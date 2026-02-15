@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AlphaBAG | Professional Crypto Intelligence</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    // Global polyfills for Web3/AI SDKs - Non-destructive augmentation
+    window.global = window;
+    window.process = window.process || {};
+    window.process.env = window.process.env || {};
+    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'production';
+    window.process.browser = true;
+    window.process.version = window.process.version || '';
+    window.process.nextTick = window.process.nextTick || ((cb) => setTimeout(cb, 0));
+
+    window.Buffer = window.Buffer || {
+      isBuffer: () => false,
+      from: (str, enc) => {
+        if (enc === 'base64') return { toString: () => btoa(str) };
+        return str;
+      }
+    };
+  </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "react-router-dom": "https://esm.sh/react-router-dom@6.22.1?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.1?external=react,react-dom",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react,react-dom",
+    "@google/genai": "https://esm.sh/@google/genai@1.3.0",
+    "wagmi": "https://esm.sh/wagmi@1.4.13?external=react,react-dom,viem",
+    "wagmi/chains": "https://esm.sh/wagmi@1.4.13/chains?external=react,react-dom,viem",
+    "wagmi/connectors/injected": "https://esm.sh/wagmi@1.4.13/connectors/injected?external=react,react-dom,viem",
+    "wagmi/connectors/walletConnect": "https://esm.sh/wagmi@1.4.13/connectors/walletConnect?external=react,react-dom,viem",
+    "wagmi/providers/public": "https://esm.sh/wagmi@1.4.13/providers/public?external=react,react-dom,viem",
+    "viem": "https://esm.sh/viem@1.21.4",
+    "viem/chains": "https://esm.sh/viem@1.21.4/chains",
+    "@walletconnect/ethereum-provider": "https://esm.sh/@walletconnect/ethereum-provider@2.11.0",
+    "@tanstack/react-query": "https://esm.sh/@tanstack/react-query@4.36.1?external=react,react-dom",
+    "axios": "https://esm.sh/axios@1.6.7",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"IBM Plex Sans"', 'sans-serif'] },
+          colors: {
+            alphabag: {
+              black: '#0B0E11',
+              dark: '#181A20',
+              gray: '#2B3139',
+              yellow: '#FCD535',
+              yellowHover: '#F0B90B',
+              text: '#EAECEF',
+              subtext: '#848E9C',
+              green: '#0ECB81',
+              red: '#F6465D',
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'shimmer': 'shimmer 2s infinite linear',
+            'scan': 'scan 2.5s infinite linear',
+            'slide-in': 'slideIn 0.3s ease-out forwards'
+          },
+          keyframes: {
+            shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+            slideIn: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+            scan: { '0%': { top: '0%' }, '100%': { top: '100%' } }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg-primary: #0B0E11;
+      --bg-secondary: #181A20;
+      --bg-tertiary: #2B3139;
+      --primary: #FCD535;
+      --text-primary: #EAECEF;
+      --text-secondary: #848E9C;
+      --success: #0ECB81;
+      --danger: #F6465D;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'IBM Plex Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      overscroll-behavior-y: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+    }
+
+    .glass {
+      background: rgba(24, 26, 32, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .safe-pb {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>

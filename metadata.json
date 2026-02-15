@@ -1,0 +1,8 @@
+{
+  "name": "AlphaBAG Pro",
+  "description": "Professional Crypto Intelligence Hub",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
