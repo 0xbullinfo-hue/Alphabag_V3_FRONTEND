@@ -225,45 +225,75 @@ export const Calculator: React.FC = () => {
         return (
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
                 {/* Inputs */}
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20">
-                    <div className="flex flex-col gap-3 mb-5">
-                        <label className="text-alphabag-muted text-xs font-bold uppercase tracking-widest">DIRECTION</label>
-                        <div className="flex gap-4">
-                            <button onClick={() => setDirection('LONG')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81] border-opacity-[0.25]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
-                                ↑ Long
-                            </button>
-                            <button onClick={() => setDirection('SHORT')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D] border-opacity-30' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
-                                ↓ Short
-                            </button>
+                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
+                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="flex flex-col gap-3 mb-5">
+                            <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">DIRECTION</label>
+                            <div className="flex gap-4">
+                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81] border-opacity-[0.25] shadow-[0_0_15px_rgba(14,203,129,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                                    ↑ Long
+                                </button>
+                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D] border-opacity-30 shadow-[0_0_15px_rgba(246,70,93,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                                    ↓ Short
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-6 mb-8">
-                        <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" />
-                        <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" />
-                    </div>
+                        <div className="grid grid-cols-2 gap-6 mb-8">
+                            <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" />
+                            <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" />
+                        </div>
 
-                    <div className="flex flex-col gap-5 mb-10">
-                        <div className="flex justify-between items-center">
-                            <label className="text-alphabag-muted text-[13px] font-bold">Leverage</label>
-                            <span className="text-[#FCD535] font-bold bg-[#FCD535] bg-opacity-[0.15] px-3 py-1.5 rounded-md text-[13px] tracking-wide">{levSlider}x</span>
+                        <div className="flex flex-col gap-5 mb-10">
+                            <div className="flex justify-between items-center">
+                                <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-widest">Leverage</label>
+                                <span className="text-alphabag-yellow font-black bg-alphabag-yellow/10 px-3 py-1.5 rounded-lg border border-alphabag-yellow/30 text-[12px] tracking-widest shadow-[0_0_10px_rgba(252,213,53,0.1)]">{levSlider}x</span>
+                            </div>
+                            <div className="relative pt-2">
+                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[4px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                            </div>
+                            <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest px-1 mt-[-4px]">
+                                <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
+                            </div>
                         </div>
-                        <div className="relative pt-2">
-                            <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[3px] bg-alphabag-black/50 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow" />
-                        </div>
-                        <div className="flex justify-between text-alphabag-muted text-[11px] font-semibold px-0.5 mt-[-6px]">
-                            <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-6">
-                        <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-alphabag-green/40' : 'border-white/10'} />
-                        <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-alphabag-red/40' : 'border-white/10'} />
+                        <div className="grid grid-cols-2 gap-6">
+                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-alphabag-green/40' : 'border-white/10'} />
+                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-alphabag-red/40' : 'border-white/10'} />
+                        </div>
                     </div>
                 </div>
 
                 {/* Results */}
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20 flex flex-col justify-between">
+                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
+                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                            <h3 className="text-alphabag-muted text-[10px] font-black uppercase tracking-[0.2em]">Live Modeling</h3>
+                            <div className="flex items-center gap-1.5 text-[10px] text-alphabag-yellow font-black uppercase tracking-widest">
+                                <div className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-pulse"></div> REALTIME
+                            </div>
+                        </div>
+                        <div className="flex flex-col">
+                            <ResultRow label="Position Size" resultObj={formatCurrency(positionSize)} />
+                            <ResultRow label="Margin Used" resultObj={formatCurrency(margin)} />
+                            <ResultTextRow label="Leverage" value={hasCalc ? `${levSlider}x` : '—'} valueColor={hasCalc ? "text-white font-black" : "text-alphabag-muted"} />
+                            <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice, 2)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-black" : "text-alphabag-muted"} />
+
+                            {/* TP / SL Rows */}
+                            <div className="mt-4 pt-4 border-t border-white/5 space-y-2">
+                                <ResultRow
+                                    label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
+                                    resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
+                                />
+                                <ResultRow
+                                    label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
+                                    resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
+                                />
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <h3 className="text-alphabag-muted text-[11px] font-bold tracking-widest mb-4">RESULTS</h3>
                         <div className="flex flex-col">
@@ -331,37 +361,59 @@ export const Calculator: React.FC = () => {
         return (
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
                 {/* Inputs */}
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20">
-                    <div className="grid grid-cols-2 gap-6 mb-5">
-                        <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" />
-                        <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-6 mb-7">
-                        <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" />
-                        <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" />
-                    </div>
-                    <div className="flex flex-col gap-3">
-                        <label className="text-alphabag-muted text-[13px] font-bold">Fee Presets</label>
-                        <div className="flex flex-wrap gap-2.5">
-                            {['Binance 0.1%', 'Coinbase 0.6%', 'Kraken 0.26%', 'Custom'].map(preset => {
-                                const val = preset === 'Custom' ? '' : preset.split(' ')[1].replace('%', '');
-                                const isActive = preset === 'Custom' ? (spotFee !== '0.1' && spotFee !== '0.6' && spotFee !== '0.26') : spotFee === val;
-                                return (
-                                    <button
-                                        key={preset}
-                                        onClick={() => { if (val) setSpotFee(val); }}
-                                        className={`px-4 py-2 rounded-full text-[13px] font-semibold transition-colors ${isActive ? 'bg-alphabag-black/70 text-white border border-alphabag-yellow/40' : 'bg-transparent text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}
-                                    >
-                                        {preset}
-                                    </button>
-                                );
-                            })}
+                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
+                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="grid grid-cols-2 gap-6 mb-5">
+                            <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" />
+                            <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-6 mb-7">
+                            <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" />
+                            <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Fee Presets</label>
+                            <div className="flex flex-wrap gap-2.5">
+                                {['Binance 0.1%', 'Coinbase 0.6%', 'Kraken 0.26%', 'Custom'].map(preset => {
+                                    const val = preset === 'Custom' ? '' : preset.split(' ')[1].replace('%', '');
+                                    const isActive = preset === 'Custom' ? (spotFee !== '0.1' && spotFee !== '0.6' && spotFee !== '0.26') : spotFee === val;
+                                    return (
+                                        <button
+                                            key={preset}
+                                            onClick={() => { if (val) setSpotFee(val); }}
+                                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${isActive ? 'bg-alphabag-yellow text-alphabag-black shadow-[0_0_15px_rgba(252,213,53,0.2)]' : 'bg-black/30 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}
+                                        >
+                                            {preset}
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Results */}
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20 flex flex-col justify-between">
+                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
+                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                            <h3 className="text-alphabag-muted text-[10px] font-black uppercase tracking-[0.2em]">Modeling Result</h3>
+                            <div className="flex items-center gap-1.5 text-[10px] text-alphabag-yellow font-black uppercase tracking-widest">
+                                <div className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-pulse"></div> CALCULATED
+                            </div>
+                        </div>
+                        <div className="flex flex-col">
+                            <ResultRow label="Total Cost" resultObj={formatCurrency(totalCost)} />
+                            <ResultRow label="Total Revenue" resultObj={formatCurrency(totalRev)} />
+                            <ResultTextRow label="Total Fees" value={hasCalc ? `$${formatNum(totalFees)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-black" : "text-alphabag-muted"} />
+                            <ResultRow label="Gross P&L" resultObj={gross !== 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} />
+                            <div className="mt-4 pt-4 border-t border-white/5">
+                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (+${formatNum(netROE)}%)`) : { value: '—', status: 'neutral' }} />
+                                <ResultRow label="Break-even Price" resultObj={formatCurrency(breakEven)} />
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <h3 className="text-alphabag-muted text-[11px] font-bold tracking-widest mb-4">RESULTS</h3>
                         <div className="flex flex-col">
@@ -401,22 +453,28 @@ export const Calculator: React.FC = () => {
 
         return (
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20">
-                    <div className="flex items-center gap-2.5 mb-6">
-                        <Percent size={18} className="text-alphabag-yellow" />
-                        <h2 className="text-white font-bold text-[15px]">IL Risk Assessment</h2>
-                    </div>
-                    <div className="space-y-6">
-                        <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" />
-                        <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" />
+                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
+                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-2.5 mb-6">
+                            <Percent size={18} className="text-alphabag-yellow" />
+                            <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">IL Risk Assessment</h2>
+                        </div>
+                        <div className="space-y-6">
+                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" />
+                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" />
+                        </div>
                     </div>
                 </div>
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20 flex flex-col justify-center items-center text-center">
-                    <h3 className="text-alphabag-muted text-[11px] font-bold tracking-widest mb-4">ESTIMATED LOSS</h3>
-                    <div className={`text-4xl font-black ${ilPercent > 5 ? 'text-[#F6465D]' : 'text-alphabag-yellow'}`}>
-                        {ilPercent.toFixed(2)}%
+                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-center items-center text-center">
+                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <h3 className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest mb-4">ESTIMATED LOSS</h3>
+                        <div className={`text-5xl font-black tracking-tighter ${ilPercent > 5 ? 'text-alphabag-red' : 'text-alphabag-yellow'}`}>
+                            {ilPercent.toFixed(2)}%
+                        </div>
+                        <p className="text-[10px] text-alphabag-muted mt-3 max-w-[200px] font-bold uppercase tracking-widest opacity-60">Compared to holding both assets outside the pool.</p>
                     </div>
-                    <p className="text-[10px] text-alphabag-muted mt-2 max-w-[200px]">Compared to holding both assets outside the pool.</p>
                 </div>
             </div>
         );
@@ -428,41 +486,47 @@ export const Calculator: React.FC = () => {
 
         return (
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20">
-                    <div className="flex items-center gap-2.5 mb-6">
-                        <ArrowRightLeft size={18} className="text-alphabag-yellow" />
-                        <h2 className="text-white font-bold text-[15px]">Instant Rate Converter</h2>
-                    </div>
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-[1fr_100px] gap-3">
-                            <InputField label="From" value={convAmount} onChange={setConvAmount} />
-                            <div className="flex flex-col gap-1">
-                                <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-[0.2em]">Token</label>
-                                <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-black/50 border border-white/10 text-white rounded-xl h-11 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20">
-                                    {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
-                                </select>
-                            </div>
+                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
+                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <div className="flex items-center gap-2.5 mb-6">
+                            <ArrowRightLeft size={18} className="text-alphabag-yellow" />
+                            <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">Instant Rate Converter</h2>
                         </div>
-                        <div className="grid grid-cols-[1fr_100px] gap-3">
-                            <div className="flex flex-col gap-1 w-full">
-                                <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-[0.2em]">Converted Value</label>
-                                <div className="bg-alphabag-black/50 border border-white/10 text-white text-[15px] font-medium rounded-xl px-4 py-2.5 h-11 flex items-center">
-                                    {result.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-[1fr_100px] gap-3">
+                                <InputField label="From" value={convAmount} onChange={setConvAmount} />
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Token</label>
+                                    <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-black/40 border border-white/10 text-white rounded-xl h-12 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 font-bold">
+                                        {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
+                                    </select>
                                 </div>
                             </div>
-                            <div className="flex flex-col gap-1">
-                                <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-[0.2em]">Token</label>
-                                <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-alphabag-black/50 border border-white/10 text-white rounded-xl h-11 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20">
-                                    {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
-                                </select>
+                            <div className="grid grid-cols-[1fr_100px] gap-3">
+                                <div className="flex flex-col gap-1 w-full">
+                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Converted Value</label>
+                                    <div className="bg-black/40 border border-white/10 text-white text-[15px] font-bold rounded-xl px-4 py-2.5 h-12 flex items-center shadow-inner">
+                                        {result.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Token</label>
+                                    <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-black/40 border border-white/10 text-white rounded-xl h-12 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 font-bold">
+                                        {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20 flex flex-col justify-center items-center text-center">
-                    <h3 className="text-alphabag-muted text-[11px] font-bold tracking-widest mb-2">QUICK RATE</h3>
-                    <div className="text-2xl font-black text-alphabag-yellow">
-                        1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
+                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-center items-center text-center">
+                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className="relative z-10">
+                        <h3 className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest mb-3">QUICK RATE</h3>
+                        <div className="text-3xl font-black text-alphabag-yellow tracking-tighter">
+                            1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -496,84 +560,94 @@ export const Calculator: React.FC = () => {
             <div className="flex flex-col gap-8">
                 <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
                     {/* Inputs */}
-                    <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20">
-                        <div className="flex items-center gap-2.5 mb-6">
-                            <Rocket size={18} className="text-[#D8B4FE]" />
-                            <h2 className="text-white font-bold text-[15px]">Degen Entry Calculator</h2>
-                        </div>
-
-                        <div className="flex flex-col gap-7">
-                            <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" />
-                            <div className="grid grid-cols-2 gap-6">
-                                <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} />
-                                <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} />
+                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
+                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                        <div className="relative z-10">
+                            <div className="flex items-center gap-2.5 mb-6">
+                                <Rocket size={18} className="text-[#D8B4FE]" />
+                                <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">Degen Entry Calculator</h2>
                             </div>
 
-                            <div className="flex flex-col gap-4 mt-2">
-                                <div className="flex justify-between items-center">
-                                    <label className="text-alphabag-muted font-semibold text-[13px] flex items-center gap-2">
-                                        <Skull size={15} className="text-[#F6465D]" /> Rug / Loss Probability
-                                    </label>
-                                    <span className="font-bold text-[#0ECB81] bg-[#0ECB81]/10 px-2.5 py-1 rounded-md text-[13px] tracking-wide">
-                                        {degenRugProb}%
-                                    </span>
+                            <div className="flex flex-col gap-7">
+                                <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" />
+                                <div className="grid grid-cols-2 gap-6">
+                                    <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} />
+                                    <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} />
                                 </div>
-                                <div className="relative pt-1">
-                                    <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="w-full h-[4px] bg-alphabag-black/50 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow" />
-                                </div>
-                                <div className="flex justify-between text-alphabag-muted text-[11px] font-semibold mt-1 px-0.5">
-                                    <span>Safe</span>
-                                    <span>Risky</span>
-                                    <span className="flex items-center gap-1.5 text-[#D8B4FE]"><Rocket size={12} className="text-[#D8B4FE]" /> Degen</span>
+
+                                <div className="flex flex-col gap-4 mt-2">
+                                    <div className="flex justify-between items-center">
+                                        <label className="text-alphabag-muted font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                                            <Skull size={15} className="text-alphabag-red" /> Rug / Loss Probability
+                                        </label>
+                                        <span className="font-black text-alphabag-green bg-alphabag-green/10 border border-alphabag-green/30 px-3 py-1.5 rounded-lg text-[12px] tracking-widest shadow-[0_0_10px_rgba(14,203,129,0.1)]">
+                                            {degenRugProb}%
+                                        </span>
+                                    </div>
+                                    <div className="relative pt-1">
+                                        <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="w-full h-[4px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                                    </div>
+                                    <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest mt-1 px-1">
+                                        <span>Safe (0%)</span>
+                                        <span>High Risk (100%)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Results */}
-                    <div className="glass-panel p-5 rounded-xl transition-all hover:border-white/20 flex flex-col justify-between">
-                        <div>
-                            <h3 className="text-alphabag-muted text-[11px] font-bold tracking-widest mb-4">RESULTS</h3>
+                    <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
+                        <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                        <div className="relative z-10">
+                            <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
+                                <h3 className="text-alphabag-muted text-[10px] font-black uppercase tracking-[0.2em]">Exit Projections</h3>
+                                <div className="flex items-center gap-1.5 text-[10px] text-alphabag-yellow font-black uppercase tracking-widest">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-pulse"></div> MOONSHOT
+                                </div>
+                            </div>
                             <div className="flex flex-col">
-                                <ResultTextRow label="Multiplier" value={hasCalc ? `${formatNum(multiplier, 1)}x` : '—'} valueColor={hasCalc ? "text-[#0ECB81] font-semibold" : "text-[#ADB5BD]"} />
-                                <ResultRow label="Target Value" resultObj={hasCalc ? { value: formatKMBValue(targetVal), status: 'positive' } : { value: '—', status: 'neutral' }} />
-                                <ResultRow label="Profit" resultObj={hasCalc ? formatPnL(profit, true, '', true) : { value: '—', status: 'neutral' }} />
-                                <ResultTextRow label="ROI" value={hasCalc ? `+${formatNum(roi, 1)}%` : '—'} valueColor={hasCalc ? "text-[#0ECB81] font-semibold" : "text-[#ADB5BD]"} />
-                                <ResultRow label="Expected Value (EV)" resultObj={hasCalc ? formatPnL(ev, true, '', true) : { value: '—', status: 'neutral' }} />
+                                <ResultRow label="Investment" resultObj={formatCurrency(inv)} />
+                                <ResultTextRow label="Target Multiple" value={hasCalc ? `${multiplier.toFixed(2)}x` : '—'} valueColor={hasCalc ? "text-[#D8B4FE] font-black" : "text-alphabag-muted"} />
+                                <ResultRow label="Target Value" resultObj={formatCurrency(targetVal)} />
+                                <ResultRow label="Net Profit" resultObj={profit !== 0 && hasCalc ? formatPnL(profit, true, ` (+${formatNum(roi, 0)}%)`) : { value: '—', status: 'neutral' }} />
+
+                                <div className="mt-8 pt-6 border-t border-white/5">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Expected Value (EV)</span>
+                                        <div className="flex items-center gap-2">
+                                            <div className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest ${ev > 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
+                                                {ev > 0 ? 'Positive EV' : 'Negative EV'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`text-4xl font-black tracking-tighter ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                        {ev !== 0 && hasCalc ? (ev > 0 ? '+' : '') + formatCurrency(ev, false).value : '—'}
+                                    </div>
+                                    <p className="text-[10px] text-alphabag-muted mt-3 font-bold uppercase tracking-widest opacity-60">The mathematical average outcome including risk.</p>
+                                </div>
                             </div>
                         </div>
-
-                        {ev > 0 && hasCalc && (
-                            <div className="mt-8 bg-[#1E1630] border border-[#311C4C] rounded-xl p-5 shadow-inner shadow-black/20">
-                                <div className="flex items-center gap-3">
-                                    <Rocket size={18} className="text-[#D8B4FE]" />
-                                    <span className="text-[#D8B4FE] font-bold text-[15px]">+EV trade — go for it!</span>
-                                </div>
-                                <div className="text-[#A78BFA] opacity-70 text-[12px] font-medium mt-1">
-                                    Adjusted for {degenRugProb}% rug probability
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
 
                 {/* Moonbag Scenarios */}
-                <div className="glass-panel p-5 lg:p-6 w-full overflow-hidden mt-2 rounded-xl transition-all hover:border-white/20">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Activity size={18} className="text-[#F97316]" />
-                        <h2 className="text-white font-bold text-[14px]">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — if ${formatNum(inv || 1000, 0)} 🚀</span></h2>
+                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-6 shadow-2xl">
+                    <div className="flex items-center gap-2 mb-6">
+                        <Activity size={18} className="text-alphabag-yellow" />
+                        <h2 className="text-white font-black text-[14px] uppercase tracking-tighter">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
                     </div>
 
-                    <div className="flex flex-wrap gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                    <div className="flex flex-wrap gap-4">
                         {[2, 5, 10, 50, 100, 1000].map(mult => {
                             const baseInv = inv || 1000;
                             const scenarioTarget = baseInv * mult;
                             const scenarioProfit = scenarioTarget - baseInv;
                             return (
-                                <div key={mult} className="glass-panel border border-white/10 rounded-xl p-5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center shadow-inner shadow-black/10">
-                                    <div className="text-[#A78BFA] font-bold text-[15px] mb-2">{mult}x</div>
-                                    <div className="text-white font-bold text-[15px] mb-1">{formatKMBValue(scenarioTarget)}</div>
-                                    <div className="text-alphabag-muted text-[11px] font-semibold">+{formatKMBValue(scenarioProfit)}</div>
+                                <div key={mult} className="bg-black/30 border border-white/10 rounded-xl p-5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/40 transition-all shadow-inner">
+                                    <div className="text-alphabag-yellow font-black text-[18px] mb-2">{mult}x</div>
+                                    <div className="text-white font-black text-[15px] mb-1">{formatKMBValue(scenarioTarget)}</div>
+                                    <div className="text-alphabag-green text-[10px] font-black uppercase tracking-widest">+{formatKMBValue(scenarioProfit)}</div>
                                 </div>
                             );
                         })}
