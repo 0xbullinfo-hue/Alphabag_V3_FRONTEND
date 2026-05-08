@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -57,7 +57,6 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('features')} className={`transition-colors uppercase ${activeTab === 'features' ? 'text-white' : 'hover:text-white'}`}>Features</button>
             <button onClick={() => handleNavClick('roadmap')} className={`transition-colors uppercase ${activeTab === 'roadmap' ? 'text-white' : 'hover:text-white'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('faq')} className={`transition-colors uppercase ${activeTab === 'faq' ? 'text-white' : 'hover:text-white'}`}>FAQ</button>
-            <button onClick={() => handleNavClick('calculator')} className={`transition-colors uppercase font-bold ${activeTab === 'calculator' ? 'text-alphabag-yellow' : 'text-alphabag-yellow/70 hover:text-alphabag-yellow'}`}>Calculator</button>
             {/* Pricing hidden for beta
             <button onClick={() => scrollToSection('membership')} className="hover:text-white transition-colors uppercase">Pricing</button>
              */}
@@ -87,7 +86,6 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'features' ? 'text-white' : 'text-alphabag-subtext'}`}>Features</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'roadmap' ? 'text-white' : 'text-alphabag-subtext'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'faq' ? 'text-white' : 'text-alphabag-subtext'}`}>FAQ</button>
-            <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'calculator' ? 'text-alphabag-yellow' : 'text-alphabag-yellow/70'}`}>Calculator</button>
             {/* <button onClick={() => scrollToSection('membership')} className="text-left py-2 font-semibold text-white uppercase tracking-widest">Pricing</button> */}
             <Button size="lg" onClick={handleLaunchApp} className="w-full uppercase font-semibold">{isAuthenticated ? 'Open App' : 'Get Started'}</Button>
           </div>
@@ -108,7 +106,7 @@ export const Landing: React.FC = () => {
                 <span className="flex h-2 w-2 relative">
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-green"></span>
                 </span>
-                <span className="text-xs font-semibold text-alphabag-subtext uppercase tracking-wider">v2.0 Multi-Chain Live</span>
+                <span className="text-xs font-semibold text-alphabag-subtext uppercase tracking-wider">v1.0 Testnet</span>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-500 leading-tight">
@@ -116,7 +114,7 @@ export const Landing: React.FC = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-alphabag-subtext max-w-2xl mx-auto mb-10 leading-relaxed font-normal animate-fade-in-up delay-100">
-                Manage diverse Web3 portfolios, track whale movements, access Alpha-grade trade signals, and explore ways to earn.
+                Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
@@ -131,11 +129,11 @@ export const Landing: React.FC = () => {
               {/* Stats Section */}
               <div className="flex flex-wrap justify-center gap-10 md:gap-24 mt-20 text-center animate-fade-in-up delay-300">
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">$1.2M+</div>
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">$100k+</div>
                   <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Assets Tracked</div>
                 </div>
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">2,500+</div>
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">100+</div>
                   <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Active Members</div>
                 </div>
                 <div>
@@ -206,6 +204,21 @@ export const Landing: React.FC = () => {
                   icon={<BarChart3 size={32} className="text-blue-400" />}
                   title="Whale Watch"
                   desc="Follow the smart money. Get alerted when high-net-worth wallets enter or exit positions in real-time."
+                />
+                <FeatureHighlight
+                  icon={<Wallet size={32} className="text-purple-400" />}
+                  title="CEX HUB"
+                  desc="Connect your exchange APIs for a truly unified overview of your crypto net worth across 20+ major platforms."
+                />
+                <FeatureHighlight
+                  icon={<Rocket size={32} className="text-[#D8B4FE]" />}
+                  title="Alpha Calculator"
+                  desc="Simulate complex futures and spot trades with real-time accuracy before executing on-chain."
+                />
+                <FeatureHighlight
+                  icon={<Trophy size={32} className="text-alphabag-yellow" />}
+                  title="T2E REWARDS"
+                  desc="Participate in the ecosystem through missions and social tasks to earn your share of the $BAG allocation."
                 />
               </div>
             </div>
@@ -408,7 +421,7 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
         <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
             ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
           `}>
-          <div className={`bg-[#0A0F1C]/90 backdrop-blur-xl border rounded-lg p-5 h-full flex flex-col min-h-[220px] transition-colors duration-300
+          <div className={`bg-[#0A0F1C]/90 backdrop-blur-xl border rounded-lg p-5 h-full flex flex-col min-h-[340px] transition-colors duration-300
                ${status === 'EXECUTING' ? 'border-alphabag-yellow/30 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-border'}
             `}>
             {/* Header Info */}
