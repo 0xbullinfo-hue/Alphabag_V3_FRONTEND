@@ -47,8 +47,8 @@ export const DeFi: React.FC = () => {
                  </div>
 
                  <div className="relative z-10 w-full md:w-auto">
-                     <h1 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3 text-white mb-6">
-                        DeFi <span className="text-alphabag-yellow">Tracker</span>
+                     <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3 mb-6">
+                        DeFi <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Tracker</span>
                      </h1>
                      
                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 w-full">

@@ -111,9 +111,9 @@ export const Whales: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-alphabag-yellow/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
                 <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white flex items-center">
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
                         <Eye className="mr-3 text-alphabag-yellow" size={28} />
-                        Whale Watch
+                        Whale <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Watch</span>
                     </h1>
                     <div className="flex items-center gap-4">
                         <p className="text-alphabag-subtext mt-1">Monitor high-conviction wallet movements across chains.</p>

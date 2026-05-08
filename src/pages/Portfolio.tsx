@@ -95,8 +95,8 @@ export const Portfolio: React.FC = () => {
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(252,213,53,0.2)]">
                     📊 Portfolio Analytics
                 </div>
-                <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight uppercase leading-none">
-                    Wealth <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_20px_rgba(252,213,53,0.3)]">Dashboard</span>
+                <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative mb-4">
+                    DEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">HUB</span>
                 </h1>
                 <p className="text-alphabag-subtext max-w-2xl mx-auto font-medium text-sm leading-relaxed">
                     Multi-chain portfolio tracking across 100+ blockchains. Real-time performance metrics and whale analytics.

@@ -73,8 +73,8 @@ export const Integrations: React.FC = () => {
         </div>
         
         <div className="relative z-10">
-            <h1 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3 text-white">
-               Connections <span className="text-alphabag-yellow">Hub</span>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3">
+               Connections <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Hub</span>
             </h1>
             <p className="text-alphabag-subtext mt-1 text-sm max-w-md">
                 A unified, read-only dashboard showing all live API keys and Web3 wallets currently streaming into AlphaBAG.

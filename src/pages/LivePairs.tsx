@@ -147,8 +147,8 @@ export const LivePairs: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
-                        Live <span className="text-alphabag-yellow">Pairs</span>
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3">
+                        Live <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Pairs</span>
                         <div className="px-2 py-0.5 bg-alphabag-red/10 border border-alphabag-red/20 rounded text-[10px] text-alphabag-red font-black uppercase tracking-widest not-italic flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-alphabag-red animate-pulse"></span> FIREHOSE
                         </div>

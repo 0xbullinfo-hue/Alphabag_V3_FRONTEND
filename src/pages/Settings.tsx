@@ -270,7 +270,7 @@ export const Settings: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-alphabag-yellow/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
                 <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Membership & Connection Hub</h1>
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">Membership & Connection <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Hub</span></h1>
                     <p className="text-alphabag-subtext mt-1">Configure your professional data feeds and membership status.</p>
                 </div>
                 <div className="flex flex-col items-end">

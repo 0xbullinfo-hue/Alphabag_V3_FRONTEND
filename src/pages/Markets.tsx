@@ -93,8 +93,8 @@ export const Markets: React.FC = () => {
     <div className="space-y-6 animate-fade-in pb-20">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <h1 className="text-3xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
-            Global <span className="text-alphabag-yellow">Market</span>
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3">
+            Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Market</span>
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-green opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-alphabag-green"></span>

@@ -634,13 +634,7 @@ export const Calculator: React.FC = () => {
                 </div>
             </div>
 
-            <div className="mb-6">
-                <p className="text-[#51596A] text-[12px] font-semibold tracking-wide">
-                    {mode === 'LEVERAGE' && 'Futures & perps with liquidation price'}
-                    {mode === 'SPOT' && 'Spot trade P&L with fees'}
-                    {mode === 'DEGEN' && 'Low-cap moonshot & EV calculator'}
-                </p>
-            </div>
+
 
             {mode === 'LEVERAGE' && renderLeveragePanel()}
             {mode === 'SPOT' && renderSpotPanel()}

@@ -156,7 +156,7 @@ export const AlphaAi: React.FC = () => {
           <div className="w-12 h-12 bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(252,213,53,0.15)]"><Fingerprint size={24} /></div>
           <div>
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl md:text-3xl font-black text-white flex items-center tracking-tighter leading-none uppercase">Alpha <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Analyst</span></h1>
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">Alpha <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Analyst</span></h1>
               <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-glow-green/5">
                   <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse shadow-[0_0_8px_rgba(14,203,129,0.8)]"></div>
                   <span className="text-[9px] text-alphabag-green font-black uppercase tracking-[0.2em] relative top-[0.5px]">Link Active</span>

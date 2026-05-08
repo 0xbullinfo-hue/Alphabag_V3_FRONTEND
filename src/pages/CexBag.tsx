@@ -130,7 +130,7 @@ export const CexBag: React.FC = () => {
                 
                 {/* Header Title Row */}
                 <div className="relative z-10 flex items-center gap-3">
-                    <h1 className="text-3xl font-black text-white tracking-tighter uppercase leading-none">CEX <span className="text-alphabag-yellow">HUB</span></h1>
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">CEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">HUB</span></h1>
                     <div className="px-2.5 py-1 rounded bg-alphabag-black border border-alphabag-gray text-[10px] font-black uppercase text-alphabag-subtext tracking-widest flex items-center gap-1.5">
                         <ShieldCheck size={12} className="text-alphabag-yellow" /> Read-Only Tracking
                     </div>
