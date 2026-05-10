@@ -321,7 +321,8 @@ export const createCampaign = async (req, res) => {
 
         res.json({ success: true, item: newCamp });
     } catch (error) {
-        res.status(500).json({ error: 'Failed' });
+        console.error('[AIRDROP] createCampaign Error:', error.stack || error);
+        res.status(500).json({ error: 'Failed to create campaign', details: error.message });
     }
 };
 
@@ -346,7 +347,8 @@ export const updateCampaign = async (req, res) => {
 
         res.json({ success: true, item: updated });
     } catch (error) {
-        res.status(500).json({ error: 'Failed' });
+        console.error('[AIRDROP] updateCampaign Error:', error.stack || error);
+        res.status(500).json({ error: 'Failed to update campaign', details: error.message });
     }
 };
 

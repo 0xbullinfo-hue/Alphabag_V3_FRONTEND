@@ -588,6 +588,7 @@ export const AdminAirdrop: React.FC = () => {
                 ) : (
                     <div className="space-y-8">
                         {/* Protocol Control Content */}
+                        {/* TGE Countdown Timer */}
                         <div className="bg-[#0a0a0a] border border-alphabag-yellow/20 rounded-2xl p-8 space-y-6">
                             <div className="flex items-center justify-between pb-4 border-b border-white/5">
                                 <div>
@@ -619,11 +620,43 @@ export const AdminAirdrop: React.FC = () => {
                                     {isSettingTge ? 'SYNCING...' : '🚀 SET TGE DATE'}
                                 </Button>
                             </div>
-                            {tgeDate && (
-                                <p className="text-[10px] text-alphabag-yellow font-bold uppercase tracking-widest text-center">
-                                    🟡 Live countdown active — Users see days until: {new Date(tgeDate).toUTCString()}
-                                </p>
-                            )}
+                        </div>
+
+                        {/* Campaign Activator */}
+                        <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-8 space-y-6">
+                            <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                                <div>
+                                    <h3 className="text-lg font-black text-white uppercase tracking-tighter flex items-center gap-2">
+                                        <Zap className="text-alphabag-yellow" size={20} /> Campaign Activator
+                                    </h3>
+                                    <p className="text-[10px] text-alphabag-muted font-bold uppercase tracking-widest mt-1">Activate the mission lifecycle and define reward parameters.</p>
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-alphabag-green/20 bg-alphabag-green/10 text-alphabag-green text-[10px] font-black uppercase tracking-widest">
+                                    <span className="w-2 h-2 rounded-full bg-alphabag-green animate-pulse"></span>
+                                    TESTNET PHASE 1
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest pl-1">Token Ticker</label>
+                                    <input type="text" defaultValue="BAG" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest pl-1">Genesis Reward (ITEMS)</label>
+                                    <input type="number" defaultValue="5000" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest pl-1">Phase Duration (Days)</label>
+                                    <input type="number" defaultValue="10" className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white" />
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center pt-4">
+                                <Button className="bg-alphabag-green !text-black font-black uppercase tracking-[0.3em] text-[11px] px-12 h-14 rounded-2xl shadow-[0_0_30px_rgba(0,255,163,0.2)]">
+                                    START CAMPAIGN
+                                </Button>
+                            </div>
                         </div>
 
                         <div className="bg-[#0a0a0a] border border-white/5 rounded-2xl p-8 space-y-6">
