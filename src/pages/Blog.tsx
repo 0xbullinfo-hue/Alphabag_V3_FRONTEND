@@ -14,7 +14,7 @@ export const Blog: React.FC = () => {
   return (
     <div className="space-y-8 animate-fade-in">
          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h1 className="text-4xl font-bold text-white mb-4">Alphabag Academy</h1>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase mb-4">Alphabag Academy</h1>
             <p className="text-alphabag-subtext text-lg">Learn about crypto, DeFi strategies, and market analysis from industry experts.</p>
         </div>
 

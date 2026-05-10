@@ -2,8 +2,10 @@ import React from 'react';
 
 export const Alphas: React.FC = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Alphas</h1>
+    <div className="space-y-8 animate-fade-in">
+      <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase mb-6 relative flex items-center">
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Alphas</span>
+      </h1>
       <div className="bg-alphabag-darkgray p-6 rounded-xl border border-alphabag-border">
         <p className="text-alphabag-muted mb-4">Beta Stream Active. Neural link syncing...</p>
         <div className="flex flex-col space-y-6">

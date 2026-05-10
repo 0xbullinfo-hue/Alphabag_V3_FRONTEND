@@ -133,8 +133,8 @@ export const getMissions = async (req, res) => {
             totalPages: Math.ceil(total / parseInt(limit)) 
         });
     } catch (error) {
-        console.error('[T2E] Fetch Missions Error:', error);
-        res.status(500).json({ error: 'Failed to fetch missions' });
+        console.error('[T2E] Fetch Missions Error:', error.stack || error);
+        res.status(500).json({ error: 'Failed to fetch missions', details: error.message });
     }
 };
 
@@ -307,8 +307,8 @@ export const claimMission = async (req, res) => {
             rewardXP: mission.rewardXP || mission.rewardTokens
         });
     } catch (error) {
-        console.error('[T2E] Claim Error:', error);
-        res.status(500).json({ error: 'Mission claim failed' });
+        console.error('[T2E] Claim Error:', error.stack || error);
+        res.status(500).json({ error: 'Mission claim failed', details: error.message });
     }
 };
 

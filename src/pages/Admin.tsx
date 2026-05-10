@@ -85,12 +85,12 @@ export const Admin: React.FC = () => {
         <div className="flex h-screen bg-alphabag-black">
             <AdminSidebar />
 
-            <div className="flex-1 ml-64 overflow-y-auto custom-scrollbar">
-                <main className="p-8 pb-20 max-w-7xl mx-auto">
+            <div className="flex-1 md:pl-64 overflow-y-auto custom-scrollbar">
+                <main className="p-4 md:p-8 lg:p-10 pb-20 max-w-7xl mx-auto">
                     {/* Page Header */}
                     <div className="flex justify-between items-center mb-10">
                         <div>
-                            <h1 className="text-3xl font-black text-white uppercase tracking-tighter flex items-center">
+                            <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter flex items-center">
                                 <Shield className="mr-3 text-alphabag-yellow" size={32} />
                                 {currentView === 'overview' ? 'Admin Center' :
                                     currentView === 'users' ? 'Member Database' :

@@ -9,7 +9,6 @@ import {
 import { Button } from '../components/ui/Button';
 import Swal from 'sweetalert2';
 
-// Simulated premium "preview" data for the read-only Alpha Phase
 const DEMO_SIGNALS: TradeSignal[] = [
     {
         id: 'demo-1',
@@ -18,12 +17,12 @@ const DEMO_SIGNALS: TradeSignal[] = [
         type: 'BUY',
         risk: 'HIGH',
         status: 'ACTIVE',
-        entry: '***', // Masked
-        targets: ['***', '***', '***'],
-        stopLoss: '***',
+        entry: '$142.50',
+        targets: ['$165.00', '$180.00'],
+        stopLoss: '$135.00',
         narrative: 'Accumulation pattern observed across top 50 whale wallets. Anticipating major liquidity sweep to the upside ahead of upcoming network upgrade. Early positioning is critical.',
         timestamp: 'Just now',
-        contractAddress: '***',
+        contractAddress: 'So11111111111111111111111111111111111111112',
         socialLinks: { twitter: '#', telegram: '#', website: '#' }
     },
     {
@@ -33,26 +32,26 @@ const DEMO_SIGNALS: TradeSignal[] = [
         type: 'BUY',
         risk: 'MEDIUM',
         status: 'ACTIVE',
-        entry: '***',
-        targets: ['***', '***'],
-        stopLoss: '***',
+        entry: '0.0000085',
+        targets: ['0.000012', '0.000015'],
+        stopLoss: '0.000007',
         narrative: 'Strong relative strength against the wider market dump. On-chain volume is surging. Breaking key resistance zone, targeting a 300% narrative leg up.',
         timestamp: '2 hours ago',
-        contractAddress: '***',
+        contractAddress: 'pepe11111111111111111111111111111111111111112',
     },
     {
         id: 'demo-3',
-        pair: 'NEW/PROJECT',
+        pair: 'ZETA/USDC',
         category: 'AIRDROPS',
         type: 'AIRDROP',
         risk: 'LOW',
         status: 'ACTIVE',
-        entry: '***',
-        targets: ['***'],
-        stopLoss: '***',
+        entry: 'N/A',
+        targets: ['TBA'],
+        stopLoss: 'N/A',
         narrative: 'Highly classified seed-round token entering public sale. Team allocated massive supply for community airdrop. Secure your wallet interactions rapidly to qualify.',
         timestamp: '5 hours ago',
-        relevantInfo: '***',
+        relevantInfo: 'https://zeta.markets',
         socialLinks: { twitter: '#' }
     }
 ];
@@ -86,19 +85,6 @@ export const AlphaCalls: React.FC = () => {
     }, [token]);
 
     const copyToClipboard = (text: string) => {
-        if (text.includes('***')) {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'error',
-                title: 'Data Encrypted. Unlock required.',
-                showConfirmButton: false,
-                timer: 2000,
-                background: '#1E2329',
-                color: '#FCBA03'
-            });
-            return;
-        }
         navigator.clipboard.writeText(text);
         Swal.fire({
             toast: true,
@@ -170,39 +156,37 @@ export const AlphaCalls: React.FC = () => {
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
                     {signals.filter(s => activeCategory === 'ALL' || s.category === activeCategory).map((signal, index) => {
-                        const isMasked = signal.entry === '***';
-                        
                         // Theme definitions based on category
                         const theme = signal.category === 'DEGEN' 
-                            ? { color: 'purple-500', bg: 'purple-500/10', border: 'purple-500/20', icon: <Rocket size={20} /> }
+                            ? { color: 'purple-500', bg: 'purple-500/10', border: 'purple-500/20', icon: <Rocket size={18} /> }
                             : signal.category === 'LONGTERM'
-                                ? { color: 'blue-500', bg: 'blue-500/10', border: 'blue-500/20', icon: <Layers size={20} /> }
-                                : { color: 'alphabag-yellow', bg: 'alphabag-yellow/10', border: 'alphabag-yellow/20', icon: <Gift size={20} /> };
+                                ? { color: 'blue-500', bg: 'blue-500/10', border: 'blue-500/20', icon: <Layers size={18} /> }
+                                : { color: 'alphabag-yellow', bg: 'alphabag-yellow/10', border: 'alphabag-yellow/20', icon: <Gift size={18} /> };
 
                         return (
                             <div 
                                 key={signal.id} 
-                                className={`glass-panel p-6 rounded-3xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-500 border border-${theme.border} hover:border-${theme.color}/40`}
-                                style={{ animationDelay: `${index * 150}ms` }}
+                                className={`glass-panel p-4 rounded-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 border border-${theme.border} hover:border-${theme.color}/40`}
+                                style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Background Ambient Glow */}
-                                <div className={`absolute -top-32 -right-32 w-64 h-64 bg-${theme.bg} rounded-full blur-[80px] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-1000`}></div>
+                                <div className={`absolute -top-16 -right-16 w-32 h-32 bg-${theme.bg} rounded-full blur-[60px] pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-1000`}></div>
                                 
                                 {/* Header Section */}
-                                <div className="flex justify-between items-start mb-6 relative z-10">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border border-${theme.border} bg-[#0c0c0c] text-${theme.color} shadow-lg shadow-${theme.bg}`}>
+                                <div className="flex justify-between items-start mb-3 relative z-10">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-${theme.border} bg-[#0c0c0c] text-${theme.color}`}>
                                             {theme.icon}
                                         </div>
                                         <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h3 className="text-xl font-black text-white tracking-tight leading-none">{signal.pair}</h3>
+                                            <div className="flex items-center gap-2 mb-0.5">
+                                                <h3 className="text-lg font-black text-white tracking-tight leading-none">{signal.pair}</h3>
                                                 {signal.status === 'HIT' && (
-                                                    <span className="text-[8px] px-2 py-0.5 rounded border border-green-500 text-green-500 font-bold uppercase tracking-widest">Target Hit</span>
+                                                    <span className="text-[8px] px-1.5 py-0.5 rounded border border-green-500 text-green-500 font-bold uppercase tracking-widest">Target Hit</span>
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className={`text-[8px] px-2 py-0.5 rounded font-black uppercase tracking-[0.2em] bg-${theme.bg} text-${theme.color}`}>
+                                                <span className={`text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-[0.2em] bg-${theme.bg} text-${theme.color}`}>
                                                     {signal.category}
                                                 </span>
                                                 <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest flex items-center">
@@ -211,76 +195,60 @@ export const AlphaCalls: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Action button */}
                                     <button 
-                                        onClick={() => copyToClipboard(isMasked ? '***' : `${signal.pair} details`)}
-                                        className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
+                                        onClick={() => copyToClipboard(`${signal.pair} details`)}
+                                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
                                     >
-                                        <Copy size={16} />
+                                        <Copy size={14} />
                                     </button>
                                 </div>
 
                                 {/* Narrative Section */}
-                                <div className="mb-6 relative z-10">
-                                    <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-3 flex items-center gap-2">
-                                        <Target size={12} /> Strategic Thesis
+                                <div className="mb-3 relative z-10">
+                                    <p className={`text-xs text-zinc-300 font-medium leading-[1.5] line-clamp-2`}>
+                                        {signal.narrative}
                                     </p>
-                                    <div className="relative">
-                                        <p className={`text-sm text-zinc-300 font-medium leading-[1.6] ${isMasked ? 'blur-sm select-none opacity-50' : ''}`}>
-                                            {signal.narrative}
-                                        </p>
-                                        {isMasked && (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl text-[10px] font-black tracking-[0.2em] text-white uppercase border border-white/10 shadow-xl flex items-center gap-2">
-                                                    <Lock size={12} className="text-alphabag-yellow" /> Classified Intel
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
                                 </div>
 
                                 {/* Metrics Matrix */}
-                                <div className="grid grid-cols-3 gap-3 mb-6 relative z-10">
-                                    <div className="bg-black/40 border border-white/5 p-3 rounded-2xl flex flex-col justify-center relative overflow-hidden group/metric">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1.5">Entry Zone</span>
-                                        <span className={`font-mono text-sm font-bold ${isMasked ? 'text-zinc-600 blur-[2px]' : 'text-white'}`}>{signal.entry}</span>
-                                        {isMasked && <Lock size={10} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-700" />}
+                                <div className="grid grid-cols-3 gap-2 mb-3 relative z-10">
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
+                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Entry</span>
+                                        <span className={`font-mono text-xs font-bold text-white truncate`}>{signal.entry}</span>
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-3 rounded-2xl flex flex-col justify-center relative overflow-hidden group/metric">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1.5">Exit Target</span>
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
+                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Target</span>
                                         <div className="flex flex-wrap gap-1">
                                             {signal.targets?.map((t, i) => (
-                                                <span key={i} className={`font-mono text-sm font-bold ${isMasked ? 'text-zinc-600 blur-[2px]' : `text-${theme.color}`}`}>{t}</span>
+                                                <span key={i} className={`font-mono text-xs font-bold text-${theme.color}`}>{t}</span>
                                             ))}
                                         </div>
-                                        {isMasked && <Lock size={10} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-700" />}
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-3 rounded-2xl flex flex-col justify-center relative overflow-hidden group/metric">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1.5">Stop Loss</span>
-                                        <span className={`font-mono text-sm font-bold ${isMasked ? 'text-zinc-600 blur-[2px]' : 'text-red-500'}`}>{signal.stopLoss}</span>
-                                        {isMasked && <Lock size={10} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-700" />}
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
+                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Stop Loss</span>
+                                        <span className={`font-mono text-xs font-bold text-red-500 truncate`}>{signal.stopLoss}</span>
                                     </div>
                                 </div>
 
                                 {/* Footer Data */}
                                 {(signal.contractAddress || signal.socialLinks) && (
-                                    <div className="flex items-center justify-between pt-5 border-t border-white/5 relative z-10">
+                                    <div className="flex items-center justify-between pt-3 border-t border-white/5 relative z-10">
                                         {signal.contractAddress && (
-                                            <div className="flex gap-2 items-center flex-1 max-w-[60%]">
+                                            <div className="flex gap-2 items-center flex-1 max-w-[70%]">
                                                 <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500">CA:</span>
-                                                <code className={`text-[10px] font-mono truncate px-2 py-1 rounded bg-[#111] border border-white/10 ${isMasked ? 'text-zinc-600 blur-[2px]' : 'text-white'}`}>
+                                                <code className={`text-[9px] font-mono truncate px-1.5 py-0.5 rounded bg-[#111] border border-white/10 text-white`}>
                                                     {signal.contractAddress}
                                                 </code>
                                             </div>
                                         )}
                                         
-                                        {!isMasked && signal.socialLinks && (
-                                            <div className="flex gap-2">
+                                        {signal.socialLinks && (
+                                            <div className="flex gap-1.5">
                                                 {signal.socialLinks.twitter && (
-                                                    <a href={signal.socialLinks.twitter} target="_blank" rel="noreferrer" className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center hover:bg-blue-500/20 transition-colors border border-blue-500/20"><ExternalLink size={12} /></a>
+                                                    <a href={signal.socialLinks.twitter} target="_blank" rel="noreferrer" className="w-6 h-6 rounded bg-blue-500/10 text-blue-400 flex items-center justify-center hover:bg-blue-500/20 transition-colors border border-blue-500/20"><ExternalLink size={10} /></a>
                                                 )}
                                                 {signal.socialLinks.telegram && (
-                                                    <a href={signal.socialLinks.telegram} target="_blank" rel="noreferrer" className="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-500/20 transition-colors border border-cyan-500/20"><MessageSquare size={12} /></a>
+                                                    <a href={signal.socialLinks.telegram} target="_blank" rel="noreferrer" className="w-6 h-6 rounded bg-cyan-500/10 text-cyan-400 flex items-center justify-center hover:bg-cyan-500/20 transition-colors border border-cyan-500/20"><MessageSquare size={10} /></a>
                                                 )}
                                             </div>
                                         )}

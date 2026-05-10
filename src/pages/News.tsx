@@ -44,7 +44,7 @@ export const News: React.FC = () => {
           <Newspaper size={160} />
         </div>
         <div className="relative z-10">
-          <h1 className="text-4xl font-extrabold text-white tracking-tighter">Market Pulse</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">Market Pulse</h1>
           <p className="text-alphabag-subtext mt-2 font-medium max-w-md">Expert narratives and real-time intelligence aggregated for BAG holders.</p>
         </div>
         <div className="relative z-10 w-full md:w-auto mt-6 md:mt-0 flex flex-col items-end">

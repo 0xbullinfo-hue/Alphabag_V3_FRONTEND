@@ -30,6 +30,18 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       }
+    },
+    build: {
+      chunkSizeWarningLimit: 1500,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['react', 'react-dom', 'react-router-dom'],
+            web3: ['wagmi', 'viem', '@web3modal/wagmi'],
+            ui: ['lucide-react', 'framer-motion', 'sweetalert2']
+          }
+        }
+      }
     }
   };
 });

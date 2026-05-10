@@ -7,7 +7,7 @@ export const Widgets: React.FC = () => {
   return (
     <div className="space-y-8 animate-fade-in">
         <div>
-            <h1 className="text-2xl font-bold text-white">Crypto Widgets</h1>
+            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">Crypto Widgets</h1>
             <p className="text-alphabag-subtext mt-1">Embed live crypto prices and charts on your website.</p>
         </div>
 

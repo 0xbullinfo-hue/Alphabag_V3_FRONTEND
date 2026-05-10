@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { Activity, Trash2, ArrowUpRight, ArrowDownRight, RefreshCcw, ShieldCheck, Plus, Key, Zap } from 'lucide-react';
+import { Activity, Trash2, ArrowUpRight, ArrowDownRight, RefreshCcw, ShieldCheck, Plus, Key, Zap, TrendingUp } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { CexConnectModal } from '../components/CexConnectModal';
 import { useWallet } from '../context/WalletContext';
@@ -122,58 +122,72 @@ export const CexBag: React.FC = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-12rem)] pb-20 max-w-[1400px] w-full mx-auto space-y-6 animate-fade-in text-alphabag-text">
+        <div className="min-h-[calc(100vh-12rem)] pb-20 max-w-7xl w-full mx-auto space-y-6 animate-fade-in text-alphabag-text">
 
-            {/* ─── Dashboard Header ─── */}
-            <div className="flex flex-col gap-8 bg-alphabag-dark border border-alphabag-gray rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-12 opacity-[0.02] rotate-12 pointer-events-none"><Activity size={250} /></div>
-                
-                {/* Header Title Row */}
-                <div className="relative z-10 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(252,213,53,0.2)]">
-                        <Zap size={12} fill="currentColor" className="animate-pulse" /> Phase 1: AlphaBAG Genesis
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">
-                            CEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">HUB</span>
-                        </h1>
-                        <div className="px-2.5 py-1 rounded bg-alphabag-black border border-alphabag-gray text-[10px] font-black uppercase text-alphabag-subtext tracking-widest flex items-center gap-1.5">
-                            <ShieldCheck size={12} className="text-alphabag-yellow" /> Read-Only Tracking
+
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-6 mb-10">
+                <div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
+                            <Activity size={20} fill="currentColor" />
                         </div>
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            My CEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Portfolio</span>
+                        </h1>
+                        <span className="badge-yellow">Active</span>
+                    </div>
+
+                    <div className="flex items-baseline gap-4">
+                        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight tabular-nums flex items-center gap-3 truncate">
+                            ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </h2>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 mt-2">
+                        <div className={`flex items-center px-3 py-1 rounded-full text-[11px] font-black tracking-widest uppercase ${mockPnL >= 0 ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                            {mockPnL >= 0 ? <TrendingUp size={14} className="mr-1" /> : <TrendingUp size={14} className="mr-1 rotate-180" />}
+                            {mockPnLPct.toFixed(2)}%
+                            <span className="ml-2 opacity-60">(${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
+                        </div>
+                        <span className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest">Aggregate PnL</span>
                     </div>
                 </div>
 
-                {/* Metrics Row */}
-                <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between w-full gap-6 md:gap-0">
-                    <div className="flex flex-col md:flex-row md:items-start gap-6 lg:gap-32 w-full md:w-auto">
-                        <div className="min-w-[320px] lg:min-w-[400px]">
-                            <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-[0.3em] mb-1">Aggregate Net Worth (USDT)</p>
-                            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter leading-none tabular-data truncate" title={`$${totalBalance.toLocaleString()}`}>
-                                ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </h2>
-                        </div>
-                        <div>
-                            <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-[0.3em] mb-1">24H PnL</p>
-                            <div className="flex items-center gap-2">
-                                <span className={`flex items-center text-xl font-black tracking-tight tabular-data truncate ${mockPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                    {mockPnL >= 0 ? <ArrowUpRight size={20} className="mr-1" /> : <ArrowDownRight size={20} className="mr-1" />}
-                                    {mockPnL >= 0 ? '+' : ''}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </span>
-                                <span className="bg-alphabag-black border border-alphabag-gray px-2 py-0.5 rounded text-xs font-bold text-alphabag-subtext">
-                                    {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
-                                </span>
-                            </div>
-                        </div>
+                <div className="flex items-center gap-4">
+                    <div className="glass-panel px-4 py-2 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-glow-green"></div>
+                        <span className="section-label text-[9px]">API Sync</span>
                     </div>
+                    <Button 
+                        onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}
+                        className="bg-alphabag-yellow text-alphabag-black hover:bg-yellow-400 hover:scale-[1.02] active:scale-[0.98] border-none rounded-2xl px-6 py-3 font-black uppercase tracking-widest text-[10px] shadow-glow-yellow/20 transition-all"
+                    >
+                        <Plus className="mr-2" size={16} /> Add Exchange
+                    </Button>
+                </div>
+            </div>
 
-                    <div className="flex flex-col md:items-end gap-2 text-left md:text-right">
-                        <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-[0.3em] mb-1">
-                            {connectedCex.length} / {MAX_CEX} EXCHANGES SYNCED
-                        </p>
-                        <Button size="sm" variant="secondary" className="border-alphabag-gray w-full md:w-auto" onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}>
-                            <Plus size={14} className="mr-2" /> Add Exchange
-                        </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div className="glass-panel p-6 relative overflow-hidden group transition-all">
+                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <span className="section-label mb-3 block">Aggregate Net Worth</span>
+                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter tabular-nums mb-2">
+                        ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </h2>
+                    <div className="badge-yellow w-fit">CONSOLIDATED ASSETS</div>
+                </div>
+                <div className="glass-panel p-6 relative overflow-hidden group transition-all">
+                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-alphabag-green/5 rounded-full blur-3xl group-hover:bg-alphabag-green/10 transition-all duration-700"></div>
+                    <span className="section-label mb-3 block">Consolidated PnL</span>
+                    <div className="flex items-center gap-4 mb-2">
+                        <h2 className={`text-3xl md:text-5xl font-black tracking-tighter tabular-nums ${mockPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </h2>
+                        <div className={`badge-${mockPnL >= 0 ? 'green' : 'red'}`}>
+                            {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
+                        </div>
                     </div>
+                    <div className="badge-muted w-fit uppercase">24H Metrics</div>
                 </div>
             </div>
 

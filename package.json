@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:backend": "node --watch backend/server.js",
+    "dev:all": "concurrently \"npm run dev:backend\" \"npm run dev\" --names \"BACKEND,FRONTEND\" --prefix-colors \"cyan,magenta\"",
     "build": "vite build",
     "preview": "vite preview",
     "server": "node backend/server.js"
@@ -56,6 +58,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^9.2.1",
     "prisma": "^7.5.0",
     "typescript": "^5.9.3",
     "vite": "^5.1.4",

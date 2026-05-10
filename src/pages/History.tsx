@@ -49,7 +49,9 @@ export const HistoryPage: React.FC = () => {
         <div className="space-y-6 animate-fade-in pb-20">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-white uppercase tracking-tighter">Transaction History</h1>
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                        Transaction <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">History</span>
+                    </h1>
                     <p className="text-alphabag-subtext text-sm font-medium">Immutable ledger of all portfolio activity</p>
                 </div>
                 <div className="flex space-x-2">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'home' | 'features' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -33,7 +33,7 @@ export const Landing: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNavClick = (tab: 'home' | 'features' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
+  const handleNavClick = (tab: 'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
     setActiveTab(tab);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -55,6 +55,8 @@ export const Landing: React.FC = () => {
           <div className="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-widest text-alphabag-subtext">
             <button onClick={() => handleNavClick('home')} className={`transition-colors uppercase ${activeTab === 'home' ? 'text-white' : 'hover:text-white'}`}>Home</button>
             <button onClick={() => handleNavClick('features')} className={`transition-colors uppercase ${activeTab === 'features' ? 'text-white' : 'hover:text-white'}`}>Features</button>
+            <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors uppercase ${activeTab === 'tokenomics' ? 'text-white' : 'hover:text-white'}`}>Tokenomics</button>
+            <button onClick={() => handleNavClick('buy')} className={`transition-colors uppercase ${activeTab === 'buy' ? 'text-white' : 'hover:text-white'}`}>Buy</button>
             <button onClick={() => handleNavClick('roadmap')} className={`transition-colors uppercase ${activeTab === 'roadmap' ? 'text-white' : 'hover:text-white'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('calculator')} className={`transition-colors uppercase ${activeTab === 'calculator' ? 'text-white' : 'hover:text-white'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`transition-colors uppercase ${activeTab === 'faq' ? 'text-white' : 'hover:text-white'}`}>FAQ</button>
@@ -85,6 +87,8 @@ export const Landing: React.FC = () => {
           <div className="md:hidden absolute top-20 left-0 w-full bg-alphabag-dark border-b border-alphabag-gray/50 p-6 flex flex-col space-y-4 animate-slide-in">
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'home' ? 'text-white' : 'text-alphabag-subtext'}`}>Home</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'features' ? 'text-white' : 'text-alphabag-subtext'}`}>Features</button>
+            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'tokenomics' ? 'text-white' : 'text-alphabag-subtext'}`}>Tokenomics</button>
+            <button onClick={() => handleNavClick('buy')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'buy' ? 'text-white' : 'text-alphabag-subtext'}`}>Buy</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'roadmap' ? 'text-white' : 'text-alphabag-subtext'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'calculator' ? 'text-white' : 'text-alphabag-subtext'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'faq' ? 'text-white' : 'text-alphabag-subtext'}`}>FAQ</button>
@@ -144,7 +148,7 @@ export const Landing: React.FC = () => {
                 </div>
                 <div>
                   <div className="text-3xl md:text-4xl font-bold text-white mb-2">99.9%</div>
-                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Uptime</div>
+                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">System Uptime</div>
                 </div>
               </div>
 
@@ -217,17 +221,180 @@ export const Landing: React.FC = () => {
                   desc="Participate in the ecosystem through missions and social tasks to earn your share of the $BAG allocation."
                 />
               </div>
+
+              {/* Why AlphaBAG Section */}
+              <div className="mt-32 pt-20 border-t border-white/5 relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
+                
+                <div className="text-center mb-16">
+                  <h2 className="text-3xl md:text-4xl font-black mb-6 uppercase tracking-[0.1em] text-white">Why <span className="text-alphabag-yellow">AlphaBAG?</span></h2>
+                  <p className="text-base text-alphabag-subtext max-w-2xl mx-auto">
+                    Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+                  <div className="space-y-8">
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 shrink-0 bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center rounded-xl border border-alphabag-yellow/20">
+                        <Zap size={20} />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">Zero Latency Execution</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 shrink-0 bg-green-500/10 text-green-500 flex items-center justify-center rounded-xl border border-green-500/20">
+                        <ShieldCheck size={20} />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">Absolute Privacy</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="w-10 h-10 shrink-0 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-xl border border-blue-500/20">
+                        <Bot size={20} />
+                      </div>
+                      <div>
+                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">AlphaAi Integration</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-alphabag-dark overflow-hidden flex items-center justify-center group shadow-2xl">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
+                    <div className="w-24 h-24 bg-alphabag-black border border-white/5 rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(252,213,53,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(252,213,53,0.2)] transition-all duration-700 relative z-10">
+                      <Lock size={40} className="text-alphabag-yellow" />
+                    </div>
+                    <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Tokenomics Section */}
+        {activeTab === 'tokenomics' && (
+          <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none"></div>
+            
+            <div className="max-w-7xl mx-auto relative z-10 w-full">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-[0.2em] text-white">System <span className="text-alphabag-yellow">Tokenomics</span></h2>
+                <p className="text-alphabag-subtext font-mono text-sm uppercase tracking-widest">// Financial_Architecture</p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column: Metrics */}
+                <div className="lg:col-span-1 flex flex-col gap-4">
+                  <TokenMetricCard label="Token Name" value="AlphaBAG (Not Yet Live)" icon={<Briefcase />} />
+                  <TokenMetricCard label="Ticker" value="$BAG" isMasked icon={<TrendingUp />} />
+                  <TokenMetricCard label="Network" value="BNB Smart Chain" icon={<LayoutGrid />} />
+                  <TokenMetricCard label="Total Supply" value="21,000,000" icon={<PieChart />} />
+                  <TokenMetricCard label="Contract Address" value="TBA" icon={<Lock />} />
+                </div>
+
+                {/* Right Column: Allocations Masked */}
+                <div className="lg:col-span-2 relative bg-alphabag-dark border border-white/5 rounded-3xl p-8 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden min-h-[400px]">
+                  <div className="absolute inset-0 opacity-10 flex flex-wrap gap-4 items-center justify-center pointer-events-none">
+                    <div className="w-48 h-48 rounded-full border-[20px] border-white blur-md"></div>
+                    <div className="w-32 h-32 rounded-full border-[15px] border-white blur-md"></div>
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-alphabag-black/80 backdrop-blur-xl z-10 flex flex-col items-center justify-center text-center p-8 border border-white/5">
+                    <div className="w-16 h-16 bg-alphabag-yellow/10 text-alphabag-yellow rounded-2xl flex items-center justify-center mb-6 border border-alphabag-yellow/20 shadow-[0_0_30px_rgba(252,213,53,0.2)]">
+                      <Lock size={32} />
+                    </div>
+                    <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-3">Allocations Masked</h3>
+                    <p className="text-alphabag-subtext max-w-md mx-auto text-sm leading-relaxed">
+                      Detailed token distribution and exact tokenomics are strictly classified during the Testnet phase to prevent pre-launch front-running.
+                    </p>
+                    <div className="mt-8 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-black uppercase tracking-[0.2em] text-alphabag-yellow">
+                      Unlocks at TGE
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* How to Buy Section */}
+        {activeTab === 'buy' && (
+          <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
+            <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(252,213,53,0.05) 0%, transparent 70%)', backgroundSize: '100% 100%' }}></div>
+            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(252,213,53,0.4) 1px, transparent 0)', backgroundSize: '60px 60px' }}></div>
+            
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
+
+            <div className="max-w-7xl mx-auto relative z-10 w-full">
+              <div className="text-center md:text-left mb-20 relative">
+                <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
+                  <div className="h-px w-8 bg-alphabag-yellow"></div>
+                  <span className="text-[10px] font-bold text-alphabag-yellow uppercase tracking-[0.3em]">Get Started</span>
+                </div>
+                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">How To <span className="text-alphabag-yellow">Buy</span></h2>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+                {/* Horizontal Connection Line */}
+                <div className="hidden md:block absolute top-8 left-10 right-10 h-px bg-white/10 z-0"></div>
+
+                <BuyStepCard 
+                  step="01" 
+                  title="CREATE WALLET" 
+                  desc="Download Trust Wallet or MetaMask and create a new wallet. Save your seed phrase securely."
+                />
+                <BuyStepCard 
+                  step="02" 
+                  title="FUND WITH BNB" 
+                  desc="Purchase BNB from any exchange (Binance, Coinbase) and transfer it to your wallet."
+                />
+                <BuyStepCard 
+                  step="03" 
+                  title="CONNECT TO DEX" 
+                  desc="Visit PancakeSwap and connect your wallet to the BNB Smart Chain network."
+                />
+                <BuyStepCard 
+                  step="04" 
+                  title="PASTE CONTRACT" 
+                  desc={
+                    <span>
+                      In the swap interface, paste the <span className="text-white/20 blur-[3px] select-none">$BAG</span> contract address to find the token. 
+                      <span className="block mt-2 text-[10px] text-alphabag-yellow font-bold uppercase tracking-tight">
+                        ONLY USE CA FROM OUR WEBSITE OR OFFICIAL COMMUNITY CHANELS/GROUPS WHEN WE ARE LIVE.
+                      </span>
+                    </span>
+                  }
+                />
+                <BuyStepCard 
+                  step="05" 
+                  title={<span>SWAP FOR <span className="text-white/20 blur-[4px] select-none inline-block">$BAG</span></span>}
+                  desc={<span>Enter the amount of BNB, confirm the swap, and welcome to the <span className="text-white/20 blur-[3px] select-none inline-block">$BAG</span> community.</span>}
+                />
+              </div>
+
+              <div className="mt-24 flex justify-center">
+                <a href="#" className="bg-alphabag-yellow text-black font-black uppercase tracking-widest px-8 py-4 rounded hover:bg-alphabag-yellowHover transition-all shadow-[0_0_20px_rgba(252,213,53,0.3)] flex items-center gap-3">
+                  <ArrowRight size={18} /> Swap on PancakeSwap
+                </a>
+              </div>
             </div>
           </section>
         )}
 
         {/* Terminal Roadmap Section */}
         {activeTab === 'roadmap' && (
-          <section id="roadmap" className="py-20 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
+          <section id="roadmap" className="pt-40 pb-24 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
             <div className="absolute inset-0 bg-alphabag-yellow/5 blur-[120px] rounded-full w-[800px] h-[800px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
-              <div className="text-center mb-10">
+              <div className="text-center mb-8 mt-12">
                 <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-[0.2em] text-white">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
                 <p className="text-alphabag-subtext font-mono text-sm uppercase tracking-widest">// Network_Deployment_Phases</p>
               </div>
@@ -236,7 +403,7 @@ export const Landing: React.FC = () => {
                 {/* Main Horizontal Trace */}
                 <div className="absolute top-[68px] left-0 right-0 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/50 to-alphabag-gray min-w-[max(100%,1200px)]"></div>
 
-                <div className="flex flex-row gap-6 md:gap-8 w-max px-6 mx-auto min-w-full justify-between items-start mt-10">
+                <div className="flex flex-row gap-6 md:gap-8 w-max px-6 mx-auto min-w-full justify-between items-start mt-4">
                   <RoadmapStep
                     phase="PHASE_01"
                     title="CORE_INITIALIZATION"
@@ -328,7 +495,7 @@ export const Landing: React.FC = () => {
 
         {/* Global Markets Section */}
         {activeTab === 'markets' && (
-          <section className="relative pt-24 pb-16 px-6 min-h-[90vh]">
+          <section className="relative pt-20 pb-20 px-6 min-h-[90vh]">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none"></div>
             <div className="max-w-7xl mx-auto relative z-10 w-full">
                <Markets />
@@ -489,12 +656,36 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 p-8 rounded-3xl hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group cursor-default shadow-glass">
-    <div className="mb-6 bg-alphabag-black w-16 h-16 rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(252,213,53,0.15)] transition-all">
+  <div className="bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 p-6 rounded-3xl hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group cursor-default shadow-glass">
+    <div className="mb-4 bg-alphabag-black w-12 h-12 rounded-xl flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(252,213,53,0.15)] transition-all">
       {icon}
     </div>
-    <h3 className="text-2xl font-semibold text-white mb-3 uppercase tracking-tighter">{title}</h3>
-    <p className="text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
+    <h3 className="text-xl font-semibold text-white mb-2 uppercase tracking-tighter">{title}</h3>
+    <p className="text-sm text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
+  </div>
+);
+
+const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
+  <div className="relative flex flex-col items-center text-center group mt-10 md:mt-0">
+    <div className="w-16 h-16 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow text-xl font-black rounded flex items-center justify-center mb-6 relative z-10 shadow-[0_0_20px_rgba(252,213,53,0.1)] group-hover:shadow-[0_0_30px_rgba(252,213,53,0.3)] group-hover:scale-110 transition-all duration-300">
+      {step}
+    </div>
+    <h3 className="text-[13px] font-black text-white uppercase tracking-[0.1em] mb-3 h-10 flex items-center justify-center">{title}</h3>
+    <p className="text-[11px] text-alphabag-subtext leading-relaxed font-medium px-2">{desc}</p>
+  </div>
+);
+
+const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
+  <div className="bg-alphabag-dark border border-white/5 p-5 rounded-2xl flex items-center gap-4 hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group">
+    <div className="w-10 h-10 bg-alphabag-black border border-white/5 rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform">
+      {icon}
+    </div>
+    <div>
+      <div className="text-[10px] text-alphabag-subtext font-bold uppercase tracking-widest mb-1">{label}</div>
+      <div className={`text-lg font-black text-white uppercase tracking-tighter ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
+        {value}
+      </div>
+    </div>
   </div>
 );
 

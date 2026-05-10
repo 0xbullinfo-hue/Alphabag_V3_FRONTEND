@@ -16,15 +16,27 @@ const MOCK_SUBMISSIONS: ProjectSubmission[] = [
     { id: '2', name: 'BSC Whale Bot', symbol: 'WHALE', founder: 'Degen_One', status: 'PENDING', createdAt: '2026-03-14' },
 ];
 
+import { AdminSidebar } from '../components/AdminSidebar';
+
 export const AdminProjectDashboard: React.FC = () => {
     return (
-        <div className="space-y-8 pb-20">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex h-screen bg-alphabag-black">
+            <AdminSidebar />
+            
+            <div className="flex-1 md:pl-64 overflow-y-auto custom-scrollbar">
+                <main className="p-4 md:p-8 lg:p-10 pb-20 max-w-7xl mx-auto space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-6 mb-10">
                 <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-3">
-                        Admin <span className="text-alphabag-yellow">Control</span>
-                    </h1>
-                    <p className="text-alphabag-subtext text-sm mt-1">Reviewing community listings and managing ad inventory.</p>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
+                            <Shield size={20} fill="currentColor" />
+                        </div>
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            Admin <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Control</span>
+                        </h1>
+                        <span className="badge-yellow">Secure Session</span>
+                    </div>
+                    <p className="text-alphabag-subtext text-xs font-medium opacity-80 uppercase tracking-widest">Protocol validation and platform asset oversight.</p>
                 </div>
             </div>
 
@@ -99,8 +111,10 @@ export const AdminProjectDashboard: React.FC = () => {
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
+    </div>
     );
 };

@@ -21,9 +21,9 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="pt-16 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-6"
+        className="pt-20 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-6"
       >
-        <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+        <div className="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
           {children}
         </div>
       </motion.main>

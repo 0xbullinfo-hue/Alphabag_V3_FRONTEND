@@ -150,7 +150,7 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] animate-fade-in max-w-7xl mx-auto text-alphabag-text mt-4">
+    <div className="flex flex-col h-[calc(100vh-100px)] animate-fade-in max-w-7xl mx-auto text-alphabag-text">
       <div className="flex justify-between items-center mb-6 px-2">
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(252,213,53,0.15)]"><Fingerprint size={24} /></div>

@@ -13,7 +13,7 @@ export const NFTs: React.FC = () => {
 
   return (
     <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-white">NFT Gallery</h1>
+        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">NFT Gallery</h1>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {nfts.map((nft) => (

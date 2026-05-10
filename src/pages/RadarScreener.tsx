@@ -59,8 +59,8 @@ export const RadarScreener: React.FC = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black uppercase tracking-tighter flex items-center flex-wrap gap-3">
-                        Radar <span className="text-alphabag-yellow">Screener</span>
+                    <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter flex items-center flex-wrap gap-3">
+                        Radar <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Screener</span>
                         <div className="px-2 py-0.5 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded text-[10px] text-alphabag-yellow font-black uppercase tracking-widest not-italic">Organic Heat</div>
                         <div className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded text-[10px] text-green-400 font-black uppercase tracking-widest flex items-center gap-1 mt-2 md:mt-0 not-italic">
                             <Zap size={10} fill="currentColor" /> LIVE FEED

@@ -1,53 +1,10 @@
 [
   {
-    "id": "kt60fpotu",
-    "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
-    "missionId": "testnet_calc_001",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "createdAt": "2026-05-08T21:43:43.179Z"
-  },
-  {
-    "id": "bw89u1zrl",
-    "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
-    "missionId": "t2e_growth_001",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "createdAt": "2026-05-08T21:49:25.520Z"
-  },
-  {
-    "id": "xsklozm29",
+    "id": "xm7jf3g18",
     "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
     "missionId": "t2e_daily_claim",
     "rewardTokens": 100,
     "rewardXP": 25,
-    "createdAt": "2026-05-08T21:57:38.073Z"
-  },
-  {
-    "id": "m9fpgeqlt",
-    "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
-    "missionId": "t2e_social_006",
-    "proofLink": "WW",
-    "rewardTokens": 100,
-    "rewardXP": 50,
-    "createdAt": "2026-05-08T23:54:22.110Z"
-  },
-  {
-    "id": "t5bpvrr6c",
-    "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
-    "missionId": "t2e_social_001",
-    "proofLink": "ETERTER",
-    "rewardTokens": 100,
-    "rewardXP": 50,
-    "createdAt": "2026-05-08T23:54:49.267Z"
-  },
-  {
-    "id": "w2o8unds7",
-    "userId": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
-    "missionId": "t2e_social_002",
-    "proofLink": "https://x.com/alphabagpro",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "createdAt": "2026-05-09T00:25:29.228Z"
+    "createdAt": "2026-05-10T14:55:40.805Z"
   }
 ]

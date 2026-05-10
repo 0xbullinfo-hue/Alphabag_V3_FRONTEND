@@ -105,7 +105,7 @@ export const WhaleDetail: React.FC = () => {
                     </Link>
                     <div>
                         <div className="flex items-center space-x-2">
-                            <h1 className="text-2xl font-bold text-white uppercase tracking-tight">{whaleInfo?.label || 'Unknown Whale'}</h1>
+                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">{whaleInfo?.label || 'Unknown Whale'}</h1>
                             <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-widest border border-alphabag-yellow/20">Verified Whale</span>
                         </div>
                         <div className="text-sm font-mono text-alphabag-subtext mt-1">{address}</div>

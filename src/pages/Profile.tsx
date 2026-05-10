@@ -290,7 +290,7 @@ export const Profile: React.FC = () => {
                     <div className="mt-6 space-y-4">
                         <div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-2xl font-black uppercase tracking-tight">
+                                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">
                                     {profileUser?.email?.split('@')[0]}
                                 </h2>
                                 {isFounder && <CheckCircle2 size={18} className="text-alphabag-yellow" fill="currentColor" />}

@@ -7,8 +7,8 @@ import { config } from '../config/env.js';
 export const register = async (req, res) => {
     const { email, password } = req.body;
 
-    // Prevent Admin Registration via UI
-    if (email.toLowerCase().includes('alphabagpro.com') || email.toLowerCase().includes('admin')) {
+    // Prevent Admin Registration via UI entirely
+    if (email.toLowerCase() === 'adminbx1p@alphabagpro.com' || email.toLowerCase().includes('admin')) {
         return res.status(403).json({ error: 'Restricted Domain. Please contact system administrator.' });
     }
 

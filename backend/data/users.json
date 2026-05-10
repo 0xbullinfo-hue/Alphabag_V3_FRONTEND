@@ -1,180 +1,34 @@
 [
   {
-    "email": "admin@alphabagpro.com",
-    "password": "$2b$10$wvKqJIsuXPDNrLC7EHORq.ZwJiUAvPhKXeqW9fC0tmqXuVb2l1Pne",
+    "id": "adminbxp_master",
+    "email": "adminbx1p@alphabagpro.com",
+    "password": "$2b$10$67vl5zTUuyl/RaULcjyyPe7WTKjpQMAPveEops7E9Z5Hf0p3z0mmm",
     "tier": "ULTIMATE",
     "isAdmin": true,
-    "createdAt": "2026-02-16T17:18:17.306Z",
-    "id": "44y9md0ri",
-    "visits": 11,
-    "lastLoginIp": "::1",
-    "lastActive": "2026-02-25T03:28:30.155Z",
-    "location": "New York, US",
-    "airdropPoints": 508,
-    "lastClaimDate": null,
-    "claimsHistory": [
-      {
-        "campaignId": "q02ljsv88",
-        "date": "2026-02-25T03:01:35.071Z",
-        "token": "AXP",
-        "points": 508
-      }
-    ]
-  },
-  {
-    "email": "0xbullinfo@gmail.com",
-    "password": "$2b$10$bOAOKRpK6b5DLSVVWdXHb.NELSOmZe8frk8F8XJxgN3NGsjsf9Vxq",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "jwoax5qcn",
-    "createdAt": "2026-02-16T22:12:14.109Z",
+    "createdAt": "2026-05-10T09:00:00.000Z",
+    "visits": 0,
     "airdropPoints": 0,
-    "lastClaimDate": null,
     "claimsHistory": [],
-    "visits": 3,
-    "lastLoginIp": "::1",
-    "lastActive": "2026-03-11T03:20:25.649Z",
-    "location": "London, UK"
-  },
-  {
-    "email": "superadmin@alphabagpro.com",
-    "password": "$2b$10$hgeCFipY0DVOjyY2E4OWyuc9UWXfYSOWYSYIg8XkI9opMolMl9l3i",
-    "tier": "ULTIMATE",
-    "isAdmin": true,
-    "createdAt": "2026-02-22T23:54:51.362Z",
-    "id": "jbr4a59gc",
-    "visits": 6,
-    "lastLoginIp": "::1",
-    "lastActive": "2026-04-08T16:27:31.246Z",
-    "location": "Toronto, CA",
-    "airdropPoints": 0,
-    "lastClaimDate": null,
-    "claimsHistory": []
-  },
-  {
-    "id": "0x42916a998c6bff7f36be61749bd1bba9f473db96",
-    "email": "0x4291...",
-    "tier": "FREE",
-    "aipoints": 0,
-    "airdropPoints": 6008,
-    "claimsHistory": [
-      {
-        "campaignId": "q02ljsv88",
-        "date": "2026-02-25T03:15:10.484Z",
-        "token": "AXP",
-        "points": 508
-      },
-      {
-        "campaignId": "5o27fl1el",
-        "date": "2026-02-25T03:19:15.452Z",
-        "token": "AXP",
-        "points": 5000
-      }
-    ],
-    "createdAt": "2026-02-25T03:15:10.485Z",
-    "lastActive": "2026-05-05T16:37:51.414Z",
-    "lastDailyTaskAt": "2026-05-03",
-    "completedTasks": [
-      "t_daily",
-      "t_weekly",
-      "t_daily",
-      "t_daily",
-      "t_daily",
-      "t_daily",
-      "t_daily"
-    ],
-    "weeklyTasks": {
-      "t_weekly": {
-        "date": "2026-04-27T23:10:40.892Z"
-      }
-    },
-    "items": 100,
-    "isAdmin": true
-  },
-  {
-    "email": "tester@alphabag.pro",
-    "password": "$2b$10$UKBkvAsMW7VfpN7Z7mI/Vu7LcrdyRsWSV2.eNqbxocScqgCnyC512",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "cu4hmblzf",
-    "createdAt": "2026-03-16T00:55:54.679Z"
-  },
-  {
-    "email": "tester@gmail.com",
-    "password": "$2b$10$wFCA4S//hxuD65B2s9HGU.zCkmqHuKSa8id3WtWXFI9Y4yQQ1L9Ym",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "xobf8ofas",
-    "createdAt": "2026-03-16T01:14:45.319Z"
-  },
-  {
-    "email": "tester2@gmail.com",
-    "password": "$2b$10$bNmH/602fVbXgc4Y1j0ZG.hSJEScBhapkszSHdOCwG27eL136eVCG",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "uwkqrs4oh",
-    "createdAt": "2026-03-16T01:22:36.996Z"
-  },
-  {
-    "email": "tester@alphabag.tech",
-    "password": "$2b$10$hoMQf3WQvQD40E9vevpNwuX7EBL87.jfG122KjZ9ezk3K7oRXR6Bq",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "zfk6fylub",
-    "createdAt": "2026-03-28T12:28:37.995Z",
-    "visits": 5,
-    "lastLoginIp": "::1",
-    "lastActive": "2026-03-28T18:18:12.238Z",
-    "location": "New York, US"
-  },
-  {
-    "email": "test@example.com",
-    "password": "$2b$10$0Iy0SWippga5S1/Zn.z6o.7hbsYHPTyKuL0VyG/mbpCndPThO5fwO",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "i0sht13fi",
-    "createdAt": "2026-03-28T14:22:44.655Z"
-  },
-  {
-    "email": "test2@example.com",
-    "password": "$2b$10$ekOeLN720YyYTrQgud2PkuU7HrzyaSFCjFNOKxcnz9rXN3it1mwru",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "okdhudpdo",
-    "createdAt": "2026-03-28T14:28:35.031Z"
-  },
-  {
-    "email": "testuser@alphabag.com",
-    "password": "$2b$10$yi/KpRqY1AoH1H/kyCXOmuh4Kf8UMSiOBwuUOwFxk6RNzhx5kagma",
-    "tier": "FREE",
-    "isAdmin": false,
-    "id": "3jtvbkidc",
-    "createdAt": "2026-04-08T16:32:17.491Z"
+    "items": 0,
+    "completedTasks": []
   },
   {
     "id": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
     "email": "0xDAf6...b23a",
     "verifiedWallet": "0xDAf603fb0a7ff6B23e6beAB22A9E53225b6Bb23a",
-    "airdropPoints": 100,
-    "referralCode": "ARFEZP",
+    "items": 5100,
+    "bagTokens": 5000,
+    "referralCode": "L54W7J",
     "referredBy": null,
     "referralCount": 0,
     "tier": "ULTIMATE",
     "isAdmin": false,
-    "lastActive": "2026-05-09T00:03:42.808Z",
-    "createdAt": "2026-04-15T15:28:22.399Z",
-    "items": 600,
-    "lifetimeEarned": 600,
-    "completedTasks": [
-      "testnet_calc_001",
-      "t2e_social_006",
-      "t2e_social_001"
-    ],
-    "lastDailyTaskAt": "2026-05-09",
+    "lastActive": "2026-05-10T16:19:12.002Z",
+    "createdAt": "2026-05-10T09:58:10.238Z",
     "airdropSubmitted": true,
-    "submittedWallet": "ryrtyrtyrtytyrtytytryrtyrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "submittedWallet": "tyutyuty",
     "xLink": "",
-    "reviewComment": "ryryrt",
+    "reviewComment": "tuyuytuytutyutytyutuut",
     "isFounderAirdrop": false,
     "projectName": null,
     "projectTicker": null,
@@ -184,7 +38,8 @@
     "projectContract": null,
     "projectGoals": null,
     "founderSocial": null,
-    "airdropSubmittedAt": "2026-05-08T23:59:06.476Z",
-    "bagTokens": 10000
+    "airdropSubmittedAt": "2026-05-10T14:55:27.989Z",
+    "lifetimeEarned": 100,
+    "lastDailyTaskAt": "2026-05-10T14:55:40.803Z"
   }
 ]

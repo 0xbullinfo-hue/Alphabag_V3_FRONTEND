@@ -34,7 +34,7 @@ export const ChainOverview: React.FC = () => {
             <div className="flex items-center space-x-3">
                 <img src={chain.icon} alt={chain.name} className="w-10 h-10 rounded-full" />
                 <div>
-                    <h1 className="text-2xl font-bold text-white">{chain.name}</h1>
+                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">{chain.name}</h1>
                     <span className="text-xs text-alphabag-subtext bg-alphabag-gray px-2 py-0.5 rounded uppercase">{chain.symbol}</span>
                 </div>
             </div>

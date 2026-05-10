@@ -73,7 +73,11 @@ const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
 
 // Fix: Correctly typing AdminRoute props to include children using React.PropsWithChildren
 const AdminRoute = ({ children }: React.PropsWithChildren<{}>) => {
-  // Temporary Hard-Bypass for isolated testing
+  const { user, isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return <GlobalLoader />;
+  if (!isAuthenticated || !user?.isAdmin) {
+    return <Navigate to="/" replace />;
+  }
   return <>{children}</>;
 };
 
@@ -151,7 +155,6 @@ const AppContent = () => {
           <Route path="/calculator" element={<PrivateRoute><Calculator /></PrivateRoute>} />
 
           <Route path="/markets" element={<Layout><Markets /></Layout>} />
-          <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
           <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
           <Route path="/whales" element={<PrivateRoute><Whales /></PrivateRoute>} />
           <Route path="/whales/:address" element={<PrivateRoute><WhaleDetail /></PrivateRoute>} />

@@ -39,40 +39,54 @@ export const DeFi: React.FC = () => {
     const pendingYield = totalValueLocked * 0.0015; 
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 max-w-[1400px] w-full mx-auto space-y-6 animate-fade-in text-alphabag-text">
-             {/* Header */}
-             <div className="bg-alphabag-dark border border-alphabag-gray rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                 <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
-                     <Layers size={250} />
-                 </div>
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 max-w-7xl w-full mx-auto space-y-6 animate-fade-in text-alphabag-text">
+            {/* 1. Header Area Area Area Area Area */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-6 mb-10">
+                <div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
+                            <Layers size={20} fill="currentColor" />
+                        </div>
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            DeFi <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Operations</span>
+                        </h1>
+                        <span className="badge-yellow">Active Tracking</span>
+                    </div>
 
-                 <div className="relative z-10 w-full md:w-auto">
-                     <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3 mb-6">
-                        DeFi <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Tracker</span>
-                     </h1>
-                     
-                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12 w-full">
-                         <div>
-                             <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-[0.2em] mb-1">Total Supplied</p>
-                             <h2 className="text-3xl font-black text-white tabular-data">${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
-                         </div>
-                         <div>
-                             <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-[0.2em] mb-1">Total Borrowed</p>
-                             <h2 className="text-3xl font-black text-alphabag-red tabular-data">${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
-                         </div>
-                         <div>
-                             <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-[0.2em] mb-1">Net APY</p>
-                             <h2 className="text-3xl font-black text-alphabag-green tabular-data">+{netApy.toFixed(2)}%</h2>
-                         </div>
-                         <div>
-                             <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-[0.2em] mb-1">Pending Yield</p>
-                             <div className="flex items-end gap-3">
-                                <h2 className="text-3xl font-black text-alphabag-yellow tabular-data">${pendingYield.toFixed(2)}</h2>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-             </div>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                        <div>
+                            <span className="section-label mb-1.5 block opacity-70">Total Supplied</span>
+                            <h2 className="text-3xl font-black text-white tabular-nums">${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
+                        </div>
+                        <div>
+                            <span className="section-label mb-1.5 block opacity-70">Total Borrowed</span>
+                            <h2 className="text-3xl font-black text-red-400 tabular-nums">${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
+                        </div>
+                        <div>
+                            <span className="section-label mb-1.5 block opacity-70">Net APY</span>
+                            <h2 className="text-3xl font-black text-green-400 tabular-nums">+{netApy.toFixed(2)}%</h2>
+                        </div>
+                        <div>
+                            <span className="section-label mb-1.5 block opacity-70">Pending Yield</span>
+                            <h2 className="text-3xl font-black text-alphabag-yellow tabular-nums">${pendingYield.toFixed(2)}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <div className="glass-panel px-4 py-2 flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-glow-green"></div>
+                        <span className="section-label text-[9px]">Live Nodes</span>
+                    </div>
+                    <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="rounded-2xl border-white/10 hover:border-alphabag-yellow/50 transition-all font-black uppercase tracking-widest text-[10px] h-10 px-6"
+                    >
+                        <Activity size={14} className="mr-2" /> Protocol Audit
+                    </Button>
+                </div>
+            </div>
 
              {/* Tabs & Actions */}
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

@@ -159,15 +159,15 @@ export const AlphasFeed: React.FC = () => {
                 onExit={() => window.location.hash = '#/'}
             />
 
-            <div className={`max-w-[1400px] mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-700 ${showOnboarding ? 'blur-2xl pointer-events-none scale-95 opacity-50' : 'blur-0 opacity-100 scale-100'}`}>
+            <div className={`max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 transition-all duration-700 ${showOnboarding ? 'blur-2xl pointer-events-none scale-95 opacity-50' : 'blur-0 opacity-100 scale-100'}`}>
 
                 {/* Left Sidebar: Featured Founders */}
-                <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto py-6 hide-scrollbar">
-                    <div className="bg-alphabag-black/40 backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden shadow-2xl">
-                        <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-                            <h3 className="font-black text-[11px] uppercase tracking-widest text-white flex items-center gap-2">
+                <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
+                    <div className="glass-panel overflow-hidden">
+                        <div className="p-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                            <span className="section-label text-white flex items-center gap-2">
                                 <Users size={14} className="text-alphabag-yellow" /> Featured Founders
-                            </h3>
+                            </span>
                         </div>
                         <div className="divide-y divide-white/5">
                             {foundersProjects.length > 0 ? (
@@ -216,8 +216,20 @@ export const AlphasFeed: React.FC = () => {
 
                 {/* Main Feed */}
                 <div className="lg:col-span-6 border-x border-white/5 min-h-screen">
+                    <div className="p-6 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
+                        <div className="flex items-center gap-3 mb-1">
+                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/10">
+                                <Rocket size={16} fill="currentColor" />
+                            </div>
+                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                                Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Feed</span>
+                            </h1>
+                        </div>
+                        <p className="text-[10px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
+                    </div>
+
                     {/* Top Tabs */}
-                    <div className="sticky top-0 z-10 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5">
+                    <div className="sticky top-0 z-20 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5">
                         <div className="flex w-full">
                             {['For you', 'Following'].map((label, i) => {
                                 const tab = i === 0 ? 'FOR_YOU' : 'FOLLOWING';
@@ -225,13 +237,13 @@ export const AlphasFeed: React.FC = () => {
                                     <button
                                         key={label}
                                         onClick={() => setActiveTab(tab as any)}
-                                        className="flex-1 py-4 text-sm font-bold transition-colors relative group"
+                                        className="flex-1 py-5 text-[11px] font-black uppercase tracking-[0.2em] transition-all relative group"
                                     >
                                         <span className={activeTab === tab ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
                                             {label}
                                         </span>
                                         {activeTab === tab && (
-                                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-alphabag-yellow rounded-full" />
+                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow shadow-glow-yellow/50" />
                                         )}
                                     </button>
                                 );
@@ -320,7 +332,7 @@ export const AlphasFeed: React.FC = () => {
                 </div>
 
                 {/* Sidebar Widgets */}
-                <div className="hidden lg:block lg:col-span-3 py-4 space-y-4 sticky top-4 h-fit">
+                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-4 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
                     {/* My Profile Quick Access [NEW] */}
                     <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-2xl p-4 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
                         onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}

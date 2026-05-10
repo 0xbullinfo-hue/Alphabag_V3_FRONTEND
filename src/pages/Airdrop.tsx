@@ -47,11 +47,7 @@ export const Airdrop: React.FC = () => {
     const handleTaskLinkChange = (id: string, value: string) => setTaskLinks(prev => ({ ...prev, [id]: value }));
     const handleTaskFeedbackChange = (id: string, value: string) => setTaskFeedback(prev => ({ ...prev, [id]: value }));
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitted, setSubmitted] = useState(() => {
-        // Persist submission state per user so form can't be re-submitted
-        const key = `alphabag_submitted_${user?.id || 'guest'}`;
-        return localStorage.getItem(key) === 'true';
-    });
+    const [submitted, setSubmitted] = useState(false);
     const [isFounderApplication, setIsFounderApplication] = useState(false);
     
     // Founder Project Fields
@@ -171,6 +167,23 @@ export const Airdrop: React.FC = () => {
             checkStatus();
         }
     }, [user]);
+
+    // Live TGE end checker
+    useEffect(() => {
+        if (!stats?.tgeDate) return;
+
+        const checkTGE = () => {
+            const now = new Date().getTime();
+            const tge = new Date(stats.tgeDate).getTime();
+            if (now >= tge && !campaignEnded) {
+                setCampaignEnded(true);
+            }
+        };
+
+        checkTGE();
+        const interval = setInterval(checkTGE, 1000);
+        return () => clearInterval(interval);
+    }, [stats?.tgeDate, campaignEnded]);
 
     const handleCompleteTask = async (taskId: string, requiresLink?: boolean) => {
         if (!user) {
@@ -317,13 +330,12 @@ export const Airdrop: React.FC = () => {
             });
 
             if (res.data.success) {
-                const key = `alphabag_submitted_${user?.id || 'guest'}`;
-                localStorage.setItem(key, 'true');
+                setSubmitted(true);
                 setSubmitted(true);
                 
-                // Immediately apply the 5000 ITEM reward
-                if (res.data.items !== undefined) {
-                    setItemsBalance(res.data.items);
+                // Immediately apply the 5000 Reserve ITEMS reward
+                if (res.data.bagTokens !== undefined) {
+                    setBagBalance(res.data.bagTokens);
                 }
                 await refreshUser();
 
@@ -364,21 +376,27 @@ export const Airdrop: React.FC = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 pb-20 px-4 md:px-8">
-            {/* Header section */}
-            <div className="text-center space-y-6 relative">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-alphabag-yellow/10 rounded-full blur-[100px] pointer-events-none -z-10"></div>
-                
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(252,213,53,0.2)]">
-                    <Zap size={12} fill="currentColor" className="animate-pulse" /> v1.0 Testnet Phase
+        <div className="max-w-7xl mx-auto space-y-8 pb-20 px-4 md:px-8 animate-in fade-in duration-700">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-4 mb-10">
+                <div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
+                            <Gift size={20} fill="currentColor" />
+                        </div>
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            Mission <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Control</span>
+                        </h1>
+                        <span className="badge-yellow">v1.0 Testnet</span>
+                    </div>
+                    <p className="text-alphabag-subtext text-xs max-w-2xl mt-1 font-medium leading-relaxed">
+                        Task-to-Earn (T2E) protocol. Complete missions to accumulate **ITEMS** for future utility rewards.
+                    </p>
                 </div>
-                <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative mb-6">
-                    Mission Control: <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">AlphaBAG</span>
-                </h1>
-                <p className="text-alphabag-subtext max-w-2xl mx-auto font-medium text-sm leading-relaxed">
-                    We're rewarding our community with **ITEMS** for active participation. Join our Task-to-Earn (T2E) program to accumulate ITEMS, which will be collected for future utility rewards at TGE. Complete the mission goals below to secure your allocation.
-                </p>
-                
+                <div className="flex items-center gap-4">
+                    <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/30 px-4 py-2 rounded-2xl text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] shadow-glow-yellow/5 flex items-center gap-2">
+                        <Zap size={14} fill="currentColor" className="animate-pulse" /> Live Tracking
+                    </div>
+                </div>
             </div>
 
             {/* Mission Paused Banner */}
@@ -401,30 +419,30 @@ export const Airdrop: React.FC = () => {
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
 
                     return (
-                        <div className="glass-panel p-3 bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl">
-                            <div className="absolute -top-6 -right-6 w-16 h-16 bg-alphabag-yellow/10 rounded-full blur-xl group-hover:bg-alphabag-yellow/20 transition-all duration-700"></div>
-                            <div className="flex justify-between items-start mb-3">
-                                <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest">My Team</div>
-                                <Users size={14} className="text-alphabag-yellow opacity-50" />
+                        <div className="glass-panel p-6 transition-all group relative overflow-hidden border border-alphabag-yellow/20 flex flex-col h-full">
+                            <div className="absolute -top-6 -right-6 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-2xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                            <div className="flex justify-between items-start mb-4">
+                                <span className="section-label">My Team</span>
+                                <Users size={16} className="text-alphabag-yellow opacity-50" />
                             </div>
-                            <div className="text-2xl font-black text-white tracking-tight mb-2">{myTeamSize}</div>
+                            <div className="text-3xl font-black text-white tracking-tight mb-4">{myTeamSize}</div>
 
-                            <div className="space-y-1">
+                            <div className="space-y-2">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-alphabag-yellow">CAPACITY</span>
-                                    <span className="text-[8px] text-alphabag-muted font-bold">{100 - myTeamSize} slots left</span>
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow">CAPACITY</span>
+                                    <span className="text-[9px] text-alphabag-muted font-bold">{100 - myTeamSize} slots left</span>
                                 </div>
-                                <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                                    <div className="h-full rounded-full transition-all duration-700 bg-alphabag-yellow" style={{width: `${progress}%`}}></div>
+                                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                    <div className="h-full rounded-full transition-all duration-1000 bg-alphabag-yellow shadow-glow-yellow" style={{width: `${progress}%`}}></div>
                                 </div>
-                                <div className="text-[8px] text-alphabag-muted font-bold mb-4">{myTeamSize} / 100 MAX</div>
+                                <div className="text-[9px] text-alphabag-muted font-bold">{myTeamSize} / 100 MAX</div>
                             </div>
 
                             {/* Status Row */}
-                            <div className="mt-4 pt-4 border-t border-white/5">
-                                <div className="bg-red-500/10 p-2.5 rounded-lg border border-red-500/20 flex justify-between items-center">
-                                    <div className="text-[8px] font-bold uppercase tracking-widest text-red-400">Status Strike Protocol</div>
-                                    <div className="text-sm font-black text-red-400">
+                            <div className="mt-auto pt-6 border-t border-white/5">
+                                <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex justify-between items-center h-[52px]">
+                                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-red-400">Strike Protocol</div>
+                                    <div className="text-lg font-black text-red-400">
                                         {(user as any)?.strikes || 0}/5
                                     </div>
                                 </div>
@@ -433,102 +451,114 @@ export const Airdrop: React.FC = () => {
                     );
                 })()}
 
-                <div className="glass-panel p-3 bg-gradient-to-br from-white/[0.03] to-transparent border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.1)] transition-all group relative overflow-hidden rounded-xl">
-                    <div className="absolute -top-6 -right-6 w-16 h-16 bg-alphabag-yellow/10 rounded-full blur-xl group-hover:bg-alphabag-yellow/20 transition-all duration-700"></div>
+                <div className="glass-panel p-6 border-alphabag-yellow/20 shadow-[0_0_20px_rgba(252,213,53,0.1)] transition-all group relative overflow-hidden flex flex-col h-full">
+                    <div className="absolute -top-6 -right-6 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-2xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
 
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-                        <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest">Earned ITEMS</div>
-                        <span className="text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full border bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/40">ELIGIBLE</span>
+                    <div className="flex justify-between items-center mb-4 pb-3 border-b border-white/5">
+                        <span className="section-label text-alphabag-yellow">Earned ITEMS</span>
+                        <span className="badge-yellow">ELIGIBLE</span>
                     </div>
 
                     {/* Main Balance (Total) */}
-                    <div className="mb-4">
-                        <div className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest mb-1">Total ITEMS Earned</div>
+                    <div className="mb-6">
+                        <div className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest mb-1.5 opacity-70">Total Portfolio ITEMS</div>
                         <div className="text-4xl font-black text-white tracking-tight drop-shadow-md">
                             {(itemsBalance + bagBalance).toLocaleString()}
                         </div>
                     </div>
 
                     {/* Breakdown */}
-                    <div className="flex gap-4 mb-4 pb-4 border-b border-white/5">
+                    <div className="flex gap-6 mb-6 pb-6 border-b border-white/5">
                         <div className="flex-1">
-                            <div className="text-[8px] text-alphabag-muted font-bold uppercase tracking-widest mb-0.5">Earned ITEMS</div>
-                            <div className="text-lg font-black text-white/90">{itemsBalance.toLocaleString()}</div>
+                            <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest mb-1 opacity-70">Earned</div>
+                            <div className="text-xl font-black text-white/90 tabular-nums">{itemsBalance.toLocaleString()}</div>
                         </div>
                         <div className="flex-1">
-                            <div className="text-[8px] text-alphabag-yellow font-bold uppercase tracking-widest mb-0.5">Reserve ITEMS</div>
-                            <div className="text-lg font-black text-alphabag-yellow drop-shadow-[0_0_8px_rgba(252,213,53,0.3)]">{bagBalance.toLocaleString()}</div>
+                            <div className="text-[9px] text-alphabag-yellow font-black uppercase tracking-widest mb-1 opacity-70">Reserve</div>
+                            <div className="text-xl font-black text-alphabag-yellow drop-shadow-[0_0_8px_rgba(252,213,53,0.3)] tabular-nums">{bagBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
-                    {/* Actions */}
-                    <div className="flex gap-2">
-                        {campaignEnded ? (
-                            <>
-                                <button onClick={handleConvertItems} className="flex-1 bg-alphabag-yellow text-black px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-transform z-10 relative shadow-lg">
-                                    CONVERT
-                                </button>
-                                {bagBalance > 0 && (
-                                    <button
-                                        onClick={handleRequestPayout}
-                                        className="flex-1 bg-white/5 border border-alphabag-yellow/50 text-alphabag-yellow px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-white/10 transition-all"
-                                    >
-                                        WITHDRAWAL
+                    {/* Actions + Footer — grouped as single pinned-bottom block */}
+                    <div className="mt-auto pt-6 border-t border-white/5">
+                        <div className="flex gap-3">
+                            {campaignEnded ? (
+                                <>
+                                    <button onClick={handleConvertItems} className="flex-1 bg-alphabag-yellow text-black px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all z-10 relative shadow-glow-yellow/20">
+                                        CONVERT
                                     </button>
-                                )}
-                            </>
-                        ) : (
-                            <div className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-center text-[8px] text-alphabag-muted font-black uppercase tracking-widest">
-                                Locked until campaign end
+                                    {bagBalance > 0 && (
+                                        <button
+                                            onClick={handleRequestPayout}
+                                            className="flex-1 bg-white/5 border border-alphabag-yellow/50 text-alphabag-yellow px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-alphabag-yellow/10 active:scale-[0.98] transition-all"
+                                        >
+                                            WITHDRAWAL
+                                        </button>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="w-full h-[52px] px-4 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-[9px] text-alphabag-muted font-black uppercase tracking-[0.2em] opacity-60">
+                                    Locked until campaign end
+                                </div>
+                            )}
+                        </div>
+                        {itemsToBagRate && itemsToBagRate > 0 && (
+                            <div className="mt-3 text-center text-[9px] text-alphabag-muted font-black uppercase tracking-widest opacity-50">
+                                Rate: {itemsToBagRate} ITEMS = 1 utility token
                             </div>
                         )}
                     </div>
-
-                    {/* Footer Info */}
-                    {itemsToBagRate && itemsToBagRate > 0 && (
-                        <div className="mt-2 text-center text-[8px] text-alphabag-muted font-bold uppercase tracking-tight">
-                            Rate: {itemsToBagRate} ITEMS = 1 utility token
-                        </div>
-                    )}
                 </div>
 
-                <div className="glass-panel p-3 bg-gradient-to-br from-alphabag-green/5 to-transparent border border-alphabag-green/20 relative overflow-hidden rounded-xl shadow-[0_4px_30px_rgba(0,255,163,0.05)] flex flex-col">
-                    <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-alphabag-green/10 rounded-full blur-xl opacity-50"></div>
-                    <div className="flex justify-between items-start mb-3">
-                        <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest">TGE EVENT</div>
-                        <Gift size={14} className="text-alphabag-green opacity-50" />
+                <div className="glass-panel p-6 border-alphabag-green/20 relative overflow-hidden shadow-[0_4px_30px_rgba(0,255,163,0.05)] flex flex-col h-full transition-all group">
+                    <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-alphabag-green/10 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
+                    <div className="flex justify-between items-start mb-4">
+                        <span className="section-label">TGE EVENT</span>
+                        <Gift size={16} className="text-alphabag-green opacity-50" />
                     </div>
-
-                    {stats?.tgeDate ? (
+                    {stats ? (
                         <div className="flex flex-col flex-1">
-                            <div>
-                                {campaignEnded ? (
-                                    <div className="animate-in fade-in zoom-in duration-500">
-                                        <div className="text-[8px] text-alphabag-yellow font-black uppercase tracking-[0.2em] text-center mb-2">Wallet Distribution Protocol</div>
-                                        <TGECountdown targetDate={new Date(new Date(stats.tgeDate).getTime() + 72 * 60 * 60 * 1000).toISOString()} />
-                                    </div>
-                                ) : (
-                                    <>
-                                        <TGECountdown targetDate={stats.tgeDate} />
-                                        <div className="mt-2 text-center text-[8px] text-alphabag-muted font-bold uppercase tracking-widest">
-                                            Target: {new Date(stats.tgeDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                        </div>
-                                    </>
-                                )}
-                            </div>
-
-                            <div className="mt-auto pb-2 border-b border-alphabag-green/20">
-                                <div className={`text-[8px] font-black uppercase tracking-[0.2em] text-center mb-1 ${campaignEnded ? 'text-alphabag-yellow animate-pulse' : 'text-alphabag-green'}`}>
-                                    {campaignEnded ? "Final $BAG Allocation" : "Projected $BAG Allocation"}
+                        <div className="mb-6">
+                            {campaignEnded ? (
+                                <div className="animate-in fade-in zoom-in duration-500">
+                                    <div className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] text-center mb-3">Wallet Distribution Protocol</div>
+                                    <TGECountdown targetDate={new Date(new Date(stats.tgeDate).getTime() + 72 * 60 * 60 * 1000).toISOString()} />
                                 </div>
-                                <div className={`text-center font-black transition-all duration-700 tracking-tight py-2 ${campaignEnded ? 'text-3xl text-alphabag-yellow drop-shadow-[0_0_10px_rgba(252,213,53,0.5)]' : 'text-2xl text-white/30 blur-[2px] tracking-[0.3em]'}`}>
-                                    {campaignEnded ? (bagBalance + (itemsBalance * (itemsToBagRate || 0))).toLocaleString() : "????"}
+                            ) : (
+                                <>
+                                    <TGECountdown targetDate={stats?.tgeDate || new Date().toISOString()} />
+                                    <div className="mt-3 text-center">
+                                        <span className="badge-blue">
+                                            Target: {stats?.tgeDate ? new Date(stats.tgeDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Q4 2026'}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+
+                            <div className="mt-auto pt-6 border-t border-alphabag-green/20">
+                                <div className={`text-[8px] font-black uppercase tracking-[0.2em] text-center mb-1 ${campaignEnded ? 'text-alphabag-yellow animate-pulse' : 'text-alphabag-green'}`}>
+                                    {campaignEnded ? "Final Allocation" : "Projected Allocation"}
+                                </div>
+                                <div className={`text-center font-black transition-all duration-700 tracking-tight py-2 ${campaignEnded ? 'text-3xl text-alphabag-yellow drop-shadow-[0_0_10px_rgba(252,213,53,0.5)]' : 'text-2xl tracking-[0.2em] relative flex justify-center'}`}>
+                                    {campaignEnded ? (
+                                        (bagBalance + (itemsBalance * (itemsToBagRate || 0))).toLocaleString()
+                                    ) : (
+                                        <div className="group relative w-fit flex justify-center items-center cursor-help">
+                                            <span className="text-white/10 blur-[8px] select-none">
+                                                {(bagBalance + (itemsBalance * (itemsToBagRate || 1))).toLocaleString()}
+                                            </span>
+                                            <div className="absolute inset-0 flex items-center justify-center font-black text-alphabag-yellow text-[10px] uppercase whitespace-nowrap bg-alphabag-black/90 rounded px-2 backdrop-blur-md border border-alphabag-yellow/20 z-10 pointer-events-none">
+                                                Unlocks at TGE
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="py-2 text-center mt-auto">
+                        <div className="py-2 text-center mt-6">
                             <div className="text-lg font-black text-alphabag-green/60 tracking-tight">TBA</div>
                             <div className="text-[8px] text-alphabag-muted font-bold uppercase tracking-widest mt-0.5">Announcement incoming</div>
                         </div>
@@ -550,7 +580,7 @@ export const Airdrop: React.FC = () => {
             </div>
 
             {/* Team Referral Hub */}
-            <div className="glass-panel p-6 bg-[#0a0a0a] border border-white/5 rounded-3xl relative overflow-hidden mb-8">
+            <div className="glass-panel p-6 bg-[#0a0a0a] border border-alphabag-yellow/20 rounded-3xl relative overflow-hidden mb-8">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-alphabag-yellow/5 rounded-full blur-[100px] pointer-events-none"></div>
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 ">
                         <div>
@@ -591,7 +621,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Mission Section */}
             <div className="space-y-8">
-                <div className="glass-panel p-8 space-y-6 bg-gradient-to-b from-[#0c0c0c] to-black border border-white/5 rounded-3xl">
+                <div className="glass-panel p-8 space-y-6 bg-gradient-to-b from-[#0c0c0c] to-black border border-alphabag-yellow/20 rounded-3xl">
                     <div className="flex justify-between items-center border-b border-white/5 pb-6">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
                             <Shield className="text-alphabag-yellow" /> Mission Hub
@@ -631,9 +661,9 @@ export const Airdrop: React.FC = () => {
                             })();
                             const type = task.frequency?.toLowerCase() || task.type?.toLowerCase();
                             return (
-                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 rounded-2xl border transition-all group relative overflow-hidden ${isCompleted ? 'bg-alphabag-green/5 border-alphabag-green/20' : 'bg-white/[0.02] border-white/5 hover:border-alphabag-yellow/30'}`}>
+                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 transition-all group relative overflow-hidden border ${isCompleted ? 'bg-alphabag-green/5 border-alphabag-green/20 rounded-2xl' : 'bg-[#0d0d11]/60 backdrop-blur-xl border-alphabag-yellow/20 rounded-2xl hover:border-alphabag-yellow/40 hover:bg-white/[0.04]'}`}>
                                     <div className="flex justify-between items-start mb-4">
-                                        <div className={`p-3 rounded-xl ${isCompleted ? 'bg-alphabag-green/20 text-alphabag-green' : 'bg-alphabag-yellow/10 text-alphabag-yellow'}`}>
+                                        <div className={`p-3 rounded-xl ${isCompleted ? 'bg-alphabag-green/20 text-alphabag-green shadow-glow-green/10' : 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-glow-yellow/10'}`}>
                                             <Zap size={20} fill="currentColor" className={!isCompleted ? 'animate-pulse' : ''} />
                                         </div>
                                         {isCompleted ? (
@@ -641,13 +671,15 @@ export const Airdrop: React.FC = () => {
                                                 <CheckCircle2 size={14} /> Completed
                                             </div>
                                         ) : (
-                                            <div className="text-[10px] text-alphabag-yellow font-black uppercase tracking-widest bg-alphabag-yellow/10 px-2 py-1 rounded-md">
-                                                +{task.rewardTokens || task.rewardTokens || 0} ITEMS
+                                            <div className="badge-yellow">
+                                                +{task.rewardTokens || 0} ITEMS
                                             </div>
                                         )}
                                     </div>
-                                    <div className="flex-1"><h3 className="font-black text-white uppercase tracking-wider mb-1">{task.title}</h3>
-                                    <p className="text-xs text-alphabag-subtext mb-2 leading-relaxed">{task.description}</p></div>
+                                    <div className="flex-1">
+                                        <h3 className="section-title text-base mb-1.5">{task.title}</h3>
+                                        <p className="text-xs text-alphabag-muted mb-4 leading-relaxed font-medium opacity-80">{task.description}</p>
+                                    </div>
 
 
                                     {task.actionUrl && !isCompleted && (
@@ -664,7 +696,7 @@ export const Airdrop: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {((isCompleted && task.id === 't2e_daily_claim') || (task.id === 't2e_daily_claim' && (user as any)?.lastDailyTaskAt)) && (
+                                    {task.id === 't2e_daily_claim' && (
                                         <div className="mb-4">
                                             <div className="text-[8px] text-alphabag-muted font-black uppercase tracking-[0.2em] mb-2 text-center opacity-50">Next Transmission Window</div>
                                             <div className="flex gap-2 justify-center">

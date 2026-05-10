@@ -148,7 +148,7 @@ export const CoinDetail: React.FC = () => {
                     <div className="flex items-center space-x-4">
                         <img src={coin.image} className="w-12 h-12 rounded-full shadow-lg p-1 bg-alphabag-gray" alt={coin.name} />
                         <div>
-                            <h1 className="text-3xl font-bold text-alphabag-text leading-tight">{coin.name} <span className="text-alphabag-subtext text-xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
+                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase leading-tight">{coin.name} <span className="text-alphabag-subtext text-xl md:text-2xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
                             <div className="flex items-center space-x-2 mt-1">
                                 <span className="bg-alphabag-black text-[10px] px-2 py-0.5 rounded text-alphabag-yellow border border-alphabag-gray font-bold uppercase tracking-widest">Rank #{coin.market_cap_rank}</span>
                                 <span className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-tighter">CoinMarketCap & CoinGecko Data</span>

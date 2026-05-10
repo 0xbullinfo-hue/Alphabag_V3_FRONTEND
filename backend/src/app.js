@@ -25,7 +25,7 @@ import { streamNeuralCore } from './controllers/aiController.js';
 
 const app = express();
 
-// Request Debugger
+// Request Debugger (single instance)
 app.use((req, res, next) => {
     console.log(`[DEBUG] ${new Date().toISOString()} - ${req.method} ${req.url}`);
     next();
@@ -46,12 +46,6 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-
-// Request Debugger
-app.use((req, res, next) => {
-    console.log(`[DEBUG] ${req.method} ${req.url}`);
-    next();
-});
 
 // Rate Limiting (Basic)
 const limiter = rateLimit({
@@ -74,7 +68,7 @@ app.use('/api/portfolio', portfolioRouter); // Moved up to ensure precedence
 app.use('/api/whale', whaleRouter); 
 app.use('/api/ai', aiRouter);
 app.use('/api', marketRouter);
-app.use('/api', publicRoutes);
+// NOTE: publicRoutes already mounted above at /api — do NOT mount again here
 
 app.post('/api/neural-core', streamNeuralCore);
 

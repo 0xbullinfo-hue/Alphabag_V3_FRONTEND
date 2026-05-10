@@ -110,50 +110,51 @@
 
   /* ── Glass Panels ── */
   .glass-panel {
-    @apply bg-white/[0.03] backdrop-blur-md border border-white/10;
+    @apply bg-[#0d0d11]/60 backdrop-blur-xl border border-white/10 rounded-2xl;
   }
   .glass-panel-heavy {
-    @apply bg-alphabag-dark/80 backdrop-blur-xl border border-white/10;
+    @apply bg-alphabag-dark/80 backdrop-blur-2xl border border-white/20 rounded-2xl;
   }
   .glass-card {
-    @apply bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 rounded-xl;
-    backdrop-filter: blur(12px);
-    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    @apply bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-2xl;
+    backdrop-filter: blur(16px);
+    transition: all var(--transition-base);
   }
   .glass-card:hover {
-    @apply border-white/20;
-    box-shadow: 0 0 24px rgba(0,0,0,0.4);
+    @apply border-white/30 bg-white/[0.08];
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
   }
 
   .card-panel {
-    @apply bg-alphabag-dark border border-alphabag-gray rounded-xl shadow-panel;
+    @apply bg-alphabag-dark border border-white/10 rounded-2xl shadow-panel;
   }
 
   .card-panel-soft {
-    @apply bg-black/40 border border-white/10 rounded-xl;
+    @apply bg-black/40 border border-white/5 rounded-2xl;
   }
 
   /* ── Sidebar Nav Items ── */
   .nav-item {
-    @apply flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 text-alphabag-subtext hover:text-white hover:bg-white/5 cursor-pointer;
+    @apply flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 text-alphabag-muted hover:text-white hover:bg-white/5 cursor-pointer;
   }
   .nav-item-active {
-    @apply flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 bg-alphabag-yellow text-black font-bold;
+    @apply flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 bg-alphabag-yellow/10 text-alphabag-yellow font-black uppercase tracking-widest shadow-glow-yellow;
   }
 
   /* ── Status Badges ── */
-  .badge-green  { @apply text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20; }
-  .badge-yellow { @apply text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20; }
-  .badge-red    { @apply text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20; }
-  .badge-blue   { @apply text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20; }
-  .badge-muted  { @apply text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/5 text-alphabag-muted border border-white/10; }
+  .badge-green  { @apply text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]; }
+  .badge-yellow { @apply text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 shadow-[0_0_15px_rgba(252,213,53,0.1)]; }
+  .badge-red    { @apply text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.1)]; }
+  .badge-blue   { @apply text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(96,165,250,0.1)]; }
+  .badge-muted  { @apply text-[9px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full bg-white/5 text-alphabag-muted border border-white/10; }
 
   /* ── Section Headers ── */
   .section-label {
-    @apply text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-muted;
+    @apply text-[10px] font-black uppercase tracking-[0.25em] text-alphabag-muted;
   }
   .section-title {
-    @apply text-xl font-black text-white uppercase tracking-tighter;
+    @apply text-xl md:text-2xl font-black text-white uppercase tracking-tighter;
   }
 
   /* ── Input Base ── */

@@ -89,8 +89,8 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
-            <NavItem to="/cex-bag" icon={Layers} label="CEX HUB" active={location.pathname === '/cex-bag'} />
-            <NavItem to="/dex-bag" icon={Wallet2} label="DEX HUB" active={location.pathname === '/dex-bag'} />
+            <NavItem to="/cex-bag" icon={Layers} label="CEX PORTFOLIO" active={location.pathname === '/cex-bag'} />
+            <NavItem to="/dex-bag" icon={Wallet2} label="DEX PORTFOLIO" active={location.pathname === '/dex-bag'} />
 
             <div className="relative">
               <NavItem to="/airdrop" icon={Gift} label="Alpha Missions" active={location.pathname === '/airdrop'} />
@@ -112,14 +112,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
             <NavItem to="/markets" icon={BarChart3} label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/alpha-ai" icon={Bot} label="Alpha Intelligence" active={location.pathname === '/alpha-ai'} />
             <NavItem to="/calculator" icon={Calculator} label="Alpha Calculator" active={location.pathname === '/calculator'} />
-            
-            <NavDropdown 
-              icon={Layers} 
-              label="Advanced Tools" 
-              activePaths={['/defi']}
-            >
-              <NavItem to="/defi" label="DeFi Tracker" active={location.pathname === '/defi'} />
-            </NavDropdown>
+            <NavItem to="/defi" icon={Layers} label="DeFi Tracker" active={location.pathname === '/defi'} />
             <NavItem to="/news" icon={Newspaper} label="News" active={location.pathname === '/news'} />
           </NavGroup>
 

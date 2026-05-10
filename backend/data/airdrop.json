@@ -1,10 +1,10 @@
 [
   {
-    "id": "5o27fl1el",
-    "tokenTicker": "🔒",
+    "id": "testnet_airdrop_1",
+    "tokenTicker": "BAG",
     "pointsPerClaim": 5000,
-    "durationDays": 7,
-    "startDate": "2026-02-25T03:18:52.993Z",
+    "durationDays": 14,
+    "startDate": "2026-05-10T00:00:00.000Z",
     "status": "ACTIVE",
     "isSubmissionActive": false
   }

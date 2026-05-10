@@ -14,13 +14,13 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => (
     <Link
         to={to}
-        className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors mb-1 mx-2 ${active
-            ? 'bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 shadow-[0_0_10px_rgba(252,213,53,0.1)]'
-            : 'text-alphabag-subtext hover:bg-white/5 hover:text-white'
+        className={`flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 active:scale-[0.98] mb-1 mx-2 ${active
+            ? 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-glow-yellow'
+            : 'text-alphabag-muted hover:bg-white/5 hover:text-white'
             }`}
     >
-        <Icon size={18} />
-        <span className="font-bold text-sm tracking-wide">{label}</span>
+        {Icon && <Icon size={18} />}
+        <span className="font-black text-[11px] uppercase tracking-[0.2em]">{label}</span>
     </Link>
 );
 
@@ -45,18 +45,20 @@ export const AdminSidebar: React.FC = () => {
     };
 
     return (
-        <aside className="fixed top-0 left-0 h-full w-64 bg-alphabag-black border-r border-alphabag-gray/50 z-40 flex flex-col justify-between">
+        <aside className="fixed top-0 left-0 h-full w-64 bg-[#0d0d11] border-r border-white/10 z-40 flex flex-col justify-between overflow-y-auto custom-scrollbar shadow-[0_60px_120px_rgba(0,0,0,0.4)]">
             <div>
-                {/* Header */}
-                <div className="h-20 flex items-center px-6 border-b border-alphabag-gray/30">
-                    <div className="flex items-center text-alphabag-yellow">
-                        <Shield size={24} className="mr-2" />
-                        <span className="font-black text-lg tracking-tighter uppercase">ADMIN HUB</span>
+                {/* Header - Aligned with global header height */}
+                <div className="h-16 flex items-center px-6 border-b border-white/10">
+                    <div className="flex items-center text-alphabag-yellow gap-2">
+                        <div className="w-8 h-8 bg-alphabag-yellow text-black flex items-center justify-center rounded-xl shadow-[0_0_15px_rgba(252,213,53,0.3)]">
+                            <Shield size={18} fill="currentColor" />
+                        </div>
+                        <span className="font-black text-sm tracking-tighter uppercase text-white">Admin<span className="text-alphabag-yellow">HUB</span></span>
                     </div>
                 </div>
 
                 {/* Nav */}
-                <div className="py-6 space-y-1">
+                <div className="pt-10 pb-6 space-y-1">
                     <div className="px-6 mb-2 text-[10px] font-black text-alphabag-subtext uppercase tracking-widest opacity-50">
                         Main Operations
                     </div>

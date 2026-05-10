@@ -66,52 +66,50 @@ export const Integrations: React.FC = () => {
   return (
     <div className="space-y-6 animate-fade-in relative min-h-[calc(100vh-12rem)] max-w-5xl mx-auto pb-10">
       
-      {/* Settings Header */}
-      <div className="bg-alphabag-dark border border-alphabag-gray rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row justify-between md:items-center gap-6">
-        <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
-            <Network size={120} />
-        </div>
-        
-        <div className="relative z-10">
-            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center gap-3">
-               Connections <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Hub</span>
-            </h1>
-            <p className="text-alphabag-subtext mt-1 text-sm max-w-md">
-                A unified, read-only dashboard showing all live API keys and Web3 wallets currently streaming into AlphaBAG.
-            </p>
-        </div>
-
-        <div className="relative z-10 w-full md:w-auto">
-             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={16} className="text-alphabag-subtext" />
-             </div>
-             <input 
-                type="text" 
-                placeholder="Search active connections..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-alphabag-black border border-alphabag-gray rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-72 transition-colors shadow-inner"
-             />
-        </div>
-      </div>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-4 mb-6">
+                <div>
+                    <div className="flex items-center gap-3 mb-1">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black font-bold">CH</div>
+                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            Connections <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Hub</span>
+                        </h1>
+                        <span className="text-[10px] bg-alphabag-yellow/20 text-alphabag-yellow px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Active</span>
+                    </div>
+                    <p className="text-alphabag-subtext text-xs max-w-2xl mt-1">
+                        Unified dashboard for all live API keys and Web3 wallets currently streaming into AlphaBAG.
+                    </p>
+                </div>
+                <div className="relative z-10 w-full md:w-auto">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Search size={16} className="text-alphabag-subtext" />
+                    </div>
+                    <input 
+                        type="text" 
+                        placeholder="Search active connections..." 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-72 transition-colors shadow-inner"
+                    />
+                </div>
+            </div>
 
       {/* Connection Prompts - Since Hub is Read-Only, direct users to the Bags to connect */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-alphabag-dark/50 border border-alphabag-gray border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-alphabag-dark transition-colors">
+          <div className="bg-white/5 border border-white/10 border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
               <div>
                   <h3 className="text-sm font-bold text-white mb-0.5">Need to add an Exchange?</h3>
-                  <p className="text-xs text-alphabag-subtext">Manage active API Keys in the CEX Bag.</p>
+                  <p className="text-xs text-alphabag-subtext">Manage active API Keys in the CEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-xs border-alphabag-gray">
+              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-xs border-white/10">
                  Add CEX API <ExternalLink size={12} className="ml-1.5" />
               </Button>
           </div>
-          <div className="bg-alphabag-dark/50 border border-alphabag-gray border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-alphabag-dark transition-colors">
+          <div className="bg-white/5 border border-white/10 border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
               <div>
                   <h3 className="text-sm font-bold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
-                  <p className="text-xs text-alphabag-subtext">Connect on-chain wallets in the DEX Hub.</p>
+                  <p className="text-xs text-alphabag-subtext">Connect on-chain wallets in the DEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-xs border-alphabag-gray">
+              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-xs border-white/10">
                  Set BAG <ExternalLink size={12} className="ml-1.5" />
               </Button>
           </div>

@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 // Centralized API Configuration
-// Empty string = use Vite proxy (keeps browser on frontend port 3000)
-// ALL /api/* calls are proxied by vite.config.ts => http://localhost:3003
-export const API_BASE_URL = '';
+// ALL API calls will be prefixed with this base URL.
+// In dev: empty string (proxied to localhost:3003)
+// In prod: /adminbxp (or whatever is set in .env)
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 // Create axios instance — baseURL is empty so calls stay on the frontend port
 export const api = axios.create({

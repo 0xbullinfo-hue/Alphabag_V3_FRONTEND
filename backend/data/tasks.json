@@ -1,66 +1,13 @@
 [
   {
-    "id": "t_daily",
-    "title": "Daily Claim",
-    "description": "Initialize your membership once a day to verify connectivity and claim your daily $BAG allocation.",
-    "rewardTokens": 50,
-    "rewardXP": 50,
+    "id": "t2e_daily_claim",
+    "title": "Daily Terminal Reward",
+    "description": "Secure your daily 100 ITEMS allocation by synchronizing your terminal session. Resets every 24 hours.",
+    "rewardXP": 25,
+    "rewardTokens": 100,
     "type": "daily",
     "status": "ACTIVE",
-    "category": "TECHNICAL",
-    "requiresLink": false
-  },
-  {
-    "id": "t_weekly",
-    "title": "Weekly Claim",
-    "description": "Claim your 400 $BAG weekly allocation. Resets automatically 7 days after your claim.",
-    "rewardTokens": 400,
-    "rewardXP": 400,
-    "type": "weekly",
-    "status": "ACTIVE",
-    "category": "CONTENT",
-    "requiresLink": false
-  },
-  {
-    "id": "t_admin_1",
-    "title": "Task 1",
-    "description": "Complete the current Admin task on our official X account and paste the link below.",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "type": "once",
-    "status": "ACTIVE",
     "category": "SOCIAL",
-    "requiresLink": true
-  },
-  {
-    "id": "t_admin_2",
-    "title": "Task 2",
-    "description": "Complete the secondary Admin task on our official X account and paste the link below.",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "type": "once",
-    "status": "ACTIVE",
-    "category": "SOCIAL",
-    "requiresLink": true
-  },
-  {
-    "id": "t_invite",
-    "title": "Invite a Member",
-    "description": "Successfully recruit a new member to the Network using your referral link. Earn 100 $BAG per verified recruit.",
-    "rewardTokens": 100,
-    "rewardXP": 100,
-    "type": "unlimited",
-    "status": "ACTIVE",
-    "category": "GROWTH",
     "requiresLink": false
-  },
-  {
-    "title": "Daily Checkin",
-    "description": "checking daily to earn",
-    "rewardTokens": 50,
-    "actionUrl": "",
-    "type": "daily",
-    "status": "ACTIVE",
-    "id": "t92o1i"
   }
 ]

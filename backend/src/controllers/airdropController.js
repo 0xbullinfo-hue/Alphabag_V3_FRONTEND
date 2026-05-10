@@ -97,8 +97,8 @@ export const getAirdropStatus = async (req, res) => {
 
         res.json(response);
     } catch (error) {
-        console.error('Error fetching airdrop status:', error);
-        res.status(500).json({ error: 'Failed to fetch status' });
+        console.error('[AIRDROP] getAirdropStatus Error:', error.stack || error);
+        res.status(500).json({ error: 'Failed to fetch status', details: error.message });
     }
 };
 
@@ -176,10 +176,11 @@ export const claimPoints = async (req, res) => {
         });
 
     } catch (error) {
-        if (error.message.includes('Already claimed today') || error.message.includes('wait 24 hours')) {
+        console.error('[AIRDROP] claimPoints Error:', error.stack || error);
+        if (error.message.includes('wait 24 hours')) {
             return res.status(400).json({ error: error.message });
         }
-        res.status(500).json({ error: 'Claim failed' });
+        res.status(500).json({ error: 'Claim failed', details: error.message });
     }
 };
 
@@ -237,8 +238,7 @@ export const submitWallet = async (req, res) => {
                 projectGoals: founderApproved ? projectGoals : null,
                 founderSocial: founderApproved ? founderSocial : null,
                 airdropSubmittedAt: new Date().toISOString(),
-                items: (user.items || 0) + 5000, // Testnet reward
-                bagTokens: (user.bagTokens || 0) + 10000 // Reserved allocation
+                bagTokens: (user.bagTokens || 0) + 5000 // Reserved allocation (Reserve ITEMS)
             };
         });
 
@@ -247,7 +247,8 @@ export const submitWallet = async (req, res) => {
         res.json({ 
             success: true, 
             message: 'Airdrop submission received! Welcome to AlphaBAG.',
-            isFounder: founderApproved 
+            isFounder: founderApproved,
+            bagTokens: updatedUser.bagTokens
         });
     } catch (error) {
         console.error("Airdrop Submit Error:", error);
@@ -273,7 +274,8 @@ export const getAirdropStats = async (req, res) => {
             tgeDate
         });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch stats' });
+        console.error('[AIRDROP] getAirdropStats Error:', error.stack || error);
+        res.status(500).json({ error: 'Failed to fetch stats', details: error.message });
     }
 };
 

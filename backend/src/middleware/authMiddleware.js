@@ -77,9 +77,11 @@ export const optionalAuth = (req, res, next) => {
 
 export const requireAuth = verifyToken;
 export const verifyAdmin = (req, res, next) => {
-    // temporary bypass so you can test
     if (!req.user) {
         return res.status(403).json({ error: 'Require basic auth to access Admin.' });
+    }
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ error: 'Forbidden: Admin access required.' });
     }
     next();
 };
