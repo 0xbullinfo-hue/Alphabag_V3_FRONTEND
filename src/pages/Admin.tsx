@@ -86,12 +86,12 @@ export const Admin: React.FC = () => {
             <AdminSidebar />
 
             <div className="flex-1 md:pl-64 overflow-y-auto custom-scrollbar">
-                <main className="p-4 md:p-8 lg:p-10 pb-20 max-w-7xl mx-auto">
+                <main className="p-3 md:p-5 lg:p-6 pb-20 max-w-7xl mx-auto">
                     {/* Page Header */}
-                    <div className="flex justify-between items-center mb-10">
+                    <div className="flex justify-between items-center mb-6">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter flex items-center">
-                                <Shield className="mr-3 text-alphabag-yellow" size={32} />
+                            <h1 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter flex items-center">
+                                <Shield className="mr-2 text-alphabag-yellow" size={24} />
                                 {currentView === 'overview' ? 'Admin Center' :
                                     currentView === 'users' ? 'Member Database' :
                                         currentView === 'news' ? 'Intelligence Deck' :
@@ -101,12 +101,12 @@ export const Admin: React.FC = () => {
                                                     currentView === 'whales' ? 'Whale Watch' :
                                                         'System Integrity'}
                             </h1>
-                            <p className="text-alphabag-subtext mt-1 text-sm font-bold tracking-wide">
+                            <p className="text-alphabag-subtext mt-0.5 text-[12px] font-bold tracking-wide">
                                 ADMIN: <span className="text-white">{user?.email}</span> | STATUS: <span className="text-green-500">SECURE</span>
                             </p>
                         </div>
-                        <Button onClick={fetchAllData} size="sm" variant="secondary" className="border-alphabag-gray bg-alphabag-dark hover:bg-white/5">
-                            <RefreshCw size={16} className={`mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                        <Button onClick={fetchAllData} size="sm" variant="secondary" className="border-alphabag-gray bg-alphabag-dark hover:bg-white/5 h-8 text-xs">
+                            <RefreshCw size={14} className={`mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                             Refresh
                         </Button>
                     </div>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchPortfolioHistory } from '../services/mockData';
 import { PortfolioHistoryPoint } from '../types';
 import { Button } from '../components/ui/Button';
-import { Plus, Settings, Briefcase, Eye, ChevronUp, ChevronDown, Download, PieChart as PieChartIcon, Layers, BarChart3, Shield, Zap, TrendingUp } from 'lucide-react';
+import { Plus, Settings, Briefcase, Eye, ChevronUp, ChevronDown, Download, PieChart as PieChartIcon, Layers, BarChart3, Shield, Zap, TrendingUp, Wallet2 } from 'lucide-react';
 import { PieChart as RePieChart, Pie, Cell, Tooltip as ReTooltip, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { useWallet } from '../context/WalletContext';
 import { Sparkline } from '../components/ui/Sparkline';
@@ -86,59 +86,58 @@ export const Portfolio: React.FC = () => {
     }
 
     return (
-        <div className="space-y-8 animate-fade-in pb-20 max-w-7xl mx-auto px-4 md:px-8 text-alphabag-text">
+        <div className="space-y-5 animate-in fade-in duration-700 pb-20 max-w-7xl mx-auto px-4 md:px-8">
 
 
 
             {/* 1. Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-6 mb-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-[#2b3139] gap-6">
                 <div>
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
-                            <Briefcase size={20} fill="currentColor" />
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Wallet2 size={20} />
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                            My DEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Portfolio</span>
-                        </h1>
-                        <span className="badge-yellow">Default</span>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
+                        <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
                     </div>
 
                     <div className="flex items-baseline gap-4">
-                        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight tabular-nums flex items-center gap-3 truncate" title={`$${totalValue.toLocaleString()}`}>
+                        <h2 className="text-4xl font-semibold text-[#eaecef] tracking-tight tabular-nums flex items-center gap-3 truncate">
                             ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            <Eye size={20} className="text-alphabag-muted cursor-pointer hover:text-white transition-colors shrink-0" />
+                            <Eye size={16} className="text-[#848e9c] cursor-pointer hover:text-[#eaecef] transition-colors shrink-0" />
                         </h2>
                     </div>
                     
                     <div className="flex items-center gap-3 mt-2">
-                        <div className={`flex items-center px-3 py-1 rounded-full text-[11px] font-black tracking-widest uppercase ${totalPnL24h >= 0 ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                            {totalPnL24h >= 0 ? <ChevronUp size={14} className="mr-1" /> : <ChevronDown size={14} className="mr-1" />}
+                        <div className={`flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border ${
+                            totalPnL24h >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81] border-[#0ecb81]/20' : 'bg-[#f6465d]/10 text-[#f6465d] border-[#f6465d]/20'
+                        }`}>
+                            {totalPnL24h >= 0 ? <ChevronUp size={13} className="mr-1" /> : <ChevronDown size={13} className="mr-1" />}
                             {totalPnLPercent24h.toFixed(2)}%
-                            <span className="ml-2 opacity-60">(${Math.abs(totalPnL24h).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
+                            <span className="ml-2 opacity-70">(${Math.abs(totalPnL24h).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
                         </div>
-                        <span className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest">24h Change</span>
+                        <span className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">24h Change</span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm font-semibold">
-                    <div className="flex items-center gap-3 mr-4">
-                        <span className="section-label">Show charts</span>
+                <div className="flex items-center gap-3 text-sm font-semibold">
+                    <div className="flex items-center gap-2 mr-2">
+                        <span className="text-[11px] text-[#848e9c] uppercase font-semibold tracking-wider">Charts</span>
                         <div
-                            className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-alphabag-yellow shadow-glow-yellow/50' : 'bg-white/10'}`}
+                            className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-[#fcd535]' : 'bg-[#2b3139]'}`}
                             onClick={() => setShowCharts(!showCharts)}
                         >
-                            <div className={`w-3 h-3 bg-alphabag-black rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                            <div className={`w-3 h-3 bg-[#181a20] rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
 
-                    <Button 
-                        onClick={handleManageConnections} 
-                        className="bg-alphabag-yellow text-alphabag-black hover:bg-yellow-400 hover:scale-[1.02] active:scale-[0.98] border-none rounded-2xl px-6 py-3 font-black uppercase tracking-widest text-[10px] shadow-glow-yellow/20 transition-all"
+                    <button
+                        onClick={handleManageConnections}
+                        className="bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e] active:scale-[0.98] border-none rounded-md px-5 py-2 font-semibold text-[11px] uppercase tracking-wider transition-all"
                     >
-                        Manage Connections
-                    </Button>
-                    <Button
-                        variant="secondary"
+                        Manage
+                    </button>
+                    <button
                         onClick={() => {
                             const csvContent = "data:text/csv;charset=utf-8,Date,Portfolio Value\n" +
                                 history.map(h => `${new Date(h.timestamp).toLocaleDateString()},${h.value}`).join("\n");
@@ -150,20 +149,17 @@ export const Portfolio: React.FC = () => {
                             link.click();
                             document.body.removeChild(link);
                         }}
-                        className="bg-alphabag-gray text-alphabag-text border-alphabag-gray hover:bg-alphabag-gray/80 rounded-lg px-4 py-2"
+                        className="bg-[#2b3139] text-[#eaecef] border border-[#474d57] rounded-md px-4 py-2 text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center gap-1.5"
                     >
-                        <Download size={16} className="mr-2" /> Export
-                    </Button>
-                    <Button variant="secondary" className="bg-alphabag-gray text-alphabag-text border-alphabag-gray hover:bg-alphabag-gray/80 rounded-lg p-2">
-                        •••
-                    </Button>
+                        <Download size={14} /> Export
+                    </button>
                 </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-6 border-b border-alphabag-gray pb-4">
-                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-4 px-1 cursor-pointer transition-colors ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
-                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-4 px-1 cursor-pointer transition-colors ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transaction</span>
+            <div className="flex gap-6 border-b border-[#2b3139]">
+                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-[#eaecef] border-b-2 border-[#fcd535]' : 'text-[#848e9c] hover:text-[#eaecef]'}`}>Overview</span>
+                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-[#eaecef] border-b-2 border-[#fcd535]' : 'text-[#848e9c] hover:text-[#eaecef]'}`}>Transactions</span>
             </div>
 
             {activeTab === 'overview' ? (
@@ -171,14 +167,14 @@ export const Portfolio: React.FC = () => {
                     {/* 2. Metrics 4-Card Row */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         {/* All-time profit */}
-                        <div className="glass-panel p-6 group">
-                            <div className="flex items-center justify-between mb-4">
+                        <div className="glass-panel p-4 group rounded-xl">
+                            <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">PnL Protocol</span>
                                 <div className={`p-1.5 rounded-lg ${totalPnL >= 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
                                     <TrendingUp size={14} />
                                 </div>
                             </div>
-                            <div className={`text-3xl font-black mb-2 tracking-tight tabular-nums ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            <div className={`text-2xl font-black mb-1 tracking-tight tabular-nums ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                                 {totalPnL >= 0 ? '+' : '-'}${Math.abs(totalPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
                             <div className={`badge-${totalPnL >= 0 ? 'green' : 'red'} w-fit`}>
@@ -187,14 +183,14 @@ export const Portfolio: React.FC = () => {
                         </div>
 
                         {/* Assets */}
-                        <div className="glass-panel p-6 group">
-                            <div className="flex items-center justify-between mb-4">
+                        <div className="glass-panel p-4 group rounded-xl">
+                            <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">Token Matrix</span>
                                 <div className="p-1.5 rounded-lg bg-white/5 text-alphabag-muted">
                                     <Layers size={14} />
                                 </div>
                             </div>
-                            <div className="text-3xl font-black text-white mb-2 tracking-tight">
+                            <div className="text-2xl font-black text-white mb-1 tracking-tight">
                                 {portfolioItems.length} <span className="text-alphabag-muted text-lg">Assets</span>
                             </div>
                             <div className="badge-muted w-fit">
@@ -203,9 +199,9 @@ export const Portfolio: React.FC = () => {
                         </div>
 
                         {/* Best Performer */}
-                        <div className="glass-panel p-6 group overflow-hidden relative">
+                        <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
                             <div className="absolute -top-12 -right-12 w-32 h-32 bg-green-500/5 rounded-full blur-3xl group-hover:bg-green-500/10 transition-all duration-700"></div>
-                            <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">Top Performer</span>
                                 <div className="badge-green">ALPHA</div>
                             </div>
@@ -225,9 +221,9 @@ export const Portfolio: React.FC = () => {
                         </div>
 
                         {/* Worst Performer */}
-                        <div className="glass-panel p-6 group overflow-hidden relative">
+                        <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
                             <div className="absolute -top-12 -right-12 w-32 h-32 bg-red-500/5 rounded-full blur-3xl group-hover:bg-red-500/10 transition-all duration-700"></div>
-                            <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">Risk Asset</span>
                                 <div className="badge-red">UNDERWATER</div>
                             </div>
@@ -252,8 +248,8 @@ export const Portfolio: React.FC = () => {
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
                             {/* History Chart */}
-                            <div className="lg:col-span-2 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-5 hover:border-white/20 transition-all">
-                                <div className="flex justify-between items-center mb-6">
+                            <div className="lg:col-span-2 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
+                                <div className="flex justify-between items-center mb-4">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-black text-white uppercase tracking-tight">History</h3>
                                         <Eye size={14} className="text-alphabag-subtext" />
@@ -301,7 +297,7 @@ export const Portfolio: React.FC = () => {
                             </div>
 
                             {/* Allocation Donut */}
-                            <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-5 flex flex-col justify-between hover:border-white/20 transition-all">
+                            <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-all">
                                 <h3 className="font-black text-white mb-4 uppercase tracking-tight">Allocation</h3>
                                 <div className="flex-1 flex flex-row items-center justify-center gap-6">
 
@@ -342,8 +338,8 @@ export const Portfolio: React.FC = () => {
                     )}
 
                     {/* 4. Assets Table Area */}
-                    <div className="mt-8 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-5 hover:border-white/20 transition-all">
-                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4">
+                    <div className="mt-6 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-3">
                             <div>
                                 <h3 className="font-black text-white text-xl uppercase tracking-tight">Assets</h3>
                                 <p className="text-[11px] text-alphabag-subtext mt-1 max-w-xl">Track your top holdings, profit drivers, and chain exposure across your connected wallets.</p>
@@ -367,8 +363,8 @@ export const Portfolio: React.FC = () => {
                                         <th className="py-3 px-4 font-semibold text-right">24h% ↕</th>
                                         <th className="py-3 px-4 font-semibold text-right w-40">7D Trend</th>
                                         <th className="py-3 px-4 font-semibold text-right">Holdings ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-right">Avg. Buy Price ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-right">Profit/Loss ↕</th>
+                                        <th className="py-2.5 px-4 font-semibold text-right">Avg. Buy Price ↕</th>
+                                        <th className="py-2.5 px-4 font-semibold text-right">Profit/Loss ↕</th>
                                         <th className="py-3 px-4 font-semibold text-center w-24">Actions</th>
                                     </tr>
                                 </thead>
@@ -392,30 +388,30 @@ export const Portfolio: React.FC = () => {
 
                                             return (
                                                 <tr key={item.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
-                                                    <td className="py-4 px-4">
+                                                    <td className="py-3 px-4">
                                                         <div className="flex items-center gap-3">
                                                             <img src={item.image} alt={item.name} className="w-6 h-6 rounded-full" />
                                                             <span className="text-alphabag-text font-bold">{item.name}</span>
                                                             <span className="text-alphabag-subtext text-xs font-semibold">{item.symbol}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-right text-alphabag-text tabular-data">
+                                                    <td className="py-3 px-4 text-right text-alphabag-text tabular-data">
                                                         <div className="tracking-tighter truncate" title={`$${item.currentPrice.toLocaleString()}`}>
                                                             ${item.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
                                                         </div>
                                                     </td>
-                                                    <td className={`py-4 px-4 text-right tabular-data text-xs font-bold ${dayPnlPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                                    <td className={`py-3 px-4 text-right tabular-data text-xs font-bold ${dayPnlPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                                         <div className="flex items-center justify-end gap-1 tracking-tighter truncate">
                                                             {dayPnlPositive ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                                                             {Math.abs(item.priceChange24h).toFixed(2)}%
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-right w-40">
+                                                    <td className="py-3 px-4 text-right w-40">
                                                         <div className="h-8 w-24 ml-auto">
                                                             <Sparkline data={fakeSparklineData} color={dayPnlPositive ? '#0ECB81' : '#F6465D'} />
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-right">
+                                                    <td className="py-3 px-4 text-right">
                                                         <div className="text-alphabag-text font-bold tabular-data tracking-tighter truncate" title={`$${item.value.toLocaleString()}`}>
                                                             ${item.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                         </div>
@@ -423,12 +419,12 @@ export const Portfolio: React.FC = () => {
                                                             {item.amount.toLocaleString(undefined, { maximumFractionDigits: 4 })} {item.symbol}
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-right text-alphabag-text tabular-data">
+                                                    <td className="py-3 px-4 text-right text-alphabag-text tabular-data">
                                                         <div className="tracking-tighter truncate" title={`$${(item.avgBuyPrice || item.currentPrice).toLocaleString()}`}>
                                                             ${(item.avgBuyPrice || item.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4 text-right tabular-data">
+                                                    <td className="py-3 px-4 text-right tabular-data">
                                                         <div className={`font-bold tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`} title={`$${item.pnl.toLocaleString()}`}>
                                                             {holdsPositive ? '+' : '-'}${Math.abs(item.pnl).toLocaleString()}
                                                         </div>
@@ -436,7 +432,7 @@ export const Portfolio: React.FC = () => {
                                                             {holdsPositive ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {Math.abs(item.pnlPercent).toFixed(2)}%
                                                         </div>
                                                     </td>
-                                                    <td className="py-4 px-4">
+                                                    <td className="py-3 px-4">
                                                         <div className="flex items-center justify-center gap-2 text-alphabag-subtext">
                                                             <button className="p-1 hover:text-alphabag-text hover:bg-alphabag-gray rounded"><Plus size={16} /></button>
                                                             <button className="p-1 hover:text-alphabag-text hover:bg-alphabag-gray rounded">•••</button>

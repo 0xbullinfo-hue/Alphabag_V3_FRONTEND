@@ -39,25 +39,25 @@ export const News: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-fade-in max-w-7xl mx-auto pb-20">
-      <div className="bg-alphabag-dark border border-alphabag-gray p-8 rounded-3xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-12 opacity-5">
-          <Newspaper size={160} />
+      <div className="bg-alphabag-dark border border-alphabag-gray p-6 rounded-xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-5">
+          <Newspaper size={120} />
         </div>
         <div className="relative z-10">
-          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">Market Pulse</h1>
-          <p className="text-alphabag-subtext mt-2 font-medium max-w-md">Expert narratives and real-time intelligence aggregated for BAG holders.</p>
+          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">Market Pulse</h1>
+          <p className="text-alphabag-subtext mt-1 text-[13px] font-medium max-w-md opacity-60">Expert narratives and real-time intelligence for BAG holders.</p>
         </div>
         <div className="relative z-10 w-full md:w-auto mt-6 md:mt-0 flex flex-col items-end">
              <div className="relative">
                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search size={16} className="text-alphabag-subtext" />
+                     <Search size={14} className="text-alphabag-subtext" />
                  </div>
                  <input 
                     type="text" 
                     placeholder="Search historical posts..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="bg-alphabag-black border border-alphabag-gray rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-72 transition-colors shadow-inner"
+                    className="bg-alphabag-black border border-alphabag-gray rounded-lg pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-64 transition-colors shadow-inner"
                  />
              </div>
              <div className="flex items-center space-x-2 mt-3 text-[9px] text-alphabag-green font-bold uppercase tracking-widest text-right">
@@ -67,7 +67,7 @@ export const News: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                 <Search size={48} className="text-alphabag-gray mb-4" />
@@ -78,7 +78,7 @@ export const News: React.FC = () => {
           <article
             key={item.id}
             className={`
-                group flex flex-col bg-alphabag-dark border rounded-2xl overflow-hidden transition-all hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]
+                group flex flex-col bg-alphabag-dark border rounded-xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]
                 ${item.isPremium ? 'border-alphabag-yellow/40 hover:border-alphabag-yellow' : 'border-alphabag-gray hover:border-alphabag-subtext'}
             `}
           >
@@ -107,19 +107,19 @@ export const News: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="p-6 flex flex-col flex-1">
-              <div className="flex items-center text-[10px] text-alphabag-subtext font-bold uppercase mb-4">
-                <Clock size={12} className="mr-1.5" /> {item.date}
+            <div className="p-4 flex flex-col flex-1">
+              <div className="flex items-center text-[9px] text-alphabag-subtext font-bold uppercase mb-3">
+                <Clock size={10} className="mr-1.5" /> {item.date}
               </div>
-              <h3 className="text-xl font-extrabold text-white mb-4 leading-tight group-hover:text-alphabag-yellow transition-colors">{item.title}</h3>
-              <p className="text-alphabag-subtext text-sm mb-6 line-clamp-3 flex-1 font-medium leading-relaxed">{item.summary}</p>
+              <h3 className="text-lg font-extrabold text-white mb-3 leading-tight group-hover:text-alphabag-yellow transition-colors">{item.title}</h3>
+              <p className="text-alphabag-subtext text-[13px] mb-4 line-clamp-2 flex-1 font-medium leading-relaxed opacity-80">{item.summary}</p>
 
-              <div className="pt-6 border-t border-alphabag-gray/50">
+              <div className="pt-4 border-t border-alphabag-gray/50">
                 <button
                   onClick={() => setSelectedArticle(item)}
-                  className="w-full bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-yellow text-xs font-bold uppercase tracking-[0.2em] py-3 rounded-xl flex items-center justify-center transition-all group/btn"
+                  className="w-full bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-yellow text-[10px] font-bold uppercase tracking-[0.1em] py-2 rounded-lg flex items-center justify-center transition-all group/btn"
                 >
-                  FULL ALPHA NEWS <ArrowRight size={14} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                  READ REPORT <ArrowRight size={12} className="ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>

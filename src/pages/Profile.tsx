@@ -192,36 +192,36 @@ export const Profile: React.FC = () => {
     return (
         <div className="bg-alphabag-black min-h-screen text-white pb-20">
             {/* Header / Banner */}
-            <div className="h-48 border-b border-white/5 relative bg-cover bg-center bg-no-repeat" style={{ backgroundImage: profileUser?.bannerUrl ? `url(${profileUser.bannerUrl})` : undefined }}>
+            <div className="h-32 border-b border-white/5 relative bg-cover bg-center bg-no-repeat" style={{ backgroundImage: profileUser?.bannerUrl ? `url(${profileUser.bannerUrl})` : undefined }}>
                 {!profileUser?.bannerUrl && <div className="absolute inset-0 bg-gradient-to-r from-alphabag-dark to-alphabag-black"></div>}
                 <button 
                     onClick={() => navigate(-1)}
-                    className="absolute top-4 left-4 p-2 bg-black/40 backdrop-blur-md rounded-full hover:bg-black/60 transition-colors z-10"
+                    className="absolute top-3 left-3 p-1.5 bg-black/40 backdrop-blur-md rounded-full hover:bg-black/60 transition-colors z-10"
                 >
-                    <ArrowLeft size={20} />
+                    <ArrowLeft size={16} />
                 </button>
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             </div>
 
             <div className="max-w-3xl mx-auto px-4">
                 {/* Profile Info Card */}
-                <div className="relative -mt-16 mb-8 px-4 py-6 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-3xl shadow-2xl">
+                <div className="relative -mt-12 mb-6 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
                     <div className="flex justify-between items-start">
                         <div className="relative">
                             <div
-                                className={`w-32 h-32 rounded-3xl bg-gradient-to-tr from-alphabag-yellow to-orange-500 p-1 shadow-glow-yellow/20 ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
+                                className={`w-24 h-24 rounded-2xl bg-gradient-to-tr from-alphabag-yellow to-orange-500 p-1 shadow-glow-yellow/20 ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
                                 onClick={() => isEditing && isOwnProfile && avatarInputRef.current?.click()}
                             >
-                                <div className="w-full h-full bg-alphabag-black rounded-[20px] flex items-center justify-center overflow-hidden relative">
+                                <div className="w-full h-full bg-alphabag-black rounded-xl flex items-center justify-center overflow-hidden relative">
                                     {(editData.logoUrl || profileUser?.logoUrl) ? (
                                         <img src={editData.logoUrl || profileUser?.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                     ) : (
                                         <span className="text-4xl font-black text-alphabag-yellow uppercase">{profileUser?.email?.[0] || 'U'}</span>
                                     )}
                                     {isEditing && isOwnProfile && (
-                                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-[20px]">
-                                            <Camera size={22} className="text-white mb-1" />
-                                            <span className="text-white text-[9px] font-black uppercase tracking-widest">Change</span>
+                                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                                            <Camera size={20} className="text-white mb-1" />
+                                            <span className="text-white text-[8px] font-black uppercase tracking-widest">Change</span>
                                         </div>
                                     )}
                                 </div>
@@ -234,31 +234,31 @@ export const Profile: React.FC = () => {
                                 onChange={handleAvatarChange}
                             />
                             {isFounder && (
-                                <div className="absolute -bottom-2 -right-2 bg-alphabag-yellow text-black p-1.5 rounded-xl shadow-lg border-4 border-alphabag-black">
-                                    <ShieldCheck size={18} fill="currentColor" />
+                                <div className="absolute -bottom-1.5 -right-1.5 bg-alphabag-yellow text-black p-1 rounded-lg shadow-lg border-2 border-alphabag-black">
+                                    <ShieldCheck size={14} fill="currentColor" />
                                 </div>
                             )}
                         </div>
 
                         {isOwnProfile && (
-                            <div className="pt-16 flex gap-3">
+                            <div className="pt-10 flex gap-2">
                                 {isEditing ? (
                                     <>
                                         <Button 
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setIsEditing(false)}
-                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[10px] px-6 py-2"
+                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
                                         >
-                                            <X size={14} className="mr-2" /> Cancel
+                                            Cancel
                                         </Button>
                                         <Button 
                                             size="sm"
                                             onClick={handleSave}
                                             disabled={isSaving}
-                                            className="rounded-full bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[10px] px-6 py-2 shadow-glow-yellow/20"
+                                            className="rounded-full bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[9px] px-4 py-1.5 shadow-glow-yellow/20"
                                         >
-                                            <Save size={14} className="mr-2" /> {isSaving ? 'Saving...' : 'Save Changes'}
+                                            {isSaving ? 'Saving...' : 'Save'}
                                         </Button>
                                     </>
                                 ) : (
@@ -268,18 +268,18 @@ export const Profile: React.FC = () => {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() => navigate('/genesis-manifesto')}
-                                                className="rounded-full border-alphabag-yellow/30 text-alphabag-yellow hover:bg-alphabag-yellow/10 font-black uppercase tracking-widest text-[10px] px-6 py-2"
+                                                className="rounded-full border-alphabag-yellow/30 text-alphabag-yellow hover:bg-alphabag-yellow/10 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
                                             >
-                                                {project ? <><Edit3 size={14} className="mr-2" /> Edit Manifesto</> : <><Rocket size={14} className="mr-2" /> Post Manifesto</>}
+                                                {project ? 'Edit Manifesto' : 'Post Manifesto'}
                                             </Button>
                                         )}
                                         <Button 
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setIsEditing(true)}
-                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[10px] px-6 py-2"
+                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
                                         >
-                                            <Edit3 size={14} className="mr-2" /> Edit Profile
+                                            Edit
                                         </Button>
                                     </>
                                 )}
@@ -287,18 +287,18 @@ export const Profile: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="mt-6 space-y-4">
+                    <div className="mt-4 space-y-3">
                         <div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">
+                                <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
                                     {profileUser?.email?.split('@')[0]}
                                 </h2>
-                                {isFounder && <CheckCircle2 size={18} className="text-alphabag-yellow" fill="currentColor" />}
-                                <div className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ml-2 ${isFounder ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
-                                    {isFounder ? 'FOUNDER' : 'ELITE TRADER'}
+                                {isFounder && <CheckCircle2 size={16} className="text-alphabag-yellow" fill="currentColor" />}
+                                <div className={`px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest ml-1 ${isFounder ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
+                                    {isFounder ? 'FOUNDER' : 'ELITE'}
                                 </div>
                             </div>
-                            <p className="text-alphabag-muted text-sm font-medium">@{profileUser?.email?.split('@')[0].toLowerCase() || 'anonymous'}_member</p>
+                            <p className="text-alphabag-muted text-[13px] font-medium opacity-60">@{profileUser?.email?.split('@')[0].toLowerCase() || 'anonymous'}_member</p>
                         </div>
 
                         {isEditing ? (
@@ -394,24 +394,24 @@ export const Profile: React.FC = () => {
                     </div>
 
                     {/* Stats Dashboard */}
-                    <div className="mt-6 grid grid-cols-3 gap-4 pt-6 border-t border-white/5">
-                        <div className="text-center p-3 bg-alphabag-yellow/5 rounded-2xl border border-alphabag-yellow/10">
-                            <div className="text-[10px] font-black text-alphabag-yellow uppercase tracking-widest mb-1">Alpha Rep</div>
-                            <div className="text-lg font-black text-white">98%</div>
-                            <div className="text-[8px] font-bold text-alphabag-yellow/60 uppercase">Diamond Node</div>
+                    <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-white/5">
+                        <div className="text-center p-2 bg-alphabag-yellow/5 rounded-xl border border-alphabag-yellow/10">
+                            <div className="text-[9px] font-black text-alphabag-yellow uppercase tracking-widest mb-0.5">Rep</div>
+                            <div className="text-base font-black text-white leading-tight">98%</div>
+                            <div className="text-[7px] font-bold text-alphabag-yellow/60 uppercase">Diamond</div>
                         </div>
-                        <div className="text-center p-3 bg-white/5 rounded-2xl border border-white/10">
-                            <div className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest mb-1">$BAG Tokens</div>
+                        <div className="text-center p-2 bg-white/5 rounded-xl border border-white/10">
+                            <div className="text-[9px] font-black text-alphabag-muted uppercase tracking-widest mb-0.5">Tokens</div>
                             <div className="flex items-center justify-center gap-1">
-                                <Zap size={14} className="text-alphabag-yellow" fill="currentColor" />
-                                <span className="text-lg font-black text-white">{profileUser?.bagTokens || 100}</span>
+                                <Zap size={12} className="text-alphabag-yellow" fill="currentColor" />
+                                <span className="text-base font-black text-white leading-tight">{profileUser?.bagTokens || 100}</span>
                             </div>
-                            <div className="text-[8px] font-bold text-alphabag-muted uppercase">Top 1% Global</div>
+                            <div className="text-[7px] font-bold text-alphabag-muted uppercase">Top 1%</div>
                         </div>
-                        <div className="text-center p-3 bg-white/5 rounded-2xl border border-white/10">
-                            <div className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest mb-1">Vetting</div>
-                            <div className="text-lg font-black text-alphabag-green">LVL 1</div>
-                            <div className="text-[8px] font-bold text-alphabag-muted uppercase">Phase 1 Verified</div>
+                        <div className="text-center p-2 bg-white/5 rounded-xl border border-white/10">
+                            <div className="text-[9px] font-black text-alphabag-muted uppercase tracking-widest mb-0.5">Vetting</div>
+                            <div className="text-base font-black text-alphabag-green leading-tight">LVL 1</div>
+                            <div className="text-[7px] font-bold text-alphabag-muted uppercase">Verified</div>
                         </div>
                     </div>
                 </div>

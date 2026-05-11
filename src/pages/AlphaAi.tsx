@@ -150,40 +150,39 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] animate-fade-in max-w-7xl mx-auto text-alphabag-text">
-      <div className="flex justify-between items-center mb-6 px-2">
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(252,213,53,0.15)]"><Fingerprint size={24} /></div>
-          <div>
-            <div className="flex items-center gap-4">
-              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">Alpha <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Analyst</span></h1>
-              <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-3 py-1 rounded-full flex items-center gap-1.5 shadow-glow-green/5">
-                  <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse shadow-[0_0_8px_rgba(14,203,129,0.8)]"></div>
-                  <span className="text-[9px] text-alphabag-green font-black uppercase tracking-[0.2em] relative top-[0.5px]">Link Active</span>
-              </div>
+    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 max-w-7xl mx-auto text-[#eaecef] px-4 md:px-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-4 shrink-0">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+              <Bot size={20} />
             </div>
-            <p className="text-xs text-zinc-400 font-medium max-w-xl mt-2 leading-relaxed">
-                Your dedicated intelligence hub for on-chain analytics, unified portfolio modeling, and strategic market forecasting.
-            </p>
+            <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Alpha Analyst</h1>
+            <div className="bg-[#0ecb81]/10 border border-[#0ecb81]/20 px-2 py-1 rounded-md flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full animate-pulse"></div>
+              <span className="text-[9px] text-[#0ecb81] font-semibold uppercase tracking-wider">Link Active</span>
+            </div>
           </div>
+          <p className="text-[#848e9c] text-sm">Intelligence hub for on-chain analytics, portfolio modeling, and market forecasting.</p>
         </div>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-hidden">
 
         {/* Left Side: Chat Area */}
-        <div className="lg:col-span-2 flex flex-col bg-alphabag-dark/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-glass border border-white/5 relative group">
+        <div className="lg:col-span-2 flex flex-col bg-[#1e2329] rounded-lg overflow-hidden border border-[#2b3139] relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-[80px] pointer-events-none transition-opacity duration-1000 group-hover:opacity-100 opacity-50"></div>
           
-          <div className="flex justify-between items-center px-6 py-4 border-b border-white/5 bg-black/20">
-              <span className="text-[10px] text-alphabag-subtext uppercase font-black tracking-widest flex items-center gap-2">
-                 <TerminalSquare size={12} className="text-alphabag-yellow" /> Interaction Terminal
+          <div className="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/20">
+              <span className="text-[9px] text-alphabag-subtext uppercase font-black tracking-widest flex items-center gap-2">
+                 <TerminalSquare size={11} className="text-alphabag-yellow" /> Interaction Terminal
               </span>
               <button 
                   onClick={clearChat}
-                  className="flex items-center gap-1.5 text-[9px] uppercase font-bold tracking-widest text-zinc-500 hover:text-red-400 transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-transparent hover:border-red-500/20"
+                  className="flex items-center gap-1 text-[8px] uppercase font-bold tracking-widest text-zinc-500 hover:text-red-400 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded-lg border border-transparent hover:border-red-500/20"
               >
-                  <Trash2 size={10} /> Clear Cache
+                  <Trash2 size={9} /> Clear Cache
               </button>
           </div>
 
@@ -191,24 +190,24 @@ export const AlphaAi: React.FC = () => {
               <ChatFeed messages={messages} isTyping={isStreaming} />
           </div>
 
-          <div className="p-4 bg-black/40 border-t border-white/5 relative z-10">
+          <div className="p-3 bg-black/40 border-t border-white/5 relative z-10">
             <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputText); }} className="relative flex items-center group/form">
-              <span className="absolute left-4 text-alphabag-yellow font-mono text-sm font-bold opacity-70 cursor-default">{'>_'}</span>
+              <span className="absolute left-4 text-alphabag-yellow font-mono text-xs font-bold opacity-70 cursor-default">{'>_'}</span>
               <input
                 type="text"
                 placeholder={hasLimitRemaining ? "Query the neural core..." : "Daily bandwidth exceeded..."}
                 disabled={!hasLimitRemaining || isStreaming}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-12 py-4 text-sm font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus:shadow-[0_0_15px_rgba(252,213,53,0.1)] outline-none transition-all placeholder:text-zinc-600 shadow-inner"
+                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-10 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus:shadow-[0_0_15px_rgba(252,213,53,0.1)] outline-none transition-all placeholder:text-zinc-600 shadow-inner"
               />
               <Button
                 type="submit"
                 disabled={!inputText.trim() || isStreaming || !hasLimitRemaining}
-                className={`absolute right-2 top-2 bottom-2 rounded-lg px-3 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:shadow-[0_0_15px_rgba(252,213,53,0.3)]'}`}
+                className={`absolute right-1.5 top-1.5 bottom-1.5 rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:shadow-[0_0_15px_rgba(252,213,53,0.3)]'}`}
                 title="Send Command"
               >
-                <Send size={14} />
+                <Send size={12} />
               </Button>
             </form>
           </div>
@@ -218,8 +217,8 @@ export const AlphaAi: React.FC = () => {
         <div className="lg:col-span-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
 
           {/* Quick Actions (2-Column Dense Grid) */}
-          <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-2xl p-5 shadow-glass relative overflow-hidden">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-4 flex items-center gap-2">
+          <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-xl p-4 shadow-glass relative overflow-hidden">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-3 flex items-center gap-2">
                 <Zap size={12} className="text-alphabag-yellow"/> Neural Prompts
             </h3>
             <div className="grid grid-cols-2 gap-2">
@@ -234,7 +233,7 @@ export const AlphaAi: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickAction(action.label)}
-                  className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl bg-black/40 hover:bg-alphabag-yellow/10 border border-white/5 hover:border-alphabag-yellow/30 transition-all group"
+                  className="flex flex-col items-center justify-center gap-1 p-2.5 rounded-xl bg-black/40 hover:bg-alphabag-yellow/10 border border-white/5 hover:border-alphabag-yellow/30 transition-all group"
                 >
                   <div className="text-alphabag-muted group-hover:text-alphabag-yellow transition-colors">
                     {action.icon}
@@ -245,22 +244,22 @@ export const AlphaAi: React.FC = () => {
             </div>
           </div>
 
-          {/* Your Portfolio Matrix */}
-          <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-glass relative overflow-hidden">
+          {/* Portfolio Matrix */}
+          <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-5 relative overflow-hidden">
             
-            <div className="flex items-center justify-between mb-6 relative z-10">
+            <div className="flex items-center justify-between mb-4 relative z-10">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                     <Wallet size={12} className="text-alphabag-green"/> Aggregate Assets
                 </h3>
             </div>
 
-            <div className="mb-6">
-                <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Total Net Worth</p>
+            <div className="mb-4">
+                <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Total Net Worth</p>
                 <div className="flex items-end gap-3">
-                    <span className="text-3xl font-black text-white tracking-tighter tabular-nums leading-none">
+                    <span className="text-xl font-black text-white tracking-tighter tabular-nums leading-none">
                         ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
-                    <div className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-1 mb-1 ${totalPnL24h >= 0 ? 'text-alphabag-green' : 'text-red-500'}`}>
+                    <div className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1 mb-1 ${totalPnL24h >= 0 ? 'text-alphabag-green' : 'text-red-500'}`}>
                         {totalPnLPercent24h >= 0 ? '+' : ''}{totalPnLPercent24h.toFixed(2)}% (24H)
                     </div>
                 </div>
@@ -278,8 +277,8 @@ export const AlphaAi: React.FC = () => {
             </div>
           </div>
 
-          {/* Chat History Sidebar */}
-          <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-glass relative overflow-hidden">
+          {/* Chat History */}
+          <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-5 relative overflow-hidden">
             <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-4">
                 <Clock size={12} className="text-alphabag-yellow"/> Chat History
             </h3>

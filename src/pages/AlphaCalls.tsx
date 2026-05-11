@@ -99,42 +99,35 @@ export const AlphaCalls: React.FC = () => {
     };
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 max-w-6xl mx-auto">
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 max-w-6xl mx-auto px-4 md:px-8 animate-in fade-in duration-700">
             
-            {/* Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 px-2">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="p-2 bg-alphabag-yellow/10 rounded-lg border border-alphabag-yellow/20">
-                            <Radio className="text-alphabag-yellow animate-pulse" size={20} />
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Radio className="animate-pulse" size={20} />
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">
-                            Classified <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Alphas</span>
-                        </h1>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Classified Alphas</h1>
                     </div>
-                    <p className="text-alphabag-subtext text-xs font-bold uppercase tracking-widest pl-1">
-                        High-conviction setups • Early Mems • Airdrops
-                    </p>
+                    <p className="text-[#848e9c] text-sm">High-conviction setups · Early Mems · Airdrops</p>
                 </div>
-
-                <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/20 px-4 py-2 rounded-xl flex items-center gap-2 shadow-glow-yellow/5">
-                    <ShieldAlert size={14} className="text-alphabag-yellow" />
-                    <span className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] relative top-px">
-                        E2E Encryption Active
-                    </span>
+                <div className="bg-[#2b3139] border border-[#fcd535]/20 px-3 py-1.5 rounded-md flex items-center gap-2">
+                    <ShieldAlert size={12} className="text-[#fcd535]" />
+                    <span className="text-[9px] text-[#fcd535] font-semibold uppercase tracking-wider">E2E Encryption Active</span>
                 </div>
             </div>
 
             {/* Category Filter Tabs */}
-            <div className="flex overflow-x-auto custom-scrollbar pb-4 mb-6 gap-2 px-2">
+            <div className="flex overflow-x-auto custom-scrollbar pb-3 mb-4 gap-2">
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat}
                         onClick={() => setActiveCategory(cat)}
-                        className={`flex-shrink-0 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                        className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                             activeCategory === cat 
-                            ? 'bg-alphabag-yellow text-alphabag-black shadow-[0_0_15px_rgba(252,213,53,0.3)]' 
-                            : 'bg-black/40 border border-white/5 text-alphabag-subtext hover:text-white hover:bg-white/5'
+                            ? 'bg-[#fcd535] text-[#181a20]' 
+                            : 'bg-[#1e2329] border border-[#2b3139] text-[#848e9c] hover:text-[#eaecef] hover:border-[#474d57]'
                         }`}
                     >
                         {cat}
@@ -144,62 +137,61 @@ export const AlphaCalls: React.FC = () => {
 
             {loading ? (
                 <div className="text-center py-32 flex flex-col items-center">
-                    <Loader2 size={40} className="animate-spin text-alphabag-yellow mb-6 shadow-glow-yellow/50 rounded-full" />
-                    <p className="text-xs font-bold uppercase tracking-widest text-alphabag-subtext animate-pulse">Decrypting Alpha Stream...</p>
+                    <div className="animate-spin w-8 h-8 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-[#848e9c] animate-pulse">Decrypting Alpha Stream...</p>
                 </div>
             ) : signals.length === 0 ? (
-                <div className="text-center py-32 glass-panel rounded-3xl mx-2">
-                    <Target size={48} className="mx-auto text-alphabag-subtext mb-6 opacity-30" />
-                    <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">No Active Intelligence</h3>
-                    <p className="text-xs font-bold uppercase tracking-widest text-alphabag-subtext">The Alpha stream is currently silent. Stand by for targets.</p>
+                <div className="text-center py-32 rounded-lg border border-dashed border-[#2b3139] mx-2">
+                    <Target size={40} className="mx-auto text-[#848e9c] mb-6 opacity-30" />
+                    <h3 className="text-base font-semibold text-[#eaecef] mb-2">No Active Intelligence</h3>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-[#848e9c]">The Alpha stream is currently silent. Stand by.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                     {signals.filter(s => activeCategory === 'ALL' || s.category === activeCategory).map((signal, index) => {
-                        // Theme definitions based on category
                         const theme = signal.category === 'DEGEN' 
-                            ? { color: 'purple-500', bg: 'purple-500/10', border: 'purple-500/20', icon: <Rocket size={18} /> }
+                            ? { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', icon: <Rocket size={18} /> }
                             : signal.category === 'LONGTERM'
-                                ? { color: 'blue-500', bg: 'blue-500/10', border: 'blue-500/20', icon: <Layers size={18} /> }
-                                : { color: 'alphabag-yellow', bg: 'alphabag-yellow/10', border: 'alphabag-yellow/20', icon: <Gift size={18} /> };
+                                ? { color: '#60a5fa', bg: 'rgba(96,165,250,0.1)', border: 'rgba(96,165,250,0.2)', icon: <Layers size={18} /> }
+                                : { color: '#fcd535', bg: 'rgba(252,213,53,0.1)', border: 'rgba(252,213,53,0.2)', icon: <Gift size={18} /> };
 
                         return (
                             <div 
                                 key={signal.id} 
-                                className={`glass-panel p-4 rounded-2xl relative overflow-hidden group hover:-translate-y-1 transition-all duration-300 border border-${theme.border} hover:border-${theme.color}/40`}
+                                className="bg-[#1e2329] border border-[#2b3139] p-4 rounded-lg relative overflow-hidden hover:border-[#474d57] transition-all"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Background Ambient Glow */}
                                 <div className={`absolute -top-16 -right-16 w-32 h-32 bg-${theme.bg} rounded-full blur-[60px] pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-1000`}></div>
                                 
                                 {/* Header Section */}
-                                <div className="flex justify-between items-start mb-3 relative z-10">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-${theme.border} bg-[#0c0c0c] text-${theme.color}`}>
-                                            {theme.icon}
+                                <div className="flex justify-between items-start mb-2 relative z-10">
+                                    <div className="flex items-center gap-2">
+                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border border-${theme.border} bg-[#0c0c0c] text-${theme.color}`}>
+                                            {React.cloneElement(theme.icon as React.ReactElement, { size: 14 })}
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-2 mb-0.5">
-                                                <h3 className="text-lg font-black text-white tracking-tight leading-none">{signal.pair}</h3>
+                                                <h3 className="text-base font-black text-white tracking-tight leading-none">{signal.pair}</h3>
                                                 {signal.status === 'HIT' && (
-                                                    <span className="text-[8px] px-1.5 py-0.5 rounded border border-green-500 text-green-500 font-bold uppercase tracking-widest">Target Hit</span>
+                                                    <span className="text-[7px] px-1 py-0.5 rounded border border-green-500 text-green-500 font-bold uppercase tracking-widest">Target Hit</span>
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className={`text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-[0.2em] bg-${theme.bg} text-${theme.color}`}>
+                                                <span className={`text-[7px] px-1 py-0.5 rounded font-black uppercase tracking-[0.2em] bg-${theme.bg} text-${theme.color}`}>
                                                     {signal.category}
                                                 </span>
-                                                <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest flex items-center">
-                                                    <Clock size={10} className="mr-1 opacity-70" /> {signal.timestamp}
+                                                <span className="text-[8px] text-alphabag-muted font-bold uppercase tracking-widest flex items-center">
+                                                    <Clock size={8} className="mr-1 opacity-70" /> {signal.timestamp}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
                                     <button 
                                         onClick={() => copyToClipboard(`${signal.pair} details`)}
-                                        className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
+                                        className="w-7 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
                                     >
-                                        <Copy size={14} />
+                                        <Copy size={12} />
                                     </button>
                                 </div>
 
@@ -211,22 +203,22 @@ export const AlphaCalls: React.FC = () => {
                                 </div>
 
                                 {/* Metrics Matrix */}
-                                <div className="grid grid-cols-3 gap-2 mb-3 relative z-10">
-                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Entry</span>
-                                        <span className={`font-mono text-xs font-bold text-white truncate`}>{signal.entry}</span>
+                                <div className="grid grid-cols-3 gap-2 mb-2 relative z-10">
+                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
+                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">Entry</span>
+                                        <span className={`font-mono text-[11px] font-bold text-white truncate`}>{signal.entry}</span>
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Target</span>
+                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
+                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">Target</span>
                                         <div className="flex flex-wrap gap-1">
                                             {signal.targets?.map((t, i) => (
-                                                <span key={i} className={`font-mono text-xs font-bold text-${theme.color}`}>{t}</span>
+                                                <span key={i} className={`font-mono text-[11px] font-bold text-${theme.color}`}>{t}</span>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-2 rounded-xl flex flex-col justify-center">
-                                        <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Stop Loss</span>
-                                        <span className={`font-mono text-xs font-bold text-red-500 truncate`}>{signal.stopLoss}</span>
+                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
+                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">SL</span>
+                                        <span className={`font-mono text-[11px] font-bold text-red-500 truncate`}>{signal.stopLoss}</span>
                                     </div>
                                 </div>
 

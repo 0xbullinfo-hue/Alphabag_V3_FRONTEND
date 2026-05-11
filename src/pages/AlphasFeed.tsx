@@ -159,14 +159,14 @@ export const AlphasFeed: React.FC = () => {
                 onExit={() => window.location.hash = '#/'}
             />
 
-            <div className={`max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 transition-all duration-700 ${showOnboarding ? 'blur-2xl pointer-events-none scale-95 opacity-50' : 'blur-0 opacity-100 scale-100'}`}>
+            <div className={`max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-700 ${showOnboarding ? 'blur-2xl pointer-events-none scale-95 opacity-50' : 'blur-0 opacity-100 scale-100'}`}>
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
-                    <div className="glass-panel overflow-hidden">
-                        <div className="p-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
-                            <span className="section-label text-white flex items-center gap-2">
-                                <Users size={14} className="text-alphabag-yellow" /> Featured Founders
+                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+                        <div className="p-2.5 border-b border-[#2b3139] bg-[#0b0e11] flex items-center justify-between">
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-[#eaecef] flex items-center gap-2">
+                                <Users size={12} className="text-[#fcd535]" /> Featured Founders
                             </span>
                         </div>
                         <div className="divide-y divide-white/5">
@@ -177,9 +177,9 @@ export const AlphasFeed: React.FC = () => {
                                         <div
                                             key={project.id}
                                             onClick={() => window.location.hash = `#/alpha-radar?project=${project.id}`}
-                                            className="p-4 hover:bg-white/[0.02] transition-colors cursor-pointer group flex items-start gap-3 relative"
+                                            className="p-2.5 hover:bg-white/[0.02] transition-colors cursor-pointer group flex items-start gap-2.5 relative"
                                         >
-                                            <div className="w-10 h-10 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow overflow-hidden shrink-0 uppercase shadow-inner group-hover:border-alphabag-yellow/50 transition-all">
+                                            <div className="w-9 h-9 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow overflow-hidden shrink-0 uppercase shadow-inner group-hover:border-alphabag-yellow/50 transition-all">
                                                 {project.logoUrl ? (
                                                     <img src={project.logoUrl} alt={project.name} className="w-full h-full object-cover" />
                                                 ) : (
@@ -188,26 +188,26 @@ export const AlphasFeed: React.FC = () => {
                                             </div>
                                             <div className="flex-1 min-w-0 pt-0.5">
                                                 <div className="flex items-center gap-1.5">
-                                                    <div className="font-bold text-[13px] text-white truncate group-hover:text-alphabag-yellow transition-colors">{project.name}</div>
-                                                    <CheckCircle className="w-3.5 h-3.5 text-alphabag-yellow shrink-0" fill="currentColor" />
+                                                    <div className="font-bold text-[12px] text-white truncate group-hover:text-alphabag-yellow transition-colors">{project.name}</div>
+                                                    <CheckCircle className="w-3 h-3 text-alphabag-yellow shrink-0" fill="currentColor" />
                                                 </div>
-                                                <div className="text-[11px] font-medium text-alphabag-muted truncate mt-0.5">${project.tickerSymbol || project.symbol}</div>
+                                                <div className="text-[10px] font-medium text-alphabag-muted truncate mt-0.5">${project.tickerSymbol || project.symbol}</div>
                                             </div>
                                             {project.isPaidSponsor && (
-                                                <div className="absolute top-4 right-4 flex items-center text-[8px] font-black text-alphabag-yellow uppercase tracking-widest bg-alphabag-yellow/10 px-1.5 py-0.5 rounded border border-alphabag-yellow/20">
-                                                    <Star size={8} className="mr-1 fill-current" /> Promoted
+                                                <div className="absolute top-3 right-3 flex items-center text-[7px] font-black text-alphabag-yellow uppercase tracking-widest bg-alphabag-yellow/10 px-1.5 py-0.5 rounded border border-alphabag-yellow/20">
+                                                    <Star size={7} className="mr-1 fill-current" /> Promoted
                                                 </div>
                                             )}
                                         </div>
                                     ))
                             ) : (
-                                <div className="p-6 text-center text-[11px] font-bold uppercase tracking-widest text-alphabag-muted">
+                                <div className="p-4 text-center text-[10px] font-bold uppercase tracking-widest text-alphabag-muted">
                                     No founders available.
                                 </div>
                             )}
                         </div>
-                        <div className="p-3 border-t border-white/5 bg-white/5">
-                            <button className="text-[10px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white w-full text-left transition-colors">
+                        <div className="p-2.5 border-t border-white/5 bg-white/5">
+                            <button className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white w-full text-left transition-colors">
                                 Show more
                             </button>
                         </div>
@@ -216,16 +216,16 @@ export const AlphasFeed: React.FC = () => {
 
                 {/* Main Feed */}
                 <div className="lg:col-span-6 border-x border-white/5 min-h-screen">
-                    <div className="p-6 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
+                    <div className="p-3 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
                         <div className="flex items-center gap-3 mb-1">
-                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/10">
-                                <Rocket size={16} fill="currentColor" />
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/10">
+                                <Zap size={14} />
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase relative flex items-center">
                                 Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Feed</span>
                             </h1>
                         </div>
-                        <p className="text-[10px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
+                        <p className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
                     </div>
 
                     {/* Top Tabs */}
@@ -237,7 +237,7 @@ export const AlphasFeed: React.FC = () => {
                                     <button
                                         key={label}
                                         onClick={() => setActiveTab(tab as any)}
-                                        className="flex-1 py-5 text-[11px] font-black uppercase tracking-[0.2em] transition-all relative group"
+                                        className="flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all relative group"
                                     >
                                         <span className={activeTab === tab ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
                                             {label}
@@ -253,14 +253,14 @@ export const AlphasFeed: React.FC = () => {
 
                     {/* Create Post */}
                     {user && (
-                        <div className="p-4 border-b border-white/5">
+                        <div className="p-3 border-b border-white/5">
                             <div className="flex gap-4">
                                 <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden">
                                     {user.email[0]}
                                 </div>
-                                <div className="flex-1 space-y-3">
+                                <div className="flex-1 space-y-2">
                                     <textarea
-                                        className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-2 text-xl leading-snug"
+                                        className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-1.5 text-lg leading-snug"
                                         placeholder="What's happening?"
                                         rows={2}
                                         value={newPostContent}
@@ -308,7 +308,7 @@ export const AlphasFeed: React.FC = () => {
                                             size="sm"
                                             onClick={handleCreatePost}
                                             disabled={!newPostContent.trim()}
-                                            className="px-6 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-2 disabled:opacity-50"
+                                            className="px-4 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-1 disabled:opacity-50 text-[10px]"
                                         >
                                             Post
                                         </Button>
@@ -334,49 +334,49 @@ export const AlphasFeed: React.FC = () => {
                 {/* Sidebar Widgets */}
                 <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-4 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
                     {/* My Profile Quick Access [NEW] */}
-                    <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-2xl p-4 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
+                    <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
                         onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center font-black text-alphabag-yellow">
+                            <div className="w-9 h-9 rounded-full bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center font-black text-alphabag-yellow text-sm">
                                 {user?.email?.[0].toUpperCase() || 'U'}
                             </div>
                             <div>
-                                <div className="text-sm font-black text-white uppercase tracking-tight">My Profile</div>
-                                <div className="text-[10px] text-alphabag-yellow font-bold uppercase tracking-widest">View Timeline</div>
+                                <div className="text-[13px] font-black text-white uppercase tracking-tight">My Profile</div>
+                                <div className="text-[9px] text-alphabag-yellow font-bold uppercase tracking-widest">View Timeline</div>
                             </div>
                         </div>
-                        <ExternalLink size={16} className="text-alphabag-yellow opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <ExternalLink size={14} className="text-alphabag-yellow opacity-50 group-hover:opacity-100 transition-opacity" />
                     </div>
 
                     {/* Search Bar */}
                     <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-muted group-focus-within:text-alphabag-yellow transition-colors" size={18} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-muted group-focus-within:text-alphabag-yellow transition-colors" size={16} />
                         <input
                             type="text"
                             placeholder="Search Alphas"
-                            className="w-full bg-white/5 border border-transparent focus:border-alphabag-yellow/50 focus:bg-transparent rounded-full py-3 pl-12 pr-4 text-sm text-white transition-all outline-none"
+                            className="w-full bg-white/5 border border-transparent focus:border-alphabag-yellow/50 focus:bg-transparent rounded-full py-2.5 pl-11 pr-4 text-[13px] text-white transition-all outline-none"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
 
                     {/* Premium Widget */}
-                    <div className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-3">
+                    <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 space-y-2.5">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-black text-white uppercase tracking-tight">Subscribe to Premium</h3>
-                            <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[10px] px-2 py-0.5 rounded-full font-black">50% OFF</span>
+                            <h3 className="text-lg font-black text-white uppercase tracking-tight">Premium</h3>
+                            <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[9px] px-2 py-0.5 rounded-full font-black">50% OFF</span>
                         </div>
-                        <p className="text-xs text-alphabag-subtext leading-relaxed font-medium">
+                        <p className="text-[11px] text-alphabag-subtext leading-relaxed font-medium">
                             Get rid of ads, see your analytics, boost your replies and unlock 20+ features.
                         </p>
-                        <Button className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-xs py-3 shadow-glow-yellow/20">
+                        <Button className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 shadow-glow-yellow/20">
                             Learn More
                         </Button>
                     </div>
 
                     {/* NEW: Promotions & Ads Section */}
-                    <div className="bg-gradient-to-br from-alphabag-dark to-alphabag-black border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+                    <div className="bg-gradient-to-br from-alphabag-dark to-alphabag-black border border-white/10 rounded-xl overflow-hidden shadow-xl">
                         <div className="p-4 border-b border-white/5 flex items-center justify-between">
                             <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
                                 <Target size={14} className="text-alphabag-yellow" /> Promoted Projects
@@ -416,33 +416,33 @@ export const AlphasFeed: React.FC = () => {
                     </div>
 
                     {/* Trending / Live Widget (Sponsored) */}
-                    <div className="bg-white/5 border border-white/5 rounded-2xl overflow-hidden">
-                        <h3 className="text-lg font-black text-white uppercase tracking-tight p-4">Live on AlphaBag</h3>
+                    <div className="bg-white/5 border border-white/5 rounded-xl overflow-hidden">
+                        <h3 className="text-base font-black text-white uppercase tracking-tight p-3.5">Live on AlphaBag</h3>
                         <div className="divide-y divide-white/5">
                             {sidebarAds.map(ad => (
-                                <div key={ad.id} className="p-4 hover:bg-white/[0.03] transition-colors cursor-pointer group">
+                                <div key={ad.id} className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group">
                                     <div className="flex justify-between items-start mb-1">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-5 h-5 bg-alphabag-dark rounded flex items-center justify-center text-[8px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
+                                            <div className="w-4 h-4 bg-alphabag-dark rounded flex items-center justify-center text-[7px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
                                                 {ad.symbol?.[0]}
                                             </div>
-                                            <span className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">{ad.name} <span className="text-red-500 ml-1">Live</span></span>
+                                            <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-wider">{ad.name} <span className="text-red-500 ml-1">Live</span></span>
                                         </div>
-                                        <div className="flex -space-x-2">
+                                        <div className="flex -space-x-1.5">
                                             {[...Array(3)].map((_, i) => (
-                                                <div key={i} className="w-6 h-6 rounded-full border-2 border-alphabag-dark bg-alphabag-yellow/20 flex items-center justify-center text-[8px] font-black text-alphabag-yellow">
+                                                <div key={i} className="w-5 h-5 rounded-full border-2 border-alphabag-dark bg-alphabag-yellow/20 flex items-center justify-center text-[7px] font-black text-alphabag-yellow">
                                                     {i === 2 ? '+48' : 'U'}
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <h4 className="text-sm font-bold text-white leading-snug line-clamp-2">
+                                    <h4 className="text-[12px] font-bold text-white leading-snug line-clamp-2">
                                         {ad.description}
                                     </h4>
                                 </div>
                             ))}
                         </div>
-                        <button className="w-full p-4 text-left text-sm text-alphabag-yellow hover:bg-white/5 transition-colors font-bold uppercase tracking-wider">
+                        <button className="w-full p-3.5 text-left text-[11px] text-alphabag-yellow hover:bg-white/5 transition-colors font-bold uppercase tracking-wider">
                             Show more
                         </button>
                     </div>
@@ -494,12 +494,12 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
     };
 
     return (
-        <div className="p-4 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
+        <div className="p-3 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
             <div className="flex gap-4">
                 {/* Avatar */}
                 <div
                     onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                    className="w-10 h-10 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow shadow-inner overflow-hidden uppercase cursor-pointer hover:border-alphabag-yellow/50 transition-all mt-1"
+                    className="w-9 h-9 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow shadow-inner overflow-hidden uppercase cursor-pointer hover:border-alphabag-yellow/50 transition-all mt-1"
                 >
                     {post.logoUrl ? (
                         <img src={post.logoUrl} alt={authorName} className="w-full h-full object-cover" />
@@ -516,17 +516,17 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                             <div className="flex items-center flex-wrap gap-1.5">
                                 <span
                                     onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                                    className="font-bold text-white text-[15px] truncate cursor-pointer hover:underline"
+                                    className="font-bold text-white text-[14px] truncate cursor-pointer hover:underline"
                                 >
                                     {authorName}
                                 </span>
                                 {isFounderPost ? (
-                                    <CheckCircle size={14} className="text-alphabag-yellow flex-shrink-0" fill="currentColor" />
+                                    <CheckCircle size={13} className="text-alphabag-yellow flex-shrink-0" fill="currentColor" />
                                 ) : (
-                                    <Zap size={14} className="text-alphabag-muted flex-shrink-0" />
+                                    <Zap size={13} className="text-alphabag-muted flex-shrink-0" />
                                 )}
-                                <span className="text-alphabag-muted text-[14px] truncate">{authorHandle}</span>
-                                <span className="text-alphabag-muted text-[14px]">· 20h</span>
+                                <span className="text-alphabag-muted text-[13px] truncate">{authorHandle}</span>
+                                <span className="text-alphabag-muted text-[13px]">· 20h</span>
                             </div>
 
                             {/* Role Badges line */}
@@ -571,13 +571,13 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                     </div>
 
                     {/* Content */}
-                    <div className={`p-4 rounded-xl mb-3 border ${post.strategy === 'DEGEN' ? 'bg-gradient-to-br from-orange-500/5 to-transparent border-orange-500/20 shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]' :
+                    <div className={`p-2.5 rounded-lg mb-2 border ${post.strategy === 'DEGEN' ? 'bg-gradient-to-br from-orange-500/5 to-transparent border-orange-500/20 shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]' :
                         post.strategy === 'SHORT' ? 'bg-gradient-to-br from-red-500/5 to-transparent border-red-500/20' :
                             post.strategy === 'LONGTERM' ? 'bg-gradient-to-br from-green-500/5 to-transparent border-green-500/20' :
                                 post.strategy === 'AIRDROP' ? 'bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20' :
                                     'bg-transparent border-transparent'
                         }`}>
-                        <p className={`text-[15px] leading-relaxed whitespace-pre-wrap ${post.strategy === 'DEGEN' ? 'text-orange-50 font-medium' :
+                        <p className={`text-[14px] leading-relaxed whitespace-pre-wrap ${post.strategy === 'DEGEN' ? 'text-orange-50 font-medium' :
                             post.strategy === 'SHORT' ? 'text-red-50' :
                                 post.strategy === 'LONGTERM' ? 'text-green-50' :
                                     post.strategy === 'AIRDROP' ? 'text-purple-50' :
@@ -589,12 +589,12 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
 
                     {/* Banner for Manifesto posts */}
                     {isFounderPost && (
-                        <div className="rounded-2xl border border-white/10 overflow-hidden mb-4 bg-white/5 shadow-2xl">
+                        <div className="rounded-lg border border-white/10 overflow-hidden mb-3 bg-white/5 shadow-2xl">
                             {post.bannerUrl ? (
                                 <img src={post.bannerUrl} alt="Manifesto Banner" className="aspect-[3/1] w-full object-cover" />
                             ) : (
                                 <div className="aspect-video bg-gradient-to-br from-alphabag-yellow/10 to-transparent flex items-center justify-center">
-                                    <Zap size={48} className="text-alphabag-yellow/20" />
+                                    <Zap size={40} className="text-alphabag-yellow/20" />
                                 </div>
                             )}
                         </div>

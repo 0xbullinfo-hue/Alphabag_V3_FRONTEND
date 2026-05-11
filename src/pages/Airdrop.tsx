@@ -376,32 +376,31 @@ export const Airdrop: React.FC = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-8 pb-20 px-4 md:px-8 animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-4 mb-10">
+        <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
-                            <Gift size={20} fill="currentColor" />
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Gift size={20} />
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                            Mission <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Control</span>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">
+                            Mission Control
                         </h1>
-                        <span className="badge-yellow">v1.0 Testnet</span>
                     </div>
-                    <p className="text-alphabag-subtext text-xs max-w-2xl mt-1 font-medium leading-relaxed">
-                        Task-to-Earn (T2E) protocol. Complete missions to accumulate **ITEMS** for future utility rewards.
+                    <p className="text-[#848e9c] text-sm max-w-2xl mt-2 font-medium leading-relaxed">
+                        Task-to-Earn (T2E) protocol. Complete missions to accumulate <span className="text-[#eaecef] font-semibold">ITEMS</span> for future utility rewards.
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/30 px-4 py-2 rounded-2xl text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] shadow-glow-yellow/5 flex items-center gap-2">
-                        <Zap size={14} fill="currentColor" className="animate-pulse" /> Live Tracking
+                    <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider flex items-center gap-2">
+                        <Zap size={14} fill="currentColor" /> Live Tracking
                     </div>
                 </div>
             </div>
 
             {/* Mission Paused Banner */}
             {missionPaused && (
-                <div className="flex items-center gap-4 p-5 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl animate-in slide-in-from-top-4 duration-500">
+                <div className="flex items-center gap-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl animate-in slide-in-from-top-4 duration-500">
                     <div className="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
                         <Lock size={20} className="text-yellow-400" />
                     </div>
@@ -413,37 +412,33 @@ export const Airdrop: React.FC = () => {
             )}
 
             {/* Stats Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 {(() => {
                     const myTeamSize = user?.referralCount || 0;
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
 
                     return (
-                        <div className="glass-panel p-6 transition-all group relative overflow-hidden border border-alphabag-yellow/20 flex flex-col h-full">
-                            <div className="absolute -top-6 -right-6 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-2xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                        <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 flex flex-col h-full relative">
                             <div className="flex justify-between items-start mb-4">
-                                <span className="section-label">My Team</span>
-                                <Users size={16} className="text-alphabag-yellow opacity-50" />
+                                <span className="text-xs font-semibold uppercase text-[#848e9c]">My Team</span>
+                                <Users size={18} className="text-[#848e9c]" />
                             </div>
-                            <div className="text-3xl font-black text-white tracking-tight mb-4">{myTeamSize}</div>
-
-                            <div className="space-y-2">
+                            <div className="text-3xl font-semibold text-[#eaecef] mb-4">{myTeamSize}</div>
+                            <div className="space-y-2 relative z-10">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow">CAPACITY</span>
-                                    <span className="text-[9px] text-alphabag-muted font-bold">{100 - myTeamSize} slots left</span>
+                                    <span className="text-[10px] font-semibold text-[#848e9c]">CAPACITY</span>
+                                    <span className="text-[10px] text-[#848e9c] font-medium">{100 - myTeamSize} slots left</span>
                                 </div>
-                                <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                    <div className="h-full rounded-full transition-all duration-1000 bg-alphabag-yellow shadow-glow-yellow" style={{width: `${progress}%`}}></div>
+                                <div className="w-full h-1.5 bg-[#0b0e11] rounded-full overflow-hidden">
+                                    <div className="h-full rounded-full transition-all duration-1000 bg-[#fcd535]" style={{width: `${progress}%`}}></div>
                                 </div>
-                                <div className="text-[9px] text-alphabag-muted font-bold">{myTeamSize} / 100 MAX</div>
+                                <div className="text-[10px] text-[#848e9c] font-medium">{myTeamSize} / 100 MAX</div>
                             </div>
-
-                            {/* Status Row */}
-                            <div className="mt-auto pt-6 border-t border-white/5">
-                                <div className="bg-white/5 p-4 rounded-2xl border border-white/10 flex justify-between items-center h-[52px]">
-                                    <div className="text-[9px] font-black uppercase tracking-[0.2em] text-red-400">Strike Protocol</div>
-                                    <div className="text-lg font-black text-red-400">
-                                        {(user as any)?.strikes || 0}/5
+                            <div className="mt-auto pt-6">
+                                <div className="bg-[#0ecb81]/10 px-4 rounded-md border border-[#0ecb81]/20 flex justify-between items-center h-10">
+                                    <div className="text-[10px] font-semibold uppercase text-[#0ecb81]">Tasks Completed</div>
+                                    <div className="text-sm font-semibold text-[#0ecb81]">
+                                        {user?.completedTasks?.length || 0}
                                     </div>
                                 </div>
                             </div>
@@ -451,85 +446,82 @@ export const Airdrop: React.FC = () => {
                     );
                 })()}
 
-                <div className="glass-panel p-6 border-alphabag-yellow/20 shadow-[0_0_20px_rgba(252,213,53,0.1)] transition-all group relative overflow-hidden flex flex-col h-full">
-                    <div className="absolute -top-6 -right-6 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-2xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
-
+                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 flex flex-col h-full relative">
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-4 pb-3 border-b border-white/5">
-                        <span className="section-label text-alphabag-yellow">Earned ITEMS</span>
-                        <span className="badge-yellow">ELIGIBLE</span>
+                    <div className="flex justify-between items-center mb-4 pb-4 border-b border-[#2b3139]">
+                        <span className="text-xs font-semibold uppercase text-[#848e9c]">Earned ITEMS</span>
+                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] px-2 py-1 rounded-md text-[10px] font-semibold">ELIGIBLE</span>
                     </div>
 
                     {/* Main Balance (Total) */}
-                    <div className="mb-6">
-                        <div className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest mb-1.5 opacity-70">Total Portfolio ITEMS</div>
-                        <div className="text-4xl font-black text-white tracking-tight drop-shadow-md">
+                    <div className="mb-4">
+                        <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-1">Total Portfolio ITEMS</div>
+                        <div className="text-3xl font-semibold text-[#eaecef]">
                             {(itemsBalance + bagBalance).toLocaleString()}
                         </div>
                     </div>
 
                     {/* Breakdown */}
-                    <div className="flex gap-6 mb-6 pb-6 border-b border-white/5">
+                    <div className="flex gap-6 mb-6 pb-6 border-b border-[#2b3139]">
                         <div className="flex-1">
-                            <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest mb-1 opacity-70">Earned</div>
-                            <div className="text-xl font-black text-white/90 tabular-nums">{itemsBalance.toLocaleString()}</div>
+                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-1">Earned</div>
+                            <div className="text-xl font-semibold text-[#eaecef] tabular-nums">{itemsBalance.toLocaleString()}</div>
                         </div>
                         <div className="flex-1">
-                            <div className="text-[9px] text-alphabag-yellow font-black uppercase tracking-widest mb-1 opacity-70">Reserve</div>
-                            <div className="text-xl font-black text-alphabag-yellow drop-shadow-[0_0_8px_rgba(252,213,53,0.3)] tabular-nums">{bagBalance.toLocaleString()}</div>
+                            <div className="text-[10px] text-[#fcd535] font-semibold uppercase mb-1 flex items-center justify-between">
+                                <span>Reserve</span>
+                                {itemsToBagRate && itemsToBagRate > 0 && (
+                                    <span className="text-[8px] text-[#848e9c] normal-case tracking-normal">({itemsToBagRate}:1 rate)</span>
+                                )}
+                            </div>
+                            <div className="text-xl font-semibold text-[#fcd535] tabular-nums">{bagBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
-                    {/* Actions + Footer — grouped as single pinned-bottom block */}
-                    <div className="mt-auto pt-6 border-t border-white/5">
-                        <div className="flex gap-3">
+                    {/* Actions + Footer */}
+                    <div className="mt-auto pt-6">
+                        <div className="flex gap-3 h-10">
                             {campaignEnded ? (
                                 <>
-                                    <button onClick={handleConvertItems} className="flex-1 bg-alphabag-yellow text-black px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all z-10 relative shadow-glow-yellow/20">
+                                    <button onClick={handleConvertItems} className="flex-1 bg-[#fcd535] text-[#181a20] px-4 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] active:scale-[0.98] transition-all h-full">
                                         CONVERT
                                     </button>
                                     {bagBalance > 0 && (
                                         <button
                                             onClick={handleRequestPayout}
-                                            className="flex-1 bg-white/5 border border-alphabag-yellow/50 text-alphabag-yellow px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-alphabag-yellow/10 active:scale-[0.98] transition-all"
+                                            className="flex-1 bg-[#2b3139] text-[#eaecef] px-4 rounded-md text-xs font-semibold hover:bg-[#474d57] active:scale-[0.98] transition-all h-full"
                                         >
                                             WITHDRAWAL
                                         </button>
                                     )}
                                 </>
                             ) : (
-                                <div className="w-full h-[52px] px-4 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-[9px] text-alphabag-muted font-black uppercase tracking-[0.2em] opacity-60">
+                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-[#848e9c] font-semibold uppercase h-full">
                                     Locked until campaign end
                                 </div>
                             )}
                         </div>
-                        {itemsToBagRate && itemsToBagRate > 0 && (
-                            <div className="mt-3 text-center text-[9px] text-alphabag-muted font-black uppercase tracking-widest opacity-50">
-                                Rate: {itemsToBagRate} ITEMS = 1 utility token
-                            </div>
-                        )}
                     </div>
                 </div>
 
-                <div className="glass-panel p-6 border-alphabag-green/20 relative overflow-hidden shadow-[0_4px_30px_rgba(0,255,163,0.05)] flex flex-col h-full transition-all group">
-                    <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-alphabag-green/10 rounded-full blur-2xl opacity-50 group-hover:opacity-70 transition-opacity"></div>
+                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 relative flex flex-col h-full">
                     <div className="flex justify-between items-start mb-4">
-                        <span className="section-label">TGE EVENT</span>
-                        <Gift size={16} className="text-alphabag-green opacity-50" />
+                        <span className="text-xs font-semibold uppercase text-[#848e9c]">TGE EVENT</span>
+                        <Gift size={18} className="text-[#848e9c]" />
                     </div>
                     {stats ? (
                         <div className="flex flex-col flex-1">
                         <div className="mb-6">
                             {campaignEnded ? (
                                 <div className="animate-in fade-in zoom-in duration-500">
-                                    <div className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] text-center mb-3">Wallet Distribution Protocol</div>
+                                    <div className="text-[10px] text-[#fcd535] font-semibold uppercase text-center mb-3">Wallet Distribution Protocol</div>
                                     <TGECountdown targetDate={new Date(new Date(stats.tgeDate).getTime() + 72 * 60 * 60 * 1000).toISOString()} />
                                 </div>
                             ) : (
                                 <>
                                     <TGECountdown targetDate={stats?.tgeDate || new Date().toISOString()} />
-                                    <div className="mt-3 text-center">
-                                        <span className="badge-blue">
+                                    <div className="mt-4 text-center">
+                                        <span className="bg-[#2b3139] text-[#eaecef] px-3 py-1.5 rounded-md text-[10px] font-semibold border border-[#474d57]">
                                             Target: {stats?.tgeDate ? new Date(stats.tgeDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Q4 2026'}
                                         </span>
                                     </div>
@@ -537,19 +529,19 @@ export const Airdrop: React.FC = () => {
                             )}
                         </div>
 
-                            <div className="mt-auto pt-6 border-t border-alphabag-green/20">
-                                <div className={`text-[8px] font-black uppercase tracking-[0.2em] text-center mb-1 ${campaignEnded ? 'text-alphabag-yellow animate-pulse' : 'text-alphabag-green'}`}>
+                            <div className="mt-auto pt-6 border-t border-[#2b3139]">
+                                <div className={`text-[10px] font-semibold uppercase text-center mb-1 ${campaignEnded ? 'text-[#fcd535]' : 'text-[#848e9c]'}`}>
                                     {campaignEnded ? "Final Allocation" : "Projected Allocation"}
                                 </div>
-                                <div className={`text-center font-black transition-all duration-700 tracking-tight py-2 ${campaignEnded ? 'text-3xl text-alphabag-yellow drop-shadow-[0_0_10px_rgba(252,213,53,0.5)]' : 'text-2xl tracking-[0.2em] relative flex justify-center'}`}>
+                                <div className={`text-center font-semibold transition-all duration-700 py-1 ${campaignEnded ? 'text-3xl text-[#fcd535]' : 'text-2xl text-[#eaecef] relative flex justify-center'}`}>
                                     {campaignEnded ? (
                                         (bagBalance + (itemsBalance * (itemsToBagRate || 0))).toLocaleString()
                                     ) : (
                                         <div className="group relative w-fit flex justify-center items-center cursor-help">
-                                            <span className="text-white/10 blur-[8px] select-none">
+                                            <span className="text-[#848e9c] text-2xl">
                                                 {(bagBalance + (itemsBalance * (itemsToBagRate || 1))).toLocaleString()}
                                             </span>
-                                            <div className="absolute inset-0 flex items-center justify-center font-black text-alphabag-yellow text-[10px] uppercase whitespace-nowrap bg-alphabag-black/90 rounded px-2 backdrop-blur-md border border-alphabag-yellow/20 z-10 pointer-events-none">
+                                            <div className="absolute inset-0 flex items-center justify-center font-semibold text-[#fcd535] text-[10px] uppercase bg-[#181a20] rounded-md px-3 py-1 border border-[#2b3139] z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
                                                 Unlocks at TGE
                                             </div>
                                         </div>
@@ -559,49 +551,58 @@ export const Airdrop: React.FC = () => {
                         </div>
                     ) : (
                         <div className="py-2 text-center mt-6">
-                            <div className="text-lg font-black text-alphabag-green/60 tracking-tight">TBA</div>
-                            <div className="text-[8px] text-alphabag-muted font-bold uppercase tracking-widest mt-0.5">Announcement incoming</div>
+                            <div className="text-2xl font-semibold text-[#848e9c]">TBA</div>
+                            <div className="text-[10px] text-[#848e9c] font-medium uppercase mt-2">Announcement incoming</div>
                         </div>
                     )}
                 </div>
             </div>
 
             {/* --- Protocol Notice --- */}
-            <div className="mb-12 p-4 rounded-2xl bg-blue-500/5 border border-blue-500/15 relative flex items-start gap-4">
-                <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 shrink-0 mt-0.5">
-                    <ShieldAlert size={20} className="text-blue-400" />
+            <div className="mb-4 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="flex items-start gap-4">
+                    <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 shrink-0 mt-0.5">
+                        <ShieldAlert size={18} className="text-blue-400" />
+                    </div>
+                    <div>
+                        <h4 className="text-[13px] font-black text-white uppercase tracking-wider">Protocol Verification</h4>
+                        <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed max-w-2xl">
+                            All mission tasks are verified for authenticity. Maintain good standing to keep earning. A 5/5 status strike would result in a complete ban from the AlphaBAG T2E platform.
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h4 className="text-sm font-black text-white uppercase tracking-wider">Protocol Verification</h4>
-                    <p className="text-[11px] text-gray-400 mt-1 leading-relaxed">
-                        All mission tasks are verified for authenticity. Maintain good standing to keep earning. A 5/5 status strike would result in a complete ban from the AlphaBAG T2E platform.
-                    </p>
+                <div className="flex items-center gap-3 shrink-0 self-stretch md:self-auto w-full md:w-auto">
+                    <div className="bg-[#f6465d]/10 p-3 px-4 rounded-md border border-[#f6465d]/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
+                        <div className="text-[10px] font-semibold uppercase text-[#f6465d] mb-0.5 whitespace-nowrap">Strike Protocol</div>
+                        <div className="text-sm font-semibold text-[#f6465d]">
+                            {(user as any)?.strikes || 0}/5
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Team Referral Hub */}
-            <div className="glass-panel p-6 bg-[#0a0a0a] border border-alphabag-yellow/20 rounded-3xl relative overflow-hidden mb-8">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-alphabag-yellow/5 rounded-full blur-[100px] pointer-events-none"></div>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 ">
+            <div className="rounded-lg p-6 bg-[#1e2329] border border-[#2b3139] mb-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
-                            <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                                <Users className="text-alphabag-yellow" /> Network Hub
+                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                                <Users size={18} className="text-[#fcd535]" /> Network Hub
                             </h2>
-                            <p className="text-xs text-alphabag-subtext mt-1">Recruit new members and earn <span className="text-alphabag-yellow font-bold">100 ITEMS</span> per successful sync.</p>
+                            <p className="text-xs text-[#848e9c] mt-1 font-medium">Recruit new members and earn <span className="text-[#fcd535] font-semibold">100 ITEMS</span> per successful sync.</p>
                         </div>
                         
                         <div className="flex flex-col items-end gap-2 w-full md:w-auto">
-                            <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest pr-2">Your Invite Link</div>
+                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase pr-1">Your Invite Link</div>
                             <div className="flex items-center gap-2 w-full md:w-auto">
-                                <div className="flex-1 md:w-64 bg-black border border-white/10 rounded-xl px-4 py-3 font-mono text-[10px] text-gray-400 truncate">
+                                <div className="flex-1 md:w-64 bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 font-mono text-xs text-[#848e9c] truncate">
                                     https://alphabag.com/?ref={user?.referralCode || 'ACCESS_LOCKED'}
                                 </div>
                                 <button 
                                     onClick={copyReferralLink}
                                     title="Copy referral link"
-                                    className="p-3 bg-alphabag-yellow text-black rounded-xl hover:bg-white transition-all active:scale-95 shrink-0"
+                                    className="p-2 bg-[#2b3139] text-[#eaecef] rounded-md hover:bg-[#474d57] transition-all shrink-0"
                                 >
-                                    <Copy size={18} />
+                                    <Copy size={16} />
                                 </button>
                                 <button
                                     onClick={() => {
@@ -610,9 +611,9 @@ export const Airdrop: React.FC = () => {
                                         window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
                                     }}
                                     title="Share on X"
-                                    className="p-3 bg-[#1DA1F2]/10 border border-[#1DA1F2]/30 text-[#1DA1F2] rounded-xl hover:bg-[#1DA1F2]/20 transition-all active:scale-95 shrink-0"
+                                    className="p-2 bg-[#2b3139] text-[#eaecef] rounded-md hover:bg-[#474d57] transition-all shrink-0"
                                 >
-                                    <Twitter size={18} />
+                                    <Twitter size={16} />
                                 </button>
                             </div>
                         </div>
@@ -620,13 +621,13 @@ export const Airdrop: React.FC = () => {
             </div>
 
             {/* Mission Section */}
-            <div className="space-y-8">
-                <div className="glass-panel p-8 space-y-6 bg-gradient-to-b from-[#0c0c0c] to-black border border-alphabag-yellow/20 rounded-3xl">
-                    <div className="flex justify-between items-center border-b border-white/5 pb-6">
-                        <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                            <Shield className="text-alphabag-yellow" /> Mission Hub
+            <div className="space-y-8 mb-8">
+                <div className="rounded-[32px] p-8 space-y-6 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
+                    <div className="flex justify-between items-center border-b border-white/5 pb-6 relative z-10">
+                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+                            <Shield className="text-alphabag-yellow drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]" /> Mission Hub
                         </h2>
-                        <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-lg border border-white/10">
+                        <div className="text-[10px] text-[#848e9c] font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
                             Available Missions: {tasks.filter((t: any) => t.type !== 'unlimited').length}
                         </div>
                     </div>
@@ -661,53 +662,53 @@ export const Airdrop: React.FC = () => {
                             })();
                             const type = task.frequency?.toLowerCase() || task.type?.toLowerCase();
                             return (
-                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 transition-all group relative overflow-hidden border ${isCompleted ? 'bg-alphabag-green/5 border-alphabag-green/20 rounded-2xl' : 'bg-[#0d0d11]/60 backdrop-blur-xl border-alphabag-yellow/20 rounded-2xl hover:border-alphabag-yellow/40 hover:bg-white/[0.04]'}`}>
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className={`p-3 rounded-xl ${isCompleted ? 'bg-alphabag-green/20 text-alphabag-green shadow-glow-green/10' : 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-glow-yellow/10'}`}>
-                                            <Zap size={20} fill="currentColor" className={!isCompleted ? 'animate-pulse' : ''} />
+                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 transition-all relative overflow-hidden border ${isCompleted ? 'bg-[#181a20] border-[#0ecb81]/30 rounded-lg' : 'bg-[#1e2329] border-[#2b3139] rounded-lg hover:border-[#fcd535] hover:bg-[#2b3139]'}`}>
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div className={`p-2.5 rounded-md ${isCompleted ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#fcd535]/10 text-[#fcd535]'}`}>
+                                            <Zap size={18} fill="currentColor" />
                                         </div>
                                         {isCompleted ? (
-                                            <div className="flex items-center gap-1.5 text-[9px] text-alphabag-green font-black uppercase tracking-widest">
+                                            <div className="flex items-center gap-1 text-[10px] text-[#0ecb81] font-semibold uppercase">
                                                 <CheckCircle2 size={14} /> Completed
                                             </div>
                                         ) : (
-                                            <div className="badge-yellow">
+                                            <div className="bg-[#fcd535]/10 text-[#fcd535] px-2 py-1 rounded-md text-[10px] font-semibold uppercase">
                                                 +{task.rewardTokens || 0} ITEMS
                                             </div>
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="section-title text-base mb-1.5">{task.title}</h3>
-                                        <p className="text-xs text-alphabag-muted mb-4 leading-relaxed font-medium opacity-80">{task.description}</p>
+                                        <h3 className="text-sm font-semibold text-[#eaecef] mb-2">{task.title}</h3>
+                                        <p className="text-xs text-[#848e9c] mb-6 leading-relaxed">{task.description}</p>
                                     </div>
 
 
                                     {task.actionUrl && !isCompleted && (
-                                        <div className="mb-3">
+                                        <div className="mb-4">
                                             <Button
                                                 onClick={() => window.open(task.actionUrl, '_blank')}
-                                                className="w-full py-2 bg-white/5 text-white/70 hover:text-white border border-white/10 hover:border-alphabag-yellow/50 text-[9px] font-black tracking-widest uppercase transition-all flex items-center justify-center gap-2"
+                                                className="w-full py-2.5 bg-[#2b3139] text-[#eaecef] hover:bg-[#474d57] border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
                                                 variant="secondary"
                                                 size="sm"
                                             >
-                                                {task.title.toLowerCase().includes('telegram') ? <Send size={12} className="text-[#229ED9]" /> : <X size={12} className="text-white" />}
+                                                {task.title.toLowerCase().includes('telegram') ? <Send size={14} className="text-[#229ED9]" /> : <X size={14} className="text-white" />}
                                                 Execute Mission ↗
                                             </Button>
                                         </div>
                                     )}
 
                                     {task.id === 't2e_daily_claim' && (
-                                        <div className="mb-4">
-                                            <div className="text-[8px] text-alphabag-muted font-black uppercase tracking-[0.2em] mb-2 text-center opacity-50">Next Transmission Window</div>
+                                        <div className="mb-6">
+                                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-3 text-center">Next Window</div>
                                             <div className="flex gap-2 justify-center">
                                                 {(task.frequency?.toUpperCase() === 'DAILY' ? dailyCountdown : weeklyCountdown).split(':').map((val, idx) => (
                                                     <div key={idx} className="flex flex-col items-center">
-                                                        <div className="bg-black/60 border border-white/10 rounded-lg w-12 h-12 flex items-center justify-center mb-1 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                                                            <span className="text-xl font-black text-alphabag-yellow tabular-nums drop-shadow-[0_0_15px_rgba(252,213,53,0.6)]">
+                                                        <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md w-12 h-12 flex items-center justify-center mb-1">
+                                                            <span className="text-xl font-semibold text-[#fcd535] tabular-nums">
                                                                 {val || '00'}
                                                             </span>
                                                         </div>
-                                                        <span className="text-[8px] font-black text-alphabag-muted uppercase tracking-widest">
+                                                        <span className="text-[9px] font-semibold text-[#848e9c] uppercase">
                                                             {idx === 0 ? 'Day' : idx === 1 ? 'Hrs' : idx === 2 ? 'Min' : 'Sec'}
                                                         </span>
                                                     </div>
@@ -721,7 +722,7 @@ export const Airdrop: React.FC = () => {
                                             <input 
                                                 type="text" 
                                                 placeholder={task.title.toLowerCase().includes('telegram') ? "@Telegram_Username" : "Activity Proof Link: https://..."}
-                                                className="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-[10px] text-white focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-3 py-2.5 text-xs font-mono text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
                                                 value={taskLinks[task.id] || ''}
                                                 onChange={(e) => handleTaskLinkChange(task.id, e.target.value)}
                                             />
@@ -732,7 +733,7 @@ export const Airdrop: React.FC = () => {
                                         <div className="mb-4">
                                             <textarea 
                                                 placeholder="Provide your mission feedback here..."
-                                                className="w-full bg-[#111] border border-white/10 rounded-lg px-4 py-2.5 text-[10px] text-white h-20 resize-none focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-3 py-2.5 text-xs font-mono text-[#eaecef] h-20 resize-none focus:border-[#fcd535] outline-none transition-all"
                                                 value={taskFeedback[task.id] || ''}
                                                 onChange={(e) => handleTaskFeedbackChange(task.id, e.target.value)}
                                             />
@@ -744,15 +745,15 @@ export const Airdrop: React.FC = () => {
                                             onClick={() => {
                                                 handleCompleteTask(task.id, task.requiresLink);
                                             }}
-                                            className={`w-full py-2.5 text-[10px] font-black tracking-[0.2em] uppercase transition-all ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-white/5 text-alphabag-muted cursor-not-allowed opacity-50' : task.frequency?.toUpperCase() === 'DAILY' ? 'bg-green-500 text-black hover:scale-[1.02] shadow-[0_5px_15px_rgba(34,197,94,0.3)]' : 'bg-alphabag-yellow text-black hover:scale-[1.02] shadow-[0_5px_15px_rgba(252,213,53,0.3)]'}`}
+                                            className={`w-full py-2.5 text-xs font-semibold uppercase transition-all rounded-md ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-[#2b3139] text-[#848e9c] cursor-not-allowed border-none' : 'bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]'}`}
                                             size="sm"
                                             disabled={isTaskLoading || missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id])}
                                         >
-                                            {missionPaused ? '⏸ MISSION PAUSED' : isTaskLoading ? 'Syncing...' : `CLAIM ${task.rewardTokens || 50} ITEMS`}
+                                            {missionPaused ? 'MISSION PAUSED' : isTaskLoading ? 'Syncing...' : `CLAIM ${task.rewardTokens || 50} ITEMS`}
                                         </Button>
                                     ) : (
                                         <Button
-                                            className="w-full py-2.5 text-[10px] font-black tracking-[0.2em] uppercase bg-white/5 text-alphabag-muted cursor-not-allowed border border-white/10"
+                                            className="w-full py-2.5 text-xs font-semibold uppercase bg-[#2b3139] text-[#848e9c] cursor-not-allowed border-none rounded-md"
                                             size="sm"
                                             disabled
                                         >
@@ -768,37 +769,35 @@ export const Airdrop: React.FC = () => {
 
             {/* Submission Section (Founder & Social) */}
             {!submitted ? (
-                <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-700">
+                <div className="space-y-6 animate-in slide-in-from-bottom-8 duration-700">
                     {/* Mission Proof Submission */}
-                    <div className="glass-panel p-8 bg-gradient-to-b from-[#0c0c0c] to-black border border-white/5 rounded-3xl relative overflow-hidden">
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-[80px] pointer-events-none"></div>
+                    <div className="rounded-lg p-8 bg-[#1e2329] border border-[#2b3139]">
                         <div className="mb-8">
-                            <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                                <Send className="text-alphabag-yellow" /> Submission Hub
+                            <h2 className="text-xl font-semibold text-[#eaecef] flex items-center gap-2">
+                                <Send className="text-[#fcd535]" size={20} /> Submission Hub
                             </h2>
-                            <p className="text-xs text-alphabag-subtext mt-1 font-bold uppercase tracking-widest">Connect your final social identity and mission proof.</p>
+                            <p className="text-xs text-[#848e9c] mt-2 font-medium">Connect your final social identity and mission proof.</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Distribution Wallet (BSC)</label>
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Distribution Wallet (BSC)</label>
                                 <input 
                                     type="text" 
                                     required
                                     placeholder="0x..."
-                                    className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-alphabag-yellow/50 outline-none transition-all"
+                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
                                     value={bscWallet}
                                     onChange={(e) => setBscWallet(e.target.value)}
                                 />
-                                <p className="text-[8px] text-alphabag-muted uppercase font-bold tracking-widest pl-1">The wallet where you will receive your tokens.</p>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Final Mission Feedback (Compulsory)</label>
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Final Mission Feedback (Compulsory)</label>
                                 <textarea 
                                     required
-                                    className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white h-24 resize-none focus:border-alphabag-yellow/50 outline-none transition-all"
-                                    placeholder="Please provide your feedback on the platform UI/UX and features. This is required for final verification."
+                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] h-24 resize-none focus:border-[#fcd535] outline-none transition-all"
+                                    placeholder="Please provide your feedback on the platform UI/UX and features."
                                     value={review}
                                     onChange={(e) => setReview(e.target.value)}
                                 />
@@ -807,32 +806,28 @@ export const Airdrop: React.FC = () => {
                             <Button 
                                 type="submit" 
                                 disabled={isSubmitting || !review}
-                                className="w-full py-4 bg-alphabag-yellow text-black font-black uppercase tracking-[0.4em] rounded-2xl hover:scale-[1.01] transition-all shadow-[0_20px_80px_rgba(252,213,53,0.15)] flex items-center justify-center gap-4 group"
+                                className="w-full py-3 bg-[#fcd535] text-[#181a20] font-semibold uppercase rounded-md hover:bg-[#e0bd2e] transition-all flex flex-col items-center justify-center gap-1"
                             >
                                 {isSubmitting ? 'SYNCING DATA...' : (
-                                    <div className="flex flex-col items-center text-center">
-                                        <span className="text-xs md:text-sm font-black tracking-[0.2em] mb-1">INITIALIZE FINAL SYNC</span>
-                                        <span className="text-[9px] font-bold opacity-80 group-hover:opacity-100 group-hover:text-black transition-all uppercase tracking-[0.1em]">
+                                    <>
+                                        <span className="text-sm">INITIALIZE FINAL SYNC</span>
+                                        <span className="text-[10px] font-medium opacity-80 uppercase">
                                             Earn 5,000 ITEMS for Feedback
                                         </span>
-                                    </div>
+                                    </>
                                 )}
                             </Button>
                         </form>
                     </div>
                 </div>
             ) : (
-                <div className="glass-panel p-12 bg-gradient-to-b from-green-900/10 to-black border border-alphabag-green/20 rounded-3xl text-center space-y-6 animate-in zoom-in duration-700">
-                    <div className="w-20 h-20 bg-alphabag-green/20 rounded-full flex items-center justify-center mx-auto border border-alphabag-green/40 shadow-[0_0_30px_rgba(0,255,163,0.2)]">
-                        <CheckCircle2 size={40} className="text-alphabag-green" />
+                <div className="p-8 bg-[#0ecb81]/10 border border-[#0ecb81]/30 rounded-lg text-center space-y-4">
+                    <div className="w-12 h-12 bg-[#0ecb81]/20 rounded-full flex items-center justify-center mx-auto border border-[#0ecb81]/40">
+                        <CheckCircle2 size={24} className="text-[#0ecb81]" />
                     </div>
                     <div>
-                        <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Identity Synchronized</h2>
-                        <p className="text-alphabag-subtext mt-2">Your mission data and founder application have been secured by the community.</p>
-                    </div>
-                    <div className="bg-black/40 p-4 rounded-xl border border-white/5 inline-block mx-auto">
-                        <span className="text-[10px] text-alphabag-muted uppercase font-black tracking-widest mr-3">Status:</span>
-                        <span className="text-[10px] text-alphabag-green uppercase font-black tracking-widest">DATA RECEIVED 🔒</span>
+                        <h2 className="text-xl font-semibold text-[#eaecef] uppercase">Identity Synchronized</h2>
+                        <p className="text-sm text-[#848e9c] mt-1">Your mission data and application have been secured.</p>
                     </div>
                 </div>
             )}
@@ -840,141 +835,138 @@ export const Airdrop: React.FC = () => {
             {!submitted && (
                 <>
                 {/* ── AlphaBAG Allocation ── */}
-                <div className="glass-panel p-6 bg-gradient-to-br from-alphabag-yellow/5 to-black border border-alphabag-yellow/20 rounded-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-[80px] pointer-events-none"></div>
-
+                <div className="rounded-lg p-6 bg-[#1e2329] border border-[#2b3139] mb-6 relative">
                     {/* Header */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-white/5 pb-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-[#2b3139] pb-4">
                         <div className="space-y-1">
-                            <h2 className="text-xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                                <BarChart3 className="text-alphabag-yellow" /> AlphaBAG Allocation
+                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                                <BarChart3 className="text-[#fcd535]" size={20} /> AlphaBAG Allocation
                             </h2>
-                            <p className="text-xs text-alphabag-subtext">Strategic token distribution for sustainable ecosystem growth.</p>
+                            <p className="text-xs text-[#848e9c]">Strategic token distribution for sustainable ecosystem growth.</p>
                         </div>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-alphabag-yellow text-black border border-alphabag-yellow/30 rounded-lg shadow-[0_0_15px_rgba(252,213,53,0.2)]">
-                            <Zap size={16} fill="currentColor" className="animate-pulse"/>
-                            <span className="text-xs font-black uppercase tracking-widest">Total Supply: 21,000,000</span>
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#fcd535] text-[#181a20] rounded-md">
+                            <Zap size={14} fill="currentColor" />
+                            <span className="text-[10px] font-semibold uppercase tracking-wider">Total Supply: 21,000,000</span>
                         </div>
                     </div>
 
                     {/* Allocation Grid with Mask */}
                     <div className="relative group/allocation">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 filter blur-[2px] transition-all duration-700 group-hover/allocation:blur-[1px] opacity-40">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 filter blur-[2px] transition-all duration-700 opacity-60">
                             {[
-                                { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'from-alphabag-yellow to-yellow-600', desc: 'Locked Forever. Stable trading pool.' },
-                                { label: 'Task-to-Earn', pct: '35%', tokens: '7.35M', color: 'from-blue-500 to-blue-700', desc: 'Mined through engagement (4-5y)' },
-                                { label: 'Dev & Ecosystem', pct: '15%', tokens: '3.15M', color: 'from-alphabag-green to-emerald-700', desc: '6m cliff + 24m linear release' },
-                                { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'from-orange-400 to-orange-600', desc: 'Partnerships & Growth milestones' },
-                                { label: 'Team & Advisors', pct: '10%', tokens: '2.1M', color: 'from-purple-500 to-purple-700', desc: '12m cliff + 36m linear release' },
+                                { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'bg-[#fcd535] text-black', desc: 'Locked Forever.' },
+                                { label: 'Task-to-Earn', pct: '35%', tokens: '7.35M', color: 'bg-[#1DA1F2] text-white', desc: 'Mined (4-5y)' },
+                                { label: 'Dev & Eco', pct: '15%', tokens: '3.15M', color: 'bg-[#0ecb81] text-black', desc: '6m cliff' },
+                                { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'bg-[#f6465d] text-white', desc: 'Partnerships' },
+                                { label: 'Team', pct: '10%', tokens: '2.1M', color: 'bg-[#9333EA] text-white', desc: '12m cliff' },
                             ].map((item) => (
-                                <div key={item.label} className="flex flex-col items-center p-4 bg-black/40 border border-white/5 rounded-xl text-center">
-                                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex flex-col items-center justify-center mb-3 shadow-lg`}>
-                                        <span className="text-black font-black text-xs leading-none">{item.pct}</span>
-                                        <span className="text-black/70 font-bold text-[8px] leading-none mt-0.5">{item.tokens}</span>
+                                <div key={item.label} className="flex flex-col items-center p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md text-center">
+                                    <div className={`w-10 h-10 rounded-md ${item.color} flex flex-col items-center justify-center mb-2`}>
+                                        <span className="font-semibold text-[11px] leading-none">{item.pct}</span>
                                     </div>
-                                    <div className="text-white font-black text-xs uppercase tracking-tight leading-tight mb-1">{item.label}</div>
-                                    <div className="text-alphabag-muted text-[8px] font-medium leading-snug">{item.desc}</div>
+                                    <div className="text-[#eaecef] font-semibold text-xs mb-1">{item.label}</div>
+                                    <div className="text-[#848e9c] text-[9px]">{item.desc}</div>
                                 </div>
                             ))}
                         </div>
                         
                         {/* Translucent Mask Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                            <div className="bg-alphabag-black/20 backdrop-blur-sm border border-white/5 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-2xl">
-                                <Lock size={16} className="text-alphabag-yellow animate-pulse" />
-                                <span className="text-[10px] text-white font-black uppercase tracking-[0.2em]">Allocation Locked • Verification in Progress</span>
+                            <div className="bg-[#181a20] border border-[#2b3139] px-4 py-2 rounded-md flex items-center gap-2">
+                                <Lock size={14} className="text-[#fcd535]" />
+                                <span className="text-[10px] text-[#eaecef] font-semibold uppercase tracking-wider">Allocation Locked • Verification in Progress</span>
                             </div>
                         </div>
                     </div>
 
 
 
+
                     {/* Utility & Key Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="flex items-start gap-3 p-3 bg-black/30 border border-white/5 rounded-lg">
-                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0"><Zap size={14} className="text-alphabag-yellow"/></div>
+                        <div className="flex items-start gap-3 p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
+                            <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Zap size={14} className="text-[#fcd535]"/></div>
                             <div>
-                                <div className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest">Utility</div>
-                                <div className="text-xs font-bold text-white mt-0.5 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
+                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">Utility</div>
+                                <div className="text-xs font-semibold text-[#eaecef] mt-1 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-black/30 border border-white/5 rounded-lg">
-                            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0"><Gift size={14} className="text-alphabag-green"/></div>
+                        <div className="flex items-center gap-3 p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
+                            <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Gift size={14} className="text-[#0ecb81]"/></div>
                             <div>
-                                <div className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest">TGE Distribution</div>
-                                <div className="text-xs font-black text-white mt-0.5">Proportional to future utility reward conversion</div>
+                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">TGE Distribution</div>
+                                <div className="text-xs font-semibold text-[#eaecef] mt-1">Proportional to future utility reward conversion</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Founder Protocol Module */}
-                <div className="glass-panel p-8 bg-gradient-to-br from-blue-900/20 to-black border border-blue-500/20 rounded-3xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] pointer-events-none"></div>
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b border-white/5 pb-8">
+                <div className="rounded-lg p-6 bg-[#1e2329] border border-[#1DA1F2]/30 relative">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-[#2b3139] pb-4">
                         <div className="space-y-1">
-                            <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
-                                <Shield className="text-blue-400" /> Founder Application
+                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                                <Shield className="text-[#1DA1F2]" size={20} /> Founder Application
                             </h2>
-                            <p className="text-xs text-alphabag-subtext">Apply for one of the <span className="text-white font-bold">100 Alpha Founder</span> slots for elite priority access.</p>
+                            <p className="text-xs text-[#848e9c]">Apply for one of the <span className="text-[#eaecef] font-semibold">100 Alpha Founder</span> slots for elite priority access.</p>
                         </div>
-                        <div className="flex items-center gap-4 bg-black/40 p-4 rounded-2xl border border-white/5">
+                        <div className="flex items-center gap-4 bg-[#0b0e11] p-3 rounded-md border border-[#2b3139]">
                             <div className="text-right">
-                                <div className="text-[9px] text-alphabag-muted font-black uppercase tracking-widest">Slots Remaining</div>
-                                <div className="text-xl font-black text-white">{Math.max(0, 100 - (stats?.founderEntries || 0))}</div>
+                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">Slots Remaining</div>
+                                <div className="text-lg font-semibold text-[#eaecef]">{Math.max(0, 100 - (stats?.founderEntries || 0))}</div>
                             </div>
                             <div className="relative flex items-center justify-center">
                                 <input 
                                 type="checkbox" 
-                                className="w-8 h-8 rounded-xl appearance-none bg-black border-2 border-white/10 checked:bg-blue-500 checked:border-blue-500 transition-all cursor-pointer peer"
+                                className="w-6 h-6 rounded-md appearance-none bg-[#181a20] border border-[#474d57] checked:bg-[#1DA1F2] checked:border-[#1DA1F2] transition-all cursor-pointer peer"
                                 checked={isFounderApplication}
                                 onChange={(e) => setIsFounderApplication(e.target.checked)}
                                 />
-                                <CheckCircle2 size={18} className="absolute text-black pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" />
+                                <CheckCircle2 size={14} className="absolute text-[#181a20] pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" />
                             </div>
                         </div>
                     </div>
 
                     {isFounderApplication && (
-                        <div className="space-y-6 pt-2 animate-in slide-in-from-top-4 duration-500">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Project Name</label>
-                                <input required type="text" placeholder="Project Alpha" className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={projectName} onChange={e => setProjectName(e.target.value)} />
+                        <div className="space-y-4 pt-2 animate-in slide-in-from-top-4 duration-500">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project Name</label>
+                                <input required type="text" placeholder="Project Alpha" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectName} onChange={e => setProjectName(e.target.value)} />
                                 </div>
-                                <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Ticker</label>
-                                <input required type="text" placeholder="$ALPHA" className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={projectTicker} onChange={e => setProjectTicker(e.target.value)} />
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Ticker</label>
+                                <input required type="text" placeholder="$ALPHA" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectTicker} onChange={e => setProjectTicker(e.target.value)} />
                                 </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Project Vision</label>
-                                <textarea required placeholder="What is your singular vision for the space?" className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none h-24 resize-none" value={projectManifesto} onChange={e => setProjectManifesto(e.target.value)} />
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project Vision</label>
+                                <textarea required placeholder="What is your singular vision for the space?" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectManifesto} onChange={e => setProjectManifesto(e.target.value)} />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Project X Link</label>
-                                <input required type="url" placeholder="https://x.com/..." className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={projectSocial} onChange={e => setProjectSocial(e.target.value)} />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project X Link</label>
+                                <input required type="url" placeholder="https://x.com/..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectSocial} onChange={e => setProjectSocial(e.target.value)} />
                                 </div>
-                                <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Official Website</label>
-                                <input required type="url" placeholder="https://..." className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Official Website</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
                                 </div>
                             </div>
                             
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Project Contract Address</label>
-                                <input required type="text" placeholder="0x..." className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={projectContract} onChange={e => setProjectContract(e.target.value)} />
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project Contract Address</label>
+                                <input required type="text" placeholder="0x..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectContract} onChange={e => setProjectContract(e.target.value)} />
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Key Project Goals</label>
-                                <textarea required placeholder="What are the next 3 major milestones for your project?" className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none h-24 resize-none" value={projectGoals} onChange={e => setProjectGoals(e.target.value)} />
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Key Project Goals</label>
+                                <textarea required placeholder="What are the next 3 major milestones for your project?" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectGoals} onChange={e => setProjectGoals(e.target.value)} />
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest pl-1">Founder Personal Social / Telegram</label>
-                                <input required type="text" placeholder="@username" className="w-full bg-[#111] border border-white/10 rounded-xl px-5 py-4 text-sm text-white focus:border-blue-500/50 outline-none" value={founderSocial} onChange={e => setFounderSocial(e.target.value)} />
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Founder Personal Social / Telegram</label>
+                                <input required type="text" placeholder="@username" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={founderSocial} onChange={e => setFounderSocial(e.target.value)} />
                             </div>
                         </div>
                     )}

@@ -22,7 +22,7 @@
   }
 
   html, body {
-    @apply bg-alphabag-black text-alphabag-text;
+    @apply bg-[#0b0e11] text-[#eaecef] bg-fixed;
     font-family: 'Inter', 'Satoshi', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -33,8 +33,8 @@
   /* ── Typography Hierarchy & Clarity ── */
   h1, h2, h3, .font-extrabold, b, strong {
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.02em;
-    font-weight: 800 !important;
+    letter-spacing: -0.01em;
+    font-weight: 700 !important;
   }
   
   .micro-label, .text-\[9px\], .text-\[10px\], .text-xs, .tracking-widest {
@@ -72,14 +72,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #0b0e11;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.10);
+  background: #2b3139;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(252, 213, 53, 0.35);
+  background: #474d57;
 }
 
 /* Firefox */
@@ -108,38 +108,36 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer components {
 
-  /* ── Glass Panels ── */
+  /* ── Solid Panels (Binance Style) ── */
   .glass-panel {
-    @apply bg-[#0d0d11]/60 backdrop-blur-xl border border-white/10 rounded-2xl;
+    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
   }
   .glass-panel-heavy {
-    @apply bg-alphabag-dark/80 backdrop-blur-2xl border border-white/20 rounded-2xl;
+    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg shadow-md;
   }
   .glass-card {
-    @apply bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-2xl;
-    backdrop-filter: blur(16px);
+    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
     transition: all var(--transition-base);
   }
   .glass-card:hover {
-    @apply border-white/30 bg-white/[0.08];
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    @apply border-[#474d57] bg-[#2b3139];
     transform: translateY(-2px);
   }
 
   .card-panel {
-    @apply bg-alphabag-dark border border-white/10 rounded-2xl shadow-panel;
+    @apply bg-[#181a20] border border-[#2b3139] rounded-lg;
   }
 
   .card-panel-soft {
-    @apply bg-black/40 border border-white/5 rounded-2xl;
+    @apply bg-[#181a20] border border-[#2b3139] rounded-lg;
   }
 
   /* ── Sidebar Nav Items ── */
   .nav-item {
-    @apply flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 text-alphabag-muted hover:text-white hover:bg-white/5 cursor-pointer;
+    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139] cursor-pointer;
   }
   .nav-item-active {
-    @apply flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 bg-alphabag-yellow/10 text-alphabag-yellow font-black uppercase tracking-widest shadow-glow-yellow;
+    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 bg-[#fcd535]/10 text-alphabag-yellow font-medium;
   }
 
   /* ── Status Badges ── */

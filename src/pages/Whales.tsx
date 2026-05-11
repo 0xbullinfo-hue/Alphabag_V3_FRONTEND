@@ -40,61 +40,50 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     }, [whale.address]);
 
     return (
-        <div key={whale.id} className="glass-panel rounded-xl p-6 hover:border-alphabag-yellow/40 transition-all group relative overflow-hidden shadow-lg">
-            <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                <Eye size={100} />
-            </div>
-
-            <div className="flex justify-between items-start mb-6">
-                <div className="flex space-x-2">
-                    <div className="w-12 h-12 bg-alphabag-black rounded-xl flex items-center justify-center border border-alphabag-gray group-hover:bg-alphabag-yellow/10 transition-colors">
-                        <Eye size={24} className="text-alphabag-yellow" />
+        <div key={whale.id} className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-5 hover:border-[#fcd535]/30 transition-all">
+            <div className="flex justify-between items-start mb-4">
+                <div className="flex items-center gap-2">
+                    <div className="w-9 h-9 bg-[#0b0e11] rounded-md flex items-center justify-center border border-[#2b3139]">
+                        <Eye size={18} className="text-[#fcd535]" />
                     </div>
                     {hasAlerts && (
-                        <div className="w-12 h-12 bg-alphabag-green/10 rounded-xl flex items-center justify-center border border-alphabag-green/20 text-alphabag-green animate-pulse">
-                            <Bell size={20} />
+                        <div className="bg-[#0ecb81]/10 text-[#0ecb81] px-2 py-1 rounded-md text-[9px] font-semibold uppercase flex items-center gap-1">
+                            <Bell size={10} /> Alert
                         </div>
                     )}
                 </div>
-                <button
-                    onClick={() => removeTrackedWallet(whale.id)}
-                    className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-2"
-                >
-                    <Trash2 size={18} />
+                <button onClick={() => removeTrackedWallet(whale.id)} className="text-[#848e9c] hover:text-[#f6465d] transition-colors p-1.5">
+                    <Trash2 size={15} />
                 </button>
             </div>
 
-            <div className="mb-6">
-                <h3 className="text-lg font-bold text-white mb-1 group-hover:text-alphabag-yellow transition-colors">{whale.label}</h3>
-                <p className="text-xs font-mono text-alphabag-subtext bg-alphabag-black px-2 py-1 rounded inline-block">
+            <div className="mb-4">
+                <h3 className="text-sm font-semibold text-[#eaecef] mb-1">{whale.label}</h3>
+                <p className="text-[10px] font-mono text-[#848e9c] bg-[#0b0e11] px-2 py-0.5 rounded-md inline-block border border-[#2b3139]">
                     {whale.address.substring(0, 10)}...{whale.address.substring(whale.address.length - 8)}
                 </p>
             </div>
 
-            <div className="flex items-center space-x-4 mb-6">
-                <div className="flex-1">
-                    <div className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-wider">Status</div>
-                    <div className="flex items-center text-alphabag-green text-sm font-medium">
-                        <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-2 animate-pulse"></div>
-                        Live Tracking
+            <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md p-2.5">
+                    <div className="text-[9px] text-[#848e9c] uppercase font-semibold tracking-wider mb-1">Status</div>
+                    <div className="flex items-center text-[#0ecb81] text-xs font-semibold">
+                        <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full mr-1.5 animate-pulse"></div>
+                        Live
                     </div>
                 </div>
-                <div className="flex-1">
-                    <div className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-wider">Net Worth</div>
-                    <div className="text-white text-sm font-bold">
-                        {loading ? (
-                            <span className="animate-pulse text-alphabag-subtext">Scanning...</span>
-                        ) : (
-                            `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-                        )}
+                <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md p-2.5">
+                    <div className="text-[9px] text-[#848e9c] uppercase font-semibold tracking-wider mb-1">Value</div>
+                    <div className="text-[#eaecef] text-xs font-semibold tabular-nums">
+                        {loading ? <span className="text-[#848e9c] animate-pulse">Scanning...</span> : `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                     </div>
                 </div>
             </div>
 
             <Link to={`/whales/${whale.address}`}>
-                <Button variant="secondary" className="w-full group/btn font-bold">
-                    View Full Analytics <ArrowRight size={16} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
+                <button className="w-full py-2 bg-[#2b3139] text-[#eaecef] rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center justify-center gap-2">
+                    View Analytics <ArrowRight size={13} />
+                </button>
             </Link>
         </div>
     );
@@ -106,83 +95,61 @@ export const Whales: React.FC = () => {
     const limits = getLimits();
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-6 animate-fade-in">
-            <div className="relative overflow-hidden rounded-[2rem] bg-alphabag-black/50 border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.35)] p-8">
-                <div className="absolute inset-0 bg-gradient-to-br from-alphabag-yellow/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
-                <div className="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
+
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                        <Eye className="mr-3 text-alphabag-yellow" size={28} />
-                        Whale <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Watch</span>
-                    </h1>
-                    <div className="flex items-center gap-4">
-                        <p className="text-alphabag-subtext mt-1">Monitor high-conviction wallet movements across chains.</p>
-                        <UpgradeCmd />
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Eye size={20} />
+                        </div>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Whale Watch</h1>
                     </div>
+                    <p className="text-[#848e9c] text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-[#eaecef] font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>
-                <div className="mt-4 md:mt-0">
+                <div className="flex items-center gap-3">
+                    <UpgradeCmd />
                     <Link to="/settings">
-                        <Button variant="primary">
-                            <Plus size={18} className="mr-2" /> Add Whale Wallet
-                        </Button>
+                        <button className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all">
+                            <Plus size={15} /> Add Whale
+                        </button>
                     </Link>
                 </div>
             </div>
-            </div>
 
             {/* Info Banner */}
-            <div className="glass-panel p-4 rounded-xl flex items-start space-x-3 border-blue-500/20 bg-blue-500/10 shadow-[0_10px_40px_rgba(96,165,250,0.08)]">
-                <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={18} />
-                <div className="text-sm text-blue-100/80">
-                    Whale Watch allows you to track major and retail "whales". Our AI engine alerts you when these addresses make significant trades.
-                    <span className="text-blue-300 ml-1 font-medium">Currently watching {whaleWallets.length} addresses.</span>
-                </div>
+            <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-3">
+                <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={17} />
+                <p className="text-sm text-[#848e9c]">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {whaleWallets.length === 0 ? (
-                    <div className="col-span-full py-20 glass-panel rounded-xl border-dashed border-alphabag-gray/40 text-center">
-                        <Eye size={48} className="mx-auto mb-4 text-alphabag-subtext opacity-30" />
-                        <h3 className="text-lg font-bold text-white mb-2">No Whales Tracked</h3>
-                        <p className="text-alphabag-subtext max-w-xs mx-auto mb-6">Start following smart money by adding a wallet address to your watch list.</p>
+                    <div className="col-span-full py-20 rounded-lg border border-dashed border-[#2b3139] text-center">
+                        <Eye size={40} className="mx-auto mb-4 text-[#848e9c] opacity-30" />
+                        <h3 className="text-base font-semibold text-[#eaecef] mb-2">No Whales Tracked</h3>
+                        <p className="text-[#848e9c] text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
                         <Link to="/settings">
-                            <Button variant="secondary">Go to Settings</Button>
+                            <button className="bg-[#2b3139] text-[#eaecef] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all">Go to Settings</button>
                         </Link>
                     </div>
                 ) : (
                     whaleWallets.map(whale => (
-                        <WhaleListItem
-                            key={whale.id}
-                            whale={whale}
-                            removeTrackedWallet={removeTrackedWallet}
-                            hasAlerts={whaleAlerts.includes(whale.address)}
-                        />
+                        <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
                     ))
                 )}
 
-                {/* Limit Card if Basic/Premium */}
                 {whaleWallets.length < limits.maxWhales && (
-                    <Link to="/settings" className="glass-panel rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group">
-                        <div className="w-10 h-10 bg-alphabag-gray rounded-full flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-alphabag-yellow group-hover:text-black transition-all">
-                            <Plus size={20} />
+                    <Link to="/settings" className="rounded-lg border border-dashed border-[#2b3139] p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group">
+                        <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-[#848e9c] mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
+                            <Plus size={18} />
                         </div>
-                        <span className="text-sm font-bold text-white group-hover:text-alphabag-yellow">Add Whale Slot</span>
-                        <span className="text-xs text-alphabag-subtext mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
+                        <span className="text-sm font-semibold text-[#eaecef]">Add Whale Slot</span>
+                        <span className="text-xs text-[#848e9c] mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
                     </Link>
                 )}
             </div>
-
-            {tier === 'BASIC' && (
-                <div className="bg-gradient-to-r from-alphabag-yellow/20 to-alphabag-dark border border-alphabag-yellow/30 rounded-xl p-6 flex flex-col md:flex-row items-center justify-between shadow-lg">
-                    <div className="mb-4 md:mb-0">
-                        <h4 className="text-lg font-bold text-white">Unlock More Whale Slots</h4>
-                        <p className="text-sm text-alphabag-subtext">Premium members can track up to 10 whales simultaneously.</p>
-                    </div>
-                    <Link to="/settings">
-                        <Button variant="primary" className="font-bold px-8">Upgrade to Pro</Button>
-                    </Link>
-                </div>
-            )}
         </div>
     );
 };

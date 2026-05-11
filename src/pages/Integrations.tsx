@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useWallet } from '../context/WalletContext';
-import { Search, Settings2, ExternalLink, Activity, Network, Wallet } from 'lucide-react';
+import { Search, Settings2, ExternalLink, Activity, Network, Wallet, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 
@@ -64,115 +64,101 @@ export const Integrations: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 animate-fade-in relative min-h-[calc(100vh-12rem)] max-w-5xl mx-auto pb-10">
-      
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-4 mb-6">
+    <div className="space-y-4 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] max-w-5xl mx-auto pb-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-[#2b3139] gap-3">
                 <div>
-                    <div className="flex items-center gap-3 mb-1">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black font-bold">CH</div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                            Connections <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Hub</span>
-                        </h1>
-                        <span className="text-[10px] bg-alphabag-yellow/20 text-alphabag-yellow px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Active</span>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Zap size={20} />
+                        </div>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Connections Hub</h1>
+                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live</span>
                     </div>
-                    <p className="text-alphabag-subtext text-xs max-w-2xl mt-1">
-                        Unified dashboard for all live API keys and Web3 wallets currently streaming into AlphaBAG.
-                    </p>
+                    <p className="text-[#848e9c] text-sm">Unified dashboard for all live API keys and Web3 wallets streaming into AlphaBAG.</p>
                 </div>
                 <div className="relative z-10 w-full md:w-auto">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search size={16} className="text-alphabag-subtext" />
+                        <Search size={13} className="text-[#848e9c]" />
                     </div>
-                    <input 
-                        type="text" 
-                        placeholder="Search active connections..." 
-                        value={searchQuery}
+                    <input type="text" placeholder="Search connections..." value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-72 transition-colors shadow-inner"
-                    />
+                        className="bg-[#0b0e11] border border-[#2b3139] rounded-md pl-9 pr-4 py-2 text-xs text-[#eaecef] focus:outline-none focus:border-[#fcd535] w-full md:w-64 transition-colors" />
                 </div>
             </div>
 
       {/* Connection Prompts - Since Hub is Read-Only, direct users to the Bags to connect */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white/5 border border-white/10 border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl p-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
               <div>
-                  <h3 className="text-sm font-bold text-white mb-0.5">Need to add an Exchange?</h3>
-                  <p className="text-xs text-alphabag-subtext">Manage active API Keys in the CEX Portfolio.</p>
+                  <h3 className="text-xs font-bold text-white mb-0.5">Need to add an Exchange?</h3>
+                  <p className="text-[10px] text-alphabag-subtext opacity-60">Manage active API Keys in the CEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-xs border-white/10">
-                 Add CEX API <ExternalLink size={12} className="ml-1.5" />
+              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-[10px] h-8 font-black uppercase tracking-widest border-white/10 px-3">
+                 Add CEX <ExternalLink size={10} className="ml-1" />
               </Button>
           </div>
-          <div className="bg-white/5 border border-white/10 border-dashed rounded-2xl p-4 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
+          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl p-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
               <div>
-                  <h3 className="text-sm font-bold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
-                  <p className="text-xs text-alphabag-subtext">Connect on-chain wallets in the DEX Portfolio.</p>
+                  <h3 className="text-xs font-bold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
+                  <p className="text-[10px] text-alphabag-subtext opacity-60">Connect on-chain wallets in the DEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-xs border-white/10">
-                 Set BAG <ExternalLink size={12} className="ml-1.5" />
+              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-[10px] h-8 font-black uppercase tracking-widest border-white/10 px-3">
+                 Set BAG <ExternalLink size={10} className="ml-1" />
               </Button>
           </div>
       </div>
 
-      {/* Tabs Layout */}
-      <div className="flex overflow-x-auto custom-scrollbar pb-2 gap-2 mt-4">
+      <div className="flex overflow-x-auto custom-scrollbar pb-1.5 gap-1.5 mt-2">
          {TABS.map(tab => (
-             <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
+             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                className={`flex-shrink-0 px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     activeTab === tab.id 
-                    ? 'bg-alphabag-yellow text-alphabag-black shadow-md' 
-                    : 'bg-transparent border border-alphabag-gray text-alphabag-subtext hover:text-white hover:border-alphabag-gray'
-                }`}
-             >
-                 {tab.label}
-             </button>
+                    ? 'bg-[#fcd535] text-[#181a20]' 
+                    : 'bg-[#1e2329] border border-[#2b3139] text-[#848e9c] hover:text-[#eaecef] hover:border-[#474d57]'
+                }`}>{tab.label}</button>
          ))}
       </div>
 
-      {/* Aggregated List Layout */}
-      <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl overflow-hidden shadow-lg">
+      <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
         {filtered.length === 0 ? (
-            <div className="p-16 text-center text-alphabag-subtext flex flex-col items-center">
-                <Settings2 size={48} className="opacity-20 mb-4" />
-                <p className="font-bold text-white mb-1">No Active Connections</p>
-                <p className="text-sm">You haven't linked any CEX APIs or Web3 Wallets yet.</p>
+            <div className="p-12 text-center text-[#848e9c] flex flex-col items-center">
+                <Settings2 size={40} className="opacity-20 mb-3" />
+                <p className="font-semibold uppercase tracking-wider text-[#eaecef] text-[11px] mb-1">No Active Connections</p>
+                <p className="text-[11px] opacity-60">You haven't linked any CEX APIs or Web3 Wallets yet.</p>
             </div>
         ) : (
-            <div className="divide-y divide-alphabag-gray/50">
+            <div className="divide-y divide-[#2b3139]">
                 {filtered.map((item) => (
-                    <div key={item.id} className="p-5 hover:bg-alphabag-black/40 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                    <div key={item.id} className="p-3.5 hover:bg-[#0b0e11] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
                         
                         {/* Identity */}
-                        <div className="flex items-center gap-4 flex-1">
-                            <div className="relative shrink-0 w-12 h-12 rounded-full bg-alphabag-black border border-alphabag-gray flex items-center justify-center overflow-hidden">
+                        <div className="flex items-center gap-3 flex-1">
+                            <div className="relative shrink-0 w-10 h-10 rounded-full bg-alphabag-black border border-alphabag-gray flex items-center justify-center overflow-hidden">
                                 {typeof item.icon === 'string' ? (
-                                    <img src={item.icon} alt={item.name} className="w-10 h-10 object-contain p-1" />
+                                    <img src={item.icon} alt={item.name} className="w-8 h-8 object-contain p-1" />
                                 ) : (
-                                    item.icon
+                                    React.cloneElement(item.icon as React.ReactElement, { size: 18 })
                                 )}
-                                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-alphabag-green rounded-full border-2 border-alphabag-dark"></div>
+                                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-alphabag-green rounded-full border-2 border-alphabag-dark"></div>
                             </div>
                             <div>
-                                <div className="flex items-center gap-3">
-                                    <h3 className="font-bold text-white text-lg">{item.name}</h3>
-                                    <span className={`text-[9px] font-black tracking-widest px-2 py-0.5 rounded uppercase ${item.category === 'CEX' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}`}>
+                                <div className="flex items-center gap-2">
+                                    <h3 className="font-bold text-white text-base">{item.name}</h3>
+                                    <span className={`text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded uppercase ${item.category === 'CEX' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}`}>
                                        {item.category}
                                     </span>
                                 </div>
-                                <p className="text-sm font-mono text-alphabag-subtext mt-0.5">
+                                <p className="text-[11px] font-mono text-alphabag-subtext mt-0.5 opacity-60">
                                    {item.subtext}
                                 </p>
                             </div>
                         </div>
-
+ 
                         {/* Status Widget */}
-                        <div className="flex items-center gap-4 w-full md:w-auto justify-end border-t md:border-t-0 border-alphabag-gray/30 pt-4 md:pt-0">
-                            <div className="flex items-center gap-2 bg-alphabag-green/10 border border-alphabag-green/20 px-3 py-1.5 rounded-lg">
-                                <Activity size={14} className="text-alphabag-green animate-pulse" />
-                                <span className="text-xs font-bold text-alphabag-green uppercase tracking-wider">Live</span>
+                        <div className="flex items-center gap-4 w-full md:w-auto justify-end pt-3 md:pt-0">
+                            <div className="flex items-center gap-1.5 bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md">
+                                <Activity size={12} className="text-alphabag-green animate-pulse" />
+                                <span className="text-[10px] font-black text-alphabag-green uppercase tracking-widest">Live</span>
                             </div>
                         </div>
                         

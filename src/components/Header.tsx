@@ -77,20 +77,20 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-alphabag-dark/95 backdrop-blur-xl border-b border-white/10 z-50 px-6 flex items-center justify-between shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-[#181a20] border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all">
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
-            className="mr-4 p-2 rounded-2xl text-alphabag-muted hover:text-white hover:bg-white/10 md:hidden transition-all duration-200 active:scale-[0.98]"
+            className="mr-4 p-2 rounded-md text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139] md:hidden transition-all duration-200"
           >
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-9 h-9 bg-alphabag-yellow text-black flex items-center justify-center rounded-2xl group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(252,213,53,0.3)]">
-              <Briefcase size={20} fill="currentColor" strokeWidth={2.5} />
+            <div className="w-8 h-8 bg-[#fcd535] text-[#181a20] flex items-center justify-center rounded-md group-hover:scale-105 transition-transform">
+              <Briefcase size={18} fill="currentColor" strokeWidth={2.5} />
             </div>
-            <span className="text-xl font-bold text-zinc-50 tracking-tight uppercase">Alpha<span className="text-alphabag-yellow">BAG</span></span>
+            <span className="text-xl font-bold text-[#eaecef] tracking-tight">AlphaBAG</span>
           </Link>
 
           <nav className="hidden md:flex items-center ml-10 space-x-8">
@@ -115,14 +115,14 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-alphabag-muted" />
+            <Search size={18} className="text-[#848e9c]" />
           </div>
           <input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search coin, pair, or contract..."
-            className="w-full bg-alphabag-dark border border-white/10 text-white text-sm rounded-2xl focus:ring-1 focus:ring-alphabag-yellow focus:border-alphabag-yellow block pl-10 p-2.5 placeholder:text-alphabag-muted/50 outline-none transition-all duration-200 shadow-inner"
+            className="w-full bg-[#1e2329] border border-[#2b3139] text-[#eaecef] text-sm rounded-md focus:border-[#fcd535] focus:ring-1 focus:ring-[#fcd535] block pl-10 p-2 outline-none transition-all duration-200"
           />
         </form>
 
@@ -135,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                         setShowNotifications(!showNotifications);
                         setShowUserMenu(false);
                     }}
-                    className={`p-2 rounded-xl transition-all duration-200 active:scale-[0.98] relative ${showNotifications ? 'bg-alphabag-yellow text-black' : 'bg-white/5 text-alphabag-muted hover:text-white hover:bg-white/10'}`}
+                    className={`p-2 rounded-xl transition-all duration-300 active:scale-[0.98] relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-[0_0_15px_rgba(252,213,53,0.3)]' : 'bg-transparent text-alphabag-muted hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10'}`}
                 >
                     <Bell size={20} />
                     {notifications.some(n => !n.read) && (
@@ -148,14 +148,14 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                         setShowUserMenu(!showUserMenu);
                         setShowNotifications(false);
                     }}
-                    className="flex items-center space-x-3 bg-alphabag-black/50 border border-alphabag-border px-3 py-1.5 rounded-xl hover:bg-white/5 transition-all duration-200 active:scale-[0.98]"
+                    className="flex items-center space-x-3 bg-transparent px-3 py-1.5 rounded-md hover:bg-[#2b3139] transition-all duration-300"
                 >
                     <div className="hidden sm:block text-right">
-                    <div className="text-[10px] font-black text-white leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
-                    <div className="text-[8px] font-bold text-alphabag-yellow uppercase tracking-widest">BETA ACCESS</div>
+                    <div className="text-sm font-medium text-[#eaecef] leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
+                    <div className="text-[10px] font-medium text-[#fcd535] uppercase">Verified</div>
                     </div>
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-alphabag-yellow to-orange-500 shadow-inner"></div>
-                    <ChevronDown size={14} className={`text-alphabag-muted transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#fcd535] to-orange-500"></div>
+                    <ChevronDown size={14} className={`text-[#848e9c] transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </button>
               </div>
 
@@ -166,13 +166,13 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
               />
 
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-alphabag-dark/95 backdrop-blur-3xl border border-white/20 rounded-2xl shadow-2xl p-2 animate-fade-in z-[100]">
-                  <div className="p-4 border-b border-alphabag-border mb-1">
-                    <p className="text-[9px] text-alphabag-muted font-bold uppercase mb-1 tracking-widest">Authenticated Member</p>
-                    <p className="text-xs text-zinc-50 font-bold truncate">{user?.email}</p>
-                    <div className="mt-3">
-                      <span className="px-2 py-1 bg-alphabag-yellow/20 text-alphabag-yellow text-[10px] font-black uppercase rounded-lg border border-alphabag-yellow/30">
-                        EARLY ACCESS
+                <div className="absolute right-0 mt-2 w-64 bg-[#1e2329] border border-[#2b3139] rounded-lg shadow-lg p-2 animate-fade-in z-[100]">
+                  <div className="p-4 border-b border-[#2b3139] mb-1">
+                    <p className="text-[10px] text-[#848e9c] font-medium uppercase mb-1">Account</p>
+                    <p className="text-sm text-[#eaecef] font-medium truncate">{user?.email}</p>
+                    <div className="mt-2">
+                      <span className="px-2 py-1 bg-[#fcd535]/10 text-[#fcd535] text-[10px] font-medium rounded-md">
+                        Standard User
                       </span>
                     </div>
                   </div>

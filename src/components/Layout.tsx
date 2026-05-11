@@ -5,28 +5,28 @@ import { Header } from './Header';
 import { MobileNav } from './MobileNav';
 import { useWallet } from '../context/WalletContext';
 import { X, CheckCircle, Info, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import { PageTransition } from './ui/PageTransition';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { toasts, removeToast } = useWallet();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-alphabag-black via-[#050505] to-black text-zinc-50 font-sans selection:bg-alphabag-yellow selection:text-black">
+    <div className="min-h-screen text-[#eaecef] font-sans selection:bg-[#fcd535] selection:text-black bg-[#0b0e11] relative">
       <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <motion.main
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="pt-20 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-6"
-      >
-        <div className="p-4 md:p-8 lg:p-10 max-w-7xl mx-auto">
-          {children}
-        </div>
-      </motion.main>
+      <main className="pt-16 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-8 relative z-10">
+        <AnimatePresence mode="wait">
+          <PageTransition>
+            <div className="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">
+              {children}
+            </div>
+          </PageTransition>
+        </AnimatePresence>
+      </main>
 
       {/* Mobile-only Bottom Navigation */}
       <MobileNav />

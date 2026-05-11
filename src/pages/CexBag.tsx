@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { Activity, Trash2, ArrowUpRight, ArrowDownRight, RefreshCcw, ShieldCheck, Plus, Key, Zap, TrendingUp } from 'lucide-react';
+import { Activity, Trash2, ArrowUpRight, ArrowDownRight, RefreshCcw, Plus, Key, TrendingUp, Layers } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { CexConnectModal } from '../components/CexConnectModal';
 import { useWallet } from '../context/WalletContext';
 import { useCexConnections } from '../hooks/useCexConnections';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-// 20-color palette — enough for max allowed exchanges
 const CHART_COLORS = [
     '#FCD535','#F97316','#22D3EE','#A78BFA','#34D399',
     '#F43F5E','#60A5FA','#FBBF24','#4ADE80','#E879F9',
@@ -15,7 +14,6 @@ const CHART_COLORS = [
     '#FDE68A','#6EE7B7','#93C5FD','#DDD6FE','#FDA4AF',
 ];
 
-// Full Supported CEX List (up to 20)
 export const SUPPORTED_CEX = [
     { id: 'binance',  name: 'Binance',  icon: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/270.png' },
     { id: 'bybit',    name: 'Bybit',    icon: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/521.png' },
@@ -39,7 +37,6 @@ export const SUPPORTED_CEX = [
     { id: 'upbit',    name: 'Upbit',    icon: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/375.png' },
 ];
 
-// Mock Unified Asset Data (in future: pulled from API per exchange)
 const MOCK_ASSETS = [
     { coin: 'Bitcoin',  symbol: 'BTC',  balance: 0.452, price: 64230.50, value: 29032.18, exchange: 'Binance',  img: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png'  },
     { coin: 'Ethereum', symbol: 'ETH',  balance: 4.2,   price: 3450.20,  value: 14490.84, exchange: 'Binance',  img: 'https://cryptologos.cc/logos/ethereum-eth-logo.png'  },
@@ -55,16 +52,15 @@ export const CexBag: React.FC = () => {
     const [activeExchange, setActiveExchange] = useState<string | null>(null);
     const [isConnecting, setIsConnecting] = useState(false);
 
-    // Max 20 connections — same limit as DEX wallets
     const MAX_CEX = 20;
 
     const openConnectModal = (cexId: string) => {
         if (connectedCex.find(c => c.id === cexId)) {
-            Swal.fire({ title: 'Already Connected', text: 'This exchange is already linked. Remove it first to reconnect.', icon: 'info', background: '#1E2329', color: '#FFF' });
+            Swal.fire({ title: 'Already Connected', text: 'This exchange is already linked. Remove it first to reconnect.', icon: 'info', background: '#1E2329', color: '#EAECEF' });
             return;
         }
         if (connectedCex.length >= MAX_CEX) {
-            Swal.fire({ title: 'Limit Reached', text: `You can connect up to ${MAX_CEX} exchanges.`, icon: 'warning', background: '#1E2329', color: '#FFF' });
+            Swal.fire({ title: 'Limit Reached', text: `You can connect up to ${MAX_CEX} exchanges.`, icon: 'warning', background: '#1E2329', color: '#EAECEF' });
             return;
         }
         setActiveExchange(cexId);
@@ -84,15 +80,15 @@ export const CexBag: React.FC = () => {
                 balance: Math.random() * 8000 + 500,
                 isConnected: true,
             });
-            Swal.fire({ title: 'Connected', text: `Read-Only ${info.name} API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#FFF' });
+            Swal.fire({ title: 'Connected', text: `Read-Only ${info.name} API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#EAECEF' });
             setIsModalOpen(false);
         } finally {
             setIsConnecting(false);
         }
     };
 
-    const mockPnL     = totalBalance * 0.054;
-    const mockPnLPct  = 5.4;
+    const mockPnL    = totalBalance * 0.054;
+    const mockPnLPct = 5.4;
 
     const chartData = connectedCex.map((cex, i) => ({
         name:  cex.name,
@@ -108,13 +104,13 @@ export const CexBag: React.FC = () => {
         if (active && payload?.length) {
             const d = payload[0].payload;
             return (
-                <div className="bg-alphabag-black border border-alphabag-gray rounded-xl px-4 py-3 shadow-xl text-sm">
+                <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-3 shadow-xl text-sm">
                     <div className="flex items-center gap-2 mb-1">
                         <img src={d.icon} className="w-5 h-5 rounded-full" alt={d.name} />
-                        <span className="font-black text-white">{d.name}</span>
+                        <span className="font-semibold text-[#eaecef]">{d.name}</span>
                     </div>
-                    <div className="text-alphabag-yellow font-bold tabular-data">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                    <div className="text-alphabag-muted text-xs">{d.pct}% of total</div>
+                    <div className="text-[#fcd535] font-semibold tabular-nums">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                    <div className="text-[#848e9c] text-xs">{d.pct}% of total</div>
                 </div>
             );
         }
@@ -122,92 +118,79 @@ export const CexBag: React.FC = () => {
     };
 
     return (
-        <div className="min-h-[calc(100vh-12rem)] pb-20 max-w-7xl w-full mx-auto space-y-6 animate-fade-in text-alphabag-text">
+        <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
 
-
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-white/10 gap-6 mb-10">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/20">
-                            <Activity size={20} fill="currentColor" />
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Layers size={20} />
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                            My CEX <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Portfolio</span>
-                        </h1>
-                        <span className="badge-yellow">Active</span>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">CEX Portfolio</h1>
                     </div>
-
-                    <div className="flex items-baseline gap-4">
-                        <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight tabular-nums flex items-center gap-3 truncate">
-                            ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </h2>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 mt-2">
-                        <div className={`flex items-center px-3 py-1 rounded-full text-[11px] font-black tracking-widest uppercase ${mockPnL >= 0 ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
-                            {mockPnL >= 0 ? <TrendingUp size={14} className="mr-1" /> : <TrendingUp size={14} className="mr-1 rotate-180" />}
-                            {mockPnLPct.toFixed(2)}%
-                            <span className="ml-2 opacity-60">(${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
-                        </div>
-                        <span className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest">Aggregate PnL</span>
-                    </div>
+                    <p className="text-[#848e9c] text-sm font-medium leading-relaxed">
+                        Aggregate your centralized exchange balances via read-only <span className="text-[#eaecef] font-semibold">API keys</span>.
+                    </p>
                 </div>
-
-                <div className="flex items-center gap-4">
-                    <div className="glass-panel px-4 py-2 flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-glow-green"></div>
-                        <span className="section-label text-[9px]">API Sync</span>
+                <div className="flex items-center gap-3">
+                    <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#0ecb81] font-semibold uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-pulse"></span> API Sync
                     </div>
-                    <Button 
+                    <button
                         onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}
-                        className="bg-alphabag-yellow text-alphabag-black hover:bg-yellow-400 hover:scale-[1.02] active:scale-[0.98] border-none rounded-2xl px-6 py-3 font-black uppercase tracking-widest text-[10px] shadow-glow-yellow/20 transition-all"
+                        className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] active:scale-[0.98] transition-all"
                     >
-                        <Plus className="mr-2" size={16} /> Add Exchange
-                    </Button>
+                        <Plus size={16} /> Add Exchange
+                    </button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                <div className="glass-panel p-6 relative overflow-hidden group transition-all">
-                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
-                    <span className="section-label mb-3 block">Aggregate Net Worth</span>
-                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter tabular-nums mb-2">
+            {/* Metric Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                    <span className="text-xs font-semibold uppercase text-[#848e9c] block mb-2">Aggregate Net Worth</span>
+                    <div className="text-3xl font-semibold text-[#eaecef] tracking-tight tabular-nums mb-2">
                         ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </h2>
-                    <div className="badge-yellow w-fit">CONSOLIDATED ASSETS</div>
+                    </div>
+                    <div className="bg-[#fcd535]/10 text-[#fcd535] px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">Consolidated Assets</div>
                 </div>
-                <div className="glass-panel p-6 relative overflow-hidden group transition-all">
-                    <div className="absolute -top-12 -right-12 w-32 h-32 bg-alphabag-green/5 rounded-full blur-3xl group-hover:bg-alphabag-green/10 transition-all duration-700"></div>
-                    <span className="section-label mb-3 block">Consolidated PnL</span>
-                    <div className="flex items-center gap-4 mb-2">
-                        <h2 className={`text-3xl md:text-5xl font-black tracking-tighter tabular-nums ${mockPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                    <span className="text-xs font-semibold uppercase text-[#848e9c] block mb-2">Consolidated PnL</span>
+                    <div className={`flex items-center gap-3 mb-2`}>
+                        <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
                             {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </h2>
-                        <div className={`badge-${mockPnL >= 0 ? 'green' : 'red'}`}>
+                        </div>
+                        <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#f6465d]/10 text-[#f6465d]'}`}>
                             {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
                         </div>
                     </div>
-                    <div className="badge-muted w-fit uppercase">24H Metrics</div>
+                    <div className="bg-[#2b3139] text-[#848e9c] px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">24H Metrics</div>
                 </div>
             </div>
 
-            {/* ─── Main Content Grid ─── */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
                 {/* Left: Chart + Table */}
                 <div className="lg:col-span-2 space-y-4">
 
                     {/* Exchange Allocation Chart */}
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 shadow-lg">
-                        <h3 className="font-black text-sm uppercase tracking-widest text-alphabag-subtext mb-4">Exchange Allocation</h3>
+                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                        <div className="flex justify-between items-center mb-4 pb-4 border-b border-[#2b3139]">
+                            <h3 className="text-xs font-semibold uppercase text-[#848e9c] tracking-wider">Exchange Allocation</h3>
+                        </div>
                         {connectedCex.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-36 border border-dashed border-alphabag-gray/40 rounded-xl gap-3 text-center px-6">
-                                <Key size={24} className="text-alphabag-muted" />
-                                <p className="text-alphabag-subtext text-sm font-bold">No exchanges connected</p>
-                                <p className="text-alphabag-muted text-xs">Connect a read-only API key to see your allocation chart.</p>
-                                <Button size="sm" variant="primary" onClick={() => { setActiveExchange(null); setIsModalOpen(true); }} className="mt-1">
-                                    <Plus size={14} className="mr-2" /> Connect First Exchange
-                                </Button>
+                            <div className="flex flex-col items-center justify-center h-36 border border-dashed border-[#2b3139] rounded-lg gap-3 text-center px-6">
+                                <Key size={24} className="text-[#848e9c]" />
+                                <p className="text-[#848e9c] text-sm font-semibold">No exchanges connected</p>
+                                <p className="text-[#848e9c] text-xs">Connect a read-only API key to view your allocation.</p>
+                                <button
+                                    onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}
+                                    className="mt-1 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                                >
+                                    <Plus size={14} className="inline mr-1" /> Connect First Exchange
+                                </button>
                             </div>
                         ) : (
                             <div className="flex flex-col md:flex-row items-center gap-6">
@@ -221,21 +204,20 @@ export const CexBag: React.FC = () => {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-                                {/* Scrollable legend for 20 exchanges */}
                                 <div className="flex-1 space-y-2 w-full max-h-52 overflow-y-auto pr-1 custom-scrollbar">
                                     {chartData.map((d, i) => (
                                         <div key={i} className="flex items-center gap-3">
                                             <img src={d.icon} alt={d.name} className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0" />
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex justify-between items-center text-xs mb-1">
-                                                    <span className="font-bold text-white truncate">{d.name}</span>
-                                                    <span className="font-black text-white tabular-data shrink-0 ml-2">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                                    <span className="font-semibold text-[#eaecef] truncate">{d.name}</span>
+                                                    <span className="font-semibold text-[#eaecef] tabular-nums shrink-0 ml-2">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                                                 </div>
-                                                <div className="w-full bg-alphabag-black rounded-full h-1.5">
+                                                <div className="w-full bg-[#0b0e11] rounded-full h-1.5">
                                                     <div className="h-1.5 rounded-full transition-all duration-700" style={{ width: `${d.pct}%`, backgroundColor: d.color }} />
                                                 </div>
                                             </div>
-                                            <span className="text-[11px] font-black tabular-data shrink-0 w-10 text-right" style={{ color: d.color }}>{d.pct}%</span>
+                                            <span className="text-[11px] font-semibold tabular-nums shrink-0 w-10 text-right" style={{ color: d.color }}>{d.pct}%</span>
                                         </div>
                                     ))}
                                 </div>
@@ -244,42 +226,44 @@ export const CexBag: React.FC = () => {
                     </div>
 
                     {/* Unified Balances Table */}
-                    <h3 className="font-black text-sm uppercase tracking-widest text-alphabag-subtext border-b border-alphabag-gray pb-2">Unified Balances</h3>
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl overflow-hidden shadow-lg">
+                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+                        <div className="px-6 py-4 border-b border-[#2b3139]">
+                            <h3 className="text-xs font-semibold uppercase text-[#848e9c] tracking-wider">Unified Balances</h3>
+                        </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse min-w-[560px]">
-                                <thead className="bg-alphabag-black/40 text-alphabag-muted text-[10px] uppercase font-black tracking-wider border-b border-alphabag-gray/50">
+                                <thead className="bg-[#0b0e11] text-[#848e9c] text-[10px] uppercase font-semibold tracking-wider border-b border-[#2b3139]">
                                     <tr>
-                                        <th className="p-5 px-6">Asset</th>
-                                        <th className="p-5 px-6 text-right">Balance</th>
-                                        <th className="p-5 px-6 text-right">Value (USD)</th>
-                                        <th className="p-5 px-6 text-right">Source</th>
+                                        <th className="p-4 px-6">Asset</th>
+                                        <th className="p-4 px-6 text-right">Balance</th>
+                                        <th className="p-4 px-6 text-right">Value (USD)</th>
+                                        <th className="p-4 px-6 text-right">Source</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-alphabag-gray/30 text-sm">
+                                <tbody className="divide-y divide-[#2b3139] text-sm">
                                     {connectedCex.length === 0 ? (
-                                        <tr><td colSpan={4} className="p-16 text-center text-alphabag-subtext">No data. Connect an exchange API key to view balances.</td></tr>
+                                        <tr><td colSpan={4} className="p-16 text-center text-[#848e9c] text-xs">No data. Connect an exchange API key to view balances.</td></tr>
                                     ) : (
                                         MOCK_ASSETS.map((asset, idx) => (
-                                            <tr key={idx} className="hover:bg-alphabag-black/20 transition-colors">
-                                                <td className="p-5 px-6">
+                                            <tr key={idx} className="hover:bg-[#2b3139]/40 transition-colors">
+                                                <td className="p-4 px-6">
                                                     <div className="flex items-center gap-4">
-                                                        <img src={asset.img} alt={asset.symbol} className="w-8 h-8 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                                                        <div className="overflow-hidden">
-                                                            <div className="text-white font-bold text-base truncate" title={asset.symbol}>{asset.symbol}</div>
-                                                            <div className="text-alphabag-subtext text-[10px] mt-0.5 truncate" title={asset.coin}>{asset.coin}</div>
+                                                        <img src={asset.img} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                        <div>
+                                                            <div className="text-[#eaecef] font-semibold">{asset.symbol}</div>
+                                                            <div className="text-[#848e9c] text-[10px] mt-0.5">{asset.coin}</div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="py-4 px-6 text-right tabular-data">
-                                                    <div className="font-bold text-white text-base tracking-tighter truncate" title={asset.balance.toLocaleString()}>{asset.balance.toLocaleString()}</div>
+                                                <td className="py-4 px-6 text-right tabular-nums">
+                                                    <div className="font-semibold text-[#eaecef]">{asset.balance.toLocaleString()}</div>
                                                 </td>
-                                                <td className="py-4 px-6 text-right tabular-data">
-                                                    <div className="font-bold text-white text-base tracking-tighter truncate" title={`$${asset.value.toLocaleString()}`}>${asset.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                                                    <div className="text-[10px] text-alphabag-muted mt-1 truncate">@ ${asset.price.toLocaleString()}</div>
+                                                <td className="py-4 px-6 text-right tabular-nums">
+                                                    <div className="font-semibold text-[#eaecef]">${asset.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                                                    <div className="text-[10px] text-[#848e9c] mt-1">@ ${asset.price.toLocaleString()}</div>
                                                 </td>
-                                                <td className="p-5 px-6 text-right">
-                                                    <span className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext bg-alphabag-gray/30 px-2.5 py-1 rounded border border-alphabag-gray/50">{asset.exchange}</span>
+                                                <td className="p-4 px-6 text-right">
+                                                    <span className="text-[10px] font-semibold uppercase text-[#848e9c] bg-[#2b3139] px-2 py-0.5 rounded-md border border-[#474d57]">{asset.exchange}</span>
                                                 </td>
                                             </tr>
                                         ))
@@ -292,36 +276,38 @@ export const CexBag: React.FC = () => {
 
                 {/* Right: Active Integrations + Add New */}
                 <div className="space-y-4">
-                    <h3 className="font-black text-sm uppercase tracking-widest text-alphabag-subtext border-b border-alphabag-gray pb-2">Active Integrations</h3>
-                    {connectedCex.length > 0 ? (
-                        <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
-                            {connectedCex.map((cex) => (
-                                <div key={cex.id} className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-4 flex items-center justify-between group">
-                                    <div className="flex items-center space-x-3">
-                                        <img src={cex.icon} alt={cex.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
-                                        <div>
-                                            <h3 className="font-bold text-white text-sm">{cex.name}</h3>
-                                            <div className="flex items-center text-[9px] text-alphabag-green font-bold uppercase tracking-widest mt-0.5">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5 shadow-[0_0_5px_rgba(52,211,153,0.8)]"></div>
-                                                Live API
+                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                        <h3 className="text-xs font-semibold uppercase text-[#848e9c] tracking-wider mb-4 pb-4 border-b border-[#2b3139]">Active Integrations</h3>
+                        {connectedCex.length > 0 ? (
+                            <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+                                {connectedCex.map((cex) => (
+                                    <div key={cex.id} className="bg-[#0b0e11] border border-[#2b3139] rounded-md p-3 flex items-center justify-between">
+                                        <div className="flex items-center space-x-3">
+                                            <img src={cex.icon} alt={cex.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
+                                            <div>
+                                                <h3 className="font-semibold text-[#eaecef] text-sm">{cex.name}</h3>
+                                                <div className="flex items-center text-[9px] text-[#0ecb81] font-semibold uppercase tracking-wider mt-0.5">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] mr-1.5 animate-pulse"></div>
+                                                    Live API
+                                                </div>
+                                                <div className="text-[#848e9c] text-[9px] font-mono mt-0.5">{cex.apiKey}</div>
                                             </div>
-                                            <div className="text-alphabag-muted text-[9px] font-mono mt-0.5">{cex.apiKey}</div>
                                         </div>
+                                        <button onClick={() => removeConnection(cex.id)} className="text-[#848e9c] hover:text-[#f6465d] transition-colors p-2">
+                                            <Trash2 size={14} />
+                                        </button>
                                     </div>
-                                    <button onClick={() => removeConnection(cex.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors opacity-50 hover:opacity-100 p-2">
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="bg-alphabag-black/20 border border-alphabag-gray/50 border-dashed rounded-xl p-6 text-center">
-                            <p className="text-alphabag-subtext text-xs">No active CEX connections.</p>
-                        </div>
-                    )}
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="border border-dashed border-[#2b3139] rounded-md p-6 text-center">
+                                <p className="text-[#848e9c] text-xs">No active CEX connections.</p>
+                            </div>
+                        )}
+                    </div>
 
-                    <div className="pt-2 border-t border-alphabag-gray/50">
-                        <h4 className="text-[10px] font-black uppercase tracking-widest text-alphabag-muted mb-3">
+                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-[#848e9c] mb-4 pb-4 border-b border-[#2b3139]">
                             Available ({availableExchanges.length} remaining)
                         </h4>
                         <div className="grid grid-cols-5 gap-2">
@@ -329,7 +315,7 @@ export const CexBag: React.FC = () => {
                                 <button
                                     key={cex.id}
                                     onClick={() => openConnectModal(cex.id)}
-                                    className="flex items-center justify-center p-2 bg-alphabag-black border border-alphabag-gray rounded-xl hover:bg-white/5 hover:border-alphabag-yellow/40 transition-all group"
+                                    className="flex items-center justify-center p-2 bg-[#0b0e11] border border-[#2b3139] rounded-md hover:border-[#fcd535]/40 hover:bg-[#2b3139] transition-all group"
                                     title={`Connect ${cex.name}`}
                                 >
                                     <img src={cex.icon} alt={cex.name} className="w-6 h-6 rounded-full bg-white p-0.5 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" />

@@ -13,14 +13,14 @@ interface NavItemProps {
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => (
   <Link
     to={to}
-    className={`flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-200 active:scale-[0.98] mb-1 mx-2 ${active
-      ? 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-glow-yellow'
-      : 'text-alphabag-muted hover:bg-white/5 hover:text-zinc-50'
+    className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${active
+      ? 'bg-[#2b3139] text-[#eaecef] border-l-2 border-[#fcd535]'
+      : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef] border-l-2 border-transparent'
       }`}
   >
-    <div className="flex items-center space-x-3">
-      {Icon && <Icon size={18} />}
-      <span className="font-black text-[11px] uppercase tracking-[0.2em]">{label}</span>
+    <div className="flex items-center space-x-3 relative z-10">
+      {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
+      <span className="font-medium text-xs uppercase">{label}</span>
     </div>
   </Link>
 );
@@ -34,14 +34,14 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
     <div className="mb-1">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-[calc(100%-1rem)] flex items-center justify-between px-4 py-2.5 rounded-lg transition-all duration-200 active:scale-[0.98] mx-2 ${isActive
-          ? 'bg-alphabag-yellow/10 text-alphabag-yellow'
-          : 'text-alphabag-muted hover:bg-white/5 hover:text-zinc-50'
+        className={`w-[calc(100%-1rem)] flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-200 mx-2 ${isActive
+          ? 'bg-[#2b3139] text-[#eaecef]'
+          : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef]'
           }`}
       >
         <div className="flex items-center space-x-3">
           <Icon size={18} />
-          <span className="font-black text-[11px] uppercase tracking-[0.2em]">{label}</span>
+          <span className="font-medium text-xs uppercase">{label}</span>
         </div>
         <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -55,8 +55,8 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
 };
 
 const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
-  <div className="mb-6">
-    <div className="px-8 mb-2 text-[9px] font-semibold text-alphabag-subtext uppercase tracking-[0.28em] opacity-80">
+  <div className="mb-4">
+    <div className="px-6 mb-1.5 text-[10px] font-semibold text-[#848e9c] uppercase tracking-wider">
       {title}
     </div>
     <div className="space-y-1">
@@ -83,8 +83,8 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed top-0 left-0 h-full w-64 bg-[#0d0d11] border-r border-white/10 z-30 transition-transform duration-300 ease-in-out
-        md:translate-x-0 pt-24 pb-8 flex flex-col justify-between overflow-y-auto custom-scrollbar shadow-[0_60px_120px_rgba(0,0,0,0.4)]
+        fixed top-16 left-0 bottom-0 w-64 bg-[#181a20] border-r border-[#2b3139] z-40 transition-transform duration-300 ease-in-out
+        md:translate-x-0 pt-6 pb-6 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="py-2">
@@ -125,12 +125,12 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
           )}
         </div>
 
-        <div className="px-6">
-          <div className="border-t border-alphabag-border pt-6 mb-2 space-y-1">
+        <div className="px-4">
+          <div className="border-t border-[#2b3139] pt-6 mb-2 space-y-1">
             <NavItem to="/profile" icon={UserCircle} label="My Profile" active={location.pathname === '/profile'} />
-            <button onClick={handleLogout} className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-all duration-200 active:scale-[0.98] text-alphabag-muted hover:bg-alphabag-red/10 hover:text-alphabag-red">
+            <button onClick={handleLogout} className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-[#848e9c] hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
               <LogOut size={18} />
-              <span className="font-medium text-sm">Logout</span>
+              <span className="font-medium text-xs uppercase">Logout</span>
             </button>
           </div>
         </div>

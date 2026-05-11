@@ -45,10 +45,10 @@ export const Landing: React.FC = () => {
       <nav className="fixed top-0 w-full z-50 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5 shadow-glass">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('home')}>
-            <div className="w-10 h-10 bg-zinc-900 border border-white/10 text-alphabag-yellow flex items-center justify-center rounded-xl shadow-[0_0_20px_rgba(252,213,53,0.1)]">
-              <Lock size={22} fill="currentColor" strokeWidth={2.5} />
+            <div className="w-9 h-9 bg-zinc-900 border border-white/10 text-alphabag-yellow flex items-center justify-center rounded-lg shadow-[0_0_20px_rgba(252,213,53,0.1)]">
+              <Lock size={20} fill="currentColor" strokeWidth={2.5} />
             </div>
-            <span className="text-2xl font-semibold tracking-tighter text-white">Alpha<span className="text-alphabag-yellow">BAG</span></span>
+            <span className="text-xl font-semibold tracking-tighter text-white">Alpha<span className="text-alphabag-yellow">BAG</span></span>
           </div>
 
           {/* Desktop Nav */}
@@ -597,7 +597,7 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
         <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
             ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
           `}>
-          <div className={`bg-[#0A0F1C]/90 backdrop-blur-xl border rounded-lg p-5 h-full flex flex-col min-h-[340px] transition-colors duration-300
+          <div className={`bg-[#0A0F1C]/90 backdrop-blur-xl border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
                ${status === 'EXECUTING' ? 'border-alphabag-yellow/30 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-border'}
             `}>
             {/* Header Info */}
@@ -635,18 +635,18 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray bg-alphabag-dark hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
+    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray bg-alphabag-dark hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 text-left"
+        className="w-full flex items-center justify-between p-4 text-left"
       >
-        <span className="font-bold text-white uppercase tracking-wider text-base">{question}</span>
-        <div className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-alphabag-yellow text-black' : 'bg-white/10 text-white'}`}>
-          {isOpen ? <X size={16} /> : <span className="text-xl leading-none font-light mb-1">+</span>}
+        <span className="font-bold text-white uppercase tracking-wider text-sm">{question}</span>
+        <div className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-alphabag-yellow text-black' : 'bg-white/10 text-white'}`}>
+          {isOpen ? <X size={14} /> : <span className="text-lg leading-none font-light mb-1">+</span>}
         </div>
       </button>
       <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="p-6 pt-0 text-base text-alphabag-subtext leading-relaxed border-t border-alphabag-border mt-2 font-medium">
+        <div className="p-4 pt-0 text-[13px] text-alphabag-subtext leading-relaxed border-t border-alphabag-border mt-1 font-medium opacity-60">
           {answer}
         </div>
       </div>
@@ -656,33 +656,33 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 p-6 rounded-3xl hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group cursor-default shadow-glass">
-    <div className="mb-4 bg-alphabag-black w-12 h-12 rounded-xl flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(252,213,53,0.15)] transition-all">
-      {icon}
+  <div className="bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 p-4 rounded-xl hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group cursor-default shadow-glass">
+    <div className="mb-2.5 bg-alphabag-black w-9 h-9 rounded-lg flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(252,213,53,0.15)] transition-all">
+      {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
-    <h3 className="text-xl font-semibold text-white mb-2 uppercase tracking-tighter">{title}</h3>
-    <p className="text-sm text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
+    <h3 className="text-lg font-black text-white mb-1.5 uppercase tracking-tighter leading-tight">{title}</h3>
+    <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed opacity-60">{desc}</p>
   </div>
 );
 
 const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
-  <div className="relative flex flex-col items-center text-center group mt-10 md:mt-0">
-    <div className="w-16 h-16 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow text-xl font-black rounded flex items-center justify-center mb-6 relative z-10 shadow-[0_0_20px_rgba(252,213,53,0.1)] group-hover:shadow-[0_0_30px_rgba(252,213,53,0.3)] group-hover:scale-110 transition-all duration-300">
+  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0">
+    <div className="w-12 h-12 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow text-base font-black rounded-lg flex items-center justify-center mb-3 relative z-10 shadow-[0_0_20px_rgba(252,213,53,0.1)] group-hover:shadow-[0_0_30px_rgba(252,213,53,0.3)] group-hover:scale-110 transition-all duration-300">
       {step}
     </div>
-    <h3 className="text-[13px] font-black text-white uppercase tracking-[0.1em] mb-3 h-10 flex items-center justify-center">{title}</h3>
-    <p className="text-[11px] text-alphabag-subtext leading-relaxed font-medium px-2">{desc}</p>
+    <h3 className="text-[11px] font-black text-white uppercase tracking-[0.1em] mb-2 h-8 flex items-center justify-center">{title}</h3>
+    <p className="text-[10px] text-alphabag-subtext leading-relaxed font-medium px-2 opacity-60">{desc}</p>
   </div>
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-alphabag-dark border border-white/5 p-5 rounded-2xl flex items-center gap-4 hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group">
-    <div className="w-10 h-10 bg-alphabag-black border border-white/5 rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform">
-      {icon}
+  <div className="bg-alphabag-dark border border-white/5 p-3 rounded-xl flex items-center gap-3 hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group">
+    <div className="w-8 h-8 bg-alphabag-black border border-white/5 rounded-lg flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform">
+      {React.cloneElement(icon as React.ReactElement, { size: 16 })}
     </div>
     <div>
-      <div className="text-[10px] text-alphabag-subtext font-bold uppercase tracking-widest mb-1">{label}</div>
-      <div className={`text-lg font-black text-white uppercase tracking-tighter ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
+      <div className="text-[9px] text-alphabag-subtext font-black uppercase tracking-widest mb-0.5 opacity-60">{label}</div>
+      <div className={`text-base font-black text-white uppercase tracking-tighter ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
         {value}
       </div>
     </div>
@@ -702,29 +702,29 @@ const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spread
 );
 
 const PricingCard = ({ tier, tokens, price, features, recommended = false, onAction }: { tier: string, tokens: string, price: string, features: string[], recommended?: boolean, onAction: () => void }) => (
-  <div className={`relative flex flex-col p-8 rounded-3xl border ${recommended ? 'bg-alphabag-dark border-alphabag-yellow shadow-[0_0_40px_rgba(252,213,53,0.1)] scale-105 z-10' : 'bg-alphabag-black border-white/10'}`}>
+  <div className={`relative flex flex-col p-6 rounded-xl border ${recommended ? 'bg-alphabag-dark border-alphabag-yellow shadow-[0_0_40px_rgba(252,213,53,0.1)] scale-105 z-10' : 'bg-alphabag-black border-white/10'}`}>
     {recommended && (
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[10px] font-semibold px-4 py-1.5 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
-        <Crown size={12} className="mr-1" fill="currentColor" /> Best Value
+      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
+        <Crown size={10} className="mr-1" fill="currentColor" /> Best Value
       </div>
     )}
-    <div className="mb-8 text-center">
-      <h3 className="text-alphabag-subtext text-[10px] font-semibold uppercase tracking-[0.3em] mb-2">{tier}</h3>
-      <div className="text-4xl font-semibold mb-2 uppercase tracking-tighter text-white">{price}</div>
-      {recommended && <div className="text-alphabag-yellow font-semibold text-[10px] uppercase tracking-widest mb-2">ELIGIBILITY: GENESIS HOLDER</div>}
-      <div className="text-alphabag-yellow font-semibold text-[10px] uppercase tracking-widest bg-alphabag-yellow/5 inline-block px-3 py-1 rounded border border-alphabag-yellow/20">{tokens}</div>
+    <div className="mb-6 text-center">
+      <h3 className="text-alphabag-subtext text-[9px] font-black uppercase tracking-[0.3em] mb-1.5 opacity-60">{tier}</h3>
+      <div className="text-3xl font-black mb-1.5 uppercase tracking-tighter text-white">{price}</div>
+      {recommended && <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest mb-1.5">ELIGIBILITY: GENESIS HOLDER</div>}
+      <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest bg-alphabag-yellow/5 inline-block px-2.5 py-1 rounded border border-alphabag-yellow/20">{tokens}</div>
     </div>
-    <ul className="space-y-4 mb-10 flex-1 text-sm font-medium">
+    <ul className="space-y-3 mb-8 flex-1 text-[11px] font-bold">
       {features.map((f, i) => (
-        <li key={i} className="flex items-center space-x-3 text-gray-300">
-          <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-            <CheckCircle2 size={10} className="text-green-400" />
+        <li key={i} className="flex items-center space-x-2.5 text-gray-400">
+          <div className="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+            <CheckCircle2 size={8} className="text-green-400" />
           </div>
-          <span className="uppercase text-[11px] tracking-wider font-semibold">{f}</span>
+          <span className="uppercase tracking-widest opacity-80">{f}</span>
         </li>
       ))}
     </ul>
-    <Button variant={recommended ? 'primary' : 'secondary'} size="lg" className="w-full font-semibold py-6 uppercase tracking-widest text-sm" onClick={onAction}>
+    <Button variant={recommended ? 'primary' : 'secondary'} size="lg" className="w-full font-black py-4 uppercase tracking-widest text-[11px] h-12 rounded-xl" onClick={onAction}>
       {tier.includes('Free') ? 'Start for Free' : 'Secure Ultimate Access'}
     </Button>
   </div>

@@ -12,25 +12,25 @@ export const NFTs: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-6">
-        <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase">NFT Gallery</h1>
+    <div className="space-y-4 animate-fade-in">
+        <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-none">NFT <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-1">Gallery</span></h1>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {nfts.map((nft) => (
-                <div key={nft.id} className="bg-alphabag-dark border border-alphabag-gray rounded-xl overflow-hidden group">
-                    <div className="aspect-square relative overflow-hidden">
+                <div key={nft.id} className="bg-alphabag-dark border border-alphabag-gray rounded-xl overflow-hidden group hover:border-alphabag-yellow/30 transition-all shadow-lg">
+                    <div className="aspect-square relative overflow-hidden bg-black/20">
                         <img 
                             src={nft.imageUrl} 
                             alt={nft.name} 
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                         />
                     </div>
-                    <div className="p-4">
-                        <div className="text-alphabag-subtext text-xs uppercase tracking-wide mb-1">{nft.collection}</div>
-                        <h3 className="text-white font-bold">{nft.name}</h3>
-                        <div className="mt-4 flex justify-between items-end">
-                            <span className="text-xs text-alphabag-subtext">Floor Price</span>
-                            <span className="text-alphabag-yellow font-mono text-sm">{nft.floorPrice} ETH</span>
+                    <div className="p-3">
+                        <div className="text-alphabag-subtext text-[9px] uppercase font-black tracking-[0.2em] mb-1 opacity-60 truncate">{nft.collection}</div>
+                        <h3 className="text-white font-bold text-[13px] truncate leading-tight group-hover:text-alphabag-yellow transition-colors">{nft.name}</h3>
+                        <div className="mt-2.5 pt-2.5 border-t border-white/5 flex justify-between items-center">
+                            <span className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-widest">Floor</span>
+                            <span className="text-alphabag-yellow font-black tabular-nums text-[11px]">{nft.floorPrice} <span className="text-[9px]">ETH</span></span>
                         </div>
                     </div>
                 </div>
@@ -39,8 +39,8 @@ export const NFTs: React.FC = () => {
             {/* Empty State Placeholder */}
             {nfts.length === 0 && (
                 <div className="col-span-full py-20 text-center text-alphabag-subtext">
-                    <Image size={48} className="mx-auto mb-4 opacity-50" />
-                    <p>No NFTs found in connected wallet.</p>
+                    <Image size={32} className="mx-auto mb-3 opacity-20" />
+                    <p className="text-[11px] font-bold uppercase tracking-widest opacity-40">No NFT transmissions detected in wallet.</p>
                 </div>
             )}
         </div>

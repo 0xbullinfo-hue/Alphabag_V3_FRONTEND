@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Rocket, Clock, DollarSign, ExternalLink, RefreshCw, ArrowUpRight, Zap, Users, TrendingUp, Plus, Timer, CheckCircle } from 'lucide-react';
+import { Rocket, Clock, DollarSign, ExternalLink, RefreshCw, ArrowUpRight, Zap, Users, TrendingUp, Plus, Timer, CheckCircle, Radio } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
@@ -217,53 +217,57 @@ export const LivePairs: React.FC = () => {
     const displayPairs = tab === 'trending' ? trendingPairs : communityPairs;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 animate-in fade-in duration-700">
 
             {/* ── Header ─────────────────────────────────────────────────────── */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 py-6 border-b border-[#2b3139]">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase flex items-center gap-3">
-                        Live <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Pairs</span>
-                        <span className="px-2 py-0.5 bg-red-500/10 border border-red-500/20 rounded text-[10px] text-red-400 font-black uppercase tracking-widest flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" /> LIVE
-                        </span>
-                    </h1>
-                    <p className="text-alphabag-subtext text-sm mt-1">Real-time DexScreener firehose + community alpha picks.</p>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <Radio size={20} />
+                        </div>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight flex items-center gap-3">
+                            Live Pairs
+                            <span className="px-2 py-0.5 bg-[#f6465d]/10 border border-[#f6465d]/20 rounded-md text-[10px] text-[#f6465d] font-semibold uppercase tracking-wider flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#f6465d] animate-pulse" /> LIVE
+                            </span>
+                        </h1>
+                    </div>
+                    <p className="text-[#848e9c] text-sm">Real-time DexScreener firehose + community alpha picks.</p>
                 </div>
 
-                <Button
-                    variant="outline" size="sm"
+                <button
                     onClick={() => tab === 'trending' ? fetchTrending(chain) : fetchCommunity()}
                     disabled={refreshing}
-                    className="border-white/5 text-alphabag-subtext gap-2 self-start md:self-auto"
+                    className="flex items-center gap-2 bg-[#2b3139] text-[#eaecef] border border-[#474d57] rounded-md px-4 py-2 text-xs font-semibold hover:bg-[#474d57] transition-all self-start md:self-auto disabled:opacity-50"
                 >
-                    <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} /> Refresh
-                </Button>
+                    <RefreshCw size={13} className={refreshing ? 'animate-spin' : ''} /> Refresh
+                </button>
             </div>
 
             {/* ── Tabs ───────────────────────────────────────────────────────── */}
-            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/5 rounded-2xl p-1.5">
+            <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-1 flex gap-1">
                 <button
                     onClick={() => setTab('trending')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                         tab === 'trending'
-                            ? 'bg-alphabag-yellow text-black shadow-[0_0_20px_rgba(252,213,53,0.2)]'
-                            : 'text-alphabag-subtext hover:text-white'
+                            ? 'bg-[#fcd535] text-[#181a20]'
+                            : 'text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139]'
                     }`}
                 >
                     <TrendingUp size={13} /> Live Firehose
                 </button>
                 <button
                     onClick={() => setTab('community')}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                         tab === 'community'
-                            ? 'bg-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.2)]'
-                            : 'text-alphabag-subtext hover:text-white'
+                            ? 'bg-[#3b82f6] text-white'
+                            : 'text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139]'
                     }`}
                 >
                     <Users size={13} /> Community Alpha
                     {communityPairs.length > 0 && (
-                        <span className="px-1.5 py-0.5 bg-blue-500/20 text-blue-300 rounded text-[8px]">{communityPairs.length}</span>
+                        <span className="px-1.5 py-0.5 bg-[#3b82f6]/20 text-blue-300 rounded text-[8px] font-semibold">{communityPairs.length}</span>
                     )}
                 </button>
             </div>
@@ -275,10 +279,10 @@ export const LivePairs: React.FC = () => {
                         <button
                             key={c}
                             onClick={() => { setChain(c); setLoading(true); }}
-                            className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all border ${
+                            className={`px-4 py-1.5 rounded-md text-[10px] font-semibold uppercase tracking-wider transition-all border ${
                                 chain === c
-                                    ? 'bg-white/10 border-white/20 text-white'
-                                    : 'border-white/5 text-alphabag-subtext hover:border-white/10 hover:text-white'
+                                    ? 'bg-[#2b3139] border-[#474d57] text-[#eaecef]'
+                                    : 'border-[#2b3139] text-[#848e9c] hover:border-[#474d57] hover:text-[#eaecef]'
                             }`}
                         >
                             {CHAIN_LABELS[c]}
@@ -289,27 +293,31 @@ export const LivePairs: React.FC = () => {
 
             {/* ── Community Submission Banner ─────────────────────────────────── */}
             {tab === 'community' && (
-                <div className={`glass-panel p-4 flex flex-col sm:flex-row items-center justify-between gap-4 ${isPremium ? 'border-blue-500/20 bg-blue-500/5' : 'border-white/5 bg-white/[0.02]'}`}>
+                <div className={`rounded-lg border p-4 flex flex-col sm:flex-row items-center justify-between gap-4 ${
+                    isPremium ? 'border-blue-500/20 bg-blue-500/5' : 'border-[#2b3139] bg-[#1e2329]'
+                }`}>
                     <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border shadow-inner ${isPremium ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-white/5 border-white/10 text-alphabag-muted'}`}>
+                        <div className={`w-9 h-9 rounded-md flex items-center justify-center border ${
+                            isPremium ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-[#0b0e11] border-[#2b3139] text-[#848e9c]'
+                        }`}>
                             {isPremium ? <Zap size={18} /> : <Rocket size={18} />}
                         </div>
                         <div>
-                            <div className="text-sm font-black text-white uppercase tracking-tight">
+                            <div className="text-sm font-semibold text-[#eaecef] mb-0.5">
                                 {isPremium ? 'Community Alpha Submission' : 'Premium Feature'}
                             </div>
                             {isPremium && cooldown ? (
                                 cooldown.canSubmit ? (
-                                    <div className="text-[10px] text-green-400 font-bold flex items-center gap-1">
+                                    <div className="text-[10px] text-[#0ecb81] font-semibold flex items-center gap-1">
                                         <CheckCircle size={10} /> Slot available — nominate your alpha pick
                                     </div>
                                 ) : (
-                                    <div className="text-[10px] text-alphabag-muted font-bold flex items-center gap-1">
+                                    <div className="text-[10px] text-[#848e9c] font-semibold flex items-center gap-1">
                                         <Timer size={10} /> Next slot: {new Date(cooldown.nextAvailableAt!).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}
                                     </div>
                                 )
                             ) : (
-                                <div className="text-[10px] text-alphabag-muted font-bold">
+                                <div className="text-[10px] text-[#848e9c] font-semibold">
                                     {isPremium ? 'Checking cooldown...' : 'Connect wallet to unlock 1 submission per month'}
                                 </div>
                             )}
@@ -317,10 +325,10 @@ export const LivePairs: React.FC = () => {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className={`flex items-center gap-2 font-black uppercase tracking-widest text-[10px] h-9 px-6 rounded-lg whitespace-nowrap active:scale-95 transition-all ${
+                        className={`flex items-center gap-2 font-semibold uppercase tracking-wider text-[10px] h-9 px-6 rounded-md whitespace-nowrap active:scale-95 transition-all ${
                             isPremium && cooldown?.canSubmit
-                                ? 'bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:bg-blue-400'
-                                : 'bg-white/5 text-alphabag-muted border border-white/10 hover:border-white/20'
+                                ? 'bg-blue-500 text-white hover:bg-blue-400'
+                                : 'bg-[#2b3139] text-[#848e9c] border border-[#474d57] hover:border-[#848e9c]'
                         }`}
                     >
                         <Plus size={12} /> Submit CA
@@ -330,19 +338,19 @@ export const LivePairs: React.FC = () => {
 
             {/* ── Pair Grid ──────────────────────────────────────────────────── */}
             {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[1,2,3,4,5,6].map(i => (
-                        <div key={i} className="glass-panel p-6 h-52 animate-pulse bg-white/[0.02]" />
+                        <div key={i} className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 h-52 animate-pulse" />
                     ))}
                 </div>
             ) : displayPairs.length === 0 ? (
-                <div className="glass-panel p-12 text-center">
-                    <div className="text-alphabag-muted text-sm">
+                <div className="rounded-lg border border-dashed border-[#2b3139] p-12 text-center">
+                    <div className="text-[#848e9c] text-sm">
                         {tab === 'community' ? 'No community pairs submitted yet. Be the first to nominate an alpha pick.' : 'No pairs found. Try a different chain filter.'}
                     </div>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {displayPairs.map((pair, i) => <PairCard key={pair.id || i} pair={pair} onBoost={handleBoost} />)}
                 </div>
             )}
@@ -356,7 +364,7 @@ const PairCard = ({ pair, onBoost }: { pair: Pair; onBoost: (id: string) => void
     const isUp = change >= 0;
 
     return (
-        <div className="glass-panel p-5 hover:bg-white/[0.03] transition-all group border-white/5 relative overflow-hidden">
+        <div className="bg-[#1e2329] border border-[#2b3139] p-5 hover:border-[#474d57] transition-all relative overflow-hidden rounded-lg">
 
             {/* Background glow */}
             <div className={`absolute top-0 right-0 w-24 h-24 blur-[50px] rounded-full pointer-events-none transition-all ${

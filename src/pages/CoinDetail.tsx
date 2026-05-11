@@ -141,17 +141,17 @@ export const CoinDetail: React.FC = () => {
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center space-x-4">
-                    <Link to="/markets" className="p-2 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-lg transition-all shadow-md">
-                        <ArrowLeft size={20} />
+                <div className="flex items-center space-x-3">
+                    <Link to="/markets" className="p-1.5 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-lg transition-all shadow-md">
+                        <ArrowLeft size={18} />
                     </Link>
-                    <div className="flex items-center space-x-4">
-                        <img src={coin.image} className="w-12 h-12 rounded-full shadow-lg p-1 bg-alphabag-gray" alt={coin.name} />
+                    <div className="flex items-center space-x-3">
+                        <img src={coin.image} className="w-10 h-10 rounded-full shadow-lg p-1 bg-alphabag-gray" alt={coin.name} />
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase leading-tight">{coin.name} <span className="text-alphabag-subtext text-xl md:text-2xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
-                            <div className="flex items-center space-x-2 mt-1">
-                                <span className="bg-alphabag-black text-[10px] px-2 py-0.5 rounded text-alphabag-yellow border border-alphabag-gray font-bold uppercase tracking-widest">Rank #{coin.market_cap_rank}</span>
-                                <span className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-tighter">CoinMarketCap & CoinGecko Data</span>
+                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">{coin.name} <span className="text-alphabag-subtext text-lg md:text-xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
+                            <div className="flex items-center space-x-2 mt-0.5">
+                                <span className="bg-alphabag-black text-[9px] px-2 py-0.5 rounded text-alphabag-yellow border border-alphabag-gray font-bold uppercase tracking-widest">Rank #{coin.market_cap_rank}</span>
+                                <span className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-tighter">Market Intelligence Feed</span>
                             </div>
                         </div>
                     </div>
@@ -164,65 +164,65 @@ export const CoinDetail: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-[0.03] rotate-12">
-                            <BarChart size={160} />
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 shadow-xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-6 opacity-[0.03] rotate-12">
+                            <BarChart size={120} />
                         </div>
-                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                             <div>
-                                <p className="text-alphabag-subtext text-xs font-bold uppercase tracking-widest mb-1">Current Value</p>
-                                <div className="flex items-baseline space-x-4">
-                                    <span className="text-5xl font-extrabold text-white tracking-tighter">${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                                    <span className={`text-xl font-bold px-3 py-1 rounded-lg ${isPositive ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
+                                <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Current Value</p>
+                                <div className="flex items-baseline space-x-3">
+                                    <span className="text-4xl font-extrabold text-white tracking-tighter">${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span className={`text-lg font-bold px-2 py-0.5 rounded-lg ${isPositive ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
                                         {isPositive ? '+' : ''}{coin.price_change_percentage_24h.toFixed(2)}%
                                     </span>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-8 text-right w-full md:w-auto">
+                            <div className="grid grid-cols-2 gap-6 text-right w-full md:w-auto">
                                 <div>
-                                    <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest">24h High</p>
-                                    <p className="text-white font-bold">${(coin.current_price * 1.05).toLocaleString()}</p>
+                                    <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h High</p>
+                                    <p className="text-white font-bold text-sm">${(coin.current_price * 1.05).toLocaleString()}</p>
                                 </div>
                                 <div>
-                                    <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest">24h Low</p>
-                                    <p className="text-white font-bold">${(coin.current_price * 0.95).toLocaleString()}</p>
+                                    <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h Low</p>
+                                    <p className="text-white font-bold text-sm">${(coin.current_price * 0.95).toLocaleString()}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-alphabag-dark to-alphabag-black border border-alphabag-yellow/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden group">
+                    <div className="bg-gradient-to-r from-alphabag-dark to-alphabag-black border border-alphabag-yellow/30 rounded-xl p-5 shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-alphabag-yellow/5 animate-pulse"></div>
                         <div className="flex items-start space-x-4 relative z-10">
-                            <div className="w-12 h-12 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
-                                <Zap size={24} className="text-alphabag-yellow fill-current" />
+                            <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
+                                <Zap size={20} className="text-alphabag-yellow fill-current" />
                             </div>
                             <div>
-                                <div className="flex items-center space-x-2 mb-2">
-                                    <h3 className="text-alphabag-yellow font-extrabold uppercase text-xs tracking-[0.2em]">Expert Narrative Agent</h3>
+                                <div className="flex items-center space-x-2 mb-1.5">
+                                    <h3 className="text-alphabag-yellow font-extrabold uppercase text-[10px] tracking-[0.2em]">Expert Narrative Agent</h3>
                                 </div>
-                                <div className="text-sm text-alphabag-text leading-relaxed font-medium">
+                                <div className="text-[13px] text-alphabag-text leading-relaxed font-medium">
                                     {isFetchingAi ? (
                                         <div className="flex items-center space-x-2">
-                                            <div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full animate-bounce"></div>
-                                            <div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                                            <div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                                            <span className="ml-2 italic text-alphabag-subtext">Aggregating global sentiment and technical signals...</span>
+                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce"></div>
+                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                                            <span className="ml-2 italic text-alphabag-subtext">Aggregating global sentiment...</span>
                                         </div>
                                     ) : (
                                         <div>
                                             <p>{aiInsight}</p>
                                             {groundingLinks.length > 0 && (
-                                                <div className="mt-4 pt-4 border-t border-alphabag-yellow/20">
-                                                    <p className="text-[10px] text-alphabag-subtext uppercase font-bold mb-2">Sources:</p>
-                                                    <div className="flex flex-wrap gap-2">
+                                                <div className="mt-3 pt-3 border-t border-alphabag-yellow/20">
+                                                    <p className="text-[9px] text-alphabag-subtext uppercase font-bold mb-2">Sources:</p>
+                                                    <div className="flex flex-wrap gap-1.5">
                                                         {groundingLinks.map((link, idx) => link.web && (
                                                             <a
                                                                 key={idx}
                                                                 href={link.web.uri}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                className="text-[10px] text-alphabag-yellow hover:underline bg-alphabag-yellow/5 px-2 py-1 rounded"
+                                                                className="text-[9px] text-alphabag-yellow hover:underline bg-alphabag-yellow/5 px-2 py-1 rounded"
                                                             >
                                                                 {link.web.title || 'Source'}
                                                             </a>
@@ -237,14 +237,14 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 h-[550px] flex flex-col shadow-2xl">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-6 border-b border-alphabag-gray/30">
-                            <div className="flex space-x-2 bg-alphabag-black p-1 rounded-xl border border-alphabag-gray">
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 h-[500px] flex flex-col shadow-2xl">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-4 border-b border-alphabag-gray/30">
+                            <div className="flex space-x-2 bg-alphabag-black p-1 rounded-lg border border-alphabag-gray">
                                 {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
                                     <button
                                         key={tf}
                                         onClick={() => setTimeframe(tf)}
-                                        className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all uppercase tracking-tighter ${timeframe === tf
+                                        className={`px-3 py-1 rounded text-[10px] font-bold transition-all uppercase tracking-tighter ${timeframe === tf
                                             ? 'bg-alphabag-yellow text-alphabag-black shadow-lg'
                                             : 'text-alphabag-subtext hover:text-white hover:bg-alphabag-gray'
                                             }`}
@@ -253,9 +253,9 @@ export const CoinDetail: React.FC = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="flex items-center space-x-4 text-[10px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
-                                <span className="flex items-center"><div className="w-2 h-2 bg-alphabag-yellow rounded-full mr-2"></div> EMA (20)</span>
-                                <span className="flex items-center"><div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div> VWAP</span>
+                            <div className="flex items-center space-x-4 text-[9px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
+                                <span className="flex items-center"><div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></div> EMA (20)</span>
+                                <span className="flex items-center"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div> VWAP</span>
                             </div>
                         </div>
 

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useWallet } from '../context/WalletContext';
 import { Button } from '../components/ui/Button';
-import { Trash2, Plus, Shield, Crown, Zap, AlertCircle, Radio, Loader2, Search, Eye, Key, ShieldCheck } from 'lucide-react';
+import { Trash2, Plus, Shield, Crown, Zap, AlertCircle, Radio, Loader2, Search, Eye, Key, ShieldCheck, Link as LinkIcon } from 'lucide-react';
 import { UserTier, Chain } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { useCexConnections } from '../hooks/useCexConnections';
@@ -63,7 +63,7 @@ const ManualHoldingsSection: React.FC = () => {
     const totalValue = holdings.reduce((acc, h) => acc + h.amount * h.buyPrice, 0);
 
     return (
-        <section className="glass-panel p-6 rounded-xl shadow-xl">
+        <section className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                     <Plus size={18} className="text-alphabag-yellow" /> Manual Holdings
@@ -79,35 +79,35 @@ const ManualHoldingsSection: React.FC = () => {
             </p>
 
             {/* Add Form */}
-            <div className="glass-panel p-5 rounded-xl border-white/10 mb-6">
-                <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                    <Search size={14} className="text-alphabag-yellow" /> Add Holding
+            <div className="bg-[#0b0e11] border border-[#2b3139] p-5 rounded-lg mb-6">
+                <h3 className="text-sm font-semibold text-[#eaecef] mb-4 flex items-center gap-2">
+                    <Search size={14} className="text-[#fcd535]" /> Add Holding
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
                     <input
-                        type="text" placeholder="Coin Name (e.g. Bitcoin)" value={coin}
+                        type="text" placeholder="Name" value={coin}
                         onChange={e => setCoin(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none"
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
                     />
                     <input
-                        type="text" placeholder="Ticker (e.g. BTC)" value={symbol}
+                        type="text" placeholder="Ticker" value={symbol}
                         onChange={e => setSymbol(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none uppercase"
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none uppercase"
                     />
                     <input
-                        type="number" placeholder="Amount held" value={amount}
+                        type="number" placeholder="Amount" value={amount}
                         onChange={e => setAmount(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none"
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
                     />
                     <input
-                        type="number" placeholder="Avg Buy Price ($)" value={buyPrice}
+                        type="number" placeholder="Price ($)" value={buyPrice}
                         onChange={e => setBuyPrice(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none"
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
                     />
                     <input
-                        type="text" placeholder="Notes (optional)" value={notes}
+                        type="text" placeholder="Notes" value={notes}
                         onChange={e => setNotes(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none"
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
                     />
                 </div>
                 {formError && <div className="text-alphabag-red text-xs mb-3 flex items-center gap-2"><AlertCircle size={12} />{formError}</div>}
@@ -238,8 +238,8 @@ export const Settings: React.FC = () => {
     const TierCard = ({ level, minTokens, current }: { level: UserTier, minTokens: string, current: boolean }) => {
         const label = level === 'FREE' ? 'Beta Tester' : 'Ultimate (Elite)';
         return (
-            <div className={`border rounded-xl p-6 relative overflow-hidden transition-all ${current ? 'border-alphabag-yellow bg-alphabag-yellow/10' : 'border-alphabag-gray bg-alphabag-dark opacity-60'}`}>
-                {current && <div className="absolute top-2 right-2 text-[8px] bg-alphabag-yellow text-black font-extrabold px-2 py-1 rounded tracking-widest">ACTIVE TIER</div>}
+            <div className={`border rounded-lg p-6 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-[#2b3139] bg-[#1e2329] opacity-60'}`}>
+                {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest">ACTIVE TIER</div>}
                 {level === 'ULTIMATE' ? (
                     <div className="flex flex-col items-center justify-center h-full py-8 text-center space-y-4">
                         <div className="p-3 bg-alphabag-yellow/10 rounded-full"><Crown className="text-alphabag-yellow" size={32} /></div>
@@ -265,36 +265,39 @@ export const Settings: React.FC = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-8 animate-fade-in">
-            <div className="relative overflow-hidden rounded-[2rem] bg-alphabag-black/50 border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.35)] p-8">
-                <div className="absolute inset-0 bg-gradient-to-br from-alphabag-yellow/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
-                <div className="relative flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-5 animate-in fade-in duration-700 pb-12">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">Membership & Connection <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Hub</span></h1>
-                    <p className="text-alphabag-subtext mt-1">Configure your professional data feeds and membership status.</p>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <LinkIcon size={20} />
+                        </div>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Membership & Connections</h1>
+                    </div>
+                    <p className="text-[#848e9c] text-sm">Configure professional data feeds and membership status.</p>
                 </div>
                 <div className="flex flex-col items-end">
-                    <span className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Network Verified Balance</span>
+                    <span className="text-[#848e9c] text-[9px] font-semibold uppercase tracking-widest mb-1">Network Verified Balance</span>
                     <div className="flex items-center gap-3">
-                        <div className="text-3xl font-extrabold text-white leading-none tracking-tighter">
-                            {premiumTokenBalance.toLocaleString()} <span className="text-alphabag-yellow text-lg">BAG</span>
+                        <div className="text-2xl font-semibold text-[#eaecef] leading-none tracking-tight tabular-nums">
+                            {premiumTokenBalance.toLocaleString()} <span className="text-[#fcd535] text-base">BAG</span>
                         </div>
-                        <Button variant="primary" size="xs" onClick={() => window.open('https://pancakeswap.finance', '_blank')} className="h-8">Buy</Button>
+                        <button onClick={() => window.open('https://pancakeswap.finance', '_blank')} className="h-7 bg-[#fcd535] text-[#181a20] text-[10px] font-semibold px-3 rounded-md hover:bg-[#e0bd2e] transition-all">Buy</button>
                     </div>
                 </div>
             </div>
-            </div>
 
-            <section className="glass-panel p-6 rounded-xl shadow-xl">
-                <h2 className="text-lg font-bold text-white mb-6">Portfolio Connections</h2>
-                <div className="glass-panel p-6 rounded-xl border-white/10 mb-8">
+            <section className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+                <h2 className="text-sm font-semibold text-[#eaecef] mb-6 uppercase tracking-wider">Portfolio Connections</h2>
+                <div className="bg-[#0b0e11] border border-[#2b3139] p-6 rounded-lg mb-8">
                     <h3 className="text-sm font-bold text-white mb-4 flex items-center">
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
-                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1" />
-                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none" />
-                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none font-mono">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
+                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1" />
+                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none" />
+                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono">
                             <option value="BSC">BSC</option>
                             <option value="ETH">ETH</option>
                             <option value="SOL">SOL</option>
@@ -302,12 +305,12 @@ export const Settings: React.FC = () => {
                             <option value="AVAX">AVAX</option>
                             <option value="ARB">ARB</option>
                         </select>
-                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-alphabag-yellow/40 outline-none">
+                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none">
                             <option value="PORTFOLIO">Portfolio</option>
                             <option value="WHALE">Whale Watch</option>
                         </select>
-                        <Button onClick={handleAdd} disabled={isSyncing} className="font-bold">
-                            {isSyncing ? <Loader2 size={16} className="animate-spin mr-2" /> : <Plus size={16} className="mr-2" />}
+                        <Button onClick={handleAdd} disabled={isSyncing} className="font-bold h-[42px] text-xs">
+                            {isSyncing ? <Loader2 size={14} className="animate-spin mr-2" /> : <Plus size={14} className="mr-2" />}
                             {isSyncing ? 'Verifying...' : 'Add Connection'}
                         </Button>
                     </div>

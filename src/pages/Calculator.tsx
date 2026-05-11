@@ -50,7 +50,7 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
                 }
             }}
             placeholder={placeholder}
-            className={`bg-alphabag-black/50 border ${borderClass} text-white text-[15px] font-medium rounded-xl px-4 py-3 focus:outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors shadow-[inset_0_1px_10px_rgba(0,0,0,0.25)] text-left`}
+            className={`bg-alphabag-black/50 border ${borderClass} text-white text-[14px] font-medium rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors shadow-[inset_0_1px_10px_rgba(0,0,0,0.25)] text-left`}
             autoComplete="off"
         />
         {labelSub && <span className="text-alphabag-muted text-[11px] font-medium h-4">{labelSub}</span>}
@@ -228,37 +228,37 @@ export const Calculator: React.FC = () => {
                 <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
                     <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
                     <div className="relative z-10">
-                        <div className="flex flex-col gap-3 mb-5">
+                        <div className="flex flex-col gap-2.5 mb-4">
                             <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">DIRECTION</label>
-                            <div className="flex gap-4">
-                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81] border-opacity-[0.25] shadow-[0_0_15px_rgba(14,203,129,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                            <div className="flex gap-3">
+                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-2.5 rounded-lg flex justify-center items-center gap-2 text-[14px] font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81] border-opacity-[0.25] shadow-[0_0_15px_rgba(14,203,129,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
                                     ↑ Long
                                 </button>
-                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-3 rounded-xl flex justify-center items-center gap-2 text-[15px] font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D] border-opacity-30 shadow-[0_0_15px_rgba(246,70,93,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-2.5 rounded-lg flex justify-center items-center gap-2 text-[14px] font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D] border-opacity-30 shadow-[0_0_15px_rgba(246,70,93,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
                                     ↓ Short
                                 </button>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-8">
+                        <div className="grid grid-cols-2 gap-4 mb-6">
                             <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" />
                             <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" />
                         </div>
 
-                        <div className="flex flex-col gap-5 mb-10">
+                        <div className="flex flex-col gap-4 mb-8">
                             <div className="flex justify-between items-center">
                                 <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-widest">Leverage</label>
-                                <span className="text-alphabag-yellow font-black bg-alphabag-yellow/10 px-3 py-1.5 rounded-lg border border-alphabag-yellow/30 text-[12px] tracking-widest shadow-[0_0_10px_rgba(252,213,53,0.1)]">{levSlider}x</span>
+                                <span className="text-alphabag-yellow font-black bg-alphabag-yellow/10 px-3 py-1 rounded-lg border border-alphabag-yellow/30 text-[12px] tracking-widest shadow-[0_0_10px_rgba(252,213,53,0.1)]">{levSlider}x</span>
                             </div>
                             <div className="relative pt-2">
-                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[4px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
                             </div>
-                            <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest px-1 mt-[-4px]">
+                            <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest px-1 mt-[-2px]">
                                 <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-4">
                             <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-alphabag-green/40' : 'border-white/10'} />
                             <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-alphabag-red/40' : 'border-white/10'} />
                         </div>
@@ -608,54 +608,44 @@ export const Calculator: React.FC = () => {
     };
 
     return (
-        <div className="animate-fade-in pb-12 max-w-7xl mx-auto px-4 md:px-8">
-            <div className="relative mb-10 overflow-hidden rounded-[2rem] bg-alphabag-black/50 border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.4)]">
-                <div className="absolute inset-0 bg-gradient-to-br from-alphabag-yellow/10 via-transparent to-transparent blur-3xl pointer-events-none"></div>
-                <div className="relative p-8 md:p-10">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-4">
-                        <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <div className="p-2 bg-alphabag-yellow/10 rounded-lg border border-alphabag-yellow/20">
-                                    <CalculatorIcon className="text-alphabag-yellow" size={20} />
-                                </div>
-                                <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter uppercase relative">
-                                    Alpha <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Calculator</span>
-                                </h1>
-                            </div>
-                            <p className="text-alphabag-subtext text-xs font-bold uppercase tracking-widest pl-1">
-                                Precise trade modeling • futures, spot, degen, and risk tools
-                            </p>
+        <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+                <div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                            <CalculatorIcon size={20} />
                         </div>
-                        <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/20 px-4 py-2 rounded-xl flex items-center gap-2 shadow-glow-yellow/5">
-                            <span className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.2em] relative top-px">Premium Analytics</span>
-                        </div>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Alpha Calculator</h1>
                     </div>
-
+                    <p className="text-[#848e9c] text-sm font-medium">Futures, spot, degen, impermanent loss and conversion tools</p>
+                </div>
+                <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider">
+                    Premium Analytics
                 </div>
             </div>
 
-            <div className="glass-panel p-2 rounded-2xl w-full mb-6 border-white/10 overflow-hidden">
-                <div className="flex gap-2 px-1 py-1">
-                    {[
-                        { id: 'LEVERAGE', label: 'Leverage' },
-                        { id: 'SPOT', label: 'Spot' },
-                        { id: 'DEGEN', label: 'Degen' },
-                        { id: 'IL', label: 'IL Risk' },
-                        { id: 'CONVERTER', label: 'Converter' }
-                    ].map((t: any) => (
-                        <button
-                            key={t.id}
-                            onClick={() => setMode(t.id)}
-                            className={`flex-1 py-4 rounded-xl text-[11px] font-black uppercase tracking-[0.18em] transition-all duration-200 whitespace-nowrap ${
-                                mode === t.id
-                                    ? 'bg-alphabag-yellow text-alphabag-black shadow-[0_0_20px_rgba(252,213,53,0.35)] scale-[1.02]'
-                                    : 'bg-black/30 border border-white/[0.06] text-alphabag-subtext hover:text-white hover:bg-white/[0.06] hover:border-white/10'
-                            }`}
-                        >
-                            {t.label}
-                        </button>
-                    ))}
-                </div>
+            {/* Tab Bar */}
+            <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-1 flex gap-1">
+                {[
+                    { id: 'LEVERAGE', label: 'Leverage' },
+                    { id: 'SPOT', label: 'Spot' },
+                    { id: 'DEGEN', label: 'Degen' },
+                    { id: 'IL', label: 'IL Risk' },
+                    { id: 'CONVERTER', label: 'Converter' }
+                ].map((t: any) => (
+                    <button
+                        key={t.id}
+                        onClick={() => setMode(t.id)}
+                        className={`flex-1 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
+                            mode === t.id
+                                ? 'bg-[#fcd535] text-[#181a20]'
+                                : 'text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139]'
+                        }`}
+                    >
+                        {t.label}
+                    </button>
+                ))}
             </div>
 
 
