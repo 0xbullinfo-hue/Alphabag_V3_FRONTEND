@@ -537,12 +537,12 @@ export const Airdrop: React.FC = () => {
                                     {campaignEnded ? (
                                         (bagBalance + (itemsBalance * (itemsToBagRate || 0))).toLocaleString()
                                     ) : (
-                                        <div className="group relative w-fit flex justify-center items-center cursor-help">
-                                            <span className="text-[#848e9c] text-2xl">
+                                        <div className="relative w-fit mx-auto flex justify-center items-center select-none">
+                                            <span className="text-[#848e9c] text-2xl blur-[5px] opacity-40">
                                                 {(bagBalance + (itemsBalance * (itemsToBagRate || 1))).toLocaleString()}
                                             </span>
-                                            <div className="absolute inset-0 flex items-center justify-center font-semibold text-[#fcd535] text-[10px] uppercase bg-[#181a20] rounded-md px-3 py-1 border border-[#2b3139] z-10 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                                                Unlocks at TGE
+                                            <div className="absolute inset-0 flex items-center justify-center font-black tracking-widest text-[#848e9c] text-xl z-10 pointer-events-none">
+                                                ???
                                             </div>
                                         </div>
                                     )}
