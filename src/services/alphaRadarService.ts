@@ -1,4 +1,5 @@
 import { Post } from '../types';
+import { api } from './api';
 
 /**
  * Alpha Radar Service
@@ -66,15 +67,9 @@ export class AlphaRadarService {
      */
     static async submitProject(projectData: any) {
         try {
-            const response = await fetch('/api/projects/manifesto', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('alphabag_token') || `wallet-auth:${localStorage.getItem('alphabag_wallet')}`}`
-                },
-                body: JSON.stringify(projectData)
-            });
-            return await response.json();
+            // Uses api.ts interceptor — JWT is attached automatically from sessionStorage
+            const response = await api.post('/api/projects/manifesto', projectData);
+            return response.data;
         } catch (error) {
             console.error("Project submission error:", error);
             return { success: false, error: "Network error" };
@@ -83,8 +78,8 @@ export class AlphaRadarService {
 
     static async getScreenerData() {
         try {
-            const response = await fetch('/api/projects/screener');
-            return await response.json();
+            const response = await api.get('/api/projects/screener');
+            return response.data;
         } catch (error) {
             console.error("Screener fetch error:", error);
             return [];
@@ -93,9 +88,8 @@ export class AlphaRadarService {
 
     static async getAllProjects() {
         try {
-            const response = await fetch('/api/projects');
-            if (!response.ok) return [];
-            return await response.json();
+            const response = await api.get('/api/projects');
+            return response.data;
         } catch (error) {
             console.error("All Projects fetch error:", error);
             return [];
@@ -104,9 +98,8 @@ export class AlphaRadarService {
 
     static async getProject(ownerId: string) {
         try {
-            const response = await fetch(`/api/projects/${ownerId}`);
-            if (!response.ok) return null;
-            return await response.json();
+            const response = await api.get(`/api/projects/${ownerId}`);
+            return response.data;
         } catch (error) {
             console.error("Project fetch error:", error);
             return null;

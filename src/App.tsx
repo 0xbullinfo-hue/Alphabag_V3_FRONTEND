@@ -12,6 +12,11 @@ import { AuthModal } from './components/AuthModal';
 import { UpgradeModal } from './components/UpgradeModal';
 import { AirdropOnboarding } from './components/AirdropOnboarding';
 
+// Teaser mode: when VITE_LAUNCH_MODE=teaser, show only the landing page.
+// All routes redirect to '/' and no backend is required.
+// Flip to full app: remove VITE_LAUNCH_MODE from Netlify env vars (or set to 'full').
+const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
+
 // Solana Imports
 import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -104,6 +109,21 @@ const AppContent = () => {
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const { isConnected } = useAccount();
 
+  // ── TEASER MODE: render only the landing page, block all other routes ──
+  if (IS_TEASER_MODE) {
+    return (
+      <>
+        <AirdropTracker />
+        <Suspense fallback={<GlobalLoader />}>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </>
+    );
+  }
+
   // Automatic SIWE Trigger after connection — but skip if already authenticated
   useEffect(() => {
     if (isConnected && !isAuthenticated && !isLoading) {
@@ -127,7 +147,7 @@ const AppContent = () => {
     const params = new URLSearchParams(window.location.search);
     const refCode = params.get('ref');
     if (refCode) {
-      console.log("[NETWORK] Storing referral code:", refCode);
+      console.log('[NETWORK] Storing referral code:', refCode);
       sessionStorage.setItem('alphabag_ref_code', refCode);
     }
 

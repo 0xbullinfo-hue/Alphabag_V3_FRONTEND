@@ -13,7 +13,9 @@ export default defineConfig(({ mode }) => {
       host: true,
       proxy: {
         '/api': {
-          target: env.VITE_API_URL || 'http://localhost:3003',
+          // VITE_API_BASE_URL is the single source of truth for the backend URL.
+          // In dev: falls back to localhost:3003. In prod: set to https://api.yourdomain.com
+          target: env.VITE_API_BASE_URL || 'http://localhost:3003',
           changeOrigin: true,
           secure: false,
         }

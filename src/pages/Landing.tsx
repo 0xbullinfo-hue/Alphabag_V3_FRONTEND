@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,20 +7,32 @@ import { useAuth } from '../context/AuthContext';
 import { Calculator } from '../pages/Calculator';
 import { Markets } from '../pages/Markets';
 
+// When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
+const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
+
 export const Landing: React.FC = () => {
   const { open } = useWeb3Modal();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
+  const [showTeaserToast, setShowTeaserToast] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    // Only redirect to app if NOT in teaser mode and user is authenticated
+    if (!IS_TEASER_MODE && isAuthenticated) {
       navigate('/airdrop');
     }
   }, [isAuthenticated, navigate]);
 
   const handleLaunchApp = () => {
+    if (IS_TEASER_MODE) {
+      // In teaser mode — show a "coming soon" notification instead of login
+      setShowTeaserToast(true);
+      setTimeout(() => setShowTeaserToast(false), 4000);
+      return;
+    }
     if (isAuthenticated) {
       navigate('/airdrop');
     } else {
@@ -41,6 +53,46 @@ export const Landing: React.FC = () => {
 
   return (
     <div className="bg-alphabag-black min-h-screen text-alphabag-text font-sans overflow-x-hidden selection:bg-alphabag-yellow selection:text-black">
+
+      {/* ── TEASER TOAST NOTIFICATION ── */}
+      <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
+        showTeaserToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+      }`}>
+        <div className="flex items-center gap-3 bg-alphabag-dark border border-alphabag-yellow/40 text-white px-5 py-3.5 rounded-xl shadow-[0_0_40px_rgba(252,213,53,0.2)] backdrop-blur-xl">
+          <BellRing size={16} className="text-alphabag-yellow animate-bounce" />
+          <span className="text-sm font-bold">Testnet is launching soon — <span className="text-alphabag-yellow">stay tuned on Telegram & X.</span></span>
+          <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-white">
+            <X size={14} />
+          </button>
+        </div>
+      </div>
+
+      {/* ── ANNOUNCEMENT BANNER ── */}
+      {IS_TEASER_MODE && !bannerDismissed && (
+        <div className="w-full bg-gradient-to-r from-alphabag-yellow/10 via-alphabag-yellow/20 to-alphabag-yellow/10 border-b border-alphabag-yellow/20 py-2.5 px-4 flex items-center justify-center gap-3 relative">
+          <span className="flex h-2 w-2 relative shrink-0">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-yellow opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
+          </span>
+          <p className="text-xs font-bold text-white uppercase tracking-widest text-center">
+            Testnet Launching Soon &mdash; Join our community for early access
+          </p>
+          <div className="flex items-center gap-3 shrink-0">
+            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-alphabag-yellow text-[10px] font-black uppercase tracking-widest hover:underline">
+              <Send size={11} /> Telegram <ChevronRight size={11} />
+            </a>
+            <a href="https://x.com/alphabagpro" target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-alphabag-yellow text-[10px] font-black uppercase tracking-widest hover:underline">
+              <X size={11} /> Follow <ChevronRight size={11} />
+            </a>
+          </div>
+          <button onClick={() => setBannerDismissed(true)} className="absolute right-4 top-1/2 -translate-y-1/2 text-alphabag-subtext hover:text-white">
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5 shadow-glass">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -56,7 +108,7 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('home')} className={`transition-colors uppercase ${activeTab === 'home' ? 'text-white' : 'hover:text-white'}`}>Home</button>
             <button onClick={() => handleNavClick('features')} className={`transition-colors uppercase ${activeTab === 'features' ? 'text-white' : 'hover:text-white'}`}>Features</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors uppercase ${activeTab === 'tokenomics' ? 'text-white' : 'hover:text-white'}`}>Tokenomics</button>
-            <button onClick={() => handleNavClick('buy')} className={`transition-colors uppercase ${activeTab === 'buy' ? 'text-white' : 'hover:text-white'}`}>Buy</button>
+            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors uppercase ${activeTab === 'buy' ? 'text-white' : 'hover:text-white'}`}>Buy</button>}
             <button onClick={() => handleNavClick('roadmap')} className={`transition-colors uppercase ${activeTab === 'roadmap' ? 'text-white' : 'hover:text-white'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('calculator')} className={`transition-colors uppercase ${activeTab === 'calculator' ? 'text-white' : 'hover:text-white'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`transition-colors uppercase ${activeTab === 'faq' ? 'text-white' : 'hover:text-white'}`}>FAQ</button>
@@ -88,7 +140,7 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'home' ? 'text-white' : 'text-alphabag-subtext'}`}>Home</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'features' ? 'text-white' : 'text-alphabag-subtext'}`}>Features</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'tokenomics' ? 'text-white' : 'text-alphabag-subtext'}`}>Tokenomics</button>
-            <button onClick={() => handleNavClick('buy')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'buy' ? 'text-white' : 'text-alphabag-subtext'}`}>Buy</button>
+            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'buy' ? 'text-white' : 'text-alphabag-subtext'}`}>Buy</button>}
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'roadmap' ? 'text-white' : 'text-alphabag-subtext'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'calculator' ? 'text-white' : 'text-alphabag-subtext'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'faq' ? 'text-white' : 'text-alphabag-subtext'}`}>FAQ</button>
@@ -112,7 +164,9 @@ export const Landing: React.FC = () => {
                 <span className="flex h-2 w-2 relative">
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-green"></span>
                 </span>
-                <span className="text-xs font-semibold text-alphabag-subtext uppercase tracking-wider">v1.0 Testnet</span>
+                <span className="text-xs font-semibold text-alphabag-subtext uppercase tracking-wider">
+                  {IS_TEASER_MODE ? 'Testnet Coming Soon' : 'v1.0 Testnet'}
+                </span>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-500 leading-tight">
@@ -124,12 +178,27 @@ export const Landing: React.FC = () => {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
-                <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
-                  {isAuthenticated ? 'Open Hub' : 'Start Tracking Free'}
-                </Button>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all" onClick={handleViewMarkets}>
-                  Explore Markets
-                </Button>
+                {IS_TEASER_MODE ? (
+                  <>
+                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
+                      Notify Me at Launch
+                    </Button>
+                    <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
+                        <Send size={16} /> Join Telegram
+                      </Button>
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
+                      {isAuthenticated ? 'Open Hub' : 'Start Tracking Free'}
+                    </Button>
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all" onClick={handleViewMarkets}>
+                      Explore Markets
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Stats Section */}

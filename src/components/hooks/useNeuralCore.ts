@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { API_BASE_URL } from '../../services/api';
 
 export interface ChatMessage {
     role: 'user' | 'ai';
@@ -35,10 +36,15 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
         setMessages((prev) => [...prev, { role: 'ai', content: '' }]);
 
         try {
-            const baseUrl = import.meta.env.VITE_API_URL || '';
-            const response = await fetch(`${baseUrl}/api/neural-core`, {
+            // API_BASE_URL is the single source of truth (VITE_API_BASE_URL env var)
+            // fetch is used instead of axios here to support ReadableStream responses
+            const token = sessionStorage.getItem('alphabag_token');
+            const response = await fetch(`${API_BASE_URL}/api/neural-core`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify({ prompt: userMessage.content }),
             });
 
