@@ -121,9 +121,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         <div className="p-8 relative z-10">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-alphabag-yellow to-yellow-600 text-black flex items-center justify-center rounded-xl shadow-[0_0_20px_rgba(252,213,53,0.3)] transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                <Briefcase size={22} fill="currentColor" strokeWidth={2.5} />
-              </div>
+              <img src="/logo.png" alt="AlphaBAG Logo" className="w-10 h-10 object-contain rounded-xl shadow-[0_0_20px_rgba(252,213,53,0.3)] transform rotate-3 hover:rotate-0 transition-transform duration-300" />
               <div>
                 <h2 className="text-xl font-black text-white tracking-tighter uppercase leading-none">
                   Alpha<span className="text-alphabag-yellow">BAG</span>
