@@ -14,7 +14,6 @@ import { AdminNews } from '../components/admin/AdminNews';
 import { AdminSignals } from '../components/admin/AdminSignals';
 import { AdminSystem } from '../components/admin/AdminSystem';
 import { AdminAirdrop } from '../components/admin/AdminAirdrop';
-import { AdminT2E } from '../components/admin/AdminT2E';
 import { AdminWhales } from '../components/admin/AdminWhales';
 
 export const Admin: React.FC = () => {
@@ -69,9 +68,8 @@ export const Admin: React.FC = () => {
             case 'signals':
                 return <AdminSignals />;
             case 'airdrop':
-                return <AdminAirdrop />;
             case 't2e':
-                return <AdminT2E />;
+                return <AdminAirdrop />;
             case 'whales':
                 return <AdminWhales />;
             case 'system':

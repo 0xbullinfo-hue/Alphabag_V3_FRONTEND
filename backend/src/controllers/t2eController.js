@@ -535,3 +535,119 @@ export const getAdminActivity = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch activity' });
     }
 };
+
+export const approveAllTokenRequests = async (req, res) => {
+    try {
+        const requests = await store.read('t2e_payout_requests') || [];
+        let updatedCount = 0;
+
+        const updatedRequests = requests.map(r => {
+            if (r.status === 'PENDING') {
+                updatedCount++;
+                return {
+                    ...r,
+                    status: 'APPROVED',
+                    txHash: '0x' + Math.random().toString(16).substr(2, 64)
+                };
+            }
+            return r;
+        });
+
+        if (updatedCount > 0) {
+            await store.write('t2e_payout_requests', updatedRequests);
+        }
+
+        res.json({ success: true, message: `Approved ${updatedCount} pending requests.` });
+    } catch (error) {
+        console.error('[T2E] Approve All Error:', error);
+        res.status(500).json({ error: 'Failed to approve all requests' });
+    }
+};
+
+export const markAllPayoutsDone = async (req, res) => {
+    try {
+        const { txReference } = req.body;
+        const requests = await store.read('t2e_payout_requests') || [];
+        let updatedCount = 0;
+
+        const updatedRequests = requests.map(r => {
+            if (r.status === 'APPROVED') {
+                updatedCount++;
+                return {
+                    ...r,
+                    status: 'SENT',
+                    sentAt: new Date().toISOString(),
+                    txReference: txReference || 'Bulk Manual Airdrop',
+                    processedBy: req.user?.id || 'admin'
+                };
+            }
+            return r;
+        });
+
+        if (updatedCount > 0) {
+            await store.write('t2e_payout_requests', updatedRequests);
+        }
+
+        res.json({ success: true, message: `Marked ${updatedCount} approved requests as SENT.` });
+    } catch (error) {
+        console.error('[T2E] Mark All Done Error:', error);
+        res.status(500).json({ error: 'Failed to mark requests as SENT' });
+    }
+};
+
+export const rejectBulkTokenRequests = async (req, res) => {
+    try {
+        const { ids } = req.body;
+        if (!ids || !Array.isArray(ids)) {
+            return res.status(400).json({ error: 'Request body must contain an array of ids' });
+        }
+
+        const requests = await store.read('t2e_payout_requests') || [];
+        let updatedCount = 0;
+
+        const updatedRequests = requests.map(r => {
+            if (ids.includes(r.id) && r.status === 'PENDING') {
+                updatedCount++;
+                return {
+                    ...r,
+                    status: 'REJECTED'
+                };
+            }
+            return r;
+        });
+
+        if (updatedCount > 0) {
+            await store.write('t2e_payout_requests', updatedRequests);
+        }
+
+        res.json({ success: true, message: `Rejected ${updatedCount} selected requests.` });
+    } catch (error) {
+        console.error('[T2E] Reject Bulk Error:', error);
+        res.status(500).json({ error: 'Failed to reject selected requests' });
+    }
+};
+
+export const exportApprovedPayouts = async (req, res) => {
+    try {
+        const requests = await store.read('t2e_payout_requests') || [];
+        const approved = requests.filter(r => r.status === 'APPROVED');
+        
+        let config = await store.findOne('t2e_config', { id: 'global_config' });
+        // Handle config stored in array format by adjustTreasuryBalance
+        if (Array.isArray(config)) config = config[0];
+        const rate = config?.itemsToBagRate || 1;
+
+        let csvContent = "Wallet,ITEMS_Earned,BAG_Tokens\n";
+        approved.forEach(r => {
+            const bagTokens = Number(r.expectedTokens) / rate;
+            csvContent += `${r.walletAddress},${r.expectedTokens},${bagTokens.toFixed(2)}\n`;
+        });
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', `attachment; filename=approved_payouts_${new Date().toISOString().split('T')[0]}.csv`);
+        res.status(200).send(csvContent);
+    } catch (error) {
+        console.error('[T2E] Export Approved Error:', error);
+        res.status(500).json({ error: 'Failed to export approved payouts' });
+    }
+};

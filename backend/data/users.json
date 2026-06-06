@@ -16,14 +16,14 @@
     "id": "0xdaf603fb0a7ff6b23e6beab22a9e53225b6bb23a",
     "email": "0xDAf6...b23a",
     "verifiedWallet": "0xDAf603fb0a7ff6B23e6beAB22A9E53225b6Bb23a",
-    "items": 0,
+    "items": 100,
     "bagTokens": 5000,
     "referralCode": "L54W7J",
     "referredBy": null,
     "referralCount": 0,
     "tier": "ULTIMATE",
     "isAdmin": false,
-    "lastActive": "2026-06-04T13:18:29.236Z",
+    "lastActive": "2026-06-06T20:23:25.161Z",
     "createdAt": "2026-05-10T09:58:10.238Z",
     "airdropSubmitted": true,
     "submittedWallet": "tyutyuty",
@@ -39,8 +39,8 @@
     "projectGoals": null,
     "founderSocial": null,
     "airdropSubmittedAt": "2026-05-10T14:55:27.989Z",
-    "lifetimeEarned": 200,
-    "lastDailyTaskAt": "2026-06-04T06:44:43.286Z"
+    "lifetimeEarned": 300,
+    "lastDailyTaskAt": "2026-06-06T20:15:19.587Z"
   },
   {
     "email": "testuser999@test.com",

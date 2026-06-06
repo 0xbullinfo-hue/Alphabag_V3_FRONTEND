@@ -4,7 +4,8 @@ import {
     getActivityFeed, streamActivity, getLeaderboard, claimMission,
     requestBagPayout, updatePreferredWallet,
     adjustTreasuryBalance, getAdminMissions, upsertMission, deleteMission,
-    getAdminTokenRequests, approveTokenRequest, markPayoutDone, getAdminActivity
+    getAdminTokenRequests, approveTokenRequest, markPayoutDone, getAdminActivity,
+    approveAllTokenRequests, markAllPayoutsDone, rejectBulkTokenRequests, exportApprovedPayouts
 } from '../controllers/t2eController.js';
 import { verifyToken, verifyAdmin, optionalAuth } from '../middleware/authMiddleware.js';
 const router = express.Router();
@@ -28,6 +29,10 @@ router.get('/admin/missions',        verifyToken, verifyAdmin, getAdminMissions)
 router.post('/admin/missions',       verifyToken, verifyAdmin, upsertMission);
 router.delete('/admin/missions/:id', verifyToken, verifyAdmin, deleteMission);
 router.get('/admin/token-requests',   verifyToken, verifyAdmin, getAdminTokenRequests);
+router.post('/admin/token-requests/approve-all', verifyToken, verifyAdmin, approveAllTokenRequests);
+router.post('/admin/token-requests/mark-all-done', verifyToken, verifyAdmin, markAllPayoutsDone);
+router.post('/admin/token-requests/reject-bulk', verifyToken, verifyAdmin, rejectBulkTokenRequests);
+router.get('/admin/token-requests/export-approved', verifyToken, verifyAdmin, exportApprovedPayouts);
 router.post('/admin/token-requests/:id/approve', verifyToken, verifyAdmin, approveTokenRequest);
 router.post('/admin/token-requests/:id/mark-done', verifyToken, verifyAdmin, markPayoutDone);
 router.get('/admin/activity',         verifyToken, verifyAdmin, getAdminActivity);

@@ -225,7 +225,7 @@ export const submitWallet = async (req, res) => {
         const { 
             bscWallet, xLink, reviewComment, isFounderRequest,
             projectName, projectTicker, projectManifesto, projectSocial, projectWebsite,
-            projectContract, projectGoals, founderSocial
+            projectContract, projectGoals, founderSocial, projectLogo, projectBanner
         } = req.body;
         
         if (!req.user || !req.user.id) return res.status(401).json({ error: 'Unauthorized' });
@@ -273,6 +273,8 @@ export const submitWallet = async (req, res) => {
                 projectContract: founderApproved ? projectContract : null,
                 projectGoals: founderApproved ? projectGoals : null,
                 founderSocial: founderApproved ? founderSocial : null,
+                projectLogo: founderApproved ? projectLogo : null,
+                projectBanner: founderApproved ? projectBanner : null,
                 airdropSubmittedAt: new Date().toISOString(),
                 bagTokens: (user.bagTokens || 0) + 5000 // Reserved allocation (Reserve ITEMS)
             };
@@ -763,6 +765,10 @@ export const updateTgeDate = async (req, res) => {
 export const exportMissionData = async (req, res) => {
     try {
         const users = await store.read('users');
+        let config = await store.findOne('t2e_config', { id: 'global_config' });
+        if (Array.isArray(config)) config = config[0];
+        const rate = config?.itemsToBagRate || 1;
+
         const snapshot = users
             .filter(u => u.bagTokens || u.submittedWallet)
             .map(u => ({
@@ -771,14 +777,16 @@ export const exportMissionData = async (req, res) => {
                 username: u.username || '',
                 wallet: u.submittedWallet || 'NOT_SET',
                 totalXP: u.bagTokens || 0,
+                convertedBAG: Number((u.bagTokens || 0) / rate).toFixed(2),
                 referralCount: u.referralCount || 0,
                 dailyStreak: u.lastDailyTaskAt || null,
                 completedTasks: (u.completedTasks || []).join(';'),
                 submittedAt: u.airdropSubmittedAt || null,
-                isFounder: u.isFounderAirdrop || false
+                isFounder: u.isFounderAirdrop || false,
+                feedback: u.reviewComment || ''
             }));
 
-        const headers = ['id','email','username','wallet','totalXP','referralCount','dailyStreak','completedTasks','submittedAt','isFounder'];
+        const headers = ['id','email','username','wallet','totalXP','convertedBAG','referralCount','dailyStreak','completedTasks','submittedAt','isFounder', 'feedback'];
         const csv = [
             headers.join(','),
             ...snapshot.map(row => headers.map(h => JSON.stringify(row[h] ?? '')).join(','))

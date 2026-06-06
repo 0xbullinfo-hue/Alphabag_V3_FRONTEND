@@ -60,6 +60,8 @@ export const Airdrop: React.FC = () => {
     const [projectContract, setProjectContract] = useState('');
     const [projectGoals, setProjectGoals] = useState('');
     const [founderSocial, setFounderSocial] = useState('');
+    const [projectLogo, setProjectLogo] = useState('');
+    const [projectBanner, setProjectBanner] = useState('');
 
 
     // Live countdown interval for daily/weekly missions
@@ -304,6 +306,8 @@ export const Airdrop: React.FC = () => {
                 projectContract,
                 projectGoals,
                 founderSocial,
+                projectLogo,
+                projectBanner,
                 grantReward: true // Triggers +5000 ITEMS +10000 bagTokens
             });
 
@@ -461,20 +465,28 @@ export const Airdrop: React.FC = () => {
                         <div className="flex gap-3 h-10">
                             {campaignEnded ? (
                                 <>
-                                    <button onClick={handleConvertItems} className="flex-1 bg-[#fcd535] text-[#181a20] px-4 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] active:scale-[0.98] transition-all h-full">
-                                        CONVERT
-                                    </button>
-                                    {bagBalance > 0 && (
+                                    {itemsBalance > 0 ? (
+                                        <button 
+                                            onClick={handleConvertItems} 
+                                            className="w-full bg-[#fcd535] text-[#181a20] px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#e0bd2e] active:scale-[0.98] transition-all h-full"
+                                        >
+                                            Convert Items to $BAG
+                                        </button>
+                                    ) : bagBalance > 0 && !payoutRequest ? (
                                         <button
                                             onClick={handleRequestPayout}
-                                            className="flex-1 bg-[#2b3139] text-[#eaecef] px-4 rounded-md text-xs font-semibold hover:bg-[#474d57] active:scale-[0.98] transition-all h-full"
+                                            className="w-full bg-[#0ecb81] text-[#181a20] px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#0cba76] active:scale-[0.98] transition-all h-full"
                                         >
-                                            WITHDRAWAL
+                                            Request Withdrawal
                                         </button>
+                                    ) : (
+                                        <div className="w-full bg-[#2b3139]/40 border border-[#2b3139] text-[#848e9c] rounded-md flex items-center justify-center text-[10px] font-bold uppercase tracking-wider h-full">
+                                            Campaign Completed
+                                        </div>
                                     )}
                                 </>
                             ) : (
-                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-[#848e9c] font-semibold uppercase h-full">
+                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider h-full">
                                     Locked until campaign end
                                 </div>
                             )}
@@ -512,13 +524,13 @@ export const Airdrop: React.FC = () => {
                                     {campaignEnded ? "Final Allocation" : "Final Allocation"}
                                 </div>
                                 <div className="text-center font-semibold transition-all duration-700 py-1 text-2xl text-[#eaecef] relative flex justify-center">
-                                    {campaignEnded ? (
-                                        <span className="text-3xl text-[#fcd535]">{(bagBalance + (itemsBalance * (itemsToBagRate || 0))).toLocaleString()} <span className="text-base">$BAG</span></span>
+                                    {campaignEnded && itemsBalance === 0 ? (
+                                        <span className="text-3xl text-[#fcd535]">{bagBalance.toLocaleString()} <span className="text-base">$BAG</span></span>
                                     ) : (
                                         <div className="relative w-fit mx-auto flex justify-center items-center select-none">
                                             <span className="text-[#848e9c] text-2xl blur-[5px] opacity-40 select-none">00000</span>
-                                            <div className="absolute inset-0 flex items-center justify-center font-black tracking-widest text-[#848e9c] text-lg z-10 pointer-events-none">
-                                                <Lock size={12} className="mr-1" /> LOCKED
+                                            <div className="absolute inset-0 flex items-center justify-center font-black tracking-widest text-[#848e9c] text-xs z-10 pointer-events-none whitespace-nowrap">
+                                                <Lock size={12} className="mr-1 shrink-0" /> {campaignEnded ? 'CONVERT TO REVEAL' : 'LOCKED'}
                                             </div>
                                         </div>
                                     )}
@@ -1079,6 +1091,16 @@ export const Airdrop: React.FC = () => {
                                 <div className="space-y-1">
                                 <label className="text-xs text-[#848e9c] font-semibold">Official Website</label>
                                 <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project Logo URL</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectLogo} onChange={e => setProjectLogo(e.target.value)} />
+                                </div>
+                                <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">Project Banner URL</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectBanner} onChange={e => setProjectBanner(e.target.value)} />
                                 </div>
                             </div>
                             

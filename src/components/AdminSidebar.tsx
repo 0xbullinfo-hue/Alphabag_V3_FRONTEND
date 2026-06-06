@@ -71,8 +71,7 @@ export const AdminSidebar: React.FC = () => {
                     </div>
                     <NavItem to="/admin?view=news" icon={Newspaper} label="Newsroom" active={currentView === 'news'} />
                     <NavItem to="/admin?view=signals" icon={Radio} label="Alpha Signals" active={currentView === 'signals'} />
-                    <NavItem to="/admin?view=airdrop" icon={Zap} label="Network Hub" active={currentView === 'airdrop'} />
-                    <NavItem to="/admin?view=t2e" icon={TrendingUp} label="Earn Protocols" active={currentView === 't2e'} />
+                    <NavItem to="/admin?view=airdrop" icon={Zap} label="Campaign & Missions" active={currentView === 'airdrop'} />
 
                     <div className="px-6 mb-2 mt-6 text-[10px] font-black text-alphabag-subtext uppercase tracking-widest opacity-50">
                         System

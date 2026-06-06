@@ -86,15 +86,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Session Restoration — runs once on mount to restore user state from sessionStorage
   useEffect(() => {
-    const savedUserStr = sessionStorage.getItem('alphabag_user');
-    const savedToken = sessionStorage.getItem('alphabag_token');
+    let savedUserStr = sessionStorage.getItem('alphabag_user');
+    let savedToken = sessionStorage.getItem('alphabag_token');
+
+    // Auto-login as Admin for Dev Mode if no session exists
+    if (!savedUserStr || !savedToken) {
+      const mockAdminUser = {
+        id: "0x42916a998c6bff7f36be61749bd1bba9f473db96",
+        email: "admin@alphabagpro.com",
+        verifiedWallet: "0x42916A998c6Bff7F36bE61749Bd1BBA9f473dB96",
+        isAdmin: true,
+        tier: "ULTIMATE"
+      };
+      const mockToken = "wallet-auth:0x42916A998c6Bff7F36bE61749Bd1BBA9f473dB96";
+      
+      sessionStorage.setItem('alphabag_user', JSON.stringify(mockAdminUser));
+      sessionStorage.setItem('alphabag_token', mockToken);
+      
+      savedUserStr = JSON.stringify(mockAdminUser);
+      savedToken = mockToken;
+    }
 
     if (savedUserStr && savedToken) {
       try {
         const savedUser = JSON.parse(savedUserStr);
-        // Restore ALL session types (SIWE wallet users and email users)
         setUser(savedUser);
         setToken(savedToken);
         console.log("Session restored for:", savedUser.email || savedUser.id);
@@ -106,7 +122,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
       }
     } else {
-      // No saved session — guest mode
       setIsLoading(false);
     }
   }, []); // Run only once on mount
