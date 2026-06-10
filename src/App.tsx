@@ -3,14 +3,14 @@ import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-d
 import { WagmiConfig, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from './lib/wagmi';
-import { Layout } from './components/Layout';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { Layout } from './components/frontend/Layout';
+import { ErrorBoundary } from './components/frontend/ErrorBoundary';
 import { WalletProvider } from './context/WalletContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { recordVisitor } from './services/mockData';
-import { AuthModal } from './components/AuthModal';
-import { UpgradeModal } from './components/UpgradeModal';
-import { AirdropOnboarding } from './components/AirdropOnboarding';
+import { AuthModal } from './components/frontend/AuthModal';
+import { UpgradeModal } from './components/frontend/UpgradeModal';
+import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
 
 // Solana Imports
 import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react';
@@ -26,33 +26,33 @@ const queryClient = new QueryClient();
 
 // Lazy pages
 
-const CexBag = lazy(() => import('./pages/CexBag').then(m => ({ default: m.CexBag })));
-const DexBag = lazy(() => import('./pages/DexBag').then(m => ({ default: m.DexBag })));
-const Calculator = lazy(() => import('./pages/Calculator').then(m => ({ default: m.Calculator })));
-const AlphasFeed = lazy(() => import('./pages/AlphasFeed').then(m => ({ default: m.AlphasFeed })));
-const AdminProjectDashboard = lazy(() => import('./pages/AdminProjectDashboard').then(m => ({ default: m.AdminProjectDashboard })));
+const CexBag = lazy(() => import('./pages/frontend/CexBag').then(m => ({ default: m.CexBag })));
+const DexBag = lazy(() => import('./pages/frontend/DexBag').then(m => ({ default: m.DexBag })));
+const Calculator = lazy(() => import('./pages/frontend/Calculator').then(m => ({ default: m.Calculator })));
+const AlphasFeed = lazy(() => import('./pages/frontend/AlphasFeed').then(m => ({ default: m.AlphasFeed })));
+const AdminProjectDashboard = lazy(() => import('./pages/admin/AdminProjectDashboard').then(m => ({ default: m.AdminProjectDashboard })));
 // LivePairs removed
 
-const Markets = lazy(() => import('./pages/Markets').then(m => ({ default: m.Markets })));
-const CoinDetail = lazy(() => import('./pages/CoinDetail').then(m => ({ default: m.CoinDetail })));
-const News = lazy(() => import('./pages/News').then(m => ({ default: m.News })));
-const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })));
-const DeFi = lazy(() => import('./pages/DeFi').then(m => ({ default: m.DeFi })));
-const Integrations = lazy(() => import('./pages/Integrations').then(m => ({ default: m.Integrations })));
-const AlphaAi = lazy(() => import('./pages/AlphaAi').then(m => ({ default: m.AlphaAi })));
-const AlphaCalls = lazy(() => import('./pages/AlphaCalls').then(m => ({ default: m.AlphaCalls })));
-const Landing = lazy(() => import('./pages/Landing').then(m => ({ default: m.Landing })));
-const Whales = lazy(() => import('./pages/Whales').then(m => ({ default: m.Whales })));
-const WhaleDetail = lazy(() => import('./pages/WhaleDetail').then(m => ({ default: m.WhaleDetail })));
-const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
-const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
-const History = lazy(() => import('./pages/History').then(m => ({ default: m.HistoryPage })));
-const GenesisLanding = lazy(() => import('./pages/GenesisLanding').then(m => ({ default: m.GenesisLanding })));
-const GenesisManifesto = lazy(() => import('./pages/GenesisManifesto').then(m => ({ default: m.GenesisManifesto })));
-const Profile = lazy(() => import('./pages/Profile').then(m => ({ default: m.Profile })));
-const Airdrop = lazy(() => import('./pages/Airdrop').then(m => ({ default: m.Airdrop })));
-const Portfolio = lazy(() => import('./pages/Portfolio').then(m => ({ default: m.Portfolio })));
-const AlphaScreener = lazy(() => import('./pages/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
+const Markets = lazy(() => import('./pages/frontend/Markets').then(m => ({ default: m.Markets })));
+const CoinDetail = lazy(() => import('./pages/frontend/CoinDetail').then(m => ({ default: m.CoinDetail })));
+const News = lazy(() => import('./pages/frontend/News').then(m => ({ default: m.News })));
+const Settings = lazy(() => import('./pages/frontend/Settings').then(m => ({ default: m.Settings })));
+const DeFi = lazy(() => import('./pages/frontend/DeFi').then(m => ({ default: m.DeFi })));
+const Integrations = lazy(() => import('./pages/frontend/Integrations').then(m => ({ default: m.Integrations })));
+const AlphaAi = lazy(() => import('./pages/frontend/AlphaAi').then(m => ({ default: m.AlphaAi })));
+const AlphaCalls = lazy(() => import('./pages/frontend/AlphaCalls').then(m => ({ default: m.AlphaCalls })));
+const Landing = lazy(() => import('./pages/frontend/Landing').then(m => ({ default: m.Landing })));
+const Whales = lazy(() => import('./pages/frontend/Whales').then(m => ({ default: m.Whales })));
+const WhaleDetail = lazy(() => import('./pages/frontend/WhaleDetail').then(m => ({ default: m.WhaleDetail })));
+const Admin = lazy(() => import('./pages/admin/Admin').then(m => ({ default: m.Admin })));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
+const History = lazy(() => import('./pages/frontend/History').then(m => ({ default: m.HistoryPage })));
+const GenesisLanding = lazy(() => import('./pages/frontend/GenesisLanding').then(m => ({ default: m.GenesisLanding })));
+const GenesisManifesto = lazy(() => import('./pages/frontend/GenesisManifesto').then(m => ({ default: m.GenesisManifesto })));
+const Profile = lazy(() => import('./pages/frontend/Profile').then(m => ({ default: m.Profile })));
+const Airdrop = lazy(() => import('./pages/frontend/Airdrop').then(m => ({ default: m.Airdrop })));
+const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ default: m.Portfolio })));
+const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
 
 const GlobalLoader = () => (
   <div className="min-h-screen bg-alphabag-black flex flex-col items-center justify-center space-y-6">
