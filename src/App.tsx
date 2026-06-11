@@ -30,7 +30,6 @@ const CexBag = lazy(() => import('./pages/frontend/CexBag').then(m => ({ default
 const DexBag = lazy(() => import('./pages/frontend/DexBag').then(m => ({ default: m.DexBag })));
 const Calculator = lazy(() => import('./pages/frontend/Calculator').then(m => ({ default: m.Calculator })));
 const AlphasFeed = lazy(() => import('./pages/frontend/AlphasFeed').then(m => ({ default: m.AlphasFeed })));
-const AdminProjectDashboard = lazy(() => import('./pages/admin/AdminProjectDashboard').then(m => ({ default: m.AdminProjectDashboard })));
 // LivePairs removed
 
 const Markets = lazy(() => import('./pages/frontend/Markets').then(m => ({ default: m.Markets })));
@@ -44,8 +43,6 @@ const AlphaCalls = lazy(() => import('./pages/frontend/AlphaCalls').then(m => ({
 const Landing = lazy(() => import('./pages/frontend/Landing').then(m => ({ default: m.Landing })));
 const Whales = lazy(() => import('./pages/frontend/Whales').then(m => ({ default: m.Whales })));
 const WhaleDetail = lazy(() => import('./pages/frontend/WhaleDetail').then(m => ({ default: m.WhaleDetail })));
-const Admin = lazy(() => import('./pages/admin/Admin').then(m => ({ default: m.Admin })));
-const AdminLogin = lazy(() => import('./pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
 const History = lazy(() => import('./pages/frontend/History').then(m => ({ default: m.HistoryPage })));
 const GenesisLanding = lazy(() => import('./pages/frontend/GenesisLanding').then(m => ({ default: m.GenesisLanding })));
 const GenesisManifesto = lazy(() => import('./pages/frontend/GenesisManifesto').then(m => ({ default: m.GenesisManifesto })));
@@ -61,27 +58,10 @@ const GlobalLoader = () => (
   </div>
 );
 
-// Fix: Correctly typing PrivateRoute props to include children using React.PropsWithChildren
 const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   if (isLoading) return <GlobalLoader />;
-
-  // STRICT ADMIN SEPARATION: Admins cannot access user routes
-  if (isAuthenticated && user?.isAdmin) {
-    return <Navigate to="/admin" replace />;
-  }
-
   return isAuthenticated ? <Layout>{children}</Layout> : <Navigate to="/" replace />;
-};
-
-// Fix: Correctly typing AdminRoute props to include children using React.PropsWithChildren
-const AdminRoute = ({ children }: React.PropsWithChildren<{}>) => {
-  const { user, isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return <GlobalLoader />;
-  if (!isAuthenticated || !user?.isAdmin) {
-    return <Navigate to="/" replace />;
-  }
-  return <>{children}</>;
 };
 
 const AirdropTracker = () => {
@@ -118,6 +98,7 @@ const AppContent = () => {
     }
   }, [isConnected, isAuthenticated, isLoading]);
 
+
   useEffect(() => {
     recordVisitor();
     const handleOpenAuth = () => setIsAuthModalOpen(true);
@@ -147,9 +128,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={
             isLoading ? <GlobalLoader /> :
-            isAuthenticated ? (
-              user?.isAdmin ? <Navigate to="/admin" replace /> : <Layout><Airdrop /></Layout>
-            ) : <Landing />
+            isAuthenticated ? <Layout><Airdrop /></Layout> : <Landing />
           } />
           <Route path="/genesis" element={<GenesisLanding />} />
           <Route path="/genesis-manifesto" element={<PrivateRoute><GenesisManifesto /></PrivateRoute>} />
@@ -170,12 +149,9 @@ const AppContent = () => {
           <Route path="/alpha-ai" element={<PrivateRoute><AlphaAi /></PrivateRoute>} />
           <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
           <Route path="/alphas-feed" element={<PrivateRoute><AlphasFeed /></PrivateRoute>} />
-          <Route path="/admin/projects" element={<AdminRoute><AdminProjectDashboard /></AdminRoute>} />
           // LivePairs route removed
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
-          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
-          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />

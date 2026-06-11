@@ -114,12 +114,6 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
           </NavGroup>
 
 
-          {user?.isAdmin && (
-            <NavGroup title="Management">
-              <NavItem to="/admin" icon={ShieldCheck} label="Admin Command Center" active={location.pathname === '/admin'} />
-              <NavItem to="/admin/projects" icon={Zap} label="Project Ads" active={location.pathname === '/admin/projects'} />
-            </NavGroup>
-          )}
         </div>
 
         <div className="px-4">

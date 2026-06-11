@@ -2,7 +2,9 @@ import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { mainnet, bsc, polygon, arbitrum, base, avalanche } from 'wagmi/chains';
 
 // 1. Get projectId & Alchemy ID
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || '';
+// Web3Modal requires a valid 32-character hex string for projectId.
+// We provide a fallback dummy hex string to prevent fatal constructor errors if undefined.
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || '3fcc6bba31d50731f8f7c9e05e5d3b1e';
 const alchemyId = import.meta.env.VITE_ALCHEMY_API_KEY || '';
 
 // 2. Create wagmiConfig

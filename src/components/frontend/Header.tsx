@@ -176,15 +176,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                   </div>
 
 
-                  {user?.isAdmin && (
-                    <button
-                      onClick={() => { setShowUserMenu(false); navigate('/admin'); }}
-                      className="w-full text-left px-4 py-2.5 text-xs font-black text-alphabag-yellow hover:bg-alphabag-yellow/5 rounded-xl transition-all duration-200 active:scale-[0.98] flex items-center"
-                    >
-                      <ShieldCheck size={14} className="mr-2" /> Admin Core Panel
-                    </button>
-                  )}
-
                   <button
                     onClick={() => { setShowUserMenu(false); navigate('/profile'); }}
                     className="w-full text-left px-4 py-2.5 text-xs font-bold text-zinc-50 hover:bg-white/5 rounded-xl transition-all duration-200 active:scale-[0.98] flex items-center mb-1 group"
