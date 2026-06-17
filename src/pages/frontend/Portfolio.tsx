@@ -27,6 +27,7 @@ export const Portfolio: React.FC = () => {
     const filteredItems = hideSmallBalances
         ? portfolioItems.filter(item => item.value >= 1)
         : portfolioItems;
+    const hasVisibleAssets = filteredItems.length > 0;
 
     // Derived Metrics
     const totalValue = portfolioItems.reduce((acc, item) => acc + item.value, 0);
@@ -99,6 +100,7 @@ export const Portfolio: React.FC = () => {
                         </div>
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
                         <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
+                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live Sync</span>
                     </div>
 
                     <div className="flex items-baseline gap-4">
@@ -369,10 +371,23 @@ export const Portfolio: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-alphabag-gray text-sm font-medium">
-                                    {filteredItems.length === 0 && !isSyncing ? (
+                                    {!hasVisibleAssets && !isSyncing ? (
                                         <tr>
-                                            <td colSpan={7} className="py-10 text-center text-alphabag-subtext">
-                                                No assets found. Add a transaction or tracked wallet.
+                                            <td colSpan={8} className="py-16">
+                                                <div className="flex flex-col items-center justify-center text-center px-6">
+                                                    <div className="w-16 h-16 rounded-2xl bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center mb-4">
+                                                        <PieChartIcon size={24} />
+                                                    </div>
+                                                    <h4 className="text-base font-bold text-white uppercase tracking-wider">No assets detected</h4>
+                                                    <p className="text-sm text-alphabag-subtext mt-2 max-w-md">
+                                                        Add a tracked wallet or a manual transaction to start building your premium portfolio view.
+                                                    </p>
+                                                    <div className="mt-4 flex gap-3">
+                                                        <Button size="sm" onClick={handleManageConnections} className="px-5 py-2.5 font-semibold uppercase tracking-wider">
+                                                            Manage Wallets
+                                                        </Button>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     ) : (
