@@ -185,9 +185,21 @@ export const Landing: React.FC = () => {
                 Track Your Crypto <span className="text-transparent bg-clip-text bg-gradient-to-b from-alphabag-yellow to-[#B45309]">Total Stealth</span>
               </h1>
 
-              <p className="text-lg md:text-xl text-alphabag-subtext max-w-2xl mx-auto mb-10 leading-relaxed font-normal animate-fade-in-up delay-100">
+              <p className="text-lg md:text-xl text-alphabag-subtext max-w-2xl mx-auto mb-6 leading-relaxed font-normal animate-fade-in-up delay-100">
                 Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn.
               </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 animate-fade-in-up delay-150">
+                {[
+                  'Real-time market pulse',
+                  'Multi-chain coverage',
+                  'Institutional-grade insights'
+                ].map((item) => (
+                  <span key={item} className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-alphabag-subtext">
+                    {item}
+                  </span>
+                ))}
+              </div>
 
               <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
                 {IS_TEASER_MODE ? (
