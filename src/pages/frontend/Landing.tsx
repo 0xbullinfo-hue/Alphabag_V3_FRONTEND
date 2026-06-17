@@ -40,6 +40,20 @@ export const Landing: React.FC = () => {
     }
   };
 
+  const handleDemoLogin = () => {
+    sessionStorage.setItem('alphabag_token', 'mock_dev_token_2026');
+    sessionStorage.setItem('alphabag_user', JSON.stringify({
+      id: 'mock-user-id',
+      email: 'alpha_tester@alphabag.pro',
+      tier: 'ULTIMATE',
+      alphaAiUsageSeconds: 0,
+      lastAlphaAiReset: new Date().toISOString(),
+      isAdmin: true,
+      onboardingComplete: true
+    }));
+    window.location.reload();
+  };
+
   const handleViewMarkets = () => {
     setActiveTab('markets');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -115,13 +129,13 @@ export const Landing: React.FC = () => {
              */}
 
             {/* Fallback Login Button for Debugging */}
-            {!isAuthenticated && (window as any).wagmiAddress ? (
-              <Button size="sm" onClick={() => window.location.reload()} className="uppercase font-bold px-6 bg-green-500 text-black animate-pulse">
-                Complete Login
+            {!isAuthenticated ? (
+              <Button size="sm" onClick={handleDemoLogin} className="uppercase font-bold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
+                Demo Login
               </Button>
             ) : (
-              <Button size="sm" onClick={isAuthenticated ? handleLaunchApp : undefined} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
-                {isAuthenticated ? 'Open App' : 'Coming soon'}
+              <Button size="sm" onClick={handleLaunchApp} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
+                Open App
               </Button>
             )}
           </div>
@@ -189,8 +203,8 @@ export const Landing: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : undefined}>
-                      {isAuthenticated ? 'Open Hub' : 'Coming soon'}
+                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : handleDemoLogin}>
+                      {isAuthenticated ? 'Open Hub' : 'Enter Terminal (Demo)'}
                     </Button>
                     <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">

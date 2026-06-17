@@ -16,6 +16,19 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Temporary Service Worker cleanup for local dev conflicts
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        if (regs.length > 0) {
+          for (let r of regs) r.unregister();
+          localStorage.clear();
+          sessionStorage.clear();
+          caches.keys().then(keys => keys.forEach(key => caches.delete(key)));
+          setTimeout(() => window.location.reload(true), 500);
+        }
+      });
+    }
+
     // Global polyfills for Web3/AI SDKs - Non-destructive augmentation
     window.global = window;
     window.process = window.process || {};
