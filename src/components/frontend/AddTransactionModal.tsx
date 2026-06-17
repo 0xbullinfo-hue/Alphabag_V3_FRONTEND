@@ -19,8 +19,10 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [isPriceLive, setIsPriceLive] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const isCustomAsset = coin === 'Custom Asset (MANUAL)';
+  const isSubmitDisabled = !amount || !price || (isCustomAsset && (!customAssetName.trim() || !customAssetSymbol.trim()));
 
   // Simulate price tracking when coin changes
   useEffect(() => {
@@ -42,16 +44,23 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     }
   }, [coin, isCustomAsset]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setSubmitMessage('');
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!amount || !price) return;
+    if (isSubmitDisabled) {
+      setSubmitMessage('Please complete all required fields before saving.');
+      return;
+    }
 
     if (isCustomAsset) {
-      if (!customAssetName.trim() || !customAssetSymbol.trim()) return;
-
       onAdd({
         type,
         coin: customAssetName.trim(),
@@ -64,6 +73,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
       onAdd({ type, coin, price, amount, date });
     }
 
+    setSubmitMessage('');
     onClose();
   };
 
@@ -191,8 +201,14 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                 </div>
             </div>
 
+            {submitMessage && (
+              <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-3 py-2 text-xs text-alphabag-yellow">
+                {submitMessage}
+              </div>
+            )}
+
             <div className="pt-4">
-                <Button type="submit" className="w-full py-3 font-bold uppercase tracking-[0.1em]">Save Transaction</Button>
+                <Button type="submit" disabled={isSubmitDisabled} className="w-full py-3 font-bold uppercase tracking-[0.1em] disabled:opacity-50 disabled:cursor-not-allowed">Save Transaction</Button>
             </div>
         </form>
       </div>
