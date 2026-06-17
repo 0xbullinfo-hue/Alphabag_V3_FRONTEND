@@ -52,6 +52,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { disconnect } = useDisconnect();
   const { user, upgradeToUltimate } = useAuth();
 
+  const isWeb3ModalReady = typeof window !== 'undefined' && Boolean((window as any).__W3M__);
+
   const [isSyncing, setIsSyncing] = useState(false);
   const [isCheckingBalance, setIsCheckingBalance] = useState(false);
   const [tokenCheckError, setTokenCheckError] = useState<string | null>(null);
@@ -354,7 +356,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       whaleAlerts,
       toasts,
       tier,
-      connectWallet: () => open(),
+      connectWallet: () => {
+        if (isWeb3ModalReady) {
+          open();
+        } else {
+          console.warn('[WalletContext] Web3Modal not ready yet; skipping wallet connect.');
+        }
+      },
       connectManually,
       disconnectWallet: async () => {
         if (manualAddress) {

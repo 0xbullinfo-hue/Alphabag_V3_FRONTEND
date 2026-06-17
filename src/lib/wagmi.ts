@@ -4,8 +4,12 @@ import { mainnet, bsc, polygon, arbitrum, base, avalanche } from 'wagmi/chains';
 // 1. Get projectId & Alchemy ID
 // Web3Modal requires a valid 32-character hex string for projectId.
 // We provide a fallback dummy hex string to prevent fatal constructor errors if undefined.
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || '3fcc6bba31d50731f8f7c9e05e5d3b1e';
+const fallbackProjectId = '3fcc6bba31d50731f8f7c9e05e5d3b1e';
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || fallbackProjectId;
 const alchemyId = import.meta.env.VITE_ALCHEMY_API_KEY || '';
+const isLocalhost = typeof window !== 'undefined'
+  && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+const shouldEnableWalletConnect = !isLocalhost && Boolean(projectId && projectId !== fallbackProjectId);
 
 // 2. Create wagmiConfig
 const metadata = {
@@ -31,23 +35,27 @@ export const config = defaultWagmiConfig({
   chains,
   projectId,
   metadata,
-  enableWalletConnect: true,
+  enableWalletConnect: shouldEnableWalletConnect,
   enableInjected: true,
   enableEIP6963: true, // Enable EIP-6963 for better multi-wallet support
-  enableCoinbase: true 
+  enableCoinbase: !isLocalhost 
 });
 
-// 3. Create modal
-createWeb3Modal({
-  wagmiConfig: config,
-  projectId,
-  chains,
-  enableAnalytics: true,
-  themeMode: 'dark',
-  themeVariables: {
-    '--w3m-accent': '#FCD535',
-    '--w3m-border-radius-master': '1px'
-  }
-});
+// 3. Create modal once so all useWeb3Modal hooks can initialize safely.
+try {
+  createWeb3Modal({
+    wagmiConfig: config,
+    projectId,
+    chains,
+    enableAnalytics: false,
+    themeMode: 'dark',
+    themeVariables: {
+      '--w3m-accent': '#FCD535',
+      '--w3m-border-radius-master': '1px'
+    }
+  });
+} catch (error) {
+  console.warn('[Web3Modal] Initialization skipped:', error);
+}
 
-export { chains, projectId };
+export { chains, projectId, shouldEnableWalletConnect };
