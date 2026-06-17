@@ -157,7 +157,7 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'calculator' ? 'text-white' : 'text-alphabag-subtext'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'faq' ? 'text-white' : 'text-alphabag-subtext'}`}>FAQ</button>
             {/* <button onClick={() => scrollToSection('membership')} className="text-left py-2 font-semibold text-white uppercase tracking-widest">Pricing</button> */}
-            <Button size="lg" onClick={isAuthenticated ? handleLaunchApp : undefined} className="w-full uppercase font-semibold">{isAuthenticated ? 'Open App' : 'Coming soon'}</Button>
+            <Button size="lg" onClick={handleLaunchApp} className="w-full uppercase font-semibold">{isAuthenticated ? 'Open App' : 'Notify Me'}</Button>
           </div>
         )}
       </nav>

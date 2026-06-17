@@ -13,13 +13,23 @@ interface AddTransactionModalProps {
 export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onAdd }) => {
   const [type, setType] = useState<'BUY' | 'SELL' | 'TRANSFER'>('BUY');
   const [coin, setCoin] = useState('Bitcoin (BTC)');
+  const [customAssetName, setCustomAssetName] = useState('');
+  const [customAssetSymbol, setCustomAssetSymbol] = useState('');
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [isPriceLive, setIsPriceLive] = useState(false);
 
+  const isCustomAsset = coin === 'Custom Asset (MANUAL)';
+
   // Simulate price tracking when coin changes
   useEffect(() => {
+    if (isCustomAsset) {
+      setPrice('');
+      setIsPriceLive(false);
+      return;
+    }
+
     const symbolMatch = coin.match(/\(([^)]+)\)/);
     const symbol = symbolMatch ? symbolMatch[1] : '';
     const mock = MOCK_COINS.find(c => c.symbol.toLowerCase() === symbol.toLowerCase());
@@ -30,14 +40,30 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     } else {
         setIsPriceLive(false);
     }
-  }, [coin]);
+  }, [coin, isCustomAsset]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!amount || !price) return;
-    onAdd({ type, coin, price, amount, date });
+
+    if (isCustomAsset) {
+      if (!customAssetName.trim() || !customAssetSymbol.trim()) return;
+
+      onAdd({
+        type,
+        coin: customAssetName.trim(),
+        symbol: customAssetSymbol.trim().toUpperCase(),
+        price,
+        amount,
+        date
+      });
+    } else {
+      onAdd({ type, coin, price, amount, date });
+    }
+
     onClose();
   };
 
@@ -85,6 +111,31 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                     </select>
                 </div>
             </div>
+
+            {isCustomAsset && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Asset Name</label>
+                  <input
+                    type="text"
+                    value={customAssetName}
+                    onChange={(e) => setCustomAssetName(e.target.value)}
+                    placeholder="e.g. Alpha Token"
+                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Ticker</label>
+                  <input
+                    type="text"
+                    value={customAssetSymbol}
+                    onChange={(e) => setCustomAssetSymbol(e.target.value.toUpperCase())}
+                    placeholder="e.g. ALPHA"
+                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
