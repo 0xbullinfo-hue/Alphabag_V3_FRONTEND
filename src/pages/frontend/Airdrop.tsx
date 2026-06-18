@@ -7,13 +7,14 @@ import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
+import { AirdropPayoutRequest, AirdropStatsResponse, AirdropStatusResponse, MissionClaimResponse, MissionListResponse, MissionTask, ReferralEntry } from '../../types';
 import Swal from 'sweetalert2';
 
 export const Airdrop: React.FC = () => {
     const { user, refreshUser } = useAuth();
-    const [stats, setStats] = useState<any>(null);
-    const [tasks, setTasks] = useState<any[]>([]);
-    const [referrals, setReferrals] = useState<any[]>([]);
+    const [stats, setStats] = useState<AirdropStatsResponse | null>(null);
+    const [tasks, setTasks] = useState<MissionTask[]>([]);
+    const [referrals, setReferrals] = useState<ReferralEntry[]>([]);
     const [isTaskLoading, setIsTaskLoading] = useState(false);
     const [missionPaused, setMissionPaused] = useState(false);
     // Local live ITEMS and TGE reserve balance — syncs from user context, updated immediately on claim
@@ -21,7 +22,11 @@ export const Airdrop: React.FC = () => {
     const [itemsBalance, setItemsBalance] = useState<number>(0);
     const [itemsToBagRate, setItemsToBagRate] = useState<number | null>(null);
     const [campaignEnded, setCampaignEnded] = useState(false);
-    const [payoutRequest, setPayoutRequest] = useState<any>(null); // user's current payout request
+    const [payoutRequest, setPayoutRequest] = useState<AirdropPayoutRequest | null>(null); // user's current payout request
+    const parseMissionResponse = (data: MissionTask[] | MissionListResponse): MissionTask[] => {
+        return Array.isArray(data) ? data : (data.missions || []);
+    };
+
 
 
 
@@ -67,19 +72,19 @@ export const Airdrop: React.FC = () => {
     // Live countdown interval for daily/weekly missions
     useEffect(() => {
         const tick = () => {
-            const hasDaily = tasks.some((t: any) => t.frequency?.toUpperCase() === 'DAILY' || t.type?.toUpperCase() === 'DAILY');
-            const hasWeekly = tasks.some((t: any) => t.frequency?.toUpperCase() === 'WEEKLY' || t.type?.toUpperCase() === 'WEEKLY');
+            const hasDaily = tasks.some((t) => t.frequency?.toUpperCase() === 'DAILY' || t.type?.toUpperCase() === 'DAILY');
+            const hasWeekly = tasks.some((t) => t.frequency?.toUpperCase() === 'WEEKLY' || t.type?.toUpperCase() === 'WEEKLY');
 
-            if (hasDaily && (user as any)?.lastDailyTaskAt) {
-                const lastDaily = new Date((user as any).lastDailyTaskAt).getTime();
+            if (hasDaily && user?.lastDailyTaskAt) {
+                const lastDaily = new Date(user.lastDailyTaskAt).getTime();
                 const diff = (lastDaily + 24 * 60 * 60 * 1000) - Date.now();
                 setDailyCountdown(formatCountdown(diff));
             } else {
                 setDailyCountdown('00:00:00:00');
             }
 
-            if (hasWeekly && (user as any)?.lastWeeklyTaskAt) {
-                const lastWeekly = new Date((user as any).lastWeeklyTaskAt).getTime();
+            if (hasWeekly && user?.lastWeeklyTaskAt) {
+                const lastWeekly = new Date(user.lastWeeklyTaskAt).getTime();
                 const diff = (lastWeekly + 7 * 24 * 60 * 60 * 1000) - Date.now();
                 setWeeklyCountdown(formatCountdown(diff));
             } else {
@@ -97,15 +102,15 @@ export const Airdrop: React.FC = () => {
         if (user?.bagTokens !== undefined) {
             setBagBalance(user.bagTokens);
         }
-        if ((user as any)?.items !== undefined) {
-            setItemsBalance((user as any).items);
+        if (user?.items !== undefined) {
+            setItemsBalance(user.items);
         }
-    }, [user?.bagTokens, (user as any)?.items]);
+    }, [user?.bagTokens, user?.items]);
 
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await api.get('/api/airdrop/stats');
+                const res = await api.get<AirdropStatsResponse>('/api/airdrop/stats');
                 setStats(res.data);
             } catch (err) {
                 console.error("Failed to fetch airdrop stats", err);
@@ -114,10 +119,8 @@ export const Airdrop: React.FC = () => {
         
         const fetchTasks = async () => {
             try {
-                const res = await api.get('/api/airdrop/tasks');
-                // Backend returns { missions: [], total: X, ... }
-                const taskData = Array.isArray(res.data) ? res.data : (res.data.missions || []);
-                setTasks(taskData);
+                const res = await api.get<MissionTask[] | MissionListResponse>('/api/airdrop/tasks');
+                setTasks(parseMissionResponse(res.data));
             } catch (err) {
                 console.error("Failed to fetch mission hub tasks", err);
                 setTasks([]);
@@ -126,7 +129,7 @@ export const Airdrop: React.FC = () => {
 
         const fetchReferrals = async () => {
             try {
-                const res = await api.get('/api/auth/referrals');
+                const res = await api.get<ReferralEntry[]>('/api/auth/referrals');
                 setReferrals(Array.isArray(res.data) ? res.data : []);
             } catch {}
         };
@@ -138,7 +141,7 @@ export const Airdrop: React.FC = () => {
         // Unified status check (works for both authed and public)
         const checkStatus = async () => {
             try {
-                const res = await api.get('/api/airdrop/status');
+                const res = await api.get<AirdropStatusResponse>('/api/airdrop/status');
                 const settings = res.data.settings || {};
                 setMissionPaused(Boolean(settings.isPaused));
                 setItemsToBagRate(settings.itemsToBagRate ?? null);
@@ -188,7 +191,7 @@ export const Airdrop: React.FC = () => {
 
         setIsTaskLoading(true);
         try {
-            const res = await api.post('/api/airdrop/tasks/complete', { 
+            const res = await api.post<MissionClaimResponse>('/api/airdrop/tasks/complete', { 
                 taskId, 
                 taskLink: link,
                 feedback: taskFeedback[taskId] 
@@ -208,8 +211,8 @@ export const Airdrop: React.FC = () => {
                 }
                 // Refresh tasks and stats in-place
                 const [newTasks, newStats] = await Promise.all([
-                    api.get('/api/airdrop/tasks').then((r) => Array.isArray(r.data) ? r.data : (r.data.missions || [])).catch(() => tasks),
-                    api.get('/api/airdrop/stats').then(r => r.data).catch(() => stats),
+                    api.get<MissionTask[] | MissionListResponse>('/api/airdrop/tasks').then((r) => parseMissionResponse(r.data)).catch(() => tasks),
+                    api.get<AirdropStatsResponse>('/api/airdrop/stats').then(r => r.data).catch(() => stats),
                 ]);
                 setTasks(newTasks);
                 setStats(newStats);
@@ -657,7 +660,7 @@ export const Airdrop: React.FC = () => {
                     <div className="bg-[#f6465d]/10 p-3 px-4 rounded-md border border-[#f6465d]/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
                         <div className="text-[10px] font-semibold uppercase text-[#f6465d] mb-0.5 whitespace-nowrap">Strike Protocol</div>
                         <div className="text-sm font-semibold text-[#f6465d]">
-                            {(user as any)?.strikes || 0}/5
+                            {user?.strikes || 0}/5
                         </div>
                     </div>
                 </div>
@@ -710,14 +713,14 @@ export const Airdrop: React.FC = () => {
                             <Shield className="text-alphabag-yellow drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]" /> Mission Hub
                         </h2>
                         <div className="text-[10px] text-[#848e9c] font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
-                            Available Missions: {tasks.filter((t: any) => t.type !== 'unlimited').length}
+                            Available Missions: {tasks.filter((t) => t.type !== 'unlimited').length}
                         </div>
                     </div>
 
                                         
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {tasks.filter((t: any) => t.type !== 'unlimited').map((task: any) => {
+                        {tasks.filter((t) => t.type !== 'unlimited').map((task) => {
                             const isCompleted = (() => {
                                 if (!user) return false;
                                 const freq = (task.frequency || '').toUpperCase();

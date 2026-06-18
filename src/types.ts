@@ -35,9 +35,86 @@ export interface User {
   referralCode?: string;
   referralCount?: number;
   completedTasks?: string[];
+  completedMissions?: string[];
+  items?: number;
   lastDailyTaskAt?: string;
+  lastWeeklyTaskAt?: string;
+  strikes?: number;
   bannerUrl?: string;
   logoUrl?: string;
+}
+
+export interface ReferralEntry {
+  id: string;
+  email?: string;
+  pointsEarned?: number;
+  joinedAt?: string;
+}
+
+export interface MissionTask {
+  id: string;
+  title: string;
+  description?: string;
+  rewardTokens?: number;
+  type?: string;
+  frequency?: string;
+  status?: string;
+  requiresLink?: boolean;
+  requiresFeedback?: boolean;
+  actionUrl?: string;
+}
+
+export interface MissionListResponse {
+  missions: MissionTask[];
+  total?: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
+}
+
+export interface AirdropStatsResponse {
+  totalEntries: number;
+  totalLimit: number;
+  founderEntries: number;
+  founderLimit: number;
+  remainingSpots: number;
+  tgeDate: string;
+}
+
+export interface AirdropPayoutRequest {
+  id: string;
+  status: 'PENDING' | 'APPROVED' | 'SENT' | 'REJECTED';
+  expectedTokens: number;
+  walletAddress?: string;
+  createdAt: string;
+  sentAt?: string | null;
+  txReference?: string | null;
+}
+
+export interface AirdropStatusResponse {
+  settings: {
+    isPaused: boolean;
+    itemsToBagRate: number | null;
+    campaignEnded: boolean;
+    tgeDate?: string;
+    [key: string]: unknown;
+  };
+  userStatus: {
+    walletSubmitted?: string | null;
+    payoutRequest?: AirdropPayoutRequest | null;
+    [key: string]: unknown;
+  } | null;
+  reveal?: {
+    isRevealed?: boolean;
+    [key: string]: unknown;
+  };
+}
+
+export interface MissionClaimResponse {
+  success: boolean;
+  message?: string;
+  items?: number;
+  rewardTokens?: number;
 }
 
 export type Chain = 'BSC' | 'ETH' | 'SOL' | 'BASE' | 'AVAX' | 'ARB';
