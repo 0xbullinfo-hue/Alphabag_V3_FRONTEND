@@ -9,9 +9,75 @@ import {
 import { Button } from '../../components/ui/Button';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 import { FounderListingForm } from '../../components/frontend/FounderListingForm';
-import { OnboardingModal } from '../../components/frontend/OnboardingModal';
-import { Post } from '../../types';
+import { Post, Project } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+
+type FeedTab = 'FOR_YOU' | 'FOLLOWING' | 'ALPHABAG';
+
+type StrategyFilter = Post['strategy'] | '';
+
+type FounderProject = Project & {
+    tickerSymbol?: string;
+    isPaidSponsor?: boolean;
+};
+
+type SidebarAd = {
+    id: string;
+    name: string;
+    symbol?: string;
+    description: string;
+    logoUrl?: string;
+    isAd?: boolean;
+    isVerified?: boolean;
+};
+
+const FEED_DRAFT_STORAGE_KEY = 'alphabag:alphas-feed:draft';
+const MAX_POST_LENGTH = 280;
+
+const formatRelativeTime = (isoDate: string) => {
+    const date = new Date(isoDate);
+    const diffMs = date.getTime() - Date.now();
+    const seconds = Math.round(diffMs / 1000);
+    const minutes = Math.round(seconds / 60);
+    const hours = Math.round(minutes / 60);
+    const days = Math.round(hours / 24);
+
+    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    if (Math.abs(seconds) < 60) return rtf.format(seconds, 'second');
+    if (Math.abs(minutes) < 60) return rtf.format(minutes, 'minute');
+    if (Math.abs(hours) < 24) return rtf.format(hours, 'hour');
+    return rtf.format(days, 'day');
+};
+
+const highlightContent = (content: string) => {
+    const parts = content.split(/(https?:\/\/[^\s]+|\$[A-Za-z0-9_]{2,12})/g);
+    return parts.map((part, index) => {
+        if (/^https?:\/\//i.test(part)) {
+            return (
+                <a
+                    key={`${part}-${index}`}
+                    href={part}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-alphabag-yellow underline decoration-alphabag-yellow/30 hover:decoration-alphabag-yellow"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {part}
+                </a>
+            );
+        }
+
+        if (/^\$[A-Za-z0-9_]{2,12}$/.test(part)) {
+            return (
+                <span key={`${part}-${index}`} className="text-alphabag-yellow font-bold">
+                    {part.toUpperCase()}
+                </span>
+            );
+        }
+
+        return <React.Fragment key={`${part}-${index}`}>{part}</React.Fragment>;
+    });
+};
 
 const MOCK_ALPHAS: Post[] = [
     {
@@ -61,42 +127,96 @@ const MOCK_ALPHAS: Post[] = [
 ];
 
 export const AlphasFeed: React.FC = () => {
-    const { user, completeOnboarding } = useAuth();
+    const { user } = useAuth();
     const [search, setSearch] = useState('');
-    const [activeTab, setActiveTab] = useState<'FOR_YOU' | 'FOLLOWING' | 'ALPHABAG'>('FOR_YOU');
+    const [activeTab, setActiveTab] = useState<FeedTab>('FOR_YOU');
     const [isListingOpen, setIsListingOpen] = useState(false);
-    const [sidebarAds, setSidebarAds] = useState<any[]>([]);
+    const [sidebarAds, setSidebarAds] = useState<SidebarAd[]>([]);
     const [newPostContent, setNewPostContent] = useState('');
-    const [selectedStrategy, setSelectedStrategy] = useState<Post['strategy'] | ''>('');
+    const [selectedStrategy, setSelectedStrategy] = useState<StrategyFilter>('');
     const [feedPosts, setFeedPosts] = useState<Post[]>(MOCK_ALPHAS);
     const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
-    const [foundersProjects, setFoundersProjects] = useState<any[]>([]);
+    const [foundersProjects, setFoundersProjects] = useState<FounderProject[]>([]);
+    const [isSidebarLoading, setIsSidebarLoading] = useState(true);
+    const [sidebarError, setSidebarError] = useState<string | null>(null);
+
+    const showBetaNotice = React.useCallback((title: string, text: string) => {
+        void Swal.fire({
+            icon: 'info',
+            title,
+            text,
+            background: '#0a0a0a',
+            color: '#fff',
+            confirmButtonColor: '#fcd535',
+        });
+    }, []);
+
+    const tabs: Array<{ label: string; value: FeedTab }> = [
+        { label: 'For you', value: 'FOR_YOU' },
+        { label: 'Following', value: 'FOLLOWING' },
+        { label: 'AlphaBAG', value: 'ALPHABAG' },
+    ];
+
+    const loadSidebarData = React.useCallback(async () => {
+        setIsSidebarLoading(true);
+        setSidebarError(null);
+
+        try {
+            const [ads, projects] = await Promise.all([
+                AlphaRadarService.getAds('SIDEBAR'),
+                AlphaRadarService.getAllProjects(),
+            ]);
+
+            setSidebarAds(Array.isArray(ads) ? ads : []);
+            setFoundersProjects(Array.isArray(projects) ? projects : []);
+        } catch (err) {
+            console.error('Failed to fetch sidebar data', err);
+            setSidebarError('Unable to load live community data right now.');
+        } finally {
+            setIsSidebarLoading(false);
+        }
+    }, []);
 
     React.useEffect(() => {
-        const fetchAdsAndProjects = async () => {
-            try {
-                const ads = await AlphaRadarService.getAds('SIDEBAR');
-                setSidebarAds(ads);
+        loadSidebarData();
+    }, [loadSidebarData]);
 
-                // Fetch projects for the Founders List
-                const projects = await AlphaRadarService.getAllProjects();
-                if (projects) {
-                    setFoundersProjects(projects);
-                }
-            } catch (err) {
-                console.error('Failed to fetch sidebar data', err);
-            }
-        };
-        fetchAdsAndProjects();
+    React.useEffect(() => {
+        try {
+            const savedDraft = localStorage.getItem(FEED_DRAFT_STORAGE_KEY);
+            if (savedDraft) setNewPostContent(savedDraft);
+        } catch (error) {
+            console.warn('Unable to load feed draft from storage', error);
+        }
     }, []);
+
+    React.useEffect(() => {
+        try {
+            localStorage.setItem(FEED_DRAFT_STORAGE_KEY, newPostContent);
+        } catch (error) {
+            console.warn('Unable to persist feed draft', error);
+        }
+    }, [newPostContent]);
 
     const handleCreatePost = () => {
         if (!newPostContent.trim()) return;
 
+        if (newPostContent.length > MAX_POST_LENGTH) {
+            void Swal.fire({
+                icon: 'warning',
+                title: 'Post Too Long',
+                text: `Posts are limited to ${MAX_POST_LENGTH} characters.`,
+                background: '#0b0e11',
+                color: '#fff',
+                confirmButtonColor: '#fcd535',
+            });
+            return;
+        }
+
         const myPost: Post = {
             id: Date.now().toString(),
             authorId: user?.id || 'guest',
-            content: newPostContent,
+            content: newPostContent.trim(),
             likeCount: 0,
             commentCount: 0,
             shareCount: 0,
@@ -104,9 +224,35 @@ export const AlphasFeed: React.FC = () => {
             strategy: selectedStrategy || undefined
         };
 
-        setFeedPosts([myPost, ...feedPosts]);
+        setFeedPosts((prev) => [myPost, ...prev]);
         setNewPostContent('');
         setSelectedStrategy('');
+        localStorage.removeItem(FEED_DRAFT_STORAGE_KEY);
+    };
+
+    const handleComposerToolClick = (toolName: string) => {
+        showBetaNotice('Composer Tool In Beta', `${toolName} will be enabled in the next feed release.`);
+    };
+
+    const handleExploreFeatures = () => {
+        window.location.hash = '#/integrations';
+        showBetaNotice('All Features Open', 'Alpha Feed functionality is accessible to all users.');
+    };
+
+    const handlePromotedProjectHub = () => {
+        window.location.hash = '#/alpha-radar';
+    };
+
+    const handleAdvertise = () => {
+        void window.open('https://t.me/alphabag_access', '_blank', 'noopener,noreferrer');
+    };
+
+    const handleShowMoreFounders = () => {
+        window.location.hash = '#/alpha-radar';
+    };
+
+    const handleShowMoreLive = () => {
+        window.location.hash = '#/integrations';
     };
 
     const toggleFollow = (authorId: string) => {
@@ -121,8 +267,11 @@ export const AlphasFeed: React.FC = () => {
 
     const getRankedPosts = (posts: Post[]) => {
         return [...posts].sort((a, b) => {
-            const scoreA = (a.likeCount * 2) + (a.commentCount * 5) + ((a.boostMultiplier || 1) * 10);
-            const scoreB = (b.likeCount * 2) + (b.commentCount * 5) + ((b.boostMultiplier || 1) * 10);
+            const ageHoursA = Math.max(0, (Date.now() - new Date(a.createdAt).getTime()) / (1000 * 60 * 60));
+            const ageHoursB = Math.max(0, (Date.now() - new Date(b.createdAt).getTime()) / (1000 * 60 * 60));
+
+            const scoreA = (a.likeCount * 2) + (a.commentCount * 5) + (a.shareCount * 4) + ((a.boostMultiplier || 1) * 12) + Math.max(0, 24 - ageHoursA) * 3 + (followingIds.has(a.authorId) ? 18 : 0);
+            const scoreB = (b.likeCount * 2) + (b.commentCount * 5) + (b.shareCount * 4) + ((b.boostMultiplier || 1) * 12) + Math.max(0, 24 - ageHoursB) * 3 + (followingIds.has(b.authorId) ? 18 : 0);
             return scoreB - scoreA;
         });
     };
@@ -137,7 +286,8 @@ export const AlphasFeed: React.FC = () => {
         }
 
         if (search.trim()) {
-            filtered = filtered.filter(p => p.content.toLowerCase().includes(search.toLowerCase()));
+            const query = search.toLowerCase();
+            filtered = filtered.filter(p => p.content.toLowerCase().includes(query) || p.authorId.toLowerCase().includes(query) || (p.strategy?.toLowerCase().includes(query) ?? false));
         }
 
         if (activeTab === 'FOR_YOU') {
@@ -147,19 +297,15 @@ export const AlphasFeed: React.FC = () => {
         return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     };
 
-    const isFounder = user?.accountType === 'FOUNDER';
-    const showOnboarding = !!user && !user.onboardingComplete;
+    const filteredPosts = React.useMemo(getFilteredPosts, [feedPosts, activeTab, followingIds, search]);
+
+    const postLength = newPostContent.length;
+    const postLengthPct = Math.min((postLength / MAX_POST_LENGTH) * 100, 100);
+    const isNearLimit = postLength > MAX_POST_LENGTH * 0.85;
 
     return (
         <div className="relative min-h-screen">
-            {/* Onboarding Lock */}
-            <OnboardingModal
-                isOpen={showOnboarding}
-                onComplete={(role, data) => completeOnboarding(role, data)}
-                onExit={() => window.location.hash = '#/'}
-            />
-
-            <div className={`max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-700 ${showOnboarding ? 'blur-2xl pointer-events-none scale-95 opacity-50' : 'blur-0 opacity-100 scale-100'}`}>
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 transition-all duration-700">
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
@@ -170,7 +316,17 @@ export const AlphasFeed: React.FC = () => {
                             </span>
                         </div>
                         <div className="divide-y divide-white/5">
-                            {foundersProjects.length > 0 ? (
+                            {isSidebarLoading ? (
+                                [...Array(4)].map((_, idx) => (
+                                    <div key={idx} className="p-2.5 flex items-start gap-2.5 animate-pulse">
+                                        <div className="w-9 h-9 rounded-full bg-white/10" />
+                                        <div className="flex-1 min-w-0 space-y-1.5 pt-0.5">
+                                            <div className="h-3 w-2/3 rounded bg-white/10" />
+                                            <div className="h-2.5 w-1/3 rounded bg-white/10" />
+                                        </div>
+                                    </div>
+                                ))
+                            ) : foundersProjects.length > 0 ? (
                                 [...foundersProjects]
                                     .sort((a, b) => (b.isPaidSponsor ? 1 : 0) - (a.isPaidSponsor ? 1 : 0))
                                     .map(project => (
@@ -200,6 +356,16 @@ export const AlphasFeed: React.FC = () => {
                                             )}
                                         </div>
                                     ))
+                            ) : sidebarError ? (
+                                <div className="p-4 text-center space-y-2">
+                                    <div className="text-[10px] font-bold uppercase tracking-widest text-red-300">{sidebarError}</div>
+                                    <button
+                                        onClick={loadSidebarData}
+                                        className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white transition-colors"
+                                    >
+                                        Retry
+                                    </button>
+                                </div>
                             ) : (
                                 <div className="p-4 text-center text-[10px] font-bold uppercase tracking-widest text-alphabag-muted">
                                     No founders available.
@@ -207,7 +373,10 @@ export const AlphasFeed: React.FC = () => {
                             )}
                         </div>
                         <div className="p-2.5 border-t border-white/5 bg-white/5">
-                            <button className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white w-full text-left transition-colors">
+                            <button
+                                onClick={handleShowMoreFounders}
+                                className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white w-full text-left transition-colors"
+                            >
                                 Show more
                             </button>
                         </div>
@@ -231,18 +400,17 @@ export const AlphasFeed: React.FC = () => {
                     {/* Top Tabs */}
                     <div className="sticky top-0 z-20 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5">
                         <div className="flex w-full">
-                            {['For you', 'Following'].map((label, i) => {
-                                const tab = i === 0 ? 'FOR_YOU' : 'FOLLOWING';
+                            {tabs.map(({ label, value }) => {
                                 return (
                                     <button
                                         key={label}
-                                        onClick={() => setActiveTab(tab as any)}
+                                        onClick={() => setActiveTab(value)}
                                         className="flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all relative group"
                                     >
-                                        <span className={activeTab === tab ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
+                                        <span className={activeTab === value ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
                                             {label}
                                         </span>
-                                        {activeTab === tab && (
+                                        {activeTab === value && (
                                             <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow shadow-glow-yellow/50" />
                                         )}
                                     </button>
@@ -252,82 +420,118 @@ export const AlphasFeed: React.FC = () => {
                     </div>
 
                     {/* Create Post */}
-                    {user && (
-                        <div className="p-3 border-b border-white/5">
-                            <div className="flex gap-4">
-                                <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden">
-                                    {user.email[0]}
-                                </div>
-                                <div className="flex-1 space-y-2">
+                    <div className="p-3 border-b border-white/5">
+                        <div className="flex gap-4">
+                            <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden">
+                                {(user?.email?.[0] || 'G').toUpperCase()}
+                            </div>
+                            <div className="flex-1 space-y-2">
                                     <textarea
                                         className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-1.5 text-lg leading-snug"
-                                        placeholder="What's happening?"
+                                        placeholder={user ? "What's happening?" : "What's happening? You are posting as Guest."}
                                         rows={2}
                                         value={newPostContent}
+                                        maxLength={MAX_POST_LENGTH}
                                         onChange={(e) => setNewPostContent(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleCreatePost();
+                                            }
+                                        }}
                                     />
+
+                                    <div className="space-y-1">
+                                        <div className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
+                                            <div
+                                                className={`h-full transition-all duration-300 ${isNearLimit ? 'bg-orange-400' : 'bg-alphabag-yellow'}`}
+                                                style={{ width: `${postLengthPct}%` }}
+                                            />
+                                        </div>
+                                        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
+                                            <span className="text-alphabag-muted">Ctrl/Cmd + Enter to post</span>
+                                            <span className={isNearLimit ? 'text-orange-400' : 'text-alphabag-muted'}>{postLength}/{MAX_POST_LENGTH}</span>
+                                        </div>
+                                    </div>
 
                                     <div className="flex items-center justify-between pt-2">
                                         <div className="flex items-center gap-2">
                                             <div className="flex gap-1 -ml-2 text-alphabag-yellow">
                                                 {[ImageIcon, BarChart2, Smile, Calendar, MapPin].map((Icon, idx) => (
-                                                    <button key={idx} className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors">
+                                                    <button
+                                                        key={idx}
+                                                        onClick={() => handleComposerToolClick(Icon.displayName || Icon.name || 'Composer tool')}
+                                                        className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors"
+                                                    >
                                                         <Icon size={18} />
                                                     </button>
                                                 ))}
                                             </div>
-                                            {isFounder && (
-                                                <div className="flex items-center gap-2 ml-2">
-                                                    <select
-                                                        className="bg-alphabag-black/50 border border-white/10 text-[10px] text-white font-bold uppercase tracking-widest rounded-lg px-2 py-1 outline-none appearance-none"
-                                                        value={selectedStrategy}
-                                                        onChange={(e) => setSelectedStrategy(e.target.value as any)}
-                                                    >
-                                                        <option value="">No Tag</option>
-                                                        <option value="DEGEN">DEGEN</option>
-                                                        <option value="SHORT">SHORT</option>
-                                                        <option value="LONGTERM">LONGTERM</option>
-                                                        <option value="AIRDROP">AIRDROP</option>
-                                                    </select>
-                                                    <button
-                                                        onClick={() => window.location.hash = '#/genesis-manifesto'}
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-widest hover:bg-alphabag-yellow/20 transition-all"
-                                                    >
-                                                        <Rocket size={12} /> Manifesto
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setIsListingOpen(true)}
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-[10px] text-blue-400 font-black uppercase tracking-widest hover:bg-blue-500/20 transition-all"
-                                                    >
-                                                        <Plus size={12} /> List Project
-                                                    </button>
-                                                </div>
-                                            )}
+                                            <div className="flex items-center gap-2 ml-2">
+                                                <select
+                                                    className="bg-alphabag-black/50 border border-white/10 text-[10px] text-white font-bold uppercase tracking-widest rounded-lg px-2 py-1 outline-none appearance-none"
+                                                    value={selectedStrategy}
+                                                    onChange={(e) => setSelectedStrategy(e.target.value as StrategyFilter)}
+                                                >
+                                                    <option value="">No Tag</option>
+                                                    <option value="DEGEN">DEGEN</option>
+                                                    <option value="SHORT">SHORT</option>
+                                                    <option value="LONGTERM">LONGTERM</option>
+                                                    <option value="AIRDROP">AIRDROP</option>
+                                                </select>
+                                                <button
+                                                    onClick={() => window.location.hash = '#/genesis-manifesto'}
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-widest hover:bg-alphabag-yellow/20 transition-all"
+                                                >
+                                                    <Rocket size={12} /> Manifesto
+                                                </button>
+                                                <button
+                                                    onClick={() => setIsListingOpen(true)}
+                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-[10px] text-blue-400 font-black uppercase tracking-widest hover:bg-blue-500/20 transition-all"
+                                                >
+                                                    <Plus size={12} /> List Project
+                                                </button>
+                                            </div>
                                         </div>
                                         <Button
                                             size="sm"
                                             onClick={handleCreatePost}
-                                            disabled={!newPostContent.trim()}
+                                            disabled={!newPostContent.trim() || newPostContent.length > MAX_POST_LENGTH}
                                             className="px-4 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-1 disabled:opacity-50 text-[10px]"
                                         >
                                             Post
                                         </Button>
                                     </div>
-                                </div>
                             </div>
                         </div>
-                    )}
+                    </div>
 
                     {/* Feed Posts */}
                     <div className="divide-y divide-white/5">
-                        {getFilteredPosts().map(post => (
-                            <PostCard
-                                key={post.id}
-                                post={post}
-                                isFollowing={followingIds.has(post.authorId)}
-                                onFollowToggle={() => toggleFollow(post.authorId)}
-                            />
-                        ))}
+                        {filteredPosts.length > 0 ? (
+                            filteredPosts.map(post => (
+                                <PostCard
+                                    key={post.id}
+                                    post={post}
+                                    isFollowing={followingIds.has(post.authorId)}
+                                    onFollowToggle={() => toggleFollow(post.authorId)}
+                                />
+                            ))
+                        ) : (
+                            <div className="p-8 text-center space-y-3">
+                                <div className="mx-auto w-12 h-12 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/20 flex items-center justify-center">
+                                    <Search size={20} className="text-alphabag-yellow" />
+                                </div>
+                                <div className="text-sm font-black uppercase tracking-widest text-white">
+                                    {activeTab === 'FOLLOWING' ? 'No posts from your network yet' : activeTab === 'ALPHABAG' ? 'No boosted alpha signals found' : 'No posts match your search'}
+                                </div>
+                                <div className="text-xs text-alphabag-muted">
+                                    {activeTab === 'FOLLOWING'
+                                        ? 'Follow more traders and founders to shape your timeline.'
+                                        : 'Try a different search term or switch feed tabs.'}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -361,17 +565,20 @@ export const AlphasFeed: React.FC = () => {
                         />
                     </div>
 
-                    {/* Premium Widget */}
+                    {/* Open Access Widget */}
                     <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 space-y-2.5">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-black text-white uppercase tracking-tight">Premium</h3>
-                            <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[9px] px-2 py-0.5 rounded-full font-black">50% OFF</span>
+                            <h3 className="text-lg font-black text-white uppercase tracking-tight">Open Access</h3>
+                            <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[9px] px-2 py-0.5 rounded-full font-black">UNLOCKED</span>
                         </div>
                         <p className="text-[11px] text-alphabag-subtext leading-relaxed font-medium">
-                            Get rid of ads, see your analytics, boost your replies and unlock 20+ features.
+                            Alpha Feed tools are live for everyone. Post, share, follow, and engage with full open access.
                         </p>
-                        <Button className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 shadow-glow-yellow/20">
-                            Learn More
+                        <Button
+                            onClick={handleExploreFeatures}
+                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 shadow-glow-yellow/20"
+                        >
+                            Explore Features
                         </Button>
                     </div>
 
@@ -403,13 +610,21 @@ export const AlphasFeed: React.FC = () => {
                                 <p className="text-[11px] text-alphabag-subtext leading-relaxed line-clamp-2 italic mb-3">
                                     "The next evolution of AI-driven liquidity analysis is here. Join the NeuralBag genesis event."
                                 </p>
-                                <Button size="sm" variant="outline" className="w-full border-alphabag-yellow/20 text-alphabag-yellow text-[9px] h-8 font-black uppercase tracking-widest hover:bg-alphabag-yellow hover:text-black">
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={handlePromotedProjectHub}
+                                    className="w-full border-alphabag-yellow/20 text-alphabag-yellow text-[9px] h-8 font-black uppercase tracking-widest hover:bg-alphabag-yellow hover:text-black"
+                                >
                                     View Project Hub
                                 </Button>
                             </div>
                         </div>
                         <div className="p-3 bg-white/5 text-center">
-                            <button className="text-[9px] text-alphabag-muted hover:text-white transition-colors font-bold uppercase tracking-widest">
+                            <button
+                                onClick={handleAdvertise}
+                                className="text-[9px] text-alphabag-muted hover:text-white transition-colors font-bold uppercase tracking-widest"
+                            >
                                 Advertise with AlphaBAG
                             </button>
                         </div>
@@ -419,8 +634,20 @@ export const AlphasFeed: React.FC = () => {
                     <div className="bg-white/5 border border-white/5 rounded-xl overflow-hidden">
                         <h3 className="text-base font-black text-white uppercase tracking-tight p-3.5">Live on AlphaBag</h3>
                         <div className="divide-y divide-white/5">
-                            {sidebarAds.map(ad => (
-                                <div key={ad.id} className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group">
+                            {isSidebarLoading ? (
+                                [...Array(3)].map((_, idx) => (
+                                    <div key={idx} className="p-3.5 animate-pulse space-y-2">
+                                        <div className="h-3.5 w-2/3 rounded bg-white/10" />
+                                        <div className="h-3 w-full rounded bg-white/10" />
+                                    </div>
+                                ))
+                            ) : sidebarAds.length > 0 ? (
+                                sidebarAds.map(ad => (
+                                <div
+                                    key={ad.id}
+                                    onClick={() => window.location.hash = '#/alpha-radar'}
+                                    className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
+                                >
                                     <div className="flex justify-between items-start mb-1">
                                         <div className="flex items-center gap-2">
                                             <div className="w-4 h-4 bg-alphabag-dark rounded flex items-center justify-center text-[7px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
@@ -440,9 +667,15 @@ export const AlphasFeed: React.FC = () => {
                                         {ad.description}
                                     </h4>
                                 </div>
-                            ))}
+                            ))
+                            ) : (
+                                <div className="p-4 text-[11px] text-alphabag-muted">No live promoted signals available right now.</div>
+                            )}
                         </div>
-                        <button className="w-full p-3.5 text-left text-[11px] text-alphabag-yellow hover:bg-white/5 transition-colors font-bold uppercase tracking-wider">
+                        <button
+                            onClick={handleShowMoreLive}
+                            className="w-full p-3.5 text-left text-[11px] text-alphabag-yellow hover:bg-white/5 transition-colors font-bold uppercase tracking-wider"
+                        >
                             Show more
                         </button>
                     </div>
@@ -464,11 +697,17 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
     const { user } = useAuth();
     const [isLiked, setIsLiked] = useState(false);
     const [likes, setLikes] = useState(post.likeCount);
+    const [isBookmarked, setIsBookmarked] = useState(false);
+    const [comments, setComments] = useState(post.commentCount);
+    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
+    const [replyDraft, setReplyDraft] = useState('');
+    const [commentThread, setCommentThread] = useState<Array<{ id: string; author: string; handle: string; content: string; createdAt: string }>>([]);
 
     // Determine info (mock logic for authorId 'user1' as founder)
     const isFounderPost = post.projectId || post.authorId === 'user1';
     const authorName = post.authorId === 'user1' ? 'Meme Lord' : post.authorId === user?.id ? (user?.email.split('@')[0] || 'Me') : `User_${post.authorId.substring(0, 4)}`;
     const authorHandle = post.authorId === 'user1' ? '@memelords212' : `@${post.authorId.substring(0, 8)}`;
+    const relativeTime = formatRelativeTime(post.createdAt);
 
     const handleLike = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -481,15 +720,86 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
 
     const handleComment = (e: React.MouseEvent) => {
         e.stopPropagation();
-        Swal.fire({
+        setIsCommentsOpen((prev) => !prev);
+    };
+
+    const handleSubmitReply = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const trimmed = replyDraft.trim();
+        if (!trimmed) return;
+
+        const author = user?.email?.split('@')[0] || 'Guest';
+        const handle = user?.id ? `@${user.id.slice(0, 8)}` : '@guest';
+        const newComment = {
+            id: `${post.id}-${Date.now()}`,
+            author,
+            handle,
+            content: trimmed,
+            createdAt: new Date().toISOString(),
+        };
+
+        setCommentThread((prev) => [newComment, ...prev]);
+        setComments((prev) => prev + 1);
+        setReplyDraft('');
+        setIsCommentsOpen(true);
+    };
+
+    const handleShare = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const shareText = `${authorHandle}: ${post.content.slice(0, 160)}`;
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'AlphaBAG Feed',
+                    text: shareText,
+                    url: window.location.href,
+                });
+                return;
+            }
+
+            await navigator.clipboard.writeText(shareText);
+            void Swal.fire({
+                icon: 'success',
+                title: 'Copied',
+                text: 'Post preview copied to clipboard.',
+                background: '#0a0a0a',
+                color: '#fff',
+                confirmButtonColor: '#fcd535',
+                timer: 1500,
+                showConfirmButton: false,
+            });
+        } catch (error) {
+            console.error('Share failed', error);
+        }
+    };
+
+    const handleBookmark = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsBookmarked((prev) => !prev);
+    };
+
+    const handleMoreActions = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        void Swal.fire({
             icon: 'info',
-            title: 'Beta Access',
-            text: 'Full comment threads are being indexed for the Beta phase.',
+            title: 'Post Controls',
+            text: 'Mute, report, and block actions are now in final QA for release.',
             background: '#0a0a0a',
             color: '#fff',
             confirmButtonColor: '#fcd535',
-            showConfirmButton: false,
-            timer: 3000,
+        });
+    };
+
+    const handleViewAnalytics = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        void Swal.fire({
+            icon: 'info',
+            title: 'Post Analytics',
+            text: 'Engagement analytics are available to all users in this feed experience.',
+            background: '#0a0a0a',
+            color: '#fff',
+            confirmButtonColor: '#fcd535',
         });
     };
 
@@ -526,7 +836,7 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                                     <Zap size={13} className="text-alphabag-muted flex-shrink-0" />
                                 )}
                                 <span className="text-alphabag-muted text-[13px] truncate">{authorHandle}</span>
-                                <span className="text-alphabag-muted text-[13px]">· 20h</span>
+                                <span className="text-alphabag-muted text-[13px]">· {relativeTime}</span>
                             </div>
 
                             {/* Role Badges line */}
@@ -564,7 +874,10 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                             >
                                 {isFollowing ? 'Following' : 'Follow'}
                             </button>
-                            <button className="text-alphabag-muted hover:text-white transition-colors p-1 rounded-full hover:bg-white/5">
+                            <button
+                                onClick={handleMoreActions}
+                                className="text-alphabag-muted hover:text-white transition-colors p-1 rounded-full hover:bg-white/5"
+                            >
                                 <MoreHorizontal size={18} />
                             </button>
                         </div>
@@ -583,7 +896,7 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                                     post.strategy === 'AIRDROP' ? 'text-purple-50' :
                                         'text-zinc-200'
                             }`}>
-                            {post.content}
+                            {highlightContent(post.content)}
                         </p>
                     </div>
 
@@ -607,9 +920,10 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                             className="flex items-center gap-2 group transition-colors hover:text-blue-400 p-2 rounded-full hover:bg-blue-400/10"
                         >
                             <MessageCircle size={18} />
-                            <span className="text-xs font-medium">{post.commentCount || 687}</span>
+                            <span className="text-xs font-medium">{comments}</span>
                         </button>
                         <button
+                            onClick={handleShare}
                             className="flex items-center gap-2 group transition-colors hover:text-alphabag-green p-2 rounded-full hover:bg-alphabag-green/10"
                         >
                             <Share2 size={18} />
@@ -622,19 +936,94 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                             <Heart size={18} fill={isLiked ? "currentColor" : "none"} />
                             <span className="text-xs font-medium">{likes}</span>
                         </button>
-                        <button className="flex items-center gap-2 group transition-colors hover:text-alphabag-yellow p-2 rounded-full hover:bg-alphabag-yellow/10">
+                        <button
+                            onClick={handleViewAnalytics}
+                            className="flex items-center gap-2 group transition-colors hover:text-alphabag-yellow p-2 rounded-full hover:bg-alphabag-yellow/10"
+                        >
                             <BarChart size={18} />
                             <span className="text-xs font-medium">6M</span>
                         </button>
                         <div className="flex gap-1">
-                            <button className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow">
-                                <Bookmark size={18} />
+                            <button
+                                onClick={handleBookmark}
+                                className={`p-2 rounded-full transition-colors ${isBookmarked ? 'text-alphabag-yellow bg-alphabag-yellow/10' : 'hover:bg-alphabag-yellow/10 hover:text-alphabag-yellow'}`}
+                            >
+                                <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
                             </button>
-                            <button className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow">
+                            <button
+                                onClick={handleShare}
+                                className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow"
+                            >
                                 <ExternalLink size={18} />
                             </button>
                         </div>
                     </div>
+
+                    {isCommentsOpen && (
+                        <div className="mt-3 border border-white/10 rounded-xl bg-white/[0.02] overflow-hidden">
+                            <div className="px-3 py-2 border-b border-white/10 flex items-center justify-between">
+                                <div className="text-[11px] font-black uppercase tracking-widest text-white">Conversation</div>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsCommentsOpen(false);
+                                    }}
+                                    className="text-[10px] font-bold uppercase tracking-wider text-alphabag-muted hover:text-white"
+                                >
+                                    Collapse
+                                </button>
+                            </div>
+
+                            <div className="p-3 border-b border-white/10 bg-black/20">
+                                <div className="flex gap-3 items-start">
+                                    <div className="w-8 h-8 rounded-full bg-alphabag-yellow/15 border border-alphabag-yellow/30 flex items-center justify-center text-[11px] font-black text-alphabag-yellow uppercase">
+                                        {(user?.email?.[0] || 'G').toUpperCase()}
+                                    </div>
+                                    <div className="flex-1 space-y-2">
+                                        <textarea
+                                            value={replyDraft}
+                                            onChange={(e) => setReplyDraft(e.target.value)}
+                                            placeholder="Post your reply"
+                                            rows={2}
+                                            maxLength={280}
+                                            className="w-full bg-transparent border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white placeholder:text-alphabag-muted resize-none outline-none focus:border-alphabag-yellow/50"
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">
+                                                {replyDraft.length}/280
+                                            </div>
+                                            <Button
+                                                size="sm"
+                                                onClick={handleSubmitReply}
+                                                disabled={!replyDraft.trim()}
+                                                className="px-3 h-8 bg-alphabag-yellow text-black text-[10px] font-black uppercase tracking-widest rounded-full disabled:opacity-50"
+                                            >
+                                                Reply
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="max-h-72 overflow-y-auto divide-y divide-white/5">
+                                {commentThread.length > 0 ? (
+                                    commentThread.map((comment) => (
+                                        <div key={comment.id} className="px-3 py-2.5">
+                                            <div className="flex items-center gap-2 text-[12px] mb-1">
+                                                <span className="font-bold text-white">{comment.author}</span>
+                                                <span className="text-alphabag-muted">{comment.handle}</span>
+                                                <span className="text-alphabag-muted">· {formatRelativeTime(comment.createdAt)}</span>
+                                            </div>
+                                            <p className="text-[13px] text-zinc-200 leading-relaxed whitespace-pre-wrap">{comment.content}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="px-3 py-4 text-[12px] text-alphabag-muted">No replies yet. Start the thread.</div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

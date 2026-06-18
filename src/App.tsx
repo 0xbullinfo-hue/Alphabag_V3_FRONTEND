@@ -148,7 +148,7 @@ const AppContent = () => {
           <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
           <Route path="/alpha-ai" element={<PrivateRoute><AlphaAi /></PrivateRoute>} />
           <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
-          <Route path="/alphas-feed" element={<PrivateRoute><AlphasFeed /></PrivateRoute>} />
+          <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
           // LivePairs route removed
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
