@@ -205,7 +205,7 @@ export const Airdrop: React.FC = () => {
                 }
                 // Refresh tasks and stats in-place
                 const [newTasks, newStats] = await Promise.all([
-                    api.get('/api/airdrop/tasks').then(r => r.data.missions || []).catch(() => tasks),
+                    api.get('/api/airdrop/tasks').then((r) => Array.isArray(r.data) ? r.data : (r.data.missions || [])).catch(() => tasks),
                     api.get('/api/airdrop/stats').then(r => r.data).catch(() => stats),
                 ]);
                 setTasks(newTasks);
@@ -313,11 +313,13 @@ export const Airdrop: React.FC = () => {
 
             if (res.data.success) {
                 setSubmitted(true);
-                setSubmitted(true);
                 
                 // Immediately apply the 5000 Reserve ITEMS reward
                 if (res.data.bagTokens !== undefined) {
                     setBagBalance(res.data.bagTokens);
+                }
+                if (res.data.items !== undefined) {
+                    setItemsBalance(res.data.items);
                 }
                 await refreshUser();
 
@@ -763,7 +765,7 @@ export const Airdrop: React.FC = () => {
                                         </div>
                                     )}
 
-                                    {task.id === 't2e_daily_claim' && (
+                                    {(task.frequency?.toUpperCase() === 'DAILY' || task.frequency?.toUpperCase() === 'WEEKLY') && (
                                         <div className="mb-6">
                                             <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-3 text-center">Next Window</div>
                                             <div className="flex gap-2 justify-center">
@@ -855,6 +857,17 @@ export const Airdrop: React.FC = () => {
                                     className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
                                     value={bscWallet}
                                     onChange={(e) => setBscWallet(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-xs text-[#848e9c] font-semibold">X Profile Link</label>
+                                <input 
+                                    type="url"
+                                    placeholder="https://x.com/yourhandle"
+                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
+                                    value={xLink}
+                                    onChange={(e) => setXLink(e.target.value)}
                                 />
                             </div>
 
