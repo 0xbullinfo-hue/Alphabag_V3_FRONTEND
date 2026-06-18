@@ -77,7 +77,13 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-[#181a20] border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all">
+      {/* Fair Launch Demo Mode Banner */}
+      <div className="fixed top-0 left-0 right-0 bg-alphabag-yellow/10 border-b border-alphabag-yellow/30 z-[65] px-6 py-2 flex items-center justify-center gap-3">
+        <Zap size={14} className="text-alphabag-yellow shrink-0" />
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">⚡ Fair Launch Phase: Demonstrating with simulated data • Live API integration coming soon</span>
+      </div>
+
+      <header className="fixed top-7 left-0 right-0 h-16 bg-[#181a20] border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all">
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
