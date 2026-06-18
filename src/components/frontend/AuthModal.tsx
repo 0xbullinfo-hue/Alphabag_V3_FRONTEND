@@ -212,13 +212,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 )}
 
                 {step === 'CONNECT' && (
-                  <Button
-                    onClick={handleConnect}
-                    className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-3 bg-alphabag-yellow hover:bg-yellow-400 text-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-                    disabled={loading}
-                  >
-                    {loading ? <Loader className="animate-spin" size={16} /> : <><Wallet size={16} strokeWidth={3} /> Connect Wallet</>}
-                  </Button>
+                  <>
+                    <div className="grid grid-cols-3 gap-2 mb-3">
+                      {[
+                        'Read-only access',
+                        'Secure signature',
+                        'Instant onboarding'
+                      ].map((item) => (
+                        <div key={item} className="rounded-xl border border-white/10 bg-white/5 px-2 py-2 text-center">
+                          <div className="text-[8px] font-black uppercase tracking-[0.18em] text-alphabag-subtext">{item}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <Button
+                      onClick={handleConnect}
+                      className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-3 bg-alphabag-yellow hover:bg-yellow-400 text-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      disabled={loading}
+                    >
+                      {loading ? <Loader className="animate-spin" size={16} /> : <><Wallet size={16} strokeWidth={3} /> Connect Wallet</>}
+                    </Button>
+                  </>
                 )}
 
                 {step === 'SIGN' && (

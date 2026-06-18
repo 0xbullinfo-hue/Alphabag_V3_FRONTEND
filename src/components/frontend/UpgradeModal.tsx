@@ -111,16 +111,28 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
             </button>
           </div>
 
-          <div className="mb-8 bg-alphabag-black/40 border border-alphabag-gray/50 rounded-2xl p-6 relative group overflow-hidden">
+          <div className="mb-6 bg-alphabag-black/40 border border-alphabag-gray/50 rounded-2xl p-6 relative group overflow-hidden">
             <div className="relative mb-4">
               <ShieldCheck size={48} className="mx-auto text-alphabag-yellow" />
             </div>
             <p className="text-sm text-alphabag-text font-bold leading-relaxed mb-1 uppercase tracking-tight">
-              Token Proof of Stake
+              Unlock Premium Intelligence
             </p>
             <p className="text-[10px] text-alphabag-subtext font-medium leading-relaxed px-4">
-              Verifying eligibility to unlock unlimited neural access...
+              Verify eligibility to unlock deeper analytics, priority alerts, and unlimited AlphaAI access.
             </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2 mb-6">
+            {[
+              'Unlimited AI',
+              'Priority alerts',
+              'Deeper analytics'
+            ].map((item) => (
+              <div key={item} className="rounded-xl border border-alphabag-gray/50 bg-alphabag-black/50 px-2 py-3 text-center">
+                <div className="text-[8px] font-black uppercase tracking-[0.18em] text-alphabag-subtext">{item}</div>
+              </div>
+            ))}
           </div>
 
           {verificationError && (
