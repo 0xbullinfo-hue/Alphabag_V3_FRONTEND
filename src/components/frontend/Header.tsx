@@ -78,9 +78,10 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
   return (
     <>
       {/* Fair Launch Demo Mode Banner */}
-      <div className="fixed top-0 left-0 right-0 bg-alphabag-yellow/10 border-b border-alphabag-yellow/30 z-[65] px-6 py-2 flex items-center justify-center gap-3">
-        <Zap size={14} className="text-alphabag-yellow shrink-0" />
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">⚡ Fair Launch Phase: Demonstrating with simulated data • Live API integration coming soon</span>
+      <div className="fixed top-0 left-0 right-0 bg-alphabag-yellow/10 border-b border-alphabag-yellow/30 z-[65] px-3 sm:px-6 py-1.5 flex items-center justify-center gap-2">
+        <Zap size={12} className="text-alphabag-yellow shrink-0" />
+        <span className="hidden sm:inline text-[10px] font-black uppercase tracking-[0.15em] text-alphabag-yellow text-center">Fair Launch Phase: Demonstrating with simulated data. Live API integration coming soon.</span>
+        <span className="sm:hidden text-[9px] font-black uppercase tracking-[0.12em] text-alphabag-yellow text-center">Fair-launch mode • simulated data</span>
       </div>
 
       <header className="fixed top-7 left-0 right-0 h-16 bg-[#181a20] border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all">

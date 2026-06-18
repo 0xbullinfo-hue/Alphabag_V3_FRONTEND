@@ -18,7 +18,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="pt-28 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-8 relative z-10">
+      <main className="pt-24 md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-8 relative z-10">
         <AnimatePresence mode="wait">
           <PageTransition>
             <div className="p-4 md:p-6 lg:p-8 max-w-[1400px] mx-auto">

@@ -1,6 +1,8 @@
 import { ONE_MINUTE } from './constants';
+import { API_CONFIG, DATA_SOURCE_CONFIG } from './config';
 
 const API_BASE = 'https://api.coingecko.com/api/v3';
+const MARKET_PROXY_BASE = API_CONFIG.MARKET_PROXY_BASE_URL;
 // Note: Free tier has rate limits (approx 10-30 calls/min)
 
 interface CacheItem {
@@ -10,6 +12,18 @@ interface CacheItem {
 
 const cache: Record<string, CacheItem> = {};
 const CACHE_DURATION = 2 * ONE_MINUTE; // Cache for 2 minutes to be safe
+
+const fetchJson = async (url: string, timeoutMs = 9000) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } finally {
+        clearTimeout(timeout);
+    }
+};
 
 export const MarketService = {
     /**
@@ -22,9 +36,7 @@ export const MarketService = {
         }
 
         try {
-            const res = await fetch(`${API_BASE}/simple/price?ids=${ids.join(',')}&vs_currencies=${vs_currencies}&include_24hr_change=true`);
-            if (!res.ok) throw new Error('Market API limit');
-            const data = await res.json();
+            const data = await fetchJson(`${API_BASE}/simple/price?ids=${ids.join(',')}&vs_currencies=${vs_currencies}&include_24hr_change=true`);
 
             cache[key] = { data, timestamp: Date.now() };
             return data;
@@ -41,7 +53,6 @@ export const MarketService = {
     getMarketData: async (ids: string[], sparkline = false) => {
         const key = `market_${ids.join('_')}_${sparkline}`;
         if (cache[key] && Date.now() - cache[key].timestamp < CACHE_DURATION) {
-            console.log('Serving from cache:', key);
             return cache[key].data;
         }
 
@@ -59,9 +70,20 @@ export const MarketService = {
                 params.append('ids', ids.join(','));
             }
 
-            const res = await fetch(`${API_BASE}/coins/markets?${params.toString()}`);
-            if (!res.ok) throw new Error('Market API limit');
-            const data = await res.json();
+            let data: any[] = [];
+            const canUseLive = DATA_SOURCE_CONFIG.MODE !== 'MOCK';
+
+            if (canUseLive) {
+                try {
+                    data = await fetchJson(`${MARKET_PROXY_BASE}/coins/markets?${params.toString()}`);
+                } catch (proxyError) {
+                    console.warn('Market proxy unavailable, falling back to public feed.', proxyError);
+                }
+            }
+
+            if (!Array.isArray(data) || data.length === 0) {
+                data = await fetchJson(`${API_BASE}/coins/markets?${params.toString()}`);
+            }
 
             cache[key] = { data, timestamp: Date.now() };
             return data;
@@ -77,8 +99,7 @@ export const MarketService = {
     searchCoins: async (query: string) => {
         // No cache for search usually, or short cache
         try {
-            const res = await fetch(`${API_BASE}/search?query=${query}`);
-            const data = await res.json();
+            const data = await fetchJson(`${API_BASE}/search?query=${query}`);
             return data.coins || [];
         } catch (error) {
             return [];
@@ -95,9 +116,7 @@ export const MarketService = {
         }
 
         try {
-            const res = await fetch(`${API_BASE}/simple/token_price/${platform}?contract_addresses=${contractAddresses.join(',')}&vs_currencies=usd`);
-            if (!res.ok) throw new Error('Market API limit');
-            const data = await res.json();
+            const data = await fetchJson(`${API_BASE}/simple/token_price/${platform}?contract_addresses=${contractAddresses.join(',')}&vs_currencies=usd`);
 
             cache[key] = { data, timestamp: Date.now() };
             return data;
@@ -120,13 +139,7 @@ export const MarketService = {
 
         try {
             // DexScreener endpoint: https://api.dexscreener.com/latest/dex/tokens/{tokenAddresses}
-            const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`);
-            if (!res.ok) {
-                // Not an error per se, just no data maybe
-                return null;
-            }
-
-            const data = await res.json();
+            const data = await fetchJson(`https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`);
             if (data.pairs && data.pairs.length > 0) {
                 // Find best pair (highest liquidity USD)
                 // Filter out low liquidity spam if needed, or just take top

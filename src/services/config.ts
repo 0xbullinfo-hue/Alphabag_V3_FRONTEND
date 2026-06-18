@@ -54,6 +54,35 @@ export const API_CONFIG = {
   // Premium API calls (Nansen, Etherscan, Bscscan) 
   // are now proxied through the backend to protect API keys.
   PROXY_BASE_URL: import.meta.env.VITE_API_BASE_URL || '/api/proxy',
+  MARKET_PROXY_BASE_URL: import.meta.env.VITE_MARKET_PROXY_BASE_URL || '/api/market',
+};
+
+export type DataMode = 'MOCK' | 'LIVE' | 'AUTO';
+export type DataSource = 'MOCK' | 'LIVE';
+
+const getDataMode = (): DataMode => {
+  const rawMode = String(import.meta.env.VITE_DATA_MODE || 'AUTO').toUpperCase();
+  if (rawMode === 'MOCK' || rawMode === 'LIVE' || rawMode === 'AUTO') {
+    return rawMode;
+  }
+  return 'AUTO';
+};
+
+export const DATA_SOURCE_CONFIG = {
+  MODE: getDataMode(),
+  ENABLE_BACKGROUND_SYNC: import.meta.env.VITE_ENABLE_BACKGROUND_SYNC !== 'false',
+};
+
+export const resolveDataSource = (liveAvailable: boolean): DataSource => {
+  if (DATA_SOURCE_CONFIG.MODE === 'MOCK') return 'MOCK';
+  if (DATA_SOURCE_CONFIG.MODE === 'LIVE') return 'LIVE';
+  return liveAvailable ? 'LIVE' : 'MOCK';
+};
+
+export const getConfiguredDataLabel = (): string => {
+  if (DATA_SOURCE_CONFIG.MODE === 'MOCK') return 'Demo Data';
+  if (DATA_SOURCE_CONFIG.MODE === 'LIVE') return 'Live API';
+  return 'Auto Source';
 };
 
 // ===== TIME CONSTANTS =====

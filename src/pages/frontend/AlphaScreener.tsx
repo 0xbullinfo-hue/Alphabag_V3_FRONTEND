@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TrendingUp, Filter, Search, ArrowUpRight, Flame, Globe, ExternalLink, RefreshCw, Eye } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useDebounce } from '../../components/hooks/useDebounce';
+import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
 interface DexPair {
     chainId: string;
@@ -51,7 +52,7 @@ export const AlphaScreener: React.FC = () => {
 
     const debouncedSearch = useDebounce(search, 300);
 
-    const loadData = async (silent = false) => {
+    const loadData = useCallback(async (silent = false) => {
         if (!silent) setLoading(true);
         setIsRefreshing(true);
         try {
@@ -87,12 +88,32 @@ export const AlphaScreener: React.FC = () => {
             setLoading(false);
             setIsRefreshing(false);
         }
-    };
+    }, []);
 
     // Load trending pairs on mount or when chain changes
     useEffect(() => {
         loadData();
-    }, []);
+    }, [loadData]);
+
+    useEffect(() => {
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                loadData(true);
+            }
+        };
+
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        const interval = setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                loadData(true);
+            }
+        }, 90000);
+
+        return () => {
+            document.removeEventListener('visibilitychange', onVisibilityChange);
+            clearInterval(interval);
+        };
+    }, [loadData]);
 
     // Contract address search lookup
     useEffect(() => {
@@ -150,7 +171,7 @@ export const AlphaScreener: React.FC = () => {
     };
 
     // Filter and Sort pairs
-    const getFilteredAndSorted = () => {
+    const getFilteredAndSorted = useCallback(() => {
         let list = [...pairs];
 
         // Chain Filter
@@ -181,9 +202,9 @@ export const AlphaScreener: React.FC = () => {
         });
 
         return list;
-    };
+    }, [pairs, chainFilter, debouncedSearch, timeframe]);
 
-    const displayedPairs = getFilteredAndSorted();
+    const displayedPairs = useMemo(() => getFilteredAndSorted(), [getFilteredAndSorted]);
 
     return (
         <div className="space-y-4 animate-in fade-in duration-700">
@@ -198,6 +219,7 @@ export const AlphaScreener: React.FC = () => {
                             <span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full"></span>
                             DEX GAINERS
                         </span>
+                        <DataSourceBadge />
                         {lastUpdated && (
                             <span className="text-[10px] text-[#848e9c] font-medium hidden sm:inline">
                                 Last synced: {lastUpdated}

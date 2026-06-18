@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Search, TrendingUp, TrendingDown, Star, RefreshCw, Activity, BarChart3 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MarketService } from '../../services/MarketService';
+import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
 interface CoinData {
   id: string;
@@ -23,52 +24,65 @@ export const Markets: React.FC = () => {
   const [coins, setCoins] = useState<CoinData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshLock = useRef(false);
 
-  useEffect(() => {
-    fetchMarketData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  useEffect(() => {
-    fetchMarketData();
-    const interval = setInterval(() => {
-      fetchMarketData();
-    }, 60000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  const fetchMarketData = async () => {
-    if (isRefreshing) return;
+  const fetchMarketData = useCallback(async (silent = false) => {
+    if (refreshLock.current) return;
+    refreshLock.current = true;
     try {
+      if (!silent) setLoading(true);
       setIsRefreshing(true);
       const data = await MarketService.getMarketData([], false);
       if (data && data.length > 0) {
         setCoins(data);
         setLastUpdated(new Date());
       }
-      setLoading(false);
     } catch (error) {
-      console.error("Error fetching market data:", error);
-      setLoading(false);
+      console.error('Error fetching market data:', error);
     } finally {
+      setLoading(false);
       setIsRefreshing(false);
+      refreshLock.current = false;
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMarketData();
+  }, [fetchMarketData]);
+
+  useEffect(() => {
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchMarketData(true);
+      }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        fetchMarketData(true);
+      }
+    }, 60000);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      clearInterval(interval);
+    };
+  }, [fetchMarketData]);
 
   const handleManualRefresh = () => {
-    if (!isRefreshing) fetchMarketData();
+    if (!isRefreshing) fetchMarketData(true);
   };
 
-  const filteredCoins = coins.filter(coin =>
-    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCoins = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return coins.filter((coin) =>
+      coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
+    );
+  }, [coins, searchQuery]);
 
   const fmt = (val: number) => {
     if (!val) return '$–';
@@ -96,7 +110,7 @@ export const Markets: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0ecb81] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0ecb81]"></span>
             </span>
-            <span className="bg-blue-500/10 text-blue-400 text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider ml-auto md:ml-4">📊 Live Feed</span>
+            <DataSourceBadge className="ml-auto md:ml-4" />
           </div>
           <div className="flex items-center gap-3">
             <p className="text-[#848e9c] text-sm font-medium">Top 100 Crypto Assets</p>
@@ -144,12 +158,13 @@ export const Markets: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-[#2b3139] text-[12px]">
               {loading ? (
-                <tr>
-                  <td colSpan={9} className="p-12 text-center text-[#848e9c]">
-                    <div className="animate-spin w-7 h-7 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-3"></div>
-                    <span className="text-[10px] uppercase font-semibold tracking-wider">Loading Market Data...</span>
-                  </td>
-                </tr>
+                Array.from({ length: 8 }).map((_, index) => (
+                  <tr key={`skeleton-${index}`}>
+                    <td colSpan={9} className="px-4 py-3">
+                      <div className="h-7 skeleton" />
+                    </td>
+                  </tr>
+                ))
               ) : filteredCoins.length === 0 ? (
                 <tr>
                   <td colSpan={9} className="p-12 text-center text-[#848e9c] font-semibold uppercase tracking-wider text-xs">

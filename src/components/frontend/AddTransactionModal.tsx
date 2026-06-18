@@ -79,13 +79,13 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/70 backdrop-blur-sm">
-      <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl w-full max-w-md shadow-2xl animate-fade-in">
-        <div className="flex justify-between items-center p-6 border-b border-alphabag-gray">
+      <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl w-full max-w-md max-h-[90vh] shadow-2xl animate-fade-in overflow-hidden">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-alphabag-gray">
             <h3 className="text-xl font-bold text-white">Add Transaction</h3>
             <button onClick={onClose} className="text-alphabag-subtext hover:text-white"><X size={20} /></button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(90vh-78px)] custom-scrollbar">
             <div className="flex bg-alphabag-black rounded-lg p-1 border border-alphabag-gray">
                 {['BUY', 'SELL', 'TRANSFER'].map(t => (
                     <button
@@ -123,7 +123,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             </div>
 
             {isCustomAsset && (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Asset Name</label>
                   <input
@@ -147,7 +147,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Buy Price (USD)</label>
                     <div className="relative">
@@ -180,7 +180,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                 </div>
             </div>
 
-            <div className="bg-alphabag-black/50 p-3 rounded-lg border border-alphabag-gray/50 flex items-center justify-between">
+            <div className="bg-alphabag-black/50 p-3 rounded-lg border border-alphabag-gray/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-widest">Tracking Status</div>
                 <div className="flex items-center space-x-1.5">
                     <span className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></span>

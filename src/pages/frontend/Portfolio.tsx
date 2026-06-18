@@ -8,6 +8,7 @@ import { PieChart as RePieChart, Pie, Cell, Tooltip as ReTooltip, ResponsiveCont
 import { useWallet } from '../../context/WalletContext';
 import { Sparkline } from '../../components/ui/Sparkline';
 import { HistoryPage } from './History';
+import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
 const COLORS = ['#FCD535', '#0ECB81', '#3B82F6', '#8B5CF6', '#F6465D', '#848E9C'];
 
@@ -101,7 +102,7 @@ export const Portfolio: React.FC = () => {
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
                         <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live Sync</span>
-                        <span className="bg-blue-500/10 text-blue-400 text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider ml-auto">📊 Demo Data</span>
+                        <DataSourceBadge className="ml-auto" />
                     </div>
 
                     <div className="flex items-baseline gap-4">
