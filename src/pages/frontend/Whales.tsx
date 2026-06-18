@@ -105,6 +105,7 @@ export const Whales: React.FC = () => {
                             <Eye size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Whale Watch</h1>
+                        <span className="bg-blue-500/10 text-blue-400 text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">📊 On-Chain Analytics</span>
                     </div>
                     <p className="text-[#848e9c] text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-[#eaecef] font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>

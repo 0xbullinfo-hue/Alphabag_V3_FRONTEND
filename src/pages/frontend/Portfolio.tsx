@@ -101,6 +101,7 @@ export const Portfolio: React.FC = () => {
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
                         <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live Sync</span>
+                        <span className="bg-blue-500/10 text-blue-400 text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider ml-auto">📊 Demo Data</span>
                     </div>
 
                     <div className="flex items-baseline gap-4">

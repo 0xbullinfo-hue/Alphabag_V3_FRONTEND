@@ -96,6 +96,7 @@ export const Markets: React.FC = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0ecb81] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0ecb81]"></span>
             </span>
+            <span className="bg-blue-500/10 text-blue-400 text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider ml-auto md:ml-4">📊 Live Feed</span>
           </div>
           <div className="flex items-center gap-3">
             <p className="text-[#848e9c] text-sm font-medium">Top 100 Crypto Assets</p>
