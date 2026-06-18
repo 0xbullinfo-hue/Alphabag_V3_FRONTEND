@@ -140,15 +140,18 @@ export const Airdrop: React.FC = () => {
             try {
                 const res = await api.get('/api/airdrop/status');
                 const settings = res.data.settings || {};
-                if (settings.isPaused) setMissionPaused(true);
-                if (settings.itemsToBagRate) setItemsToBagRate(settings.itemsToBagRate);
+                setMissionPaused(Boolean(settings.isPaused));
+                setItemsToBagRate(settings.itemsToBagRate ?? null);
                 // Server-authoritative campaign ended flag
-                if (settings.campaignEnded) setCampaignEnded(true);
+                setCampaignEnded(Boolean(settings.campaignEnded));
 
                 if (user && res.data.userStatus) {
                     const us = res.data.userStatus;
                     if (us.walletSubmitted) setSubmitted(true);
                     if (us.payoutRequest) setPayoutRequest(us.payoutRequest);
+                } else {
+                    setSubmitted(false);
+                    setPayoutRequest(null);
                 }
             } catch {}
         };
@@ -347,16 +350,27 @@ export const Airdrop: React.FC = () => {
 
     const copyReferralLink = () => {
         const link = `https://alphabag.com/?ref=${user?.referralCode || ''}`;
-        navigator.clipboard.writeText(link);
-        Swal.fire({
-            title: 'LINK COPIED',
-            text: 'Your Protocol invite link is ready to share.',
-            icon: 'success',
-            background: '#0a0a0a',
-            color: '#fff',
-            timer: 2000,
-            showConfirmButton: false
-        });
+        navigator.clipboard.writeText(link)
+            .then(() => {
+                Swal.fire({
+                    title: 'LINK COPIED',
+                    text: 'Your Protocol invite link is ready to share.',
+                    icon: 'success',
+                    background: '#0a0a0a',
+                    color: '#fff',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: 'COPY BLOCKED',
+                    text: 'Clipboard access was blocked. You can copy the link manually from the field.',
+                    icon: 'info',
+                    background: '#0a0a0a',
+                    color: '#fff'
+                });
+            });
     };
 
     return (
@@ -908,80 +922,6 @@ export const Airdrop: React.FC = () => {
                         <h2 className="text-xl font-semibold text-[#eaecef] uppercase">Identity Synchronized</h2>
                         <p className="text-sm text-[#848e9c] mt-1">Your mission data and BSC wallet have been secured. You will receive your $BAG once the campaign ends and admin confirms your transfer.</p>
                     </div>
-                </div>
-            )}
-
-            {/* ── Payout Status Tracker moved above Protocol Verification — see above ── */}
-            {user && payoutRequest && false && (
-                <div className={`rounded-lg border p-6 animate-in slide-in-from-bottom-4 duration-500 ${
-                    payoutRequest.status === 'SENT'     ? 'bg-[#0ecb81]/10 border-[#0ecb81]/30' :
-                    payoutRequest.status === 'APPROVED' ? 'bg-blue-500/10 border-blue-500/20' :
-                    payoutRequest.status === 'REJECTED' ? 'bg-[#f6465d]/10 border-[#f6465d]/20' :
-                                                          'bg-[#fcd535]/5 border-[#fcd535]/20'
-                }`}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
-                                payoutRequest.status === 'SENT'     ? 'bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                payoutRequest.status === 'APPROVED' ? 'bg-blue-500/20 text-blue-400' :
-                                payoutRequest.status === 'REJECTED' ? 'bg-[#f6465d]/20 text-[#f6465d]' :
-                                                                      'bg-[#fcd535]/10 text-[#fcd535]'
-                            }`}>
-                                {payoutRequest.status === 'SENT' ? <CheckCircle2 size={22} /> :
-                                 payoutRequest.status === 'REJECTED' ? <Shield size={22} /> :
-                                 <Timer size={22} />}
-                            </div>
-                            <div>
-                                <div className="text-[10px] font-black uppercase tracking-widest text-[#848e9c] mb-0.5">$BAG Withdrawal Status</div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-lg font-semibold text-[#eaecef]">
-                                        {Number(payoutRequest.expectedTokens).toLocaleString()} $BAG
-                                    </span>
-                                    <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase ${
-                                        payoutRequest.status === 'SENT'     ? 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/30' :
-                                        payoutRequest.status === 'APPROVED' ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' :
-                                        payoutRequest.status === 'REJECTED' ? 'text-[#f6465d] bg-[#f6465d]/10 border-[#f6465d]/20' :
-                                                                              'text-[#fcd535] bg-[#fcd535]/10 border-[#fcd535]/20'
-                                    }`}>{payoutRequest.status}</span>
-                                </div>
-                                <div className="text-[10px] text-[#848e9c] mt-1">
-                                    {payoutRequest.status === 'PENDING'  && 'Your request is queued for admin review. We typically process within 24–48hrs.'}
-                                    {payoutRequest.status === 'APPROVED' && 'Approved ✓ — Transfer to your BSC wallet is in progress.'}
-                                    {payoutRequest.status === 'SENT'     && `Delivered to your BSC wallet.${payoutRequest.txReference ? ` TX: ${payoutRequest.txReference}` : ''}`}
-                                    {payoutRequest.status === 'REJECTED' && 'This request was not approved. Please contact support for details.'}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="text-right text-[9px] text-[#848e9c] font-mono shrink-0">
-                            <div>Requested: {new Date(payoutRequest.createdAt).toLocaleDateString()}</div>
-                            {payoutRequest.sentAt && <div className="text-[#0ecb81] mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
-                            <div className="mt-1 text-[8px] opacity-50">{payoutRequest.walletAddress?.slice(0, 10)}...</div>
-                        </div>
-                    </div>
-                    {/* Progress bar for pending/approved */}
-                    {(payoutRequest.status === 'PENDING' || payoutRequest.status === 'APPROVED') && (
-                        <div className="mt-4 flex items-center gap-2">
-                            {['PENDING', 'APPROVED', 'SENT'].map((step, i) => (
-                                <React.Fragment key={step}>
-                                    <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase ${
-                                        (step === payoutRequest.status) ? 'text-[#fcd535]' :
-                                        (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'text-[#0ecb81]' :
-                                        'text-[#2b3139]'
-                                    }`}>
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[7px] ${
-                                            (step === payoutRequest.status) ? 'border-[#fcd535] bg-[#fcd535]/20 text-[#fcd535]' :
-                                            (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-[#0ecb81] bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                            'border-[#2b3139] text-[#2b3139]'
-                                        }`}>{i + 1}</div>
-                                        {step}
-                                    </div>
-                                    {i < 2 && <div className={`flex-1 h-px ${
-                                        ['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status) - 1 ? 'bg-[#0ecb81]' : 'bg-[#2b3139]'
-                                    }`} />}
-                                </React.Fragment>
-                            ))}
-                        </div>
-                    )}
                 </div>
             )}
 
