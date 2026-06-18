@@ -93,13 +93,36 @@ export interface AirdropStatusResponse {
 }
 
 export interface SubmitWalletRequest {
-  walletAddress: string;
+  bscWallet: string;
+  xLink?: string;
+  reviewComment?: string;
+  isFounderRequest?: boolean;
+  projectName?: string;
+  projectTicker?: string;
+  projectManifesto?: string;
+  projectSocial?: string;
+  projectWebsite?: string;
+  projectContract?: string;
+  projectGoals?: string;
+  founderSocial?: string;
+  projectLogo?: string;
+  projectBanner?: string;
+  grantReward?: boolean;
 }
 
 export interface SubmitWalletResponse {
   success: boolean;
   message: string;
   items: number;
+  bagTokens?: number;
+  isFounder?: boolean;
+}
+
+export interface ConvertItemsResponse {
+  success: boolean;
+  message: string;
+  items: number;
+  bagTokens: number;
 }
 
 export interface TreasuryStatus {
@@ -126,7 +149,7 @@ export interface PayoutRequestResponse {
   success: boolean;
   message: string;
   requestId: string;
-  expectedTokens: number;
+  expectedTokens?: number;
 }
 
 // Export all types as a namespace
@@ -142,6 +165,7 @@ export namespace OpenAPI {
   export type AirdropStatusResponse = import('./openapi-contracts').AirdropStatusResponse;
   export type SubmitWalletRequest = import('./openapi-contracts').SubmitWalletRequest;
   export type SubmitWalletResponse = import('./openapi-contracts').SubmitWalletResponse;
+  export type ConvertItemsResponse = import('./openapi-contracts').ConvertItemsResponse;
   export type TreasuryStatus = import('./openapi-contracts').TreasuryStatus;
   export type UserEarnProfile = import('./openapi-contracts').UserEarnProfile;
   export type PayoutRequestResponse = import('./openapi-contracts').PayoutRequestResponse;

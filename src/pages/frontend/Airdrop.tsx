@@ -9,12 +9,16 @@ import { api } from '../../services/api';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
 import { AirdropStatsResponse, ReferralEntry } from '../../types';
 import type {
+    ConvertItemsResponse,
     AirdropStatusResponse,
     ClaimMissionRequest,
     ClaimMissionResponse,
     Mission,
     MissionListResponse,
+    PayoutRequestResponse,
     PayoutRequest,
+    SubmitWalletRequest,
+    SubmitWalletResponse,
 } from '../../types/openapi-contracts';
 import Swal from 'sweetalert2';
 
@@ -256,7 +260,7 @@ export const Airdrop: React.FC = () => {
         }
 
         try {
-            const res = await api.post('/api/airdrop/convert');
+            const res = await api.post<ConvertItemsResponse>('/api/airdrop/convert');
             if (res.data.success) {
                 Swal.fire('Success', res.data.message, 'success');
                 setItemsBalance(res.data.items);
@@ -276,7 +280,7 @@ export const Airdrop: React.FC = () => {
         }
 
         try {
-            const res = await api.post('/api/airdrop/payout');
+            const res = await api.post<PayoutRequestResponse>('/api/airdrop/payout');
             if (res.data.success) {
                 Swal.fire({
                     title: 'AIRDROP REQUESTED',
@@ -309,7 +313,7 @@ export const Airdrop: React.FC = () => {
         
         setIsSubmitting(true);
         try {
-            const res = await api.post('/api/airdrop/submit-wallet', {
+            const submitPayload: SubmitWalletRequest = {
                 bscWallet,
                 xLink,
                 reviewComment: review,
@@ -325,7 +329,9 @@ export const Airdrop: React.FC = () => {
                 projectLogo,
                 projectBanner,
                 grantReward: true // Triggers +5000 ITEMS +10000 bagTokens
-            });
+            };
+
+            const res = await api.post<SubmitWalletResponse>('/api/airdrop/submit-wallet', submitPayload);
 
             if (res.data.success) {
                 setSubmitted(true);
