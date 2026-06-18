@@ -17,23 +17,72 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import yaml from 'js-yaml';
+import https from 'https';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.dirname(__dirname);
-const BACKEND_ROOT = path.join(ROOT, '..', 'Alphabag_V3_Backend');
-
-const SPEC_PATH = path.join(BACKEND_ROOT, 'openapi.yaml');
+const SPEC_PATH_CANDIDATES = [
+    path.join(ROOT, '..', 'Alphabag_V3_Backend', 'openapi.yaml'),
+    path.join(ROOT, '..', 'alphabag_v3_backend', 'openapi.yaml'),
+    path.join(ROOT, 'openapi.yaml')
+];
 const OUTPUT_PATH = path.join(ROOT, 'src', 'types', 'openapi-contracts.ts');
+const SPEC_URL = process.env.OPENAPI_SPEC_URL || '';
 
 console.log('\n📝 Generating TypeScript types from OpenAPI spec...\n');
+
+const readFileIfExists = (candidatePath) => {
+    if (!fs.existsSync(candidatePath)) {
+        return null;
+    }
+    return fs.readFileSync(candidatePath, 'utf-8');
+};
+
+const fetchRemoteSpec = (url) => new Promise((resolve, reject) => {
+    https
+        .get(url, (res) => {
+            if (res.statusCode !== 200) {
+                reject(new Error(`HTTP ${res.statusCode} while fetching ${url}`));
+                return;
+            }
+
+            let body = '';
+            res.setEncoding('utf8');
+            res.on('data', (chunk) => {
+                body += chunk;
+            });
+            res.on('end', () => resolve(body));
+        })
+        .on('error', reject);
+});
+
+const loadSpecContent = async () => {
+    for (const candidatePath of SPEC_PATH_CANDIDATES) {
+        const content = readFileIfExists(candidatePath);
+        if (content) {
+            console.log(`✓ Loaded OpenAPI spec from ${candidatePath}`);
+            return content;
+        }
+    }
+
+    if (SPEC_URL) {
+        const content = await fetchRemoteSpec(SPEC_URL);
+        console.log(`✓ Loaded OpenAPI spec from ${SPEC_URL}`);
+        return content;
+    }
+
+    throw new Error(
+        `OpenAPI spec not found. Checked local paths: ${SPEC_PATH_CANDIDATES.join(', ')}. ` +
+        'Set OPENAPI_SPEC_URL to fetch the contract in CI.'
+    );
+};
 
 // Load spec
 let spec;
 try {
-    const content = fs.readFileSync(SPEC_PATH, 'utf-8');
+    const content = await loadSpecContent();
     spec = yaml.load(content);
-    console.log(`✓ Loaded OpenAPI spec from ${SPEC_PATH}`);
 } catch (err) {
     console.error(`✗ Failed to load spec: ${err.message}`);
     process.exit(1);

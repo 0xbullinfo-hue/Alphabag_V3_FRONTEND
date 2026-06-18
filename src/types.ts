@@ -1,4 +1,12 @@
 
+import type {
+  AirdropStatusResponse as OpenAPIAirdropStatusResponse,
+  ClaimMissionResponse as OpenAPIClaimMissionResponse,
+  Mission as OpenAPIMission,
+  MissionListResponse as OpenAPIMissionListResponse,
+  PayoutRequest as OpenAPIPayoutRequest,
+} from './types/openapi-contracts';
+
 export interface Coin {
   id: string;
   symbol: string;
@@ -51,26 +59,9 @@ export interface ReferralEntry {
   joinedAt?: string;
 }
 
-export interface MissionTask {
-  id: string;
-  title: string;
-  description?: string;
-  rewardTokens?: number;
-  type?: string;
-  frequency?: string;
-  status?: string;
-  requiresLink?: boolean;
-  requiresFeedback?: boolean;
-  actionUrl?: string;
-}
+export type MissionTask = OpenAPIMission;
 
-export interface MissionListResponse {
-  missions: MissionTask[];
-  total?: number;
-  page?: number;
-  limit?: number;
-  totalPages?: number;
-}
+export type MissionListResponse = OpenAPIMissionListResponse;
 
 export interface AirdropStatsResponse {
   totalEntries: number;
@@ -81,41 +72,11 @@ export interface AirdropStatsResponse {
   tgeDate: string;
 }
 
-export interface AirdropPayoutRequest {
-  id: string;
-  status: 'PENDING' | 'APPROVED' | 'SENT' | 'REJECTED';
-  expectedTokens: number;
-  walletAddress?: string;
-  createdAt: string;
-  sentAt?: string | null;
-  txReference?: string | null;
-}
+export type AirdropPayoutRequest = OpenAPIPayoutRequest;
 
-export interface AirdropStatusResponse {
-  settings: {
-    isPaused: boolean;
-    itemsToBagRate: number | null;
-    campaignEnded: boolean;
-    tgeDate?: string;
-    [key: string]: unknown;
-  };
-  userStatus: {
-    walletSubmitted?: string | null;
-    payoutRequest?: AirdropPayoutRequest | null;
-    [key: string]: unknown;
-  } | null;
-  reveal?: {
-    isRevealed?: boolean;
-    [key: string]: unknown;
-  };
-}
+export type AirdropStatusResponse = OpenAPIAirdropStatusResponse;
 
-export interface MissionClaimResponse {
-  success: boolean;
-  message?: string;
-  items?: number;
-  rewardTokens?: number;
-}
+export type MissionClaimResponse = OpenAPIClaimMissionResponse;
 
 export type Chain = 'BSC' | 'ETH' | 'SOL' | 'BASE' | 'AVAX' | 'ARB';
 
