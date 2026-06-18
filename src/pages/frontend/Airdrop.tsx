@@ -7,13 +7,21 @@ import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
-import { AirdropPayoutRequest, AirdropStatsResponse, AirdropStatusResponse, MissionClaimResponse, MissionListResponse, MissionTask, ReferralEntry } from '../../types';
+import { AirdropStatsResponse, ReferralEntry } from '../../types';
+import type {
+    AirdropStatusResponse,
+    ClaimMissionRequest,
+    ClaimMissionResponse,
+    Mission,
+    MissionListResponse,
+    PayoutRequest,
+} from '../../types/openapi-contracts';
 import Swal from 'sweetalert2';
 
 export const Airdrop: React.FC = () => {
     const { user, refreshUser } = useAuth();
     const [stats, setStats] = useState<AirdropStatsResponse | null>(null);
-    const [tasks, setTasks] = useState<MissionTask[]>([]);
+    const [tasks, setTasks] = useState<Mission[]>([]);
     const [referrals, setReferrals] = useState<ReferralEntry[]>([]);
     const [isTaskLoading, setIsTaskLoading] = useState(false);
     const [missionPaused, setMissionPaused] = useState(false);
@@ -22,8 +30,8 @@ export const Airdrop: React.FC = () => {
     const [itemsBalance, setItemsBalance] = useState<number>(0);
     const [itemsToBagRate, setItemsToBagRate] = useState<number | null>(null);
     const [campaignEnded, setCampaignEnded] = useState(false);
-    const [payoutRequest, setPayoutRequest] = useState<AirdropPayoutRequest | null>(null); // user's current payout request
-    const parseMissionResponse = (data: MissionTask[] | MissionListResponse): MissionTask[] => {
+    const [payoutRequest, setPayoutRequest] = useState<PayoutRequest | null>(null); // user's current payout request
+    const parseMissionResponse = (data: Mission[] | MissionListResponse): Mission[] => {
         return Array.isArray(data) ? data : (data.missions || []);
     };
 
@@ -119,7 +127,7 @@ export const Airdrop: React.FC = () => {
         
         const fetchTasks = async () => {
             try {
-                const res = await api.get<MissionTask[] | MissionListResponse>('/api/airdrop/tasks');
+                const res = await api.get<Mission[] | MissionListResponse>('/api/airdrop/tasks');
                 setTasks(parseMissionResponse(res.data));
             } catch (err) {
                 console.error("Failed to fetch mission hub tasks", err);
@@ -191,11 +199,13 @@ export const Airdrop: React.FC = () => {
 
         setIsTaskLoading(true);
         try {
-            const res = await api.post<MissionClaimResponse>('/api/airdrop/tasks/complete', { 
+            const claimPayload: ClaimMissionRequest = {
                 taskId, 
                 taskLink: link,
-                feedback: taskFeedback[taskId] 
-            });
+                feedback: taskFeedback[taskId]
+            };
+
+            const res = await api.post<MissionClaimResponse>('/api/airdrop/tasks/complete', claimPayload);
             if (res.data.success) {
                 Swal.fire({
                     title: 'MISSION COMPLETE',
@@ -211,7 +221,7 @@ export const Airdrop: React.FC = () => {
                 }
                 // Refresh tasks and stats in-place
                 const [newTasks, newStats] = await Promise.all([
-                    api.get<MissionTask[] | MissionListResponse>('/api/airdrop/tasks').then((r) => parseMissionResponse(r.data)).catch(() => tasks),
+                    api.get<Mission[] | MissionListResponse>('/api/airdrop/tasks').then((r) => parseMissionResponse(r.data)).catch(() => tasks),
                     api.get<AirdropStatsResponse>('/api/airdrop/stats').then(r => r.data).catch(() => stats),
                 ]);
                 setTasks(newTasks);
