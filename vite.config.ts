@@ -1,7 +1,11 @@
 import path from 'path';
+import dns from 'dns';
+import https from 'https';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
+dns.setDefaultResultOrder('ipv4first');
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
@@ -13,10 +17,11 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '/api': {
           // VITE_API_BASE_URL is the single source of truth for the backend URL.
-          // In dev: falls back to localhost:3003. In prod: set to https://api.yourdomain.com
-          target: env.VITE_API_BASE_URL || 'http://localhost:3003',
+          // In dev: falls back to https://alpha-api.figmentstudio.ng. In prod: set to https://api.yourdomain.com
+          target: env.VITE_API_BASE_URL || 'https://alpha-api.figmentstudio.ng',
           changeOrigin: true,
           secure: false,
+          agent: new https.Agent({ family: 4 })
         }
       }
     },
