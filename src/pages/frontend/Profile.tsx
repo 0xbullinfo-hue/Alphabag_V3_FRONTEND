@@ -59,6 +59,14 @@ export const Profile: React.FC = () => {
     const [project, setProject] = useState<Project | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyRef = (refUrl: string) => {
+        navigator.clipboard.writeText(refUrl).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2500);
+        });
+    };
 
     // Editing State
     const [isEditing, setIsEditing] = useState(false);
@@ -467,13 +475,6 @@ export const Profile: React.FC = () => {
                     {isOwnProfile && (() => {
                         const refCode = profileUser?.referralCode || profileUser?.id?.slice(0, 8) || 'ALPHABAG';
                         const refUrl = `${window.location.origin}/#/?ref=${refCode}`;
-                        const [copied, setCopied] = React.useState(false);
-                        const handleCopy = () => {
-                            navigator.clipboard.writeText(refUrl).then(() => {
-                                setCopied(true);
-                                setTimeout(() => setCopied(false), 2500);
-                            });
-                        };
                         return (
                             <div className="mt-4 pt-4 border-t border-white/5">
                                 <div className="flex items-center gap-2 mb-2">
@@ -488,7 +489,7 @@ export const Profile: React.FC = () => {
                                 <div className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5">
                                     <span className="flex-1 font-mono text-[11px] text-zinc-400 truncate">{refUrl}</span>
                                     <button
-                                        onClick={handleCopy}
+                                        onClick={() => handleCopyRef(refUrl)}
                                         className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
                                             copied
                                                 ? 'bg-green-500/20 text-green-400 border border-green-500/30'
