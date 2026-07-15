@@ -200,22 +200,22 @@ export const Markets: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-3 text-right font-semibold text-[#eaecef] tabular-nums text-[12px]">
+                      <td className="py-3 px-3 text-right font-semibold text-[#eaecef] tabular-data text-[12px]">
                         ${coin.current_price.toLocaleString(undefined, { maximumFractionDigits: coin.current_price < 1 ? 4 : 2 })}
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-nums text-[12px] ${getPchColor(pch1h)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch1h)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch1h)}</span>{Math.abs(pch1h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-nums text-[12px] ${getPchColor(pch24h)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch24h)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch24h)}</span>{Math.abs(pch24h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-nums text-[12px] ${getPchColor(pch7d)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch7d)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch7d)}</span>{Math.abs(pch7d).toFixed(1)}%
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-nums text-[12px]">
+                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[12px]">
                         {fmt(coin.total_volume)}
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-nums text-[12px]">
+                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[12px]">
                         {fmt(coin.market_cap)}
                       </td>
                       <td className="py-3 px-4 hidden xl:table-cell">

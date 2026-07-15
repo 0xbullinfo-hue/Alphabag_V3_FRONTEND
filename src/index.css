@@ -42,7 +42,7 @@
   }
 
   /* ── Financial Data Alignment ── */
-  .tabular-data, .font-mono,
+  .tabular-data, .tabular-nums, .font-mono,
   [class*="text-alphabag-yellow"],
   [class*="text-alphabag-green"],
   [class*="text-alphabag-red"] {
