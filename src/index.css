@@ -12,8 +12,41 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --alphabag-yellow: 252 213 53;
+    --bg-color: #0b0e11;
+    --panel-color: #181a20;
+    --card-color: #1e2329;
+    --border-color: #2b3139;
+    --border-light: rgba(255, 255, 255, 0.05);
+    
+    --text-color: #eaecef;
+    --subtext-color: #848e9c;
+    --muted-color: #474d57;
+    
+    --yellow: #fcd535;
+    --yellow-hover: #e0bd2e;
+    --green: #0ecb81;
+    --red: #f6465d;
+    --blue: #60a5fa;
+
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .light {
+    --bg-color: #f6f6f6;
+    --panel-color: #ffffff;
+    --card-color: #ffffff;
+    --border-color: #eaecef;
+    --border-light: rgba(0, 0, 0, 0.03);
+    
+    --text-color: #1e2329;
+    --subtext-color: #707a8a;
+    --muted-color: #aeaeae;
+    
+    --yellow: #fcd535;
+    --yellow-hover: #e0bd2e;
+    --green: #03a66d;
+    --red: #cf304a;
+    --blue: #2f80ed;
   }
 
   html {
@@ -22,12 +55,51 @@
   }
 
   html, body {
-    @apply bg-[#0b0e11] text-[#eaecef] bg-fixed;
-    font-family: 'Inter', 'Satoshi', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* ── Theme Adaptations for Hardcoded Colors in Light Mode ── */
+  .light [class*="bg-[#0b0e11]"],
+  .light [class*="bg-[#0B0E11]"],
+  .light [class*="bg-alphabag-black"] {
+    background-color: var(--bg-color) !important;
+  }
+
+  .light [class*="bg-[#181a20]"],
+  .light [class*="bg-[#1e2329]"],
+  .light [class*="bg-[#1E2329]"],
+  .light [class*="bg-alphabag-dark"] {
+    background-color: var(--panel-color) !important;
+  }
+
+  .light [class*="border-[#2b3139]"],
+  .light [class*="border-alphabag-gray"],
+  .light [class*="border-alphabag-border"] {
+    border-color: var(--border-color) !important;
+  }
+
+  .light [class*="text-[#eaecef]"],
+  .light [class*="text-alphabag-text"] {
+    color: var(--text-color) !important;
+  }
+
+  .light [class*="text-[#848e9c]"],
+  .light [class*="text-[#A1A1AA]"],
+  .light [class*="text-alphabag-subtext"] {
+    color: var(--subtext-color) !important;
+  }
+
+  .light [class*="text-[#474d57]"],
+  .light [class*="text-[#71717A]"],
+  .light [class*="text-alphabag-muted"] {
+    color: var(--muted-color) !important;
   }
 
   /* ── Typography Hierarchy & Clarity ── */

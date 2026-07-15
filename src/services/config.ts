@@ -40,7 +40,17 @@ export const TOKEN_GATING_CONFIG = {
 export const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
-export const DISABLED_PAGES = (import.meta.env.VITE_DISABLED_PAGES || '/defi').split(',').map(p => p.trim());
+export const DISABLED_PAGES = [
+  '/cex-bag',
+  '/portfolio',
+  '/alphas-feed',
+  '/alpha-ai',
+  '/integrations',
+  '/whales',
+  '/security',
+  '/alpha-calls',
+  '/defi',
+];
 
 
 // Maps the chain symbols ChainService returns (one row per chain's native

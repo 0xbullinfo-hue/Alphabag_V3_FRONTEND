@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
-import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap } from 'lucide-react';
+import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap, Sun, Moon } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchGlobalStats } from '../../services/mockData';
 import { useAuth } from '../../context/AuthContext';
@@ -16,7 +15,6 @@ interface HeaderProps {
   isSidebarOpen: boolean;
 }
 
-
 export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
   const [stats, setStats] = useState<any>(null);
   const { user, logout, isAuthenticated } = useAuth();
@@ -25,6 +23,25 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
   const [searchValue, setSearchValue] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  
+  // Theme state
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   const [notifications, setNotifications] = useState<any[]>([
     {
       id: '1',
@@ -52,11 +69,11 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
     // Calculate CEX Total
     const savedCex = localStorage.getItem('alphabag_cex_connections');
     if (savedCex) {
-        try {
-            const parsed = JSON.parse(savedCex);
-            const total = parsed.reduce((acc: number, item: any) => acc + (item.balance || 0), 0);
-            setCexTotal(total);
-        } catch (e) { console.error("Error parsing CEX data in Header", e); }
+      try {
+        const parsed = JSON.parse(savedCex);
+        const total = parsed.reduce((acc: number, item: any) => acc + (item.balance || 0), 0);
+        setCexTotal(total);
+      } catch (e) { console.error("Error parsing CEX data in Header", e); }
     }
   }, []);
 
@@ -97,17 +114,22 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
           </button>
 
           <Link to="/" className="flex items-center space-x-2 group">
-            <img src="/logo.png" alt="AlphaBAG Logo" className="w-8 h-8 object-contain rounded-full group-hover:scale-105 transition-transform" />
-            <span className="text-xl font-bold text-[#eaecef] tracking-tight">AlphaBAG</span>
+            <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full group-hover:scale-105 transition-transform" />
+            <span className="text-lg font-bold text-[#eaecef] tracking-tight">ALPHABAG</span>
           </Link>
 
-          <nav className="hidden md:flex items-center ml-10 space-x-8">
-
-            <Link to="/markets" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-alphabag-muted hover:text-white transition-colors">
+          <nav className="hidden md:flex items-center ml-8 space-x-6 text-[12px] font-semibold text-[#848e9c]">
+            <Link to="/markets" className="hover:text-white transition-colors uppercase tracking-wider">
               Markets
             </Link>
-            <Link to="/airdrop" className="text-[11px] font-semibold uppercase tracking-[0.18em] text-alphabag-muted hover:text-white transition-colors">
-              EARN
+            <Link to="/my-alphabag" className="hover:text-white transition-colors uppercase tracking-wider">
+              Trade
+            </Link>
+            <Link to="/airdrop" className="hover:text-white transition-colors uppercase tracking-wider">
+              Earn
+            </Link>
+            <Link to="/alphas-feed" className="hover:text-white transition-colors uppercase tracking-wider">
+              Square
             </Link>
           </nav>
 
@@ -135,6 +157,14 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </form>
 
         <div className="flex items-center space-x-4">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
+            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           {isAuthenticated ? (
             <div className="relative">
               <div className="flex items-center gap-2">

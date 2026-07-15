@@ -88,31 +88,36 @@ const ManualHoldingsSection: React.FC = () => {
                     <input
                         type="text" placeholder="Name" value={coin}
                         onChange={e => setCoin(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
+                        disabled={true}
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
                     />
                     <input
                         type="text" placeholder="Ticker" value={symbol}
                         onChange={e => setSymbol(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none uppercase"
+                        disabled={true}
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none uppercase opacity-50 cursor-not-allowed"
                     />
                     <input
                         type="number" placeholder="Amount" value={amount}
                         onChange={e => setAmount(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
+                        disabled={true}
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
                     />
                     <input
                         type="number" placeholder="Price ($)" value={buyPrice}
                         onChange={e => setBuyPrice(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
+                        disabled={true}
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
                     />
                     <input
                         type="text" placeholder="Notes" value={notes}
                         onChange={e => setNotes(e.target.value)}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none"
+                        disabled={true}
+                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
                     />
                 </div>
                 {formError && <div className="text-alphabag-red text-xs mb-3 flex items-center gap-2"><AlertCircle size={12} />{formError}</div>}
-                <Button onClick={handleAdd} className="w-full sm:w-auto font-bold">
+                <Button onClick={handleAdd} disabled={true} className="w-full sm:w-auto font-bold opacity-50 cursor-not-allowed">
                     <Plus size={16} className="mr-2" /> Add Holding
                 </Button>
             </div>
@@ -150,7 +155,7 @@ const ManualHoldingsSection: React.FC = () => {
                                     </td>
                                     <td className="py-3 pr-4 text-alphabag-muted text-xs truncate max-w-[120px]">{h.notes || '—'}</td>
                                     <td className="py-3">
-                                        <button onClick={() => handleRemove(h.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-1">
+                                        <button onClick={() => {}} disabled={true} className="text-alphabag-subtext p-1 opacity-30 cursor-not-allowed">
                                             <Trash2 size={14} />
                                         </button>
                                     </td>
@@ -292,7 +297,7 @@ export const Settings: React.FC = () => {
                         <div className="text-2xl font-semibold text-[#eaecef] leading-none tracking-tight tabular-nums">
                             {premiumTokenBalance.toLocaleString()} <span className="text-[#fcd535] text-base">BAG</span>
                         </div>
-                        <button onClick={() => window.open('https://pancakeswap.finance', '_blank')} className="h-7 bg-[#fcd535] text-[#181a20] text-[10px] font-semibold px-3 rounded-md hover:bg-[#e0bd2e] transition-all">Buy</button>
+                        <button onClick={() => {}} disabled={true} className="h-7 bg-[#fcd535] text-[#181a20] text-[10px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
                     </div>
                 </div>
             </div>
@@ -301,8 +306,9 @@ export const Settings: React.FC = () => {
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-sm font-semibold text-[#eaecef] uppercase tracking-wider">Portfolio Connections</h2>
                     <button
-                        onClick={() => navigate('/integrations')}
-                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider hover:text-[#e0bd2e] transition-colors"
+                        onClick={() => {}}
+                        disabled={true}
+                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
                     >
                         View All <ExternalLink size={11} />
                     </button>
@@ -357,9 +363,9 @@ export const Settings: React.FC = () => {
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
-                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1" />
-                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none" />
-                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono">
+                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
+                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
+                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
                             <option value="BSC">BSC</option>
                             <option value="ETH">ETH</option>
                             <option value="SOL">SOL</option>
@@ -367,17 +373,16 @@ export const Settings: React.FC = () => {
                             <option value="AVAX">AVAX</option>
                             <option value="ARB">ARB</option>
                         </select>
-                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none">
+                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed">
                             <option value="PORTFOLIO">Portfolio</option>
                             <option value="WHALE">Whale Watch</option>
                         </select>
-                        <Button onClick={handleAdd} disabled={isSyncing} className="font-bold h-[42px] text-xs">
-                            {isSyncing ? <Loader2 size={14} className="animate-spin mr-2" /> : <Plus size={14} className="mr-2" />}
-                            {isSyncing ? 'Verifying...' : 'Add Connection'}
+                        <Button onClick={handleAdd} disabled={true} className="font-bold h-[42px] text-xs opacity-50 cursor-not-allowed">
+                            <Plus size={14} className="mr-2" /> Add Connection
                         </Button>
                     </div>
                     {error && <div className="text-alphabag-red text-xs mt-2 bg-alphabag-red/10 p-2 rounded flex items-center"><AlertCircle size={12} className="mr-2" /> {error}</div>}
-                    <p className="text-[10px] text-[#848e9c] mt-3">To view or remove connected wallets, go to the <button onClick={() => navigate('/integrations')} className="text-[#fcd535] underline hover:no-underline">Integrations page</button>.</p>
+                    <p className="text-[10px] text-[#848e9c] mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 
@@ -389,8 +394,9 @@ export const Settings: React.FC = () => {
                         <p className="text-alphabag-subtext text-xs mt-1">Connect read-only API keys to track centralized exchange balances. <span className="text-alphabag-yellow font-bold">Max {MAX_CEX} exchanges.</span></p>
                     </div>
                     <button
-                        onClick={() => navigate('/integrations')}
-                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider hover:text-[#e0bd2e] transition-colors"
+                        onClick={() => {}}
+                        disabled={true}
+                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
                     >
                         Manage <ExternalLink size={11} />
                     </button>
@@ -455,12 +461,13 @@ export const Settings: React.FC = () => {
                             {availableCex.map(cex => (
                                 <button
                                     key={cex.id}
-                                    onClick={() => openCexModal(cex.id)}
-                                    className="flex flex-col items-center justify-center p-3 bg-alphabag-black border border-alphabag-gray rounded-xl hover:bg-white/5 hover:border-alphabag-yellow/40 transition-all group gap-1"
+                                    onClick={() => {}}
+                                    disabled={true}
+                                    className="flex flex-col items-center justify-center p-3 bg-alphabag-black border border-alphabag-gray rounded-xl transition-all group gap-1 opacity-50 cursor-not-allowed"
                                     title={`Connect ${cex.name}`}
                                 >
-                                    <img src={cex.icon} alt={cex.name} className="w-7 h-7 rounded-full bg-white p-0.5 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" />
-                                    <span className="text-[8px] font-bold text-alphabag-muted group-hover:text-alphabag-subtext truncate w-full text-center">{cex.name}</span>
+                                    <img src={cex.icon} alt={cex.name} className="w-7 h-7 rounded-full bg-white p-0.5 grayscale opacity-30 transition-all" />
+                                    <span className="text-[8px] font-bold text-alphabag-muted truncate w-full text-center">{cex.name}</span>
                                 </button>
                             ))}
                         </div>
@@ -469,7 +476,7 @@ export const Settings: React.FC = () => {
                             <p className="text-alphabag-green font-bold text-sm">All {MAX_CEX} slots filled!</p>
                         </div>
                     )}
-                    <p className="text-[10px] text-[#848e9c] mt-3">To remove a connected exchange, go to the <button onClick={() => navigate('/integrations')} className="text-[#fcd535] underline hover:no-underline">Integrations page</button>.</p>
+                    <p className="text-[10px] text-[#848e9c] mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 

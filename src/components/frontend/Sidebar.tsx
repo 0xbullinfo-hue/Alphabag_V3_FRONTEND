@@ -3,6 +3,7 @@ import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as Lin
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DISABLED_PAGES, IS_DEMO_MODE } from '../../services/config';
+import Swal from 'sweetalert2';
 
 interface NavItemProps {
   to: string;
@@ -12,19 +13,45 @@ interface NavItemProps {
 }
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
-  if (DISABLED_PAGES.includes(to)) return null;
+  const isDisabled = DISABLED_PAGES.includes(to);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (isDisabled) {
+      e.preventDefault();
+      Swal.fire({
+        title: 'COMING SOON',
+        text: `${label} feature is in final testing. Launching in Phase 2.0.`,
+        icon: 'info',
+        confirmButtonText: 'ACKNOWLEDGE',
+        confirmButtonColor: '#fcd535',
+        background: 'var(--panel-color)',
+        color: 'var(--text-color)',
+        customClass: {
+          popup: 'border border-alphabag-gray rounded-2xl',
+          confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
+        }
+      });
+    }
+  };
+
   return (
     <Link
-      to={to}
-      className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${active
+      to={isDisabled ? '#' : to}
+      onClick={handleClick}
+      className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${
+        isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+      } ${active
         ? 'bg-[#2b3139] text-[#eaecef] border-l-2 border-[#fcd535]'
         : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef] border-l-2 border-transparent'
-        }`}
+      }`}
     >
       <div className="flex items-center space-x-3 relative z-10">
         {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
         <span className="font-medium text-xs uppercase">{label}</span>
       </div>
+      {isDisabled && (
+        <span className="text-[7px] font-black bg-[#fcd535]/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-[#fcd535]/20 shrink-0">SOON</span>
+      )}
     </Link>
   );
 };
@@ -95,8 +122,11 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
-            <NavItem to="/cex-bag" icon={Layers} label="CEX PORTFOLIO" active={location.pathname === '/cex-bag'} />
-            <NavItem to="/portfolio" icon={Wallet2} label="DEX PORTFOLIO" active={location.pathname === '/portfolio'} />
+            <NavDropdown icon={LayoutDashboard} label="MYALPHABAG" activePaths={['/my-alphabag', '/cex-bag', '/portfolio']}>
+              <NavItem to="/my-alphabag" icon={PieChart} label="Overview" active={location.pathname === '/my-alphabag'} />
+              <NavItem to="/cex-bag" icon={Layers} label="CEX Portfolio" active={location.pathname === '/cex-bag'} />
+              <NavItem to="/portfolio" icon={Wallet2} label="DEX Portfolio" active={location.pathname === '/portfolio'} />
+            </NavDropdown>
 
             {!DISABLED_PAGES.includes('/airdrop') && (
               <div className="relative">
@@ -105,12 +135,12 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
               </div>
             )}
             <NavItem to="/alphas-feed" icon={Zap} label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
-            <NavItem to="/alpha-ai" icon={Bot} label="Alpha Intelligence" active={location.pathname === '/alpha-ai'} />
+            <NavItem to="/alpha-ai" icon={Bot} label="Alpha Analyst" active={location.pathname === '/alpha-ai'} />
             <NavItem to="/calculator" icon={Calculator} label="Alpha Calculator" active={location.pathname === '/calculator'} />
             <NavItem to="/settings" icon={LinkIcon} label="Setup Connections" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" icon={Zap} label="Integrations" active={location.pathname === '/integrations'} />
             
-            <NavItem to="/whales" icon={Eye} label="Whale Watch" active={location.pathname.startsWith('/whales')} />
+            <NavItem to="/whales" icon={Eye} label="Alpha Radar" active={location.pathname.startsWith('/whales')} />
             <NavItem to="/security" icon={ShieldCheck} label="Security Radar" active={location.pathname === '/security'} />
             <NavItem to="/alpha-calls" icon={Radio} label="AlphaCalls" active={location.pathname === '/alpha-calls'} />
           </NavGroup>

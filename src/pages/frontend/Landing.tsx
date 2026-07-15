@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -20,6 +20,24 @@ export const Landing: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
   const [showTeaserToast, setShowTeaserToast] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  // Theme state
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   useEffect(() => {
     // Only redirect to app if NOT in teaser mode and user is authenticated
@@ -111,10 +129,10 @@ export const Landing: React.FC = () => {
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5 shadow-glass">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="w-full px-6 md:px-12 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('home')}>
-            <img src="/logo.png" alt="AlphaBAG Logo" className="w-9 h-9 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
-            <span className="text-xl font-semibold tracking-tighter text-white">ALPHABAG</span>
+            <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
+            <span className="text-lg font-bold tracking-tight text-white">ALPHABAG</span>
           </div>
 
           {/* Desktop Nav */}
@@ -126,9 +144,6 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('roadmap')} className={`transition-colors uppercase ${activeTab === 'roadmap' ? 'text-white' : 'hover:text-white'}`}>Roadmap</button>
             <button onClick={() => handleNavClick('calculator')} className={`transition-colors uppercase ${activeTab === 'calculator' ? 'text-white' : 'hover:text-white'}`}>Calculator</button>
             <button onClick={() => handleNavClick('faq')} className={`transition-colors uppercase ${activeTab === 'faq' ? 'text-white' : 'hover:text-white'}`}>FAQ</button>
-            {/* Pricing hidden for beta
-            <button onClick={() => scrollToSection('membership')} className="hover:text-white transition-colors uppercase">Pricing</button>
-             */}
 
             {/* Fallback Login Button for Debugging */}
             {!isAuthenticated ? (
@@ -146,12 +161,29 @@ export const Landing: React.FC = () => {
                 Open App
               </Button>
             )}
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0 ml-2"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X /> : <LayoutGrid />}
-          </button>
+          <div className="md:hidden flex items-center gap-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl text-[#848e9c]"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button className="text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X /> : <LayoutGrid />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Nav Dropdown */}

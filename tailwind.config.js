@@ -10,31 +10,22 @@ export default {
         extend: {
             colors: {
                 alphabag: {
-                    // ─── Backgrounds ───────────────────────────────────────────────
-                    black:      "#000000",         // Pure OLED black — root background
-                    dark:       "#0A0A0A",          // Elevated panels, sidebars, modals
-                    darkgray:   "#111113",          // Card surfaces
-                    'dark-card':"#141417",          // Inner card elements
-
-                    // ─── Borders & Dividers ─────────────────────────────────────────
-                    gray:       "rgba(255,255,255,0.10)",  // Standard border
-                    border:     "rgba(255,255,255,0.12)",  // Slightly stronger borders
-                    'border-light': "rgba(255,255,255,0.05)", // Ultra-subtle
-
-                    // ─── Primary Accent ─────────────────────────────────────────────
-                    yellow:     "#FCD535",          // CTA buttons, active state
-                    yellowHover:"#E6BF1A",          // Yellow on hover
-
-                    // ─── Semantic Colours ────────────────────────────────────────────
-                    green:      "#10B981",          // Positive / success
-                    red:        "#EF4444",          // Negative / error
-                    blue:       "#60A5FA",          // Info / link accent
-
-                    // ─── Text Hierarchy ──────────────────────────────────────────────
-                    text:       "#F4F4F5",          // Primary body text (Zinc 100)
-                    subtext:    "#A1A1AA",          // Secondary labels (Zinc 400)
-                    muted:      "#71717A",          // Tertiary / placeholder (Zinc 500)
-                    'ultra-muted': "#3F3F46",       // Disabled / decorative (Zinc 700)
+                    black:      "var(--bg-color)",
+                    dark:       "var(--panel-color)",
+                    darkgray:   "var(--card-color)",
+                    'dark-card':"var(--card-color)",
+                    gray:       "var(--border-color)",
+                    border:     "var(--border-color)",
+                    'border-light': "var(--border-light)",
+                    yellow:     "var(--yellow)",
+                    yellowHover:"var(--yellow-hover)",
+                    green:      "var(--green)",
+                    red:        "var(--red)",
+                    blue:       "var(--blue)",
+                    text:       "var(--text-color)",
+                    subtext:    "var(--subtext-color)",
+                    muted:      "var(--muted-color)",
+                    'ultra-muted': "#3F3F46",
                 }
             },
             fontFamily: {
