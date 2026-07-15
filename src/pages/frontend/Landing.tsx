@@ -208,8 +208,7 @@ export const Landing: React.FC = () => {
         {/* Hero Section */}
         {activeTab === 'home' && (
           <section className="relative pt-24 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center" >
-            {/* Background Gradients - Toned down for professional look */}
-            < div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none" ></div >
+
 
             <div className="max-w-7xl mx-auto text-center relative z-10">
 
@@ -298,7 +297,7 @@ export const Landing: React.FC = () => {
         {/* Standalone Calculator Section */}
         {activeTab === 'calculator' && (
           <section className="relative pt-24 pb-16 px-6 min-h-[90vh] flex flex-col justify-center">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none"></div>
+
             <div className="max-w-7xl mx-auto flex flex-col relative z-10 w-full">
               <div className="relative max-w-6xl mx-auto w-full">
                 {/* Glow removed, width expanded to max-w-6xl to accommodate the full interactive calculator grid */}
@@ -407,7 +406,7 @@ export const Landing: React.FC = () => {
         {/* Tokenomics Section */}
         {activeTab === 'tokenomics' && (
           <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none"></div>
+
             
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center mb-16">
@@ -444,12 +443,7 @@ export const Landing: React.FC = () => {
         {/* How to Buy Section */}
         {activeTab === 'buy' && (
           <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
-            <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(252,213,53,0.05) 0%, transparent 70%)', backgroundSize: '100% 100%' }}></div>
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(252,213,53,0.4) 1px, transparent 0)', backgroundSize: '60px 60px' }}></div>
-            
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full border border-alphabag-yellow/5 pointer-events-none"></div>
+
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center md:text-left mb-20 relative">
@@ -510,7 +504,7 @@ export const Landing: React.FC = () => {
         {/* Terminal Roadmap Section */}
         {activeTab === 'roadmap' && (
           <section id="roadmap" className="pt-40 pb-24 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
-            <div className="absolute inset-0 bg-alphabag-yellow/5 blur-[120px] rounded-full w-[800px] h-[800px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
               <div className="text-center mb-8 mt-12">
@@ -615,7 +609,7 @@ export const Landing: React.FC = () => {
         {/* Global Markets Section */}
         {activeTab === 'markets' && (
           <section className="relative pt-20 pb-20 px-6 min-h-[90vh]">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none"></div>
+
             <div className="max-w-7xl mx-auto relative z-10 w-full">
                <Markets />
             </div>
