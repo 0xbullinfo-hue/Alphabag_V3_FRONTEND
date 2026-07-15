@@ -155,10 +155,10 @@ const AppContent = () => {
           } />
           <Route path="/genesis" element={<GenesisLanding />} />
           <Route path="/genesis-manifesto" element={<PrivateRoute><GenesisManifesto /></PrivateRoute>} />
-          <Route path="/cex-bag" element={<PrivateRoute><RouteGuard path="/cex-bag" title="CEX Portfolio" description="Centralized exchange balance tracking is in staging. Launching in Phase 2.0."><CexBag /></RouteGuard></PrivateRoute>} />
-          <Route path="/dex-bag" element={<PrivateRoute><RouteGuard path="/dex-bag" title="DEX Portfolio" description="Decentralized wallet tracking is in staging. Launching in Phase 2.0."><DexBag /></RouteGuard></PrivateRoute>} />
+          <Route path="/cex-bag" element={<PrivateRoute><CexBag /></PrivateRoute>} />
+          <Route path="/dex-bag" element={<PrivateRoute><DexBag /></PrivateRoute>} />
           <Route path="/calculator" element={<PrivateRoute><Calculator /></PrivateRoute>} />
-          <Route path="/portfolio" element={<PrivateRoute><RouteGuard path="/portfolio" title="DEX Portfolio" description="Decentralized wallet tracking is in staging. Launching in Phase 2.0."><Portfolio /></RouteGuard></PrivateRoute>} />
+          <Route path="/portfolio" element={<PrivateRoute><Portfolio /></PrivateRoute>} />
           <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
           <Route path="/alpha-screener" element={<PrivateRoute><RouteGuard path="/alpha-screener" title="Alpha Screener" description="Real-time multi-chain token screening is in final staging. Launching in Phase 2.0."><AlphaScreener /></RouteGuard></PrivateRoute>} />
           <Route path="/my-alphabag" element={<PrivateRoute><MyAlphabag /></PrivateRoute>} />

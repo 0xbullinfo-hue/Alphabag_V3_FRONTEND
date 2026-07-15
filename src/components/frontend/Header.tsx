@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
           <Link to="/" className="flex items-center space-x-2 group">
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full group-hover:scale-105 transition-transform" />
-            <span className="text-lg font-bold text-[#eaecef] tracking-tight">ALPHABAG</span>
+            <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
           </Link>
 
           <nav className="hidden md:flex items-center ml-8 space-x-6 text-[12px] font-semibold text-[#848e9c]">

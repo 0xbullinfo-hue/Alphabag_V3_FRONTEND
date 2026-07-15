@@ -29,19 +29,8 @@ export default {
                 }
             },
             fontFamily: {
-                sans: ['Inter', 'Satoshi', 'system-ui', '-apple-system', 'sans-serif'],
+                sans: ['IBM Plex Sans', 'system-ui', '-apple-system', 'sans-serif'],
                 mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
-            },
-            fontWeight: {
-                thin: '400',
-                extralight: '400',
-                light: '400',
-                normal: '400',
-                medium: '400',
-                semibold: '800',
-                bold: '800',
-                extrabold: '800',
-                black: '800',
             },
             borderRadius: {
                 xl: '1rem',

@@ -41,8 +41,6 @@ export const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
 export const DISABLED_PAGES = [
-  '/cex-bag',
-  '/portfolio',
   '/alphas-feed',
   '/alpha-ai',
   '/integrations',

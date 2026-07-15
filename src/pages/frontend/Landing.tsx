@@ -132,7 +132,7 @@ export const Landing: React.FC = () => {
         <div className="w-full px-6 md:px-12 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('home')}>
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
-            <span className="text-lg font-bold tracking-tight text-white">ALPHABAG</span>
+            <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
           </div>
 
           {/* Desktop Nav */}

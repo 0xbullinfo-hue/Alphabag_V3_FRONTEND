@@ -58,7 +58,7 @@ export const MyAlphabag: React.FC = () => {
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <PieChart size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">MYALPHABAG</h1>
+                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">My AlphaBAG</h1>
                         <span className="text-[10px] bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
                     </div>
                     <p className="text-[#848e9c] text-sm">Consolidated portfolio overview of your centralized and decentralized assets.</p>
@@ -98,7 +98,7 @@ export const MyAlphabag: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => triggerComingSoon('CEX Portfolio Details')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => navigate('/cex-bag')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>
@@ -146,7 +146,7 @@ export const MyAlphabag: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => triggerComingSoon('DEX Portfolio Details')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => navigate('/portfolio')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>

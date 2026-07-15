@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
-   GOOGLE FONTS — Inter + JetBrains Mono
+   GOOGLE FONTS — IBM Plex Sans (Binance) + JetBrains Mono
    ═══════════════════════════════════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -57,7 +57,7 @@
   html, body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;

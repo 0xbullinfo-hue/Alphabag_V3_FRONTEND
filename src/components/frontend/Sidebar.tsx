@@ -122,11 +122,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
-            <NavDropdown icon={LayoutDashboard} label="MYALPHABAG" activePaths={['/my-alphabag', '/cex-bag', '/portfolio']}>
-              <NavItem to="/my-alphabag" icon={PieChart} label="Overview" active={location.pathname === '/my-alphabag'} />
-              <NavItem to="/cex-bag" icon={Layers} label="CEX Portfolio" active={location.pathname === '/cex-bag'} />
-              <NavItem to="/portfolio" icon={Wallet2} label="DEX Portfolio" active={location.pathname === '/portfolio'} />
-            </NavDropdown>
+            <NavItem to="/my-alphabag" icon={PieChart} label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
             {!DISABLED_PAGES.includes('/airdrop') && (
               <div className="relative">
