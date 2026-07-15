@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon, Calculator as CalculatorIcon, Globe } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,6 +12,369 @@ import { IS_DEMO_MODE } from '../../services/config';
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
 
+const TRANSLATIONS: Record<string, Record<string, string>> = {
+  en: {
+    nav_home: "Home",
+    nav_features: "Features",
+    nav_tokenomics: "Tokenomics",
+    nav_buy: "Buy",
+    nav_roadmap: "Roadmap",
+    nav_faq: "FAQ",
+    nav_pricing: "Pricing",
+    hero_title_1: "Track Your Crypto",
+    hero_title_2: "Total Stealth",
+    hero_desc: "Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn.",
+    btn_build_portfolio: "Build your portfolio",
+    btn_join_community: "Join community",
+    btn_notify_me: "Notify Me at Launch",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "Assets tracked",
+    stat_members: "100+",
+    stat_members_lbl: "Active members",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Cryptocurrencies",
+    calculator_title: "Alpha Calculator",
+    calculator_badge: "Live Simulator",
+    features_title: "Engineered for",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.",
+    why_title: "Why",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.",
+    why_latency_title: "Zero Latency Execution",
+    why_latency_desc: "Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.",
+    why_privacy_title: "Absolute Privacy",
+    why_privacy_desc: "We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.",
+    why_ai_title: "AlphaAi Integration",
+    why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
+    pricing_title: "Membership Tiers",
+    pricing_subtitle: "Scale your operation. Cancel anytime.",
+    tier_free: "Beta Tester",
+    tier_free_price: "Free Access",
+    tier_free_tokens: "Current Option (Current Alpha)",
+    tier_free_badge: "ACTIVE: CURRENT ALPHA",
+    tier_premium: "Alphabag (coming soon)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "All Features Locked",
+    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
+  },
+  ar: {
+    nav_home: "الرئيسية",
+    nav_features: "الميزات",
+    nav_tokenomics: "اقتصاديات الرمز",
+    nav_buy: "شراء",
+    nav_roadmap: "خارطة الطريق",
+    nav_faq: "الأسئلة الشائعة",
+    nav_pricing: "العضوية",
+    hero_title_1: "تتبع العملات الرقمية",
+    hero_title_2: "بسرية تامة",
+    hero_desc: "قم بإدارة محافظ Web3 المتنوعة، وتتبع تحركات الحيتان، وحاكي العائد على الاستثمار بدقة فورية. احصل على إشارات تداول واستكشف طرق الكسب.",
+    btn_build_portfolio: "ابنِ محفظتك",
+    btn_join_community: "انضم إلى المجتمع",
+    btn_notify_me: "أبلغني عند الإطلاق",
+    stat_assets: "+100 ألف دولار",
+    stat_assets_lbl: "الأصول المتتبعة",
+    stat_members: "+100",
+    stat_members_lbl: "الأعضاء النشطين",
+    stat_crypto: "+250",
+    stat_crypto_lbl: "العملات الرقمية",
+    calculator_title: "حاسبة ألفا",
+    calculator_badge: "محاكي مباشر",
+    features_title: "مصمم من أجل",
+    features_title_alpha: "ألفا",
+    features_subtitle: "توقف عن استخدام جداول البيانات. قم بالترقية إلى مركز يهدف إلى زيادة العائد وتقليل زمن الانتقال.",
+    why_title: "لماذا",
+    why_title_alpha: "ألفاباج؟",
+    why_desc: "بنيت من قبل المتداولين، للمتداولين. نقوم بإزالة الضوضاء وتقديم معلومات عالية التردد مباشرة إلى جهازك.",
+    why_latency_title: "تنفيذ بدون زمن انتقال",
+    why_latency_desc: "على عكس لوحات المعلومات التقليدية، يتصل AlphaBAG مباشرة بالعقد لتوفير تحديثات سريعة.",
+    why_privacy_title: "خصوصية مطلقة",
+    why_privacy_desc: "نحن نعمل في بيئة سرية تماماً للقراءة فقط. مفاتيحك الخاصة لا تلمس خوادمنا أبداً.",
+    why_ai_title: "تكامل AlphaAi",
+    why_ai_desc: "يقوم الذكاء الاصطناعي الخاص بنا بتحليل الهياكل الفنية وتقديم إعدادات تداول مباشرة.",
+    pricing_title: "فئات العضوية",
+    pricing_subtitle: "توسيع نطاق العملية الخاصة بك. إلغاء في أي وقت.",
+    tier_free: "مختبر بيتا",
+    tier_free_price: "وصول مجاني",
+    tier_free_tokens: "الخيار الحالي (ألفا الحالية)",
+    tier_free_badge: "نشط: ألفا الحالية",
+    tier_premium: "ألفاباج (قريباً)",
+    tier_premium_price: "مميز",
+    tier_premium_tokens: "جميع الميزات مغلقة",
+    tier_premium_badge: "الأهلية: حامل جينيسيس"
+  },
+  "ar-bh": {
+    nav_home: "الرئيسية",
+    nav_features: "الميزات",
+    nav_tokenomics: "اقتصاديات الرمز",
+    nav_buy: "شراء",
+    nav_roadmap: "خارطة الطريق",
+    nav_faq: "الأسئلة الشائعة",
+    nav_pricing: "العضوية",
+    hero_title_1: "تتبع العملات الرقمية",
+    hero_title_2: "بسرية تامة",
+    hero_desc: "قم بإدارة محافظ Web3 المتنوعة، وتتبع تحركات الحيتان، وحاكي العائد على الاستثمار بدقة فورية. احصل على إشارات تداول واستكشف طرق الكسب في البحرين.",
+    btn_build_portfolio: "ابنِ محفظتك",
+    btn_join_community: "انضم إلى المجتمع",
+    btn_notify_me: "أبلغني عند الإطلاق",
+    stat_assets: "+100 ألف د.ب",
+    stat_assets_lbl: "الأصول المتتبعة",
+    stat_members: "+100",
+    stat_members_lbl: "الأعضاء النشطين",
+    stat_crypto: "+250",
+    stat_crypto_lbl: "العملات الرقمية",
+    calculator_title: "حاسبة ألفا",
+    calculator_badge: "محاكي مباشر",
+    features_title: "مصمم من أجل",
+    features_title_alpha: "ألفا",
+    features_subtitle: "توقف عن استخدام جداول البيانات. قم بالترقية إلى مركز يهدف إلى زيادة العائد وتقليل زمن الانتقال.",
+    why_title: "لماذا",
+    why_title_alpha: "ألفاباج؟",
+    why_desc: "بنيت من قبل المتداولين، للمتداولين. نقوم بإزالة الضوضاء وتقديم معلومات عالية التردد مباشرة إلى جهازك في البحرين.",
+    why_latency_title: "تنفيذ بدون زمن انتقال",
+    why_latency_desc: "على عكس لوحات المعلومات التقليدية، يتصل AlphaBAG مباشرة بالعقد لتوفير تحديثات سريعة.",
+    why_privacy_title: "خصوصية مطلقة",
+    why_privacy_desc: "نحن نعمل في بيئة سرية تماماً للقراءة فقط. مفاتيحك الخاصة لا تلمس خوادمنا أبداً.",
+    why_ai_title: "تكامل AlphaAi",
+    why_ai_desc: "يقوم الذكاء الاصطناعي الخاص بنا بتحليل الهياكل الفنية وتقديم إعدادات تداول مباشرة.",
+    pricing_title: "فئات العضوية",
+    pricing_subtitle: "توسيع نطاق العملية الخاصة بك. إلغاء في أي وقت.",
+    tier_free: "مختبر بيتا",
+    tier_free_price: "وصول مجاني",
+    tier_free_tokens: "الخيار الحالي (ألفا الحالية)",
+    tier_free_badge: "نشط: ألفا الحالية",
+    tier_premium: "ألفاباج (قريباً)",
+    tier_premium_price: "مميز",
+    tier_premium_tokens: "جميع الميزات مغلقة",
+    tier_premium_badge: "الأهلية: حامل جينيسيس"
+  },
+  az: {
+    nav_home: "Ana Səhifə",
+    nav_features: "Özəlliklər",
+    nav_tokenomics: "Tokenomika",
+    nav_buy: "Satın Al",
+    nav_roadmap: "Yol Xəritəsi",
+    nav_faq: "FAQ",
+    nav_pricing: "Üzvlük",
+    hero_title_1: "Kriptonuzu İzləyin",
+    hero_title_2: "Tamamilə Gizli",
+    hero_desc: "Müxtəlif Web3 portfellərini idarə edin, balina hərəkətlərini izləyin və ROE-nizi real vaxt rejimində dəqiqliklə simulyasiya edin. Alpha dərəcəli siqnalları əldə edin.",
+    btn_build_portfolio: "Portfelinizi yaradın",
+    btn_join_community: "İcmaya qoşulun",
+    btn_notify_me: "Başlanğıcda mənə bildir",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "İzlənilən aktivlər",
+    stat_members: "100+",
+    stat_members_lbl: "Aktiv üzvlər",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Kriptovalyutalar",
+    calculator_title: "Alpha Kalkulyatoru",
+    calculator_badge: "Canlı Simulyator",
+    features_title: "Mühəndislik",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Cədvəllərdən istifadəni dayandırın. Gəlirliliyi artırmaq və gecikməni minimuma endirmək üçün mərkəzə keçin.",
+    why_title: "Niyə",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Trederlər tərəfindən trederlər üçün hazırlanmışdır. Səsi kəsirik və birbaşa terminalınıza yüksək tezlikli kəşfiyyat çatdırırıq.",
+    why_latency_title: "Sıfır Gecikmə İcra",
+    why_latency_desc: "Məlumatları saxlayan ənənəvi panellərdən fərqli olaraq, AlphaBAG balina hərəkətləri barədə anında məlumat verir.",
+    why_privacy_title: "Mütləq Məxfilik",
+    why_privacy_desc: "Biz tamamilə gizli, yalnız oxumaq üçün nəzərdə tutulmuş mühitdə işləyirik. Şəxsi açarlarınız serverlərimizə toxunmur.",
+    why_ai_title: "AlphaAi İnteqrasiyası",
+    why_ai_desc: "Qrafikləri əllə təhlil etməyi dayandırın. Bizim xüsusi süni intellektimiz birbaşa sizə siqnallar göndərir.",
+    pricing_title: "Üzvlük Səviyyələri",
+    pricing_subtitle: "Əməliyyatınızı genişləndirin. İstənilən vaxt ləğv edin.",
+    tier_free: "Beta Test Cihazı",
+    tier_free_price: "Pulsuz Giriş",
+    tier_free_tokens: "Cari Seçim (Cari Alpha)",
+    tier_free_badge: "AKTİV: CARİ ALPHA",
+    tier_premium: "Alphabag (tezliklə)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "Bütün Özəlliklər Kilidlidir",
+    tier_premium_badge: "UYĞUNLUQ: GENESIS SAHİBİ"
+  },
+  de: {
+    nav_home: "Startseite",
+    nav_features: "Funktionen",
+    nav_tokenomics: "Tokenomics",
+    nav_buy: "Kaufen",
+    nav_roadmap: "Roadmap",
+    nav_faq: "FAQ",
+    nav_pricing: "Preise",
+    hero_title_1: "Verfolgen Sie Ihre Krypto-Assets",
+    hero_title_2: "Absolute Anonymität",
+    hero_desc: "Verwalten Sie vielfältige Web3-Portfolios, verfolgen Sie Wal-Aktivitäten und simulieren Sie Ihre Eigenkapitalrendite (ROE) mit Echtzeitpräzision. Nutzen Sie erstklassige Handelssignale.",
+    btn_build_portfolio: "Erstellen Sie Ihr Portfolio",
+    btn_join_community: "Treten Sie der Community bei",
+    btn_notify_me: "Bei Start benachrichtigen",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "Verfolgte Assets",
+    stat_members: "100+",
+    stat_members_lbl: "Aktive Mitglieder",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Kryptowährungen",
+    calculator_title: "Alpha-Rechner",
+    calculator_badge: "Echtzeit-Simulator",
+    features_title: "Entwickelt für",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Vergessen Sie Tabellenkalkulationen. Wechseln Sie zu einer Plattform, die auf maximalen Ertrag und minimale Latenz ausgelegt ist.",
+    why_title: "Warum",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Von Tradern für Trader gebaut. Wir blenden das Rauschen aus und liefern hochfrequente Analysen direkt an Ihr Terminal.",
+    why_latency_title: "Latenzfreie Ausführung",
+    why_latency_desc: "Im Gegensatz zu traditionellen Dashboards verbindet sich AlphaBAG direkt mit RPC-Nodes, um sofortige Updates zu Wal-Bewegungen bereitzustellen.",
+    why_privacy_title: "Absolute Privatsphäre",
+    why_privacy_desc: "Wir arbeiten in einer rein lesbaren Stealth-Umgebung. Ihre privaten Schlüssel berühren niemals unsere Server.",
+    why_ai_title: "AlphaAi-Integration",
+    why_ai_desc: "Schluss mit der manuellen Chartanalyse. Unsere KI analysiert technische Strukturen und liefert profitable Setups.",
+    pricing_title: "Mitgliedschaftsstufen",
+    pricing_subtitle: "Erweitern Sie Ihre Möglichkeiten. Jederzeit kündbar.",
+    tier_free: "Beta-Tester",
+    tier_free_price: "Kostenloser Zugang",
+    tier_free_tokens: "Aktuelle Option (Aktuelle Alpha)",
+    tier_free_badge: "AKTIV: AKTUELLE ALPHA",
+    tier_premium: "Alphabag (demnächst)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "Alle Funktionen gesperrt",
+    tier_premium_badge: "BERECHTIGUNG: GENESIS HOLDER"
+  },
+  "en-ae": {
+    nav_home: "Home",
+    nav_features: "Features",
+    nav_tokenomics: "Tokenomics",
+    nav_buy: "Buy",
+    nav_roadmap: "Roadmap",
+    nav_faq: "FAQ",
+    nav_pricing: "Pricing",
+    hero_title_1: "Track Your Crypto",
+    hero_title_2: "Total Stealth",
+    hero_desc: "Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn in UAE.",
+    btn_build_portfolio: "Build your portfolio",
+    btn_join_community: "Join community",
+    btn_notify_me: "Notify Me at Launch",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "Assets tracked",
+    stat_members: "100+",
+    stat_members_lbl: "Active members",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Cryptocurrencies",
+    calculator_title: "Alpha Calculator",
+    calculator_badge: "Live Simulator",
+    features_title: "Engineered for",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.",
+    why_title: "Why",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.",
+    why_latency_title: "Zero Latency Execution",
+    why_latency_desc: "Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.",
+    why_privacy_title: "Absolute Privacy",
+    why_privacy_desc: "We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.",
+    why_ai_title: "AlphaAi Integration",
+    why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
+    pricing_title: "Membership Tiers",
+    pricing_subtitle: "Scale your operation. Cancel anytime.",
+    tier_free: "Beta Tester",
+    tier_free_price: "Free Access",
+    tier_free_tokens: "Current Option (Current Alpha)",
+    tier_free_badge: "ACTIVE: CURRENT ALPHA",
+    tier_premium: "Alphabag (coming soon)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "All Features Locked",
+    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
+  },
+  "en-au": {
+    nav_home: "Home",
+    nav_features: "Features",
+    nav_tokenomics: "Tokenomics",
+    nav_buy: "Buy",
+    nav_roadmap: "Roadmap",
+    nav_faq: "FAQ",
+    nav_pricing: "Pricing",
+    hero_title_1: "Track Your Crypto",
+    hero_title_2: "Total Stealth",
+    hero_desc: "Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn in Australia.",
+    btn_build_portfolio: "Build your portfolio",
+    btn_join_community: "Join community",
+    btn_notify_me: "Notify Me at Launch",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "Assets tracked",
+    stat_members: "100+",
+    stat_members_lbl: "Active members",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Cryptocurrencies",
+    calculator_title: "Alpha Calculator",
+    calculator_badge: "Live Simulator",
+    features_title: "Engineered for",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.",
+    why_title: "Why",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.",
+    why_latency_title: "Zero Latency Execution",
+    why_latency_desc: "Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.",
+    why_privacy_title: "Absolute Privacy",
+    why_privacy_desc: "We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.",
+    why_ai_title: "AlphaAi Integration",
+    why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
+    pricing_title: "Membership Tiers",
+    pricing_subtitle: "Scale your operation. Cancel anytime.",
+    tier_free: "Beta Tester",
+    tier_free_price: "Free Access",
+    tier_free_tokens: "Current Option (Current Alpha)",
+    tier_free_badge: "ACTIVE: CURRENT ALPHA",
+    tier_premium: "Alphabag (coming soon)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "All Features Locked",
+    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
+  },
+  "en-bh": {
+    nav_home: "Home",
+    nav_features: "Features",
+    nav_tokenomics: "Tokenomics",
+    nav_buy: "Buy",
+    nav_roadmap: "Roadmap",
+    nav_faq: "FAQ",
+    nav_pricing: "Pricing",
+    hero_title_1: "Track Your Crypto",
+    hero_title_2: "Total Stealth",
+    hero_desc: "Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn in Bahrain.",
+    btn_build_portfolio: "Build your portfolio",
+    btn_join_community: "Join community",
+    btn_notify_me: "Notify Me at Launch",
+    stat_assets: "$100k+",
+    stat_assets_lbl: "Assets tracked",
+    stat_members: "100+",
+    stat_members_lbl: "Active members",
+    stat_crypto: "250+",
+    stat_crypto_lbl: "Cryptocurrencies",
+    calculator_title: "Alpha Calculator",
+    calculator_badge: "Live Simulator",
+    features_title: "Engineered for",
+    features_title_alpha: "Alpha",
+    features_subtitle: "Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.",
+    why_title: "Why",
+    why_title_alpha: "AlphaBAG?",
+    why_desc: "Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.",
+    why_latency_title: "Zero Latency Execution",
+    why_latency_desc: "Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.",
+    why_privacy_title: "Absolute Privacy",
+    why_privacy_desc: "We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.",
+    why_ai_title: "AlphaAi Integration",
+    why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
+    pricing_title: "Membership Tiers",
+    pricing_subtitle: "Scale your operation. Cancel anytime.",
+    tier_free: "Beta Tester",
+    tier_free_price: "Free Access",
+    tier_free_tokens: "Current Option (Current Alpha)",
+    tier_free_badge: "ACTIVE: CURRENT ALPHA",
+    tier_premium: "Alphabag (coming soon)",
+    tier_premium_price: "Premium",
+    tier_premium_tokens: "All Features Locked",
+    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
+  }
+};
+
 export const Landing: React.FC = () => {
   const { open } = useWeb3Modal();
   const navigate = useNavigate();
@@ -20,6 +383,23 @@ export const Landing: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
   const [showTeaserToast, setShowTeaserToast] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [language, setLanguage] = useState<string>(() => localStorage.getItem('alphabag_language') || 'en');
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+
+  const t = (key: string): string => {
+    return TRANSLATIONS[language]?.[key] || TRANSLATIONS['en']?.[key] || '';
+  };
+
+  const languagesList = [
+    { code: 'en', label: 'English' },
+    { code: 'ar', label: 'العربية' },
+    { code: 'ar-bh', label: 'العربية (البحرين)' },
+    { code: 'az', label: 'Azərbaycan' },
+    { code: 'de', label: 'Deutsch' },
+    { code: 'en-ae', label: 'English (UAE)' },
+    { code: 'en-au', label: 'English (Australia)' },
+    { code: 'en-bh', label: 'English (Bahrain)' },
+  ];
 
   // Theme state
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -116,7 +496,7 @@ export const Landing: React.FC = () => {
               className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
               <Send size={11} /> Telegram <ChevronRight size={11} />
             </a>
-            <a href="https://x.com/alphabagpro" target="_blank" rel="noopener noreferrer"
+            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
               <X size={11} /> Follow <ChevronRight size={11} />
             </a>
@@ -128,52 +508,121 @@ export const Landing: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#181a20]/95 backdrop-blur-xl border-b border-[#2b3139]">
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-[#2b3139]" style={{ backgroundColor: 'rgba(30, 35, 41, 0.95)' }}>
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('home')}>
-            <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
-            <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
+          
+          {/* Left Side: Logo + Nav Links (Binance layout) */}
+          <div className="flex items-center space-x-10">
+            <div className="flex items-center space-x-2 cursor-pointer shrink-0" onClick={() => handleNavClick('home')}>
+              <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
+              <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
+            </div>
+
+            {/* Desktop Nav Links */}
+            <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#848e9c]">
+              <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_home')}</button>
+              <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_features')}</button>
+              <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_tokenomics')}</button>
+              {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors ${activeTab === 'buy' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_buy')}</button>}
+              <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_roadmap')}</button>
+              <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>{t('nav_faq')}</button>
+            </div>
           </div>
 
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#848e9c]">
-            <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Home</button>
-            <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Features</button>
-            <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Tokenomics</button>
-            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors ${activeTab === 'buy' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Buy</button>}
-            <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Roadmap</button>
-            <button onClick={() => handleNavClick('calculator')} className={`transition-colors ${activeTab === 'calculator' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Calculator</button>
-            <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>FAQ</button>
-
-            {/* Fallback Login Button for Debugging */}
-            {!isAuthenticated ? (
-              IS_DEMO_MODE ? (
-                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
-                  Demo Login
-                </Button>
-              ) : (
-                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6">
-                  Connect Wallet
-                </Button>
-              )
-            ) : (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6">
-                Open App
-              </Button>
-            )}
+          {/* Right Side: Translation Globe + Theme + Wallet/Login Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            
+            {/* World Globe Language Switcher */}
+            <div className="relative">
+              <button
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
+                title="Change Language"
+              >
+                <Globe size={18} />
+              </button>
+              {isLangDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsLangDropdownOpen(false)}></div>
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl bg-[#1e2329] border border-[#2b3139] shadow-2xl py-2 z-50 animate-slide-in">
+                    {languagesList.map(lang => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          localStorage.setItem('alphabag_language', lang.code);
+                          setIsLangDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-[#fcd535]' : 'text-[#848e9c]'}`}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
 
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0 ml-2"
+              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
+
+            {/* Main Auth/Demo CTAs */}
+            {!isAuthenticated ? (
+              IS_DEMO_MODE ? (
+                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+                  {t('btn_demo_login') || 'Demo Login'}
+                </Button>
+              ) : (
+                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+                  {t('btn_connect_wallet') || 'Connect Wallet'}
+                </Button>
+              )
+            ) : (
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+                Open App
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center gap-4">
+            
+            {/* World Globe Language Switcher Mobile */}
+            <div className="relative">
+              <button
+                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                className="p-2 rounded-xl text-[#848e9c]"
+              >
+                <Globe size={18} />
+              </button>
+              {isLangDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsLangDropdownOpen(false)}></div>
+                  <div className="absolute right-0 mt-2 w-48 rounded-xl bg-[#1e2329] border border-[#2b3139] shadow-2xl py-2 z-50 animate-slide-in">
+                    {languagesList.map(lang => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          setLanguage(lang.code);
+                          localStorage.setItem('alphabag_language', lang.code);
+                          setIsLangDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-[#fcd535]' : 'text-[#848e9c]'}`}
+                      >
+                        {lang.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl text-[#848e9c]"
@@ -188,16 +637,14 @@ export const Landing: React.FC = () => {
 
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full bg-alphabag-dark border-b border-alphabag-gray/50 p-6 flex flex-col space-y-4 animate-slide-in">
-            <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Home</button>
-            <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Features</button>
-            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Tokenomics</button>
-            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 text-sm font-medium ${activeTab === 'buy' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Buy</button>}
-            <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Roadmap</button>
-            <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 text-sm font-medium ${activeTab === 'calculator' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Calculator</button>
-            <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>FAQ</button>
-            {/* <button onClick={() => scrollToSection('membership')} className="text-left py-2 font-semibold text-white uppercase tracking-widest">Pricing</button> */}
-            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold">{isAuthenticated ? 'Open App' : 'Notify Me'}</Button>
+          <div className="md:hidden absolute top-20 left-0 w-full bg-[#1e2329]/95 backdrop-blur-xl border-b border-[#2b3139] p-6 flex flex-col space-y-4 animate-slide-in">
+            <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_home')}</button>
+            <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_features')}</button>
+            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_tokenomics')}</button>
+            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 text-sm font-medium ${activeTab === 'buy' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_buy')}</button>}
+            <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_roadmap')}</button>
+            <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>{t('nav_faq')}</button>
+            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold bg-[#fcd535] text-black">{isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet'}</Button>
           </div>
         )}
       </nav>
@@ -207,81 +654,96 @@ export const Landing: React.FC = () => {
 
         {/* Hero Section */}
         {activeTab === 'home' && (
-          <section className="relative pt-24 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center" >
+          <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center" >
 
+            <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col items-center xl:px-8">
+              
+              {/* Split Layout: Hero Text & Calculator side-by-side */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start w-full">
+                
+                {/* Left Column: Copy & Stats */}
+                <div className="lg:col-span-6 text-left space-y-6 flex flex-col justify-center">
+                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-white leading-[1.1] tracking-tight">
+                    {t('hero_title_1')}
+                    <span className="block text-[#fcd535] mt-1">{t('hero_title_2')}</span>
+                  </h1>
 
-            <div className="max-w-7xl mx-auto text-center relative z-10">
+                  <p className="text-base md:text-lg text-alphabag-subtext leading-relaxed font-normal animate-fade-in-up delay-100 max-w-xl">
+                    {t('hero_desc')}
+                  </p>
 
+                  <div className="flex flex-wrap items-center gap-2 animate-fade-in-up delay-150">
+                    {[
+                      t('tag_pulse') || 'Real-time market pulse',
+                      t('tag_coverage') || 'Multi-chain coverage',
+                      t('tag_insights') || 'Institutional-grade insights'
+                    ].map((item) => (
+                      <span key={item} className="inline-flex items-center rounded-full border border-[#2b3139] bg-[#1e2329] px-3 py-1.5 text-xs font-medium text-[#848e9c]">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
 
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-[#eaecef] leading-tight">
-                Track Your Crypto <span className="text-transparent bg-clip-text bg-gradient-to-b from-alphabag-yellow to-[#B45309]">Total Stealth</span>
-              </h1>
+                  <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
+                    {IS_TEASER_MODE ? (
+                      <>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
+                          {t('btn_notify_me')}
+                        </Button>
+                        <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
+                            <Send size={16} /> {t('btn_join_community')}
+                          </Button>
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
+                          {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
+                        </Button>
+                        <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
+                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
+                            <Send size={16} /> {t('btn_join_community')}
+                          </Button>
+                        </a>
+                      </>
+                    )}
+                  </div>
 
-              <p className="text-lg md:text-xl text-alphabag-subtext max-w-2xl mx-auto mb-6 leading-relaxed font-normal animate-fade-in-up delay-100">
-                Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn.
-              </p>
-
-              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 animate-fade-in-up delay-150">
-                {[
-                  'Real-time market pulse',
-                  'Multi-chain coverage',
-                  'Institutional-grade insights'
-                ].map((item) => (
-                  <span key={item} className="inline-flex items-center rounded-full border border-[#2b3139] bg-[#1e2329] px-3 py-1.5 text-xs font-medium text-[#848e9c]">
-                    {item}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
-                {IS_TEASER_MODE ? (
-                  <>
-                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
-                      Notify Me at Launch
-                    </Button>
-                    <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
-                        <Send size={16} /> Join Telegram
-                      </Button>
-                    </a>
-                  </>
-                ) : (
-                  <>
-                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
-                      {isAuthenticated ? 'Open Hub' : (IS_DEMO_MODE ? 'Enter Terminal (Demo)' : 'Connect Wallet')}
-                    </Button>
-                    <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
-                        <Send size={16} /> Join community
-                      </Button>
-                    </a>
-                  </>
-                )}
-              </div>
-
-              {/* Stats Section */}
-              <div className="flex flex-wrap justify-center gap-10 md:gap-24 mt-20 text-center animate-fade-in-up delay-300">
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">$100k+</div>
-                  <div className="text-sm font-medium text-[#848e9c]">Assets tracked</div>
+                  {/* Stats Section */}
+                  <div className="flex flex-wrap gap-6 md:gap-12 pt-6 border-t border-[#2b3139] mt-6 animate-fade-in-up delay-300">
+                    <div>
+                      <div className="text-2xl font-bold text-[#eaecef] mb-1">{t('stat_assets')}</div>
+                      <div className="text-xs font-semibold text-[#848e9c]">{t('stat_assets_lbl')}</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-[#eaecef] mb-1">{t('stat_members')}</div>
+                      <div className="text-xs font-semibold text-[#848e9c]">{t('stat_members_lbl')}</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-[#eaecef] mb-1">{t('stat_crypto')}</div>
+                      <div className="text-xs font-semibold text-[#848e9c]">{t('stat_crypto_lbl')}</div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">100+</div>
-                  <div className="text-sm font-medium text-[#848e9c]">Active members</div>
+
+                {/* Right Column: Calculator Card */}
+                <div className="lg:col-span-6 w-full bg-[#1e2329] border border-[#2b3139] rounded-2xl p-6 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
+                  <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
+                  <div className="flex items-center justify-between mb-4 border-b border-[#2b3139] pb-3">
+                    <h3 className="text-sm font-semibold text-[#eaecef] uppercase tracking-wider flex items-center gap-2">
+                      <CalculatorIcon size={16} className="text-alphabag-yellow" /> {t('calculator_title')}
+                    </h3>
+                    <span className="text-[10px] bg-[#fcd535]/10 text-alphabag-yellow px-2 py-0.5 rounded font-semibold">{t('calculator_badge')}</span>
+                  </div>
+                  <Calculator minimal={true} />
                 </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">250+</div>
-                  <div className="text-sm font-medium text-[#848e9c]">Cryptocurrencies</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">99.9%</div>
-                  <div className="text-sm font-medium text-[#848e9c]">System uptime</div>
-                </div>
+
               </div>
 
               {/* 3D Dashboard Preview */}
-              <div className="mt-24 relative max-w-5xl mx-auto opacity-40 hover:opacity-100 transition-opacity duration-1000 block">
-                <div className="bg-alphabag-dark rounded-[20px] overflow-hidden relative shadow-2xl border border-alphabag-gray/50 mask-image-b">
+              <div className="mt-24 relative max-w-7xl w-full mx-auto opacity-40 hover:opacity-100 transition-opacity duration-1000 block">
+                <div className="bg-alphabag-dark rounded-[20px] overflow-hidden relative shadow-2xl border border-[#2b3139] mask-image-b">
                   <img
                     src="/hero-dashboard.png"
                     alt="Dashboard Interface"
@@ -294,58 +756,45 @@ export const Landing: React.FC = () => {
           </section>
         )}
 
-        {/* Standalone Calculator Section */}
-        {activeTab === 'calculator' && (
-          <section className="relative pt-24 pb-16 px-6 min-h-[90vh] flex flex-col justify-center">
-
-            <div className="max-w-7xl mx-auto flex flex-col relative z-10 w-full">
-              <div className="relative max-w-6xl mx-auto w-full">
-                {/* Glow removed, width expanded to max-w-6xl to accommodate the full interactive calculator grid */}
-                <Calculator />
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* Features Grid */}
         {activeTab === 'features' && (
           <section id="features" className="py-32 px-6 min-h-[85vh] flex flex-col justify-center">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-20 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight text-[#eaecef]">Engineered for <span className="text-alphabag-yellow">Alpha</span></h2>
-                <p className="text-xl text-alphabag-subtext">Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.</p>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight text-[#eaecef]">{t('features_title')} <span className="text-alphabag-yellow">{t('features_title_alpha')}</span></h2>
+                <p className="text-xl text-alphabag-subtext">{t('features_subtitle')}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <FeatureHighlight
                   icon={<Bot size={32} className="text-alphabag-yellow" />}
-                  title="AlphaAi Agent"
-                  desc="Your personal analyst. Ask about your PnL, request chart generation, or get real-time market sentiment analysis."
+                  title={t('feature_1_title') || "AlphaAi Agent"}
+                  desc={t('feature_1_desc') || "Your personal analyst. Ask about your PnL, request chart generation, or get real-time market sentiment analysis."}
                 />
                 <FeatureHighlight
                   icon={<ShieldCheck size={32} className="text-green-400" />}
-                  title="Multi-Network Security"
-                  desc="Track assets across EVM and Solana networks without exposing your private keys. Read-only permissions by default."
+                  title={t('feature_2_title') || "Multi-Network Security"}
+                  desc={t('feature_2_desc') || "Track assets across EVM and Solana networks without exposing your private keys. Read-only permissions by default."}
                 />
                 <FeatureHighlight
                   icon={<BarChart3 size={32} className="text-blue-400" />}
-                  title="Whale Watch"
-                  desc="Follow the smart money. Get alerted when high-net-worth wallets enter or exit positions in real-time."
+                  title={t('feature_3_title') || "Whale Watch"}
+                  desc={t('feature_3_desc') || "Follow the smart money. Get alerted when high-net-worth wallets enter or exit positions in real-time."}
                 />
                 <FeatureHighlight
                   icon={<Wallet size={32} className="text-purple-400" />}
-                  title="CEX/DEX HUB"
-                  desc="Connect your DEX Wallets and exchange APIs for a truly unified overview of your crypto net worth across 20+ major platforms."
+                  title={t('feature_4_title') || "CEX/DEX HUB"}
+                  desc={t('feature_4_desc') || "Connect your DEX Wallets and exchange APIs for a truly unified overview of your crypto net worth across 20+ major platforms."}
                 />
                 <FeatureHighlight
                   icon={<Rocket size={32} className="text-[#D8B4FE]" />}
-                  title="Alpha Calculator"
-                  desc="Simulate complex futures and spot trades with real-time accuracy before executing on-chain."
+                  title={t('feature_5_title') || "Alpha Calculator"}
+                  desc={t('feature_5_desc') || "Simulate complex futures and spot trades with real-time accuracy before executing on-chain."}
                 />
                 <FeatureHighlight
                   icon={<Trophy size={32} className="text-alphabag-yellow" />}
-                  title="T2E REWARDS"
-                  desc="Participate in the ecosystem through missions and social tasks to earn your share of the $BAG allocation."
+                  title={t('feature_6_title') || "T2E REWARDS"}
+                  desc={t('feature_6_desc') || "Participate in the ecosystem through missions and social tasks to earn your share of the $BAG allocation."}
                 />
               </div>
 
@@ -354,9 +803,9 @@ export const Landing: React.FC = () => {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
                 
                 <div className="text-center mb-16">
-                  <h2 className="text-3xl md:text-4xl font-semibold mb-6 tracking-tight text-[#eaecef]">Why <span className="text-alphabag-yellow">AlphaBAG?</span></h2>
+                  <h2 className="text-3xl md:text-4xl font-semibold mb-6 tracking-tight text-[#eaecef]">{t('why_title')} <span className="text-alphabag-yellow">{t('why_title_alpha')}</span></h2>
                   <p className="text-base text-alphabag-subtext max-w-2xl mx-auto">
-                    Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.
+                    {t('why_desc')}
                   </p>
                 </div>
 
@@ -367,8 +816,8 @@ export const Landing: React.FC = () => {
                         <Zap size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">Zero Latency Execution</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.</p>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">{t('why_latency_title')}</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_latency_desc')}</p>
                       </div>
                     </div>
                     <div className="flex gap-4">
@@ -376,8 +825,8 @@ export const Landing: React.FC = () => {
                         <ShieldCheck size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">Absolute Privacy</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.</p>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">{t('why_privacy_title')}</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_privacy_desc')}</p>
                       </div>
                     </div>
                     <div className="flex gap-4">
@@ -385,8 +834,8 @@ export const Landing: React.FC = () => {
                         <Bot size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">AlphaAi Integration</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.</p>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">{t('why_ai_title')}</h4>
+                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_ai_desc')}</p>
                       </div>
                     </div>
                   </div>
@@ -618,37 +1067,6 @@ export const Landing: React.FC = () => {
 
       </div> {/* End Dynamic Content Area */}
 
-      {/* Hidden Pricing for Beta */}
-      {
-        false && (
-          <section id="membership" className="py-32 px-6">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-16">
-                <h2 className="text-4xl font-semibold mb-4 uppercase tracking-tighter text-white">Membership Tiers</h2>
-                <p className="text-alphabag-subtext font-medium text-lg">Scale your operation. Cancel anytime.</p>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <PricingCard
-                  tier="Free Tier"
-                  tokens="Basic Access"
-                  price="$0"
-                  onAction={handleLaunchApp}
-                  features={["5 Portfolio Connections", "5 Whale Watch Slots", "AlphaAi (4h Daily)", "Global News Feed"]}
-                />
-                <PricingCard
-                  tier="Ultimate Tier"
-                  tokens="All Features Unlocked"
-                  price="Verified"
-                  recommended
-                  onAction={handleLaunchApp}
-                  features={["Unlimited Portfolios", "Unlimited Whale Watch", "AlphaAi (Unlimited)", "AlphaCalls Full Access", "Institutional PnL Data"]}
-                />
-              </div>
-            </div>
-          </section>
-        )
-      }
-
       <footer className="py-12 px-6 border-t border-white/10 bg-alphabag-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center space-x-2">
@@ -659,16 +1077,12 @@ export const Landing: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-6">
-            <a href="https://x.com/alphabagpro" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
-              <X size={14} /> Twitter
+            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+              <X size={14} /> X.com
             </a>
             <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <Send size={14} /> Telegram
             </a>
-          </div>
-
-          <div className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest opacity-50">
-            v1.0 Testnet Phase
           </div>
         </div>
       </footer>
@@ -710,8 +1124,8 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
         <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
             ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
           `}>
-          <div className={`bg-[#0A0F1C]/90 backdrop-blur-xl border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
-               ${status === 'EXECUTING' ? 'border-alphabag-yellow/30 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-border'}
+          <div className={`bg-[#1e2329] border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
+               ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-[#2b3139]'}
             `}>
             {/* Header Info */}
             <div className="flex justify-between items-start mb-4 gap-2">
@@ -769,33 +1183,33 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 p-4 rounded-xl hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group cursor-default shadow-glass">
-    <div className="mb-2.5 bg-alphabag-black w-9 h-9 rounded-lg flex items-center justify-center border border-white/5 group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(252,213,53,0.15)] transition-all">
+  <div className="bg-[#1e2329] border border-[#2b3139] p-5 rounded-xl hover:border-[#474d57] transition-all group cursor-default shadow-lg">
+    <div className="mb-2.5 bg-[#181a20] w-9 h-9 rounded-lg flex items-center justify-center border border-[#2b3139] group-hover:scale-110 transition-all">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
-    <h3 className="text-lg font-black text-white mb-1.5 uppercase tracking-tighter leading-tight">{title}</h3>
-    <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed opacity-60">{desc}</p>
+    <h3 className="text-lg font-semibold text-white mb-1.5 leading-tight">{title}</h3>
+    <p className="text-[13px] text-[#848e9c] font-medium leading-relaxed">{desc}</p>
   </div>
 );
 
 const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
-  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0">
-    <div className="w-12 h-12 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow text-base font-black rounded-lg flex items-center justify-center mb-3 relative z-10 shadow-[0_0_20px_rgba(252,213,53,0.1)] group-hover:shadow-[0_0_30px_rgba(252,213,53,0.3)] group-hover:scale-110 transition-all duration-300">
+  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-[#2b3139] bg-[#1e2329] shadow-lg">
+    <div className="w-12 h-12 bg-[#181a20] border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
       {step}
     </div>
-    <h3 className="text-[11px] font-black text-white uppercase tracking-[0.1em] mb-2 h-8 flex items-center justify-center">{title}</h3>
-    <p className="text-[10px] text-alphabag-subtext leading-relaxed font-medium px-2 opacity-60">{desc}</p>
+    <h3 className="text-sm font-semibold text-white mb-2 h-8 flex items-center justify-center">{title}</h3>
+    <p className="text-xs text-[#848e9c] leading-relaxed font-medium px-2">{desc}</p>
   </div>
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-alphabag-dark border border-white/5 p-5 md:p-6 rounded-2xl flex items-center gap-4 md:gap-5 hover:border-alphabag-yellow/20 hover:bg-white/5 transition-all group h-full shadow-lg">
-    <div className="w-12 h-12 shrink-0 bg-alphabag-black border border-white/5 rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
+  <div className="bg-[#1e2329] border border-[#2b3139] p-5 md:p-6 rounded-2xl flex items-center gap-4 md:gap-5 hover:border-[#474d57] transition-all group h-full shadow-lg">
+    <div className="w-12 h-12 shrink-0 bg-[#181a20] border border-[#2b3139] rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <div>
-      <div className="text-xs text-alphabag-subtext font-black uppercase tracking-widest mb-1 opacity-80">{label}</div>
-      <div className={`text-lg md:text-xl font-black text-white uppercase tracking-tighter leading-none ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
+      <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-1">{label}</div>
+      <div className={`text-lg md:text-xl font-bold text-white tracking-tight leading-none ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
         {value}
       </div>
     </div>
@@ -803,13 +1217,13 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
 );
 
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
-  <div className={`p-6 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-alphabag-yellow/10 border-alphabag-yellow shadow-[0_0_30px_rgba(252,213,53,0.15)]' : 'bg-white/5 border-white/10 hover:border-alphabag-yellow/30'} transition-all`}>
+  <div className={`p-6 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#1e2329] border-[#fcd535] shadow-[0_0_20px_rgba(252,213,53,0.1)]' : 'bg-[#1e2329] border-[#2b3139] hover:border-[#474d57]'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
-        <h4 className={`text-sm md:text-base font-black uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>
-        {subtitle && <div className="text-xs md:text-sm font-bold text-alphabag-yellow mt-1">{subtitle}</div>}
+        <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>
+        {subtitle && <div className="text-xs md:text-sm font-semibold text-alphabag-yellow mt-1">{subtitle}</div>}
       </div>
-      <div className={`text-xl md:text-2xl font-black ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{percentage}</div>
+      <div className={`text-xl md:text-2xl font-bold ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{percentage}</div>
     </div>
     <p className="text-xs md:text-sm text-gray-300 leading-relaxed font-medium">{desc}</p>
   </div>

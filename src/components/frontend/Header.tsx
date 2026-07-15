@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </div>
       )}
 
-      <header className={`fixed left-0 right-0 h-16 bg-[#181a20] border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
+      <header className={`fixed left-0 right-0 h-16 bg-alphabag-black border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
@@ -133,14 +133,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             </Link>
           </nav>
 
-          {isAuthenticated && (
-            <div className="hidden lg:flex items-center space-x-6 ml-8 text-xs text-alphabag-subtext border-l border-[#2b3139] pl-6">
-              <div className="flex flex-col bg-[#1e2329] rounded-lg px-4 py-2 border border-[#2b3139]">
-                <span className="text-xs font-medium text-[#848e9c] flex items-center gap-1"><Briefcase size={10} className="text-alphabag-yellow"/> Total Assets</span>
-                <span className="text-[#eaecef] font-semibold tabular-nums text-sm">${totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-              </div>
-            </div>
-          )}
+          {/* Total Assets removed per request */}
         </div>
 
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">

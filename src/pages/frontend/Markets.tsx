@@ -143,7 +143,7 @@ export const Markets: React.FC = () => {
       <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#0b0e11] border-b border-[#2b3139] text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">
+            <thead className="bg-[#181a20] border-b border-[#2b3139] text-xs text-[#848e9c] font-semibold tracking-normal">
               <tr>
                 <th className="py-3 px-3 pl-5 w-12 text-center">#</th>
                 <th className="py-3 px-3 text-left">Coin</th>
@@ -156,7 +156,7 @@ export const Markets: React.FC = () => {
                 <th className="py-3 px-4 text-right hidden xl:table-cell">7d Chart</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2b3139] text-[12px]">
+            <tbody className="divide-y divide-[#2b3139] text-[14px]">
               {loading ? (
                 Array.from({ length: 8 }).map((_, index) => (
                   <tr key={`skeleton-${index}`}>
@@ -185,7 +185,7 @@ export const Markets: React.FC = () => {
                       className="hover:bg-[#2b3139]/50 transition-colors cursor-pointer"
                       onClick={() => navigate(`/markets/${coin.id}`)}
                     >
-                      <td className="py-3 px-3 pl-5 text-center text-[#848e9c] font-medium tabular-nums text-[11px]">
+                      <td className="py-3 px-3 pl-5 text-center text-[#848e9c] font-medium tabular-nums text-xs">
                         <div className="flex items-center justify-center gap-2">
                           <Star size={11} className="text-[#474d57] hover:text-[#fcd535] cursor-pointer hidden sm:block shrink-0" />
                           {coin.market_cap_rank}
@@ -195,27 +195,27 @@ export const Markets: React.FC = () => {
                         <div className="flex items-center space-x-2.5">
                           <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full shrink-0" />
                           <div className="flex items-baseline space-x-1.5 min-w-0">
-                            <span className="font-semibold text-[#eaecef] text-[12px] truncate max-w-[120px]">{coin.name}</span>
-                            <span className="text-[10px] font-semibold text-[#848e9c] uppercase shrink-0">{coin.symbol}</span>
+                            <span className="font-semibold text-[#eaecef] text-[14px] truncate max-w-[120px]">{coin.name}</span>
+                            <span className="text-[12px] font-semibold text-[#848e9c] uppercase shrink-0">{coin.symbol}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-3 text-right font-semibold text-[#eaecef] tabular-data text-[12px]">
+                      <td className="py-3 px-3 text-right font-semibold text-[#eaecef] tabular-data text-[14px]">
                         ${coin.current_price.toLocaleString(undefined, { maximumFractionDigits: coin.current_price < 1 ? 4 : 2 })}
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch1h)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch1h)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch1h)}</span>{Math.abs(pch1h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch24h)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch24h)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch24h)}</span>{Math.abs(pch24h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[12px] ${getPchColor(pch7d)}`}>
+                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch7d)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch7d)}</span>{Math.abs(pch7d).toFixed(1)}%
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[12px]">
+                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
                         {fmt(coin.total_volume)}
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[12px]">
+                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
                         {fmt(coin.market_cap)}
                       </td>
                       <td className="py-3 px-4 hidden xl:table-cell">

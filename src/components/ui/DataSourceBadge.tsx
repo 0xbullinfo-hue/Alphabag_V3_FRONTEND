@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, Radio, Shuffle } from 'lucide-react';
+import { Database, Radio, Shuffle, RefreshCw } from 'lucide-react';
 import { DATA_SOURCE_CONFIG, getConfiguredDataLabel } from '../../services/config';
 
 interface DataSourceBadgeProps {

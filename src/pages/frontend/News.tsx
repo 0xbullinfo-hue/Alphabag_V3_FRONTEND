@@ -164,7 +164,7 @@ export const News: React.FC = () => {
                   <div className="flex items-center space-x-4 text-alphabag-subtext">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mr-2">Share Intel:</span>
                     <a 
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title + ' shared from alphabagpro')}&url=${encodeURIComponent(window.location.href)}`} 
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}&url=${encodeURIComponent(window.location.href)}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="hover:text-[#1DA1F2] transition-colors"
@@ -172,7 +172,7 @@ export const News: React.FC = () => {
                       <Twitter size={18} />
                     </a>
                     <a 
-                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(selectedArticle.title + ' shared from alphabagpro')}`} 
+                      href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="hover:text-[#229ED9] transition-colors"
@@ -192,7 +192,7 @@ export const News: React.FC = () => {
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="hover:text-[#E4405F] transition-colors"
-                      onClick={() => alert("Link copied for Instagram! \n" + window.location.href + "\nshared from alphabagpro")}
+                      onClick={() => alert("Link copied for Instagram! \n" + window.location.href + "\nshared from @myalphabag")}
                     >
                       <Instagram size={18} />
                     </a>

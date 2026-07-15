@@ -132,7 +132,7 @@ export const ONE_DAY = 24 * ONE_HOUR;
 export const TIER_LIMITS = {
   FREE: {
     maxPortfolios: 5,
-    maxWhales: 3,
+    maxWhales: 5,
     refreshInterval: 5 * ONE_MINUTE, // 5 min refresh for free
   },
   PREMIUM: {

@@ -14,7 +14,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { toasts, removeToast } = useWallet();
 
   return (
-    <div className="min-h-screen text-[#eaecef] font-sans bg-[#181a20] relative">
+    <div className="min-h-screen text-[#eaecef] font-sans bg-alphabag-black relative">
       <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

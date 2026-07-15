@@ -10,35 +10,35 @@ type Direction = 'LONG' | 'SHORT';
 //  or standard type="text" but we parse floats. The images show plain numbers in inputs: "343", "5555", "333" but results have commas.)
 // So standard inputs are fine, results must be properly formatted.
 
-const ResultRow = ({ label, resultObj, isBoldLabel = false }: { label: string, resultObj: { value: string, status: string }, isBoldLabel?: boolean }) => {
-    let colorClass = 'text-white font-semibold';
-    if (resultObj.status === 'positive' && resultObj.value !== '—' && (label.includes('P&L') || label.includes('Profit') || label.includes('Value'))) colorClass = 'text-[#0ECB81] font-semibold';
-    if (resultObj.status === 'negative') colorClass = 'text-[#F6465D] font-semibold';
-    if (resultObj.value === '—' && label === 'Total Fees') colorClass = 'text-[#F6465D]';
-    if (resultObj.value === '—' && label === 'Liquidation Price') colorClass = 'text-[#F6465D]';
-    if (resultObj.value === '—' && colorClass.indexOf('F6465D') === -1) colorClass = 'text-[#ADB5BD] font-semibold';
-    if (label === 'Multiplier') colorClass = 'text-[#0ECB81] font-semibold'; // Degen
-    if (label === 'Target Value') colorClass = 'text-[#0ECB81] font-semibold'; // Degen
-    if (label === 'ROI' && resultObj.status === 'positive') colorClass = 'text-[#0ECB81] font-semibold';
+const ResultRow = ({ label, resultObj, isBoldLabel = false, minimal = false }: { label: string, resultObj: { value: string, status: string }, isBoldLabel?: boolean, minimal?: boolean }) => {
+    let colorClass = 'text-[#eaecef] font-semibold text-sm';
+    if (resultObj.status === 'positive' && resultObj.value !== '—' && (label.includes('P&L') || label.includes('Profit') || label.includes('Value'))) colorClass = 'text-[#0ecb81] font-bold text-[15px]';
+    if (resultObj.status === 'negative') colorClass = 'text-[#f6465d] font-bold text-[15px]';
+    if (resultObj.value === '—' && label === 'Total Fees') colorClass = 'text-[#f6465d] text-sm';
+    if (resultObj.value === '—' && label === 'Liquidation Price') colorClass = 'text-[#f6465d] text-sm';
+    if (resultObj.value === '—' && colorClass.indexOf('f6465d') === -1) colorClass = 'text-[#848e9c] font-semibold text-sm';
+    if (label === 'Multiplier') colorClass = 'text-[#0ecb81] font-bold text-[15px]'; 
+    if (label === 'Target Value') colorClass = 'text-[#0ecb81] font-bold text-[15px]'; 
+    if (label === 'ROI' && resultObj.status === 'positive') colorClass = 'text-[#0ecb81] font-bold text-[15px]';
 
     return (
-        <div className="flex justify-between items-center py-[12px] border-b border-[#232832] last:border-0 relative">
-            <span className={`text-alphabag-muted text-[13px] ${isBoldLabel ? 'font-semibold text-white' : 'font-medium'}`}>{label}</span>
+        <div className={`flex justify-between items-center border-b border-[#2b3139]/40 last:border-0 relative ${minimal ? 'py-2' : 'py-3'}`}>
+            <span className={`text-[#848e9c] text-xs ${isBoldLabel ? 'font-semibold text-[#eaecef] text-sm' : 'font-medium'}`}>{label}</span>
             <span className={colorClass}>{resultObj.value}</span>
         </div>
     );
 };
 
-const ResultTextRow = ({ label, value, valueColor = 'text-white font-semibold' }: { label: string, value: string, valueColor?: string }) => (
-    <div className="flex justify-between items-center py-[12px] border-b border-[#232832] last:border-0">
-        <span className="text-alphabag-muted text-[13px] font-medium">{label}</span>
+const ResultTextRow = ({ label, value, valueColor = 'text-[#eaecef] font-semibold text-sm', minimal = false }: { label: string, value: string, valueColor?: string, minimal?: boolean }) => (
+    <div className={`flex justify-between items-center border-b border-[#2b3139]/40 last:border-0 ${minimal ? 'py-2' : 'py-3'}`}>
+        <span className="text-[#848e9c] text-xs font-medium">{label}</span>
         <span className={valueColor}>{value}</span>
     </div>
 );
 
-const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'border-white/10', labelSub = '' }: any) => (
+const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'border-[#2b3139]', labelSub = '', minimal = false }: any) => (
     <div className="flex flex-col gap-1 w-full">
-        <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-[0.2em]">{label}</label>
+        <label className="text-[#848e9c] text-xs font-semibold">{label}</label>
         <input
             type="text"
             inputMode="decimal"
@@ -50,14 +50,21 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
                 }
             }}
             placeholder={placeholder}
-            className={`bg-alphabag-black/50 border ${borderClass} text-white text-[14px] font-medium rounded-lg px-3.5 py-2.5 focus:outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors shadow-[inset_0_1px_10px_rgba(0,0,0,0.25)] text-left`}
+            className={`bg-[#181a20] border ${borderClass} text-[#eaecef] text-sm font-semibold rounded-md focus:outline-none focus:border-[#fcd535] focus:ring-1 focus:ring-[#fcd535]/20 transition-colors text-left ${minimal ? 'px-3 py-1.5' : 'px-3.5 py-2.5'}`}
             autoComplete="off"
         />
-        {labelSub && <span className="text-alphabag-muted text-[11px] font-medium h-4">{labelSub}</span>}
+        {labelSub && <span className="text-[#848e9c]/60 text-[11px] font-medium h-4 mt-0.5">{labelSub}</span>}
     </div>
 );
 
-export const Calculator: React.FC = () => {
+export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false }) => {
+    const mainGridClass = minimal ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8";
+    const inputCardClass = minimal 
+        ? "relative flex flex-col gap-3" 
+        : "bg-[#1e2329] border border-[#2b3139] hover:border-[#fcd535]/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl";
+    const resultCardClass = minimal 
+        ? "relative flex flex-col justify-between gap-1.5 mt-2 pt-2 border-t border-[#2b3139]/40" 
+        : "bg-[#1e2329] border border-[#2b3139] hover:border-[#fcd535]/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between";
     const [mode, setMode] = useState<CalcMode>('LEVERAGE');
 
 
@@ -223,75 +230,77 @@ export const Calculator: React.FC = () => {
         }
 
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
+            <div className={mainGridClass}>
                 {/* Inputs */}
-                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
-                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                <div className={inputCardClass}>
+                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="flex flex-col gap-2.5 mb-4">
-                            <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">DIRECTION</label>
+                        <div className="flex flex-col gap-2 mb-4">
+                            <label className="text-[#848e9c] text-xs font-semibold">Direction</label>
                             <div className="flex gap-3">
-                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-2.5 rounded-lg flex justify-center items-center gap-2 text-[14px] font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81] border-opacity-[0.25] shadow-[0_0_15px_rgba(14,203,129,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81]/30' : 'bg-[#181a20] text-[#848e9c] border border-[#2b3139] hover:bg-[#2b3139]'}`}>
                                     ↑ Long
                                 </button>
-                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-2.5 rounded-lg flex justify-center items-center gap-2 text-[14px] font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D] border-opacity-30 shadow-[0_0_15px_rgba(246,70,93,0.1)]' : 'bg-alphabag-black/50 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}>
+                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-[#F6465D] border border-[#F6465D]/30' : 'bg-[#181a20] text-[#848e9c] border border-[#2b3139] hover:bg-[#2b3139]'}`}>
                                     ↓ Short
                                 </button>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mb-6">
-                            <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" />
-                            <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" />
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                            <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" minimal={minimal} />
+                            <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" minimal={minimal} />
                         </div>
 
-                        <div className="flex flex-col gap-4 mb-8">
+                        <div className="flex flex-col gap-2 mb-4">
                             <div className="flex justify-between items-center">
-                                <label className="text-alphabag-muted text-[12px] font-black uppercase tracking-widest">Leverage</label>
-                                <span className="text-alphabag-yellow font-black bg-alphabag-yellow/10 px-3 py-1 rounded-lg border border-alphabag-yellow/30 text-[12px] tracking-widest shadow-[0_0_10px_rgba(252,213,53,0.1)]">{levSlider}x</span>
+                                <label className="text-[#848e9c] text-xs font-semibold">Leverage</label>
+                                <span className="text-alphabag-yellow font-bold bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20 text-xs">{levSlider}x</span>
                             </div>
-                            <div className="relative pt-2">
-                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                            <div className="relative pt-1">
+                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded appearance-none cursor-pointer accent-[#fcd535] border border-white/5" />
                             </div>
-                            <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest px-1 mt-[-2px]">
+                            <div className="flex justify-between text-[#848e9c] text-[10px] font-semibold px-1 mt-[-2px]">
                                 <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
-                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-alphabag-green/40' : 'border-white/10'} />
-                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-alphabag-red/40' : 'border-white/10'} />
+                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-[#0ecb81]/40' : 'border-[#2b3139]'} minimal={minimal} />
+                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-[#f6465d]/40' : 'border-[#2b3139]'} minimal={minimal} />
                         </div>
                     </div>
                 </div>
-                            {/* Results */}
-                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
-                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
-                    <div className="relative z-10">
-                        <div className="flex flex-col">
-                            <ResultRow label="Position Size" resultObj={formatCurrency(positionSize)} />
-                            <ResultRow label="Margin Used" resultObj={formatCurrency(margin)} />
-                            <ResultTextRow label="Leverage" value={hasCalc ? `${levSlider}x` : '—'} valueColor={hasCalc ? "text-white font-black" : "text-alphabag-muted"} />
-                            <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice, 2)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-black" : "text-alphabag-muted"} />
 
-                            {/* TP / SL Rows */}
-                            <div className="mt-4 pt-4 border-t border-white/5 space-y-2">
+                {/* Results */}
+                <div className={resultCardClass}>
+                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    <div className="relative z-10 w-full">
+                        <div className="flex flex-col">
+                            <ResultRow label="Position Size" resultObj={formatCurrency(positionSize)} minimal={minimal} />
+                            <ResultRow label="Margin Used" resultObj={formatCurrency(margin)} minimal={minimal} />
+                            <ResultTextRow label="Leverage" value={hasCalc ? `${levSlider}x` : '—'} valueColor={hasCalc ? "text-[#eaecef] font-bold text-sm" : "text-[#848e9c] text-sm"} minimal={minimal} />
+                            <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice, 2)}` : '—'} valueColor={hasCalc ? "text-[#f6465d] font-bold text-sm" : "text-[#848e9c] text-sm"} minimal={minimal} />
+
+                            <div className="mt-2 pt-2 border-t border-[#2b3139]/40 space-y-1">
                                 <ResultRow
                                     label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
                                     resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
+                                    minimal={minimal}
                                 />
                                 <ResultRow
                                     label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
                                     resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
+                                    minimal={minimal}
                                 />
                             </div>
                         </div>
                     </div>
 
                     {isSlBelowLiq && (
-                        <div className="mt-6 glass-panel bg-[#2A1519]/90 border border-[#4A252A] rounded-xl p-4 flex items-center gap-3">
-                            <AlertTriangle size={16} className="text-[#F6465D]" />
-                            <span className="text-[#F6465D] text-[13px] font-medium">Your SL is below the liquidation price — you'd be liquidated first!</span>
+                        <div className="mt-4 bg-[#2A1519]/90 border border-[#4A252A] rounded-lg p-3 flex items-center gap-2">
+                            <AlertTriangle size={14} className="text-[#f6465d] shrink-0" />
+                            <span className="text-[#f6465d] text-xs font-semibold">SL is below liquidation price — you'd be liquidated first!</span>
                         </div>
                     )}
                 </div>
@@ -333,22 +342,22 @@ export const Calculator: React.FC = () => {
         }
 
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
+            <div className={mainGridClass}>
                 {/* Inputs */}
-                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
-                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                <div className={inputCardClass}>
+                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="grid grid-cols-2 gap-6 mb-5">
-                            <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" />
-                            <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" />
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                            <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" minimal={minimal} />
+                            <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" minimal={minimal} />
                         </div>
-                        <div className="grid grid-cols-2 gap-6 mb-7">
-                            <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" />
-                            <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" />
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                            <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" minimal={minimal} />
+                            <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" minimal={minimal} />
                         </div>
-                        <div className="flex flex-col gap-3">
-                            <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Fee Presets</label>
-                            <div className="flex flex-wrap gap-2.5">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[#848e9c] text-xs font-semibold pl-1">Fee Presets</label>
+                            <div className="flex flex-wrap gap-2">
                                 {['Binance 0.1%', 'Coinbase 0.6%', 'Kraken 0.26%', 'Custom'].map(preset => {
                                     const val = preset === 'Custom' ? '' : preset.split(' ')[1].replace('%', '');
                                     const isActive = preset === 'Custom' ? (spotFee !== '0.1' && spotFee !== '0.6' && spotFee !== '0.26') : spotFee === val;
@@ -356,7 +365,7 @@ export const Calculator: React.FC = () => {
                                         <button
                                             key={preset}
                                             onClick={() => { if (val) setSpotFee(val); }}
-                                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${isActive ? 'bg-alphabag-yellow text-alphabag-black shadow-[0_0_15px_rgba(252,213,53,0.2)]' : 'bg-black/30 text-alphabag-muted border border-white/10 hover:bg-white/5 hover:border-alphabag-yellow/40'}`}
+                                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${isActive ? 'bg-[#fcd535] text-black shadow-md' : 'bg-[#181a20] text-[#848e9c] border border-[#2b3139] hover:bg-[#2b3139]'}`}
                                         >
                                             {preset}
                                         </button>
@@ -368,27 +377,27 @@ export const Calculator: React.FC = () => {
                 </div>
 
                 {/* Results */}
-                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
-                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
-                    <div className="relative z-10">
+                <div className={resultCardClass}>
+                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    <div className="relative z-10 w-full">
                         <div className="flex flex-col">
-                            <ResultRow label="Total Cost" resultObj={formatCurrency(totalCost)} />
-                            <ResultRow label="Total Revenue" resultObj={formatCurrency(totalRev)} />
-                            <ResultTextRow label="Total Fees" value={hasCalc ? `$${formatNum(totalFees)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-black" : "text-alphabag-muted"} />
-                            <ResultRow label="Gross P&L" resultObj={gross !== 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} />
-                            <div className="mt-4 pt-4 border-t border-white/5">
-                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (+${formatNum(netROEPercent)}%)`) : { value: '—', status: 'neutral' }} />
-                                <ResultRow label="Break-even Price" resultObj={formatCurrency(breakEven)} />
+                            <ResultRow label="Total Cost" resultObj={formatCurrency(totalCost)} minimal={minimal} />
+                            <ResultRow label="Total Revenue" resultObj={formatCurrency(totalRev)} minimal={minimal} />
+                            <ResultTextRow label="Total Fees" value={hasCalc ? `$${formatNum(totalFees)}` : '—'} valueColor={hasCalc ? "text-[#f6465d] font-bold text-sm" : "text-[#848e9c] text-sm"} minimal={minimal} />
+                            <ResultRow label="Gross P&L" resultObj={gross !== 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                            <div className="mt-2 pt-2 border-t border-[#2b3139]/40">
+                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (+${formatNum(netROEPercent)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                                <ResultRow label="Break-even Price" resultObj={formatCurrency(breakEven)} minimal={minimal} />
                             </div>
                         </div>
                     </div>
 
                     {net > 0 && hasCalc && (
-                        <div className="mt-8 bg-[#102B21] border border-[#1E3A2F] rounded-xl p-6 shadow-inner shadow-black/20">
-                            <div className="text-[28px] font-bold text-[#0ECB81] mb-1">
+                        <div className={`bg-[#102B21] border border-[#1E3A2F] rounded-lg shadow-inner ${minimal ? 'p-3 mt-4' : 'p-6 mt-8'}`}>
+                            <div className={`font-bold text-[#0ECB81] mb-1 ${minimal ? 'text-xl' : 'text-[28px]'}`}>
                                 +${formatNum(net)}
                             </div>
-                            <div className="text-[#0ECB81] opacity-70 text-[13px] font-medium">
+                            <div className="text-[#0ecb81] opacity-70 text-xs font-semibold">
                                 +{formatNum(netROEPercent)}% net return
                             </div>
                         </div>
@@ -409,27 +418,27 @@ export const Calculator: React.FC = () => {
         const ilPercent = Math.abs(il * 100);
 
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
-                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
-                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+            <div className={mainGridClass}>
+                <div className={inputCardClass}>
+                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2.5 mb-6">
-                            <Percent size={18} className="text-alphabag-yellow" />
-                            <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">IL Risk Assessment</h2>
+                        <div className="flex items-center gap-2 mb-4">
+                            <Percent size={16} className="text-alphabag-yellow" />
+                            <h2 className="text-[#eaecef] font-bold text-sm">IL Risk Assessment</h2>
                         </div>
-                        <div className="space-y-6">
-                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" />
-                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" />
+                        <div className="space-y-4">
+                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" minimal={minimal} />
+                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" minimal={minimal} />
                         </div>
                     </div>
                 </div>
-                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-center items-center text-center">
-                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-6`}>
+                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className={`text-5xl font-black tracking-tighter ${ilPercent > 5 ? 'text-alphabag-red' : 'text-alphabag-yellow'}`}>
+                        <div className={`font-bold tracking-tight ${minimal ? 'text-4xl' : 'text-5xl'} ${ilPercent > 5 ? 'text-[#f6465d]' : 'text-alphabag-yellow'}`}>
                             {ilPercent.toFixed(2)}%
                         </div>
-                        <p className="text-[10px] text-alphabag-muted mt-3 max-w-[200px] font-bold uppercase tracking-widest opacity-60">Estimated Loss</p>
+                        <p className="text-[10px] text-[#848e9c] mt-2 max-w-[200px] font-semibold uppercase tracking-wider">Estimated Loss</p>
                     </div>
                 </div>
             </div>
@@ -441,34 +450,34 @@ export const Calculator: React.FC = () => {
         const result = (amount * (rates[convFrom] || 0)) / (rates[convTo] || 1);
 
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
-                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
-                    <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+            <div className={mainGridClass}>
+                <div className={inputCardClass}>
+                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2.5 mb-6">
-                            <ArrowRightLeft size={18} className="text-alphabag-yellow" />
-                            <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">Instant Rate Converter</h2>
+                        <div className="flex items-center gap-2 mb-4">
+                            <ArrowRightLeft size={16} className="text-alphabag-yellow" />
+                            <h2 className="text-[#eaecef] font-bold text-sm">Instant Converter</h2>
                         </div>
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-[1fr_100px] gap-3">
-                                <InputField label="From" value={convAmount} onChange={setConvAmount} />
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-[1fr_80px] gap-2">
+                                <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} />
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Token</label>
-                                    <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-black/40 border border-white/10 text-white rounded-xl h-12 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 font-bold">
+                                    <label className="text-[#848e9c] text-xs font-semibold pl-1">Token</label>
+                                    <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-[#181a20] border border-[#2b3139] text-[#eaecef] rounded-md h-9 px-2 outline-none focus:border-[#fcd535] text-xs font-semibold">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-[1fr_100px] gap-3">
+                            <div className="grid grid-cols-[1fr_80px] gap-2">
                                 <div className="flex flex-col gap-1 w-full">
-                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Converted Value</label>
-                                    <div className="bg-black/40 border border-white/10 text-white text-[15px] font-bold rounded-xl px-4 py-2.5 h-12 flex items-center shadow-inner">
+                                    <label className="text-[#848e9c] text-xs font-semibold pl-1">Converted Value</label>
+                                    <div className="bg-[#181a20] border border-[#2b3139] text-[#eaecef] text-sm font-semibold rounded-md px-3 h-9 flex items-center">
                                         {result.toLocaleString(undefined, { maximumFractionDigits: 6 })}
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest pl-1">Token</label>
-                                    <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-black/40 border border-white/10 text-white rounded-xl h-12 px-3 outline-none focus:border-alphabag-yellow/40 focus:ring-1 focus:ring-alphabag-yellow/20 font-bold">
+                                    <label className="text-[#848e9c] text-xs font-semibold pl-1">Token</label>
+                                    <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-[#181a20] border border-[#2b3139] text-[#eaecef] rounded-md h-9 px-2 outline-none focus:border-[#fcd535] text-xs font-semibold">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>
@@ -476,13 +485,13 @@ export const Calculator: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-center items-center text-center">
-                    <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-6`}>
+                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="text-3xl font-black text-alphabag-yellow tracking-tighter">
+                        <div className={`font-bold text-alphabag-yellow tracking-tight ${minimal ? 'text-lg' : 'text-3xl'}`}>
                             1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
                         </div>
-                        <p className="text-[10px] text-alphabag-muted mt-2 font-black uppercase tracking-widest opacity-60">Quick Conversion Rate</p>
+                        <p className="text-[10px] text-[#848e9c] mt-2 font-semibold uppercase tracking-wider">Quick Conversion Rate</p>
                     </div>
                 </div>
             </div>
@@ -513,37 +522,37 @@ export const Calculator: React.FC = () => {
         }
 
         return (
-            <div className="flex flex-col gap-8">
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8">
+            <div className="flex flex-col gap-4">
+                <div className={mainGridClass}>
                     {/* Inputs */}
-                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl">
-                        <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
+                    <div className={inputCardClass}>
+                        {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                         <div className="relative z-10">
-                            <div className="flex items-center gap-2.5 mb-6">
-                                <Rocket size={18} className="text-[#D8B4FE]" />
-                                <h2 className="text-white font-black text-[15px] uppercase tracking-tighter">Degen Entry Calculator</h2>
+                            <div className="flex items-center gap-2 mb-4">
+                                <Rocket size={16} className="text-[#D8B4FE]" />
+                                <h2 className="text-[#eaecef] font-bold text-sm">Degen Entry Calculator</h2>
                             </div>
 
-                            <div className="flex flex-col gap-7">
-                                <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" />
-                                <div className="grid grid-cols-2 gap-6">
-                                    <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} />
-                                    <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} />
+                            <div className="flex flex-col gap-4">
+                                <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" minimal={minimal} />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} minimal={minimal} />
+                                    <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} minimal={minimal} />
                                 </div>
 
-                                <div className="flex flex-col gap-4 mt-2">
+                                <div className="flex flex-col gap-2 mt-1">
                                     <div className="flex justify-between items-center">
-                                        <label className="text-alphabag-muted font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
-                                            <Skull size={15} className="text-alphabag-red" /> Rug / Loss Probability
+                                        <label className="text-[#848e9c] text-xs font-semibold flex items-center gap-2">
+                                            <Skull size={14} className="text-[#f6465d]" /> Rug / Loss Probability
                                         </label>
-                                        <span className="font-black text-alphabag-green bg-alphabag-green/10 border border-alphabag-green/30 px-3 py-1.5 rounded-lg text-[12px] tracking-widest shadow-[0_0_10px_rgba(14,203,129,0.1)]">
+                                        <span className="font-bold text-[#0ecb81] bg-[#0ecb81]/10 border border-[#0ecb81]/20 px-2 py-0.5 rounded text-xs">
                                             {degenRugProb}%
                                         </span>
                                     </div>
                                     <div className="relative pt-1">
-                                        <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="w-full h-[4px] bg-black/40 rounded-lg appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                                        <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded appearance-none cursor-pointer accent-[#fcd535] border border-white/5" />
                                     </div>
-                                    <div className="flex justify-between text-alphabag-muted text-[10px] font-black uppercase tracking-widest mt-1 px-1">
+                                    <div className="flex justify-between text-[#848e9c] text-[10px] font-semibold mt-1 px-1">
                                         <span>Safe (0%)</span>
                                         <span>High Risk (100%)</span>
                                     </div>
@@ -553,28 +562,28 @@ export const Calculator: React.FC = () => {
                     </div>
 
                     {/* Results */}
-                    <div className="glass-panel bg-gradient-to-br from-white/[0.04] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl flex flex-col justify-between">
-                        <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>
-                        <div className="relative z-10">
+                    <div className={resultCardClass}>
+                        {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                        <div className="relative z-10 w-full">
                             <div className="flex flex-col">
-                                <ResultRow label="Investment" resultObj={formatCurrency(inv)} />
-                                <ResultTextRow label="Target Multiple" value={hasCalc ? `${multiplier.toFixed(2)}x` : '—'} valueColor={hasCalc ? "text-[#D8B4FE] font-black" : "text-alphabag-muted"} />
-                                <ResultRow label="Target Value" resultObj={formatCurrency(targetVal)} />
-                                <ResultRow label="Net Profit" resultObj={profit !== 0 && hasCalc ? formatPnL(profit, true, ` (+${formatNum(roi, 0)}%)`) : { value: '—', status: 'neutral' }} />
+                                <ResultRow label="Investment" resultObj={formatCurrency(inv)} minimal={minimal} />
+                                <ResultTextRow label="Target Multiple" value={hasCalc ? `${multiplier.toFixed(2)}x` : '—'} valueColor={hasCalc ? "text-[#D8B4FE] font-bold text-sm" : "text-[#848e9c] text-sm"} minimal={minimal} />
+                                <ResultRow label="Target Value" resultObj={formatCurrency(targetVal)} minimal={minimal} />
+                                <ResultRow label="Net Profit" resultObj={profit !== 0 && hasCalc ? formatPnL(profit, true, ` (+${formatNum(roi, 0)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
 
-                                <div className="mt-8 pt-6 border-t border-white/5">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Expected Value (EV)</span>
+                                <div className="mt-4 pt-3 border-t border-[#2b3139]/40">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <span className="text-[#848e9c] text-xs font-semibold">Expected Value (EV)</span>
                                         <div className="flex items-center gap-2">
-                                            <div className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-widest ${ev > 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
+                                            <div className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${ev > 0 ? 'bg-[#0ecb81]/15 text-[#0ecb81]' : 'bg-[#f6465d]/15 text-[#f6465d]'}`}>
                                                 {ev > 0 ? 'Positive EV' : 'Negative EV'}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`text-4xl font-black tracking-tighter ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                    <div className={`font-bold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev > 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
                                         {ev !== 0 && hasCalc ? (ev > 0 ? '+' : '') + formatCurrency(ev, false).value : '—'}
                                     </div>
-                                    <p className="text-[10px] text-alphabag-muted mt-3 font-bold uppercase tracking-widest opacity-60">The mathematical average outcome including risk.</p>
+                                    <p className="text-[10px] text-[#848e9c]/70 mt-1 font-medium">Average outcome including risk.</p>
                                 </div>
                             </div>
                         </div>
@@ -582,48 +591,52 @@ export const Calculator: React.FC = () => {
                 </div>
 
                 {/* Moonbag Scenarios */}
-                <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-6 shadow-2xl">
-                    <div className="flex items-center gap-2 mb-6">
-                        <Activity size={18} className="text-alphabag-yellow" />
-                        <h2 className="text-white font-black text-[14px] uppercase tracking-tighter">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
-                    </div>
+                {!minimal && (
+                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-6 shadow-2xl">
+                        <div className="flex items-center gap-2 mb-6">
+                            <Activity size={18} className="text-alphabag-yellow" />
+                            <h2 className="text-white font-black text-[14px] uppercase tracking-tighter">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
+                        </div>
 
-                    <div className="flex flex-wrap gap-4">
-                        {[2, 5, 10, 50, 100, 1000].map(mult => {
-                            const baseInv = inv || 1000;
-                            const scenarioTarget = baseInv * mult;
-                            const scenarioProfit = scenarioTarget - baseInv;
-                            return (
-                                <div key={mult} className="bg-black/30 border border-white/10 rounded-xl p-5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/40 transition-all shadow-inner">
-                                    <div className="text-alphabag-yellow font-black text-[18px] mb-2">{mult}x</div>
-                                    <div className="text-white font-black text-[15px] mb-1">{formatKMBValue(scenarioTarget)}</div>
-                                    <div className="text-alphabag-green text-[10px] font-black uppercase tracking-widest">+{formatKMBValue(scenarioProfit)}</div>
-                                </div>
-                            );
-                        })}
+                        <div className="flex flex-wrap gap-4">
+                            {[2, 5, 10, 50, 100, 1000].map(mult => {
+                                const baseInv = inv || 1000;
+                                const scenarioTarget = baseInv * mult;
+                                const scenarioProfit = scenarioTarget - baseInv;
+                                return (
+                                    <div key={mult} className="bg-black/30 border border-white/10 rounded-xl p-5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/40 transition-all shadow-inner">
+                                        <div className="text-alphabag-yellow font-black text-[18px] mb-2">{mult}x</div>
+                                        <div className="text-white font-black text-[15px] mb-1">{formatKMBValue(scenarioTarget)}</div>
+                                        <div className="text-alphabag-green text-[10px] font-black uppercase tracking-widest">+{formatKMBValue(scenarioProfit)}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         );
     };
 
     return (
-        <div className="w-full space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
+        <div className={`w-full space-y-5 animate-in fade-in duration-700 ${minimal ? '' : 'pb-12 px-4 md:px-8'}`}>
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
-                <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
-                            <CalculatorIcon size={20} />
+            {!minimal && (
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+                    <div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                                <CalculatorIcon size={20} />
+                            </div>
+                            <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Alpha Calculator</h1>
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Alpha Calculator</h1>
+                        <p className="text-[#848e9c] text-sm font-medium">Futures, spot, degen, impermanent loss and conversion tools</p>
                     </div>
-                    <p className="text-[#848e9c] text-sm font-medium">Futures, spot, degen, impermanent loss and conversion tools</p>
+                    <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider">
+                        Premium Analytics
+                    </div>
                 </div>
-                <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider">
-                    Premium Analytics
-                </div>
-            </div>
+            )}
 
             {/* Tab Bar */}
             <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-1 flex gap-1">

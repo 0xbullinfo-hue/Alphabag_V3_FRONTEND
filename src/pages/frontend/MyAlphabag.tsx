@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useWallet } from '../../context/WalletContext';
 import { useNavigate } from 'react-router-dom';
-import { PieChart, Briefcase, Layers, Wallet as WalletIcon, ArrowUpRight, TrendingUp, Search, Radio, ChevronRight, Eye, ShieldCheck, HelpCircle } from 'lucide-react';
+import { PieChart as PieChartIcon, Briefcase, Layers, Wallet as WalletIcon, ArrowUpRight, TrendingUp, Search, Radio, ChevronRight, Eye, ShieldCheck, HelpCircle } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { PieChart as RePieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
@@ -49,6 +50,17 @@ export const MyAlphabag: React.FC = () => {
         });
     };
 
+    const allocationData = useMemo(() => {
+        const dataMap: Record<string, { name: string, value: number, color: string }> = {
+            'BTC': { name: 'BTC', value: 29032.18, color: '#FCD535' },
+            'ETH': { name: 'ETH', value: 14490.84 + 6347.16, color: '#3B82F6' },
+            'SOL': { name: 'SOL', value: 7492.80, color: '#8B5CF6' },
+            'USDT': { name: 'USDT', value: 3500.00, color: '#0ECB81' },
+            'PEPE': { name: 'PEPE', value: 1638.00, color: '#F6465D' }
+        };
+        return Object.values(dataMap).sort((a, b) => b.value - a.value);
+    }, []);
+
     return (
         <div className="w-full space-y-6 pb-12 animate-in fade-in duration-700">
             {/* Header section */}
@@ -56,7 +68,7 @@ export const MyAlphabag: React.FC = () => {
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
-                            <PieChart size={20} />
+                            <PieChartIcon size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">My AlphaBAG</h1>
                         <span className="text-[10px] bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
@@ -65,21 +77,69 @@ export const MyAlphabag: React.FC = () => {
                 </div>
             </div>
 
-            {/* Combined Net Worth Hero Card */}
-            <div className="bg-[#181a20] border border-[#2b3139] rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
-                <div className="space-y-2 z-10">
-                    <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#848e9c]">Combined Net Worth</p>
-                    <h2 className="text-4xl font-extrabold text-[#eaecef] tracking-tight tabular-data">
-                        ${combinedTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </h2>
-                    <p className="text-xs text-[#848e9c] font-medium leading-relaxed">
-                        <span className="font-bold text-[#eaecef]">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> CEX Bag &nbsp;·&nbsp; <span className="font-bold text-[#eaecef]">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> DEX Bag
-                    </p>
+            {/* Net Worth & Allocation Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                
+                {/* Combined Net Worth Hero Card */}
+                <div className="lg:col-span-3 bg-[#1e2329] border border-[#2b3139] rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[180px]">
+                    <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
+                    <div className="space-y-2 z-10">
+                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#848e9c]">Combined Net Worth</p>
+                        <h2 className="text-4xl font-extrabold text-[#eaecef] tracking-tight tabular-data">
+                            ${combinedTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </h2>
+                        <p className="text-xs text-[#848e9c] font-medium leading-relaxed">
+                            <span className="font-bold text-[#eaecef]">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> CEX Bag &nbsp;·&nbsp; <span className="font-bold text-[#eaecef]">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> DEX Bag
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-[#0ecb81] font-bold text-xs shrink-0 self-start md:self-auto border border-green-500/20">
+                        <TrendingUp size={14} /> +3.9% Today
+                    </div>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-[#0ecb81] font-bold text-xs shrink-0 self-start md:self-auto border border-green-500/20">
-                    <TrendingUp size={14} /> +3.9% Today
+
+                {/* Total Allocation Donut Chart */}
+                <div className="lg:col-span-2 bg-[#1e2329] border border-[#2b3139] rounded-2xl p-6 flex flex-row items-center gap-6 min-h-[180px]">
+                    <div className="w-1/2 h-[120px] relative shrink-0">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <RePieChart>
+                                <Pie 
+                                    data={allocationData} 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    innerRadius={38} 
+                                    outerRadius={50} 
+                                    paddingAngle={2} 
+                                    dataKey="value" 
+                                    stroke="none"
+                                >
+                                    {allocationData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Pie>
+                            </RePieChart>
+                        </ResponsiveContainer>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <PieChartIcon size={18} className="text-[#848e9c]" />
+                        </div>
+                    </div>
+                    
+                    <div className="flex-1 flex flex-col justify-center space-y-1.5 min-w-0">
+                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#848e9c] mb-1">Portfolio Allocation</p>
+                        {allocationData.slice(0, 4).map((item) => {
+                            const pct = ((item.value / combinedTotal) * 100).toFixed(1);
+                            return (
+                                <div key={item.name} className="flex justify-between items-center text-xs">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }}></div>
+                                        <span className="text-[#eaecef] font-medium truncate">{item.name}</span>
+                                    </div>
+                                    <span className="text-[#848e9c] font-semibold tabular-data">{pct}%</span>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
+
             </div>
 
             {/* Split Bags Grid */}
@@ -187,7 +247,7 @@ export const MyAlphabag: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 {/* Recent Activity Table (2/3 width) */}
-                <div className="lg:col-span-2 bg-[#181a20] border border-[#2b3139] rounded-xl p-5">
+                <div className="lg:col-span-2 bg-[#1e2329] border border-[#2b3139] rounded-xl p-5">
                     <div className="flex justify-between items-center mb-5 pb-3 border-b border-[#2b3139]">
                         <h3 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                             <Briefcase size={16} className="text-blue-400" /> Recent Holdings
@@ -264,7 +324,7 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* Alpha Radar Feed (1/3 width) */}
-                <div className="bg-[#181a20] border border-[#2b3139] rounded-xl p-5">
+                <div className="bg-[#1e2329] border border-[#2b3139] rounded-xl p-5">
                     <div className="flex justify-between items-center mb-5 pb-3 border-b border-[#2b3139]">
                         <h3 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                             <Radio size={16} className="text-alphabag-yellow animate-pulse" /> Alpha Radar

@@ -12,9 +12,9 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --bg-color: #181a20;
-    --panel-color: #1e2329;
-    --card-color: #1e2329;
+    --bg-color: #1e2329;
+    --panel-color: #181a20;
+    --card-color: #181a20;
     --border-color: #2b3139;
     --border-light: rgba(255, 255, 255, 0.05);
     
@@ -39,8 +39,8 @@
     --border-light: rgba(0, 0, 0, 0.03);
     
     --text-color: #1e2329;
-    --subtext-color: #707a8a;
-    --muted-color: #aeaeae;
+    --subtext-color: #474d57;
+    --muted-color: #707a8a;
     
     --yellow: #fcd535;
     --yellow-hover: #e0bd2e;
