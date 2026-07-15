@@ -14,7 +14,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { toasts, removeToast } = useWallet();
 
   return (
-    <div className="min-h-screen text-[#eaecef] font-sans selection:bg-[#fcd535] selection:text-black bg-[#0b0e11] relative">
+    <div className="min-h-screen text-[#eaecef] font-sans bg-[#181a20] relative">
       <Header toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
@@ -50,7 +50,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               {toast.type === 'SUCCESS' ? <CheckCircle size={16} /> : toast.type === 'ERROR' ? <AlertCircle size={16} /> : <Info size={16} />}
             </div>
             <div className="flex-1">
-              <p className="text-xs font-bold text-white uppercase tracking-wider">{toast.message}</p>
+              <p className="text-xs font-medium text-[#eaecef]">{toast.message}</p>
             </div>
             <button onClick={() => removeToast(toast.id)} className="text-alphabag-subtext hover:text-white transition-colors">
               <X size={14} />

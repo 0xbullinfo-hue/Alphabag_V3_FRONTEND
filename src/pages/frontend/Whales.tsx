@@ -129,7 +129,7 @@ export const Whales: React.FC = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
+        <div className="w-full space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
 
             {/* Page Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">

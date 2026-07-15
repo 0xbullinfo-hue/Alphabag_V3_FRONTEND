@@ -132,7 +132,7 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 max-w-7xl mx-auto text-[#eaecef] px-4 md:px-8">
+    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-[#eaecef] px-4 md:px-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-4 shrink-0">
         <div>

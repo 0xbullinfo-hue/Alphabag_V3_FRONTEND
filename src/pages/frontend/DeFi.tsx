@@ -39,7 +39,7 @@ export const DeFi: React.FC = () => {
     const pendingYield = totalValueLocked * 0.0015; 
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 max-w-7xl w-full mx-auto space-y-5 animate-in fade-in duration-700 px-4 md:px-8">
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-5 animate-in fade-in duration-700 px-4 md:px-8">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
                 <div>

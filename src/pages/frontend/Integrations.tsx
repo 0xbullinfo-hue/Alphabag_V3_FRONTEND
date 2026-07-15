@@ -69,7 +69,7 @@ export const Integrations: React.FC = () => {
   });
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] max-w-5xl mx-auto pb-10">
+    <div className="space-y-4 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] w-full pb-10">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-[#2b3139] gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">

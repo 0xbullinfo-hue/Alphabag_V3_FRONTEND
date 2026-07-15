@@ -98,7 +98,7 @@ export const MyAlphabag: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/cex-bag')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => triggerComingSoon('CEX Portfolio Details')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>
@@ -146,7 +146,7 @@ export const MyAlphabag: React.FC = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/portfolio')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => triggerComingSoon('DEX Portfolio Details')} className="text-[11px] font-bold text-[#848e9c] hover:text-white border border-[#2b3139] rounded-lg px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>

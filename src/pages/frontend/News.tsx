@@ -38,7 +38,7 @@ export const News: React.FC = () => {
   );
 
   return (
-    <div className="space-y-8 animate-fade-in max-w-7xl mx-auto pb-20">
+    <div className="space-y-8 animate-fade-in w-full pb-20">
       <div className="bg-alphabag-dark border border-alphabag-gray p-6 rounded-xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5">
           <Newspaper size={120} />

@@ -65,40 +65,40 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
   }
 
-  /* ── Theme Adaptations for Hardcoded Colors in Light Mode ── */
-  .light [class*="bg-[#0b0e11]"],
-  .light [class*="bg-[#0B0E11]"],
-  .light [class*="bg-alphabag-black"] {
+  /* ── Theme Adaptations for Hardcoded Colors (Dark/Light Unified) ── */
+  [class*="bg-[#0b0e11]"],
+  [class*="bg-[#0B0E11]"],
+  [class*="bg-alphabag-black"] {
     background-color: var(--bg-color) !important;
   }
 
-  .light [class*="bg-[#181a20]"],
-  .light [class*="bg-[#1e2329]"],
-  .light [class*="bg-[#1E2329]"],
-  .light [class*="bg-alphabag-dark"] {
+  [class*="bg-[#181a20]"],
+  [class*="bg-[#1e2329]"],
+  [class*="bg-[#1E2329]"],
+  [class*="bg-alphabag-dark"] {
     background-color: var(--panel-color) !important;
   }
 
-  .light [class*="border-[#2b3139]"],
-  .light [class*="border-alphabag-gray"],
-  .light [class*="border-alphabag-border"] {
+  [class*="border-[#2b3139]"],
+  [class*="border-alphabag-gray"],
+  [class*="border-alphabag-border"] {
     border-color: var(--border-color) !important;
   }
 
-  .light [class*="text-[#eaecef]"],
-  .light [class*="text-alphabag-text"] {
+  [class*="text-[#eaecef]"],
+  [class*="text-alphabag-text"] {
     color: var(--text-color) !important;
   }
 
-  .light [class*="text-[#848e9c]"],
-  .light [class*="text-[#A1A1AA]"],
-  .light [class*="text-alphabag-subtext"] {
+  [class*="text-[#848e9c]"],
+  [class*="text-[#A1A1AA]"],
+  [class*="text-alphabag-subtext"] {
     color: var(--subtext-color) !important;
   }
 
-  .light [class*="text-[#474d57]"],
-  .light [class*="text-[#71717A]"],
-  .light [class*="text-alphabag-muted"] {
+  [class*="text-[#474d57]"],
+  [class*="text-[#71717A]"],
+  [class*="text-alphabag-muted"] {
     color: var(--muted-color) !important;
   }
 
