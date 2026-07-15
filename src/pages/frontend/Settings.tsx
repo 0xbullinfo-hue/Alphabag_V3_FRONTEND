@@ -250,30 +250,34 @@ export const Settings: React.FC = () => {
     const availableCex = SUPPORTED_CEX.filter(c => !connectedCex.find(cc => cc.id === c.id));
 
     const TierCard = ({ level, minTokens, current }: { level: UserTier, minTokens: string, current: boolean }) => {
-        const label = level === 'FREE' ? 'Beta Tester' : 'Ultimate (Elite)';
+        const label = level === 'FREE' ? 'Beta Tester' : 'Alphabag (coming soon)';
         return (
             <div className={`border rounded-lg p-6 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-[#2b3139] bg-[#1e2329] opacity-60'}`}>
-                {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest">ACTIVE TIER</div>}
-                {level === 'ULTIMATE' ? (
-                    <div className="flex flex-col items-center justify-center h-full py-8 text-center space-y-4">
-                        <div className="p-3 bg-alphabag-yellow/10 rounded-full"><Crown className="text-alphabag-yellow" size={32} /></div>
-                        <div>
-                            <h3 className="text-xl font-black text-white">ALPHA COMING SOON</h3>
-                            <p className="text-xs text-alphabag-subtext mt-1 max-w-[200px] mx-auto">The institutional-grade tools and classified alpha streams are now live for Alpha Testing.</p>
-                        </div>
-                    </div>
-                ) : (
-                    <>
-                        <h3 className="text-xl font-bold text-white mb-2">{label}</h3>
-                        <p className="text-sm text-alphabag-subtext mb-4">Hold {minTokens} of our utility token</p>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-2"></span>Up to 20 DEX Wallets</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-2"></span>Up to 20 CEX API Keys</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-2"></span>10 Whale Watch Slots</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-2"></span>AlphaAi Unlimited (Beta)</li>
-                        </ul>
-                    </>
-                )}
+                {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest uppercase">ACTIVE: CURRENT ALPHA</div>}
+                {!current && <div className="absolute top-2 right-2 text-[8px] bg-white/10 text-alphabag-muted font-extrabold px-2 py-1 rounded tracking-widest uppercase">COMING SOON</div>}
+                
+                <h3 className="text-xl font-bold text-white mb-2">{label}</h3>
+                <p className="text-sm text-alphabag-subtext mb-4">
+                    {level === 'FREE' ? 'Current Active Alpha Testing Option' : `Hold ${minTokens} of utility token`}
+                </p>
+                <ul className="space-y-2 text-sm">
+                    {level === 'FREE' ? (
+                        <>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Portfolio Connections</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 CEX API Connections</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Whale Watch Slots</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Daily AlphaAi Requests</li>
+                        </>
+                    ) : (
+                        <>
+                            <li className="flex items-center text-alphabag-muted"><span className="w-1.5 h-1.5 bg-white/20 rounded-full mr-2"></span>Unlimited Portfolios</li>
+                            <li className="flex items-center text-alphabag-muted"><span className="w-1.5 h-1.5 bg-white/20 rounded-full mr-2"></span>Unlimited Whale Watch</li>
+                            <li className="flex items-center text-alphabag-muted"><span className="w-1.5 h-1.5 bg-white/20 rounded-full mr-2"></span>AlphaAi (Unlimited)</li>
+                            <li className="flex items-center text-alphabag-muted"><span className="w-1.5 h-1.5 bg-white/20 rounded-full mr-2"></span>AlphaCalls Full Access</li>
+                            <li className="flex items-center text-alphabag-muted"><span className="w-1.5 h-1.5 bg-white/20 rounded-full mr-2"></span>Institutional PnL Data</li>
+                        </>
+                    )}
+                </ul>
             </div>
         );
     };
@@ -486,19 +490,9 @@ export const Settings: React.FC = () => {
             {/* ─── Membership Status ─── */}
             <section className="relative">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Crown className="text-alphabag-yellow" size={20} /> Membership Status</h2>
-                <div className="relative group/membership">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 filter blur-[2px] opacity-40 transition-all duration-700 group-hover/membership:blur-[1px]">
-                        <TierCard level="FREE" minTokens="0" current={tier === 'FREE'} />
-                        <TierCard level="ULTIMATE" minTokens="100k" current={tier === 'ULTIMATE'} />
-                    </div>
-                    
-                    {/* Membership Mask */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                        <div className="bg-alphabag-black/20 backdrop-blur-sm border border-white/5 px-6 py-3 rounded-2xl flex items-center gap-3 shadow-2xl">
-                            <ShieldCheck size={16} className="text-alphabag-yellow animate-pulse" />
-                            <span className="text-[10px] text-white font-black uppercase tracking-[0.2em]">Syncing Status via Network</span>
-                        </div>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <TierCard level="FREE" minTokens="0" current={true} />
+                    <TierCard level="ULTIMATE" minTokens="100k" current={false} />
                 </div>
             </section>
 
