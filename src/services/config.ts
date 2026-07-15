@@ -36,6 +36,13 @@ export const TOKEN_GATING_CONFIG = {
   IS_PRODUCTION: import.meta.env.VITE_ENVIRONMENT === 'production',
 };
 
+// Global Demo Mode Toggle
+export const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false';
+
+// Comma-separated list of disabled route paths in production
+export const DISABLED_PAGES = (import.meta.env.VITE_DISABLED_PAGES || '/defi').split(',').map(p => p.trim());
+
+
 // Maps the chain symbols ChainService returns (one row per chain's native
 // balance) to CoinGecko ids so MarketService can fetch a real price + 24h
 // change. NOTE: this only covers native gas tokens. Full ERC-20/SPL token

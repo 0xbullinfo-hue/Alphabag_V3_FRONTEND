@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { api } from '../../services/api';
+import Swal from 'sweetalert2';
 import { useWallet } from '../../context/WalletContext';
 import { useAuth } from '../../context/AuthContext';
 import { Bot, Send, User, Zap, ExternalLink, Mic, MicOff, Clock, AlertTriangle, Sparkles, Briefcase, RefreshCw, ArrowDown, PieChart as PieChartIcon, TrendingUp, BarChart3, Shield, Lightbulb, ChevronRight, Wallet, Check, TerminalSquare, Trash2, Fingerprint } from 'lucide-react';
@@ -93,7 +94,19 @@ export const AlphaAi: React.FC = () => {
   };
 
   const startLiveMode = async () => {
-    setIsLiveMode(false);
+    Swal.fire({
+      title: 'VOICE ASSISTANT',
+      text: 'AI Voice assistant is in final staging. Launching in Phase 2.0.',
+      icon: 'info',
+      confirmButtonText: 'ACKNOWLEDGE',
+      confirmButtonColor: '#fcd535',
+      background: '#181a20',
+      color: '#ffffff',
+      customClass: {
+        popup: 'border border-[#2b3139] rounded-2xl',
+        confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
+      }
+    });
   };
 
   const handleSendMessage = (userMsg: string) => {
@@ -168,16 +181,26 @@ export const AlphaAi: React.FC = () => {
                 disabled={!hasLimitRemaining || isStreaming}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-10 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus:shadow-[0_0_15px_rgba(252,213,53,0.1)] outline-none transition-all placeholder:text-zinc-600 shadow-inner"
+                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-24 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus:shadow-[0_0_15px_rgba(252,213,53,0.1)] outline-none transition-all placeholder:text-zinc-600 shadow-inner"
               />
-              <Button
-                type="submit"
-                disabled={!inputText.trim() || isStreaming || !hasLimitRemaining}
-                className={`absolute right-1.5 top-1.5 bottom-1.5 rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:shadow-[0_0_15px_rgba(252,213,53,0.3)]'}`}
-                title="Send Command"
-              >
-                <Send size={12} />
-              </Button>
+              <div className="absolute right-1.5 top-1.5 bottom-1.5 flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={startLiveMode}
+                  className="h-full px-2.5 rounded-lg text-zinc-400 hover:text-alphabag-yellow transition-colors hover:bg-white/5"
+                  title="Voice Assistant (Staging)"
+                >
+                  <Mic size={14} />
+                </button>
+                <Button
+                  type="submit"
+                  disabled={!inputText.trim() || isStreaming || !hasLimitRemaining}
+                  className={`h-full rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:shadow-[0_0_15px_rgba(252,213,53,0.3)]'}`}
+                  title="Send Command"
+                >
+                  <Send size={12} />
+                </Button>
+              </div>
             </form>
           </div>
         </div>

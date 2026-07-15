@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, lazy, useState } from 'react';
-import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { WagmiConfig, useAccount } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from './lib/wagmi';
@@ -11,6 +11,9 @@ import { recordVisitor } from './services/mockData';
 import { AuthModal } from './components/frontend/AuthModal';
 import { UpgradeModal } from './components/frontend/UpgradeModal';
 import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
+import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
+import { DISABLED_PAGES } from './services/config';
+
 
 // Solana Imports
 import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react';
@@ -64,6 +67,24 @@ const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
   if (isLoading) return <GlobalLoader />;
   return isAuthenticated ? <Layout>{children}</Layout> : <Navigate to="/" replace />;
 };
+
+const RouteGuard = ({ path, title, description, children }: { path: string; title: string; description: string; children: React.ReactNode }) => {
+  const navigate = useNavigate();
+  if (DISABLED_PAGES.includes(path)) {
+    return (
+      <div className="relative min-h-[calc(100vh-12rem)] flex items-center justify-center">
+        <ComingSoonOverlay
+          title={title}
+          description={description}
+          onClose={() => navigate('/')}
+        />
+      </div>
+    );
+  }
+  return <>{children}</>;
+};
+
+
 
 const AirdropTracker = () => {
   const location = useLocation();
@@ -138,19 +159,20 @@ const AppContent = () => {
           <Route path="/calculator" element={<PrivateRoute><Calculator /></PrivateRoute>} />
           <Route path="/portfolio" element={<PrivateRoute><Portfolio /></PrivateRoute>} />
           <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
-          <Route path="/alpha-screener" element={<PrivateRoute><AlphaScreener /></PrivateRoute>} />
+          <Route path="/alpha-screener" element={<PrivateRoute><RouteGuard path="/alpha-screener" title="Alpha Screener" description="Real-time multi-chain token screening is in final staging. Launching in Phase 2.0."><AlphaScreener /></RouteGuard></PrivateRoute>} />
 
           <Route path="/markets" element={<Layout><Markets /></Layout>} />
           <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
           <Route path="/whales" element={<PrivateRoute><Whales /></PrivateRoute>} />
           <Route path="/whales/:address" element={<PrivateRoute><WhaleDetail /></PrivateRoute>} />
-           <Route path="/defi" element={<Layout><DeFi /></Layout>} />
-          <Route path="/security" element={<PrivateRoute><SecurityScanner /></PrivateRoute>} />
+          <Route path="/defi" element={<Layout><RouteGuard path="/defi" title="DeFi Operations" description="Real-time multi-chain protocol yield and pool tracking is in final staging. Launching in Phase 2.0."><DeFi /></RouteGuard></Layout>} />
+          <Route path="/security" element={<PrivateRoute><RouteGuard path="/security" title="Security Radar" description="Real-time approval scanning and risk audit tools are in staging. Launching in Phase 2.0."><SecurityScanner /></RouteGuard></PrivateRoute>} />
           <Route path="/integrations" element={<Layout><Integrations /></Layout>} />
           <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
           <Route path="/alpha-ai" element={<PrivateRoute><AlphaAi /></PrivateRoute>} />
           <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
-          <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
+          <Route path="/alphas-feed" element={<Layout><RouteGuard path="/alphas-feed" title="Alphas Feed" description="Classified community alpha feeds are in staging. Launching in Phase 2.0."><AlphasFeed /></RouteGuard></Layout>} />
+
           {/* LivePairs route removed */}
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
 

@@ -7,6 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
 import { Markets } from './Markets';
 
+import { IS_DEMO_MODE } from '../../services/config';
+
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
 
@@ -130,9 +132,15 @@ export const Landing: React.FC = () => {
 
             {/* Fallback Login Button for Debugging */}
             {!isAuthenticated ? (
-              <Button size="sm" onClick={handleDemoLogin} className="uppercase font-bold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
-                Demo Login
-              </Button>
+              IS_DEMO_MODE ? (
+                <Button size="sm" onClick={handleDemoLogin} className="uppercase font-bold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
+                  Demo Login
+                </Button>
+              ) : (
+                <Button size="sm" onClick={handleLaunchApp} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
+                  Connect Wallet
+                </Button>
+              )
             ) : (
               <Button size="sm" onClick={handleLaunchApp} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
                 Open App
@@ -215,8 +223,8 @@ export const Landing: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : handleDemoLogin}>
-                      {isAuthenticated ? 'Open Hub' : 'Enter Terminal (Demo)'}
+                    <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-alphabag-yellowHover border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
+                      {isAuthenticated ? 'Open Hub' : (IS_DEMO_MODE ? 'Enter Terminal (Demo)' : 'Connect Wallet')}
                     </Button>
                     <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">

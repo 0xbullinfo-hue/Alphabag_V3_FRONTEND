@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as LinkIcon, Settings, LogOut, Calculator, Eye, Radio, ShieldCheck, Briefcase, PieChart, FileClock, Flame, Zap, ChevronDown, Gift, Trophy, UserCircle, Target, Wallet2 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { DISABLED_PAGES, IS_DEMO_MODE } from '../../services/config';
 
 interface NavItemProps {
   to: string;
@@ -10,20 +11,24 @@ interface NavItemProps {
   active: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => (
-  <Link
-    to={to}
-    className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${active
-      ? 'bg-[#2b3139] text-[#eaecef] border-l-2 border-[#fcd535]'
-      : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef] border-l-2 border-transparent'
-      }`}
-  >
-    <div className="flex items-center space-x-3 relative z-10">
-      {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
-      <span className="font-medium text-xs uppercase">{label}</span>
-    </div>
-  </Link>
-);
+const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
+  if (DISABLED_PAGES.includes(to)) return null;
+  return (
+    <Link
+      to={to}
+      className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${active
+        ? 'bg-[#2b3139] text-[#eaecef] border-l-2 border-[#fcd535]'
+        : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef] border-l-2 border-transparent'
+        }`}
+    >
+      <div className="flex items-center space-x-3 relative z-10">
+        {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
+        <span className="font-medium text-xs uppercase">{label}</span>
+      </div>
+    </Link>
+  );
+};
+
 
 const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], children: React.ReactNode }> = ({ icon: Icon, label, activePaths, children }) => {
   const location = useLocation();
@@ -83,19 +88,22 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed top-16 left-0 bottom-0 w-64 bg-[#181a20] border-r border-[#2b3139] z-40 transition-transform duration-300 ease-in-out
+        fixed left-0 bottom-0 w-64 bg-[#181a20] border-r border-[#2b3139] z-40 transition-transform duration-300 ease-in-out
         md:translate-x-0 pt-6 pb-6 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        ${IS_DEMO_MODE ? 'top-[92px]' : 'top-16'}
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
             <NavItem to="/cex-bag" icon={Layers} label="CEX PORTFOLIO" active={location.pathname === '/cex-bag'} />
             <NavItem to="/portfolio" icon={Wallet2} label="DEX PORTFOLIO" active={location.pathname === '/portfolio'} />
 
-            <div className="relative">
-              <NavItem to="/airdrop" icon={Gift} label="Alpha Missions" active={location.pathname === '/airdrop'} />
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">LIVE</div>
-            </div>
+            {!DISABLED_PAGES.includes('/airdrop') && (
+              <div className="relative">
+                <NavItem to="/airdrop" icon={Gift} label="Alpha Missions" active={location.pathname === '/airdrop'} />
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">LIVE</div>
+              </div>
+            )}
             <NavItem to="/alphas-feed" icon={Zap} label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
             <NavItem to="/alpha-ai" icon={Bot} label="Alpha Intelligence" active={location.pathname === '/alpha-ai'} />
             <NavItem to="/calculator" icon={Calculator} label="Alpha Calculator" active={location.pathname === '/calculator'} />
