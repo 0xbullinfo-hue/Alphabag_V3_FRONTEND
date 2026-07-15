@@ -279,7 +279,7 @@ export const Settings: React.FC = () => {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 md:px-8 space-y-5 animate-in fade-in duration-700 pb-12">
+        <div className="w-full px-4 md:px-8 space-y-5 animate-in fade-in duration-700 pb-12">
             {/* Page Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
                 <div>
