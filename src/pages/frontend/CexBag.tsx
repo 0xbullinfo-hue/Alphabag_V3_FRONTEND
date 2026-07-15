@@ -46,7 +46,7 @@ const MOCK_ASSETS = [
 
 export const CexBag: React.FC = () => {
     const { tier } = useWallet();
-    const { connections: connectedCex, addConnection, removeConnection, totalBalance } = useCexConnections();
+    const { connections: connectedCex, removeConnection, connectExchange, totalBalance } = useCexConnections();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeExchange, setActiveExchange] = useState<string | null>(null);
@@ -67,28 +67,42 @@ export const CexBag: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    const handleConnectApi = async (apiKey: string, _secret: string) => {
+    const handleConnectApi = async (apiKey: string, secret: string) => {
         if (!activeExchange) return;
         setIsConnecting(true);
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
             const info = SUPPORTED_CEX.find(c => c.id === activeExchange);
             if (!info) return;
-            addConnection({
-                ...info,
-                apiKey: apiKey.substring(0, 4) + '••••',
-                balance: Math.random() * 8000 + 500,
-                isConnected: true,
-            });
+            await connectExchange(info, apiKey, secret);
             Swal.fire({ title: 'Connected', text: `Read-Only ${info.name} API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#EAECEF' });
             setIsModalOpen(false);
+        } catch (e: any) {
+            // Previously this branch didn't exist — any API key/secret
+            // "verified" instantly with a random fake balance. Now a
+            // failed or not-yet-implemented backend check surfaces here
+            // instead of silently pretending to succeed.
+            Swal.fire({
+                title: 'Connection Failed',
+                text: e?.response?.data?.message || e?.message || 'Could not verify this exchange API key. Please check your key and try again.',
+                icon: 'error',
+                background: '#1E2329',
+                color: '#EAECEF',
+            });
         } finally {
             setIsConnecting(false);
         }
     };
 
-    const mockPnL    = totalBalance * 0.054;
-    const mockPnLPct = 5.4;
+    // IMPORTANT: There is no real cost-basis data for CEX balances yet —
+    // this used to be `totalBalance * 0.054` (a fixed, fabricated 5.4%
+    // applied to whatever balance happened to load). Real P&L here
+    // requires either the exchange's trade-history endpoint (most
+    // exchanges expose this) or a manually logged buy price, same as the
+    // wallet-tracking side. Until one of those is wired up, show this
+    // honestly as unavailable instead of a fake number.
+    const hasCexPnLData = false;
+    const mockPnL    = 0;
+    const mockPnLPct = 0;
 
     const chartData = connectedCex.map((cex, i) => ({
         name:  cex.name,
@@ -157,14 +171,18 @@ export const CexBag: React.FC = () => {
                 </div>
                 <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
                     <span className="text-xs font-semibold uppercase text-[#848e9c] block mb-2">Consolidated PnL</span>
-                    <div className={`flex items-center gap-3 mb-2`}>
-                        <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
-                            {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {hasCexPnLData ? (
+                        <div className={`flex items-center gap-3 mb-2`}>
+                            <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
+                                {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </div>
+                            <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#f6465d]/10 text-[#f6465d]'}`}>
+                                {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
+                            </div>
                         </div>
-                        <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#f6465d]/10 text-[#f6465d]'}`}>
-                            {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
-                        </div>
-                    </div>
+                    ) : (
+                        <div className="text-lg font-semibold text-[#848e9c] mb-2">Not available yet</div>
+                    )}
                     <div className="bg-[#2b3139] text-[#848e9c] px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">24H Metrics</div>
                 </div>
             </div>

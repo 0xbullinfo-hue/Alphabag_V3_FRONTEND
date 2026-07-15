@@ -44,9 +44,15 @@ export const HistoryPage: React.FC = () => {
     }, [trackedWallets]);
 
     const filteredTxs = filterChain === 'ALL' ? transactions : transactions.filter(tx => tx.chain.includes(filterChain.toLowerCase()));
+    const hasMockData = transactions.some(tx => tx.isMockData);
 
     return (
         <div className="space-y-4 animate-in fade-in duration-700 pb-20">
+            {hasMockData && (
+                <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-4 py-2.5 text-xs text-alphabag-yellow font-bold uppercase tracking-wide">
+                    Demo data shown — live transaction sync is unavailable right now. These entries are not your real transaction history.
+                </div>
+            )}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h1 className="text-2xl font-semibold text-[#eaecef] tracking-tight flex items-center gap-2">
@@ -123,11 +129,18 @@ export const HistoryPage: React.FC = () => {
                                                     {new Date(tx.date).toLocaleDateString()}
                                                 </td>
                                                 <td className="p-3 text-center">
-                                                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${tx.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                                        'bg-red-500/10 text-red-500 border-red-500/20'
-                                                        }`}>
-                                                        {tx.status}
-                                                    </span>
+                                                    <div className="flex items-center justify-center gap-1.5">
+                                                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${tx.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                                            'bg-red-500/10 text-red-500 border-red-500/20'
+                                                            }`}>
+                                                            {tx.status}
+                                                        </span>
+                                                        {tx.isMockData && (
+                                                            <span className="px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20">
+                                                                Demo
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))

@@ -6,7 +6,6 @@ import { Button } from '../../components/ui/Button';
 import { Plus, Settings, Briefcase, Eye, ChevronUp, ChevronDown, Download, PieChart as PieChartIcon, Layers, BarChart3, Shield, Zap, TrendingUp, Wallet2 } from 'lucide-react';
 import { PieChart as RePieChart, Pie, Cell, Tooltip as ReTooltip, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { useWallet } from '../../context/WalletContext';
-import { Sparkline } from '../../components/ui/Sparkline';
 import { HistoryPage } from './History';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
@@ -40,10 +39,19 @@ export const Portfolio: React.FC = () => {
     const totalPnL24h = portfolioItems.reduce((acc, item) => acc + (item.value * (item.priceChange24h / 100)), 0);
     const totalPnLPercent24h = totalValue > 0 ? (totalPnL24h / totalValue) * 100 : 0;
 
-    // Find Best/Worst Performers
-    const sortedByPnL = [...portfolioItems].filter(item => item.amount > 0).sort((a, b) => b.pnlPercent - a.pnlPercent);
+    // Find Best/Worst Performers — only among assets where we actually know
+    // the cost basis. Wallet-synced tokens without a logged buy price
+    // always carry pnlPercent === 0 (see WalletContext), so they're
+    // naturally excluded by the `> 0` / `< 0` checks below, but we filter
+    // explicitly too so this stays correct if that invariant ever changes.
+    const knownCostBasisItems = portfolioItems.filter(item => item.costBasisKnown);
+    const sortedByPnL = [...knownCostBasisItems].filter(item => item.amount > 0).sort((a, b) => b.pnlPercent - a.pnlPercent);
     const bestPerformer = sortedByPnL.length > 0 && sortedByPnL[0].pnlPercent > 0 ? sortedByPnL[0] : null;
     const worstPerformer = sortedByPnL.length > 0 && sortedByPnL[sortedByPnL.length - 1].pnlPercent < 0 ? sortedByPnL[sortedByPnL.length - 1] : null;
+
+    // Honesty flags for the badges/labels below.
+    const hasMockData = portfolioItems.some(item => item.isMockData);
+    const hasAnyKnownCostBasis = knownCostBasisItems.length > 0;
 
     useEffect(() => {
         if (activeWallets.length > 0) {
@@ -101,8 +109,12 @@ export const Portfolio: React.FC = () => {
                         </div>
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
                         <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
-                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live Sync</span>
-                        <DataSourceBadge className="ml-auto" />
+                        {hasMockData ? (
+                            <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
+                        ) : (
+                            <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">{isSyncing ? 'Syncing…' : 'Live Sync'}</span>
+                        )}
+                        <DataSourceBadge className="ml-auto" actuallyMock={hasMockData} />
                     </div>
 
                     <div className="flex items-baseline gap-4">
@@ -178,12 +190,25 @@ export const Portfolio: React.FC = () => {
                                     <TrendingUp size={14} />
                                 </div>
                             </div>
-                            <div className={`text-2xl font-black mb-1 tracking-tight tabular-nums ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                {totalPnL >= 0 ? '+' : '-'}${Math.abs(totalPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </div>
-                            <div className={`badge-${totalPnL >= 0 ? 'green' : 'red'} w-fit`}>
-                                {totalPnL >= 0 ? '+' : ''}{totalPnLPercent.toFixed(2)}% ALL TIME
-                            </div>
+                            {hasAnyKnownCostBasis ? (
+                                <>
+                                    <div className={`text-2xl font-black mb-1 tracking-tight tabular-nums ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                        {totalPnL >= 0 ? '+' : '-'}${Math.abs(totalPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </div>
+                                    <div className={`badge-${totalPnL >= 0 ? 'green' : 'red'} w-fit`}>
+                                        {totalPnL >= 0 ? '+' : ''}{totalPnLPercent.toFixed(2)}% ALL TIME
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="text-lg font-black mb-1 tracking-tight text-[#848e9c]">
+                                        No cost basis logged
+                                    </div>
+                                    <button onClick={handleManageConnections} className="badge-yellow w-fit text-[9px]">
+                                        Log a buy price to see real P&L
+                                    </button>
+                                </>
+                            )}
                         </div>
 
                         {/* Assets */}
@@ -397,12 +422,6 @@ export const Portfolio: React.FC = () => {
                                             const holdsPositive = item.pnl >= 0;
                                             const dayPnlPositive = item.priceChange24h >= 0;
 
-                                            // Generate a deterministic but randomized array for the sparkline based on the coinId
-                                            const fakeSparklineData = Array.from({ length: 20 }, (_, i) => {
-                                                const mod = (item.coinId.charCodeAt(0) + i) % 10;
-                                                return (dayPnlPositive ? 10 + mod + (i * 0.5) : 20 - mod - (i * 0.5));
-                                            });
-
                                             return (
                                                 <tr key={item.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                                     <td className="py-3 px-4">
@@ -424,8 +443,11 @@ export const Portfolio: React.FC = () => {
                                                         </div>
                                                     </td>
                                                     <td className="py-3 px-4 text-right w-40">
-                                                        <div className="h-8 w-24 ml-auto">
-                                                            <Sparkline data={fakeSparklineData} color={dayPnlPositive ? '#0ECB81' : '#F6465D'} />
+                                                        <div className="h-8 w-24 ml-auto flex items-center justify-end text-alphabag-subtext text-[10px] font-semibold">
+                                                            {/* Real per-token price history isn't wired up yet — showing
+                                                                a randomized line here previously implied a real 7d
+                                                                trend that had no relation to the actual asset. */}
+                                                            No history yet
                                                         </div>
                                                     </td>
                                                     <td className="py-3 px-4 text-right">
@@ -442,12 +464,23 @@ export const Portfolio: React.FC = () => {
                                                         </div>
                                                     </td>
                                                     <td className="py-3 px-4 text-right tabular-data">
-                                                        <div className={`font-bold tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`} title={`$${item.pnl.toLocaleString()}`}>
-                                                            {holdsPositive ? '+' : '-'}${Math.abs(item.pnl).toLocaleString()}
-                                                        </div>
-                                                        <div className={`text-xs font-bold flex items-center justify-end gap-0.5 mt-0.5 tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                                            {holdsPositive ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {Math.abs(item.pnlPercent).toFixed(2)}%
-                                                        </div>
+                                                        {item.costBasisKnown ? (
+                                                            <>
+                                                                <div className={`font-bold tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`} title={`$${item.pnl.toLocaleString()}`}>
+                                                                    {holdsPositive ? '+' : '-'}${Math.abs(item.pnl).toLocaleString()}
+                                                                </div>
+                                                                <div className={`text-xs font-bold flex items-center justify-end gap-0.5 mt-0.5 tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                                                    {holdsPositive ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {Math.abs(item.pnlPercent).toFixed(2)}%
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <button
+                                                                onClick={handleManageConnections}
+                                                                className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-wider hover:text-alphabag-yellow transition-colors"
+                                                            >
+                                                                + Add cost basis
+                                                            </button>
+                                                        )}
                                                     </td>
                                                     <td className="py-3 px-4">
                                                         <div className="flex items-center justify-center gap-2 text-alphabag-subtext">

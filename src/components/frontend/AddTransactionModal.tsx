@@ -24,7 +24,11 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   const isCustomAsset = coin === 'Custom Asset (MANUAL)';
   const isSubmitDisabled = !amount || !price || (isCustomAsset && (!customAssetName.trim() || !customAssetSymbol.trim()));
 
-  // Simulate price tracking when coin changes
+  // Pre-fill a starting price from the local coin list as a convenience —
+  // this is NOT a live feed (MOCK_COINS is static demo data), so we label
+  // it "Suggested" rather than "Live" and always leave it editable. Wire
+  // this to MarketService.getPrice(...) if/when a real quote is needed
+  // before submission.
   useEffect(() => {
     if (isCustomAsset) {
       setPrice('');
@@ -38,7 +42,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     
     if (mock) {
         setPrice(mock.current_price.toString());
-        setIsPriceLive(true);
+        setIsPriceLive(false); // suggested value only, not a live quote
     } else {
         setIsPriceLive(false);
     }
@@ -65,12 +69,20 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
         type,
         coin: customAssetName.trim(),
         symbol: customAssetSymbol.trim().toUpperCase(),
-        price,
+        buyPrice: price,
         amount,
         date
       });
     } else {
-      onAdd({ type, coin, price, amount, date });
+      // BUG FIX: previously `symbol` was never included for a non-custom
+      // coin selection, so WalletContext fell back to 'UNKNOWN' for every
+      // one of these and silently merged unrelated coins (a logged BTC buy
+      // and a logged ETH buy both landed in the same fake "UNKNOWN" row).
+      // Extract both the display name and the ticker from "Name (TICKER)".
+      const match = coin.match(/^(.*)\s\(([^)]+)\)$/);
+      const name = match ? match[1].trim() : coin;
+      const symbol = match ? match[2].trim().toUpperCase() : coin.toUpperCase();
+      onAdd({ type, coin: name, symbol, buyPrice: price, amount, date });
     }
 
     setSubmitMessage('');
@@ -160,9 +172,9 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                             placeholder="0.00"
                             className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg pl-6 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
                         />
-                        {isPriceLive && (
-                             <div className="absolute right-3 top-2.5 flex items-center text-[8px] bg-alphabag-green/10 text-alphabag-green px-1 rounded font-bold uppercase">
-                                <TrendingUp size={8} className="mr-0.5" /> Live
+                        {!isCustomAsset && (
+                             <div className="absolute right-3 top-2.5 flex items-center text-[8px] bg-alphabag-yellow/10 text-alphabag-yellow px-1 rounded font-bold uppercase">
+                                <TrendingUp size={8} className="mr-0.5" /> Suggested
                              </div>
                         )}
                     </div>
@@ -180,12 +192,8 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                 </div>
             </div>
 
-            <div className="bg-alphabag-black/50 p-3 rounded-lg border border-alphabag-gray/50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <div className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-widest">Tracking Status</div>
-                <div className="flex items-center space-x-1.5">
-                    <span className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></span>
-                    <span className="text-[10px] text-alphabag-green font-bold uppercase tracking-widest">Dexscreener API Active</span>
-                </div>
+            <div className="bg-alphabag-black/50 p-3 rounded-lg border border-alphabag-gray/50 text-[10px] text-alphabag-subtext leading-relaxed">
+                This entry sets your cost basis for this asset. Enter the price you actually paid — Alphabag will compare it against the live market price to calculate real gain/loss.
             </div>
 
             <div>

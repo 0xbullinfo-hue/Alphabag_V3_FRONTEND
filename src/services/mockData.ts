@@ -35,6 +35,10 @@ const DEFAULT_STATS = {
   ]
 };
 
+// NOTE: This function is not currently called anywhere in the app —
+// WalletContext uses ChainService.getMultiChainBalances instead. Fixed here
+// for type-correctness and left as a reference implementation, but if this
+// is wired back in, callers must check the isMockData flag on the results.
 export const fetchHoldingsForAddress = async (address: string, chain: string = 'ETH'): Promise<PortfolioItem[]> => {
   try {
     const res = await api.get(`/api/portfolio/balances`, { params: { address, chain } });
@@ -60,7 +64,8 @@ export const fetchHoldingsForAddress = async (address: string, chain: string = '
         priceChange24h: 0,
         value: 0,
         pnl: 0,
-        pnlPercent: 0
+        pnlPercent: 0,
+        costBasisKnown: false
       }];
     }
 
@@ -75,36 +80,21 @@ export const fetchHoldingsForAddress = async (address: string, chain: string = '
         priceChange24h: 0,
         value: 0,
         pnl: 0,
-        pnlPercent: 0
+        pnlPercent: 0,
+        costBasisKnown: false
     }];
 
   } catch (e) {
-    console.warn("Falling back to mock data for:", address);
-    // [Previous mock logic remains below as fallback]
-    const seed = address.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    let coins: string[] = [];
-    if (chain === 'SOL') coins = ['solana', 'bonk', 'wif', 'jupiter'];
-    else if (chain === 'BSC') coins = ['binancecoin', 'pancakeswap-token', 'cake', 'bnb'];
-    else if (chain === 'BASE') coins = ['ethereum', 'base-god', 'aerodrome-finance'];
-    else coins = ['ethereum', 'shiba-inu', 'pepe', 'uniswap', 'chainlink'];
-
-    const selectedIds = coins.filter((_, idx) => (seed + idx) % 2 === 0 || idx === 0);
-    const markets = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' + selectedIds.join(',')).then(r => r.json());
-    if (!Array.isArray(markets)) return [];
-
-    return markets.map((coin: any) => ({
-        coinId: coin.id,
-        symbol: coin.symbol.toUpperCase(),
-        name: coin.name,
-        image: coin.image,
-        amount: ((seed % 10) + 1) * (coin.current_price < 100 ? 1000 : 2),
-        avgBuyPrice: coin.current_price,
-        currentPrice: coin.current_price,
-        priceChange24h: coin.price_change_24h || 0,
-        value: ((seed % 10) + 1) * coin.current_price,
-        pnl: 0,
-        pnlPercent: 0
-    }));
+    console.warn("Real balance fetch failed for address, returning empty holdings:", address, e);
+    // IMPORTANT: previously this branch fabricated a deterministic
+    // "random but stable per wallet address" fake portfolio — picking a
+    // seeded subset of real coins, pulling their real live prices from
+    // CoinGecko, and inventing a holding amount for each. Because it used
+    // real market data and was stable across reloads for the same
+    // address, it was MORE convincing than plain mock data, not less —
+    // a user could easily mistake it for their real portfolio. Returning
+    // an empty array here is the honest behavior: no data beats fake data.
+    return [];
   }
 };
 

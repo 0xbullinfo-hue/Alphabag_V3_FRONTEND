@@ -5,7 +5,7 @@ const BASE_URL = 'https://api.covalenthq.com/v1';
 
 export const chainData = {
     async getTransactionHistory(address: string, chainId: number = 1): Promise<Transaction[]> {
-        if (!COVALENT_API_KEY) return this._getMockTransactions(); // Allow attempt, fallback on error
+        if (!COVALENT_API_KEY) return this._getMockTransactions().map(tx => ({ ...tx, isMockData: true }));
         try {
             const auth = btoa(`${COVALENT_API_KEY}:`);
             const response = await fetch(
@@ -42,7 +42,7 @@ export const chainData = {
             }));
         } catch (e) {
             console.error("Transaction Fetch Error - Using Mock Data", e);
-            return this._getMockTransactions();
+            return this._getMockTransactions().map(tx => ({ ...tx, isMockData: true }));
         }
     },
 
@@ -61,13 +61,17 @@ export const chainData = {
             );
             if (!response.ok) {
                 console.warn(`Balance fetch failed for chain ${chainId}: ${response.status}`);
-                return this._getMockBalances(chainId);
+                // Tagged so callers never mistake this for a live balance —
+                // previously this was indistinguishable from a real API
+                // response and a global "Live API" badge would still show
+                // green while these fabricated numbers were on screen.
+                return this._getMockBalances(chainId).map(item => ({ ...item, _is_mock: true }));
             }
             const data = await response.json();
             return data.data.items || [];
         } catch (e) {
             console.warn(`Balance Fetch Error (${chainId}) - Using Mock Data`, e);
-            return this._getMockBalances(chainId);
+            return this._getMockBalances(chainId).map(item => ({ ...item, _is_mock: true }));
         }
     },
 
@@ -76,12 +80,16 @@ export const chainData = {
         const chains = [1, 56, 137, 42161, 43114, 8453, 10, 1399811149];
 
         try {
-            let allItems: any[] = [];
-            for (const chainId of chains) {
-                const items = await this.getBalances(address, chainId);
-                const itemsWithChain = items.map(item => ({ ...item, chainId }));
-                allItems = [...allItems, ...itemsWithChain];
-            }
+            // Fetch all chains in parallel instead of one-at-a-time — the
+            // previous sequential `for...of` loop meant every portfolio
+            // refresh paid the full network round-trip cost 8 times over.
+            const perChainResults = await Promise.all(
+                chains.map(async chainId => {
+                    const items = await this.getBalances(address, chainId);
+                    return items.map(item => ({ ...item, chainId }));
+                })
+            );
+            const allItems = perChainResults.flat();
 
             // Flatten and map to TokenBalance
             const tokens: TokenBalance[] = allItems.map((item: any) => {
@@ -100,7 +108,8 @@ export const chainData = {
                             item.chainId === 1399811149 ? 'SOL' :
                                 item.chainId === 8453 ? 'BASE' :
                                     item.chainId === 43114 ? 'AVAX' :
-                                        item.chainId === 42161 ? 'ARB' : 'ETH'
+                                        item.chainId === 42161 ? 'ARB' : 'ETH',
+                    isMockData: !!item._is_mock,
                 };
             });
             return tokens;

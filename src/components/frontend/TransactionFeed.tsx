@@ -40,8 +40,17 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
         <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl overflow-hidden shadow-xl">
             <div className="p-4 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black/20">
                 <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center">
-                    <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
-                    Live Chain Feed (Chain ID: {chainId})
+                    {transactions.some(tx => tx.isMockData) ? (
+                        <>
+                            <span className="w-2 h-2 rounded-full bg-alphabag-yellow mr-2"></span>
+                            Demo Data (Chain ID: {chainId})
+                        </>
+                    ) : (
+                        <>
+                            <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span>
+                            Live Chain Feed (Chain ID: {chainId})
+                        </>
+                    )}
                 </h3>
                 <button onClick={fetchHistory} disabled={loading} className="text-alphabag-subtext hover:text-white transition-colors">
                     <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
@@ -129,7 +138,9 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
 
             <div className="p-2 bg-alphabag-yellow/5 border-t border-alphabag-yellow/10 text-center">
                 <p className="text-[9px] text-alphabag-yellow font-bold uppercase tracking-widest">
-                    Powered by GoldRush® API
+                    {transactions.some(tx => tx.isMockData)
+                        ? 'Demo Data — Live Sync Unavailable'
+                        : 'Powered by GoldRush® API'}
                 </p>
             </div>
         </div>

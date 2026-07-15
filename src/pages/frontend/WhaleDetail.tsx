@@ -48,7 +48,9 @@ export const WhaleDetail: React.FC = () => {
                         priceChange24h: 0,
                         avgBuyPrice: 0,
                         pnl: 0,
-                        pnlPercent: 0
+                        pnlPercent: 0,
+                        costBasisKnown: false,
+                        isMockData: !!t.isMockData
                     })).sort((a, b) => b.value - a.value); // Sort by Value Descending
 
                     // .filter(h => h.value > 10); // Temporarily disable dust filter for debugging

@@ -100,6 +100,16 @@ export interface PortfolioItem {
   value: number;
   pnl: number;
   pnlPercent: number;
+  /**
+   * True only when avgBuyPrice comes from a real source (a manually logged
+   * transaction with a user-entered buy price). False for wallet-synced
+   * tokens where we have no cost-basis data. The UI must never render a
+   * P&L figure when this is false — show "Add cost basis" instead of a
+   * fabricated number.
+   */
+  costBasisKnown: boolean;
+  /** True when price/value for this row came from a mock/fallback source rather than a live feed. */
+  isMockData?: boolean;
 }
 
 export interface PortfolioHistoryPoint {
@@ -122,6 +132,7 @@ export interface Transaction {
   fee: number;
   status: 'CONFIRMED' | 'PENDING' | 'FAILED';
   chain: string;
+  isMockData?: boolean;
 }
 
 export interface NewsItem {
@@ -325,4 +336,5 @@ export interface TokenBalance {
   tokenAddress: string;
   logo?: string;
   chain?: string; // Added to track source chain
+  isMockData?: boolean; // True when this row came from a mock/fallback source, not a live API
 }

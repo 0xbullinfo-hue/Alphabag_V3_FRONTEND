@@ -40,14 +40,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     watch: true
   });
 
-  // Beta period: auto-grant ULTIMATE to all users on first login
-  useEffect(() => {
-    if (user && !user.isPro) {
-      const updatedUser = { ...user, isPro: true, tier: 'ULTIMATE' as const };
-      setUser(updatedUser);
-      sessionStorage.setItem('alphabag_user', JSON.stringify(updatedUser));
-    }
-  }, [user?.id]); // Only re-run when the user identity changes, not every state update
+  // Tier and Pro status are decided entirely server-side and arrive on `user`
+  // from /api/auth/siwe, /api/auth/login, and /api/auth/me. Do NOT locally
+  // override them here — a client-side auto-upgrade defeats the paywall for
+  // every user, since PremiumLock and wallet-tier limits both key off this
+  // value. If you need a temporary beta promotion, do it in the backend
+  // auth response, not in the frontend.
 
   // Admin status is evaluated entirely on the server side via JWT roles.
   const siweLogin = async (address: string, signature: string, message: string) => {
@@ -138,16 +136,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const upgradeToUltimate = async (walletAddress: string): Promise<boolean> => {
     if (!user) return false;
-    const updatedUser: User = { ...user, tier: 'ULTIMATE', verifiedWallet: walletAddress };
-    setUser(updatedUser);
-    sessionStorage.setItem('alphabag_user', JSON.stringify(updatedUser));
-    return true;
+
+    // IMPORTANT: This must be verified server-side. The backend needs to
+    // independently read the BAG token balance for `walletAddress` on-chain
+    // (viem/ethers against BSC, NOT trust a client-supplied balance) and
+    // only then issue a new JWT/user record with tier: 'ULTIMATE'.
+    // Previously this function set tier locally with no verification at
+    // all, which meant clicking "Upgrade" granted Ultimate access to any
+    // user regardless of actual token holdings. Do not revert to that.
+    try {
+      const res = await api.post('/api/auth/verify-upgrade', { walletAddress });
+      if (res.data?.user && res.data?.token) {
+        setUser(res.data.user);
+        setToken(res.data.token);
+        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        sessionStorage.setItem('alphabag_token', res.data.token);
+        return res.data.user.tier === 'ULTIMATE';
+      }
+      return false;
+    } catch (e: any) {
+      console.error('[AUTH] Upgrade verification failed:', e?.response?.data || e.message);
+      throw e; // Let the caller (UpgradeModal) surface a real error to the user.
+    }
   };
 
   const updateAiUsage = (seconds: number) => {
     if (!user || user.tier === 'ULTIMATE' || user.isPro) return;
     const updated = { ...user, alphaAiUsageSeconds: (user.alphaAiUsageSeconds || 0) + seconds };
     setUser(updated);
+    // Must persist immediately — otherwise a page refresh resets usage to 0
+    // and free-tier users get unlimited AlphaAI simply by reloading.
+    sessionStorage.setItem('alphabag_user', JSON.stringify(updated));
+    // Server is the source of truth for enforcement; this local counter is
+    // only for optimistic UI. The backend must independently track and cap
+    // usage per-user (e.g. on the AI request endpoint) since a determined
+    // user can still clear sessionStorage. Do not rely on this value alone
+    // to gate access server-side.
   };
 
   const refreshUser = async () => {

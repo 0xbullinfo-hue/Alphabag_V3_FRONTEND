@@ -36,6 +36,25 @@ export const TOKEN_GATING_CONFIG = {
   IS_PRODUCTION: import.meta.env.VITE_ENVIRONMENT === 'production',
 };
 
+// Maps the chain symbols ChainService returns (one row per chain's native
+// balance) to CoinGecko ids so MarketService can fetch a real price + 24h
+// change. NOTE: this only covers native gas tokens. Full ERC-20/SPL token
+// balances per wallet require the backend's /api/portfolio/balances
+// endpoint to return per-token line items (contract address, symbol,
+// balance) rather than a single native-balance row per chain — see the
+// TODO in ChainService.ts.
+export const CHAIN_SYMBOL_TO_COINGECKO_ID: Record<string, string> = {
+  ETH: 'ethereum',
+  BSC: 'binancecoin',
+  POLY: 'matic-network',
+  MATIC: 'matic-network',
+  ARB: 'ethereum', // Arbitrum's native gas token is ETH
+  BASE: 'ethereum', // Base's native gas token is ETH
+  AVAX: 'avalanche-2',
+  OP: 'ethereum', // Optimism's native gas token is ETH
+  SOL: 'solana',
+};
+
 export const BLOCKCHAIN_CONFIG = {
   // Chain IDs
   BSC_MAINNET: 56,

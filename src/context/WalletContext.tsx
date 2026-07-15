@@ -3,7 +3,8 @@ import { useAccount, useDisconnect } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { ChainService } from '../services/ChainService';
 import { TokenBalanceService } from '../services/TokenBalanceService';
-import { TOKEN_GATING_CONFIG, BLOCKCHAIN_CONFIG, TIER_LIMITS } from '../services/config';
+import { MarketService } from '../services/MarketService';
+import { TOKEN_GATING_CONFIG, BLOCKCHAIN_CONFIG, TIER_LIMITS, CHAIN_SYMBOL_TO_COINGECKO_ID } from '../services/config';
 import { WalletEntry, PortfolioItem, Chain } from '../types';
 import { useAuth } from './AuthContext';
 
@@ -71,7 +72,14 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return saved ? JSON.parse(saved) : [];
   });
 
-  const tier = isPremium ? 'PREMIUM' : 'FREE';
+  // Single source of truth: AuthContext.user.tier, set only by the backend
+  // after real verification. Previously this derived from a second,
+  // independent `isPremium` flag that only got set by an on-chain balance
+  // check tied to wagmi wallet connection — so a user could be ULTIMATE in
+  // AuthContext (features unlocked) while still being capped at FREE wallet
+  // limits here, or vice versa. Fall back to the local on-chain check only
+  // while `user` hasn't loaded yet (e.g. brief moment during initial auth).
+  const tier = (user?.tier === 'ULTIMATE' || isPremium) ? 'PREMIUM' : 'FREE';
 
   useEffect(() => {
     localStorage.setItem('alphabag_tracked_wallets', JSON.stringify(trackedWallets));
@@ -195,17 +203,53 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       const aggregated = new Map<string, PortfolioItem>();
 
+      // Resolve real prices for wallet-synced rows in one batched call
+      // instead of fabricating them. ChainService currently returns one
+      // row per chain (its native gas token) with price/value hardcoded to
+      // 0 — see the TODO in ChainService.ts. This fills in a real price for
+      // the native tokens we can map; it does NOT invent a number when we
+      // can't resolve one.
+      const distinctSymbols = Array.from(new Set(items.map(t => (t.symbol || '').toUpperCase())));
+      const coingeckoIds = distinctSymbols
+        .map(sym => CHAIN_SYMBOL_TO_COINGECKO_ID[sym])
+        .filter(Boolean);
+      let livePriceBySymbol: Record<string, { price: number; change24h: number }> = {};
+      if (coingeckoIds.length > 0) {
+        try {
+          const priceData = await MarketService.getPrice(Array.from(new Set(coingeckoIds)));
+          if (priceData) {
+            distinctSymbols.forEach(sym => {
+              const id = CHAIN_SYMBOL_TO_COINGECKO_ID[sym];
+              if (id && priceData[id]) {
+                livePriceBySymbol[sym] = {
+                  price: Number(priceData[id].usd || 0),
+                  change24h: Number(priceData[id].usd_24h_change || 0),
+                };
+              }
+            });
+          }
+        } catch (priceErr) {
+          console.warn('[WalletContext] Price lookup failed, values will show as unpriced:', priceErr);
+        }
+      }
+
       items.forEach(token => {
         try {
           const symbol = token.symbol?.toUpperCase() || 'UNKNOWN';
           // ChainService returns guiBalance already calculated
           const amount = Number(token.guiBalance || 0);
-          const currentPrice = Number(token.price || 0);
+          const resolvedPrice = livePriceBySymbol[symbol];
+          const currentPrice = Number(token.price || resolvedPrice?.price || 0);
+          const priceChange24h = Number(resolvedPrice?.change24h || 0);
           const value = Number(token.value || (amount * currentPrice));
 
-          // Mocking PnL for now as balance API doesn't give historical cost basis without complex accounting
-          const pnlPercent = (Math.random() * 20) - 5; // Placeholder PnL
-          const pnl = value * (pnlPercent / 100);
+          // We have no historical cost-basis data for wallet-synced tokens
+          // (the balance API only reports current holdings, not purchase
+          // history). Do NOT fabricate a P&L here — show it as unknown and
+          // let the UI prompt the user to log a manual transaction if they
+          // want a real gain/loss figure for this asset.
+          const pnl = 0;
+          const pnlPercent = 0;
 
           if (aggregated.has(symbol)) {
             const existing = aggregated.get(symbol)!;
@@ -213,8 +257,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               ...existing,
               amount: existing.amount + amount,
               value: existing.value + value,
-              pnl: existing.pnl + pnl,
-              pnlPercent: (existing.pnlPercent + pnlPercent) / 2
             });
           } else {
             aggregated.set(symbol, {
@@ -223,12 +265,14 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               name: token.name || symbol,
               image: token.logo || `https://ui-avatars.com/api/?name=${symbol}&background=random`,
               amount: amount,
-              avgBuyPrice: currentPrice * 0.9, // Mocking avg buy
+              avgBuyPrice: currentPrice,
               currentPrice: currentPrice,
-              priceChange24h: 0, // Need to fetch from MarketService ideally
+              priceChange24h: priceChange24h,
               value: value,
               pnl: pnl,
-              pnlPercent: pnlPercent
+              pnlPercent: pnlPercent,
+              costBasisKnown: false,
+              isMockData: !!token.isMockData,
             });
           }
         } catch (tokenErr: any) {
@@ -237,21 +281,35 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
       });
 
-      // Merge manual transactions
+      // Merge manual transactions — these DO have a real, user-entered buy
+      // price, so this is the only place a P&L figure is legitimate.
       manualTransactions.forEach(tx => {
         try {
           const symbol = tx.symbol?.toUpperCase() || 'UNKNOWN';
           const amount = Number(tx.amount) || 0;
-          const price = Number(tx.buyPrice) || 0;
-          const value = amount * price;
+          const buyPrice = Number(tx.buyPrice) || 0;
+          // If the user also logged a current market price, use it for a
+          // real unrealized P&L; otherwise fall back to the buy price
+          // (shows 0% change rather than a fabricated one).
+          const currentPrice = Number(tx.currentPrice) || buyPrice;
+          const value = amount * currentPrice;
+          const cost = amount * buyPrice;
+          const pnl = value - cost;
+          const pnlPercent = cost > 0 ? (pnl / cost) * 100 : 0;
 
           if (amount > 0) {
             if (aggregated.has(symbol)) {
               const existing = aggregated.get(symbol)!;
+              const combinedAmount = existing.amount + amount;
+              const combinedCost = (existing.amount * existing.avgBuyPrice) + cost;
               aggregated.set(symbol, {
                 ...existing,
-                amount: existing.amount + amount,
-                value: existing.value + value
+                amount: combinedAmount,
+                value: existing.value + value,
+                avgBuyPrice: combinedAmount > 0 ? combinedCost / combinedAmount : existing.avgBuyPrice,
+                pnl: existing.pnl + pnl,
+                pnlPercent: combinedCost > 0 ? ((existing.pnl + pnl) / combinedCost) * 100 : 0,
+                costBasisKnown: true,
               });
             } else {
               aggregated.set(symbol, {
@@ -260,12 +318,13 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 name: tx.coin || symbol,
                 image: `https://ui-avatars.com/api/?name=${symbol}&background=random`,
                 amount: amount,
-                avgBuyPrice: price,
-                currentPrice: price,
+                avgBuyPrice: buyPrice,
+                currentPrice: currentPrice,
                 priceChange24h: 0,
                 value: value,
-                pnl: 0,
-                pnlPercent: 0
+                pnl: pnl,
+                pnlPercent: pnlPercent,
+                costBasisKnown: true,
               });
             }
           }
@@ -339,7 +398,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // For MVP, we might need to mock the user for manual connection if AuthContext doesn't handle it
   };
 
-  const activeAddress = (user?.verifiedWallet || user?.id) || wagmiAddress || manualAddress || undefined;
+  // Priority: an actually-connected wallet or a manually-entered watch
+  // address always wins over the account's verifiedWallet, and user?.id
+  // must NEVER be used as a fallback here — it's a database identifier,
+  // not a wallet address, and passing it into chain-balance lookups would
+  // silently produce garbage results.
+  const activeAddress = wagmiAddress || manualAddress || user?.verifiedWallet || undefined;
 
   return (
     <WalletContext.Provider value={{

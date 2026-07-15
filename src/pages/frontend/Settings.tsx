@@ -185,7 +185,7 @@ export const Settings: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     // CEX API State
-    const { connections: connectedCex, addConnection: addCex, removeConnection: removeCex } = useCexConnections();
+    const { connections: connectedCex, removeConnection: removeCex, connectExchange } = useCexConnections();
     const [isCexModalOpen, setIsCexModalOpen] = useState(false);
     const [activeCexId, setActiveCexId] = useState<string | null>(null);
     const [isConnectingCex, setIsConnectingCex] = useState(false);
@@ -220,16 +220,23 @@ export const Settings: React.FC = () => {
         setIsCexModalOpen(true);
     };
 
-    const handleCexConnect = async (apiKey: string, _secret: string) => {
+    const handleCexConnect = async (apiKey: string, secret: string) => {
         if (!activeCexId) return;
         setIsConnectingCex(true);
         try {
-            await new Promise(r => setTimeout(r, 1500));
             const info = SUPPORTED_CEX.find(c => c.id === activeCexId);
             if (!info) return;
-            addCex({ ...info, apiKey: apiKey.substring(0, 4) + '••••', balance: Math.random() * 8000 + 500, isConnected: true });
+            await connectExchange(info, apiKey, secret);
             Swal.fire({ title: 'Connected', text: `${info.name} Read-Only API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#FFF' });
             setIsCexModalOpen(false);
+        } catch (e: any) {
+            Swal.fire({
+                title: 'Connection Failed',
+                text: e?.response?.data?.message || e?.message || 'Could not verify this exchange API key. Please check your key and try again.',
+                icon: 'error',
+                background: '#1E2329',
+                color: '#FFF',
+            });
         } finally {
             setIsConnectingCex(false);
         }
