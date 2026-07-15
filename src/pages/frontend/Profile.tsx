@@ -14,6 +14,42 @@ import { Project, Post } from '../../types';
 import Swal from 'sweetalert2';
 import { extractSyncData, injectSyncData } from '../../services/syncService';
 
+const getProfileName = (userObj: any) => {
+    if (userObj?.email) {
+        return userObj.email.split('@')[0];
+    }
+    if (userObj?.walletAddress) {
+        return userObj.walletAddress.substring(0, 6) + '...' + userObj.walletAddress.substring(userObj.walletAddress.length - 4);
+    }
+    if (userObj?.id) {
+        return userObj.id.substring(0, 8);
+    }
+    return 'Explorer';
+};
+
+const getProfileHandle = (userObj: any) => {
+    if (userObj?.email) {
+        return userObj.email.split('@')[0].toLowerCase();
+    }
+    if (userObj?.walletAddress) {
+        return userObj.walletAddress.substring(0, 6).toLowerCase();
+    }
+    if (userObj?.id) {
+        return userObj.id.substring(0, 8).toLowerCase();
+    }
+    return 'explorer';
+};
+
+const getProfileInitial = (userObj: any) => {
+    if (userObj?.email && userObj.email[0]) {
+        return userObj.email[0].toUpperCase();
+    }
+    if (userObj?.walletAddress && userObj.walletAddress[2]) {
+        return userObj.walletAddress[2].toUpperCase();
+    }
+    return 'E';
+};
+
 export const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { user, refreshUser } = useAuth();
@@ -215,7 +251,7 @@ export const Profile: React.FC = () => {
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             </div>
 
-            <div className="max-w-3xl mx-auto px-4">
+            <div className="w-full px-4 md:px-8">
                 {/* Profile Info Card */}
                 <div className="relative -mt-12 mb-6 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
                     <div className="flex justify-between items-start">
@@ -228,7 +264,7 @@ export const Profile: React.FC = () => {
                                     {(editData.logoUrl || profileUser?.logoUrl) ? (
                                         <img src={editData.logoUrl || profileUser?.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="text-4xl font-black text-alphabag-yellow uppercase">{profileUser?.email?.[0] || 'U'}</span>
+                                        <span className="text-4xl font-black text-alphabag-yellow uppercase">{getProfileInitial(profileUser)}</span>
                                     )}
                                     {isEditing && isOwnProfile && (
                                         <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
@@ -303,14 +339,14 @@ export const Profile: React.FC = () => {
                         <div>
                             <div className="flex items-center gap-2">
                                 <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
-                                    {profileUser?.email?.split('@')[0]}
+                                    {getProfileName(profileUser)}
                                 </h2>
                                 {isFounder && <CheckCircle2 size={16} className="text-alphabag-yellow" fill="currentColor" />}
                                 <div className={`px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest ml-1 ${isFounder ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
                                     {isFounder ? 'FOUNDER' : 'ELITE'}
                                 </div>
                             </div>
-                            <p className="text-alphabag-muted text-[13px] font-medium opacity-60">@{profileUser?.email?.split('@')[0].toLowerCase() || 'anonymous'}_member</p>
+                            <p className="text-alphabag-muted text-[13px] font-medium opacity-60">@{getProfileHandle(profileUser)}_member</p>
                         </div>
 
                         {isEditing ? (
@@ -557,13 +593,13 @@ export const Profile: React.FC = () => {
                             <div key={post.id} className="p-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-2xl">
                                 <div className="flex gap-4">
                                     <div className="w-10 h-10 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase">
-                                        {profileUser?.email?.[0]}
+                                        {getProfileInitial(profileUser)}
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <span className="font-bold text-white text-[15px]">{profileUser?.email?.split('@')[0]}</span>
+                                            <span className="font-bold text-white text-[15px]">{getProfileName(profileUser)}</span>
                                             {isFounder && <CheckCircle2 size={14} className="text-alphabag-yellow" fill="currentColor" />}
-                                            <span className="text-alphabag-muted text-[14px]">@{profileUser?.email?.split('@')[0].toLowerCase() || 'anonymous'}_member</span>
+                                            <span className="text-alphabag-muted text-[14px]">@{getProfileHandle(profileUser)}_member</span>
                                         </div>
                                         <p className="text-zinc-200 text-[15px] leading-relaxed mb-4">
                                             {post.content}
