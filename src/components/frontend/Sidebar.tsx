@@ -47,7 +47,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
     >
       <div className="flex items-center space-x-3 relative z-10">
         {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
-        <span className="font-medium text-xs uppercase">{label}</span>
+        <span className="font-medium text-sm">{label}</span>
       </div>
       {isDisabled && (
         <span className="text-[7px] font-black bg-[#fcd535]/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-[#fcd535]/20 shrink-0">SOON</span>
@@ -73,7 +73,7 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
       >
         <div className="flex items-center space-x-3">
           <Icon size={18} />
-          <span className="font-medium text-xs uppercase">{label}</span>
+          <span className="font-medium text-sm">{label}</span>
         </div>
         <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -88,7 +88,7 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
 
 const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-4">
-    <div className="px-6 mb-1.5 text-[10px] font-semibold text-[#848e9c] uppercase tracking-wider">
+    <div className="px-6 mb-1.5 text-[10px] font-semibold text-[#474d57] uppercase tracking-wider">
       {title}
     </div>
     <div className="space-y-1">

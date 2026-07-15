@@ -118,26 +118,26 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
           </Link>
 
-          <nav className="hidden md:flex items-center ml-8 space-x-6 text-[12px] font-semibold text-[#848e9c]">
-            <Link to="/markets" className="hover:text-white transition-colors uppercase tracking-wider">
+          <nav className="hidden md:flex items-center ml-8 space-x-6 text-sm font-medium text-[#848e9c]">
+            <Link to="/markets" className="hover:text-[#eaecef] transition-colors">
               Markets
             </Link>
-            <Link to="/my-alphabag" className="hover:text-white transition-colors uppercase tracking-wider">
+            <Link to="/my-alphabag" className="hover:text-[#eaecef] transition-colors">
               Trade
             </Link>
-            <Link to="/airdrop" className="hover:text-white transition-colors uppercase tracking-wider">
+            <Link to="/airdrop" className="hover:text-[#eaecef] transition-colors">
               Earn
             </Link>
-            <Link to="/alphas-feed" className="hover:text-white transition-colors uppercase tracking-wider">
+            <Link to="/alphas-feed" className="hover:text-[#eaecef] transition-colors">
               Square
             </Link>
           </nav>
 
           {isAuthenticated && (
-            <div className="hidden lg:flex items-center space-x-6 ml-8 text-xs text-alphabag-subtext border-l border-white/10 pl-6">
-              <div className="flex flex-col bg-alphabag-black/50 rounded-2xl px-4 py-2 border border-white/10 shadow-glow-yellow">
-                <span className="uppercase tracking-[0.2em] font-semibold opacity-80 text-[9px] flex items-center gap-1"><Briefcase size={10} className="text-alphabag-yellow"/> Total Holding Assets</span>
-                <span className="text-white font-bold tabular-nums text-[13px]">${totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <div className="hidden lg:flex items-center space-x-6 ml-8 text-xs text-alphabag-subtext border-l border-[#2b3139] pl-6">
+              <div className="flex flex-col bg-[#1e2329] rounded-lg px-4 py-2 border border-[#2b3139]">
+                <span className="text-xs font-medium text-[#848e9c] flex items-center gap-1"><Briefcase size={10} className="text-alphabag-yellow"/> Total Assets</span>
+                <span className="text-[#eaecef] font-semibold tabular-nums text-sm">${totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
             </div>
           )}

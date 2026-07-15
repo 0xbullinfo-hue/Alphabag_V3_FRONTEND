@@ -86,7 +86,7 @@ export const Landing: React.FC = () => {
   };
 
   return (
-    <div className="bg-alphabag-black min-h-screen text-alphabag-text font-mono overflow-x-hidden selection:bg-alphabag-yellow selection:text-black">
+    <div className="bg-alphabag-black min-h-screen text-alphabag-text overflow-x-hidden">
 
       {/* ── TEASER TOAST NOTIFICATION ── */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
@@ -108,16 +108,16 @@ export const Landing: React.FC = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-yellow opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
           </span>
-          <p className="text-xs font-bold text-white uppercase tracking-widest text-center">
+          <p className="text-xs font-medium text-white text-center">
             Testnet Launching Soon &mdash; Join our community for early access
           </p>
           <div className="flex items-center gap-3 shrink-0">
             <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-alphabag-yellow text-[10px] font-black uppercase tracking-widest hover:underline">
+              className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
               <Send size={11} /> Telegram <ChevronRight size={11} />
             </a>
             <a href="https://x.com/alphabagpro" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-alphabag-yellow text-[10px] font-black uppercase tracking-widest hover:underline">
+              className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
               <X size={11} /> Follow <ChevronRight size={11} />
             </a>
           </div>
@@ -128,36 +128,36 @@ export const Landing: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5 shadow-glass">
-        <div className="w-full px-6 md:px-12 h-20 flex items-center justify-between">
+      <nav className="fixed top-0 w-full z-50 bg-[#181a20]/95 backdrop-blur-xl border-b border-[#2b3139]">
+        <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('home')}>
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
             <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-8 text-sm font-semibold tracking-widest text-alphabag-subtext">
-            <button onClick={() => handleNavClick('home')} className={`transition-colors uppercase ${activeTab === 'home' ? 'text-white' : 'hover:text-white'}`}>Home</button>
-            <button onClick={() => handleNavClick('features')} className={`transition-colors uppercase ${activeTab === 'features' ? 'text-white' : 'hover:text-white'}`}>Features</button>
-            <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors uppercase ${activeTab === 'tokenomics' ? 'text-white' : 'hover:text-white'}`}>Tokenomics</button>
-            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors uppercase ${activeTab === 'buy' ? 'text-white' : 'hover:text-white'}`}>Buy</button>}
-            <button onClick={() => handleNavClick('roadmap')} className={`transition-colors uppercase ${activeTab === 'roadmap' ? 'text-white' : 'hover:text-white'}`}>Roadmap</button>
-            <button onClick={() => handleNavClick('calculator')} className={`transition-colors uppercase ${activeTab === 'calculator' ? 'text-white' : 'hover:text-white'}`}>Calculator</button>
-            <button onClick={() => handleNavClick('faq')} className={`transition-colors uppercase ${activeTab === 'faq' ? 'text-white' : 'hover:text-white'}`}>FAQ</button>
+          <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-[#848e9c]">
+            <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Home</button>
+            <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Features</button>
+            <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Tokenomics</button>
+            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors ${activeTab === 'buy' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Buy</button>}
+            <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Roadmap</button>
+            <button onClick={() => handleNavClick('calculator')} className={`transition-colors ${activeTab === 'calculator' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>Calculator</button>
+            <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-[#eaecef]' : 'hover:text-[#eaecef]'}`}>FAQ</button>
 
             {/* Fallback Login Button for Debugging */}
             {!isAuthenticated ? (
               IS_DEMO_MODE ? (
-                <Button size="sm" onClick={handleDemoLogin} className="uppercase font-bold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
+                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400">
                   Demo Login
                 </Button>
               ) : (
-                <Button size="sm" onClick={handleLaunchApp} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
+                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6">
                   Connect Wallet
                 </Button>
               )
             ) : (
-              <Button size="sm" onClick={handleLaunchApp} className="uppercase font-semibold px-6 shadow-[0_0_15px_rgba(252,213,53,0.3)] hover:shadow-[0_0_25px_rgba(252,213,53,0.5)] transition-all">
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6">
                 Open App
               </Button>
             )}
@@ -189,15 +189,15 @@ export const Landing: React.FC = () => {
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-20 left-0 w-full bg-alphabag-dark border-b border-alphabag-gray/50 p-6 flex flex-col space-y-4 animate-slide-in">
-            <button onClick={() => handleNavClick('home')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'home' ? 'text-white' : 'text-alphabag-subtext'}`}>Home</button>
-            <button onClick={() => handleNavClick('features')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'features' ? 'text-white' : 'text-alphabag-subtext'}`}>Features</button>
-            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'tokenomics' ? 'text-white' : 'text-alphabag-subtext'}`}>Tokenomics</button>
-            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'buy' ? 'text-white' : 'text-alphabag-subtext'}`}>Buy</button>}
-            <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'roadmap' ? 'text-white' : 'text-alphabag-subtext'}`}>Roadmap</button>
-            <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'calculator' ? 'text-white' : 'text-alphabag-subtext'}`}>Calculator</button>
-            <button onClick={() => handleNavClick('faq')} className={`text-left py-2 font-semibold uppercase tracking-widest ${activeTab === 'faq' ? 'text-white' : 'text-alphabag-subtext'}`}>FAQ</button>
+            <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Home</button>
+            <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Features</button>
+            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Tokenomics</button>
+            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 text-sm font-medium ${activeTab === 'buy' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Buy</button>}
+            <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Roadmap</button>
+            <button onClick={() => handleNavClick('calculator')} className={`text-left py-2 text-sm font-medium ${activeTab === 'calculator' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>Calculator</button>
+            <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-[#eaecef]' : 'text-[#848e9c]'}`}>FAQ</button>
             {/* <button onClick={() => scrollToSection('membership')} className="text-left py-2 font-semibold text-white uppercase tracking-widest">Pricing</button> */}
-            <Button size="lg" onClick={handleLaunchApp} className="w-full uppercase font-semibold">{isAuthenticated ? 'Open App' : 'Notify Me'}</Button>
+            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold">{isAuthenticated ? 'Open App' : 'Notify Me'}</Button>
           </div>
         )}
       </nav>
@@ -207,21 +207,14 @@ export const Landing: React.FC = () => {
 
         {/* Hero Section */}
         {activeTab === 'home' && (
-          <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center" >
+          <section className="relative pt-24 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center" >
             {/* Background Gradients - Toned down for professional look */}
             < div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-alphabag-yellow/5 blur-[120px] rounded-full pointer-events-none" ></div >
 
             <div className="max-w-7xl mx-auto text-center relative z-10">
-              <div className="inline-flex items-center space-x-2 bg-alphabag-gray/30 border border-alphabag-gray rounded-full px-4 py-1.5 mb-8 backdrop-blur-md">
-                <span className="flex h-2 w-2 relative">
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-green"></span>
-                </span>
-                <span className="text-xs font-semibold text-alphabag-subtext uppercase tracking-wider">
-                  {IS_TEASER_MODE ? 'Testnet Coming Soon' : 'v1.0 Testnet'}
-                </span>
-              </div>
 
-              <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-500 leading-tight">
+
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-[#eaecef] leading-tight">
                 Track Your Crypto <span className="text-transparent bg-clip-text bg-gradient-to-b from-alphabag-yellow to-[#B45309]">Total Stealth</span>
               </h1>
 
@@ -235,7 +228,7 @@ export const Landing: React.FC = () => {
                   'Multi-chain coverage',
                   'Institutional-grade insights'
                 ].map((item) => (
-                  <span key={item} className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-alphabag-subtext">
+                  <span key={item} className="inline-flex items-center rounded-full border border-[#2b3139] bg-[#1e2329] px-3 py-1.5 text-xs font-medium text-[#848e9c]">
                     {item}
                   </span>
                 ))}
@@ -270,20 +263,20 @@ export const Landing: React.FC = () => {
               {/* Stats Section */}
               <div className="flex flex-wrap justify-center gap-10 md:gap-24 mt-20 text-center animate-fade-in-up delay-300">
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">$100k+</div>
-                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Assets Tracked</div>
+                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">$100k+</div>
+                  <div className="text-sm font-medium text-[#848e9c]">Assets tracked</div>
                 </div>
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">100+</div>
-                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Active Members</div>
+                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">100+</div>
+                  <div className="text-sm font-medium text-[#848e9c]">Active members</div>
                 </div>
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">250+</div>
-                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">Cryptocurrencies</div>
+                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">250+</div>
+                  <div className="text-sm font-medium text-[#848e9c]">Cryptocurrencies</div>
                 </div>
                 <div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">99.9%</div>
-                  <div className="text-xs font-semibold text-alphabag-subtext uppercase tracking-widest">System Uptime</div>
+                  <div className="text-3xl md:text-4xl font-bold text-[#eaecef] mb-2">99.9%</div>
+                  <div className="text-sm font-medium text-[#848e9c]">System uptime</div>
                 </div>
               </div>
 
@@ -320,7 +313,7 @@ export const Landing: React.FC = () => {
           <section id="features" className="py-32 px-6 min-h-[85vh] flex flex-col justify-center">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-20 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-6 uppercase tracking-tighter text-white">Engineered for <span className="text-alphabag-yellow">Alpha</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight text-[#eaecef]">Engineered for <span className="text-alphabag-yellow">Alpha</span></h2>
                 <p className="text-xl text-alphabag-subtext">Stop using spreadsheets. Upgrade to a hub aimed at maximizing yield and minimizing latency.</p>
               </div>
 
@@ -362,7 +355,7 @@ export const Landing: React.FC = () => {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
                 
                 <div className="text-center mb-16">
-                  <h2 className="text-3xl md:text-4xl font-black mb-6 uppercase tracking-[0.1em] text-white">Why <span className="text-alphabag-yellow">AlphaBAG?</span></h2>
+                  <h2 className="text-3xl md:text-4xl font-semibold mb-6 tracking-tight text-[#eaecef]">Why <span className="text-alphabag-yellow">AlphaBAG?</span></h2>
                   <p className="text-base text-alphabag-subtext max-w-2xl mx-auto">
                     Built by traders, for traders. We strip away the noise and deliver high-frequency intelligence directly to your terminal. No emotional biases, just raw, actionable data.
                   </p>
@@ -375,7 +368,7 @@ export const Landing: React.FC = () => {
                         <Zap size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">Zero Latency Execution</h4>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">Zero Latency Execution</h4>
                         <p className="text-sm text-alphabag-subtext leading-relaxed">Unlike traditional dashboards that cache data for minutes, AlphaBAG connects directly to RPC nodes to provide split-second updates on whale movements and market shifts.</p>
                       </div>
                     </div>
@@ -384,7 +377,7 @@ export const Landing: React.FC = () => {
                         <ShieldCheck size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">Absolute Privacy</h4>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">Absolute Privacy</h4>
                         <p className="text-sm text-alphabag-subtext leading-relaxed">We operate in a fully stealth, read-only environment. Your private keys never touch our servers. Monitor your wealth with total peace of mind.</p>
                       </div>
                     </div>
@@ -393,7 +386,7 @@ export const Landing: React.FC = () => {
                         <Bot size={20} />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-white uppercase tracking-tight mb-2">AlphaAi Integration</h4>
+                        <h4 className="text-lg font-semibold text-[#eaecef] tracking-tight mb-2">AlphaAi Integration</h4>
                         <p className="text-sm text-alphabag-subtext leading-relaxed">Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.</p>
                       </div>
                     </div>
@@ -418,8 +411,8 @@ export const Landing: React.FC = () => {
             
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-[0.2em] text-white">Alphabag <span className="text-alphabag-yellow">Tokenomics</span></h2>
-                <p className="text-alphabag-subtext font-mono text-sm uppercase tracking-widest max-w-4xl mx-auto leading-relaxed">Detailed token distribution and exact tokenomics for Alphabag ecosystem</p>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-[#eaecef]">Alphabag <span className="text-alphabag-yellow">Tokenomics</span></h2>
+                <p className="text-[#848e9c] text-sm max-w-4xl mx-auto leading-relaxed">Detailed token distribution and exact tokenomics for Alphabag ecosystem</p>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -464,7 +457,7 @@ export const Landing: React.FC = () => {
                   <div className="h-px w-8 bg-alphabag-yellow"></div>
                   <span className="text-[10px] font-bold text-alphabag-yellow uppercase tracking-[0.3em]">Get Started</span>
                 </div>
-                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">How To <span className="text-alphabag-yellow">Buy</span></h2>
+                <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-[#eaecef]">How to <span className="text-alphabag-yellow">Buy</span></h2>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
@@ -506,7 +499,7 @@ export const Landing: React.FC = () => {
               </div>
 
               <div className="mt-24 flex justify-center">
-                <div className="bg-alphabag-dark border border-alphabag-yellow text-alphabag-yellow font-black uppercase tracking-widest px-8 py-4 rounded cursor-not-allowed flex items-center gap-3">
+                <div className="bg-[#1e2329] border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-3">
                   <ArrowRight size={18} /> Swap on PancakeSwap (coming soon)
                 </div>
               </div>
@@ -521,8 +514,8 @@ export const Landing: React.FC = () => {
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
               <div className="text-center mb-8 mt-12">
-                <h2 className="text-4xl md:text-5xl font-black mb-4 uppercase tracking-[0.2em] text-white">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
-                <p className="text-alphabag-subtext font-mono text-sm uppercase tracking-widest">// Network_Deployment_Phases</p>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-[#eaecef]">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
+                <p className="text-[#848e9c] text-sm">Network Deployment Phases</p>
               </div>
 
               <div className="relative w-full overflow-x-auto pb-12 pt-12 custom-scrollbar snap-x snap-mandatory">
@@ -582,7 +575,7 @@ export const Landing: React.FC = () => {
           <section id="faq" className="py-24 px-6 border-y border-alphabag-border bg-alphabag-black min-h-[85vh] flex flex-col justify-center">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-4 uppercase tracking-tighter text-white">System <span className="text-alphabag-yellow">FAQ</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-[#eaecef]">System <span className="text-alphabag-yellow">FAQ</span></h2>
                 <p className="text-lg text-alphabag-subtext max-w-2xl mx-auto">Everything you need to know about the AlphaBAG hub and ecosystem.</p>
               </div>
 
