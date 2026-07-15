@@ -134,11 +134,26 @@ export const WhaleService = {
      * Analyze transactions for "Whale Alerts" (Large movements)
      */
     analyzeForAlerts: (transactions: WhaleTransaction[], thresholdUsd: number = 10000) => {
-        // This would require price data to calculate USD value. 
-        // For now, we simulate based on token amount if symbol is stablecoin, or just return recent large transfers.
+        const ESTIMATED_PRICES: Record<string, number> = {
+            ETH: 3400,
+            BNB: 580,
+            SOL: 160,
+            USDT: 1.0,
+            USDC: 1.0,
+            DAI: 1.0,
+            BUSD: 1.0,
+            FDUSD: 1.0,
+            BTC: 65000,
+            WBTC: 65000,
+            BAG: 0.1 // Estimated price of BAG token
+        };
+
         return transactions.filter(tx => {
-            // Mock logic: Alert if value has more than 20 digits (just a way to pick large numbers) or if symbol is USDT/BUSD with high val
-            return false;
+            const symbol = tx.tokenSymbol?.toUpperCase() || 'ETH';
+            const valueNum = parseFloat(tx.value) || 0;
+            const price = ESTIMATED_PRICES[symbol] || 1.0; // Default to $1 if unknown token
+            const usdValue = valueNum * price;
+            return usdValue >= thresholdUsd;
         });
     }
 };

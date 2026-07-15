@@ -8,6 +8,9 @@ import { UpgradeCmd } from '../../components/frontend/UpgradeCmd';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
 
+import { Chain } from '../../types';
+import { X } from 'lucide-react';
+
 // Sub-component to handle individual whale data fetching
 const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) => void, hasAlerts: boolean }> = ({ whale, removeTrackedWallet, hasAlerts }) => {
     const [netWorth, setNetWorth] = React.useState<number | null>(null);
@@ -91,9 +94,39 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
 };
 
 export const Whales: React.FC = () => {
-    const { trackedWallets, removeTrackedWallet, getLimits, tier, whaleAlerts } = useWallet();
+    const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts, balanceSource } = useWallet();
     const whaleWallets = trackedWallets.filter(w => w.type === 'WHALE');
     const limits = getLimits();
+
+    const [isAddOpen, setIsAddOpen] = React.useState(false);
+    const [newAddress, setNewAddress] = React.useState('');
+    const [newLabel, setNewLabel] = React.useState('');
+    const [newChain, setNewChain] = React.useState<Chain>('BSC');
+    const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newAddress.trim()) return;
+
+        setIsSubmitting(true);
+        setErrorMsg(null);
+
+        try {
+            const res = await addTrackedWallet(newAddress.trim(), newLabel.trim() || 'Unnamed Whale', newChain, 'WHALE');
+            if (res.success) {
+                setIsAddOpen(false);
+                setNewAddress('');
+                setNewLabel('');
+            } else {
+                setErrorMsg(res.error || 'Failed to track whale.');
+            }
+        } catch (err: any) {
+            setErrorMsg(err.message || 'An error occurred.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <div className="max-w-7xl mx-auto space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
@@ -106,17 +139,18 @@ export const Whales: React.FC = () => {
                             <Eye size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Whale Watch</h1>
-                        <DataSourceBadge />
+                        <DataSourceBadge source={balanceSource} />
                     </div>
                     <p className="text-[#848e9c] text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-[#eaecef] font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <UpgradeCmd />
-                    <Link to="/settings">
-                        <button className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all">
-                            <Plus size={15} /> Add Whale
-                        </button>
-                    </Link>
+                    <button 
+                        onClick={() => setIsAddOpen(true)}
+                        className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                    >
+                        <Plus size={15} /> Add Whale
+                    </button>
                 </div>
             </div>
 
@@ -132,9 +166,12 @@ export const Whales: React.FC = () => {
                         <Eye size={40} className="mx-auto mb-4 text-[#848e9c] opacity-30" />
                         <h3 className="text-base font-semibold text-[#eaecef] mb-2">No Whales Tracked</h3>
                         <p className="text-[#848e9c] text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
-                        <Link to="/settings">
-                            <button className="bg-[#2b3139] text-[#eaecef] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all">Go to Settings</button>
-                        </Link>
+                        <button 
+                            onClick={() => setIsAddOpen(true)}
+                            className="bg-[#2b3139] text-[#eaecef] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all"
+                        >
+                            Add Whale Wallet
+                        </button>
                     </div>
                 ) : (
                     whaleWallets.map(whale => (
@@ -143,15 +180,93 @@ export const Whales: React.FC = () => {
                 )}
 
                 {whaleWallets.length < limits.maxWhales && (
-                    <Link to="/settings" className="rounded-lg border border-dashed border-[#2b3139] p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group">
+                    <button 
+                        onClick={() => setIsAddOpen(true)}
+                        className="rounded-lg border border-dashed border-[#2b3139] p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
+                    >
                         <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-[#848e9c] mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
                             <Plus size={18} />
                         </div>
                         <span className="text-sm font-semibold text-[#eaecef]">Add Whale Slot</span>
                         <span className="text-xs text-[#848e9c] mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
-                    </Link>
+                    </button>
                 )}
             </div>
+
+            {/* Inline Add Modal */}
+            {isAddOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+                    <div className="bg-[#181a20] border border-[#2b3139] w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                <Eye size={18} className="text-[#fcd535]" /> Add Whale Wallet
+                            </h3>
+                            <button 
+                                onClick={() => { setIsAddOpen(false); setErrorMsg(null); }} 
+                                className="text-[#848e9c] hover:text-white"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {errorMsg && (
+                            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-semibold">
+                                {errorMsg}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Wallet Address</label>
+                                <input 
+                                    type="text" 
+                                    value={newAddress}
+                                    onChange={(e) => setNewAddress(e.target.value)}
+                                    placeholder="0x... or Solana address" 
+                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Custom Label</label>
+                                <input 
+                                    type="text" 
+                                    value={newLabel}
+                                    onChange={(e) => setNewLabel(e.target.value)}
+                                    placeholder="e.g. Vitalik, Binance Hot Wallet" 
+                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Primary Chain</label>
+                                <select 
+                                    value={newChain}
+                                    onChange={(e) => setNewChain(e.target.value as Chain)}
+                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                >
+                                    <option value="BSC">Binance Smart Chain (BSC)</option>
+                                    <option value="ETH">Ethereum (ETH)</option>
+                                    <option value="SOL">Solana (SOL)</option>
+                                    <option value="BASE">Base (BASE)</option>
+                                    <option value="ARB">Arbitrum (ARB)</option>
+                                    <option value="AVAX">Avalanche (AVAX)</option>
+                                </select>
+                            </div>
+
+                            <Button 
+                                type="submit" 
+                                isLoading={isSubmitting} 
+                                className="w-full py-3 mt-4 text-xs font-black tracking-widest uppercase bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]"
+                            >
+                                Track Wallet
+                            </Button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

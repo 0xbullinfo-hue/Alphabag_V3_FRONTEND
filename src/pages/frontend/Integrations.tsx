@@ -32,7 +32,12 @@ export const Integrations: React.FC = () => {
     // Read CEX connections directly from local storage as established in CexBag.tsx
     const saved = localStorage.getItem('alphabag_cex_connections');
     if (saved) {
-        setCexConnections(JSON.parse(saved));
+        try {
+            setCexConnections(JSON.parse(saved));
+        } catch (e) {
+            console.error('[Integrations] Error parsing CEX connections:', e);
+            setCexConnections([]);
+        }
     }
   }, []);
 

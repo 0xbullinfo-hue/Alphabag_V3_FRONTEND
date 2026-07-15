@@ -50,6 +50,7 @@ const Profile = lazy(() => import('./pages/frontend/Profile').then(m => ({ defau
 const Airdrop = lazy(() => import('./pages/frontend/Airdrop').then(m => ({ default: m.Airdrop })));
 const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ default: m.Portfolio })));
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
+const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
 
 const GlobalLoader = () => (
   <div className="min-h-screen bg-alphabag-black flex flex-col items-center justify-center space-y-6">
@@ -143,13 +144,14 @@ const AppContent = () => {
           <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
           <Route path="/whales" element={<PrivateRoute><Whales /></PrivateRoute>} />
           <Route path="/whales/:address" element={<PrivateRoute><WhaleDetail /></PrivateRoute>} />
-          <Route path="/defi" element={<Layout><DeFi /></Layout>} />
+           <Route path="/defi" element={<Layout><DeFi /></Layout>} />
+          <Route path="/security" element={<PrivateRoute><SecurityScanner /></PrivateRoute>} />
           <Route path="/integrations" element={<Layout><Integrations /></Layout>} />
           <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
           <Route path="/alpha-ai" element={<PrivateRoute><AlphaAi /></PrivateRoute>} />
           <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
           <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
-          // LivePairs route removed
+          {/* LivePairs route removed */}
           <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
 
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />

@@ -103,6 +103,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
             <NavItem to="/integrations" icon={Zap} label="Integrations" active={location.pathname === '/integrations'} />
             
             <NavItem to="/whales" icon={Eye} label="Whale Watch" active={location.pathname.startsWith('/whales')} />
+            <NavItem to="/security" icon={ShieldCheck} label="Security Radar" active={location.pathname === '/security'} />
             <NavItem to="/alpha-calls" icon={Radio} label="AlphaCalls" active={location.pathname === '/alpha-calls'} />
           </NavGroup>
 

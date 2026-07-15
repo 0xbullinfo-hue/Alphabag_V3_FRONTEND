@@ -45,7 +45,18 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
                     'Content-Type': 'application/json',
                     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                 },
-                body: JSON.stringify({ prompt: userMessage.content }),
+                body: JSON.stringify({
+                    prompt: userMessage.content,
+                    portfolio: portfolioItems.map(p => ({
+                        symbol: p.symbol,
+                        name: p.name,
+                        amount: p.amount,
+                        value: p.value,
+                        currentPrice: p.currentPrice,
+                        priceChange24h: p.priceChange24h,
+                    })),
+                    tier,
+                }),
             });
 
             if (!response.ok || !response.body) {

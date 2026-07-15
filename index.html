@@ -16,16 +16,12 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Temporary Service Worker cleanup for local dev conflicts
+    // Safe Service Worker cleanup — only unregisters same-origin workers
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(regs => {
-        if (regs.length > 0) {
-          for (let r of regs) r.unregister();
-          localStorage.clear();
-          sessionStorage.clear();
-          caches.keys().then(keys => keys.forEach(key => caches.delete(key)));
-          setTimeout(() => window.location.reload(true), 500);
-        }
+        regs.forEach(r => {
+          if (r.scope.includes(window.location.origin)) r.unregister();
+        });
       });
     }
 

@@ -12,6 +12,7 @@ import { AlphaRadarService } from '../../services/alphaRadarService';
 import { api } from '../../services/api';
 import { Project, Post } from '../../types';
 import Swal from 'sweetalert2';
+import { extractSyncData, injectSyncData } from '../../services/syncService';
 
 export const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -92,9 +93,11 @@ export const Profile: React.FC = () => {
                     }
                 }
 
-                setProfileUser(data);
+                const { bioText } = extractSyncData(data?.bio || '');
+                const cleanData = data ? { ...data, bio: bioText } : null;
+                setProfileUser(cleanData);
                 setEditData({
-                    bio: data?.bio || '',
+                    bio: bioText,
                     website: data?.website || '',
                     location: data?.location || '',
                     bannerUrl: data?.bannerUrl || '',
@@ -152,7 +155,16 @@ export const Profile: React.FC = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            const res = await api.post('/api/auth/update-profile', editData);
+            // Retrieve original sync configuration from profile database state to avoid overwriting
+            const originalSyncData = extractSyncData(user?.bio || '').syncData;
+            const finalBio = originalSyncData
+                ? injectSyncData(editData.bio, originalSyncData)
+                : editData.bio;
+
+            const res = await api.post('/api/auth/update-profile', {
+                ...editData,
+                bio: finalBio
+            });
             if (res.data.success) {
                 Swal.fire({
                     title: 'PROFILE UPDATED',
