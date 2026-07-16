@@ -320,7 +320,7 @@ export const MyAlphabag: React.FC = () => {
             </div>
 
             {/* Tabs Navigation Card */}
-            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-3 flex gap-4 mb-2">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-3 flex gap-4">
                 <button
                     onClick={() => setActiveSection('overview')}
                     className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'overview' ? 'bg-[#fcd535] text-[#181a20]' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}

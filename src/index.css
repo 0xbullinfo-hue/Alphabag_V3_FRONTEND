@@ -298,7 +298,6 @@ input[type="time"] {
   border: 1px solid var(--border-color) !important;
   border-radius: 0.5rem !important; /* uniform 8px curve */
   padding: 1rem !important;
-  margin-bottom: 8px !important; /* 8px vertical gap below it */
   display: flex !important;
   flex-direction: column !important;
 }

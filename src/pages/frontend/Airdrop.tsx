@@ -395,7 +395,7 @@ export const Airdrop: React.FC = () => {
 
     return (
         <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
+            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -430,7 +430,7 @@ export const Airdrop: React.FC = () => {
             )}
 
             {/* Stats Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 {(() => {
                     const myTeamSize = user?.referralCount || 0;
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
@@ -584,7 +584,7 @@ export const Airdrop: React.FC = () => {
 
             {/* ── Combined Withdrawal Status & Protocol Verification Card ── */}
             {user && (
-                <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5 space-y-2 mb-2 flex flex-col divide-y divide-alphabag-gray">
+                <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5 space-y-2 flex flex-col divide-y divide-alphabag-gray">
                     
                     {/* Part 1: Withdrawal Status */}
                     <div className="pb-4">
@@ -722,7 +722,7 @@ export const Airdrop: React.FC = () => {
             </div>
 
             {/* Mission Section */}
-            <div className="space-y-2 mb-2">
+            <div className="space-y-2">
                 <div className="rounded-2xl p-4 space-y-2 bg-alphabag-darkgray border border-alphabag-gray relative overflow-hidden">
                     <div className="flex justify-between items-center border-b border-white/5 pb-2 relative z-10">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
@@ -947,7 +947,7 @@ export const Airdrop: React.FC = () => {
             {!submitted && (
                 <>
                 {/* ── AlphaBAG Allocation ── */}
-                <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray mb-2 relative">
+                <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray relative">
                     {/* Header */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
