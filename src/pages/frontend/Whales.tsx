@@ -68,7 +68,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="grid grid-cols-2 gap-2 mb-4">
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
                     <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Status</div>
                     <div className="flex items-center text-[#0ecb81] text-xs font-semibold">
@@ -160,7 +160,7 @@ export const Whales: React.FC = () => {
                 <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                 {whaleWallets.length === 0 ? (
                     <div className="col-span-full py-20 rounded-lg border border-dashed border-alphabag-gray text-center">
                         <Eye size={40} className="mx-auto mb-4 text-alphabag-subtext opacity-30" />
@@ -182,7 +182,7 @@ export const Whales: React.FC = () => {
                 {whaleWallets.length < limits.maxWhales && (
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="rounded-lg border border-dashed border-alphabag-gray p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
+                        className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
                     >
                         <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
                             <Plus size={18} />
@@ -196,7 +196,7 @@ export const Whales: React.FC = () => {
             {/* Inline Add Modal */}
             {isAddOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-                    <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+                    <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-4 shadow-2xl relative">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <Eye size={18} className="text-[#fcd535]" /> Add Whale Wallet

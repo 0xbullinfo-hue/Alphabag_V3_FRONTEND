@@ -26,7 +26,6 @@
     })();
   </script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Safe Service Worker cleanup — only unregisters same-origin workers
     if ('serviceWorker' in navigator) {
@@ -53,34 +52,6 @@
         return str;
       }
     };
-
-    // Tailwind Config
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-          },
-          colors: {
-            alphabag: {
-              black: "#000000",
-              dark: "#0B0E11",
-              darkgray: "#18181B",
-              gray: "#2B3139",
-              yellow: "#FCD535",
-              text: "#EAECEF",
-              subtext: "#848E9C",
-              muted: "#A1A1AA",
-              green: "#10B981",
-              red: "#EF4444",
-              border: "rgba(255, 255, 255, 0.12)",
-              'border-light': "rgba(255, 255, 255, 0.05)",
-            }
-          }
-        }
-      }
-    }
   </script>
 </head>
 

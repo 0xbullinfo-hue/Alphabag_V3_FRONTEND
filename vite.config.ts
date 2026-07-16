@@ -3,6 +3,7 @@ import dns from 'dns';
 import https from 'https';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 dns.setDefaultResultOrder('ipv4first');
@@ -27,6 +28,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
+      tailwindcss(),
       nodePolyfills({
         include: ['buffer', 'crypto', 'stream', 'util', 'vm'],
         globals: { Buffer: true, global: true, process: true },

@@ -181,7 +181,7 @@ export const Portfolio: React.FC = () => {
             {activeTab === 'overview' ? (
                 <>
                     {/* 2. Metrics 4-Card Row */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                         {/* All-time profit */}
                         <div className="glass-panel p-4 group rounded-xl">
                             <div className="flex items-center justify-between mb-3">
@@ -274,7 +274,7 @@ export const Portfolio: React.FC = () => {
 
                     {/* 3. Charts Section */}
                     {showCharts && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
 
                             {/* History Chart */}
                             <div className="lg:col-span-2 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">

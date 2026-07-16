@@ -121,7 +121,7 @@ export const DexBag: React.FC = () => {
 
             {/* Portfolio Summary Card */}
             {isConnected && !error && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
                         <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Total DEX Value</p>
                         <p className="text-2xl font-black text-alphabag-text">

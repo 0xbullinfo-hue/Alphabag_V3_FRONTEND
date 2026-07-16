@@ -242,7 +242,7 @@ export const SecurityScanner: React.FC = () => {
             </div>
 
             {/* Quick Scan Input */}
-            <div className="glass-panel p-6 rounded-2xl relative overflow-hidden border border-white/5">
+            <div className="glass-panel p-4 rounded-2xl relative overflow-hidden border border-white/5">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-3xl pointer-events-none"></div>
                 <form onSubmit={handleQuickScan} className="flex flex-col lg:flex-row items-center gap-4">
                     <div className="w-full lg:w-1/4">
@@ -289,7 +289,7 @@ export const SecurityScanner: React.FC = () => {
 
             {/* Metrics Dashboard */}
             {approvals.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                     <div className="bg-black/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between">
                         <div>
                             <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext">At Risk Contracts</span>
@@ -325,7 +325,7 @@ export const SecurityScanner: React.FC = () => {
             )}
 
             {/* Main Scanner Results */}
-            <div className="bg-black/20 border border-white/5 rounded-2xl overflow-hidden p-6">
+            <div className="bg-black/20 border border-white/5 rounded-2xl overflow-hidden p-4">
                 <div className="flex justify-between items-center mb-6">
                     <span className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                         <Key size={14} className="text-alphabag-yellow" /> Active Approvals Result

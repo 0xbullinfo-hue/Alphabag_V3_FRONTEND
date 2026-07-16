@@ -161,15 +161,15 @@ export const CexBag: React.FC = () => {
             </div>
 
             {/* Metric Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Aggregate Net Worth</span>
                     <div className="text-3xl font-semibold text-alphabag-text tracking-tight tabular-nums mb-2">
                         ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <div className="bg-[#fcd535]/10 text-[#fcd535] px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">Consolidated Assets</div>
                 </div>
-                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Consolidated PnL</span>
                     {hasCexPnLData ? (
                         <div className={`flex items-center gap-3 mb-2`}>
@@ -194,7 +194,7 @@ export const CexBag: React.FC = () => {
                 <div className="lg:col-span-2 space-y-4">
 
                     {/* Exchange Allocation Chart */}
-                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                         <div className="flex justify-between items-center mb-4 pb-4 border-b border-alphabag-gray">
                             <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider">Exchange Allocation</h3>
                         </div>
@@ -294,7 +294,7 @@ export const CexBag: React.FC = () => {
 
                 {/* Right: Active Integrations + Add New */}
                 <div className="space-y-4">
-                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                         <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider mb-4 pb-4 border-b border-alphabag-gray">Active Integrations</h3>
                         {connectedCex.length > 0 ? (
                             <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
@@ -318,13 +318,13 @@ export const CexBag: React.FC = () => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="border border-dashed border-alphabag-gray rounded-md p-6 text-center">
+                            <div className="border border-dashed border-alphabag-gray rounded-md p-4 text-center">
                                 <p className="text-alphabag-subtext text-xs">No active CEX connections.</p>
                             </div>
                         )}
                     </div>
 
-                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                         <h4 className="text-[10px] font-semibold uppercase tracking-wider text-alphabag-subtext mb-4 pb-4 border-b border-alphabag-gray">
                             Available ({availableExchanges.length} remaining)
                         </h4>
