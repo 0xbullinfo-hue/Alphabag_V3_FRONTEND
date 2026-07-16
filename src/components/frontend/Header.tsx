@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </div>
       )}
 
-      <header className={`fixed left-0 md:left-64 right-0 h-14 bg-alphabag-darkgray border border-alphabag-gray rounded-xl z-[60] px-4 mx-2 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-9' : 'top-2'}`}>
+      <header className={`fixed left-0 right-0 h-16 bg-alphabag-darkgray border-b border-alphabag-gray z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}

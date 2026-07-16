@@ -19,10 +19,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className={`md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-2 relative z-10 ${IS_DEMO_MODE ? 'pt-24' : 'pt-20'}`}>
+      <main className={`md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-8 relative z-10 ${IS_DEMO_MODE ? 'pt-[100px]' : 'pt-[72px]'}`}>
         <AnimatePresence mode="wait">
           <PageTransition>
-            <div className="p-2 w-full">
+            <div className="py-2 w-full">
               {children}
             </div>
           </PageTransition>
