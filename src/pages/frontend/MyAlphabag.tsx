@@ -36,8 +36,8 @@ export const MyAlphabag: React.FC = () => {
     const combinedTotal = dexTotal + cexTotal;
 
     // Filter out unique chains from DEX portfolio items
-    const dexChains = Array.from(new Set(portfolioItems.map(item => item.chain || 'BSC')));
-    const dexWallets = Array.from(new Set(portfolioItems.map(item => item.address)));
+    const dexChains = Array.from(new Set(portfolioItems.map(item => (item as any).chain || 'BSC')));
+    const dexWallets = Array.from(new Set(portfolioItems.map(item => (item as any).address)));
 
     const feeAuditData = useMemo(() => {
         // Base values for "all" connected wallets

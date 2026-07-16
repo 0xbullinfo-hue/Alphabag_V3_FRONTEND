@@ -204,12 +204,13 @@ export const Airdrop: React.FC = () => {
         setIsTaskLoading(true);
         try {
             const claimPayload: ClaimMissionRequest = {
+                missionId: taskId,
                 taskId, 
                 taskLink: link,
                 feedback: taskFeedback[taskId]
             };
 
-            const res = await api.post<MissionClaimResponse>('/api/airdrop/tasks/complete', claimPayload);
+            const res = await api.post<ClaimMissionResponse>('/api/airdrop/tasks/complete', claimPayload);
             if (res.data.success) {
                 Swal.fire({
                     title: 'MISSION COMPLETE',
@@ -728,14 +729,14 @@ export const Airdrop: React.FC = () => {
                             <Shield className="text-alphabag-yellow " /> Mission Hub
                         </h2>
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
-                            Available Missions: {tasks.filter((t) => t.type !== 'unlimited').length}
+                            Available Missions: {tasks.filter((t) => (t.type as string) !== 'unlimited').length}
                         </div>
                     </div>
 
                                         
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-                        {tasks.filter((t) => t.type !== 'unlimited').map((task) => {
+                        {tasks.filter((t) => (t.type as string) !== 'unlimited').map((task) => {
                             const isCompleted = (() => {
                                 if (!user) return false;
                                 const freq = (task.frequency || '').toUpperCase();

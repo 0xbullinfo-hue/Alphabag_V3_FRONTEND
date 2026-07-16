@@ -10,8 +10,8 @@ const variants = {
     scale: 1,
     transition: {
       duration: 0.4,
-      ease: [0.16, 1, 0.3, 1], // Premium smooth easing
-      when: "beforeChildren",
+      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      when: "beforeChildren" as const,
     }
   },
   exit: { 
@@ -20,7 +20,7 @@ const variants = {
     scale: 0.99,
     transition: {
       duration: 0.3,
-      ease: [0.7, 0, 0.84, 0]
+      ease: [0.7, 0, 0.84, 0] as [number, number, number, number]
     }
   }
 };

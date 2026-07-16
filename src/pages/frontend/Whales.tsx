@@ -94,7 +94,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
 };
 
 export const Whales: React.FC = () => {
-    const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts, balanceSource } = useWallet();
+    const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts } = useWallet();
     const whaleWallets = trackedWallets.filter(w => w.type === 'WHALE');
     const limits = getLimits();
 
@@ -139,7 +139,7 @@ export const Whales: React.FC = () => {
                             <Eye size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
-                        <DataSourceBadge source={balanceSource} />
+                        <DataSourceBadge />
                     </div>
                     <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>
