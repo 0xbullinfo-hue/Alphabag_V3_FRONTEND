@@ -19,7 +19,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className={`md:pl-[248px] min-h-screen transition-all duration-300 pb-20 md:pb-8 relative z-10 ${IS_DEMO_MODE ? 'pt-[100px]' : 'pt-[72px]'}`}>
+      <main className={`md:pl-[248px] min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 ${IS_DEMO_MODE ? 'pt-[100px]' : 'pt-[72px]'}`}>
         <AnimatePresence mode="wait">
           <PageTransition>
             <div className="px-2 pb-2 w-full">
