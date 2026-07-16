@@ -290,29 +290,23 @@ input[type="time"] {
   font-size: 2.75rem !important;
 }
 
-/* ── FULL-WIDTH FIXED PAGE HEADER SUB-BAR ── */
+/* ── PAGE TITLE CARD STYLING ── */
 .page-header-card {
-  position: fixed;
-  left: 0;
-  right: 0;
-  height: 72px;
-  background-color: var(--panel-color);
-  border-bottom: 1px solid var(--border-color);
-  z-index: 30;
-  padding: 0.75rem 1.5rem;
-  top: 64px;
+  position: static !important;
+  width: 100% !important;
+  background-color: var(--card-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 0.5rem !important; /* uniform 8px curve */
+  padding: 1rem !important;
+  margin-bottom: 8px !important; /* 8px vertical gap below it */
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-/* Adjust top when demo banner is present */
-body:has([class*="Fair-launch"]) .page-header-card,
-body:has([class*="Fair Launch"]) .page-header-card {
-  top: 92px;
-}
-
-/* Handle mobile screen headers */
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .page-header-card {
-    padding: 0.5rem 1rem;
-    height: 80px; /* slightly taller for wrap spacing on mobile */
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
 }
