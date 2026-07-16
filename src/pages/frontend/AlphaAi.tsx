@@ -209,7 +209,7 @@ export const AlphaAi: React.FC = () => {
         <div className="lg:col-span-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
 
           {/* Quick Actions (2-Column Dense Grid) */}
-          <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-xl p-4 shadow-glass relative overflow-hidden">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 relative overflow-hidden">
             <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-3 flex items-center gap-2">
                 <Zap size={12} className="text-alphabag-yellow"/> Neural Prompts
             </h3>

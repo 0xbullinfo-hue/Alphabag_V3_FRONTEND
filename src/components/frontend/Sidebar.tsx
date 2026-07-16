@@ -115,10 +115,10 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed left-0 bottom-0 w-64 bg-alphabag-dark border-r border-alphabag-gray z-40 transition-transform duration-300 ease-in-out
+        fixed left-2 bottom-2 w-60 bg-alphabag-dark border border-alphabag-gray rounded-2xl z-40 transition-transform duration-300 ease-in-out
         md:translate-x-0 pt-6 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        ${IS_DEMO_MODE ? 'top-[92px]' : 'top-16'}
+        ${IS_DEMO_MODE ? 'top-[100px]' : 'top-[72px]'}
       `}>
         <div className="py-2">
           <NavGroup title="Personal">

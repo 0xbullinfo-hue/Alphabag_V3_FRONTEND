@@ -67,7 +67,8 @@ export const AirdropOnboarding: React.FC = () => {
             <div className="w-full max-w-lg bg-alphabag-dark/95 border border-white/10 rounded-xl  overflow-hidden relative group">
                 {/* Decorative Elements */}
                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${currentStep.color} transition-all duration-700`} style={{width: `${(step + 1) * 25}%`}}></div>
-                <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[100px] opacity-20 transition-all duration-700 bg-gradient-to-br ${currentStep.color}`}></div>
+
+
                 
                 <button 
                     onClick={closeOnboarding}

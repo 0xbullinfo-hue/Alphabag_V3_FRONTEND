@@ -161,8 +161,7 @@ export const AlphaCalls: React.FC = () => {
                                 className="bg-alphabag-darkgray border border-alphabag-gray p-4 rounded-lg relative overflow-hidden hover:border-[#474d57] transition-all"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
-                                {/* Background Ambient Glow */}
-                                <div className={`absolute -top-16 -right-16 w-32 h-32 bg-${theme.bg} rounded-full blur-[60px] pointer-events-none opacity-30 group-hover:opacity-60 transition-opacity duration-1000`}></div>
+
                                 
                                 {/* Header Section */}
                                 <div className="flex justify-between items-start mb-2 relative z-10">

@@ -723,7 +723,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Mission Section */}
             <div className="space-y-2 mb-2">
-                <div className="rounded-2xl p-4 space-y-2 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
+                <div className="rounded-2xl p-4 space-y-2 bg-alphabag-darkgray border border-alphabag-gray relative overflow-hidden">
                     <div className="flex justify-between items-center border-b border-white/5 pb-2 relative z-10">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
                             <Shield className="text-alphabag-yellow " /> Mission Hub
