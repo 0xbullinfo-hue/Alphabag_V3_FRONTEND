@@ -289,3 +289,30 @@ input[type="time"] {
 .calculator-container .text-4xl {
   font-size: 2.75rem !important;
 }
+
+/* ── FULL-WIDTH FIXED PAGE HEADER SUB-BAR ── */
+.page-header-card {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 72px;
+  background-color: var(--panel-color);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 30;
+  padding: 0.75rem 1.5rem;
+  top: 64px;
+}
+
+/* Adjust top when demo banner is present */
+body:has([class*="Fair-launch"]) .page-header-card,
+body:has([class*="Fair Launch"]) .page-header-card {
+  top: 92px;
+}
+
+/* Handle mobile screen headers */
+@media (max-width: 767px) {
+  .page-header-card {
+    padding: 0.5rem 1rem;
+    height: 80px; /* slightly taller for wrap spacing on mobile */
+  }
+}
