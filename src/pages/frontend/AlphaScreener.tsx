@@ -209,7 +209,7 @@ export const AlphaScreener: React.FC = () => {
     return (
         <div className="space-y-4 animate-in fade-in duration-700 screener-container">
             {/* ── Header ── */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-1">
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">

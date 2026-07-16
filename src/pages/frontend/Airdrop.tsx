@@ -394,7 +394,7 @@ export const Airdrop: React.FC = () => {
 
     return (
         <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2 mb-6">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -581,106 +581,105 @@ export const Airdrop: React.FC = () => {
                 </div>
             </div>
 
-            {/* ── $BAG Withdrawal Status — always visible above protocol verification ── */}
+            {/* ── Combined Withdrawal Status & Protocol Verification Card ── */}
             {user && (
-                <div className={`rounded-lg border p-5 animate-in slide-in-from-top-2 duration-500 mb-0 ${
-                    payoutRequest?.status === 'SENT'     ? 'bg-[#0ecb81]/10 border-[#0ecb81]/30' :
-                    payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/10 border-blue-500/20' :
-                    payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/10 border-[#f6465d]/20' :
-                    payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/5 border-[#fcd535]/20' :
-                                                          'bg-alphabag-darkgray border-alphabag-gray'
-                }`}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                        <div className="flex items-center gap-4">
-                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                                payoutRequest?.status === 'SENT'     ? 'bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/20 text-blue-400' :
-                                payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/20 text-[#f6465d]' :
-                                payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/10 text-[#fcd535]' :
-                                                                       'bg-[#2b3139] text-alphabag-subtext'
-                            }`}>
-                                {payoutRequest?.status === 'SENT' ? <CheckCircle2 size={20} /> :
-                                 payoutRequest?.status === 'REJECTED' ? <Shield size={20} /> :
-                                 payoutRequest?.status === 'PENDING' || payoutRequest?.status === 'APPROVED' ? <Timer size={20} /> :
-                                 <Bell size={20} />}
-                            </div>
-                            <div>
-                                <div className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-0.5">$BAG Withdrawal Status</div>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-lg font-semibold text-alphabag-text tabular-nums">
-                                        {payoutRequest ? Number(payoutRequest.expectedTokens).toLocaleString() : '0,000'} <span className="text-sm text-alphabag-subtext">$BAG</span>
-                                    </span>
-                                    <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase ${
-                                        payoutRequest?.status === 'SENT'     ? 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/30' :
-                                        payoutRequest?.status === 'APPROVED' ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' :
-                                        payoutRequest?.status === 'REJECTED' ? 'text-[#f6465d] bg-[#f6465d]/10 border-[#f6465d]/20' :
-                                        payoutRequest?.status === 'PENDING'  ? 'text-[#fcd535] bg-[#fcd535]/10 border-[#fcd535]/20' :
-                                                                               'text-alphabag-subtext bg-[#2b3139] border-alphabag-gray'
-                                    }`}>{payoutRequest?.status || 'NO REQUEST'}</span>
+                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 space-y-4 mb-2 flex flex-col divide-y divide-alphabag-gray">
+                    
+                    {/* Part 1: Withdrawal Status */}
+                    <div className="pb-4">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                            <div className="flex items-center gap-4">
+                                <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                                    payoutRequest?.status === 'SENT'     ? 'bg-[#0ecb81]/20 text-[#0ecb81]' :
+                                    payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/20 text-blue-400' :
+                                    payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/20 text-[#f6465d]' :
+                                    payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/10 text-[#fcd535]' :
+                                                                           'bg-[#2b3139] text-alphabag-subtext'
+                                }`}>
+                                    {payoutRequest?.status === 'SENT' ? <CheckCircle2 size={20} /> :
+                                     payoutRequest?.status === 'REJECTED' ? <Shield size={20} /> :
+                                     payoutRequest?.status === 'PENDING' || payoutRequest?.status === 'APPROVED' ? <Timer size={20} /> :
+                                     <Bell size={20} />}
                                 </div>
-                                <div className="text-[10px] text-alphabag-subtext mt-1">
-                                    {!payoutRequest && 'No withdrawal request submitted yet. Convert your ITEMS after campaign ends.'}
-                                    {payoutRequest?.status === 'PENDING'  && 'Your request is queued for admin review. Processing typically takes 48–72hrs.'}
-                                    {payoutRequest?.status === 'APPROVED' && 'Approved ✓ — Transfer to your BSC wallet is being prepared.'}
-                                    {payoutRequest?.status === 'SENT'     && `Delivered to your BSC wallet.${payoutRequest.txReference ? ` TX: ${payoutRequest.txReference}` : ''}`}
-                                    {payoutRequest?.status === 'REJECTED' && 'This request was not approved. Please contact support for details.'}
+                                <div>
+                                    <div className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-0.5">$BAG Withdrawal Status</div>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <span className="text-lg font-semibold text-alphabag-text tabular-nums">
+                                            {payoutRequest ? Number(payoutRequest.expectedTokens).toLocaleString() : '0,000'} <span className="text-sm text-alphabag-subtext">$BAG</span>
+                                        </span>
+                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase ${
+                                            payoutRequest?.status === 'SENT'     ? 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/30' :
+                                            payoutRequest?.status === 'APPROVED' ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' :
+                                            payoutRequest?.status === 'REJECTED' ? 'text-[#f6465d] bg-[#f6465d]/10 border-[#f6465d]/20' :
+                                            payoutRequest?.status === 'PENDING'  ? 'text-[#fcd535] bg-[#fcd535]/10 border-[#fcd535]/20' :
+                                                                                   'text-alphabag-subtext bg-[#2b3139] border-alphabag-gray'
+                                        }`}>{payoutRequest?.status || 'NO REQUEST'}</span>
+                                    </div>
+                                    <div className="text-[10px] text-alphabag-subtext mt-1">
+                                        {!payoutRequest && 'No withdrawal request submitted yet. Convert your ITEMS after campaign ends.'}
+                                        {payoutRequest?.status === 'PENDING'  && 'Your request is queued for admin review. Processing typically takes 48–72hrs.'}
+                                        {payoutRequest?.status === 'APPROVED' && 'Approved ✓ — Transfer to your BSC wallet is being prepared.'}
+                                        {payoutRequest?.status === 'SENT'     && `Delivered to your BSC wallet.${payoutRequest.txReference ? ` TX: ${payoutRequest.txReference}` : ''}`}
+                                        {payoutRequest?.status === 'REJECTED' && 'This request was not approved. Please contact support for details.'}
+                                    </div>
                                 </div>
                             </div>
+                            {payoutRequest && (
+                                <div className="text-right text-[9px] text-alphabag-subtext font-mono shrink-0">
+                                    <div>Requested: {new Date(payoutRequest.createdAt).toLocaleDateString()}</div>
+                                    {payoutRequest.sentAt && <div className="text-[#0ecb81] mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
+                                    <div className="mt-1 text-[8px] opacity-50">{payoutRequest.walletAddress?.slice(0, 10)}...</div>
+                                </div>
+                            )}
                         </div>
-                        {payoutRequest && (
-                            <div className="text-right text-[9px] text-alphabag-subtext font-mono shrink-0">
-                                <div>Requested: {new Date(payoutRequest.createdAt).toLocaleDateString()}</div>
-                                {payoutRequest.sentAt && <div className="text-[#0ecb81] mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
-                                <div className="mt-1 text-[8px] opacity-50">{payoutRequest.walletAddress?.slice(0, 10)}...</div>
+                        {payoutRequest && (payoutRequest.status === 'PENDING' || payoutRequest.status === 'APPROVED') && (
+                            <div className="mt-4 flex items-center gap-2">
+                                {['PENDING', 'APPROVED', 'SENT'].map((step, i) => (
+                                    <React.Fragment key={step}>
+                                        <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase ${
+                                            (step === payoutRequest.status) ? 'text-[#fcd535]' :
+                                            (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'text-[#0ecb81]' :
+                                            'text-[#2b3139]'
+                                        }`}>
+                                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[7px] ${
+                                                (step === payoutRequest.status) ? 'border-[#fcd535] bg-[#fcd535]/20 text-[#fcd535]' :
+                                                (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-[#0ecb81] bg-[#0ecb81]/20 text-[#0ecb81]' :
+                                                'border-alphabag-gray text-[#2b3139]'
+                                            }`}>{i + 1}</div>
+                                            {step}
+                                        </div>
+                                        {i < 2 && <div className={`flex-1 h-px ${['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status) - 1 ? 'bg-[#0ecb81]' : 'bg-[#2b3139]'}`} />}
+                                    </React.Fragment>
+                                ))}
                             </div>
                         )}
                     </div>
-                    {payoutRequest && (payoutRequest.status === 'PENDING' || payoutRequest.status === 'APPROVED') && (
-                        <div className="mt-4 flex items-center gap-2">
-                            {['PENDING', 'APPROVED', 'SENT'].map((step, i) => (
-                                <React.Fragment key={step}>
-                                    <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase ${
-                                        (step === payoutRequest.status) ? 'text-[#fcd535]' :
-                                        (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'text-[#0ecb81]' :
-                                        'text-[#2b3139]'
-                                    }`}>
-                                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[7px] ${
-                                            (step === payoutRequest.status) ? 'border-[#fcd535] bg-[#fcd535]/20 text-[#fcd535]' :
-                                            (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-[#0ecb81] bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                            'border-alphabag-gray text-[#2b3139]'
-                                        }`}>{i + 1}</div>
-                                        {step}
-                                    </div>
-                                    {i < 2 && <div className={`flex-1 h-px ${['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status) - 1 ? 'bg-[#0ecb81]' : 'bg-[#2b3139]'}`} />}
-                                </React.Fragment>
-                            ))}
+                    
+                    {/* Part 2: Protocol Verification */}
+                    <div className="pt-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+                        <div className="flex items-start gap-4">
+                            <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 shrink-0 mt-0.5">
+                                <ShieldAlert size={18} className="text-blue-400" />
+                            </div>
+                            <div>
+                                <h4 className="text-[13px] font-black text-white uppercase tracking-wider">Protocol Verification</h4>
+                                <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed max-w-2xl">
+                                    All mission tasks are verified for authenticity. Maintain good standing to keep earning. A 5/5 status strike would result in a complete ban from the AlphaBAG T2E platform.
+                                </p>
+                            </div>
                         </div>
-                    )}
+                        <div className="flex items-center gap-2 shrink-0 self-stretch md:self-auto w-full md:w-auto">
+                            <div className="bg-[#f6465d]/10 p-3 px-4 rounded-md border border-[#f6465d]/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
+                                <div className="text-[10px] font-semibold uppercase text-[#f6465d] mb-0.5 whitespace-nowrap">Strike Protocol</div>
+                                <div className="text-sm font-semibold text-[#f6465d]">
+                                    {user?.strikes || 0}/5
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             )}
-
-            {/* --- Protocol Verification Notice --- */}
-            <div className="mb-4 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
-                <div className="flex items-start gap-4">
-                    <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 shrink-0 mt-0.5">
-                        <ShieldAlert size={18} className="text-blue-400" />
-                    </div>
-                    <div>
-                        <h4 className="text-[13px] font-black text-white uppercase tracking-wider">Protocol Verification</h4>
-                        <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed max-w-2xl">
-                            All mission tasks are verified for authenticity. Maintain good standing to keep earning. A 5/5 status strike would result in a complete ban from the AlphaBAG T2E platform.
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3 shrink-0 self-stretch md:self-auto w-full md:w-auto">
-                    <div className="bg-[#f6465d]/10 p-3 px-4 rounded-md border border-[#f6465d]/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
-                        <div className="text-[10px] font-semibold uppercase text-[#f6465d] mb-0.5 whitespace-nowrap">Strike Protocol</div>
-                        <div className="text-sm font-semibold text-[#f6465d]">
-                            {user?.strikes || 0}/5
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {/* Team Referral Hub */}
             <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6">

@@ -6,9 +6,9 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --bg-color: #181a20;
-    --panel-color: #1e2329;
-    --card-color: #1e2329;
+    --bg-color: #0c0d0f;
+    --panel-color: #181a20;
+    --card-color: #181a20;
     --border-color: #2b3139;
     --border-light: rgba(255, 255, 255, 0.05);
     

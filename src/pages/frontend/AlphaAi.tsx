@@ -134,7 +134,7 @@ export const AlphaAi: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2 mb-4 shrink-0">
+      <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-4 shrink-0">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">

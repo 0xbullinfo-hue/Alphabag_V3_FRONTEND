@@ -140,7 +140,7 @@ export const MyAlphabag: React.FC = () => {
     return (
         <div className="w-full space-y-2 pb-12 animate-in fade-in duration-700">
             {/* Header section */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -153,13 +153,11 @@ export const MyAlphabag: React.FC = () => {
                 </div>
             </div>
 
-            {/* Net Worth & Allocation Row — one bordered container, hairline
-                divider between the two modules (Binance's actual pattern:
-                seamless adjacent panels, not separate gap-floated cards) */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden divide-y divide-alphabag-gray lg:divide-y-0 lg:divide-x">
+            {/* Net Worth & Allocation Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
                 
                 {/* Combined Net Worth Hero Card */}
-                <div className="lg:col-span-3 p-4 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-2 min-h-[180px]">
+                <div className="lg:col-span-3 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-2 min-h-[180px]">
                     <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
                     <div className="space-y-2 z-10">
                         <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-alphabag-subtext">Combined Net Worth</p>
@@ -176,7 +174,7 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* Total Allocation Donut Chart */}
-                <div className="lg:col-span-2 p-4 flex flex-row items-center gap-2 min-h-[180px]">
+                <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 flex flex-row items-center gap-2 min-h-[180px]">
                     <div className="w-1/2 h-[120px] relative shrink-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <RePieChart>
