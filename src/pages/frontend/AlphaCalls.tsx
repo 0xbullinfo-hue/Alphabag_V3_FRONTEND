@@ -99,7 +99,7 @@ export const AlphaCalls: React.FC = () => {
     };
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full px-4 md:px-8 animate-in fade-in duration-700">
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full animate-in fade-in duration-700">
             
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-6">

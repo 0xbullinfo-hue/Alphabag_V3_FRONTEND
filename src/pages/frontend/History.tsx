@@ -53,11 +53,14 @@ export const HistoryPage: React.FC = () => {
                     Demo data shown — live transaction sync is unavailable right now. These entries are not your real transaction history.
                 </div>
             )}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
-                        <History size={22} className="text-[#fcd535]" /> Transaction History
-                    </h1>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+                            <History size={20} />
+                        </div>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Transaction History</h1>
+                    </div>
                     <p className="text-alphabag-subtext text-xs font-medium mt-0.5">Immutable ledger of all portfolio activity</p>
                 </div>
                 <div className="flex space-x-2">

@@ -44,7 +44,12 @@ export const News: React.FC = () => {
           <Newspaper size={120} />
         </div>
         <div className="relative z-10">
-          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">Market Pulse</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+              <Newspaper size={20} />
+            </div>
+            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">Market Pulse</h1>
+          </div>
           <p className="text-alphabag-subtext mt-1 text-[13px] font-medium max-w-md opacity-60">Expert narratives and real-time intelligence for BAG holders.</p>
         </div>
         <div className="relative z-10 w-full md:w-auto mt-6 md:mt-0 flex flex-col items-end">

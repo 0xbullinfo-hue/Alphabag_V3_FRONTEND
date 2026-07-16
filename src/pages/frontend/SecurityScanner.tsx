@@ -223,13 +223,18 @@ export const SecurityScanner: React.FC = () => {
     }, 0);
 
     return (
-        <div className="max-w-7xl mx-auto space-y-3 pb-12 px-4 md:px-8 animate-fade-in">
+        <div className="w-full space-y-3 pb-12 animate-fade-in">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-2">
-                        Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Radar</span>
-                    </h1>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+                            <ShieldCheck size={20} />
+                        </div>
+                        <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
+                            Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Radar</span>
+                        </h1>
+                    </div>
                     <p className="text-alphabag-subtext text-xs font-medium uppercase tracking-[0.2em] mt-1">
                         DeBank-style Approval Revocation & Security Scanner
                     </p>
