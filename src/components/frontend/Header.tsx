@@ -104,8 +104,8 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </div>
       )}
 
-      <header className={`fixed left-0 right-0 h-16 bg-alphabag-darkgray border-b border-alphabag-gray z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
-        <div className="flex items-center">
+      <header className={`fixed left-0 right-0 h-16 bg-alphabag-darkgray border-b border-alphabag-gray z-[60] px-2 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
+        <div className="flex items-center flex-1">
           <button
             onClick={toggleSidebar}
             className="mr-4 p-2 rounded-md text-alphabag-subtext hover:text-alphabag-text hover:bg-[#2b3139] md:hidden transition-all duration-200"
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
           </Link>
 
-          <nav className="hidden md:flex items-center ml-8 space-x-2 text-sm font-medium text-alphabag-subtext">
+          <nav className="hidden md:flex flex-1 items-center justify-between max-w-[440px] ml-16 mr-8 text-sm font-medium text-alphabag-subtext">
             <Link to="/markets" className="hover:text-alphabag-text transition-colors">
               Markets
             </Link>
@@ -132,8 +132,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
               Square
             </Link>
           </nav>
-
-          {/* Total Assets removed per request */}
         </div>
 
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">
