@@ -7,8 +7,8 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --bg-color: #0b0e11;
-    --panel-color: #181a20;
+    --bg-color: #181a20;
+    --panel-color: #1e2329;
     --card-color: #1e2329;
     --border-color: #2b3139;
     --border-light: rgba(255, 255, 255, 0.05);
