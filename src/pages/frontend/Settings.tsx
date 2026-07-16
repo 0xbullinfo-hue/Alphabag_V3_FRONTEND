@@ -64,7 +64,7 @@ const ManualHoldingsSection: React.FC = () => {
     const totalValue = holdings.reduce((acc, h) => acc + h.amount * h.buyPrice, 0);
 
     return (
-        <section className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+        <section className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                     <Plus size={18} className="text-alphabag-yellow" /> Manual Holdings
@@ -80,8 +80,8 @@ const ManualHoldingsSection: React.FC = () => {
             </p>
 
             {/* Add Form */}
-            <div className="bg-[#0b0e11] border border-[#2b3139] p-5 rounded-lg mb-6">
-                <h3 className="text-sm font-semibold text-[#eaecef] mb-4 flex items-center gap-2">
+            <div className="bg-alphabag-black border border-alphabag-gray p-5 rounded-lg mb-6">
+                <h3 className="text-sm font-semibold text-alphabag-text mb-4 flex items-center gap-2">
                     <Search size={14} className="text-[#fcd535]" /> Add Holding
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
@@ -252,7 +252,7 @@ export const Settings: React.FC = () => {
     const TierCard = ({ level, minTokens, current }: { level: UserTier, minTokens: string, current: boolean }) => {
         const label = level === 'FREE' ? 'Beta Tester' : 'Alphabag (coming soon)';
         return (
-            <div className={`border rounded-lg p-6 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-[#2b3139] bg-[#1e2329] opacity-60'}`}>
+            <div className={`border rounded-lg p-6 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-alphabag-gray bg-alphabag-darkgray opacity-60'}`}>
                 {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest uppercase">ACTIVE: CURRENT ALPHA</div>}
                 {!current && <div className="absolute top-2 right-2 text-[8px] bg-white/10 text-alphabag-muted font-extrabold px-2 py-1 rounded tracking-widest uppercase">COMING SOON</div>}
                 
@@ -285,20 +285,20 @@ export const Settings: React.FC = () => {
     return (
         <div className="w-full px-4 md:px-8 space-y-5 animate-in fade-in duration-700 pb-12">
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <LinkIcon size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Membership & Connections</h1>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Membership & Connections</h1>
                     </div>
-                    <p className="text-[#848e9c] text-sm">Configure professional data feeds and membership status.</p>
+                    <p className="text-alphabag-subtext text-sm">Configure professional data feeds and membership status.</p>
                 </div>
                 <div className="flex flex-col items-end">
-                    <span className="text-[#848e9c] text-[9px] font-semibold uppercase tracking-widest mb-1">Network Verified Balance</span>
+                    <span className="text-alphabag-subtext text-[9px] font-semibold uppercase tracking-widest mb-1">Network Verified Balance</span>
                     <div className="flex items-center gap-3">
-                        <div className="text-2xl font-semibold text-[#eaecef] leading-none tracking-tight tabular-nums">
+                        <div className="text-2xl font-semibold text-alphabag-text leading-none tracking-tight tabular-nums">
                             {premiumTokenBalance.toLocaleString()} <span className="text-[#fcd535] text-base">BAG</span>
                         </div>
                         <button onClick={() => {}} disabled={true} className="h-7 bg-[#fcd535] text-[#181a20] text-[10px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
@@ -306,9 +306,9 @@ export const Settings: React.FC = () => {
                 </div>
             </div>
 
-            <section className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6">
+            <section className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
                 <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-sm font-semibold text-[#eaecef] uppercase tracking-wider">Portfolio Connections</h2>
+                    <h2 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Portfolio Connections</h2>
                     <button
                         onClick={() => {}}
                         disabled={true}
@@ -320,41 +320,41 @@ export const Settings: React.FC = () => {
 
                 {/* Count Summary Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <Wallet size={18} className="text-[#0ecb81]" />
                         </div>
                         <div>
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-0.5">DEX Wallets</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">DEX Wallets</div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-2xl font-semibold text-[#eaecef] tabular-nums">{portfolioCount}</span>
-                                <span className="text-[10px] text-[#848e9c]">/ {limits.maxPortfolios} max</span>
+                                <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{portfolioCount}</span>
+                                <span className="text-[10px] text-alphabag-subtext">/ {limits.maxPortfolios} max</span>
                             </div>
                             <div className="text-[9px] text-[#0ecb81] font-semibold mt-0.5">Portfolio Wallets</div>
                         </div>
                     </div>
-                    <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Eye size={18} className="text-[#fcd535]" />
                         </div>
                         <div>
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-0.5">Whale Watch</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">Whale Watch</div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-2xl font-semibold text-[#eaecef] tabular-nums">{whaleCount}</span>
-                                <span className="text-[10px] text-[#848e9c]">/ {limits.maxWhales} max</span>
+                                <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{whaleCount}</span>
+                                <span className="text-[10px] text-alphabag-subtext">/ {limits.maxWhales} max</span>
                             </div>
                             <div className="text-[9px] text-[#fcd535] font-semibold mt-0.5">Wallet Trackers</div>
                         </div>
                     </div>
-                    <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-blue-500/10 flex items-center justify-center shrink-0">
                             <Database size={18} className="text-blue-400" />
                         </div>
                         <div>
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-0.5">Total Connected</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">Total Connected</div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-2xl font-semibold text-[#eaecef] tabular-nums">{portfolioCount + whaleCount}</span>
-                                <span className="text-[10px] text-[#848e9c]">wallets</span>
+                                <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{portfolioCount + whaleCount}</span>
+                                <span className="text-[10px] text-alphabag-subtext">wallets</span>
                             </div>
                             <div className="text-[9px] text-blue-400 font-semibold mt-0.5">All Networks</div>
                         </div>
@@ -362,7 +362,7 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* Add New Wallet Form */}
-                <div className="bg-[#0b0e11] border border-[#2b3139] p-6 rounded-lg">
+                <div className="bg-alphabag-black border border-alphabag-gray p-6 rounded-lg">
                     <h3 className="text-sm font-bold text-white mb-4 flex items-center">
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
@@ -386,7 +386,7 @@ export const Settings: React.FC = () => {
                         </Button>
                     </div>
                     {error && <div className="text-alphabag-red text-xs mt-2 bg-alphabag-red/10 p-2 rounded flex items-center"><AlertCircle size={12} className="mr-2" /> {error}</div>}
-                    <p className="text-[10px] text-[#848e9c] mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                    <p className="text-[10px] text-alphabag-subtext mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 
@@ -408,15 +408,15 @@ export const Settings: React.FC = () => {
 
                 {/* CEX Count Card */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Key size={18} className="text-[#fcd535]" />
                         </div>
                         <div>
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-0.5">CEX APIs Connected</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">CEX APIs Connected</div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-2xl font-semibold text-[#eaecef] tabular-nums">{connectedCex.length}</span>
-                                <span className="text-[10px] text-[#848e9c]">/ {MAX_CEX} max</span>
+                                <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{connectedCex.length}</span>
+                                <span className="text-[10px] text-alphabag-subtext">/ {MAX_CEX} max</span>
                             </div>
                             <div className="flex items-center gap-1 mt-0.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] shadow-[0_0_4px_rgba(14,203,129,0.8)]"></span>
@@ -424,17 +424,17 @@ export const Settings: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-[#0b0e11] border border-[#2b3139] rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <TrendingUp size={18} className="text-[#0ecb81]" />
                         </div>
                         <div>
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-0.5">Available Slots</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">Available Slots</div>
                             <div className="flex items-baseline gap-1.5">
-                                <span className="text-2xl font-semibold text-[#eaecef] tabular-nums">{MAX_CEX - connectedCex.length}</span>
-                                <span className="text-[10px] text-[#848e9c]">remaining</span>
+                                <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{MAX_CEX - connectedCex.length}</span>
+                                <span className="text-[10px] text-alphabag-subtext">remaining</span>
                             </div>
-                            <div className="text-[9px] text-[#848e9c] font-semibold mt-0.5">Add via Integrations page</div>
+                            <div className="text-[9px] text-alphabag-subtext font-semibold mt-0.5">Add via Integrations page</div>
                         </div>
                     </div>
                 </div>
@@ -442,12 +442,12 @@ export const Settings: React.FC = () => {
                 {/* Quick icons for connected exchanges */}
                 {connectedCex.length > 0 && (
                     <div className="mb-6">
-                        <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider mb-3">Connected Exchanges</div>
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-3">Connected Exchanges</div>
                         <div className="flex items-center gap-2 flex-wrap">
                             {connectedCex.map(cex => (
-                                <div key={cex.id} className="flex items-center gap-2 bg-[#0b0e11] border border-[#2b3139] rounded-lg px-3 py-2">
+                                <div key={cex.id} className="flex items-center gap-2 bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2">
                                     <img src={cex.icon} alt={cex.name} className="w-5 h-5 rounded-full bg-white p-0.5" />
-                                    <span className="text-[10px] font-semibold text-[#eaecef]">{cex.name}</span>
+                                    <span className="text-[10px] font-semibold text-alphabag-text">{cex.name}</span>
                                     <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] shadow-[0_0_4px_rgba(14,203,129,0.8)]"></span>
                                 </div>
                             ))}
@@ -480,7 +480,7 @@ export const Settings: React.FC = () => {
                             <p className="text-alphabag-green font-bold text-sm">All {MAX_CEX} slots filled!</p>
                         </div>
                     )}
-                    <p className="text-[10px] text-[#848e9c] mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                    <p className="text-[10px] text-alphabag-subtext mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 

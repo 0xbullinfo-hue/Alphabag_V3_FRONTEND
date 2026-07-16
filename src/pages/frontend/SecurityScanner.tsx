@@ -225,7 +225,7 @@ export const SecurityScanner: React.FC = () => {
     return (
         <div className="max-w-7xl mx-auto space-y-6 pb-12 px-4 md:px-8 animate-fade-in">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
                     <h1 className="text-3xl font-black text-white tracking-tighter uppercase flex items-center gap-2">
                         Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Radar</span>

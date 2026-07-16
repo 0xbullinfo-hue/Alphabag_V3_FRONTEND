@@ -55,32 +55,32 @@ export const HistoryPage: React.FC = () => {
             )}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 className="text-2xl font-semibold text-[#eaecef] tracking-tight flex items-center gap-2">
+                    <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
                         <History size={22} className="text-[#fcd535]" /> Transaction History
                     </h1>
-                    <p className="text-[#848e9c] text-xs font-medium mt-0.5">Immutable ledger of all portfolio activity</p>
+                    <p className="text-alphabag-subtext text-xs font-medium mt-0.5">Immutable ledger of all portfolio activity</p>
                 </div>
                 <div className="flex space-x-2">
                     <select
                         value={filterChain}
                         onChange={(e) => setFilterChain(e.target.value)}
-                        className="bg-[#0b0e11] border border-[#2b3139] rounded-md px-3 py-1.5 text-xs text-[#eaecef] focus:border-[#fcd535] outline-none uppercase font-semibold"
+                        className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-1.5 text-xs text-alphabag-text focus:border-[#fcd535] outline-none uppercase font-semibold"
                     >
                         <option value="ALL">All Networks</option>
                         <option value="eth">Ethereum</option>
                         <option value="bsc">BSC</option>
                         <option value="sol">Solana</option>
                     </select>
-                    <button onClick={() => window.location.reload()} className="bg-[#2b3139] text-[#eaecef] border border-[#474d57] rounded-md px-3 py-1.5 hover:bg-[#474d57] transition-all">
+                    <button onClick={() => window.location.reload()} className="bg-[#2b3139] text-alphabag-text border border-[#474d57] rounded-md px-3 py-1.5 hover:bg-[#474d57] transition-all">
                         <RefreshCw size={13} />
                     </button>
                 </div>
             </div>
 
-            <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+            <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead className="bg-[#0b0e11] text-[#848e9c] text-[10px] uppercase tracking-wider font-semibold border-b border-[#2b3139]">
+                        <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase tracking-wider font-semibold border-b border-alphabag-gray">
                             <tr>
                                 <th className="p-3 pl-6">Type</th>
                                 <th className="p-3">Hash</th>

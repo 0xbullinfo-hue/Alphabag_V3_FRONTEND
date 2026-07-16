@@ -309,9 +309,9 @@ export const AlphasFeed: React.FC = () => {
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
-                    <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
-                        <div className="p-2.5 border-b border-[#2b3139] bg-[#0b0e11] flex items-center justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-[#eaecef] flex items-center gap-2">
+                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+                        <div className="p-2.5 border-b border-alphabag-gray bg-alphabag-black flex items-center justify-between">
+                            <span className="text-[10px] font-semibold uppercase tracking-widest text-alphabag-text flex items-center gap-2">
                                 <Users size={12} className="text-[#fcd535]" /> Featured Founders
                             </span>
                         </div>

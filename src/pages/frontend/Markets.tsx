@@ -97,13 +97,13 @@ export const Markets: React.FC = () => {
     <div className="w-full space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
 
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
               <BarChart3 size={20} />
             </div>
-            <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">
+            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
               Global Market
             </h1>
             <span className="relative flex h-2 w-2 mt-1">
@@ -113,37 +113,37 @@ export const Markets: React.FC = () => {
             <DataSourceBadge className="ml-auto md:ml-4" />
           </div>
           <div className="flex items-center gap-3">
-            <p className="text-[#848e9c] text-sm font-medium">Top 100 Crypto Assets</p>
-            <span className="text-[#848e9c]">·</span>
+            <p className="text-alphabag-subtext text-sm font-medium">Top 100 Crypto Assets</p>
+            <span className="text-alphabag-subtext">·</span>
             <button
               onClick={handleManualRefresh}
               disabled={isRefreshing}
-              className="text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider hover:text-[#eaecef] transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              className="text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider hover:text-alphabag-text transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
               <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
               {isRefreshing ? 'Syncing...' : 'Refresh'}
             </button>
-            <span className="text-[10px] text-[#848e9c] font-mono">{lastUpdated.toLocaleTimeString()}</span>
+            <span className="text-[10px] text-alphabag-subtext font-mono">{lastUpdated.toLocaleTimeString()}</span>
           </div>
         </div>
 
         <div className="relative w-full md:w-72">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848e9c]" size={15} />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-alphabag-subtext" size={15} />
           <input
             type="text"
             placeholder="Search token..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md py-2.5 pl-10 pr-4 text-[13px] text-[#eaecef] placeholder-[#848e9c] focus:border-[#fcd535] outline-none transition-colors"
+            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2.5 pl-10 pr-4 text-[13px] text-alphabag-text placeholder-[#848e9c] focus:border-[#fcd535] outline-none transition-colors"
           />
         </div>
       </div>
 
       {/* Market Table */}
-      <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+      <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-[#181a20] border-b border-[#2b3139] text-xs text-[#848e9c] font-semibold tracking-normal">
+            <thead className="bg-alphabag-dark border-b border-alphabag-gray text-xs text-alphabag-subtext font-semibold tracking-normal">
               <tr>
                 <th className="py-3 px-3 pl-5 w-12 text-center">#</th>
                 <th className="py-3 px-3 text-left">Coin</th>
@@ -167,7 +167,7 @@ export const Markets: React.FC = () => {
                 ))
               ) : filteredCoins.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="p-12 text-center text-[#848e9c] font-semibold uppercase tracking-wider text-xs">
+                  <td colSpan={9} className="p-12 text-center text-alphabag-subtext font-semibold uppercase tracking-wider text-xs">
                     No assets found matching "{searchQuery}"
                   </td>
                 </tr>
@@ -185,7 +185,7 @@ export const Markets: React.FC = () => {
                       className="hover:bg-[#2b3139]/50 transition-colors cursor-pointer"
                       onClick={() => navigate(`/markets/${coin.id}`)}
                     >
-                      <td className="py-3 px-3 pl-5 text-center text-[#848e9c] font-medium tabular-nums text-xs">
+                      <td className="py-3 px-3 pl-5 text-center text-alphabag-subtext font-medium tabular-nums text-xs">
                         <div className="flex items-center justify-center gap-2">
                           <Star size={11} className="text-[#474d57] hover:text-[#fcd535] cursor-pointer hidden sm:block shrink-0" />
                           {coin.market_cap_rank}
@@ -195,12 +195,12 @@ export const Markets: React.FC = () => {
                         <div className="flex items-center space-x-2.5">
                           <img src={coin.image} alt={coin.name} className="w-5 h-5 rounded-full shrink-0" />
                           <div className="flex items-baseline space-x-1.5 min-w-0">
-                            <span className="font-semibold text-[#eaecef] text-[14px] truncate max-w-[120px]">{coin.name}</span>
-                            <span className="text-[12px] font-semibold text-[#848e9c] uppercase shrink-0">{coin.symbol}</span>
+                            <span className="font-semibold text-alphabag-text text-[14px] truncate max-w-[120px]">{coin.name}</span>
+                            <span className="text-[12px] font-semibold text-alphabag-subtext uppercase shrink-0">{coin.symbol}</span>
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-3 text-right font-semibold text-[#eaecef] tabular-data text-[14px]">
+                      <td className="py-3 px-3 text-right font-semibold text-alphabag-text tabular-data text-[14px]">
                         ${coin.current_price.toLocaleString(undefined, { maximumFractionDigits: coin.current_price < 1 ? 4 : 2 })}
                       </td>
                       <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch1h)}`}>
@@ -212,10 +212,10 @@ export const Markets: React.FC = () => {
                       <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch7d)}`}>
                         <span className="text-[8px] mr-0.5">{getPchIcon(pch7d)}</span>{Math.abs(pch7d).toFixed(1)}%
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
+                      <td className="py-3 px-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
                         {fmt(coin.total_volume)}
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
+                      <td className="py-3 px-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
                         {fmt(coin.market_cap)}
                       </td>
                       <td className="py-3 px-4 hidden xl:table-cell">

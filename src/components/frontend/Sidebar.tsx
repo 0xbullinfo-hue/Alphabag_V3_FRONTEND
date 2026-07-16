@@ -41,12 +41,12 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
       className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${
         isDisabled ? 'opacity-50 cursor-not-allowed' : ''
       } ${active
-        ? 'bg-[#2b3139] text-[#eaecef] border-l-2 border-[#fcd535]'
-        : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef] border-l-2 border-transparent'
+        ? 'bg-[#2b3139] text-alphabag-text border-l-2 border-[#fcd535]'
+        : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
       <div className="flex items-center space-x-3 relative z-10">
-        {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-[#eaecef]'} />}
+        {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-alphabag-text'} />}
         <span className="font-medium text-sm">{label}</span>
       </div>
       {isDisabled && (
@@ -67,8 +67,8 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-[calc(100%-1rem)] flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-200 mx-2 ${isActive
-          ? 'bg-[#2b3139] text-[#eaecef]'
-          : 'text-[#848e9c] hover:bg-[#2b3139] hover:text-[#eaecef]'
+          ? 'bg-[#2b3139] text-alphabag-text'
+          : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text'
           }`}
       >
         <div className="flex items-center space-x-3">
@@ -115,7 +115,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed left-0 bottom-0 w-64 bg-[#181a20] border-r border-[#2b3139] z-40 transition-transform duration-300 ease-in-out
+        fixed left-0 bottom-0 w-64 bg-alphabag-dark border-r border-alphabag-gray z-40 transition-transform duration-300 ease-in-out
         md:translate-x-0 pt-6 pb-6 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         ${IS_DEMO_MODE ? 'top-[92px]' : 'top-16'}
@@ -152,9 +152,9 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         </div>
 
         <div className="px-4">
-          <div className="border-t border-[#2b3139] pt-6 mb-2 space-y-1">
+          <div className="border-t border-alphabag-gray pt-6 mb-2 space-y-1">
             <NavItem to="/profile" icon={UserCircle} label="My Profile" active={location.pathname === '/profile'} />
-            <button onClick={handleLogout} className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-[#848e9c] hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
+            <button onClick={handleLogout} className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
               <LogOut size={18} />
               <span className="font-medium text-xs uppercase">Logout</span>
             </button>

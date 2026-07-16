@@ -212,7 +212,7 @@ export const AlphaScreener: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-1">
-                        <h1 className="text-2xl font-semibold text-[#eaecef] tracking-tight flex items-center gap-2">
+                        <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
                             <Flame size={22} className="text-[#fcd535]" /> Alpha Screener
                         </h1>
                         <span className="bg-[#fcd535]/15 text-[#fcd535] text-[10px] font-medium px-2 py-0.5 rounded border border-[#fcd535]/25 flex items-center gap-1.5 shrink-0">
@@ -221,22 +221,22 @@ export const AlphaScreener: React.FC = () => {
                         </span>
                         <DataSourceBadge />
                         {lastUpdated && (
-                            <span className="text-[10px] text-[#848e9c] font-medium hidden sm:inline">
+                            <span className="text-[10px] text-alphabag-subtext font-medium hidden sm:inline">
                                 Last synced: {lastUpdated}
                             </span>
                         )}
                     </div>
-                    <p className="text-[#848e9c] text-xs">Real-time trending data on-chain directly from DexScreener markets.</p>
+                    <p className="text-alphabag-subtext text-xs">Real-time trending data on-chain directly from DexScreener markets.</p>
                 </div>
                 
                 {/* ── Search & Actions ── */}
                 <div className="flex items-center space-x-2 self-start md:self-auto w-full md:w-auto">
                     <div className="relative flex-1 md:flex-initial">
-                        <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#848e9c]" />
+                        <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext" />
                         <input 
                             type="text"
                             placeholder="Token symbol or paste CA..."
-                            className="bg-[#181a20] border border-[#2b3139] rounded-md py-2 pl-9 pr-4 text-xs text-[#eaecef] focus:border-[#fcd535] outline-none w-full md:w-64"
+                            className="bg-alphabag-dark border border-alphabag-gray rounded-md py-2 pl-9 pr-4 text-xs text-alphabag-text focus:border-[#fcd535] outline-none w-full md:w-64"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -244,7 +244,7 @@ export const AlphaScreener: React.FC = () => {
                     <button 
                         onClick={() => loadData(true)} 
                         disabled={isRefreshing}
-                        className="border border-[#2b3139] text-[#848e9c] h-8 px-3 rounded-md bg-[#1e2329] hover:bg-[#2b3139] hover:text-white transition-all flex items-center justify-center gap-1 shrink-0"
+                        className="border border-alphabag-gray text-alphabag-subtext h-8 px-3 rounded-md bg-alphabag-darkgray hover:bg-[#2b3139] hover:text-white transition-all flex items-center justify-center gap-1 shrink-0"
                         title="Sync Live Data"
                     >
                         <RefreshCw size={13} className={`shrink-0 ${isRefreshing ? 'animate-spin text-[#fcd535]' : ''}`} />
@@ -254,7 +254,7 @@ export const AlphaScreener: React.FC = () => {
             </div>
  
             {/* ── Filters (Chain & Timeframe) ── */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center bg-[#1e2329] border border-[#2b3139] rounded-lg p-3">
+            <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3">
                 {/* Chains */}
                 <div className="flex flex-wrap gap-1.5">
                     {(['All', 'Solana', 'Ethereum', 'BSC', 'Base'] as const).map(chain => {
@@ -266,7 +266,7 @@ export const AlphaScreener: React.FC = () => {
                                 className={`h-7 px-3.5 text-[11px] font-semibold rounded transition-all border ${
                                     chainFilter === filterVal 
                                         ? 'bg-[#fcd535] border-[#fcd535] text-black shadow-md' 
-                                        : 'bg-[#181a20] border-[#2b3139] text-[#848e9c] hover:bg-[#2b3139] hover:text-white'
+                                        : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-[#2b3139] hover:text-white'
                                 }`}
                             >
                                 {chain}
@@ -284,7 +284,7 @@ export const AlphaScreener: React.FC = () => {
                             className={`h-7 px-3 text-[11px] font-semibold rounded transition-all border ${
                                 timeframe === tf 
                                     ? 'bg-[#2b3139] border-[#fcd535] text-[#fcd535]' 
-                                    : 'bg-[#181a20] border-[#2b3139] text-[#848e9c] hover:bg-[#2b3139] hover:text-white'
+                                    : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-[#2b3139] hover:text-white'
                             }`}
                         >
                             {tf === 'm5' ? '5m' : tf === 'h1' ? '1h' : tf === 'h6' ? '6h' : '24h'}
@@ -295,9 +295,9 @@ export const AlphaScreener: React.FC = () => {
 
             {/* ── Highlighted Specific CA Lookup Result ── */}
             {searchingCa && (
-                <div className="bg-[#1e2329] border border-dashed border-[#fcd535]/30 rounded-lg p-4 text-center">
+                <div className="bg-alphabag-darkgray border border-dashed border-[#fcd535]/30 rounded-lg p-4 text-center">
                     <div className="w-5 h-5 border-2 border-[#fcd535] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                    <p className="text-[10px] text-[#848e9c] font-black uppercase tracking-wider">Querying blockchain for contract address details...</p>
+                    <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-wider">Querying blockchain for contract address details...</p>
                 </div>
             )}
             
@@ -352,19 +352,19 @@ export const AlphaScreener: React.FC = () => {
             )}
 
             {/* ── Main Gainers Table ── */}
-            <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+            <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left min-w-[900px]">
                         <thead>
-                            <tr className="border-b border-[#2b3139] bg-[#181a20]">
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] w-14 text-center"># Rank</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] w-64 text-left">Token</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] text-right">Price (USD)</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] text-right">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase() === 'H24' ? '24h' : timeframe === 'h1' ? '1h' : '6h'} Change</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] text-right">24h Volume</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] text-right">Liquidity</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] text-right">FDV</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-[#848e9c] w-24"></th>
+                            <tr className="border-b border-alphabag-gray bg-alphabag-dark">
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-14 text-center"># Rank</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-64 text-left">Token</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">Price (USD)</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase() === 'H24' ? '24h' : timeframe === 'h1' ? '1h' : '6h'} Change</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">24h Volume</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">Liquidity</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">FDV</th>
+                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-24"></th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#2b3139] text-[14px]">
@@ -372,19 +372,19 @@ export const AlphaScreener: React.FC = () => {
                                 <tr>
                                     <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
                                         <div className="w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                                        <p className="text-xs text-[#848e9c] font-medium animate-pulse">Synchronizing DexScreener Live Feeds...</p>
+                                        <p className="text-xs text-alphabag-subtext font-medium animate-pulse">Synchronizing DexScreener Live Feeds...</p>
                                     </td>
                                 </tr>
                             ) : displayedPairs.length === 0 ? (
                                 <tr>
                                     <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
-                                        <p className="text-xs text-[#848e9c] font-medium">No trading pairs matched filters</p>
+                                        <p className="text-xs text-alphabag-subtext font-medium">No trading pairs matched filters</p>
                                     </td>
                                 </tr>
                             ) : (
                                 displayedPairs.map((pair, index) => (
                                     <tr key={pair.pairAddress} className="hover:bg-[#2b3139]/40 transition-colors group">
-                                        <td className="px-4 py-3 font-medium text-[#848e9c] text-center text-xs">
+                                        <td className="px-4 py-3 font-medium text-alphabag-subtext text-center text-xs">
                                             {index + 1}
                                         </td>
                                         <td className="px-4 py-3">
@@ -398,9 +398,9 @@ export const AlphaScreener: React.FC = () => {
                                                         <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded leading-none bg-gradient-to-r ${getChainColor(pair.chainId)}`}>
                                                             {pair.chainId === 'bsc' ? 'BSC' : pair.chainId?.charAt(0).toUpperCase() + pair.chainId?.slice(1)}
                                                         </span>
-                                                        <span className="text-[9px] text-[#848e9c] bg-[#2b3139] px-1.5 rounded leading-none py-0.5 font-medium">{pair.dexId}</span>
+                                                        <span className="text-[9px] text-alphabag-subtext bg-[#2b3139] px-1.5 rounded leading-none py-0.5 font-medium">{pair.dexId}</span>
                                                     </div>
-                                                    <div className="text-[12px] text-[#848e9c] truncate max-w-[180px] mt-0.5">{pair.baseToken?.name}</div>
+                                                    <div className="text-[12px] text-alphabag-subtext truncate max-w-[180px] mt-0.5">{pair.baseToken?.name}</div>
                                                 </div>
                                             </div>
                                         </td>
@@ -412,13 +412,13 @@ export const AlphaScreener: React.FC = () => {
                                                 {formatPriceChange(pair.priceChange?.[timeframe])}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
+                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
                                             {formatUsd(pair.volume?.h24)}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
+                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
                                             {formatUsd(pair.liquidity?.usd)}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-[#848e9c] tabular-data text-[14px]">
+                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
                                             {formatUsd(pair.fdv)}
                                         </td>
                                         <td className="px-4 py-3 text-right">

@@ -70,24 +70,24 @@ export const Integrations: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] w-full pb-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-[#2b3139] gap-3">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Zap size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Connections Hub</h1>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Connections Hub</h1>
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live</span>
                     </div>
-                    <p className="text-[#848e9c] text-sm">Unified dashboard for all live API keys and Web3 wallets streaming into AlphaBAG.</p>
+                    <p className="text-alphabag-subtext text-sm">Unified dashboard for all live API keys and Web3 wallets streaming into AlphaBAG.</p>
                 </div>
                 <div className="relative z-10 w-full md:w-auto">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search size={13} className="text-[#848e9c]" />
+                        <Search size={13} className="text-alphabag-subtext" />
                     </div>
                     <input type="text" placeholder="Search connections..." value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-[#0b0e11] border border-[#2b3139] rounded-md pl-9 pr-4 py-2 text-xs text-[#eaecef] focus:outline-none focus:border-[#fcd535] w-full md:w-64 transition-colors" />
+                        className="bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-4 py-2 text-xs text-alphabag-text focus:outline-none focus:border-[#fcd535] w-full md:w-64 transition-colors" />
                 </div>
             </div>
 
@@ -119,22 +119,22 @@ export const Integrations: React.FC = () => {
                 className={`flex-shrink-0 px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     activeTab === tab.id 
                     ? 'bg-[#fcd535] text-[#181a20]' 
-                    : 'bg-[#1e2329] border border-[#2b3139] text-[#848e9c] hover:text-[#eaecef] hover:border-[#474d57]'
+                    : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-[#474d57]'
                 }`}>{tab.label}</button>
          ))}
       </div>
 
-      <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] overflow-hidden">
+      <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
         {filtered.length === 0 ? (
-            <div className="p-12 text-center text-[#848e9c] flex flex-col items-center">
+            <div className="p-12 text-center text-alphabag-subtext flex flex-col items-center">
                 <Settings2 size={40} className="opacity-20 mb-3" />
-                <p className="font-semibold uppercase tracking-wider text-[#eaecef] text-[11px] mb-1">No Active Connections</p>
+                <p className="font-semibold uppercase tracking-wider text-alphabag-text text-[11px] mb-1">No Active Connections</p>
                 <p className="text-[11px] opacity-60">You haven't linked any CEX APIs or Web3 Wallets yet.</p>
             </div>
         ) : (
             <div className="divide-y divide-[#2b3139]">
                 {filtered.map((item) => (
-                    <div key={item.id} className="p-3.5 hover:bg-[#0b0e11] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                    <div key={item.id} className="p-3.5 hover:bg-alphabag-black transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
                         
                         {/* Identity */}
                         <div className="flex items-center gap-3 flex-1">

@@ -394,18 +394,18 @@ export const Airdrop: React.FC = () => {
 
     return (
         <div className="w-full space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Gift size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
                             Mission Control
                         </h1>
                     </div>
-                    <p className="text-[#848e9c] text-sm max-w-2xl mt-2 font-medium leading-relaxed">
-                        Task-to-Earn (T2E) protocol. Complete missions to accumulate <span className="text-[#eaecef] font-semibold">ITEMS</span> for future utility rewards.
+                    <p className="text-alphabag-subtext text-sm max-w-2xl mt-2 font-medium leading-relaxed">
+                        Task-to-Earn (T2E) protocol. Complete missions to accumulate <span className="text-alphabag-text font-semibold">ITEMS</span> for future utility rewards.
                     </p>
                 </div>
                 <div className="flex items-center gap-4">
@@ -435,21 +435,21 @@ export const Airdrop: React.FC = () => {
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
 
                     return (
-                        <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 flex flex-col h-full relative">
+                        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col h-full relative">
                             <div className="flex justify-between items-start mb-4">
-                                <span className="text-xs font-semibold uppercase text-[#848e9c]">My Team</span>
-                                <Users size={18} className="text-[#848e9c]" />
+                                <span className="text-xs font-semibold uppercase text-alphabag-subtext">My Team</span>
+                                <Users size={18} className="text-alphabag-subtext" />
                             </div>
-                            <div className="text-3xl font-semibold text-[#eaecef] mb-4">{myTeamSize}</div>
+                            <div className="text-3xl font-semibold text-alphabag-text mb-4">{myTeamSize}</div>
                             <div className="space-y-2 relative z-10">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-[10px] font-semibold text-[#848e9c]">CAPACITY</span>
-                                    <span className="text-[10px] text-[#848e9c] font-medium">{100 - myTeamSize} slots left</span>
+                                    <span className="text-[10px] font-semibold text-alphabag-subtext">CAPACITY</span>
+                                    <span className="text-[10px] text-alphabag-subtext font-medium">{100 - myTeamSize} slots left</span>
                                 </div>
-                                <div className="w-full h-1.5 bg-[#0b0e11] rounded-full overflow-hidden">
+                                <div className="w-full h-1.5 bg-alphabag-black rounded-full overflow-hidden">
                                     <div className="h-full rounded-full transition-all duration-1000 bg-[#fcd535]" style={{width: `${progress}%`}}></div>
                                 </div>
-                                <div className="text-[10px] text-[#848e9c] font-medium">{myTeamSize} / 100 MAX</div>
+                                <div className="text-[10px] text-alphabag-subtext font-medium">{myTeamSize} / 100 MAX</div>
                             </div>
                             <div className="mt-auto pt-6">
                                 <div className="bg-[#0ecb81]/10 px-4 rounded-md border border-[#0ecb81]/20 flex justify-between items-center h-10">
@@ -463,32 +463,32 @@ export const Airdrop: React.FC = () => {
                     );
                 })()}
 
-                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 flex flex-col h-full relative">
+                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col h-full relative">
                     {/* Header */}
-                    <div className="flex justify-between items-center mb-4 pb-4 border-b border-[#2b3139]">
-                        <span className="text-xs font-semibold uppercase text-[#848e9c]">Earned ITEMS</span>
+                    <div className="flex justify-between items-center mb-4 pb-4 border-b border-alphabag-gray">
+                        <span className="text-xs font-semibold uppercase text-alphabag-subtext">Earned ITEMS</span>
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] px-2 py-1 rounded-md text-[10px] font-semibold">ELIGIBLE</span>
                     </div>
 
                     {/* Main Balance (Total) */}
                     <div className="mb-4">
-                        <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-1">Total Portfolio ITEMS</div>
-                        <div className="text-3xl font-semibold text-[#eaecef]">
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase mb-1">Total Portfolio ITEMS</div>
+                        <div className="text-3xl font-semibold text-alphabag-text">
                             {(itemsBalance + bagBalance).toLocaleString()}
                         </div>
                     </div>
 
                     {/* Breakdown */}
-                    <div className="flex gap-6 mb-6 pb-6 border-b border-[#2b3139]">
+                    <div className="flex gap-6 mb-6 pb-6 border-b border-alphabag-gray">
                         <div className="flex-1">
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-1">Earned</div>
-                            <div className="text-xl font-semibold text-[#eaecef] tabular-nums">{itemsBalance.toLocaleString()}</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase mb-1">Earned</div>
+                            <div className="text-xl font-semibold text-alphabag-text tabular-nums">{itemsBalance.toLocaleString()}</div>
                         </div>
                         <div className="flex-1">
                             <div className="text-[10px] text-[#fcd535] font-semibold uppercase mb-1 flex items-center justify-between">
                                 <span>Reserve</span>
                                 {itemsToBagRate && itemsToBagRate > 0 && (
-                                    <span className="text-[8px] text-[#848e9c] normal-case tracking-normal">({itemsToBagRate}:1 rate)</span>
+                                    <span className="text-[8px] text-alphabag-subtext normal-case tracking-normal">({itemsToBagRate}:1 rate)</span>
                                 )}
                             </div>
                             <div className="text-xl font-semibold text-[#fcd535] tabular-nums">{bagBalance.toLocaleString()}</div>
@@ -515,13 +515,13 @@ export const Airdrop: React.FC = () => {
                                             Request Withdrawal
                                         </button>
                                     ) : (
-                                        <div className="w-full bg-[#2b3139]/40 border border-[#2b3139] text-[#848e9c] rounded-md flex items-center justify-center text-[10px] font-bold uppercase tracking-wider h-full">
+                                        <div className="w-full bg-[#2b3139]/40 border border-alphabag-gray text-alphabag-subtext rounded-md flex items-center justify-center text-[10px] font-bold uppercase tracking-wider h-full">
                                             Campaign Completed
                                         </div>
                                     )}
                                 </>
                             ) : (
-                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider h-full">
+                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider h-full">
                                     Locked until campaign end
                                 </div>
                             )}
@@ -529,10 +529,10 @@ export const Airdrop: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-6 relative flex flex-col h-full">
+                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 relative flex flex-col h-full">
                     <div className="flex justify-between items-start mb-4">
-                        <span className="text-xs font-semibold uppercase text-[#848e9c]">TGE EVENT</span>
-                        <Gift size={18} className="text-[#848e9c]" />
+                        <span className="text-xs font-semibold uppercase text-alphabag-subtext">TGE EVENT</span>
+                        <Gift size={18} className="text-alphabag-subtext" />
                     </div>
                     {stats ? (
                         <div className="flex flex-col flex-1">
@@ -546,7 +546,7 @@ export const Airdrop: React.FC = () => {
                                 <>
                                     <TGECountdown targetDate={stats?.tgeDate || new Date().toISOString()} />
                                     <div className="mt-4 text-center">
-                                        <span className="bg-[#2b3139] text-[#eaecef] px-3 py-1.5 rounded-md text-[10px] font-semibold border border-[#474d57]">
+                                        <span className="bg-[#2b3139] text-alphabag-text px-3 py-1.5 rounded-md text-[10px] font-semibold border border-[#474d57]">
                                             Target: {stats?.tgeDate ? new Date(stats.tgeDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Q4 2026'}
                                         </span>
                                     </div>
@@ -554,17 +554,17 @@ export const Airdrop: React.FC = () => {
                             )}
                         </div>
 
-                            <div className="mt-auto pt-6 border-t border-[#2b3139]">
-                                <div className={`text-[10px] font-semibold uppercase text-center mb-1 ${campaignEnded ? 'text-[#fcd535]' : 'text-[#848e9c]'}`}>
+                            <div className="mt-auto pt-6 border-t border-alphabag-gray">
+                                <div className={`text-[10px] font-semibold uppercase text-center mb-1 ${campaignEnded ? 'text-[#fcd535]' : 'text-alphabag-subtext'}`}>
                                     {campaignEnded ? "Final Allocation" : "Final Allocation"}
                                 </div>
-                                <div className="text-center font-semibold transition-all duration-700 py-1 text-2xl text-[#eaecef] relative flex justify-center">
+                                <div className="text-center font-semibold transition-all duration-700 py-1 text-2xl text-alphabag-text relative flex justify-center">
                                     {campaignEnded && itemsBalance === 0 ? (
                                         <span className="text-3xl text-[#fcd535]">{bagBalance.toLocaleString()} <span className="text-base">$BAG</span></span>
                                     ) : (
                                         <div className="relative w-fit mx-auto flex justify-center items-center select-none">
-                                            <span className="text-[#848e9c] text-2xl blur-[5px] opacity-40 select-none">00000</span>
-                                            <div className="absolute inset-0 flex items-center justify-center font-black tracking-widest text-[#848e9c] text-xs z-10 pointer-events-none whitespace-nowrap">
+                                            <span className="text-alphabag-subtext text-2xl blur-[5px] opacity-40 select-none">00000</span>
+                                            <div className="absolute inset-0 flex items-center justify-center font-black tracking-widest text-alphabag-subtext text-xs z-10 pointer-events-none whitespace-nowrap">
                                                 <Lock size={12} className="mr-1 shrink-0" /> {campaignEnded ? 'CONVERT TO REVEAL' : 'LOCKED'}
                                             </div>
                                         </div>
@@ -574,8 +574,8 @@ export const Airdrop: React.FC = () => {
                         </div>
                     ) : (
                         <div className="py-2 text-center mt-6">
-                            <div className="text-2xl font-semibold text-[#848e9c]">TBA</div>
-                            <div className="text-[10px] text-[#848e9c] font-medium uppercase mt-2">Announcement incoming</div>
+                            <div className="text-2xl font-semibold text-alphabag-subtext">TBA</div>
+                            <div className="text-[10px] text-alphabag-subtext font-medium uppercase mt-2">Announcement incoming</div>
                         </div>
                     )}
                 </div>
@@ -588,7 +588,7 @@ export const Airdrop: React.FC = () => {
                     payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/10 border-blue-500/20' :
                     payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/10 border-[#f6465d]/20' :
                     payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/5 border-[#fcd535]/20' :
-                                                          'bg-[#1e2329] border-[#2b3139]'
+                                                          'bg-alphabag-darkgray border-alphabag-gray'
                 }`}>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-center gap-4">
@@ -597,7 +597,7 @@ export const Airdrop: React.FC = () => {
                                 payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/20 text-blue-400' :
                                 payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/20 text-[#f6465d]' :
                                 payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/10 text-[#fcd535]' :
-                                                                       'bg-[#2b3139] text-[#848e9c]'
+                                                                       'bg-[#2b3139] text-alphabag-subtext'
                             }`}>
                                 {payoutRequest?.status === 'SENT' ? <CheckCircle2 size={20} /> :
                                  payoutRequest?.status === 'REJECTED' ? <Shield size={20} /> :
@@ -605,20 +605,20 @@ export const Airdrop: React.FC = () => {
                                  <Bell size={20} />}
                             </div>
                             <div>
-                                <div className="text-[10px] font-black uppercase tracking-widest text-[#848e9c] mb-0.5">$BAG Withdrawal Status</div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-0.5">$BAG Withdrawal Status</div>
                                 <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-lg font-semibold text-[#eaecef] tabular-nums">
-                                        {payoutRequest ? Number(payoutRequest.expectedTokens).toLocaleString() : '0,000'} <span className="text-sm text-[#848e9c]">$BAG</span>
+                                    <span className="text-lg font-semibold text-alphabag-text tabular-nums">
+                                        {payoutRequest ? Number(payoutRequest.expectedTokens).toLocaleString() : '0,000'} <span className="text-sm text-alphabag-subtext">$BAG</span>
                                     </span>
                                     <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase ${
                                         payoutRequest?.status === 'SENT'     ? 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/30' :
                                         payoutRequest?.status === 'APPROVED' ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' :
                                         payoutRequest?.status === 'REJECTED' ? 'text-[#f6465d] bg-[#f6465d]/10 border-[#f6465d]/20' :
                                         payoutRequest?.status === 'PENDING'  ? 'text-[#fcd535] bg-[#fcd535]/10 border-[#fcd535]/20' :
-                                                                               'text-[#848e9c] bg-[#2b3139] border-[#2b3139]'
+                                                                               'text-alphabag-subtext bg-[#2b3139] border-alphabag-gray'
                                     }`}>{payoutRequest?.status || 'NO REQUEST'}</span>
                                 </div>
-                                <div className="text-[10px] text-[#848e9c] mt-1">
+                                <div className="text-[10px] text-alphabag-subtext mt-1">
                                     {!payoutRequest && 'No withdrawal request submitted yet. Convert your ITEMS after campaign ends.'}
                                     {payoutRequest?.status === 'PENDING'  && 'Your request is queued for admin review. Processing typically takes 48–72hrs.'}
                                     {payoutRequest?.status === 'APPROVED' && 'Approved ✓ — Transfer to your BSC wallet is being prepared.'}
@@ -628,7 +628,7 @@ export const Airdrop: React.FC = () => {
                             </div>
                         </div>
                         {payoutRequest && (
-                            <div className="text-right text-[9px] text-[#848e9c] font-mono shrink-0">
+                            <div className="text-right text-[9px] text-alphabag-subtext font-mono shrink-0">
                                 <div>Requested: {new Date(payoutRequest.createdAt).toLocaleDateString()}</div>
                                 {payoutRequest.sentAt && <div className="text-[#0ecb81] mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
                                 <div className="mt-1 text-[8px] opacity-50">{payoutRequest.walletAddress?.slice(0, 10)}...</div>
@@ -647,7 +647,7 @@ export const Airdrop: React.FC = () => {
                                         <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[7px] ${
                                             (step === payoutRequest.status) ? 'border-[#fcd535] bg-[#fcd535]/20 text-[#fcd535]' :
                                             (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-[#0ecb81] bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                            'border-[#2b3139] text-[#2b3139]'
+                                            'border-alphabag-gray text-[#2b3139]'
                                         }`}>{i + 1}</div>
                                         {step}
                                     </div>
@@ -683,25 +683,25 @@ export const Airdrop: React.FC = () => {
             </div>
 
             {/* Team Referral Hub */}
-            <div className="rounded-lg p-6 bg-[#1e2329] border border-[#2b3139] mb-6">
+            <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
-                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                            <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <Users size={18} className="text-[#fcd535]" /> Network Hub
                             </h2>
-                            <p className="text-xs text-[#848e9c] mt-1 font-medium">Recruit new members and earn <span className="text-[#fcd535] font-semibold">100 ITEMS</span> per successful sync.</p>
+                            <p className="text-xs text-alphabag-subtext mt-1 font-medium">Recruit new members and earn <span className="text-[#fcd535] font-semibold">100 ITEMS</span> per successful sync.</p>
                         </div>
                         
                         <div className="flex flex-col items-end gap-2 w-full md:w-auto">
-                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase pr-1">Your Invite Link</div>
+                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase pr-1">Your Invite Link</div>
                             <div className="flex items-center gap-2 w-full md:w-auto">
-                                <div className="flex-1 md:w-64 bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 font-mono text-xs text-[#848e9c] truncate">
+                                <div className="flex-1 md:w-64 bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 font-mono text-xs text-alphabag-subtext truncate">
                                     https://alphabag.com/?ref={user?.referralCode || 'ACCESS_LOCKED'}
                                 </div>
                                 <button 
                                     onClick={copyReferralLink}
                                     title="Copy referral link"
-                                    className="p-2 bg-[#2b3139] text-[#eaecef] rounded-md hover:bg-[#474d57] transition-all shrink-0"
+                                    className="p-2 bg-[#2b3139] text-alphabag-text rounded-md hover:bg-[#474d57] transition-all shrink-0"
                                 >
                                     <Copy size={16} />
                                 </button>
@@ -712,7 +712,7 @@ export const Airdrop: React.FC = () => {
                                         window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
                                     }}
                                     title="Share on X"
-                                    className="p-2 bg-[#2b3139] text-[#eaecef] rounded-md hover:bg-[#474d57] transition-all shrink-0"
+                                    className="p-2 bg-[#2b3139] text-alphabag-text rounded-md hover:bg-[#474d57] transition-all shrink-0"
                                 >
                                     <Twitter size={16} />
                                 </button>
@@ -728,7 +728,7 @@ export const Airdrop: React.FC = () => {
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
                             <Shield className="text-alphabag-yellow drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]" /> Mission Hub
                         </h2>
-                        <div className="text-[10px] text-[#848e9c] font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
                             Available Missions: {tasks.filter((t) => t.type !== 'unlimited').length}
                         </div>
                     </div>
@@ -763,7 +763,7 @@ export const Airdrop: React.FC = () => {
                             })();
                             const type = task.frequency?.toLowerCase() || task.type?.toLowerCase();
                             return (
-                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 transition-all relative overflow-hidden border ${isCompleted ? 'bg-[#181a20] border-[#0ecb81]/30 rounded-lg' : 'bg-[#1e2329] border-[#2b3139] rounded-lg hover:border-[#fcd535] hover:bg-[#2b3139]'}`}>
+                                <div key={task.id} className={`flex flex-col justify-between h-full p-6 transition-all relative overflow-hidden border ${isCompleted ? 'bg-alphabag-dark border-[#0ecb81]/30 rounded-lg' : 'bg-alphabag-darkgray border-alphabag-gray rounded-lg hover:border-[#fcd535] hover:bg-[#2b3139]'}`}>
                                     <div className="flex justify-between items-start mb-6">
                                         <div className={`p-2.5 rounded-md ${isCompleted ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#fcd535]/10 text-[#fcd535]'}`}>
                                             <Zap size={18} fill="currentColor" />
@@ -779,8 +779,8 @@ export const Airdrop: React.FC = () => {
                                         )}
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="text-sm font-semibold text-[#eaecef] mb-2">{task.title}</h3>
-                                        <p className="text-xs text-[#848e9c] mb-6 leading-relaxed">{task.description}</p>
+                                        <h3 className="text-sm font-semibold text-alphabag-text mb-2">{task.title}</h3>
+                                        <p className="text-xs text-alphabag-subtext mb-6 leading-relaxed">{task.description}</p>
                                     </div>
 
 
@@ -788,7 +788,7 @@ export const Airdrop: React.FC = () => {
                                         <div className="mb-4">
                                             <Button
                                                 onClick={() => window.open(task.actionUrl, '_blank')}
-                                                className="w-full py-2.5 bg-[#2b3139] text-[#eaecef] hover:bg-[#474d57] border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
+                                                className="w-full py-2.5 bg-[#2b3139] text-alphabag-text hover:bg-[#474d57] border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
                                                 variant="secondary"
                                                 size="sm"
                                             >
@@ -800,16 +800,16 @@ export const Airdrop: React.FC = () => {
 
                                     {(task.frequency?.toUpperCase() === 'DAILY' || task.frequency?.toUpperCase() === 'WEEKLY') && (
                                         <div className="mb-6">
-                                            <div className="text-[10px] text-[#848e9c] font-semibold uppercase mb-3 text-center">Next Window</div>
+                                            <div className="text-[10px] text-alphabag-subtext font-semibold uppercase mb-3 text-center">Next Window</div>
                                             <div className="flex gap-2 justify-center">
                                                 {(task.frequency?.toUpperCase() === 'DAILY' ? dailyCountdown : weeklyCountdown).split(':').map((val, idx) => (
                                                     <div key={idx} className="flex flex-col items-center">
-                                                        <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md w-12 h-12 flex items-center justify-center mb-1">
+                                                        <div className="bg-alphabag-black border border-alphabag-gray rounded-md w-12 h-12 flex items-center justify-center mb-1">
                                                             <span className="text-xl font-semibold text-[#fcd535] tabular-nums">
                                                                 {val || '00'}
                                                             </span>
                                                         </div>
-                                                        <span className="text-[9px] font-semibold text-[#848e9c] uppercase">
+                                                        <span className="text-[9px] font-semibold text-alphabag-subtext uppercase">
                                                             {idx === 0 ? 'Day' : idx === 1 ? 'Hrs' : idx === 2 ? 'Min' : 'Sec'}
                                                         </span>
                                                     </div>
@@ -823,7 +823,7 @@ export const Airdrop: React.FC = () => {
                                             <input 
                                                 type="text" 
                                                 placeholder={task.title.toLowerCase().includes('telegram') ? "@Telegram_Username" : "Activity Proof Link: https://..."}
-                                                className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-3 py-2.5 text-xs font-mono text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
+                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
                                                 value={taskLinks[task.id] || ''}
                                                 onChange={(e) => handleTaskLinkChange(task.id, e.target.value)}
                                             />
@@ -834,7 +834,7 @@ export const Airdrop: React.FC = () => {
                                         <div className="mb-4">
                                             <textarea 
                                                 placeholder="Provide your mission feedback here..."
-                                                className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-3 py-2.5 text-xs font-mono text-[#eaecef] h-20 resize-none focus:border-[#fcd535] outline-none transition-all"
+                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text h-20 resize-none focus:border-[#fcd535] outline-none transition-all"
                                                 value={taskFeedback[task.id] || ''}
                                                 onChange={(e) => handleTaskFeedbackChange(task.id, e.target.value)}
                                             />
@@ -846,7 +846,7 @@ export const Airdrop: React.FC = () => {
                                             onClick={() => {
                                                 handleCompleteTask(task.id, task.requiresLink);
                                             }}
-                                            className={`w-full py-2.5 text-xs font-semibold uppercase transition-all rounded-md ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-[#2b3139] text-[#848e9c] cursor-not-allowed border-none' : 'bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]'}`}
+                                            className={`w-full py-2.5 text-xs font-semibold uppercase transition-all rounded-md ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-[#2b3139] text-alphabag-subtext cursor-not-allowed border-none' : 'bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]'}`}
                                             size="sm"
                                             disabled={isTaskLoading || missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id])}
                                         >
@@ -854,7 +854,7 @@ export const Airdrop: React.FC = () => {
                                         </Button>
                                     ) : (
                                         <Button
-                                            className="w-full py-2.5 text-xs font-semibold uppercase bg-[#2b3139] text-[#848e9c] cursor-not-allowed border-none rounded-md"
+                                            className="w-full py-2.5 text-xs font-semibold uppercase bg-[#2b3139] text-alphabag-subtext cursor-not-allowed border-none rounded-md"
                                             size="sm"
                                             disabled
                                         >
@@ -872,43 +872,43 @@ export const Airdrop: React.FC = () => {
             {!submitted ? (
                 <div className="space-y-6 animate-in slide-in-from-bottom-8 duration-700">
                     {/* Mission Proof Submission */}
-                    <div className="rounded-lg p-8 bg-[#1e2329] border border-[#2b3139]">
+                    <div className="rounded-lg p-8 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-8">
-                            <h2 className="text-xl font-semibold text-[#eaecef] flex items-center gap-2">
+                            <h2 className="text-xl font-semibold text-alphabag-text flex items-center gap-2">
                                 <Send className="text-[#fcd535]" size={20} /> Submission Hub
                             </h2>
-                            <p className="text-xs text-[#848e9c] mt-2 font-medium">Connect your final social identity and mission proof.</p>
+                            <p className="text-xs text-alphabag-subtext mt-2 font-medium">Connect your final social identity and mission proof.</p>
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Distribution Wallet (BSC)</label>
+                                <label className="text-xs text-alphabag-subtext font-semibold">Distribution Wallet (BSC)</label>
                                 <input 
                                     type="text" 
                                     required
                                     placeholder="0x..."
-                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
                                     value={bscWallet}
                                     onChange={(e) => setBscWallet(e.target.value)}
                                 />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">X Profile Link</label>
+                                <label className="text-xs text-alphabag-subtext font-semibold">X Profile Link</label>
                                 <input 
                                     type="url"
                                     placeholder="https://x.com/yourhandle"
-                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
                                     value={xLink}
                                     onChange={(e) => setXLink(e.target.value)}
                                 />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Final Mission Feedback (Compulsory)</label>
+                                <label className="text-xs text-alphabag-subtext font-semibold">Final Mission Feedback (Compulsory)</label>
                                 <textarea 
                                     required
-                                    className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2.5 text-sm text-[#eaecef] h-24 resize-none focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text h-24 resize-none focus:border-[#fcd535] outline-none transition-all"
                                     placeholder="Please provide your feedback on the platform UI/UX and features."
                                     value={review}
                                     onChange={(e) => setReview(e.target.value)}
@@ -938,8 +938,8 @@ export const Airdrop: React.FC = () => {
                         <CheckCircle2 size={24} className="text-[#0ecb81]" />
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold text-[#eaecef] uppercase">Identity Synchronized</h2>
-                        <p className="text-sm text-[#848e9c] mt-1">Your mission data and BSC wallet have been secured. You will receive your $BAG once the campaign ends and admin confirms your transfer.</p>
+                        <h2 className="text-xl font-semibold text-alphabag-text uppercase">Identity Synchronized</h2>
+                        <p className="text-sm text-alphabag-subtext mt-1">Your mission data and BSC wallet have been secured. You will receive your $BAG once the campaign ends and admin confirms your transfer.</p>
                     </div>
                 </div>
             )}
@@ -947,14 +947,14 @@ export const Airdrop: React.FC = () => {
             {!submitted && (
                 <>
                 {/* ── AlphaBAG Allocation ── */}
-                <div className="rounded-lg p-6 bg-[#1e2329] border border-[#2b3139] mb-6 relative">
+                <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6 relative">
                     {/* Header */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-[#2b3139] pb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
-                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                            <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <BarChart3 className="text-[#fcd535]" size={20} /> AlphaBAG Allocation
                             </h2>
-                            <p className="text-xs text-[#848e9c]">Strategic token distribution for sustainable ecosystem growth.</p>
+                            <p className="text-xs text-alphabag-subtext">Strategic token distribution for sustainable ecosystem growth.</p>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#fcd535] text-[#181a20] rounded-md">
                             <Zap size={14} fill="currentColor" />
@@ -972,21 +972,21 @@ export const Airdrop: React.FC = () => {
                                 { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'bg-[#f6465d] text-white', desc: 'Partnerships' },
                                 { label: 'Team', pct: '10%', tokens: '2.1M', color: 'bg-[#9333EA] text-white', desc: '12m cliff' },
                             ].map((item) => (
-                                <div key={item.label} className="flex flex-col items-center p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md text-center">
+                                <div key={item.label} className="flex flex-col items-center p-4 bg-alphabag-black border border-alphabag-gray rounded-md text-center">
                                     <div className={`w-10 h-10 rounded-md ${item.color} flex flex-col items-center justify-center mb-2`}>
                                         <span className="font-semibold text-[11px] leading-none">{item.pct}</span>
                                     </div>
-                                    <div className="text-[#eaecef] font-semibold text-xs mb-1">{item.label}</div>
-                                    <div className="text-[#848e9c] text-[9px]">{item.desc}</div>
+                                    <div className="text-alphabag-text font-semibold text-xs mb-1">{item.label}</div>
+                                    <div className="text-alphabag-subtext text-[9px]">{item.desc}</div>
                                 </div>
                             ))}
                         </div>
                         
                         {/* Translucent Mask Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                            <div className="bg-[#181a20] border border-[#2b3139] px-4 py-2 rounded-md flex items-center gap-2">
+                            <div className="bg-alphabag-dark border border-alphabag-gray px-4 py-2 rounded-md flex items-center gap-2">
                                 <Lock size={14} className="text-[#fcd535]" />
-                                <span className="text-[10px] text-[#eaecef] font-semibold uppercase tracking-wider">Allocation Locked • Verification in Progress</span>
+                                <span className="text-[10px] text-alphabag-text font-semibold uppercase tracking-wider">Allocation Locked • Verification in Progress</span>
                             </div>
                         </div>
                     </div>
@@ -996,41 +996,41 @@ export const Airdrop: React.FC = () => {
 
                     {/* Utility & Key Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="flex items-start gap-3 p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
+                        <div className="flex items-start gap-3 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
                             <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Zap size={14} className="text-[#fcd535]"/></div>
                             <div>
-                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">Utility</div>
-                                <div className="text-xs font-semibold text-[#eaecef] mt-1 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
+                                <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">Utility</div>
+                                <div className="text-xs font-semibold text-alphabag-text mt-1 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
                             </div>
                         </div>
-                        <div className="flex items-center gap-3 p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
+                        <div className="flex items-center gap-3 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
                             <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Gift size={14} className="text-[#0ecb81]"/></div>
                             <div>
-                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">TGE Distribution</div>
-                                <div className="text-xs font-semibold text-[#eaecef] mt-1">Proportional to future utility reward conversion</div>
+                                <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">TGE Distribution</div>
+                                <div className="text-xs font-semibold text-alphabag-text mt-1">Proportional to future utility reward conversion</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Founder Protocol Module */}
-                <div className="rounded-lg p-6 bg-[#1e2329] border border-[#1DA1F2]/30 relative">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-[#2b3139] pb-4">
+                <div className="rounded-lg p-6 bg-alphabag-darkgray border border-[#1DA1F2]/30 relative">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
-                            <h2 className="text-lg font-semibold text-[#eaecef] flex items-center gap-2">
+                            <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <Shield className="text-[#1DA1F2]" size={20} /> Founder Application
                             </h2>
-                            <p className="text-xs text-[#848e9c]">Apply for one of the <span className="text-[#eaecef] font-semibold">100 Alpha Founder</span> slots for elite priority access.</p>
+                            <p className="text-xs text-alphabag-subtext">Apply for one of the <span className="text-alphabag-text font-semibold">100 Alpha Founder</span> slots for elite priority access.</p>
                         </div>
-                        <div className="flex items-center gap-4 bg-[#0b0e11] p-3 rounded-md border border-[#2b3139]">
+                        <div className="flex items-center gap-4 bg-alphabag-black p-3 rounded-md border border-alphabag-gray">
                             <div className="text-right">
-                                <div className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">Slots Remaining</div>
-                                <div className="text-lg font-semibold text-[#eaecef]">{Math.max(0, 100 - (stats?.founderEntries || 0))}</div>
+                                <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">Slots Remaining</div>
+                                <div className="text-lg font-semibold text-alphabag-text">{Math.max(0, 100 - (stats?.founderEntries || 0))}</div>
                             </div>
                             <div className="relative flex items-center justify-center">
                                 <input 
                                 type="checkbox" 
-                                className="w-6 h-6 rounded-md appearance-none bg-[#181a20] border border-[#474d57] checked:bg-[#1DA1F2] checked:border-[#1DA1F2] transition-all cursor-pointer peer"
+                                className="w-6 h-6 rounded-md appearance-none bg-alphabag-dark border border-[#474d57] checked:bg-[#1DA1F2] checked:border-[#1DA1F2] transition-all cursor-pointer peer"
                                 checked={isFounderApplication}
                                 onChange={(e) => setIsFounderApplication(e.target.checked)}
                                 />
@@ -1043,52 +1043,52 @@ export const Airdrop: React.FC = () => {
                         <div className="space-y-4 pt-2 animate-in slide-in-from-top-4 duration-500">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project Name</label>
-                                <input required type="text" placeholder="Project Alpha" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectName} onChange={e => setProjectName(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project Name</label>
+                                <input required type="text" placeholder="Project Alpha" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectName} onChange={e => setProjectName(e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Ticker</label>
-                                <input required type="text" placeholder="$ALPHA" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectTicker} onChange={e => setProjectTicker(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Ticker</label>
+                                <input required type="text" placeholder="$ALPHA" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectTicker} onChange={e => setProjectTicker(e.target.value)} />
                                 </div>
                             </div>
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project Vision</label>
-                                <textarea required placeholder="What is your singular vision for the space?" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectManifesto} onChange={e => setProjectManifesto(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project Vision</label>
+                                <textarea required placeholder="What is your singular vision for the space?" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectManifesto} onChange={e => setProjectManifesto(e.target.value)} />
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project X Link</label>
-                                <input required type="url" placeholder="https://x.com/..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectSocial} onChange={e => setProjectSocial(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project X Link</label>
+                                <input required type="url" placeholder="https://x.com/..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectSocial} onChange={e => setProjectSocial(e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Official Website</label>
-                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Official Website</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project Logo URL</label>
-                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectLogo} onChange={e => setProjectLogo(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project Logo URL</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectLogo} onChange={e => setProjectLogo(e.target.value)} />
                                 </div>
                                 <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project Banner URL</label>
-                                <input required type="url" placeholder="https://..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectBanner} onChange={e => setProjectBanner(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project Banner URL</label>
+                                <input required type="url" placeholder="https://..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectBanner} onChange={e => setProjectBanner(e.target.value)} />
                                 </div>
                             </div>
                             
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Project Contract Address</label>
-                                <input required type="text" placeholder="0x..." className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={projectContract} onChange={e => setProjectContract(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Project Contract Address</label>
+                                <input required type="text" placeholder="0x..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectContract} onChange={e => setProjectContract(e.target.value)} />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Key Project Goals</label>
-                                <textarea required placeholder="What are the next 3 major milestones for your project?" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectGoals} onChange={e => setProjectGoals(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Key Project Goals</label>
+                                <textarea required placeholder="What are the next 3 major milestones for your project?" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectGoals} onChange={e => setProjectGoals(e.target.value)} />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs text-[#848e9c] font-semibold">Founder Personal Social / Telegram</label>
-                                <input required type="text" placeholder="@username" className="w-full bg-[#0b0e11] border border-[#2b3139] rounded-md px-4 py-2 text-sm text-[#eaecef] focus:border-[#1DA1F2] outline-none transition-colors" value={founderSocial} onChange={e => setFounderSocial(e.target.value)} />
+                                <label className="text-xs text-alphabag-subtext font-semibold">Founder Personal Social / Telegram</label>
+                                <input required type="text" placeholder="@username" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={founderSocial} onChange={e => setFounderSocial(e.target.value)} />
                             </div>
                         </div>
                     )}

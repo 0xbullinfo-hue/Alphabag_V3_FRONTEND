@@ -44,10 +44,10 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     }, [whale.address]);
 
     return (
-        <div key={whale.id} className="rounded-lg border border-[#2b3139] bg-[#1e2329] p-5 hover:border-[#fcd535]/30 transition-all">
+        <div key={whale.id} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 hover:border-[#fcd535]/30 transition-all">
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 bg-[#0b0e11] rounded-md flex items-center justify-center border border-[#2b3139]">
+                    <div className="w-9 h-9 bg-alphabag-black rounded-md flex items-center justify-center border border-alphabag-gray">
                         <Eye size={18} className="text-[#fcd535]" />
                     </div>
                     {hasAlerts && (
@@ -56,36 +56,36 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                         </div>
                     )}
                 </div>
-                <button onClick={() => removeTrackedWallet(whale.id)} className="text-[#848e9c] hover:text-[#f6465d] transition-colors p-1.5">
+                <button onClick={() => removeTrackedWallet(whale.id)} className="text-alphabag-subtext hover:text-[#f6465d] transition-colors p-1.5">
                     <Trash2 size={15} />
                 </button>
             </div>
 
             <div className="mb-4">
-                <h3 className="text-sm font-semibold text-[#eaecef] mb-1">{whale.label}</h3>
-                <p className="text-[10px] font-mono text-[#848e9c] bg-[#0b0e11] px-2 py-0.5 rounded-md inline-block border border-[#2b3139]">
+                <h3 className="text-sm font-semibold text-alphabag-text mb-1">{whale.label}</h3>
+                <p className="text-[10px] font-mono text-alphabag-subtext bg-alphabag-black px-2 py-0.5 rounded-md inline-block border border-alphabag-gray">
                     {whale.address.substring(0, 10)}...{whale.address.substring(whale.address.length - 8)}
                 </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md p-2.5">
-                    <div className="text-[9px] text-[#848e9c] uppercase font-semibold tracking-wider mb-1">Status</div>
+                <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
+                    <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Status</div>
                     <div className="flex items-center text-[#0ecb81] text-xs font-semibold">
                         <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full mr-1.5 animate-pulse"></div>
                         Live
                     </div>
                 </div>
-                <div className="bg-[#0b0e11] border border-[#2b3139] rounded-md p-2.5">
-                    <div className="text-[9px] text-[#848e9c] uppercase font-semibold tracking-wider mb-1">Value</div>
-                    <div className="text-[#eaecef] text-xs font-semibold tabular-nums">
-                        {loading ? <span className="text-[#848e9c] animate-pulse">Scanning...</span> : `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
+                <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
+                    <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Value</div>
+                    <div className="text-alphabag-text text-xs font-semibold tabular-nums">
+                        {loading ? <span className="text-alphabag-subtext animate-pulse">Scanning...</span> : `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                     </div>
                 </div>
             </div>
 
             <Link to={`/whales/${whale.address}`}>
-                <button className="w-full py-2 bg-[#2b3139] text-[#eaecef] rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center justify-center gap-2">
+                <button className="w-full py-2 bg-[#2b3139] text-alphabag-text rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center justify-center gap-2">
                     View Analytics <ArrowRight size={13} />
                 </button>
             </Link>
@@ -132,16 +132,16 @@ export const Whales: React.FC = () => {
         <div className="w-full space-y-5 pb-12 px-4 md:px-8 animate-in fade-in duration-700">
 
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Eye size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Whale Watch</h1>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
                         <DataSourceBadge source={balanceSource} />
                     </div>
-                    <p className="text-[#848e9c] text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-[#eaecef] font-semibold">{whaleWallets.length}</span> addresses.</p>
+                    <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <UpgradeCmd />
@@ -157,18 +157,18 @@ export const Whales: React.FC = () => {
             {/* Info Banner */}
             <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-3">
                 <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={17} />
-                <p className="text-sm text-[#848e9c]">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
+                <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {whaleWallets.length === 0 ? (
-                    <div className="col-span-full py-20 rounded-lg border border-dashed border-[#2b3139] text-center">
-                        <Eye size={40} className="mx-auto mb-4 text-[#848e9c] opacity-30" />
-                        <h3 className="text-base font-semibold text-[#eaecef] mb-2">No Whales Tracked</h3>
-                        <p className="text-[#848e9c] text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
+                    <div className="col-span-full py-20 rounded-lg border border-dashed border-alphabag-gray text-center">
+                        <Eye size={40} className="mx-auto mb-4 text-alphabag-subtext opacity-30" />
+                        <h3 className="text-base font-semibold text-alphabag-text mb-2">No Whales Tracked</h3>
+                        <p className="text-alphabag-subtext text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
                         <button 
                             onClick={() => setIsAddOpen(true)}
-                            className="bg-[#2b3139] text-[#eaecef] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all"
+                            className="bg-[#2b3139] text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all"
                         >
                             Add Whale Wallet
                         </button>
@@ -182,13 +182,13 @@ export const Whales: React.FC = () => {
                 {whaleWallets.length < limits.maxWhales && (
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="rounded-lg border border-dashed border-[#2b3139] p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
+                        className="rounded-lg border border-dashed border-alphabag-gray p-6 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
                     >
-                        <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-[#848e9c] mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
+                        <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
                             <Plus size={18} />
                         </div>
-                        <span className="text-sm font-semibold text-[#eaecef]">Add Whale Slot</span>
-                        <span className="text-xs text-[#848e9c] mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
+                        <span className="text-sm font-semibold text-alphabag-text">Add Whale Slot</span>
+                        <span className="text-xs text-alphabag-subtext mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
                     </button>
                 )}
             </div>
@@ -196,14 +196,14 @@ export const Whales: React.FC = () => {
             {/* Inline Add Modal */}
             {isAddOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-                    <div className="bg-[#181a20] border border-[#2b3139] w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+                    <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <Eye size={18} className="text-[#fcd535]" /> Add Whale Wallet
                             </h3>
                             <button 
                                 onClick={() => { setIsAddOpen(false); setErrorMsg(null); }} 
-                                className="text-[#848e9c] hover:text-white"
+                                className="text-alphabag-subtext hover:text-white"
                             >
                                 <X size={20} />
                             </button>
@@ -217,35 +217,35 @@ export const Whales: React.FC = () => {
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Wallet Address</label>
+                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Wallet Address</label>
                                 <input 
                                     type="text" 
                                     value={newAddress}
                                     onChange={(e) => setNewAddress(e.target.value)}
                                     placeholder="0x... or Solana address" 
-                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Custom Label</label>
+                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Custom Label</label>
                                 <input 
                                     type="text" 
                                     value={newLabel}
                                     onChange={(e) => setNewLabel(e.target.value)}
                                     placeholder="e.g. Vitalik, Binance Hot Wallet" 
-                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-[10px] text-[#848e9c] font-bold uppercase tracking-wider mb-1">Primary Chain</label>
+                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Primary Chain</label>
                                 <select 
                                     value={newChain}
                                     onChange={(e) => setNewChain(e.target.value as Chain)}
-                                    className="w-full bg-[#1e2329] border border-[#2b3139] text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
                                 >
                                     <option value="BSC">Binance Smart Chain (BSC)</option>
                                     <option value="ETH">Ethereum (ETH)</option>

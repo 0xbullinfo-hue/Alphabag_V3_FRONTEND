@@ -101,13 +101,13 @@ export const Portfolio: React.FC = () => {
 
 
             {/* 1. Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-[#2b3139] gap-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Wallet2 size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">DEX Portfolio</h1>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DEX Portfolio</h1>
                         <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
                         {hasMockData ? (
                             <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
@@ -118,9 +118,9 @@ export const Portfolio: React.FC = () => {
                     </div>
 
                     <div className="flex items-baseline gap-4">
-                        <h2 className="text-4xl font-semibold text-[#eaecef] tracking-tight tabular-nums flex items-center gap-3 truncate">
+                        <h2 className="text-4xl font-semibold text-alphabag-text tracking-tight tabular-nums flex items-center gap-3 truncate">
                             ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            <Eye size={16} className="text-[#848e9c] cursor-pointer hover:text-[#eaecef] transition-colors shrink-0" />
+                            <Eye size={16} className="text-alphabag-subtext cursor-pointer hover:text-alphabag-text transition-colors shrink-0" />
                         </h2>
                     </div>
                     
@@ -132,18 +132,18 @@ export const Portfolio: React.FC = () => {
                             {totalPnLPercent24h.toFixed(2)}%
                             <span className="ml-2 opacity-70">(${Math.abs(totalPnL24h).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
                         </div>
-                        <span className="text-[10px] text-[#848e9c] font-semibold uppercase tracking-wider">24h Change</span>
+                        <span className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">24h Change</span>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm font-semibold">
                     <div className="flex items-center gap-2 mr-2">
-                        <span className="text-[11px] text-[#848e9c] uppercase font-semibold tracking-wider">Charts</span>
+                        <span className="text-[11px] text-alphabag-subtext uppercase font-semibold tracking-wider">Charts</span>
                         <div
                             className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-[#fcd535]' : 'bg-[#2b3139]'}`}
                             onClick={() => setShowCharts(!showCharts)}
                         >
-                            <div className={`w-3 h-3 bg-[#181a20] rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                            <div className={`w-3 h-3 bg-alphabag-dark rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
 
@@ -165,7 +165,7 @@ export const Portfolio: React.FC = () => {
                             link.click();
                             document.body.removeChild(link);
                         }}
-                        className="bg-[#2b3139] text-[#eaecef] border border-[#474d57] rounded-md px-4 py-2 text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center gap-1.5"
+                        className="bg-[#2b3139] text-alphabag-text border border-[#474d57] rounded-md px-4 py-2 text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center gap-1.5"
                     >
                         <Download size={14} /> Export
                     </button>
@@ -173,9 +173,9 @@ export const Portfolio: React.FC = () => {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-6 border-b border-[#2b3139]">
-                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-[#eaecef] border-b-2 border-[#fcd535]' : 'text-[#848e9c] hover:text-[#eaecef]'}`}>Overview</span>
-                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-[#eaecef] border-b-2 border-[#fcd535]' : 'text-[#848e9c] hover:text-[#eaecef]'}`}>Transactions</span>
+            <div className="flex gap-6 border-b border-alphabag-gray">
+                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
+                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
             </div>
 
             {activeTab === 'overview' ? (
@@ -201,7 +201,7 @@ export const Portfolio: React.FC = () => {
                                 </>
                             ) : (
                                 <>
-                                    <div className="text-lg font-black mb-1 tracking-tight text-[#848e9c]">
+                                    <div className="text-lg font-black mb-1 tracking-tight text-alphabag-subtext">
                                         No cost basis logged
                                     </div>
                                     <button onClick={handleManageConnections} className="badge-yellow w-fit text-[9px]">

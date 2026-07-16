@@ -82,46 +82,46 @@ export const WhaleDetail: React.FC = () => {
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-96">
             <div className="w-10 h-10 border-2 border-[#fcd535] border-t-transparent rounded-full animate-spin mb-4"></div>
-            <span className="text-[#848e9c] font-semibold uppercase tracking-widest text-[10px]">Scanning whale wallet...</span>
+            <span className="text-alphabag-subtext font-semibold uppercase tracking-widest text-[10px]">Scanning whale wallet...</span>
         </div>
     );
 
     return (
         <div className="space-y-4 animate-in fade-in duration-700 relative">
             {showToast && (
-                <div className="fixed top-20 right-8 z-[60] bg-[#1e2329] border border-[#fcd535]/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-3">
+                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-[#fcd535]/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-3">
                     <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-[#0ecb81]/20 text-[#0ecb81]' : 'bg-[#f6465d]/20 text-[#f6465d]'}`}>
                         {alertsEnabled ? <Bell size={16} /> : <BellOff size={16} />}
                     </div>
                     <div>
-                        <div className="text-sm font-semibold text-[#eaecef]">Alerts {alertsEnabled ? 'Enabled' : 'Disabled'}</div>
-                        <div className="text-[10px] text-[#848e9c] uppercase tracking-widest">For {whaleInfo?.label || 'this whale'}</div>
+                        <div className="text-sm font-semibold text-alphabag-text">Alerts {alertsEnabled ? 'Enabled' : 'Disabled'}</div>
+                        <div className="text-[10px] text-alphabag-subtext uppercase tracking-widest">For {whaleInfo?.label || 'this whale'}</div>
                     </div>
                 </div>
             )}
 
-            <div className="flex items-center justify-between py-6 border-b border-[#2b3139]">
+            <div className="flex items-center justify-between py-6 border-b border-alphabag-gray">
                 <div className="flex items-center space-x-3">
-                    <Link to="/whales" className="p-1.5 bg-[#2b3139] hover:bg-[#474d57] text-[#eaecef] rounded-md transition-colors">
+                    <Link to="/whales" className="p-1.5 bg-[#2b3139] hover:bg-[#474d57] text-alphabag-text rounded-md transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
                         <div className="flex items-center space-x-2">
-                            <h1 className="text-2xl font-semibold text-[#eaecef] tracking-tight">{whaleInfo?.label || 'Unknown Whale'}</h1>
+                            <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight">{whaleInfo?.label || 'Unknown Whale'}</h1>
                             <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-[#fcd535]/20">Verified Whale</span>
                         </div>
-                        <div className="text-[11px] font-mono text-[#848e9c] mt-0.5">{address}</div>
+                        <div className="text-[11px] font-mono text-alphabag-subtext mt-0.5">{address}</div>
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <button className="p-2 bg-[#2b3139] text-[#848e9c] hover:text-[#eaecef] rounded-md transition-colors"><Share2 size={16} /></button>
-                    <button className="p-2 bg-[#2b3139] text-[#848e9c] hover:text-[#eaecef] rounded-md transition-colors"><MoreHorizontal size={16} /></button>
+                    <button className="p-2 bg-[#2b3139] text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Share2 size={16} /></button>
+                    <button className="p-2 bg-[#2b3139] text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><MoreHorizontal size={16} /></button>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <div className="lg:col-span-2 space-y-4">
-                    <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-6 relative overflow-hidden">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-5">
                             <TrendingUp size={100} />
                         </div>
@@ -145,10 +145,10 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg overflow-hidden">
-                        <div className="p-4 border-b border-[#2b3139] flex justify-between items-center bg-[#0b0e11]">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden">
+                        <div className="p-4 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black">
                             <div className="flex items-center gap-3">
-                                <h3 className="font-semibold text-[#eaecef] uppercase tracking-wider text-[11px]">Holdings Distribution</h3>
+                                <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-[11px]">Holdings Distribution</h3>
                                 <Button
                                     variant="secondary"
                                     size="sm"
@@ -162,7 +162,7 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-[#0b0e11] text-[#848e9c] text-[10px] uppercase font-semibold tracking-wider border-b border-[#2b3139]">
+                                <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                                     <tr>
                                         <th className="p-4 pl-8">Asset</th>
                                         <th className="p-4 text-right">Price</th>
@@ -200,7 +200,7 @@ export const WhaleDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                    <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-6 h-[400px] flex flex-col">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-6 h-[400px] flex flex-col">
                         <h3 className="font-bold text-white mb-6 flex items-center uppercase tracking-widest text-xs">
                             <ShieldCheck className="mr-2 text-alphabag-yellow" size={18} />
                             Asset allocation
@@ -259,14 +259,14 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-6">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-6">
                         <h3 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Whale insights</h3>
                         <div className="space-y-3">
-                            <div className="p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
-                                <div className="text-xs text-[#848e9c] mb-1 uppercase tracking-wider font-semibold">Accumulation strategy</div>
+                            <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
+                                <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Accumulation strategy</div>
                                 <div className="text-sm text-white font-medium">Buying ETH consistently below $3,500 over the last 30 days.</div>
                             </div>
-                            <div className="p-4 bg-[#0b0e11] border border-[#2b3139] rounded-md">
+                            <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
                                 <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-bold">Risk profile</div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm text-white font-medium">Conservative / Large Cap</span>
@@ -282,14 +282,14 @@ export const WhaleDetail: React.FC = () => {
                             : 'bg-[#fcd535]/10 border-[#fcd535]/30'
                     }`}>
                         <div className="flex items-center space-x-2 mb-3">
-                            <div className="bg-[#0b0e11]/30 rounded-md p-1.5 flex items-center justify-center">
+                            <div className="bg-alphabag-black/30 rounded-md p-1.5 flex items-center justify-center">
                                 {alertsEnabled ? <Bell size={18} className="text-[#0ecb81]" /> : <DollarSign size={18} className="text-[#fcd535]" />}
                             </div>
-                            <h4 className="font-semibold text-base uppercase tracking-tight text-[#eaecef]">
+                            <h4 className="font-semibold text-base uppercase tracking-tight text-alphabag-text">
                                 {alertsEnabled ? 'Alerts active' : 'Alpha alerts'}
                             </h4>
                         </div>
-                        <p className="text-xs font-medium leading-tight opacity-80 mb-4 text-[#848e9c]">
+                        <p className="text-xs font-medium leading-tight opacity-80 mb-4 text-alphabag-subtext">
                             {alertsEnabled
                                 ? "You'll receive push notifications for significant transactions from this wallet."
                                 : "Get push notifications when this whale moves more than $100k USD in assets."}
@@ -307,13 +307,13 @@ export const WhaleDetail: React.FC = () => {
                     </div>
 
                     {/* Recent Transactions Section */}
-                    <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg overflow-hidden mt-4">
-                        <div className="p-4 border-b border-[#2b3139]">
-                            <h3 className="font-semibold text-[#eaecef] uppercase tracking-wider text-xs">Recent Movements</h3>
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden mt-4">
+                        <div className="p-4 border-b border-alphabag-gray">
+                            <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-xs">Recent Movements</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-[#0b0e11] text-[#848e9c] text-[10px] uppercase font-semibold tracking-wider border-b border-[#2b3139]">
+                                <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                                     <tr>
                                         <th className="p-4 pl-6">Hash</th>
                                         <th className="p-4">Type</th>
@@ -325,7 +325,7 @@ export const WhaleDetail: React.FC = () => {
                                 <tbody className="divide-y divide-[#2b3139] text-xs">
                                     {transactions.length === 0 ? (
                                         <tr>
-                                            <td colSpan={5} className="p-6 text-center text-[#848e9c]">No recent transactions found</td>
+                                            <td colSpan={5} className="p-6 text-center text-alphabag-subtext">No recent transactions found</td>
                                         </tr>
                                     ) : (
                                         transactions.slice(0, 10).map((tx) => {

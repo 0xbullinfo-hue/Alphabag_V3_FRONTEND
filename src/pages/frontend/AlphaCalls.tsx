@@ -102,15 +102,15 @@ export const AlphaCalls: React.FC = () => {
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full px-4 md:px-8 animate-in fade-in duration-700">
             
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Radio className="animate-pulse" size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Classified Alphas</h1>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
                     </div>
-                    <p className="text-[#848e9c] text-sm">High-conviction setups · Early Mems · Airdrops</p>
+                    <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
                 </div>
                 <div className="bg-[#2b3139] border border-[#fcd535]/20 px-3 py-1.5 rounded-md flex items-center gap-2">
                     <ShieldAlert size={12} className="text-[#fcd535]" />
@@ -127,7 +127,7 @@ export const AlphaCalls: React.FC = () => {
                         className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                             activeCategory === cat 
                             ? 'bg-[#fcd535] text-[#181a20]' 
-                            : 'bg-[#1e2329] border border-[#2b3139] text-[#848e9c] hover:text-[#eaecef] hover:border-[#474d57]'
+                            : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-[#474d57]'
                         }`}
                     >
                         {cat}
@@ -138,13 +138,13 @@ export const AlphaCalls: React.FC = () => {
             {loading ? (
                 <div className="text-center py-32 flex flex-col items-center">
                     <div className="animate-spin w-8 h-8 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-4"></div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[#848e9c] animate-pulse">Decrypting Alpha Stream...</p>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext animate-pulse">Decrypting Alpha Stream...</p>
                 </div>
             ) : signals.length === 0 ? (
-                <div className="text-center py-32 rounded-lg border border-dashed border-[#2b3139] mx-2">
-                    <Target size={40} className="mx-auto text-[#848e9c] mb-6 opacity-30" />
-                    <h3 className="text-base font-semibold text-[#eaecef] mb-2">No Active Intelligence</h3>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[#848e9c]">The Alpha stream is currently silent. Stand by.</p>
+                <div className="text-center py-32 rounded-lg border border-dashed border-alphabag-gray mx-2">
+                    <Target size={40} className="mx-auto text-alphabag-subtext mb-6 opacity-30" />
+                    <h3 className="text-base font-semibold text-alphabag-text mb-2">No Active Intelligence</h3>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext">The Alpha stream is currently silent. Stand by.</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
@@ -158,7 +158,7 @@ export const AlphaCalls: React.FC = () => {
                         return (
                             <div 
                                 key={signal.id} 
-                                className="bg-[#1e2329] border border-[#2b3139] p-4 rounded-lg relative overflow-hidden hover:border-[#474d57] transition-all"
+                                className="bg-alphabag-darkgray border border-alphabag-gray p-4 rounded-lg relative overflow-hidden hover:border-[#474d57] transition-all"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
                                 {/* Background Ambient Glow */}

@@ -103,7 +103,7 @@ export const AlphaAi: React.FC = () => {
       background: '#181a20',
       color: '#ffffff',
       customClass: {
-        popup: 'border border-[#2b3139] rounded-2xl',
+        popup: 'border border-alphabag-gray rounded-2xl',
         confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
       }
     });
@@ -132,28 +132,28 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-[#eaecef] px-4 md:px-8">
+    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text px-4 md:px-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-[#2b3139] gap-4 mb-4 shrink-0">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-4 shrink-0">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
               <Bot size={20} />
             </div>
-            <h1 className="text-3xl font-semibold text-[#eaecef] tracking-tight">Alpha Analyst</h1>
+            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
             <div className="bg-[#0ecb81]/10 border border-[#0ecb81]/20 px-2 py-1 rounded-md flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full animate-pulse"></div>
               <span className="text-[9px] text-[#0ecb81] font-semibold uppercase tracking-wider">Link Active</span>
             </div>
           </div>
-          <p className="text-[#848e9c] text-sm">Intelligence hub for on-chain analytics, portfolio modeling, and market forecasting.</p>
+          <p className="text-alphabag-subtext text-sm">Intelligence hub for on-chain analytics, portfolio modeling, and market forecasting.</p>
         </div>
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-hidden">
 
         {/* Left Side: Chat Area */}
-        <div className="lg:col-span-2 flex flex-col bg-[#1e2329] rounded-lg overflow-hidden border border-[#2b3139] relative">
+        <div className="lg:col-span-2 flex flex-col bg-alphabag-darkgray rounded-lg overflow-hidden border border-alphabag-gray relative">
           <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-[80px] pointer-events-none transition-opacity duration-1000 group-hover:opacity-100 opacity-50"></div>
           
           <div className="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/20">
@@ -237,7 +237,7 @@ export const AlphaAi: React.FC = () => {
           </div>
 
           {/* Portfolio Matrix */}
-          <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-5 relative overflow-hidden">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
             
             <div className="flex items-center justify-between mb-4 relative z-10">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
@@ -270,7 +270,7 @@ export const AlphaAi: React.FC = () => {
           </div>
 
           {/* Chat History */}
-          <div className="bg-[#1e2329] border border-[#2b3139] rounded-lg p-5 relative overflow-hidden">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
             <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-4">
                 <Clock size={12} className="text-alphabag-yellow"/> Chat History
             </h3>

@@ -104,11 +104,11 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </div>
       )}
 
-      <header className={`fixed left-0 right-0 h-16 bg-alphabag-black border-b border-[#2b3139] z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
+      <header className={`fixed left-0 right-0 h-16 bg-alphabag-black border-b border-alphabag-gray z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
-            className="mr-4 p-2 rounded-md text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139] md:hidden transition-all duration-200"
+            className="mr-4 p-2 rounded-md text-alphabag-subtext hover:text-alphabag-text hover:bg-[#2b3139] md:hidden transition-all duration-200"
           >
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -118,17 +118,17 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
           </Link>
 
-          <nav className="hidden md:flex items-center ml-8 space-x-6 text-sm font-medium text-[#848e9c]">
-            <Link to="/markets" className="hover:text-[#eaecef] transition-colors">
+          <nav className="hidden md:flex items-center ml-8 space-x-6 text-sm font-medium text-alphabag-subtext">
+            <Link to="/markets" className="hover:text-alphabag-text transition-colors">
               Markets
             </Link>
-            <Link to="/my-alphabag" className="hover:text-[#eaecef] transition-colors">
+            <Link to="/my-alphabag" className="hover:text-alphabag-text transition-colors">
               Trade
             </Link>
-            <Link to="/airdrop" className="hover:text-[#eaecef] transition-colors">
+            <Link to="/airdrop" className="hover:text-alphabag-text transition-colors">
               Earn
             </Link>
-            <Link to="/alphas-feed" className="hover:text-[#eaecef] transition-colors">
+            <Link to="/alphas-feed" className="hover:text-alphabag-text transition-colors">
               Square
             </Link>
           </nav>
@@ -138,21 +138,21 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-[#848e9c]" />
+            <Search size={18} className="text-alphabag-subtext" />
           </div>
           <input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search coin, pair, or contract..."
-            className="w-full bg-[#1e2329] border border-[#2b3139] text-[#eaecef] text-sm rounded-md focus:border-[#fcd535] focus:ring-1 focus:ring-[#fcd535] block pl-10 p-2 outline-none transition-all duration-200"
+            className="w-full bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text text-sm rounded-md focus:border-[#fcd535] focus:ring-1 focus:ring-[#fcd535] block pl-10 p-2 outline-none transition-all duration-200"
           />
         </form>
 
         <div className="flex items-center space-x-4">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-[#848e9c] hover:text-[#eaecef] hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
+            className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -182,11 +182,11 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                     className="flex items-center space-x-3 bg-transparent px-3 py-1.5 rounded-md hover:bg-[#2b3139] transition-all duration-300"
                 >
                     <div className="hidden sm:block text-right">
-                    <div className="text-sm font-medium text-[#eaecef] leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
+                    <div className="text-sm font-medium text-alphabag-text leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
                     <div className="text-[10px] font-medium text-[#fcd535] uppercase">Verified</div>
                     </div>
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#fcd535] to-orange-500"></div>
-                    <ChevronDown size={14} className={`text-[#848e9c] transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+                    <ChevronDown size={14} className={`text-alphabag-subtext transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </button>
               </div>
 
@@ -197,10 +197,10 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
               />
 
               {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-[#1e2329] border border-[#2b3139] rounded-lg shadow-lg p-2 animate-fade-in z-[100]">
-                  <div className="p-4 border-b border-[#2b3139] mb-1">
-                    <p className="text-[10px] text-[#848e9c] font-medium uppercase mb-1">Account</p>
-                    <p className="text-sm text-[#eaecef] font-medium truncate">{user?.email}</p>
+                <div className="absolute right-0 mt-2 w-64 bg-alphabag-darkgray border border-alphabag-gray rounded-lg shadow-lg p-2 animate-fade-in z-[100]">
+                  <div className="p-4 border-b border-alphabag-gray mb-1">
+                    <p className="text-[10px] text-alphabag-subtext font-medium uppercase mb-1">Account</p>
+                    <p className="text-sm text-alphabag-text font-medium truncate">{user?.email}</p>
                     <div className="mt-2">
                       <span className="px-2 py-1 bg-[#fcd535]/10 text-[#fcd535] text-[10px] font-medium rounded-md">
                         Standard User
