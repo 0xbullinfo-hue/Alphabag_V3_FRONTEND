@@ -64,7 +64,7 @@ const ManualHoldingsSection: React.FC = () => {
     const totalValue = holdings.reduce((acc, h) => acc + h.amount * h.buyPrice, 0);
 
     return (
-        <section className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+        <section className="rounded-2xl border border-alphabag-gray/40 bg-alphabag-darkgray p-6">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                     <Plus size={18} className="text-alphabag-yellow" /> Manual Holdings
@@ -80,7 +80,7 @@ const ManualHoldingsSection: React.FC = () => {
             </p>
 
             {/* Add Form */}
-            <div className="bg-alphabag-black border border-alphabag-gray p-5 rounded-lg mb-6">
+            <div className="bg-[#1e2329] border border-alphabag-gray/40 p-5 rounded-xl mb-6">
                 <h3 className="text-sm font-semibold text-alphabag-text mb-4 flex items-center gap-2">
                     <Search size={14} className="text-[#fcd535]" /> Add Holding
                 </h3>
@@ -124,7 +124,7 @@ const ManualHoldingsSection: React.FC = () => {
 
             {/* Holdings List */}
             {holdings.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-24 border border-dashed border-alphabag-gray/40 rounded-xl text-center px-4">
+                <div className="flex flex-col items-center justify-center h-24 border border-dashed border-alphabag-gray/40 rounded-2xl text-center px-4">
                     <p className="text-alphabag-subtext text-sm font-bold">No manual holdings yet</p>
                     <p className="text-alphabag-muted text-xs mt-1">Add entries above for coins you don't want to sync.</p>
                 </div>
@@ -306,7 +306,7 @@ export const Settings: React.FC = () => {
                 </div>
             </div>
 
-            <section className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6">
+            <section className="rounded-2xl border border-alphabag-gray/40 bg-alphabag-darkgray p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Portfolio Connections</h2>
                     <button
@@ -320,7 +320,7 @@ export const Settings: React.FC = () => {
 
                 {/* Count Summary Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-[#1e2329] border border-alphabag-gray/40 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <Wallet size={18} className="text-[#0ecb81]" />
                         </div>
@@ -333,7 +333,7 @@ export const Settings: React.FC = () => {
                             <div className="text-[9px] text-[#0ecb81] font-semibold mt-0.5">Portfolio Wallets</div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-[#1e2329] border border-alphabag-gray/40 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Eye size={18} className="text-[#fcd535]" />
                         </div>
@@ -346,7 +346,7 @@ export const Settings: React.FC = () => {
                             <div className="text-[9px] text-[#fcd535] font-semibold mt-0.5">Wallet Trackers</div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-[#1e2329] border border-alphabag-gray/40 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-blue-500/10 flex items-center justify-center shrink-0">
                             <Database size={18} className="text-blue-400" />
                         </div>
@@ -362,7 +362,7 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* Add New Wallet Form */}
-                <div className="bg-alphabag-black border border-alphabag-gray p-6 rounded-lg">
+                <div className="bg-[#1e2329] border border-alphabag-gray/40 p-6 rounded-xl">
                     <h3 className="text-sm font-bold text-white mb-4 flex items-center">
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
@@ -391,7 +391,7 @@ export const Settings: React.FC = () => {
             </section>
 
             {/* ─── CEX Exchange APIs ─── */}
-            <section className="glass-panel p-6 rounded-xl shadow-xl">
+            <section className="rounded-2xl border border-alphabag-gray/40 bg-alphabag-darkgray p-6 shadow-xl relative">
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h2 className="text-lg font-bold text-white flex items-center gap-2"><Key size={18} className="text-alphabag-yellow" /> CEX Exchange APIs</h2>
@@ -408,7 +408,7 @@ export const Settings: React.FC = () => {
 
                 {/* CEX Count Card */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-[#1e2329] border border-alphabag-gray/40 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Key size={18} className="text-[#fcd535]" />
                         </div>
@@ -424,7 +424,7 @@ export const Settings: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-4 flex items-center gap-4">
+                    <div className="bg-[#1e2329] border border-alphabag-gray/40 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <TrendingUp size={18} className="text-[#0ecb81]" />
                         </div>
@@ -445,7 +445,7 @@ export const Settings: React.FC = () => {
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-3">Connected Exchanges</div>
                         <div className="flex items-center gap-2 flex-wrap">
                             {connectedCex.map(cex => (
-                                <div key={cex.id} className="flex items-center gap-2 bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2">
+                                <div key={cex.id} className="flex items-center gap-2 bg-[#1e2329] border border-alphabag-gray/40 rounded-lg px-3 py-2">
                                     <img src={cex.icon} alt={cex.name} className="w-5 h-5 rounded-full bg-white p-0.5" />
                                     <span className="text-[10px] font-semibold text-alphabag-text">{cex.name}</span>
                                     <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] shadow-[0_0_4px_rgba(14,203,129,0.8)]"></span>
@@ -467,7 +467,7 @@ export const Settings: React.FC = () => {
                                     key={cex.id}
                                     onClick={() => {}}
                                     disabled={true}
-                                    className="flex flex-col items-center justify-center p-3 bg-alphabag-black border border-alphabag-gray rounded-xl transition-all group gap-1 opacity-50 cursor-not-allowed"
+                                    className="flex flex-col items-center justify-center p-3 bg-[#1e2329] border border-alphabag-gray/40 rounded-xl transition-all group gap-1 opacity-50 cursor-not-allowed"
                                     title={`Connect ${cex.name}`}
                                 >
                                     <img src={cex.icon} alt={cex.name} className="w-7 h-7 rounded-full bg-white p-0.5 grayscale opacity-30 transition-all" />
