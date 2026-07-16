@@ -259,7 +259,7 @@ export const Profile: React.FC = () => {
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             </div>
 
-            <div className="w-full px-4 md:px-8">
+            <div className="w-full">
                 {/* Profile Info Card */}
                 <div className="relative -mt-12 mb-6 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
                     <div className="flex justify-between items-start">

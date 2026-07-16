@@ -96,7 +96,7 @@ export const Portfolio: React.FC = () => {
     }
 
     return (
-        <div className="space-y-5 animate-in fade-in duration-700 pb-20 w-full px-4 md:px-8">
+        <div className="space-y-5 animate-in fade-in duration-700 pb-20 w-full">
 
 
 

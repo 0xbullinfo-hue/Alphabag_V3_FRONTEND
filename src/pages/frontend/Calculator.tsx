@@ -619,7 +619,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     return (
-        <div className={`w-full space-y-5 animate-in fade-in duration-700 ${minimal ? '' : 'pb-12 px-4 md:px-8'}`}>
+        <div className={`w-full space-y-5 animate-in fade-in duration-700 ${minimal ? '' : 'pb-12'}`}>
             {/* Page Header */}
             {!minimal && (
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">

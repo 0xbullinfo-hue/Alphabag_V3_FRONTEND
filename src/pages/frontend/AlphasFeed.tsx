@@ -305,7 +305,7 @@ export const AlphasFeed: React.FC = () => {
 
     return (
         <div className="relative min-h-screen">
-            <div className="w-full px-4 grid grid-cols-1 lg:grid-cols-12 gap-3 transition-all duration-700">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 transition-all duration-700">
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
