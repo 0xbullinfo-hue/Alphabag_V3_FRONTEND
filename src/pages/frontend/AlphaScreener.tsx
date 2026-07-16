@@ -324,7 +324,7 @@ export const AlphaScreener: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-6 text-sm">
+                        <div className="flex flex-wrap gap-3 text-sm">
                             <div>
                                 <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">Price</div>
                                 <div className="font-mono font-bold text-white mt-0.5">${Number(searchedPair.priceUsd) < 0.01 ? Number(searchedPair.priceUsd).toFixed(8) : Number(searchedPair.priceUsd).toFixed(4)}</div>

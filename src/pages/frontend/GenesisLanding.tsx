@@ -98,7 +98,7 @@ export const GenesisLanding: React.FC = () => {
                 </div>
 
                 {/* Core Benefits */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 w-full animate-fade-in-up delay-500">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-20 w-full animate-fade-in-up delay-500">
                     <GenesisBenefit 
                         icon={<Crown size={24} className="text-alphabag-yellow" />}
                         title="OG MULTIPLIER"

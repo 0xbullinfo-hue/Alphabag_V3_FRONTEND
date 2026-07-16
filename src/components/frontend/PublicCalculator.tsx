@@ -108,7 +108,7 @@ export const PublicCalculator: React.FC = () => {
                 ))}
             </div>
 
-            <div className="p-4 md:p-6 grid grid-cols-1 gap-6">
+            <div className="p-4 md:p-6 grid grid-cols-1 gap-3">
                 <div className="space-y-4">
                     {mode === 'FUTURES' && (
                         <div className="grid grid-cols-2 gap-3">

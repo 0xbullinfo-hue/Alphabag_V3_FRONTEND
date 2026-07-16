@@ -59,7 +59,7 @@ export const DexBag: React.FC = () => {
     const filtered = filterChain === 'ALL' ? balances : balances.filter(t => t.chain === filterChain);
 
     return (
-        <div className="space-y-6 animate-in fade-in duration-700 pb-20">
+        <div className="space-y-3 animate-in fade-in duration-700 pb-20">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>

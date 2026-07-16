@@ -75,7 +75,7 @@ export const Portfolio: React.FC = () => {
 
     if (activeWallets.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 space-y-8 max-w-2xl mx-auto animate-fade-in">
+            <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 space-y-4 max-w-2xl mx-auto animate-fade-in">
                 <div className="w-24 h-24 bg-alphabag-gray/50 rounded-3xl flex items-center justify-center text-alphabag-yellow animate-pulse-slow shadow-inner border border-alphabag-gray">
                     <Briefcase size={48} fill="currentColor" />
                 </div>
@@ -101,7 +101,7 @@ export const Portfolio: React.FC = () => {
 
 
             {/* 1. Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -173,7 +173,7 @@ export const Portfolio: React.FC = () => {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-6 border-b border-alphabag-gray">
+            <div className="flex gap-3 border-b border-alphabag-gray">
                 <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
                 <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
             </div>
@@ -328,7 +328,7 @@ export const Portfolio: React.FC = () => {
                             {/* Allocation Donut */}
                             <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-all">
                                 <h3 className="font-black text-white mb-4 uppercase tracking-tight">Allocation</h3>
-                                <div className="flex-1 flex flex-row items-center justify-center gap-6">
+                                <div className="flex-1 flex flex-row items-center justify-center gap-3">
 
                                     <div className="w-1/2 h-[180px] relative">
                                         <ResponsiveContainer width="100%" height="100%">

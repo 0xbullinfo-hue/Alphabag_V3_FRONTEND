@@ -277,7 +277,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           )}
 
           <div className="mt-8 pt-6 border-t border-white/5">
-            <div className="flex items-center justify-center gap-6 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
+            <div className="flex items-center justify-center gap-3 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
               <div className="flex items-center gap-2">
                 <Shield size={10} className="text-alphabag-subtext" />
                 <span className="text-[8px] font-black uppercase tracking-widest text-alphabag-subtext">Secure Phase 1</span>

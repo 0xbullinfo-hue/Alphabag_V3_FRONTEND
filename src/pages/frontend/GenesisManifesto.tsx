@@ -157,7 +157,7 @@ export const GenesisManifesto: React.FC = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-3">
                     {/* Basic Info */}
                     <Section title="00. IDENTITY" subtitle="Project name and ticker symbol.">
                         <div className="grid md:grid-cols-2 gap-4">

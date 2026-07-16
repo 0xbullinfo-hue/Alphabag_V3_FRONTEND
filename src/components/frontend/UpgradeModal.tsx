@@ -177,7 +177,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
               <ArrowRight size={20} className="text-blue-400 opacity-0 group-hover:opacity-100 transition-all" />
             </button>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-3">
               <div className="p-4 bg-alphabag-black rounded-xl border border-alphabag-gray">
                 <p className="text-[10px] text-alphabag-subtext font-bold uppercase mb-1">Authenticated Wallet</p>
                 <p className="text-white font-mono text-xs">{address?.substring(0, 10)}...{address?.substring(address.length - 8)}</p>

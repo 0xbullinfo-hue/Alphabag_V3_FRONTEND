@@ -490,7 +490,7 @@ export const Settings: React.FC = () => {
             {/* ─── Membership Status ─── */}
             <section className="relative">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Crown className="text-alphabag-yellow" size={20} /> Membership Status</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <TierCard level="FREE" minTokens="0" current={true} />
                     <TierCard level="ULTIMATE" minTokens="100k" current={false} />
                 </div>

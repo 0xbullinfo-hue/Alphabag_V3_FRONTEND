@@ -211,7 +211,7 @@ export const CexBag: React.FC = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex flex-col md:flex-row items-center gap-6">
+                            <div className="flex flex-col md:flex-row items-center gap-3">
                                 <div className="w-full md:w-48 h-48 shrink-0">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>

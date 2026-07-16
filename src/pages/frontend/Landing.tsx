@@ -663,10 +663,10 @@ export const Landing: React.FC = () => {
             <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col items-center xl:px-8">
               
               {/* Split Layout: Hero Text & Calculator side-by-side */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start w-full">
                 
                 {/* Left Column: Copy & Stats */}
-                <div className="lg:col-span-6 text-left space-y-6 flex flex-col justify-center">
+                <div className="lg:col-span-6 text-left space-y-3 flex flex-col justify-center">
                   <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-white leading-[1.1] tracking-tight">
                     {t('hero_title_1')}
                     <span className="block text-[#fcd535] mt-1">{t('hero_title_2')}</span>
@@ -715,7 +715,7 @@ export const Landing: React.FC = () => {
                   </div>
 
                   {/* Stats Section */}
-                  <div className="flex flex-wrap gap-6 md:gap-12 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
+                  <div className="flex flex-wrap gap-3 md:gap-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
                     <div>
                       <div className="text-2xl font-bold text-alphabag-text mb-1">{t('stat_assets')}</div>
                       <div className="text-xs font-semibold text-alphabag-subtext">{t('stat_assets_lbl')}</div>
@@ -769,7 +769,7 @@ export const Landing: React.FC = () => {
                 <p className="text-xl text-alphabag-subtext">{t('features_subtitle')}</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <FeatureHighlight
                   icon={<Bot size={32} className="text-alphabag-yellow" />}
                   title={t('feature_1_title') || "AlphaAi Agent"}
@@ -813,8 +813,8 @@ export const Landing: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
-                  <div className="space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-5xl mx-auto items-center">
+                  <div className="space-y-4">
                     <div className="flex gap-4">
                       <div className="w-10 h-10 shrink-0 bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center rounded-xl border border-alphabag-yellow/20">
                         <Zap size={20} />
@@ -867,7 +867,7 @@ export const Landing: React.FC = () => {
                 <p className="text-alphabag-subtext text-sm max-w-4xl mx-auto leading-relaxed">Detailed token distribution and exact tokenomics for Alphabag ecosystem</p>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {/* Left Column: Metrics */}
                 <div className="lg:col-span-1 flex flex-col gap-4">
                   <TokenMetricCard label="Token Name" value="AlphaBAG (Not Yet Live)" icon={<Briefcase />} />
@@ -879,7 +879,7 @@ export const Landing: React.FC = () => {
 
                 {/* Right Column: Allocations Unmasked */}
                 <div className="lg:col-span-2 relative bg-alphabag-dark border border-white/5 rounded-3xl p-8 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full h-full">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full h-full">
                     <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
                     <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
                     <TokenomicsDetailCard title="Development & Ecosystem" percentage="15%" desc="Allocated for infrastructure upgrades, API integrations, and core platform development. Automated post-deployment allocation." />
@@ -969,7 +969,7 @@ export const Landing: React.FC = () => {
                 {/* Main Horizontal Trace */}
                 <div className="absolute top-[68px] left-0 right-0 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/50 to-alphabag-gray min-w-[max(100%,1200px)]"></div>
 
-                <div className="flex flex-row gap-6 md:gap-8 w-max px-6 mx-auto min-w-full justify-between items-start mt-4">
+                <div className="flex flex-row gap-3 md:gap-4 w-max px-6 mx-auto min-w-full justify-between items-start mt-4">
                   <RoadmapStep
                     phase="PHASE_01"
                     title="CORE_INITIALIZATION"
@@ -1026,9 +1026,9 @@ export const Landing: React.FC = () => {
                 <p className="text-lg text-alphabag-subtext max-w-2xl mx-auto">Everything you need to know about the AlphaBAG hub and ecosystem.</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
                 {/* Left Column */}
-                <div className="space-y-6">
+                <div className="space-y-3">
                   <FaqItem
                     question="What is AlphaBAG?"
                     answer="AlphaBAG is an advanced centralized intelligence hub for smart investors. It aggregates portfolio tracking, whale watching, and AI-driven market analysis into a single, professional interface."
@@ -1044,7 +1044,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column */}
-                <div className="space-y-6">
+                <div className="space-y-3">
                   <FaqItem
                     question="How does AlphaAI work?"
                     answer="AlphaAI utilizes fine-tuned large language models (LLMs) with access to real-time market data. It can analyze your specific portfolio composition against current market trends to provide actionable, natural-language insights."
@@ -1072,7 +1072,7 @@ export const Landing: React.FC = () => {
       </div> {/* End Dynamic Content Area */}
 
       <footer className="py-12 px-6 border-t border-white/10 bg-alphabag-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="flex items-center space-x-2">
             <div className="w-6 h-6 bg-zinc-900 border border-white/10 text-alphabag-yellow flex items-center justify-center rounded">
               <Lock size={14} fill="currentColor" />
@@ -1080,7 +1080,7 @@ export const Landing: React.FC = () => {
             <span className="text-white text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
             <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <X size={14} /> X.com
             </a>

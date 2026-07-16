@@ -139,7 +139,7 @@ export const CoinDetail: React.FC = () => {
     const isPositive = coin.price_change_percentage_24h >= 0;
 
     return (
-        <div className="space-y-6 animate-fade-in">
+        <div className="space-y-3 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center space-x-3">
                     <Link to="/markets" className="p-1.5 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-lg transition-all shadow-md">
@@ -162,8 +162,8 @@ export const CoinDetail: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <div className="lg:col-span-2 space-y-3">
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-[0.03] rotate-12">
                             <BarChart size={120} />
@@ -178,7 +178,7 @@ export const CoinDetail: React.FC = () => {
                                     </span>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-6 text-right w-full md:w-auto">
+                            <div className="grid grid-cols-2 gap-3 text-right w-full md:w-auto">
                                 <div>
                                     <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h High</p>
                                     <p className="text-white font-bold text-sm">${(coin.current_price * 1.05).toLocaleString()}</p>
@@ -299,7 +299,7 @@ export const CoinDetail: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-3">
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 relative overflow-hidden shadow-2xl">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Wallet size={100} className="text-alphabag-yellow" />
@@ -309,12 +309,12 @@ export const CoinDetail: React.FC = () => {
                         </h3>
 
                         {isConnected && holding ? (
-                            <div className="space-y-6 relative z-10">
+                            <div className="space-y-3 relative z-10">
                                 <div>
                                     <p className="text-alphabag-subtext text-[10px] font-extrabold uppercase tracking-[0.15em] mb-1">Position Value</p>
                                     <div className="text-4xl font-extrabold text-white tracking-tighter">${holding.value.toLocaleString()}</div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-6 pt-6 border-t border-alphabag-gray/50">
+                                <div className="grid grid-cols-2 gap-3 pt-6 border-t border-alphabag-gray/50">
                                     <div>
                                         <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Balance</p>
                                         <p className="font-extrabold text-white text-lg">{holding.amount.toLocaleString()} {coin.symbol.toUpperCase()}</p>

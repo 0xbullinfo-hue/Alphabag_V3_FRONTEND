@@ -138,7 +138,7 @@ export const MyAlphabag: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full space-y-6 pb-12 animate-in fade-in duration-700">
+        <div className="w-full space-y-3 pb-12 animate-in fade-in duration-700">
             {/* Header section */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
@@ -154,10 +154,10 @@ export const MyAlphabag: React.FC = () => {
             </div>
 
             {/* Net Worth & Allocation Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-3">
                 
                 {/* Combined Net Worth Hero Card */}
-                <div className="lg:col-span-3 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-6 min-h-[180px]">
+                <div className="lg:col-span-3 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-3 min-h-[180px]">
                     <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
                     <div className="space-y-2 z-10">
                         <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-alphabag-subtext">Combined Net Worth</p>
@@ -174,7 +174,7 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* Total Allocation Donut Chart */}
-                <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 flex flex-row items-center gap-6 min-h-[180px]">
+                <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 flex flex-row items-center gap-3 min-h-[180px]">
                     <div className="w-1/2 h-[120px] relative shrink-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <RePieChart>
@@ -219,7 +219,7 @@ export const MyAlphabag: React.FC = () => {
             </div>
 
             {/* Split Bags Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                 
                 {/* CEX Card */}
                 <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-[#474d57] transition-all relative flex flex-col justify-between h-[280px]">
@@ -320,7 +320,7 @@ export const MyAlphabag: React.FC = () => {
             </div>
 
             {/* Tabs Navigation */}
-            <div className="flex border-b border-alphabag-gray gap-6 mt-8 mb-6">
+            <div className="flex border-b border-alphabag-gray gap-3 mt-8 mb-6">
                 <button
                     onClick={() => setActiveSection('overview')}
                     className={`pb-4 text-xs font-black uppercase tracking-[0.15em] relative transition-all ${activeSection === 'overview' ? 'text-alphabag-yellow font-black border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}
@@ -337,7 +337,7 @@ export const MyAlphabag: React.FC = () => {
 
             {activeSection === 'overview' ? (
                 /* Bottom Section: Recent Activity & Alpha Radar */
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                     
                     {/* Recent Activity Table (2/3 width) */}
                     <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
@@ -460,7 +460,7 @@ export const MyAlphabag: React.FC = () => {
                 </div>
             ) : (
                 /* Fee Auditor Tab Content */
-                <div className="space-y-6 animate-in fade-in duration-300">
+                <div className="space-y-3 animate-in fade-in duration-300">
                     
                     {/* Wallet input controller banner */}
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -539,7 +539,7 @@ export const MyAlphabag: React.FC = () => {
                     ) : (
                         <>
                             {/* Summary Auditor cards grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 relative overflow-hidden">
                                     <div className="flex justify-between items-start mb-3">
                                         <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider">Cumulative Bleed</span>
@@ -567,7 +567,7 @@ export const MyAlphabag: React.FC = () => {
                             </div>
 
                             {/* Middle section: Chart & recommendations */}
-                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
                                 
                                 {/* Network Leakage Chart Breakdown (5 cols) */}
                                 <div className="lg:col-span-5 bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5">

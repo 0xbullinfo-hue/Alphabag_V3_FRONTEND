@@ -27,7 +27,7 @@ export const ConnectOrWatch: React.FC = () => {
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-3">
         <Button size="lg" className="w-full font-bold py-3" onClick={connectWallet} isLoading={isConnecting}>
             <Wallet className="mr-2" size={20} />
             Connect Web3 Wallet

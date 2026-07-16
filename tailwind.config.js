@@ -33,10 +33,10 @@ export default {
                 mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
             },
             borderRadius: {
-                xl: '1rem',
-                '2xl': '1rem',
-                '3xl': '1rem',
-                '4xl': '1.25rem',
+                xl: '0.5rem',
+                '2xl': '0.5rem',
+                '3xl': '0.5rem',
+                '4xl': '0.75rem',
             },
             boxShadow: {
                 'glow-yellow': '0 0 20px rgba(252,213,53,0.15)',

@@ -38,7 +38,7 @@ export const News: React.FC = () => {
   );
 
   return (
-    <div className="space-y-8 animate-fade-in w-full pb-20">
+    <div className="space-y-4 animate-fade-in w-full pb-20">
       <div className="bg-alphabag-dark border border-alphabag-gray p-6 rounded-xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-5">
           <Newspaper size={120} />
@@ -67,7 +67,7 @@ export const News: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                 <Search size={48} className="text-alphabag-gray mb-4" />
@@ -215,7 +215,7 @@ export const News: React.FC = () => {
                   <p className="text-xl text-alphabag-yellow font-bold leading-relaxed mb-8 border-l-4 border-alphabag-yellow pl-6">
                     {selectedArticle.summary}
                   </p>
-                  <div className="text-alphabag-text text-lg leading-loose space-y-6 font-medium opacity-90">
+                  <div className="text-alphabag-text text-lg leading-loose space-y-3 font-medium opacity-90">
                     {selectedArticle.content ? (
                       selectedArticle.content.split('\n').map((para, i) => (
                         <p key={i}>{para}</p>

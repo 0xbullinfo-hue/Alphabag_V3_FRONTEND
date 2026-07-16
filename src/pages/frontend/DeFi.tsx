@@ -51,7 +51,7 @@ export const DeFi: React.FC = () => {
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 mt-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 mt-3">
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Supplied</span>
                             <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums">${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>

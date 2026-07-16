@@ -437,7 +437,7 @@ export const Profile: React.FC = () => {
                             </>
                         )}
 
-                        <div className="flex gap-6 pt-2 border-t border-white/5">
+                        <div className="flex gap-3 pt-2 border-t border-white/5">
                             <div className="flex items-center gap-1.5">
                                 <span className="text-white font-black text-sm">4.2K</span>
                                 <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Following</span>
@@ -525,7 +525,7 @@ export const Profile: React.FC = () => {
                 </div>
 
                 {/* Timeline Content */}
-                <div className="space-y-6">
+                <div className="space-y-3">
                     {isFounder && project && (
                         <div className="group relative">
                             <div className="flex items-center gap-2 mb-2 ml-4">

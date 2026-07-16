@@ -479,7 +479,7 @@ export const Airdrop: React.FC = () => {
                     </div>
 
                     {/* Breakdown */}
-                    <div className="flex gap-6 mb-6 pb-6 border-b border-alphabag-gray">
+                    <div className="flex gap-3 mb-6 pb-6 border-b border-alphabag-gray">
                         <div className="flex-1">
                             <div className="text-[10px] text-alphabag-subtext font-semibold uppercase mb-1">Earned</div>
                             <div className="text-xl font-semibold text-alphabag-text tabular-nums">{itemsBalance.toLocaleString()}</div>
@@ -684,7 +684,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Team Referral Hub */}
             <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                         <div>
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <Users size={18} className="text-[#fcd535]" /> Network Hub
@@ -722,8 +722,8 @@ export const Airdrop: React.FC = () => {
             </div>
 
             {/* Mission Section */}
-            <div className="space-y-8 mb-8">
-                <div className="rounded-[32px] p-8 space-y-6 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
+            <div className="space-y-4 mb-8">
+                <div className="rounded-[32px] p-8 space-y-3 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
                     <div className="flex justify-between items-center border-b border-white/5 pb-6 relative z-10">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
                             <Shield className="text-alphabag-yellow drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]" /> Mission Hub
@@ -870,7 +870,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Submission Section (Founder & Social) */}
             {!submitted ? (
-                <div className="space-y-6 animate-in slide-in-from-bottom-8 duration-700">
+                <div className="space-y-3 animate-in slide-in-from-bottom-8 duration-700">
                     {/* Mission Proof Submission */}
                     <div className="rounded-lg p-8 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-8">
@@ -880,7 +880,7 @@ export const Airdrop: React.FC = () => {
                             <p className="text-xs text-alphabag-subtext mt-2 font-medium">Connect your final social identity and mission proof.</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleSubmit} className="space-y-3">
                             <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Distribution Wallet (BSC)</label>
                                 <input 

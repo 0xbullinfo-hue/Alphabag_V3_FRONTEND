@@ -57,7 +57,7 @@ const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m
 const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
 
 const GlobalLoader = () => (
-  <div className="min-h-screen bg-alphabag-black flex flex-col items-center justify-center space-y-6">
+  <div className="min-h-screen bg-alphabag-black flex flex-col items-center justify-center space-y-3">
     <div className="w-12 h-12 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
     <p className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.4em] animate-pulse">Synchronizing Protocol Hub...</p>
   </div>

@@ -58,7 +58,7 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
 );
 
 export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false }) => {
-    const mainGridClass = minimal ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-8";
+    const mainGridClass = minimal ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-4";
     const inputCardClass = minimal 
         ? "relative flex flex-col gap-3" 
         : "bg-alphabag-darkgray border border-alphabag-gray hover:border-[#fcd535]/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl";

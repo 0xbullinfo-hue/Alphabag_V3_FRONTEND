@@ -223,7 +223,7 @@ export const SecurityScanner: React.FC = () => {
     }, 0);
 
     return (
-        <div className="max-w-7xl mx-auto space-y-6 pb-12 px-4 md:px-8 animate-fade-in">
+        <div className="max-w-7xl mx-auto space-y-3 pb-12 px-4 md:px-8 animate-fade-in">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
                 <div>
@@ -348,7 +348,7 @@ export const SecurityScanner: React.FC = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                         {approvals.map(token => (
                             <div key={token.tokenAddress} className="border border-white/5 bg-black/40 rounded-2xl overflow-hidden hover:border-white/10 transition-all p-5">
                                 {/* Token Info header */}
@@ -390,7 +390,7 @@ export const SecurityScanner: React.FC = () => {
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0 border-white/5">
+                                            <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0 border-white/5">
                                                 <div className="text-left sm:text-right">
                                                     <div className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-widest mb-0.5">Approved Allowance</div>
                                                     <div className="text-xs font-black text-white flex items-center gap-1.5 uppercase">
