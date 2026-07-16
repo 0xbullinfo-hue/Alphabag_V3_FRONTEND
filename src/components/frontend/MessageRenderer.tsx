@@ -103,7 +103,7 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
 
     return (
         <div className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in group`}>
-            <div className={`flex max-w-[85%] space-x-3 ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+            <div className={`flex max-w-[85%] space-x-2 ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${message.role === 'ai' ? 'bg-alphabag-yellow text-black' : 'bg-alphabag-gray text-white'}`}>
                     {message.role === 'ai' ? <Bot size={20} /> : <User size={20} />}
                 </div>

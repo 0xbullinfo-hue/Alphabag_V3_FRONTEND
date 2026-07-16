@@ -135,7 +135,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             </div>
 
             {isCustomAsset && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Asset Name</label>
                   <input
@@ -159,7 +159,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
                     <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Buy Price (USD)</label>
                     <div className="relative">

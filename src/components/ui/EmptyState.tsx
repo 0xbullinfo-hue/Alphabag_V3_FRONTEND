@@ -27,7 +27,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description
       <p className="text-alphabag-subtext max-w-sm mb-8 font-medium leading-relaxed">
         {description}
       </p>
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-2">
         {action && (
           <Button onClick={action.onClick} leftIcon={action.icon} variant="primary">
             {action.label}

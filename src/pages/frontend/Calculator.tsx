@@ -58,9 +58,9 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
 );
 
 export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false }) => {
-    const mainGridClass = minimal ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-4";
+    const mainGridClass = minimal ? "grid grid-cols-1 gap-2" : "grid grid-cols-1 lg:grid-cols-[1fr_500px] gap-2";
     const inputCardClass = minimal 
-        ? "relative flex flex-col gap-3" 
+        ? "relative flex flex-col gap-2" 
         : "bg-alphabag-darkgray border border-alphabag-gray hover:border-[#fcd535]/30 transition-all group relative overflow-hidden rounded-xl p-5 shadow-2xl";
     const resultCardClass = minimal 
         ? "relative flex flex-col justify-between gap-1.5 mt-2 pt-2 border-t border-alphabag-gray/40" 
@@ -247,7 +247,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-4">
                             <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" minimal={minimal} />
                             <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" minimal={minimal} />
                         </div>
@@ -265,7 +265,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-2">
                             <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-[#0ecb81]/40' : 'border-alphabag-gray'} minimal={minimal} />
                             <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-[#f6465d]/40' : 'border-alphabag-gray'} minimal={minimal} />
                         </div>
@@ -347,11 +347,11 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                 <div className={inputCardClass}>
                     {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
                     <div className="relative z-10">
-                        <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-4">
                             <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" minimal={minimal} />
                             <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" minimal={minimal} />
                         </div>
-                        <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-4">
                             <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" minimal={minimal} />
                             <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" minimal={minimal} />
                         </div>
@@ -522,7 +522,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         }
 
         return (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
                 <div className={mainGridClass}>
                     {/* Inputs */}
                     <div className={inputCardClass}>
@@ -533,9 +533,9 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <h2 className="text-alphabag-text font-bold text-sm">Degen Entry Calculator</h2>
                             </div>
 
-                            <div className="flex flex-col gap-4">
+                            <div className="flex flex-col gap-2">
                                 <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" minimal={minimal} />
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-2">
                                     <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} minimal={minimal} />
                                     <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} minimal={minimal} />
                                 </div>
@@ -619,10 +619,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     return (
-        <div className={`w-full space-y-5 animate-in fade-in duration-700 ${minimal ? '' : 'pb-12'}`}>
+        <div className={`w-full space-y-5 animate-in fade-in duration-700 calculator-container ${minimal ? '' : 'pb-12'}`}>
             {/* Page Header */}
             {!minimal && (
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                     <div>
                         <div className="flex items-center gap-3 mb-2">
                             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">

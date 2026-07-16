@@ -343,7 +343,7 @@ export const Profile: React.FC = () => {
                         )}
                     </div>
 
-                    <div className="mt-4 space-y-3">
+                    <div className="mt-4 space-y-2">
                         <div>
                             <div className="flex items-center gap-2">
                                 <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
@@ -368,7 +368,7 @@ export const Profile: React.FC = () => {
                                         placeholder="Tell the community about your alpha discovery strategy..."
                                     />
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-2">
                                     <div className="space-y-1">
                                         <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Location</label>
                                         <div className="relative">
@@ -450,7 +450,7 @@ export const Profile: React.FC = () => {
                     </div>
 
                     {/* Stats Dashboard */}
-                    <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t border-white/5">
+                    <div className="mt-4 grid grid-cols-3 gap-2 pt-4 border-t border-white/5">
                         <div className="text-center p-2 bg-alphabag-yellow/5 rounded-xl border border-alphabag-yellow/10">
                             <div className="text-[9px] font-black text-alphabag-yellow uppercase tracking-widest mb-0.5">Rep</div>
                             <div className="text-base font-black text-white leading-tight">98%</div>
@@ -525,7 +525,7 @@ export const Profile: React.FC = () => {
                 </div>
 
                 {/* Timeline Content */}
-                <div className="space-y-3">
+                <div className="space-y-2">
                     {isFounder && project && (
                         <div className="group relative">
                             <div className="flex items-center gap-2 mb-2 ml-4">

@@ -84,7 +84,7 @@ const ManualHoldingsSection: React.FC = () => {
                 <h3 className="text-sm font-semibold text-alphabag-text mb-4 flex items-center gap-2">
                     <Search size={14} className="text-[#fcd535]" /> Add Holding
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-3">
                     <input
                         type="text" placeholder="Name" value={coin}
                         onChange={e => setCoin(e.target.value)}
@@ -285,7 +285,7 @@ export const Settings: React.FC = () => {
     return (
         <div className="w-full space-y-5 animate-in fade-in duration-700 pb-12">
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -319,7 +319,7 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* Count Summary Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-8">
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <Wallet size={18} className="text-[#0ecb81]" />
@@ -366,7 +366,7 @@ export const Settings: React.FC = () => {
                     <h3 className="text-sm font-bold text-white mb-4 flex items-center">
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mb-4">
                         <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
                         <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
                         <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
@@ -407,7 +407,7 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* CEX Count Card */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Key size={18} className="text-[#fcd535]" />
@@ -490,7 +490,7 @@ export const Settings: React.FC = () => {
             {/* ─── Membership Status ─── */}
             <section className="relative">
                 <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Crown className="text-alphabag-yellow" size={20} /> Membership Status</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <TierCard level="FREE" minTokens="0" current={true} />
                     <TierCard level="ULTIMATE" minTokens="100k" current={false} />
                 </div>

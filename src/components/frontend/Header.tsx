@@ -179,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                         setShowUserMenu(!showUserMenu);
                         setShowNotifications(false);
                     }}
-                    className="flex items-center space-x-3 bg-transparent px-3 py-1.5 rounded-md hover:bg-[#2b3139] transition-all duration-300"
+                    className="flex items-center space-x-2 bg-transparent px-3 py-1.5 rounded-md hover:bg-[#2b3139] transition-all duration-300"
                 >
                     <div className="hidden sm:block text-right">
                     <div className="text-sm font-medium text-alphabag-text leading-none mb-0.5">{user?.email?.split('@')[0]}</div>

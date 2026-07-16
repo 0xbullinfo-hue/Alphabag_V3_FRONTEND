@@ -134,7 +134,7 @@ export const AlphaAi: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-4 shrink-0">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2 mb-4 shrink-0">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -150,7 +150,7 @@ export const AlphaAi: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-2 overflow-hidden">
 
         {/* Left Side: Chat Area */}
         <div className="lg:col-span-2 flex flex-col bg-alphabag-darkgray rounded-lg overflow-hidden border border-alphabag-gray relative">
@@ -257,7 +257,7 @@ export const AlphaAi: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 relative z-10">
+            <div className="grid grid-cols-2 gap-2 relative z-10">
                 <div className="bg-black/40 border border-white/5 p-3 rounded-xl flex flex-col">
                     <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Active Connections</span>
                     <span className="text-lg font-bold text-white tabular-nums leading-none">{numAssets}</span>

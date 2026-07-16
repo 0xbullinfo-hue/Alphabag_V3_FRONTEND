@@ -97,7 +97,7 @@ export const Markets: React.FC = () => {
     <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
 
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
         <div>
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">

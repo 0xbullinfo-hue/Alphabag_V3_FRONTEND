@@ -116,7 +116,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
       <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-3xl shadow-[0_0_50px_rgba(252,213,53,0.2)] overflow-hidden relative border-t-alphabag-yellow/50">
         <div className="p-8 text-center">
           <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-alphabag-yellow text-alphabag-black flex items-center justify-center rounded-xl">
                 <Crown size={22} fill="currentColor" />
               </div>
@@ -177,7 +177,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
               <ArrowRight size={20} className="text-blue-400 opacity-0 group-hover:opacity-100 transition-all" />
             </button>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="p-4 bg-alphabag-black rounded-xl border border-alphabag-gray">
                 <p className="text-[10px] text-alphabag-subtext font-bold uppercase mb-1">Authenticated Wallet</p>
                 <p className="text-white font-mono text-xs">{address?.substring(0, 10)}...{address?.substring(address.length - 8)}</p>

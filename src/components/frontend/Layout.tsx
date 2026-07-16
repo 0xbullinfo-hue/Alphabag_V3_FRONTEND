@@ -33,11 +33,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <MobileNav />
 
       {/* Global Toast Portal */}
-      <div className="fixed bottom-20 md:bottom-6 right-6 z-[100] flex flex-col space-y-3 pointer-events-none">
+      <div className="fixed bottom-20 md:bottom-6 right-6 z-[100] flex flex-col space-y-2 pointer-events-none">
         {toasts.map(toast => (
           <div
             key={toast.id}
-            className="pointer-events-auto glass-panel px-4 py-3 rounded-xl  flex items-center space-x-3 min-w-[280px] animate-slide-in overflow-hidden"
+            className="pointer-events-auto glass-panel px-4 py-3 rounded-xl  flex items-center space-x-2 min-w-[280px] animate-slide-in overflow-hidden"
           >
             <div className={`
                     w-1 h-full absolute left-0 top-0 

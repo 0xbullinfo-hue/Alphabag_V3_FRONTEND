@@ -108,10 +108,10 @@ export const PublicCalculator: React.FC = () => {
                 ))}
             </div>
 
-            <div className="p-4 md:p-6 grid grid-cols-1 gap-3">
+            <div className="p-4 md:p-6 grid grid-cols-1 gap-2">
                 <div className="space-y-4">
                     {mode === 'FUTURES' && (
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-2">
                             <button
                                 onClick={() => setDirection('LONG')}
                                 className={`py-2 rounded-xl border flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-widest transition-all ${direction === 'LONG'
@@ -133,7 +133,7 @@ export const PublicCalculator: React.FC = () => {
                         </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-2">
                         <div className="space-y-1">
                             <label className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext pl-1">Inv ($)</label>
                             <div className="relative group">
@@ -187,7 +187,7 @@ export const PublicCalculator: React.FC = () => {
                     </div>
 
                     {mode === 'FUTURES' && (
-                        <div className="bg-alphabag-black/30 p-4 rounded-xl border border-alphabag-gray/50 space-y-3">
+                        <div className="bg-alphabag-black/30 p-4 rounded-xl border border-alphabag-gray/50 space-y-2">
                             <div className="flex justify-between items-center">
                                 <label className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext">Isolate Leverage</label>
                                 <span className="text-alphabag-yellow font-black text-lg font-mono">{leverage}x</span>
@@ -211,7 +211,7 @@ export const PublicCalculator: React.FC = () => {
                         <Activity size={80} />
                     </div>
 
-                    <div className="space-y-3 relative z-10 text-center sm:text-left">
+                    <div className="space-y-2 relative z-10 text-center sm:text-left">
                         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1">
                             <div>
                                 <p className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext mb-0.5">Estimated PnL</p>

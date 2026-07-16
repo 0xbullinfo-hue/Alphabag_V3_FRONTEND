@@ -6,9 +6,9 @@
    ═══════════════════════════════════════════════════════════════════ */
 @layer base {
   :root {
-    --bg-color: #1e2329;
-    --panel-color: #181a20;
-    --card-color: #181a20;
+    --bg-color: #181a20;
+    --panel-color: #1e2329;
+    --card-color: #1e2329;
     --border-color: #2b3139;
     --border-light: rgba(255, 255, 255, 0.05);
     
@@ -44,6 +44,7 @@
   }
 
   html {
+    font-size: 17px;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
@@ -241,4 +242,50 @@ input[type="datetime-local"],
 input[type="date"],
 input[type="time"] {
   color-scheme: dark;
+}
+
+/* ── LOCAL TEXT SCALING FOR ALPHA SCREENER & CALCULATOR ── */
+.screener-container .text-xs,
+.screener-container .text-\[12px\] {
+  font-size: 0.85rem !important;
+}
+.screener-container .text-[14px],
+.screener-container .text-\[14px\] {
+  font-size: 15.5px !important;
+}
+.screener-container .text-sm {
+  font-size: 1rem !important;
+}
+.screener-container .text-2xl {
+  font-size: 1.7rem !important;
+}
+.screener-container th {
+  font-size: 0.85rem !important;
+}
+
+.calculator-container .text-xs {
+  font-size: 0.85rem !important;
+}
+.calculator-container .text-sm {
+  font-size: 1.02rem !important;
+}
+.calculator-container .text-[11px],
+.calculator-container .text-\[11px\] {
+  font-size: 13.5px !important;
+}
+.calculator-container .text-[10px],
+.calculator-container .text-\[10px\] {
+  font-size: 12.5px !important;
+}
+.calculator-container .text-lg {
+  font-size: 1.25rem !important;
+}
+.calculator-container .text-2xl {
+  font-size: 1.75rem !important;
+}
+.calculator-container .text-3xl {
+  font-size: 2.15rem !important;
+}
+.calculator-container .text-4xl {
+  font-size: 2.75rem !important;
 }

@@ -68,7 +68,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                                 Define your role to access the Alpha Radar ecosystem.
                             </p>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button 
                                     onClick={() => handleRoleSelect('FOUNDER')}
                                     className="group relative p-5 bg-white/5 border border-white/10 rounded-xl text-left transition-all hover:bg-alphabag-yellow/5 hover:border-alphabag-yellow/40 shadow-[0_0_30px_rgba(252,213,53,0.1)]"
@@ -117,7 +117,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
 
                             {selectedRole === 'FOUNDER' ? (
                                 <form onSubmit={handleFounderSubmit} className="space-y-4">
-                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         <div className="space-y-1">
                                             <label className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest ml-1 opacity-60">Project Name</label>
                                             <div className="relative">

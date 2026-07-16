@@ -139,13 +139,13 @@ export const CoinDetail: React.FC = () => {
     const isPositive = coin.price_change_percentage_24h >= 0;
 
     return (
-        <div className="space-y-3 animate-fade-in">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center space-x-3">
+        <div className="space-y-2 animate-fade-in">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div className="flex items-center space-x-2">
                     <Link to="/markets" className="p-1.5 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-lg transition-all shadow-md">
                         <ArrowLeft size={18} />
                     </Link>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2">
                         <img src={coin.image} className="w-10 h-10 rounded-full shadow-lg p-1 bg-alphabag-gray" alt={coin.name} />
                         <div>
                             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">{coin.name} <span className="text-alphabag-subtext text-lg md:text-xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
@@ -156,29 +156,29 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                     <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Star size={18} className="mr-2" /> Watchlist</Button>
                     <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Share2 size={18} /></Button>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-                <div className="lg:col-span-2 space-y-3">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+                <div className="lg:col-span-2 space-y-2">
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 shadow-xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-[0.03] rotate-12">
                             <BarChart size={120} />
                         </div>
-                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-2">
                             <div>
                                 <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Current Value</p>
-                                <div className="flex items-baseline space-x-3">
+                                <div className="flex items-baseline space-x-2">
                                     <span className="text-4xl font-extrabold text-white tracking-tighter">${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                                     <span className={`text-lg font-bold px-2 py-0.5 rounded-lg ${isPositive ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
                                         {isPositive ? '+' : ''}{coin.price_change_percentage_24h.toFixed(2)}%
                                     </span>
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-3 text-right w-full md:w-auto">
+                            <div className="grid grid-cols-2 gap-2 text-right w-full md:w-auto">
                                 <div>
                                     <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h High</p>
                                     <p className="text-white font-bold text-sm">${(coin.current_price * 1.05).toLocaleString()}</p>
@@ -238,7 +238,7 @@ export const CoinDetail: React.FC = () => {
                     </div>
 
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 h-[500px] flex flex-col shadow-2xl">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-4 border-b border-alphabag-gray/30">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 pb-4 border-b border-alphabag-gray/30">
                             <div className="flex space-x-2 bg-alphabag-black p-1 rounded-lg border border-alphabag-gray">
                                 {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
                                     <button
@@ -299,7 +299,7 @@ export const CoinDetail: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 relative overflow-hidden shadow-2xl">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Wallet size={100} className="text-alphabag-yellow" />
@@ -309,12 +309,12 @@ export const CoinDetail: React.FC = () => {
                         </h3>
 
                         {isConnected && holding ? (
-                            <div className="space-y-3 relative z-10">
+                            <div className="space-y-2 relative z-10">
                                 <div>
                                     <p className="text-alphabag-subtext text-[10px] font-extrabold uppercase tracking-[0.15em] mb-1">Position Value</p>
                                     <div className="text-4xl font-extrabold text-white tracking-tighter">${holding.value.toLocaleString()}</div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-3 pt-6 border-t border-alphabag-gray/50">
+                                <div className="grid grid-cols-2 gap-2 pt-6 border-t border-alphabag-gray/50">
                                     <div>
                                         <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Balance</p>
                                         <p className="font-extrabold text-white text-lg">{holding.amount.toLocaleString()} {coin.symbol.toUpperCase()}</p>
@@ -366,7 +366,7 @@ export const CoinDetail: React.FC = () => {
                         </h3>
                         {audit.score > 0 ? (
                             <>
-                                <div className="flex items-end space-x-3 mb-4">
+                                <div className="flex items-end space-x-2 mb-4">
                                     <div className="text-5xl font-extrabold text-white tracking-tighter">{audit.score}<span className="text-lg text-alphabag-subtext ml-1">/100</span></div>
                                     <div className={`text-[10px] ${audit.color} font-extrabold uppercase tracking-widest pb-2`}>{audit.label}</div>
                                 </div>

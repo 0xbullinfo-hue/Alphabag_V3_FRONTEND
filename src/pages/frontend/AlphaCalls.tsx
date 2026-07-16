@@ -102,7 +102,7 @@ export const AlphaCalls: React.FC = () => {
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full animate-in fade-in duration-700">
             
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -147,7 +147,7 @@ export const AlphaCalls: React.FC = () => {
                     <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext">The Alpha stream is currently silent. Stand by.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
                     {signals.filter(s => activeCategory === 'ALL' || s.category === activeCategory).map((signal, index) => {
                         const theme = signal.category === 'DEGEN' 
                             ? { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', icon: <Rocket size={18} /> }

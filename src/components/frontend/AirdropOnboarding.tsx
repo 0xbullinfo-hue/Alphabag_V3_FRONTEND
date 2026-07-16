@@ -83,7 +83,7 @@ export const AirdropOnboarding: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="space-y-3 mb-8">
+                    <div className="space-y-2 mb-8">
                         <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] text-alphabag-muted font-black uppercase tracking-widest">
                             <Sparkles size={10} className="text-alphabag-yellow" /> Deployment Step {step + 1} of 4
                         </div>
@@ -95,7 +95,7 @@ export const AirdropOnboarding: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2">
                         <Button 
                             onClick={nextStep}
                             className={`w-full py-4 bg-gradient-to-r ${currentStep.color} text-black font-black uppercase tracking-[0.3em] rounded-xl transition-all shadow-[0_20px_80px_rgba(252,213,53,0.18)] text-[11px] h-11`}

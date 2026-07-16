@@ -41,7 +41,7 @@ export const DeFi: React.FC = () => {
     return (
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-5 animate-in fade-in duration-700">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -51,7 +51,7 @@ export const DeFi: React.FC = () => {
                         <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-10 mt-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-10 mt-3">
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Supplied</span>
                             <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums">${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
@@ -83,7 +83,7 @@ export const DeFi: React.FC = () => {
             </div>
 
              {/* Tabs & Actions */}
-             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                  <div className="flex overflow-x-auto custom-scrollbar pb-1.5 gap-1.5">
                      {TABS.map(tab => (
                          <button

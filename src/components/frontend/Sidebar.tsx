@@ -45,7 +45,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
         : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
-      <div className="flex items-center space-x-3 relative z-10">
+      <div className="flex items-center space-x-2 relative z-10">
         {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-alphabag-text'} />}
         <span className="font-medium text-sm">{label}</span>
       </div>
@@ -71,7 +71,7 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
           : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text'
           }`}
       >
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2">
           <Icon size={18} />
           <span className="font-medium text-sm">{label}</span>
         </div>
@@ -154,7 +154,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         <div className="px-4">
           <div className="border-t border-alphabag-gray pt-6 mb-2 space-y-1">
             <NavItem to="/profile" icon={UserCircle} label="My Profile" active={location.pathname === '/profile'} />
-            <button onClick={handleLogout} className="w-full flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
+            <button onClick={handleLogout} className="w-full flex items-center space-x-2 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
               <LogOut size={18} />
               <span className="font-medium text-xs uppercase">Logout</span>
             </button>

@@ -138,9 +138,9 @@ export const MyAlphabag: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full space-y-3 pb-12 animate-in fade-in duration-700">
+        <div className="w-full space-y-2 pb-12 animate-in fade-in duration-700">
             {/* Header section */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -159,7 +159,7 @@ export const MyAlphabag: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-5 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden divide-y divide-alphabag-gray lg:divide-y-0 lg:divide-x">
                 
                 {/* Combined Net Worth Hero Card */}
-                <div className="lg:col-span-3 p-4 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-3 min-h-[180px]">
+                <div className="lg:col-span-3 p-4 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-2 min-h-[180px]">
                     <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
                     <div className="space-y-2 z-10">
                         <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-alphabag-subtext">Combined Net Worth</p>
@@ -176,7 +176,7 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* Total Allocation Donut Chart */}
-                <div className="lg:col-span-2 p-4 flex flex-row items-center gap-3 min-h-[180px]">
+                <div className="lg:col-span-2 p-4 flex flex-row items-center gap-2 min-h-[180px]">
                     <div className="w-1/2 h-[120px] relative shrink-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <RePieChart>
@@ -462,17 +462,17 @@ export const MyAlphabag: React.FC = () => {
                 </div>
             ) : (
                 /* Fee Auditor Tab Content */
-                <div className="space-y-3 animate-in fade-in duration-300">
+                <div className="space-y-2 animate-in fade-in duration-300">
                     
                     {/* Wallet input controller banner */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <div className="space-y-1">
                             <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <ShieldCheck size={16} className="text-[#fcd535]" /> Select Audit Target
                             </h4>
                             <p className="text-xs text-alphabag-subtext">Choose a connected portfolio address or paste a custom wallet target.</p>
                         </div>
-                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                             <select
                                 value={selectedWallet}
                                 onChange={(e) => {
@@ -619,7 +619,7 @@ export const MyAlphabag: React.FC = () => {
                                     <h3 className="text-xs font-black uppercase text-white tracking-widest border-b border-alphabag-gray pb-3 flex items-center gap-2">
                                         <TrendingUp size={14} className="text-alphabag-yellow" /> AI Fee Optimizer Reports
                                     </h3>
-                                    <div className="space-y-3.5 text-xs text-alphabag-subtext leading-relaxed">
+                                    <div className="space-y-2.5 text-xs text-alphabag-subtext leading-relaxed">
                                         <div className="flex items-start gap-2.5">
                                             <span className="text-[#fcd535] shrink-0 mt-0.5">▪</span>
                                             <p>Your **Ethereum** network fee share is **{feeAuditData.ethLeakage}%** of your total cumulative bleed. Recommend routing token trades through L2 aggregators like **Arbitrum** or **Optimism** to cut swap gas by 85%.</p>

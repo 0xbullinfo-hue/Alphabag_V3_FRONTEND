@@ -394,7 +394,7 @@ export const Airdrop: React.FC = () => {
 
     return (
         <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4 mb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2 mb-6">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -429,7 +429,7 @@ export const Airdrop: React.FC = () => {
             )}
 
             {/* Stats Dashboard */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
                 {(() => {
                     const myTeamSize = user?.referralCount || 0;
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
@@ -590,7 +590,7 @@ export const Airdrop: React.FC = () => {
                     payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/5 border-[#fcd535]/20' :
                                                           'bg-alphabag-darkgray border-alphabag-gray'
                 }`}>
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <div className="flex items-center gap-4">
                             <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
                                 payoutRequest?.status === 'SENT'     ? 'bg-[#0ecb81]/20 text-[#0ecb81]' :
@@ -660,7 +660,7 @@ export const Airdrop: React.FC = () => {
             )}
 
             {/* --- Protocol Verification Notice --- */}
-            <div className="mb-4 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="mb-4 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
                 <div className="flex items-start gap-4">
                     <div className="p-2 bg-blue-500/10 rounded-lg border border-blue-500/20 shrink-0 mt-0.5">
                         <ShieldAlert size={18} className="text-blue-400" />
@@ -684,7 +684,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Team Referral Hub */}
             <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                         <div>
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <Users size={18} className="text-[#fcd535]" /> Network Hub
@@ -723,7 +723,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Mission Section */}
             <div className="space-y-4 mb-8">
-                <div className="rounded-[32px] p-8 space-y-3 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
+                <div className="rounded-[32px] p-8 space-y-2 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
                     <div className="flex justify-between items-center border-b border-white/5 pb-6 relative z-10">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
                             <Shield className="text-alphabag-yellow drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]" /> Mission Hub
@@ -735,7 +735,7 @@ export const Airdrop: React.FC = () => {
 
                                         
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
                         {tasks.filter((t) => t.type !== 'unlimited').map((task) => {
                             const isCompleted = (() => {
                                 if (!user) return false;
@@ -870,7 +870,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Submission Section (Founder & Social) */}
             {!submitted ? (
-                <div className="space-y-3 animate-in slide-in-from-bottom-8 duration-700">
+                <div className="space-y-2 animate-in slide-in-from-bottom-8 duration-700">
                     {/* Mission Proof Submission */}
                     <div className="rounded-lg p-8 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-8">
@@ -880,7 +880,7 @@ export const Airdrop: React.FC = () => {
                             <p className="text-xs text-alphabag-subtext mt-2 font-medium">Connect your final social identity and mission proof.</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-3">
+                        <form onSubmit={handleSubmit} className="space-y-2">
                             <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Distribution Wallet (BSC)</label>
                                 <input 
@@ -949,7 +949,7 @@ export const Airdrop: React.FC = () => {
                 {/* ── AlphaBAG Allocation ── */}
                 <div className="rounded-lg p-6 bg-alphabag-darkgray border border-alphabag-gray mb-6 relative">
                     {/* Header */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-alphabag-gray pb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-6 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <BarChart3 className="text-[#fcd535]" size={20} /> AlphaBAG Allocation
@@ -964,7 +964,7 @@ export const Airdrop: React.FC = () => {
 
                     {/* Allocation Grid with Mask */}
                     <div className="relative group/allocation">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-6 filter blur-[2px] transition-all duration-700 opacity-60">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-6 filter blur-[2px] transition-all duration-700 opacity-60">
                             {[
                                 { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'bg-[#fcd535] text-black', desc: 'Locked Forever.' },
                                 { label: 'Task-to-Earn', pct: '35%', tokens: '7.35M', color: 'bg-[#1DA1F2] text-white', desc: 'Mined (4-5y)' },
@@ -995,7 +995,7 @@ export const Airdrop: React.FC = () => {
 
 
                     {/* Utility & Key Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex items-start gap-3 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
                             <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Zap size={14} className="text-[#fcd535]"/></div>
                             <div>
@@ -1015,7 +1015,7 @@ export const Airdrop: React.FC = () => {
 
                 {/* Founder Protocol Module */}
                 <div className="rounded-lg p-6 bg-alphabag-darkgray border border-[#1DA1F2]/30 relative">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-alphabag-gray pb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-6 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
                                 <Shield className="text-[#1DA1F2]" size={20} /> Founder Application
@@ -1041,7 +1041,7 @@ export const Airdrop: React.FC = () => {
 
                     {isFounderApplication && (
                         <div className="space-y-4 pt-2 animate-in slide-in-from-top-4 duration-500">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Project Name</label>
                                 <input required type="text" placeholder="Project Alpha" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectName} onChange={e => setProjectName(e.target.value)} />
@@ -1055,7 +1055,7 @@ export const Airdrop: React.FC = () => {
                                 <label className="text-xs text-alphabag-subtext font-semibold">Project Vision</label>
                                 <textarea required placeholder="What is your singular vision for the space?" className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors h-20 resize-none" value={projectManifesto} onChange={e => setProjectManifesto(e.target.value)} />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Project X Link</label>
                                 <input required type="url" placeholder="https://x.com/..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectSocial} onChange={e => setProjectSocial(e.target.value)} />
@@ -1065,7 +1065,7 @@ export const Airdrop: React.FC = () => {
                                 <input required type="url" placeholder="https://..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectWebsite} onChange={e => setProjectWebsite(e.target.value)} />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Project Logo URL</label>
                                 <input required type="url" placeholder="https://..." className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2 text-sm text-alphabag-text focus:border-[#1DA1F2] outline-none transition-colors" value={projectLogo} onChange={e => setProjectLogo(e.target.value)} />

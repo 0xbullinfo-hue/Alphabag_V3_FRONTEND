@@ -101,7 +101,7 @@ export const Portfolio: React.FC = () => {
 
 
             {/* 1. Header Area */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-3">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -328,7 +328,7 @@ export const Portfolio: React.FC = () => {
                             {/* Allocation Donut */}
                             <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-all">
                                 <h3 className="font-black text-white mb-4 uppercase tracking-tight">Allocation</h3>
-                                <div className="flex-1 flex flex-row items-center justify-center gap-3">
+                                <div className="flex-1 flex flex-row items-center justify-center gap-2">
 
                                     <div className="w-1/2 h-[180px] relative">
                                         <ResponsiveContainer width="100%" height="100%">
@@ -345,7 +345,7 @@ export const Portfolio: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <div className="w-1/2 flex flex-col justify-center space-y-3">
+                                    <div className="w-1/2 flex flex-col justify-center space-y-2">
                                         {filteredItems.slice(0, 6).map((item, index) => {
                                             const filteredTotalValue = filteredItems.reduce((acc, curr) => acc + curr.value, 0);
                                             return (
@@ -368,7 +368,7 @@ export const Portfolio: React.FC = () => {
 
                     {/* 4. Assets Table Area */}
                     <div className="mt-6 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
-                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-3">
+                        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 mb-3">
                             <div>
                                 <h3 className="font-black text-white text-xl uppercase tracking-tight">Assets</h3>
                                 <p className="text-[11px] text-alphabag-subtext mt-1 max-w-xl">Track your top holdings, profit drivers, and chain exposure across your connected wallets.</p>

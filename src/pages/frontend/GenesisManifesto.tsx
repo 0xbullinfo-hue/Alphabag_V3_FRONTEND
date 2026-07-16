@@ -157,10 +157,10 @@ export const GenesisManifesto: React.FC = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-3">
+                <form onSubmit={handleSubmit} className="space-y-2">
                     {/* Basic Info */}
                     <Section title="00. IDENTITY" subtitle="Project name and ticker symbol.">
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
                                 <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Project Name</label>
                                     <input 
@@ -186,7 +186,7 @@ export const GenesisManifesto: React.FC = () => {
                         </div>
  
                         {/* Media Assets */}
-                        <div className="grid md:grid-cols-2 gap-4 mt-4 pt-4 border-t border-white/5">
+                        <div className="grid md:grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/5">
                             <div className="space-y-1.5">
                                 <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Logo URL (64x64)</label>
                                 <input 
@@ -221,7 +221,7 @@ export const GenesisManifesto: React.FC = () => {
                                             <Rocket size={32} />
                                         </div>
                                     )}
-                                    <div className="absolute left-4 bottom-4 flex items-end space-x-3">
+                                    <div className="absolute left-4 bottom-4 flex items-end space-x-2">
                                         <div className="w-12 h-12 rounded-xl bg-alphabag-yellow p-0.5 shadow-2xl border border-white/10">
                                             <div className="w-full h-full bg-alphabag-black rounded-lg overflow-hidden">
                                                 {formData.logoUrl ? (
@@ -242,7 +242,7 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     <Section title="01. ON-CHAIN DATA" subtitle="Contract Address and Supply details.">
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
                                 <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Contract Address (CA)</label>
                                 <input 
@@ -269,7 +269,7 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     <Section title="02. LINKS" subtitle="Where can users find you and buy?">
-                        <div className="grid md:grid-cols-2 gap-4">
+                        <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
                                 <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Website URL</label>
                                 <input 
@@ -333,7 +333,7 @@ export const GenesisManifesto: React.FC = () => {
 
                     {/* Token Utility */}
                     <Section title="03. TOKEN UTILITY" subtitle="Why should investors hold your token?">
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             {formData.utility.map((item, index) => (
                                 <div key={index} className="flex items-center space-x-2">
                                     <input 
@@ -362,7 +362,7 @@ export const GenesisManifesto: React.FC = () => {
 
                     {/* Security & Trust */}
                     <Section title="04. SECURITY & TRUST" subtitle="Transparency is required for Genesis spots.">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                             <LinkInput 
                                 label="AUDIT LINK" 
                                 placeholder="https://certik.com/..." 

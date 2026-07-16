@@ -207,9 +207,9 @@ export const AlphaScreener: React.FC = () => {
     const displayedPairs = useMemo(() => getFilteredAndSorted(), [getFilteredAndSorted]);
 
     return (
-        <div className="space-y-4 animate-in fade-in duration-700">
+        <div className="space-y-4 animate-in fade-in duration-700 screener-container">
             {/* ── Header ── */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-1">
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
@@ -254,7 +254,7 @@ export const AlphaScreener: React.FC = () => {
             </div>
  
             {/* ── Filters (Chain & Timeframe) ── */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-between items-start sm:items-center bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3">
+            <div className="flex flex-col sm:flex-row gap-2 justify-between items-start sm:items-center bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3">
                 {/* Chains */}
                 <div className="flex flex-wrap gap-1.5">
                     {(['All', 'Solana', 'Ethereum', 'BSC', 'Base'] as const).map(chain => {
@@ -307,8 +307,8 @@ export const AlphaScreener: React.FC = () => {
                         <Globe size={11} />
                         FOUND VIA DIRECT BLOCKCHAIN CA LOOKUP
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center space-x-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center space-x-2">
                             <div className="w-10 h-10 bg-[#fcd535] text-black rounded flex items-center justify-center font-black text-sm">
                                 {searchedPair.baseToken.symbol?.[0] || 'T'}
                             </div>
@@ -388,7 +388,7 @@ export const AlphaScreener: React.FC = () => {
                                             {index + 1}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <div className="flex items-center space-x-3">
+                                            <div className="flex items-center space-x-2">
                                                 <div className="w-8 h-8 bg-alphabag-black border border-white/5 rounded flex items-center justify-center font-semibold text-alphabag-yellow relative overflow-hidden text-xs shrink-0">
                                                     {pair.baseToken?.symbol?.[0] || '?'}
                                                 </div>

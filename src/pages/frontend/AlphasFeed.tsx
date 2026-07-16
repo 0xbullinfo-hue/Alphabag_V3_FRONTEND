@@ -305,7 +305,7 @@ export const AlphasFeed: React.FC = () => {
 
     return (
         <div className="relative min-h-screen">
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 transition-all duration-700">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-2 transition-all duration-700">
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
@@ -518,7 +518,7 @@ export const AlphasFeed: React.FC = () => {
                                 />
                             ))
                         ) : (
-                            <div className="p-8 text-center space-y-3">
+                            <div className="p-8 text-center space-y-2">
                                 <div className="mx-auto w-12 h-12 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/20 flex items-center justify-center">
                                     <Search size={20} className="text-alphabag-yellow" />
                                 </div>

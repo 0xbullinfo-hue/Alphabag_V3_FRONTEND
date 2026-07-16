@@ -72,7 +72,7 @@ export const News: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                 <Search size={48} className="text-alphabag-gray mb-4" />
@@ -152,7 +152,7 @@ export const News: React.FC = () => {
                 <img src={selectedArticle.imageUrl} className="w-full h-full object-cover" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-alphabag-dark via-alphabag-dark/40 to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8">
-                  <div className="flex items-center space-x-3 mb-4">
+                  <div className="flex items-center space-x-2 mb-4">
                     <span className="bg-alphabag-yellow text-black text-[10px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-widest">{selectedArticle.source}</span>
                     <span className="text-[10px] text-white/70 font-bold uppercase tracking-widest flex items-center">
                       <Clock size={12} className="mr-1.5" /> {selectedArticle.date}
@@ -220,7 +220,7 @@ export const News: React.FC = () => {
                   <p className="text-xl text-alphabag-yellow font-bold leading-relaxed mb-8 border-l-4 border-alphabag-yellow pl-6">
                     {selectedArticle.summary}
                   </p>
-                  <div className="text-alphabag-text text-lg leading-loose space-y-3 font-medium opacity-90">
+                  <div className="text-alphabag-text text-lg leading-loose space-y-2 font-medium opacity-90">
                     {selectedArticle.content ? (
                       selectedArticle.content.split('\n').map((para, i) => (
                         <p key={i}>{para}</p>

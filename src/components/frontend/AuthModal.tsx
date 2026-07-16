@@ -120,7 +120,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
         <div className="p-8 relative z-10">
           <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <img src="/logo.png" alt="AlphaBAG Logo" className="w-10 h-10 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.3)] transform rotate-3 hover:rotate-0 transition-transform duration-300" />
               <div>
                 <h2 className="text-xl font-black text-white tracking-tighter uppercase leading-none">
@@ -145,7 +145,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="text-center space-y-3 mb-8">
+              <div className="text-center space-y-2 mb-8">
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] text-alphabag-muted font-black uppercase tracking-widest opacity-60">
                   <Sparkles size={10} className="text-alphabag-yellow" /> Deployment Step {carouselStep + 1} of 4
                 </div>
@@ -235,7 +235,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 )}
 
                 {step === 'SIGN' && (
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl mb-1">
                       <div className="w-7 h-7 bg-alphabag-blue/20 rounded flex items-center justify-center text-alphabag-blue">
                         <CheckCircle2 size={14} />

@@ -135,7 +135,7 @@ export const CexBag: React.FC = () => {
         <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
 
             {/* Page Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -188,7 +188,7 @@ export const CexBag: React.FC = () => {
             </div>
 
             {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
 
                 {/* Left: Chart + Table */}
                 <div className="lg:col-span-2 space-y-4">
@@ -199,7 +199,7 @@ export const CexBag: React.FC = () => {
                             <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider">Exchange Allocation</h3>
                         </div>
                         {connectedCex.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-36 border border-dashed border-alphabag-gray rounded-lg gap-3 text-center px-6">
+                            <div className="flex flex-col items-center justify-center h-36 border border-dashed border-alphabag-gray rounded-lg gap-2 text-center px-6">
                                 <Key size={24} className="text-alphabag-subtext" />
                                 <p className="text-alphabag-subtext text-sm font-semibold">No exchanges connected</p>
                                 <p className="text-alphabag-subtext text-xs">Connect a read-only API key to view your allocation.</p>
@@ -211,7 +211,7 @@ export const CexBag: React.FC = () => {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex flex-col md:flex-row items-center gap-3">
+                            <div className="flex flex-col md:flex-row items-center gap-2">
                                 <div className="w-full md:w-48 h-48 shrink-0">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
@@ -300,7 +300,7 @@ export const CexBag: React.FC = () => {
                             <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                                 {connectedCex.map((cex) => (
                                     <div key={cex.id} className="bg-alphabag-black border border-alphabag-gray rounded-md p-3 flex items-center justify-between">
-                                        <div className="flex items-center space-x-3">
+                                        <div className="flex items-center space-x-2">
                                             <img src={cex.icon} alt={cex.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
                                             <div>
                                                 <h3 className="font-semibold text-alphabag-text text-sm">{cex.name}</h3>

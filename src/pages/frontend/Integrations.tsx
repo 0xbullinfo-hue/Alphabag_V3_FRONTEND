@@ -70,7 +70,7 @@ export const Integrations: React.FC = () => {
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] w-full pb-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-3">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
@@ -92,7 +92,7 @@ export const Integrations: React.FC = () => {
             </div>
 
       {/* Connection Prompts - Since Hub is Read-Only, direct users to the Bags to connect */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="bg-white/5 border border-white/10 border-dashed rounded-xl p-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
               <div>
                   <h3 className="text-xs font-bold text-white mb-0.5">Need to add an Exchange?</h3>
@@ -134,7 +134,7 @@ export const Integrations: React.FC = () => {
         ) : (
             <div className="divide-y divide-[#2b3139]">
                 {filtered.map((item) => (
-                    <div key={item.id} className="p-3.5 hover:bg-alphabag-black transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                    <div key={item.id} className="p-3.5 hover:bg-alphabag-black transition-colors flex flex-col md:flex-row md:items-center justify-between gap-2 group">
                         
                         {/* Identity */}
                         <div className="flex items-center gap-3 flex-1">

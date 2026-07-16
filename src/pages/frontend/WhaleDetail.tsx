@@ -89,7 +89,7 @@ export const WhaleDetail: React.FC = () => {
     return (
         <div className="space-y-4 animate-in fade-in duration-700 relative">
             {showToast && (
-                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-[#fcd535]/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-3">
+                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-[#fcd535]/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-2">
                     <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-[#0ecb81]/20 text-[#0ecb81]' : 'bg-[#f6465d]/20 text-[#f6465d]'}`}>
                         {alertsEnabled ? <Bell size={16} /> : <BellOff size={16} />}
                     </div>
@@ -101,7 +101,7 @@ export const WhaleDetail: React.FC = () => {
             )}
 
             <div className="flex items-center justify-between py-6 border-b border-alphabag-gray">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2">
                     <Link to="/whales" className="p-1.5 bg-[#2b3139] hover:bg-[#474d57] text-alphabag-text rounded-md transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
@@ -119,7 +119,7 @@ export const WhaleDetail: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 <div className="lg:col-span-2 space-y-4">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-6 opacity-5">
@@ -261,7 +261,7 @@ export const WhaleDetail: React.FC = () => {
 
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-6">
                         <h3 className="font-bold text-white mb-4 uppercase tracking-widest text-xs">Whale insights</h3>
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
                                 <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Accumulation strategy</div>
                                 <div className="text-sm text-white font-medium">Buying ETH consistently below $3,500 over the last 30 days.</div>

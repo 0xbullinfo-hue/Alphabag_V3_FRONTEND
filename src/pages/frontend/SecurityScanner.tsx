@@ -223,9 +223,9 @@ export const SecurityScanner: React.FC = () => {
     }, 0);
 
     return (
-        <div className="w-full space-y-3 pb-12 animate-fade-in">
+        <div className="w-full space-y-2 pb-12 animate-fade-in">
             {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-6 border-b border-alphabag-gray gap-2">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
@@ -244,7 +244,7 @@ export const SecurityScanner: React.FC = () => {
             {/* Quick Scan Input */}
             <div className="glass-panel p-4 rounded-2xl relative overflow-hidden border border-white/5">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-3xl pointer-events-none"></div>
-                <form onSubmit={handleQuickScan} className="flex flex-col lg:flex-row items-center gap-4">
+                <form onSubmit={handleQuickScan} className="flex flex-col lg:flex-row items-center gap-2">
                     <div className="w-full lg:w-1/4">
                         <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1.5">Scanning Network</label>
                         <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
@@ -353,7 +353,7 @@ export const SecurityScanner: React.FC = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                         {approvals.map(token => (
                             <div key={token.tokenAddress} className="border border-white/5 bg-black/40 rounded-2xl overflow-hidden hover:border-white/10 transition-all p-5">
                                 {/* Token Info header */}
@@ -376,9 +376,9 @@ export const SecurityScanner: React.FC = () => {
                                 </div>
 
                                 {/* Spenders allowances table */}
-                                <div className="space-y-3">
+                                <div className="space-y-2">
                                     {token.spenders.map(spender => (
-                                        <div key={spender.spenderAddress} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-white/5 border border-white/5 rounded-xl hover:border-white/10 transition-all gap-4">
+                                        <div key={spender.spenderAddress} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-white/5 border border-white/5 rounded-xl hover:border-white/10 transition-all gap-2">
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-xs font-black text-white uppercase tracking-tight">{spender.spenderLabel}</span>
