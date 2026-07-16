@@ -309,7 +309,7 @@ export const AlphasFeed: React.FC = () => {
 
                 {/* Left Sidebar: Featured Founders */}
                 <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
-                    <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                         <div className="p-2.5 border-b border-alphabag-gray bg-alphabag-black flex items-center justify-between">
                             <span className="text-[10px] font-semibold uppercase tracking-widest text-alphabag-text flex items-center gap-2">
                                 <Users size={12} className="text-[#fcd535]" /> Featured Founders
@@ -538,7 +538,7 @@ export const AlphasFeed: React.FC = () => {
                 {/* Sidebar Widgets */}
                 <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-2 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
                     {/* My Profile Quick Access [NEW] */}
-                    <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
+                    <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-2xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
                         onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
                     >
                         <div className="flex items-center gap-2">
@@ -566,7 +566,7 @@ export const AlphasFeed: React.FC = () => {
                     </div>
 
                     {/* Open Access Widget */}
-                    <div className="bg-white/5 border border-white/5 rounded-xl p-3.5 space-y-2.5">
+                    <div className="bg-white/5 border border-white/5 rounded-2xl p-3.5 space-y-2.5">
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-black text-white uppercase tracking-tight">Open Access</h3>
                             <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[9px] px-2 py-0.5 rounded-full font-black">UNLOCKED</span>

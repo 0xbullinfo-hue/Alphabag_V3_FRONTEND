@@ -670,7 +670,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             {mode === 'CONVERTER' && renderConverterPanel()}
 
             {/* Disclaimer */}
-            <div className="text-[10px] text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">
+            <div className="text-xs text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">
                 This calculation is an estimate of rewards you will earn in cryptocurrency based off the parameter inputted. It does not display the actual .
             </div>
         </div>

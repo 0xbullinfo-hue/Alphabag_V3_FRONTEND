@@ -121,7 +121,7 @@ export const WhaleDetail: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 <div className="lg:col-span-2 space-y-2">
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 relative overflow-hidden">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-4 opacity-5">
                             <TrendingUp size={100} />
                         </div>
@@ -145,7 +145,7 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl overflow-hidden">
                         <div className="p-4 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-[11px]">Holdings Distribution</h3>
@@ -200,7 +200,7 @@ export const WhaleDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 h-[400px] flex flex-col">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 h-[400px] flex flex-col">
                         <h3 className="font-bold text-white mb-2 flex items-center uppercase tracking-widest text-xs">
                             <ShieldCheck className="mr-2 text-alphabag-yellow" size={18} />
                             Asset allocation
@@ -259,7 +259,7 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4">
                         <h3 className="font-bold text-white mb-2 uppercase tracking-widest text-xs">Whale insights</h3>
                         <div className="space-y-2">
                             <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
@@ -276,7 +276,7 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className={`p-4 rounded-lg border transition-all duration-500 ${
+                    <div className={`p-4 rounded-2xl border transition-all duration-500 ${
                         alertsEnabled
                             ? 'bg-[#0ecb81]/10 border-[#0ecb81]/30'
                             : 'bg-[#fcd535]/10 border-[#fcd535]/30'
@@ -307,7 +307,7 @@ export const WhaleDetail: React.FC = () => {
                     </div>
 
                     {/* Recent Transactions Section */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden mt-4">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl overflow-hidden mt-4">
                         <div className="p-4 border-b border-alphabag-gray">
                             <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-xs">Recent Movements</h3>
                         </div>

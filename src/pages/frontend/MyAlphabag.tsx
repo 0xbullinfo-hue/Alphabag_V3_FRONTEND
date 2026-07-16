@@ -319,17 +319,17 @@ export const MyAlphabag: React.FC = () => {
 
             </div>
 
-            {/* Tabs Navigation */}
-            <div className="flex border-b border-alphabag-gray gap-2 mt-8 mb-2">
+            {/* Tabs Navigation Card */}
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-3 flex gap-4 mb-2">
                 <button
                     onClick={() => setActiveSection('overview')}
-                    className={`pb-4 text-xs font-black uppercase tracking-[0.15em] relative transition-all ${activeSection === 'overview' ? 'text-alphabag-yellow font-black border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}
+                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'overview' ? 'bg-[#fcd535] text-[#181a20]' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
                 >
                     Overview
                 </button>
                 <button
                     onClick={() => setActiveSection('fee-auditor')}
-                    className={`pb-4 text-xs font-black uppercase tracking-[0.15em] relative transition-all ${activeSection === 'fee-auditor' ? 'text-alphabag-yellow font-black border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}
+                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'fee-auditor' ? 'bg-[#fcd535] text-[#181a20]' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
                 >
                     Fee Auditor
                 </button>
@@ -417,7 +417,7 @@ export const MyAlphabag: React.FC = () => {
                     </div>
 
                     {/* Alpha Radar Feed (1/3 width) */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
                         <div className="flex justify-between items-center mb-5 pb-3 border-b border-alphabag-gray">
                             <h3 className="text-sm font-bold text-white uppercase flex items-center gap-2">
                                 <Radio size={16} className="text-alphabag-yellow animate-pulse" /> Alpha Radar
@@ -463,7 +463,7 @@ export const MyAlphabag: React.FC = () => {
                 <div className="space-y-2 animate-in fade-in duration-300">
                     
                     {/* Wallet input controller banner */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <div className="space-y-1">
                             <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <ShieldCheck size={16} className="text-[#fcd535]" /> Select Audit Target
@@ -527,7 +527,7 @@ export const MyAlphabag: React.FC = () => {
                     </div>
 
                     {selectedWallet === 'custom' && !isAuditingCustom ? (
-                        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-12 text-center flex flex-col items-center justify-center space-y-2 min-h-[300px]">
+                        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-12 text-center flex flex-col items-center justify-center space-y-2 min-h-[300px]">
                             <div className="p-4 bg-alphabag-yellow/10 rounded-full text-alphabag-yellow animate-bounce">
                                 <Search size={32} />
                             </div>
@@ -540,7 +540,7 @@ export const MyAlphabag: React.FC = () => {
                         <>
                             {/* Summary Auditor cards grid */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 relative overflow-hidden">
+                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden">
                                     <div className="flex justify-between items-start mb-3">
                                         <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider">Cumulative Bleed</span>
                                         <div className="px-2 py-0.5 rounded text-[8px] font-black bg-orange-500/10 text-orange-400 border border-orange-500/20">Gas Fees</div>
@@ -548,7 +548,7 @@ export const MyAlphabag: React.FC = () => {
                                     <div className="text-3xl font-extrabold text-alphabag-text tabular-data">${feeAuditData.gasSpent.toFixed(2)}</div>
                                     <p className="text-[10px] text-alphabag-muted mt-2 font-medium">Estimated execution gas cost lost to consensus validators.</p>
                                 </div>
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 relative overflow-hidden">
+                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden">
                                     <div className="flex justify-between items-start mb-3">
                                         <span className="text-[10px] text-alphabag-red font-bold uppercase tracking-wider">Slippage Leakage</span>
                                         <div className="px-2 py-0.5 rounded text-[8px] font-black bg-red-500/10 text-alphabag-red border border-red-500/20">MEV Loss</div>
@@ -556,7 +556,7 @@ export const MyAlphabag: React.FC = () => {
                                     <div className="text-3xl font-extrabold text-alphabag-text tabular-data">${feeAuditData.slippageLoss.toFixed(2)}</div>
                                     <p className="text-[10px] text-alphabag-muted mt-2 font-medium">Slippage loss due to frontrunning or sub-optimal trade routes.</p>
                                 </div>
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 relative overflow-hidden">
+                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden">
                                     <div className="flex justify-between items-start mb-3">
                                         <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Bridge Friction</span>
                                         <div className="px-2 py-0.5 rounded text-[8px] font-black bg-blue-500/10 text-blue-400 border border-blue-500/20">Network Tolls</div>
@@ -570,7 +570,7 @@ export const MyAlphabag: React.FC = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 items-start">
                                 
                                 {/* Network Leakage Chart Breakdown (5 cols) */}
-                                <div className="lg:col-span-5 bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5">
+                                <div className="lg:col-span-5 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
                                     <h3 className="text-xs font-black uppercase text-white tracking-widest mb-2">Network Leakage Share</h3>
                                     <div className="space-y-2">
                                         <div>
@@ -613,7 +613,7 @@ export const MyAlphabag: React.FC = () => {
                                 </div>
 
                                 {/* Optimization Recommendations (7 cols) */}
-                                <div className="lg:col-span-7 bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5 space-y-2">
+                                <div className="lg:col-span-7 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 space-y-2">
                                     <h3 className="text-xs font-black uppercase text-white tracking-widest border-b border-alphabag-gray pb-3 flex items-center gap-2">
                                         <TrendingUp size={14} className="text-alphabag-yellow" /> AI Fee Optimizer Reports
                                     </h3>
@@ -636,7 +636,7 @@ export const MyAlphabag: React.FC = () => {
                             </div>
 
                             {/* Audit table logs list */}
-                            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-5">
+                            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
                                 <h3 className="text-xs font-black uppercase text-white tracking-widest mb-2 pb-3 border-b border-alphabag-gray">Audited Fee Log</h3>
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left">

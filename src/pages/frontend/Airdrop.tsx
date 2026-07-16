@@ -436,7 +436,7 @@ export const Airdrop: React.FC = () => {
                     const progress = Math.min(100, Math.round((myTeamSize / 100) * 100));
 
                     return (
-                        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
+                        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
                             <div className="flex justify-between items-start mb-2">
                                 <span className="text-xs font-semibold uppercase text-alphabag-subtext">My Team</span>
                                 <Users size={18} className="text-alphabag-subtext" />
@@ -464,7 +464,7 @@ export const Airdrop: React.FC = () => {
                     );
                 })()}
 
-                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
+                <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
                     {/* Header */}
                     <div className="flex justify-between items-center mb-2 pb-4 border-b border-alphabag-gray">
                         <span className="text-xs font-semibold uppercase text-alphabag-subtext">Earned ITEMS</span>
@@ -530,7 +530,7 @@ export const Airdrop: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4 relative flex flex-col h-full">
+                <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 relative flex flex-col h-full">
                     <div className="flex justify-between items-start mb-2">
                         <span className="text-xs font-semibold uppercase text-alphabag-subtext">TGE EVENT</span>
                         <Gift size={18} className="text-alphabag-subtext" />
@@ -584,7 +584,7 @@ export const Airdrop: React.FC = () => {
 
             {/* ── Combined Withdrawal Status & Protocol Verification Card ── */}
             {user && (
-                <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 space-y-2 mb-2 flex flex-col divide-y divide-alphabag-gray">
+                <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5 space-y-2 mb-2 flex flex-col divide-y divide-alphabag-gray">
                     
                     {/* Part 1: Withdrawal Status */}
                     <div className="pb-4">
@@ -683,7 +683,7 @@ export const Airdrop: React.FC = () => {
             )}
 
             {/* Team Referral Hub */}
-            <div className="rounded-lg p-4 bg-alphabag-darkgray border border-alphabag-gray mb-2">
+            <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray mb-2">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                         <div>
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
@@ -723,7 +723,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Mission Section */}
             <div className="space-y-2 mb-2">
-                <div className="rounded-[32px] p-4 space-y-2 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
+                <div className="rounded-2xl p-4 space-y-2 bg-gradient-to-b from-white/[0.04] to-transparent border border-white/5 relative overflow-hidden shadow-glass-premium backdrop-blur-[40px]">
                     <div className="flex justify-between items-center border-b border-white/5 pb-2 relative z-10">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
                             <Shield className="text-alphabag-yellow " /> Mission Hub
@@ -872,7 +872,7 @@ export const Airdrop: React.FC = () => {
             {!submitted ? (
                 <div className="space-y-2 animate-in slide-in-from-bottom-8 duration-700">
                     {/* Mission Proof Submission */}
-                    <div className="rounded-lg p-4 bg-alphabag-darkgray border border-alphabag-gray">
+                    <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-2">
                             <h2 className="text-xl font-semibold text-alphabag-text flex items-center gap-2">
                                 <Send className="text-[#fcd535]" size={20} /> Submission Hub
@@ -947,7 +947,7 @@ export const Airdrop: React.FC = () => {
             {!submitted && (
                 <>
                 {/* ── AlphaBAG Allocation ── */}
-                <div className="rounded-lg p-4 bg-alphabag-darkgray border border-alphabag-gray mb-2 relative">
+                <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray mb-2 relative">
                     {/* Header */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
