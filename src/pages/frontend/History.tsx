@@ -47,7 +47,7 @@ export const HistoryPage: React.FC = () => {
     const hasMockData = transactions.some(tx => tx.isMockData);
 
     return (
-        <div className="space-y-4 animate-in fade-in duration-700 pb-20">
+        <div className="space-y-2 animate-in fade-in duration-700 pb-20">
             {hasMockData && (
                 <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-4 py-2.5 text-xs text-alphabag-yellow font-bold uppercase tracking-wide">
                     Demo data shown — live transaction sync is unavailable right now. These entries are not your real transaction history.
@@ -55,7 +55,7 @@ export const HistoryPage: React.FC = () => {
             )}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
                             <History size={20} />
                         </div>
@@ -150,7 +150,7 @@ export const HistoryPage: React.FC = () => {
                             ) : (
                                 <tr>
                                     <td colSpan={6} className="p-12 text-center text-alphabag-subtext">
-                                        <History size={48} className="mx-auto mb-4 opacity-20" />
+                                        <History size={48} className="mx-auto mb-2 opacity-20" />
                                         <p className="font-bold uppercase tracking-widest text-xs">No transactions found for the selected filter.</p>
                                     </td>
                                 </tr>

@@ -35,7 +35,7 @@ export const TGECountdown: React.FC<TGECountdownProps> = ({ targetDate }) => {
 
   const TimeBox = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center">
-      <div className="bg-white/5 border border-white/10 rounded-xl w-14 h-14 flex items-center justify-center mb-1 shadow-glow-yellow/5">
+      <div className="bg-white/5 border border-white/10 rounded-xl w-14 h-14 flex items-center justify-center mb-1 ">
         <span className="text-xl font-black text-alphabag-yellow tabular-nums">
           {value.toString().padStart(2, '0')}
         </span>
@@ -45,7 +45,7 @@ export const TGECountdown: React.FC<TGECountdownProps> = ({ targetDate }) => {
   );
 
   return (
-    <div className="flex gap-3 justify-center">
+    <div className="flex gap-2 justify-center">
       <TimeBox value={timeLeft.days} label="Days" />
       <TimeBox value={timeLeft.hours} label="Hours" />
       <TimeBox value={timeLeft.minutes} label="Mins" />

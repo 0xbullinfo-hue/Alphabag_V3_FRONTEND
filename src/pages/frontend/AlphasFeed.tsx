@@ -386,12 +386,12 @@ export const AlphasFeed: React.FC = () => {
                 {/* Main Feed */}
                 <div className="lg:col-span-6 border-x border-white/5 min-h-screen">
                     <div className="p-3 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
-                        <div className="flex items-center gap-3 mb-1">
-                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shadow-glow-yellow/10">
+                        <div className="flex items-center gap-2 mb-1">
+                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black ">
                                 <Zap size={14} />
                             </div>
                             <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                                Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)] ml-2">Feed</span>
+                                Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600  ml-2">Feed</span>
                             </h1>
                         </div>
                         <p className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
@@ -411,7 +411,7 @@ export const AlphasFeed: React.FC = () => {
                                             {label}
                                         </span>
                                         {activeTab === value && (
-                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow shadow-glow-yellow/50" />
+                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow " />
                                         )}
                                     </button>
                                 );
@@ -421,7 +421,7 @@ export const AlphasFeed: React.FC = () => {
 
                     {/* Create Post */}
                     <div className="p-3 border-b border-white/5">
-                        <div className="flex gap-4">
+                        <div className="flex gap-2">
                             <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden">
                                 {(user?.email?.[0] || 'G').toUpperCase()}
                             </div>
@@ -518,7 +518,7 @@ export const AlphasFeed: React.FC = () => {
                                 />
                             ))
                         ) : (
-                            <div className="p-8 text-center space-y-2">
+                            <div className="p-4 text-center space-y-2">
                                 <div className="mx-auto w-12 h-12 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/20 flex items-center justify-center">
                                     <Search size={20} className="text-alphabag-yellow" />
                                 </div>
@@ -536,12 +536,12 @@ export const AlphasFeed: React.FC = () => {
                 </div>
 
                 {/* Sidebar Widgets */}
-                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-4 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
+                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-2 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
                     {/* My Profile Quick Access [NEW] */}
                     <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
                         onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
                     >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                             <div className="w-9 h-9 rounded-full bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center font-black text-alphabag-yellow text-sm">
                                 {user?.email?.[0].toUpperCase() || 'U'}
                             </div>
@@ -576,7 +576,7 @@ export const AlphasFeed: React.FC = () => {
                         </p>
                         <Button
                             onClick={handleExploreFeatures}
-                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 shadow-glow-yellow/20"
+                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 "
                         >
                             Explore Features
                         </Button>
@@ -590,7 +590,7 @@ export const AlphasFeed: React.FC = () => {
                             </h3>
                             <span className="text-[8px] bg-white/5 text-alphabag-muted px-1.5 py-0.5 rounded border border-white/10 font-bold uppercase tracking-widest">AD</span>
                         </div>
-                        <div className="p-4 space-y-4">
+                        <div className="p-4 space-y-2">
                             <div className="group cursor-pointer">
                                 <div className="aspect-video bg-alphabag-gray/50 rounded-xl mb-3 overflow-hidden relative border border-white/5">
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -805,7 +805,7 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
 
     return (
         <div className="p-3 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
-            <div className="flex gap-4">
+            <div className="flex gap-2">
                 {/* Avatar */}
                 <div
                     onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
@@ -975,7 +975,7 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                             </div>
 
                             <div className="p-3 border-b border-white/10 bg-black/20">
-                                <div className="flex gap-3 items-start">
+                                <div className="flex gap-2 items-start">
                                     <div className="w-8 h-8 rounded-full bg-alphabag-yellow/15 border border-alphabag-yellow/30 flex items-center justify-center text-[11px] font-black text-alphabag-yellow uppercase">
                                         {(user?.email?.[0] || 'G').toUpperCase()}
                                     </div>

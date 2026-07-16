@@ -30,7 +30,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-alphabag-dark border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+            <div className="bg-alphabag-dark border border-white/10 rounded-2xl w-full max-w-md p-4 shadow-2xl relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-alphabag-subtext hover:text-white transition-colors"
@@ -38,8 +38,8 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     <X size={20} />
                 </button>
 
-                <div className="text-center mb-6">
-                    <div className="w-12 h-12 bg-alphabag-yellow/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="text-center mb-2">
+                    <div className="w-12 h-12 bg-alphabag-yellow/10 rounded-full flex items-center justify-center mx-auto mb-2">
                         <Shield className="text-alphabag-yellow" size={24} />
                     </div>
                     <h2 className="text-xl font-black text-white uppercase tracking-tighter">
@@ -51,7 +51,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-2">
                     <div>
                         <label className="block text-xs font-bold text-alphabag-subtext uppercase tracking-widest mb-1">
                             API Key

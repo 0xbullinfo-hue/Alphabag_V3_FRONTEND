@@ -75,11 +75,11 @@ export const Portfolio: React.FC = () => {
 
     if (activeWallets.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 space-y-4 max-w-2xl mx-auto animate-fade-in">
+            <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 space-y-2 max-w-2xl mx-auto animate-fade-in">
                 <div className="w-24 h-24 bg-alphabag-gray/50 rounded-3xl flex items-center justify-center text-alphabag-yellow animate-pulse-slow shadow-inner border border-alphabag-gray">
                     <Briefcase size={48} fill="currentColor" />
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-2">
                     <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">Initialize Tracking Hub</h1>
                     <p className="text-alphabag-subtext font-medium leading-relaxed">
                         AlphaBAG professional hub synchronizes your global holdings across 100+ chains via read-only wallet addresses. Add a wallet to start monitoring your performance.
@@ -96,14 +96,14 @@ export const Portfolio: React.FC = () => {
     }
 
     return (
-        <div className="space-y-5 animate-in fade-in duration-700 pb-20 w-full">
+        <div className="space-y-2 animate-in fade-in duration-700 pb-20 w-full">
 
 
 
             {/* 1. Header Area */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Wallet2 size={20} />
                         </div>
@@ -117,14 +117,14 @@ export const Portfolio: React.FC = () => {
                         <DataSourceBadge className="ml-auto" actuallyMock={hasMockData} />
                     </div>
 
-                    <div className="flex items-baseline gap-4">
-                        <h2 className="text-4xl font-semibold text-alphabag-text tracking-tight tabular-nums flex items-center gap-3 truncate">
+                    <div className="flex items-baseline gap-2">
+                        <h2 className="text-4xl font-semibold text-alphabag-text tracking-tight tabular-nums flex items-center gap-2 truncate">
                             ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             <Eye size={16} className="text-alphabag-subtext cursor-pointer hover:text-alphabag-text transition-colors shrink-0" />
                         </h2>
                     </div>
                     
-                    <div className="flex items-center gap-3 mt-2">
+                    <div className="flex items-center gap-2 mt-2">
                         <div className={`flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border ${
                             totalPnL24h >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81] border-[#0ecb81]/20' : 'bg-[#f6465d]/10 text-[#f6465d] border-[#f6465d]/20'
                         }`}>
@@ -136,7 +136,7 @@ export const Portfolio: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-sm font-semibold">
+                <div className="flex items-center gap-2 text-sm font-semibold">
                     <div className="flex items-center gap-2 mr-2">
                         <span className="text-[11px] text-alphabag-subtext uppercase font-semibold tracking-wider">Charts</span>
                         <div
@@ -173,7 +173,7 @@ export const Portfolio: React.FC = () => {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-3 border-b border-alphabag-gray">
+            <div className="flex gap-2 border-b border-alphabag-gray">
                 <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
                 <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
             </div>
@@ -229,14 +229,14 @@ export const Portfolio: React.FC = () => {
 
                         {/* Best Performer */}
                         <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
-                            <div className="absolute -top-12 -right-12 w-32 h-32 bg-green-500/5 rounded-full blur-3xl group-hover:bg-green-500/10 transition-all duration-700"></div>
+                            
                             <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">Top Performer</span>
                                 <div className="badge-green">ALPHA</div>
                             </div>
                             {bestPerformer ? (
                                 <>
-                                    <div className="flex items-center gap-3 mb-2 relative z-10">
+                                    <div className="flex items-center gap-2 mb-2 relative z-10">
                                         <div className="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
                                             <TrendingUp size={16} className="text-green-400" />
                                         </div>
@@ -251,14 +251,14 @@ export const Portfolio: React.FC = () => {
 
                         {/* Worst Performer */}
                         <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
-                            <div className="absolute -top-12 -right-12 w-32 h-32 bg-red-500/5 rounded-full blur-3xl group-hover:bg-red-500/10 transition-all duration-700"></div>
+                            
                             <div className="flex items-center justify-between mb-3">
                                 <span className="section-label">Risk Asset</span>
                                 <div className="badge-red">UNDERWATER</div>
                             </div>
                             {worstPerformer ? (
                                 <>
-                                    <div className="flex items-center gap-3 mb-2 relative z-10">
+                                    <div className="flex items-center gap-2 mb-2 relative z-10">
                                         <div className="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center">
                                             <TrendingUp size={16} className="text-red-400 rotate-180" />
                                         </div>
@@ -278,7 +278,7 @@ export const Portfolio: React.FC = () => {
 
                             {/* History Chart */}
                             <div className="lg:col-span-2 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
-                                <div className="flex justify-between items-center mb-4">
+                                <div className="flex justify-between items-center mb-2">
                                     <div className="flex items-center gap-2">
                                         <h3 className="font-black text-white uppercase tracking-tight">History</h3>
                                         <Eye size={14} className="text-alphabag-subtext" />
@@ -288,7 +288,7 @@ export const Portfolio: React.FC = () => {
                                             <button
                                                 key={tf}
                                                 onClick={() => setTimeframe(tf as any)}
-                                                className={`px-3 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all tracking-widest ${timeframe === tf ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/50 shadow-[0_0_15px_rgba(252,213,53,0.2)]' : 'text-alphabag-subtext hover:text-white border border-transparent'}`}
+                                                className={`px-3 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all tracking-widest ${timeframe === tf ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/50 ' : 'text-alphabag-subtext hover:text-white border border-transparent'}`}
                                             >
                                                 {tf}
                                             </button>
@@ -327,7 +327,7 @@ export const Portfolio: React.FC = () => {
 
                             {/* Allocation Donut */}
                             <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-all">
-                                <h3 className="font-black text-white mb-4 uppercase tracking-tight">Allocation</h3>
+                                <h3 className="font-black text-white mb-2 uppercase tracking-tight">Allocation</h3>
                                 <div className="flex-1 flex flex-row items-center justify-center gap-2">
 
                                     <div className="w-1/2 h-[180px] relative">
@@ -402,14 +402,14 @@ export const Portfolio: React.FC = () => {
                                         <tr>
                                             <td colSpan={8} className="py-16">
                                                 <div className="flex flex-col items-center justify-center text-center px-6">
-                                                    <div className="w-16 h-16 rounded-2xl bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center mb-4">
+                                                    <div className="w-16 h-16 rounded-2xl bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center mb-2">
                                                         <PieChartIcon size={24} />
                                                     </div>
                                                     <h4 className="text-base font-bold text-white uppercase tracking-wider">No assets detected</h4>
                                                     <p className="text-sm text-alphabag-subtext mt-2 max-w-md">
                                                         Add a tracked wallet or a manual transaction to start building your premium portfolio view.
                                                     </p>
-                                                    <div className="mt-4 flex gap-3">
+                                                    <div className="mt-4 flex gap-2">
                                                         <Button size="sm" onClick={handleManageConnections} className="px-5 py-2.5 font-semibold uppercase tracking-wider">
                                                             Manage Wallets
                                                         </Button>
@@ -425,7 +425,7 @@ export const Portfolio: React.FC = () => {
                                             return (
                                                 <tr key={item.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                                     <td className="py-3 px-4">
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-2">
                                                             <img src={item.image} alt={item.name} className="w-6 h-6 rounded-full" />
                                                             <span className="text-alphabag-text font-bold">{item.name}</span>
                                                             <span className="text-alphabag-subtext text-xs font-semibold">{item.symbol}</span>

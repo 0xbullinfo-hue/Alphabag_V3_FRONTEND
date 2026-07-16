@@ -23,7 +23,7 @@ export const ChatFeed: React.FC<ChatFeedProps> = ({ messages, isTyping }) => {
     return (
         <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-6 space-y-2 custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700"
+            className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700"
         >
             <AnimatePresence initial={false}>
                 {messages.map((msg, i) => (
@@ -42,7 +42,7 @@ export const ChatFeed: React.FC<ChatFeedProps> = ({ messages, isTyping }) => {
                         }}
                         className="flex w-full justify-start mt-2"
                     >
-                        <div className="flex max-w-[85%] sm:max-w-3xl gap-4 flex-row w-full">
+                        <div className="flex max-w-[85%] sm:max-w-3xl gap-2 flex-row w-full">
                             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg bg-alphabag-yellow text-alphabag-black">
                                 <Bot size={20} className="animate-pulse" />
                             </div>

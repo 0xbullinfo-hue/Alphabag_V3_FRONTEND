@@ -47,7 +47,7 @@ export const WalletConnectButton: React.FC = () => {
       size="sm"
       onClick={connectWallet}
       isLoading={isConnecting}
-      className="shadow-[0_0_15px_rgba(252,213,53,0.2)] font-black"
+      className=" font-black"
     >
       <Wallet className="w-4 h-4 mr-2" />
       Sync Node

@@ -207,11 +207,11 @@ export const AlphaScreener: React.FC = () => {
     const displayedPairs = useMemo(() => getFilteredAndSorted(), [getFilteredAndSorted]);
 
     return (
-        <div className="space-y-4 animate-in fade-in duration-700 screener-container">
+        <div className="space-y-2 animate-in fade-in duration-700 screener-container">
             {/* ── Header ── */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-1">
+                    <div className="flex items-center gap-2 mb-1">
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
                             <Flame size={22} className="text-[#fcd535]" /> Alpha Screener
                         </h1>
@@ -324,7 +324,7 @@ export const AlphaScreener: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-3 text-sm">
+                        <div className="flex flex-wrap gap-2 text-sm">
                             <div>
                                 <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">Price</div>
                                 <div className="font-mono font-bold text-white mt-0.5">${Number(searchedPair.priceUsd) < 0.01 ? Number(searchedPair.priceUsd).toFixed(8) : Number(searchedPair.priceUsd).toFixed(4)}</div>
@@ -371,7 +371,7 @@ export const AlphaScreener: React.FC = () => {
                             {loading ? (
                                 <tr>
                                     <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
-                                        <div className="w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                        <div className="w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                                         <p className="text-xs text-alphabag-subtext font-medium animate-pulse">Synchronizing DexScreener Live Feeds...</p>
                                     </td>
                                 </tr>

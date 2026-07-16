@@ -233,11 +233,11 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             <div className={mainGridClass}>
                 {/* Inputs */}
                 <div className={inputCardClass}>
-                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10">
-                        <div className="flex flex-col gap-2 mb-4">
+                        <div className="flex flex-col gap-2 mb-2">
                             <label className="text-alphabag-subtext text-xs font-semibold">Direction</label>
-                            <div className="flex gap-3">
+                            <div className="flex gap-2">
                                 <button onClick={() => setDirection('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-[#0ECB81] border border-[#0ECB81]/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-[#2b3139]'}`}>
                                     ↑ Long
                                 </button>
@@ -247,12 +247,12 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-2">
                             <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" minimal={minimal} />
                             <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" minimal={minimal} />
                         </div>
 
-                        <div className="flex flex-col gap-2 mb-4">
+                        <div className="flex flex-col gap-2 mb-2">
                             <div className="flex justify-between items-center">
                                 <label className="text-alphabag-subtext text-xs font-semibold">Leverage</label>
                                 <span className="text-alphabag-yellow font-bold bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20 text-xs">{levSlider}x</span>
@@ -274,7 +274,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
                 {/* Results */}
                 <div className={resultCardClass}>
-                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10 w-full">
                         <div className="flex flex-col">
                             <ResultRow label="Position Size" resultObj={formatCurrency(positionSize)} minimal={minimal} />
@@ -345,13 +345,13 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             <div className={mainGridClass}>
                 {/* Inputs */}
                 <div className={inputCardClass}>
-                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10">
-                        <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-2">
                             <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" minimal={minimal} />
                             <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" minimal={minimal} />
                         </div>
-                        <div className="grid grid-cols-2 gap-2 mb-4">
+                        <div className="grid grid-cols-2 gap-2 mb-2">
                             <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" minimal={minimal} />
                             <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" minimal={minimal} />
                         </div>
@@ -378,7 +378,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
                 {/* Results */}
                 <div className={resultCardClass}>
-                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10 w-full">
                         <div className="flex flex-col">
                             <ResultRow label="Total Cost" resultObj={formatCurrency(totalCost)} minimal={minimal} />
@@ -393,7 +393,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     </div>
 
                     {net > 0 && hasCalc && (
-                        <div className={`bg-[#102B21] border border-[#1E3A2F] rounded-lg shadow-inner ${minimal ? 'p-3 mt-4' : 'p-6 mt-8'}`}>
+                        <div className={`bg-[#102B21] border border-[#1E3A2F] rounded-lg shadow-inner ${minimal ? 'p-3 mt-4' : 'p-4 mt-8'}`}>
                             <div className={`font-bold text-[#0ECB81] mb-1 ${minimal ? 'text-xl' : 'text-[28px]'}`}>
                                 +${formatNum(net)}
                             </div>
@@ -420,20 +420,20 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         return (
             <div className={mainGridClass}>
                 <div className={inputCardClass}>
-                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center gap-2 mb-2">
                             <Percent size={16} className="text-alphabag-yellow" />
                             <h2 className="text-alphabag-text font-bold text-sm">IL Risk Assessment</h2>
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" minimal={minimal} />
                             <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" minimal={minimal} />
                         </div>
                     </div>
                 </div>
-                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-6`}>
-                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-3`}>
+                    
                     <div className="relative z-10">
                         <div className={`font-bold tracking-tight ${minimal ? 'text-4xl' : 'text-5xl'} ${ilPercent > 5 ? 'text-[#f6465d]' : 'text-alphabag-yellow'}`}>
                             {ilPercent.toFixed(2)}%
@@ -452,13 +452,13 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         return (
             <div className={mainGridClass}>
                 <div className={inputCardClass}>
-                    {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                    
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-4">
+                        <div className="flex items-center gap-2 mb-2">
                             <ArrowRightLeft size={16} className="text-alphabag-yellow" />
                             <h2 className="text-alphabag-text font-bold text-sm">Instant Converter</h2>
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <div className="grid grid-cols-[1fr_80px] gap-2">
                                 <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} />
                                 <div className="flex flex-col gap-1">
@@ -485,8 +485,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         </div>
                     </div>
                 </div>
-                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-6`}>
-                    {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                <div className={`${resultCardClass} flex flex-col justify-center items-center text-center py-3`}>
+                    
                     <div className="relative z-10">
                         <div className={`font-bold text-alphabag-yellow tracking-tight ${minimal ? 'text-lg' : 'text-3xl'}`}>
                             1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
@@ -526,9 +526,9 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                 <div className={mainGridClass}>
                     {/* Inputs */}
                     <div className={inputCardClass}>
-                        {!minimal && <div className="absolute -top-10 -right-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                        
                         <div className="relative z-10">
-                            <div className="flex items-center gap-2 mb-4">
+                            <div className="flex items-center gap-2 mb-2">
                                 <Rocket size={16} className="text-[#D8B4FE]" />
                                 <h2 className="text-alphabag-text font-bold text-sm">Degen Entry Calculator</h2>
                             </div>
@@ -563,7 +563,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
                     {/* Results */}
                     <div className={resultCardClass}>
-                        {!minimal && <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-alphabag-yellow/5 rounded-full blur-3xl group-hover:bg-alphabag-yellow/10 transition-all duration-700"></div>}
+                        
                         <div className="relative z-10 w-full">
                             <div className="flex flex-col">
                                 <ResultRow label="Investment" resultObj={formatCurrency(inv)} minimal={minimal} />
@@ -592,13 +592,13 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
                 {/* Moonbag Scenarios */}
                 {!minimal && (
-                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-6 shadow-2xl">
-                        <div className="flex items-center gap-2 mb-6">
+                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-4 shadow-2xl">
+                        <div className="flex items-center gap-2 mb-2">
                             <Activity size={18} className="text-alphabag-yellow" />
                             <h2 className="text-white font-black text-[14px] uppercase tracking-tighter">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
                         </div>
 
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-2">
                             {[2, 5, 10, 50, 100, 1000].map(mult => {
                                 const baseInv = inv || 1000;
                                 const scenarioTarget = baseInv * mult;
@@ -619,12 +619,12 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     return (
-        <div className={`w-full space-y-5 animate-in fade-in duration-700 calculator-container ${minimal ? '' : 'pb-12'}`}>
+        <div className={`w-full space-y-2 animate-in fade-in duration-700 calculator-container ${minimal ? '' : 'pb-2'}`}>
             {/* Page Header */}
             {!minimal && (
                 <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                     <div>
-                        <div className="flex items-center gap-3 mb-2">
+                        <div className="flex items-center gap-2 mb-2">
                             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                                 <CalculatorIcon size={20} />
                             </div>

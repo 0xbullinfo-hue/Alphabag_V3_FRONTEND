@@ -126,7 +126,7 @@ export const CoinDetail: React.FC = () => {
 
     if (!coin) return (
         <div className="flex flex-col items-center justify-center h-96 text-alphabag-subtext">
-            <div className="w-10 h-10 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-4"></div>
+            <div className="w-10 h-10 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-2"></div>
             <p>Loading Asset Details...</p>
         </div>
     );
@@ -165,7 +165,7 @@ export const CoinDetail: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 <div className="lg:col-span-2 space-y-2">
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-6 opacity-[0.03] rotate-12">
+                        <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12">
                             <BarChart size={120} />
                         </div>
                         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-2">
@@ -193,7 +193,7 @@ export const CoinDetail: React.FC = () => {
 
                     <div className="bg-gradient-to-r from-alphabag-dark to-alphabag-black border border-alphabag-yellow/30 rounded-xl p-5 shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-alphabag-yellow/5 animate-pulse"></div>
-                        <div className="flex items-start space-x-4 relative z-10">
+                        <div className="flex items-start space-x-2 relative z-10">
                             <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
                                 <Zap size={20} className="text-alphabag-yellow fill-current" />
                             </div>
@@ -238,7 +238,7 @@ export const CoinDetail: React.FC = () => {
                     </div>
 
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 h-[500px] flex flex-col shadow-2xl">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 pb-4 border-b border-alphabag-gray/30">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2 pb-4 border-b border-alphabag-gray/30">
                             <div className="flex space-x-2 bg-alphabag-black p-1 rounded-lg border border-alphabag-gray">
                                 {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
                                     <button
@@ -253,7 +253,7 @@ export const CoinDetail: React.FC = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="flex items-center space-x-4 text-[9px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
+                            <div className="flex items-center space-x-2 text-[9px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
                                 <span className="flex items-center"><div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></div> EMA (20)</span>
                                 <span className="flex items-center"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div> VWAP</span>
                             </div>
@@ -300,11 +300,11 @@ export const CoinDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 relative overflow-hidden shadow-2xl">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Wallet size={100} className="text-alphabag-yellow" />
                         </div>
-                        <h3 className="text-xs font-extrabold mb-6 text-alphabag-text flex items-center uppercase tracking-[0.2em]">
+                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text flex items-center uppercase tracking-[0.2em]">
                             <Wallet size={18} className="mr-3 text-alphabag-yellow" /> Wallet Position
                         </h3>
 
@@ -332,15 +332,15 @@ export const CoinDetail: React.FC = () => {
                             </div>
                         ) : (
                             <div className="text-center py-10 relative z-10">
-                                <p className="text-alphabag-subtext text-sm mb-6 leading-relaxed">Connect your wallet to track your <b>{coin.name}</b> holdings and analyze entry performance.</p>
+                                <p className="text-alphabag-subtext text-sm mb-2 leading-relaxed">Connect your wallet to track your <b>{coin.name}</b> holdings and analyze entry performance.</p>
                                 <Button variant="primary" className="w-full font-bold shadow-lg" onClick={() => navigate('/settings')}>Connect & Track</Button>
                             </div>
                         )}
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 shadow-2xl">
-                        <h3 className="text-xs font-extrabold mb-6 text-alphabag-text uppercase tracking-[0.2em]">Asset Intelligence</h3>
-                        <div className="space-y-5">
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 shadow-2xl">
+                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text uppercase tracking-[0.2em]">Asset Intelligence</h3>
+                        <div className="space-y-2">
                             <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">Market Cap</span>
                                 <span className="font-extrabold text-white text-sm">${(coin.market_cap / 1e9).toFixed(2)}B</span>
@@ -360,13 +360,13 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-6 shadow-2xl relative">
-                        <h3 className="text-xs font-extrabold mb-6 text-alphabag-text uppercase tracking-[0.2em] flex items-center">
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative">
+                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text uppercase tracking-[0.2em] flex items-center">
                             <ShieldCheck size={18} className={`mr-3 ${audit.color}`} /> Smart Audit Score
                         </h3>
                         {audit.score > 0 ? (
                             <>
-                                <div className="flex items-end space-x-2 mb-4">
+                                <div className="flex items-end space-x-2 mb-2">
                                     <div className="text-5xl font-extrabold text-white tracking-tighter">{audit.score}<span className="text-lg text-alphabag-subtext ml-1">/100</span></div>
                                     <div className={`text-[10px] ${audit.color} font-extrabold uppercase tracking-widest pb-2`}>{audit.label}</div>
                                 </div>
@@ -376,7 +376,7 @@ export const CoinDetail: React.FC = () => {
                                 <p className="text-[9px] text-alphabag-subtext mt-6 font-bold leading-relaxed uppercase tracking-widest opacity-60">Verified Liquidity • Multisig Treasury • Audited by Certik</p>
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-6">
+                            <div className="flex flex-col items-center justify-center py-3">
                                 <div className="w-6 h-6 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-3"></div>
                                 <p className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-widest">Scanning Contracts...</p>
                             </div>

@@ -31,12 +31,12 @@ export const PremiumLock: React.FC<PremiumLockProps> = ({
         {children}
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-alphabag-black/40 z-10 p-4 text-center">
-        <div className="bg-alphabag-dark/95 p-6 rounded-2xl border border-alphabag-yellow/30 shadow-2xl max-w-sm backdrop-blur-md animate-fade-in">
-          <div className="w-14 h-14 bg-alphabag-yellow/10 rounded-full flex items-center justify-center mx-auto mb-4 text-alphabag-yellow border border-alphabag-yellow/20">
+        <div className="bg-alphabag-dark/95 p-4 rounded-2xl border border-alphabag-yellow/30 shadow-2xl max-w-sm backdrop-blur-md animate-fade-in">
+          <div className="w-14 h-14 bg-alphabag-yellow/10 rounded-full flex items-center justify-center mx-auto mb-2 text-alphabag-yellow border border-alphabag-yellow/20">
             <Lock size={28} />
           </div>
           <h3 className="text-xl font-black text-white mb-2 uppercase tracking-tighter">{title}</h3>
-          <p className="text-alphabag-subtext text-xs mb-6 font-bold leading-relaxed">{description}</p>
+          <p className="text-alphabag-subtext text-xs mb-2 font-bold leading-relaxed">{description}</p>
           <div className="space-y-2">
             <Button size="md" onClick={handleUpgrade} className="w-full uppercase font-black tracking-widest shadow-xl">
               Upgrade to Ultimate

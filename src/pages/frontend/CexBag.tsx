@@ -132,12 +132,12 @@ export const CexBag: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
+        <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
 
             {/* Page Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Layers size={20} />
                         </div>
@@ -147,7 +147,7 @@ export const CexBag: React.FC = () => {
                         Aggregate your centralized exchange balances via read-only <span className="text-alphabag-text font-semibold">API keys</span>.
                     </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#0ecb81] font-semibold uppercase tracking-wider flex items-center gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-pulse"></span> API Sync
                     </div>
@@ -172,7 +172,7 @@ export const CexBag: React.FC = () => {
                 <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Consolidated PnL</span>
                     {hasCexPnLData ? (
-                        <div className={`flex items-center gap-3 mb-2`}>
+                        <div className={`flex items-center gap-2 mb-2`}>
                             <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
                                 {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
@@ -191,11 +191,11 @@ export const CexBag: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
 
                 {/* Left: Chart + Table */}
-                <div className="lg:col-span-2 space-y-4">
+                <div className="lg:col-span-2 space-y-2">
 
                     {/* Exchange Allocation Chart */}
                     <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
-                        <div className="flex justify-between items-center mb-4 pb-4 border-b border-alphabag-gray">
+                        <div className="flex justify-between items-center mb-2 pb-4 border-b border-alphabag-gray">
                             <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider">Exchange Allocation</h3>
                         </div>
                         {connectedCex.length === 0 ? (
@@ -224,7 +224,7 @@ export const CexBag: React.FC = () => {
                                 </div>
                                 <div className="flex-1 space-y-2 w-full max-h-52 overflow-y-auto pr-1 custom-scrollbar">
                                     {chartData.map((d, i) => (
-                                        <div key={i} className="flex items-center gap-3">
+                                        <div key={i} className="flex items-center gap-2">
                                             <img src={d.icon} alt={d.name} className="w-6 h-6 rounded-full bg-white p-0.5 shrink-0" />
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex justify-between items-center text-xs mb-1">
@@ -265,7 +265,7 @@ export const CexBag: React.FC = () => {
                                         MOCK_ASSETS.map((asset, idx) => (
                                             <tr key={idx} className="hover:bg-[#2b3139]/40 transition-colors">
                                                 <td className="p-4 px-6">
-                                                    <div className="flex items-center gap-4">
+                                                    <div className="flex items-center gap-2">
                                                         <img src={asset.img} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                                         <div>
                                                             <div className="text-alphabag-text font-semibold">{asset.symbol}</div>
@@ -293,9 +293,9 @@ export const CexBag: React.FC = () => {
                 </div>
 
                 {/* Right: Active Integrations + Add New */}
-                <div className="space-y-4">
+                <div className="space-y-2">
                     <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
-                        <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider mb-4 pb-4 border-b border-alphabag-gray">Active Integrations</h3>
+                        <h3 className="text-xs font-semibold uppercase text-alphabag-subtext tracking-wider mb-2 pb-4 border-b border-alphabag-gray">Active Integrations</h3>
                         {connectedCex.length > 0 ? (
                             <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
                                 {connectedCex.map((cex) => (
@@ -325,7 +325,7 @@ export const CexBag: React.FC = () => {
                     </div>
 
                     <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-alphabag-subtext mb-4 pb-4 border-b border-alphabag-gray">
+                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-alphabag-subtext mb-2 pb-4 border-b border-alphabag-gray">
                             Available ({availableExchanges.length} remaining)
                         </h4>
                         <div className="grid grid-cols-5 gap-2">

@@ -16,9 +16,9 @@ export const ConnectOrWatch: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-alphabag-dark border border-alphabag-gray rounded-xl p-8 text-center shadow-xl">
-      <div className="mb-6">
-        <div className="w-16 h-16 bg-alphabag-yellow/10 rounded-full flex items-center justify-center text-alphabag-yellow mx-auto mb-4">
+    <div className="w-full max-w-lg mx-auto bg-alphabag-dark border border-alphabag-gray rounded-xl p-4 text-center shadow-xl">
+      <div className="mb-2">
+        <div className="w-16 h-16 bg-alphabag-yellow/10 rounded-full flex items-center justify-center text-alphabag-yellow mx-auto mb-2">
             <Wallet size={32} />
         </div>
         <h2 className="text-2xl font-bold text-white mb-2">Connect Your Wallet</h2>

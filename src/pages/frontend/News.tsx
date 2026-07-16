@@ -31,20 +31,20 @@ export const News: React.FC = () => {
   }, []);
 
   if (loading) return (
-    <div className="flex flex-col items-center justify-center h-96 space-y-4">
+    <div className="flex flex-col items-center justify-center h-96 space-y-2">
       <div className="w-10 h-10 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
       <p className="text-xs text-alphabag-subtext uppercase font-bold tracking-widest">Tapping into Intelligence Feeds...</p>
     </div>
   );
 
   return (
-    <div className="space-y-4 animate-fade-in w-full pb-20">
-      <div className="bg-alphabag-dark border border-alphabag-gray p-6 rounded-xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-5">
+    <div className="space-y-2 animate-fade-in w-full pb-20">
+      <div className="bg-alphabag-dark border border-alphabag-gray p-4 rounded-xl shadow-2xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-4 opacity-5">
           <Newspaper size={120} />
         </div>
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
               <Newspaper size={20} />
             </div>
@@ -75,7 +75,7 @@ export const News: React.FC = () => {
       <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
-                <Search size={48} className="text-alphabag-gray mb-4" />
+                <Search size={48} className="text-alphabag-gray mb-2" />
                 <h3 className="text-xl font-bold text-white mb-2">No transmissions found</h3>
                 <p className="text-sm text-alphabag-subtext">Adjust your search parameters to comb through the archive.</p>
             </div>
@@ -117,7 +117,7 @@ export const News: React.FC = () => {
                 <Clock size={10} className="mr-1.5" /> {item.date}
               </div>
               <h3 className="text-lg font-extrabold text-white mb-3 leading-tight group-hover:text-alphabag-yellow transition-colors">{item.title}</h3>
-              <p className="text-alphabag-subtext text-[13px] mb-4 line-clamp-2 flex-1 font-medium leading-relaxed opacity-80">{item.summary}</p>
+              <p className="text-alphabag-subtext text-[13px] mb-2 line-clamp-2 flex-1 font-medium leading-relaxed opacity-80">{item.summary}</p>
 
               <div className="pt-4 border-t border-alphabag-gray/50">
                 <button
@@ -134,7 +134,7 @@ export const News: React.FC = () => {
 
       {/* Intelligence Detail Modal */}
       {selectedArticle && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-4 animate-fade-in">
           <div
             className="absolute inset-0 bg-alphabag-black/90 backdrop-blur-xl"
             onClick={() => setSelectedArticle(null)}
@@ -152,7 +152,7 @@ export const News: React.FC = () => {
                 <img src={selectedArticle.imageUrl} className="w-full h-full object-cover" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-alphabag-dark via-alphabag-dark/40 to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8">
-                  <div className="flex items-center space-x-2 mb-4">
+                  <div className="flex items-center space-x-2 mb-2">
                     <span className="bg-alphabag-yellow text-black text-[10px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-widest">{selectedArticle.source}</span>
                     <span className="text-[10px] text-white/70 font-bold uppercase tracking-widest flex items-center">
                       <Clock size={12} className="mr-1.5" /> {selectedArticle.date}
@@ -164,9 +164,9 @@ export const News: React.FC = () => {
                 </div>
               </div>
 
-              <div className="p-8 md:p-12">
-                <div className="flex items-center justify-between mb-8 pb-8 border-b border-alphabag-gray/30">
-                  <div className="flex items-center space-x-4 text-alphabag-subtext">
+              <div className="p-4 md:p-12">
+                <div className="flex items-center justify-between mb-2 pb-2 border-b border-alphabag-gray/30">
+                  <div className="flex items-center space-x-2 text-alphabag-subtext">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mr-2">Share Intel:</span>
                     <a 
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}&url=${encodeURIComponent(window.location.href)}`} 
@@ -217,7 +217,7 @@ export const News: React.FC = () => {
                 </div>
 
                 <div className="prose prose-invert max-w-none">
-                  <p className="text-xl text-alphabag-yellow font-bold leading-relaxed mb-8 border-l-4 border-alphabag-yellow pl-6">
+                  <p className="text-xl text-alphabag-yellow font-bold leading-relaxed mb-2 border-l-4 border-alphabag-yellow pl-6">
                     {selectedArticle.summary}
                   </p>
                   <div className="text-alphabag-text text-lg leading-loose space-y-2 font-medium opacity-90">
@@ -231,8 +231,8 @@ export const News: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-12 p-8 bg-alphabag-black/50 border border-alphabag-gray rounded-2xl">
-                  <h4 className="text-white font-bold mb-4 uppercase text-xs tracking-widest">Alpha Intelligence Disclaimer</h4>
+                <div className="mt-12 p-4 bg-alphabag-black/50 border border-alphabag-gray rounded-2xl">
+                  <h4 className="text-white font-bold mb-2 uppercase text-xs tracking-widest">Alpha Intelligence Disclaimer</h4>
                   <p className="text-xs text-alphabag-subtext leading-relaxed font-bold uppercase">
                     This report is generated by AlphaBAG proprietary intelligence hubs. Narratives are for research purposes only and do not constitute financial advice. Standard risk management suggested.
                   </p>

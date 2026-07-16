@@ -94,12 +94,12 @@ export const Markets: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
+    <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
 
       {/* Page Header */}
       <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
               <BarChart3 size={20} />
             </div>
@@ -112,7 +112,7 @@ export const Markets: React.FC = () => {
             </span>
             <DataSourceBadge className="ml-auto md:ml-4" />
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <p className="text-alphabag-subtext text-sm font-medium">Top 100 Crypto Assets</p>
             <span className="text-alphabag-subtext">·</span>
             <button

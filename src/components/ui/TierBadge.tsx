@@ -23,7 +23,7 @@ const getConfigs = (size: 'sm' | 'md' | 'lg'): Record<string, TierConfig> => ({
   ULTIMATE: {
     label: 'Ultimate',
     icon: <Crown size={size === 'sm' ? 10 : 14} className="fill-current" />,
-    styles: 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/30 shadow-[0_0_15px_rgba(252,213,53,0.15)]'
+    styles: 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/30 '
   }
 });
 

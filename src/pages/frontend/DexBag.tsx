@@ -63,7 +63,7 @@ export const DexBag: React.FC = () => {
             {/* Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
                             <Wallet2 size={20} />
                         </div>
@@ -99,9 +99,9 @@ export const DexBag: React.FC = () => {
             {/* Not Connected State */}
             {!isConnected && (
                 <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-12 text-center">
-                    <Wallet2 size={48} className="mx-auto mb-4 text-alphabag-subtext opacity-30" />
+                    <Wallet2 size={48} className="mx-auto mb-2 text-alphabag-subtext opacity-30" />
                     <p className="text-alphabag-text font-black uppercase tracking-widest text-sm mb-2">Wallet Not Connected</p>
-                    <p className="text-alphabag-subtext text-xs font-medium mb-6">Connect your EVM wallet to view your on-chain DEX holdings.</p>
+                    <p className="text-alphabag-subtext text-xs font-medium mb-2">Connect your EVM wallet to view your on-chain DEX holdings.</p>
                     <Link
                         to="/settings"
                         className="inline-flex items-center gap-2 bg-[#fcd535] text-black font-black text-xs uppercase tracking-widest px-5 py-2.5 rounded-lg hover:bg-yellow-400 transition-all"
@@ -113,7 +113,7 @@ export const DexBag: React.FC = () => {
 
             {/* Error */}
             {isConnected && error && (
-                <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 flex items-start gap-3">
+                <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4 flex items-start gap-2">
                     <AlertTriangle size={16} className="text-red-400 shrink-0 mt-0.5" />
                     <p className="text-red-400 text-xs font-semibold">{error}</p>
                 </div>
@@ -189,7 +189,7 @@ export const DexBag: React.FC = () => {
                                         return (
                                             <tr key={i} className="hover:bg-[#2b3139]/40 transition-colors group">
                                                 <td className="p-4 pl-6">
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2">
                                                         {token.logo ? (
                                                             <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-[#2b3139]" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                                         ) : (

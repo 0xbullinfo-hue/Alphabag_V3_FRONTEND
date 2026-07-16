@@ -134,9 +134,9 @@ export const AlphaAi: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
       {/* Header */}
-      <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-4 shrink-0">
+      <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
         <div>
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2 mb-2">
             <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
               <Bot size={20} />
             </div>
@@ -154,7 +154,7 @@ export const AlphaAi: React.FC = () => {
 
         {/* Left Side: Chat Area */}
         <div className="lg:col-span-2 flex flex-col bg-alphabag-darkgray rounded-lg overflow-hidden border border-alphabag-gray relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-[80px] pointer-events-none transition-opacity duration-1000 group-hover:opacity-100 opacity-50"></div>
+          
           
           <div className="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/20">
               <span className="text-[9px] text-alphabag-subtext uppercase font-black tracking-widest flex items-center gap-2">
@@ -195,7 +195,7 @@ export const AlphaAi: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={!inputText.trim() || isStreaming || !hasLimitRemaining}
-                  className={`h-full rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:shadow-[0_0_15px_rgba(252,213,53,0.3)]'}`}
+                  className={`h-full rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:'}`}
                   title="Send Command"
                 >
                   <Send size={12} />
@@ -206,7 +206,7 @@ export const AlphaAi: React.FC = () => {
         </div>
 
         {/* Right Side: Sidebar */}
-        <div className="lg:col-span-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="lg:col-span-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
 
           {/* Quick Actions (2-Column Dense Grid) */}
           <div className="bg-alphabag-dark/80 backdrop-blur-md border border-white/5 rounded-xl p-4 shadow-glass relative overflow-hidden">
@@ -239,15 +239,15 @@ export const AlphaAi: React.FC = () => {
           {/* Portfolio Matrix */}
           <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
             
-            <div className="flex items-center justify-between mb-4 relative z-10">
+            <div className="flex items-center justify-between mb-2 relative z-10">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                     <Wallet size={12} className="text-alphabag-green"/> Aggregate Assets
                 </h3>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
                 <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Total Net Worth</p>
-                <div className="flex items-end gap-3">
+                <div className="flex items-end gap-2">
                     <span className="text-xl font-black text-white tracking-tighter tabular-nums leading-none">
                         ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
@@ -271,7 +271,7 @@ export const AlphaAi: React.FC = () => {
 
           {/* Chat History */}
           <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-4">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-2">
                 <Clock size={12} className="text-alphabag-yellow"/> Chat History
             </h3>
             <div className="space-y-2">

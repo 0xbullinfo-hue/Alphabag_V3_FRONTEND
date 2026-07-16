@@ -223,16 +223,16 @@ export const SecurityScanner: React.FC = () => {
     }, 0);
 
     return (
-        <div className="w-full space-y-2 pb-12 animate-fade-in">
+        <div className="w-full space-y-2 pb-2 animate-fade-in">
             {/* Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
                             <ShieldCheck size={20} />
                         </div>
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
-                            Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 drop-shadow-[0_0_15px_rgba(252,213,53,0.3)]">Radar</span>
+                            Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 ">Radar</span>
                         </h1>
                     </div>
                     <p className="text-alphabag-subtext text-xs font-medium uppercase tracking-[0.2em] mt-1">
@@ -243,7 +243,7 @@ export const SecurityScanner: React.FC = () => {
 
             {/* Quick Scan Input */}
             <div className="glass-panel p-4 rounded-2xl relative overflow-hidden border border-white/5">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-alphabag-yellow/5 rounded-full blur-3xl pointer-events-none"></div>
+                
                 <form onSubmit={handleQuickScan} className="flex flex-col lg:flex-row items-center gap-2">
                     <div className="w-full lg:w-1/4">
                         <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1.5">Scanning Network</label>
@@ -326,7 +326,7 @@ export const SecurityScanner: React.FC = () => {
 
             {/* Main Scanner Results */}
             <div className="bg-black/20 border border-white/5 rounded-2xl overflow-hidden p-4">
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-2">
                     <span className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                         <Key size={14} className="text-alphabag-yellow" /> Active Approvals Result
                     </span>
@@ -338,12 +338,12 @@ export const SecurityScanner: React.FC = () => {
                 </div>
 
                 {loading ? (
-                    <div className="py-24 text-center space-y-4">
+                    <div className="py-24 text-center space-y-2">
                         <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto"></div>
                         <p className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow animate-pulse">Running smart contract allowance check...</p>
                     </div>
                 ) : approvals.length === 0 ? (
-                    <div className="py-24 text-center max-w-sm mx-auto space-y-4">
+                    <div className="py-24 text-center max-w-sm mx-auto space-y-2">
                         <div className="w-12 h-12 bg-white/5 border border-white/10 text-alphabag-subtext flex items-center justify-center rounded-2xl mx-auto">
                             <ShieldCheck size={26} />
                         </div>
@@ -357,8 +357,8 @@ export const SecurityScanner: React.FC = () => {
                         {approvals.map(token => (
                             <div key={token.tokenAddress} className="border border-white/5 bg-black/40 rounded-2xl overflow-hidden hover:border-white/10 transition-all p-5">
                                 {/* Token Info header */}
-                                <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-4">
-                                    <div className="flex items-center gap-3">
+                                <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-2">
+                                    <div className="flex items-center gap-2">
                                         <img src={token.tokenLogo} className="w-8 h-8 rounded-full border border-white/10 bg-black" alt={token.tokenSymbol} />
                                         <div>
                                             <h4 className="text-xs font-black text-white uppercase">{token.tokenName}</h4>
@@ -395,7 +395,7 @@ export const SecurityScanner: React.FC = () => {
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0 border-white/5">
+                                            <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0 border-white/5">
                                                 <div className="text-left sm:text-right">
                                                     <div className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-widest mb-0.5">Approved Allowance</div>
                                                     <div className="text-xs font-black text-white flex items-center gap-1.5 uppercase">

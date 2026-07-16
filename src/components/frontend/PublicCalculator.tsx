@@ -99,7 +99,7 @@ export const PublicCalculator: React.FC = () => {
                         key={m}
                         onClick={() => { setMode(m); if (m !== 'FUTURES') setLeverage(1); }}
                         className={`py-2.5 text-[11px] font-black uppercase tracking-[0.2em] transition-all rounded-xl ${mode === m
-                            ? 'bg-alphabag-yellow text-black shadow-[0_0_15px_rgba(252,213,53,0.3)]'
+                            ? 'bg-alphabag-yellow text-black '
                             : 'text-alphabag-subtext hover:text-white hover:bg-white/5'
                             }`}
                     >
@@ -108,8 +108,8 @@ export const PublicCalculator: React.FC = () => {
                 ))}
             </div>
 
-            <div className="p-4 md:p-6 grid grid-cols-1 gap-2">
-                <div className="space-y-4">
+            <div className="p-4 md:p-4 grid grid-cols-1 gap-2">
+                <div className="space-y-2">
                     {mode === 'FUTURES' && (
                         <div className="grid grid-cols-2 gap-2">
                             <button

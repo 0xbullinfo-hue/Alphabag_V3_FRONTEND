@@ -102,9 +102,9 @@ export const AlphaCalls: React.FC = () => {
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full animate-in fade-in duration-700">
             
             {/* Header */}
-            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-6">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Radio className="animate-pulse" size={20} />
                         </div>
@@ -119,7 +119,7 @@ export const AlphaCalls: React.FC = () => {
             </div>
 
             {/* Category Filter Tabs */}
-            <div className="flex overflow-x-auto custom-scrollbar pb-3 mb-4 gap-2">
+            <div className="flex overflow-x-auto custom-scrollbar pb-3 mb-2 gap-2">
                 {CATEGORIES.map(cat => (
                     <button
                         key={cat}
@@ -137,12 +137,12 @@ export const AlphaCalls: React.FC = () => {
 
             {loading ? (
                 <div className="text-center py-32 flex flex-col items-center">
-                    <div className="animate-spin w-8 h-8 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-4"></div>
+                    <div className="animate-spin w-8 h-8 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-2"></div>
                     <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext animate-pulse">Decrypting Alpha Stream...</p>
                 </div>
             ) : signals.length === 0 ? (
                 <div className="text-center py-32 rounded-lg border border-dashed border-alphabag-gray mx-2">
-                    <Target size={40} className="mx-auto text-alphabag-subtext mb-6 opacity-30" />
+                    <Target size={40} className="mx-auto text-alphabag-subtext mb-2 opacity-30" />
                     <h3 className="text-base font-semibold text-alphabag-text mb-2">No Active Intelligence</h3>
                     <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext">The Alpha stream is currently silent. Stand by.</p>
                 </div>

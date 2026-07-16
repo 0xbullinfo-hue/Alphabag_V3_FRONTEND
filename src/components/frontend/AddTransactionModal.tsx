@@ -92,12 +92,12 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/70 backdrop-blur-sm">
       <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl w-full max-w-md max-h-[90vh] shadow-2xl animate-fade-in overflow-hidden">
-        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-alphabag-gray">
+        <div className="flex justify-between items-center p-4 sm:p-4 border-b border-alphabag-gray">
             <h3 className="text-xl font-bold text-white">Add Transaction</h3>
             <button onClick={onClose} className="text-alphabag-subtext hover:text-white"><X size={20} /></button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto max-h-[calc(90vh-78px)] custom-scrollbar">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-4 space-y-2 overflow-y-auto max-h-[calc(90vh-78px)] custom-scrollbar">
             <div className="flex bg-alphabag-black rounded-lg p-1 border border-alphabag-gray">
                 {['BUY', 'SELL', 'TRANSFER'].map(t => (
                     <button

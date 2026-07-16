@@ -64,7 +64,7 @@ const ManualHoldingsSection: React.FC = () => {
     const totalValue = holdings.reduce((acc, h) => acc + h.amount * h.buyPrice, 0);
 
     return (
-        <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6">
+        <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-lg font-bold text-white flex items-center gap-2">
                     <Plus size={18} className="text-alphabag-yellow" /> Manual Holdings
@@ -80,8 +80,8 @@ const ManualHoldingsSection: React.FC = () => {
             </p>
 
             {/* Add Form */}
-            <div className="bg-alphabag-black border border-alphabag-gray/60 p-5 rounded-xl mb-6">
-                <h3 className="text-sm font-semibold text-alphabag-text mb-4 flex items-center gap-2">
+            <div className="bg-alphabag-black border border-alphabag-gray/60 p-5 rounded-xl mb-2">
+                <h3 className="text-sm font-semibold text-alphabag-text mb-2 flex items-center gap-2">
                     <Search size={14} className="text-[#fcd535]" /> Add Holding
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-3">
@@ -252,12 +252,12 @@ export const Settings: React.FC = () => {
     const TierCard = ({ level, minTokens, current }: { level: UserTier, minTokens: string, current: boolean }) => {
         const label = level === 'FREE' ? 'Beta Tester' : 'Alphabag (coming soon)';
         return (
-            <div className={`border rounded-lg p-6 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-alphabag-gray bg-alphabag-darkgray opacity-60'}`}>
+            <div className={`border rounded-lg p-4 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-alphabag-gray bg-alphabag-darkgray opacity-60'}`}>
                 {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest uppercase">ACTIVE: CURRENT ALPHA</div>}
                 {!current && <div className="absolute top-2 right-2 text-[8px] bg-white/10 text-alphabag-muted font-extrabold px-2 py-1 rounded tracking-widest uppercase">COMING SOON</div>}
                 
                 <h3 className="text-xl font-bold text-white mb-2">{label}</h3>
-                <p className="text-sm text-alphabag-subtext mb-4">
+                <p className="text-sm text-alphabag-subtext mb-2">
                     {level === 'FREE' ? 'Current Active Alpha Testing Option' : `Hold ${minTokens} of utility token`}
                 </p>
                 <ul className="space-y-2 text-sm">
@@ -283,11 +283,11 @@ export const Settings: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-5 animate-in fade-in duration-700 pb-12">
+        <div className="w-full space-y-2 animate-in fade-in duration-700 pb-2">
             {/* Page Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <LinkIcon size={20} />
                         </div>
@@ -297,7 +297,7 @@ export const Settings: React.FC = () => {
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-alphabag-subtext text-[9px] font-semibold uppercase tracking-widest mb-1">Network Verified Balance</span>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                         <div className="text-2xl font-semibold text-alphabag-text leading-none tracking-tight tabular-nums">
                             {premiumTokenBalance.toLocaleString()} <span className="text-[#fcd535] text-base">BAG</span>
                         </div>
@@ -306,8 +306,8 @@ export const Settings: React.FC = () => {
                 </div>
             </div>
 
-            <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6">
-                <div className="flex items-center justify-between mb-6">
+            <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4">
+                <div className="flex items-center justify-between mb-2">
                     <h2 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Portfolio Connections</h2>
                     <button
                         onClick={() => {}}
@@ -319,8 +319,8 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* Count Summary Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-8">
-                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <Wallet size={18} className="text-[#0ecb81]" />
                         </div>
@@ -333,7 +333,7 @@ export const Settings: React.FC = () => {
                             <div className="text-[9px] text-[#0ecb81] font-semibold mt-0.5">Portfolio Wallets</div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Eye size={18} className="text-[#fcd535]" />
                         </div>
@@ -346,7 +346,7 @@ export const Settings: React.FC = () => {
                             <div className="text-[9px] text-[#fcd535] font-semibold mt-0.5">Wallet Trackers</div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
                         <div className="w-10 h-10 rounded-md bg-blue-500/10 flex items-center justify-center shrink-0">
                             <Database size={18} className="text-blue-400" />
                         </div>
@@ -362,11 +362,11 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* Add New Wallet Form */}
-                <div className="bg-alphabag-black border border-alphabag-gray/60 p-6 rounded-xl">
-                    <h3 className="text-sm font-bold text-white mb-4 flex items-center">
+                <div className="bg-alphabag-black border border-alphabag-gray/60 p-4 rounded-xl">
+                    <h3 className="text-sm font-bold text-white mb-2 flex items-center">
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mb-4">
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mb-2">
                         <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
                         <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
                         <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
@@ -391,8 +391,8 @@ export const Settings: React.FC = () => {
             </section>
 
             {/* ─── CEX Exchange APIs ─── */}
-            <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 shadow-xl relative">
-                <div className="flex items-center justify-between mb-6">
+            <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 shadow-xl relative">
+                <div className="flex items-center justify-between mb-2">
                     <div>
                         <h2 className="text-lg font-bold text-white flex items-center gap-2"><Key size={18} className="text-alphabag-yellow" /> CEX Exchange APIs</h2>
                         <p className="text-alphabag-subtext text-xs mt-1">Connect read-only API keys to track centralized exchange balances. <span className="text-alphabag-yellow font-bold">Max {MAX_CEX} exchanges.</span></p>
@@ -407,8 +407,8 @@ export const Settings: React.FC = () => {
                 </div>
 
                 {/* CEX Count Card */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
                             <Key size={18} className="text-[#fcd535]" />
                         </div>
@@ -424,7 +424,7 @@ export const Settings: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-4">
+                    <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
                         <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
                             <TrendingUp size={18} className="text-[#0ecb81]" />
                         </div>
@@ -441,7 +441,7 @@ export const Settings: React.FC = () => {
 
                 {/* Quick icons for connected exchanges */}
                 {connectedCex.length > 0 && (
-                    <div className="mb-6">
+                    <div className="mb-2">
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-3">Connected Exchanges</div>
                         <div className="flex items-center gap-2 flex-wrap">
                             {connectedCex.map(cex => (
@@ -476,7 +476,7 @@ export const Settings: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                        <div className="text-center p-6 border border-dashed border-alphabag-gray/40 rounded-xl">
+                        <div className="text-center p-4 border border-dashed border-alphabag-gray/40 rounded-xl">
                             <p className="text-alphabag-green font-bold text-sm">All {MAX_CEX} slots filled!</p>
                         </div>
                     )}
@@ -489,7 +489,7 @@ export const Settings: React.FC = () => {
 
             {/* ─── Membership Status ─── */}
             <section className="relative">
-                <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><Crown className="text-alphabag-yellow" size={20} /> Membership Status</h2>
+                <h2 className="text-lg font-bold text-white mb-2 flex items-center gap-2"><Crown className="text-alphabag-yellow" size={20} /> Membership Status</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <TierCard level="FREE" minTokens="0" current={true} />
                     <TierCard level="ULTIMATE" minTokens="100k" current={false} />

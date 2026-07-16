@@ -45,7 +45,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
 
     return (
         <div key={whale.id} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 hover:border-[#fcd535]/30 transition-all">
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                     <div className="w-9 h-9 bg-alphabag-black rounded-md flex items-center justify-center border border-alphabag-gray">
                         <Eye size={18} className="text-[#fcd535]" />
@@ -61,14 +61,14 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                 </button>
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
                 <h3 className="text-sm font-semibold text-alphabag-text mb-1">{whale.label}</h3>
                 <p className="text-[10px] font-mono text-alphabag-subtext bg-alphabag-black px-2 py-0.5 rounded-md inline-block border border-alphabag-gray">
                     {whale.address.substring(0, 10)}...{whale.address.substring(whale.address.length - 8)}
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-2 gap-2 mb-2">
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
                     <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Status</div>
                     <div className="flex items-center text-[#0ecb81] text-xs font-semibold">
@@ -129,12 +129,12 @@ export const Whales: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-5 pb-12 animate-in fade-in duration-700">
+        <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
 
             {/* Page Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Eye size={20} />
                         </div>
@@ -143,7 +143,7 @@ export const Whales: React.FC = () => {
                     </div>
                     <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{whaleWallets.length}</span> addresses.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <UpgradeCmd />
                     <button 
                         onClick={() => setIsAddOpen(true)}
@@ -155,7 +155,7 @@ export const Whales: React.FC = () => {
             </div>
 
             {/* Info Banner */}
-            <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-3">
+            <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-2">
                 <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={17} />
                 <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
             </div>
@@ -163,7 +163,7 @@ export const Whales: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                 {whaleWallets.length === 0 ? (
                     <div className="col-span-full py-20 rounded-lg border border-dashed border-alphabag-gray text-center">
-                        <Eye size={40} className="mx-auto mb-4 text-alphabag-subtext opacity-30" />
+                        <Eye size={40} className="mx-auto mb-2 text-alphabag-subtext opacity-30" />
                         <h3 className="text-base font-semibold text-alphabag-text mb-2">No Whales Tracked</h3>
                         <p className="text-alphabag-subtext text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
                         <button 
@@ -197,7 +197,7 @@ export const Whales: React.FC = () => {
             {isAddOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
                     <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-4 shadow-2xl relative">
-                        <div className="flex justify-between items-center mb-6">
+                        <div className="flex justify-between items-center mb-2">
                             <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
                                 <Eye size={18} className="text-[#fcd535]" /> Add Whale Wallet
                             </h3>
@@ -210,12 +210,12 @@ export const Whales: React.FC = () => {
                         </div>
 
                         {errorMsg && (
-                            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-semibold">
+                            <div className="mb-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-semibold">
                                 {errorMsg}
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-2">
                             <div>
                                 <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Wallet Address</label>
                                 <input 

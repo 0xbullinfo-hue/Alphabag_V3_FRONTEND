@@ -44,9 +44,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
     // Accessing this.state and this.props which are now explicitly declared
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-alphabag-black flex items-center justify-center p-6 text-center">
+        <div className="min-h-screen bg-alphabag-black flex items-center justify-center p-4 text-center">
           <div className="card-panel max-w-md">
-            <div className="w-16 h-16 bg-alphabag-red/10 rounded-full flex items-center justify-center mx-auto mb-6 text-alphabag-red">
+            <div className="w-16 h-16 bg-alphabag-red/10 rounded-full flex items-center justify-center mx-auto mb-2 text-alphabag-red">
               <ShieldAlert size={32} />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2 uppercase tracking-tighter">System Node Failure</h1>
@@ -54,7 +54,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
               An unexpected exception occurred in the application layer. The intelligence stream has been interrupted.
             </p>
             {this.state.errorMessage && (
-              <p className="text-xs text-alphabag-muted mb-6 break-words">Error: {this.state.errorMessage}</p>
+              <p className="text-xs text-alphabag-muted mb-2 break-words">Error: {this.state.errorMessage}</p>
             )}
             <Button 
                 onClick={() => window.location.reload()} 

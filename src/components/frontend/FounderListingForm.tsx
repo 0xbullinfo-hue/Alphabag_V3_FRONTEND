@@ -39,8 +39,8 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
     return (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-sm animate-fade-in">
             <div className="bg-alphabag-dark border border-white/10 w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative">
-                <div className="p-8">
-                    <div className="flex justify-between items-center mb-6">
+                <div className="p-4">
+                    <div className="flex justify-between items-center mb-2">
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter">
                             List Your <span className="text-alphabag-yellow">Project</span>
                         </h2>
@@ -49,14 +49,14 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
                         </button>
                     </div>
 
-                    <div className="flex gap-2 mb-8">
+                    <div className="flex gap-2 mb-2">
                         {[1, 2, 3].map(i => (
                             <div key={i} className={`h-1.5 flex-1 rounded-full transition-all ${step >= i ? 'bg-alphabag-yellow shadow-[0_0_10px_rgba(252,213,53,0.3)]' : 'bg-white/5'}`}></div>
                         ))}
                     </div>
 
                     {step === 1 && (
-                        <div className="space-y-4 animate-slide-in">
+                        <div className="space-y-2 animate-slide-in">
                             <div className="space-y-2">
                                 <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest flex items-center gap-2">
                                     <Tag size={12} /> Project Name
@@ -86,7 +86,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
                     )}
 
                     {step === 2 && (
-                        <div className="space-y-4 animate-slide-in">
+                        <div className="space-y-2 animate-slide-in">
                             <div className="space-y-2">
                                 <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest flex items-center gap-2">
                                     <Globe size={12} /> Contract Address
@@ -111,7 +111,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
                                     onChange={(e) => setFormData({...formData, website: e.target.value})}
                                 />
                             </div>
-                            <div className="flex gap-4">
+                            <div className="flex gap-2">
                                 <Button variant="outline" onClick={() => setStep(1)} className="flex-1 py-4 border-white/5">Back</Button>
                                 <Button onClick={() => setStep(3)} className="flex-1 py-4 uppercase font-bold tracking-widest">Next Step</Button>
                             </div>
@@ -119,7 +119,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
                     )}
 
                     {step === 3 && (
-                        <div className="space-y-4 animate-slide-in">
+                        <div className="space-y-2 animate-slide-in">
                             <div className="space-y-2">
                                 <label className="text-[10px] text-alphabag-muted font-black uppercase tracking-widest flex items-center gap-2">
                                     <FileText size={12} /> Project Description
@@ -131,7 +131,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
                                     onChange={(e) => setFormData({...formData, description: e.target.value})}
                                 />
                             </div>
-                            <div className="flex gap-4">
+                            <div className="flex gap-2">
                                 <Button variant="outline" onClick={() => setStep(2)} className="flex-1 py-4 border-white/5">Back</Button>
                                 <Button 
                                     onClick={handleSubmit} 

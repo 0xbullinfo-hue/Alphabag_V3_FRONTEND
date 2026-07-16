@@ -39,11 +39,11 @@ export const DeFi: React.FC = () => {
     const pendingYield = totalValueLocked * 0.0015; 
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-5 animate-in fade-in duration-700">
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 animate-in fade-in duration-700">
             {/* Header */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
                             <Layers size={20} />
                         </div>
@@ -71,7 +71,7 @@ export const DeFi: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray px-3 py-1.5 rounded-md flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-pulse"></div>
                         <span className="text-[8px] font-semibold uppercase tracking-widest text-alphabag-subtext">Nodes Live</span>
@@ -126,7 +126,7 @@ export const DeFi: React.FC = () => {
                                   filtered.map(pos => (
                                       <tr key={pos.id} className="hover:bg-alphabag-black/20 transition-colors group">
                                           <td className="p-3 px-6">
-                                              <div className="flex items-center gap-3">
+                                              <div className="flex items-center gap-2">
                                                   <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm border border-alphabag-gray shrink-0">
                                                      <img src={pos.icon} alt={pos.protocol} className="w-full h-full object-contain rounded-full" />
                                                   </div>

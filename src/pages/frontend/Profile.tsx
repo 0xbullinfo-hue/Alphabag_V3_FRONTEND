@@ -261,11 +261,11 @@ export const Profile: React.FC = () => {
 
             <div className="w-full">
                 {/* Profile Info Card */}
-                <div className="relative -mt-12 mb-6 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
+                <div className="relative -mt-12 mb-2 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
                     <div className="flex justify-between items-start">
                         <div className="relative">
                             <div
-                                className={`w-24 h-24 rounded-2xl bg-gradient-to-tr from-alphabag-yellow to-orange-500 p-1 shadow-glow-yellow/20 ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
+                                className={`w-24 h-24 rounded-2xl bg-gradient-to-tr from-alphabag-yellow to-orange-500 p-1  ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
                                 onClick={() => isEditing && isOwnProfile && avatarInputRef.current?.click()}
                             >
                                 <div className="w-full h-full bg-alphabag-black rounded-xl flex items-center justify-center overflow-hidden relative">
@@ -312,7 +312,7 @@ export const Profile: React.FC = () => {
                                             size="sm"
                                             onClick={handleSave}
                                             disabled={isSaving}
-                                            className="rounded-full bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[9px] px-4 py-1.5 shadow-glow-yellow/20"
+                                            className="rounded-full bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[9px] px-4 py-1.5 "
                                         >
                                             {isSaving ? 'Saving...' : 'Save'}
                                         </Button>
@@ -358,7 +358,7 @@ export const Profile: React.FC = () => {
                         </div>
 
                         {isEditing ? (
-                            <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                                 <div className="space-y-1">
                                     <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Bio</label>
                                     <textarea 
@@ -437,7 +437,7 @@ export const Profile: React.FC = () => {
                             </>
                         )}
 
-                        <div className="flex gap-3 pt-2 border-t border-white/5">
+                        <div className="flex gap-2 pt-2 border-t border-white/5">
                             <div className="flex items-center gap-1.5">
                                 <span className="text-white font-black text-sm">4.2K</span>
                                 <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Following</span>
@@ -512,7 +512,7 @@ export const Profile: React.FC = () => {
                 </div>
 
                 {/* Timeline Tabs */}
-                <div className="flex border-b border-white/5 mb-6">
+                <div className="flex border-b border-white/5 mb-2">
                     {['Alphas', isFounder ? 'Manifesto' : 'Replies', 'Media'].map((tab) => (
                         <button 
                             key={tab}
@@ -533,7 +533,7 @@ export const Profile: React.FC = () => {
                                 <span className="text-[10px] font-black text-alphabag-yellow uppercase tracking-widest">Pinned Manifesto</span>
                             </div>
 
-                            <div className="glass-panel p-0 border-2 border-alphabag-yellow/30 bg-alphabag-black shadow-glow-yellow/5 relative overflow-hidden rounded-3xl">
+                            <div className="glass-panel p-0 border-2 border-alphabag-yellow/30 bg-alphabag-black  relative overflow-hidden rounded-3xl">
                                 <div className="h-32 w-full relative overflow-hidden bg-alphabag-darkgray/30 border-b border-white/5">
                                     {project.bannerUrl ? (
                                         <img src={project.bannerUrl} alt="Banner" className="w-full h-full object-cover" />
@@ -545,8 +545,8 @@ export const Profile: React.FC = () => {
                                     <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black to-transparent"></div>
                                 </div>
 
-                                <div className="p-8 pt-4">
-                                    <div className="flex items-center gap-4 mb-6 relative -mt-12">
+                                <div className="p-4 pt-4">
+                                    <div className="flex items-center gap-2 mb-2 relative -mt-12">
                                         <div className="w-16 h-16 bg-alphabag-black border-2 border-alphabag-yellow rounded-2xl flex items-center justify-center font-black text-2xl text-alphabag-yellow shadow-2xl overflow-hidden">
                                             {project.logoUrl ? (
                                                 <img src={project.logoUrl} alt="Logo" className="w-full h-full object-cover" />
@@ -561,18 +561,18 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <p className="text-zinc-200 text-lg font-bold leading-snug mb-6 italic border-l-4 border-alphabag-yellow pl-4">
+                                    <p className="text-zinc-200 text-lg font-bold leading-snug mb-2 italic border-l-4 border-alphabag-yellow pl-4">
                                         "{project.theHook}"
                                     </p>
 
-                                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 line-clamp-3">
+                                    <p className="text-zinc-400 text-sm leading-relaxed mb-2 line-clamp-3">
                                         {project.description}
                                     </p>
 
-                                    <div className="flex flex-wrap gap-4">
+                                    <div className="flex flex-wrap gap-2">
                                         <Button 
                                             onClick={() => window.open(project.buyLink, '_blank')}
-                                            className="bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3 shadow-glow-yellow/20 shadow-lg hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all"
+                                            className="bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3  shadow-lg hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all"
                                         >
                                             Buy $ {project.symbol}
                                         </Button>
@@ -592,7 +592,7 @@ export const Profile: React.FC = () => {
                     {posts.length > 0 ? (
                         posts.map(post => (
                             <div key={post.id} className="p-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-2xl">
-                                <div className="flex gap-4">
+                                <div className="flex gap-2">
                                     <div className="w-10 h-10 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase">
                                         {getProfileInitial(profileUser)}
                                     </div>
@@ -602,7 +602,7 @@ export const Profile: React.FC = () => {
                                             {isFounder && <CheckCircle2 size={14} className="text-alphabag-yellow" fill="currentColor" />}
                                             <span className="text-alphabag-muted text-[14px]">@{getProfileHandle(profileUser)}_member</span>
                                         </div>
-                                        <p className="text-zinc-200 text-[15px] leading-relaxed mb-4">
+                                        <p className="text-zinc-200 text-[15px] leading-relaxed mb-2">
                                             {post.content}
                                         </p>
                                     </div>
@@ -611,7 +611,7 @@ export const Profile: React.FC = () => {
                         ))
                     ) : (
                         <div className="p-20 text-center">
-                            <MessageSquare size={48} className="text-alphabag-muted mx-auto mb-4 opacity-20" />
+                            <MessageSquare size={48} className="text-alphabag-muted mx-auto mb-2 opacity-20" />
                             <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">No Alphas Yet</h3>
                             <p className="text-sm text-alphabag-muted">This node hasn't broadcasted any intelligence yet.</p>
                         </div>

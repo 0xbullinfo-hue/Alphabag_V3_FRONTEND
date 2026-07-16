@@ -115,13 +115,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       <div className="bg-alphabag-dark border border-white/10 w-full max-w-sm rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden relative group">
         
         {/* Animated Background Glow */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-alphabag-yellow/10 rounded-full blur-[80px] group-hover:bg-alphabag-yellow/20 transition-all duration-700" />
-        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-alphabag-blue/5 rounded-full blur-[80px]" />
+        
+        
 
-        <div className="p-8 relative z-10">
-          <div className="flex justify-between items-center mb-6">
+        <div className="p-4 relative z-10">
+          <div className="flex justify-between items-center mb-2">
             <div className="flex items-center space-x-2">
-              <img src="/logo.png" alt="AlphaBAG Logo" className="w-10 h-10 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.3)] transform rotate-3 hover:rotate-0 transition-transform duration-300" />
+              <img src="/logo.png" alt="AlphaBAG Logo" className="w-10 h-10 object-contain rounded-full  transform rotate-3 hover:rotate-0 transition-transform duration-300" />
               <div>
                 <h2 className="text-xl font-black text-white tracking-tighter uppercase leading-none">
                   Alpha<span className="text-alphabag-yellow">BAG</span>
@@ -139,13 +139,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
           {step === 'INFO' ? (
             <div className="animate-in fade-in slide-in-from-right-8 duration-500">
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-2">
                 <div className={`w-16 h-16 rounded-xl ${carouselSteps[carouselStep].bg} flex items-center justify-center border border-white/5 shadow-inner`}>
                   {React.cloneElement(carouselSteps[carouselStep].icon as React.ReactElement, { size: 24 })}
                 </div>
               </div>
 
-              <div className="text-center space-y-2 mb-8">
+              <div className="text-center space-y-2 mb-2">
                 <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] text-alphabag-muted font-black uppercase tracking-widest opacity-60">
                   <Sparkles size={10} className="text-alphabag-yellow" /> Deployment Step {carouselStep + 1} of 4
                 </div>
@@ -157,7 +157,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-2">
                 <Button 
                   onClick={() => {
                     if (carouselStep < 3) {
@@ -191,7 +191,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </div>
           ) : (
             <>
-              <div className="text-center mb-6 space-y-1.5">
+              <div className="text-center mb-2 space-y-1.5">
                 <p className="text-sm text-white font-black uppercase tracking-tight">
                   {step === 'CONNECT' && 'Establish Connection'}
                   {step === 'SIGN' && 'Verify Identity'}
@@ -204,7 +204,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {error && (
                   <div className="text-red-400 text-[10px] text-center font-black uppercase tracking-widest bg-red-500/5 border border-red-500/20 p-3 rounded-xl animate-in shake duration-300">
                     Error: {error}
@@ -226,7 +226,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     </div>
                     <Button
                       onClick={handleConnect}
-                      className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-3 bg-alphabag-yellow hover:bg-yellow-400 text-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-2 bg-alphabag-yellow hover:bg-yellow-400 text-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                       disabled={loading}
                     >
                       {loading ? <Loader className="animate-spin" size={16} /> : <><Wallet size={16} strokeWidth={3} /> Connect Wallet</>}
@@ -236,7 +236,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 {step === 'SIGN' && (
                   <div className="space-y-2">
-                    <div className="flex items-center gap-3 p-3 bg-white/5 border border-white/10 rounded-xl mb-1">
+                    <div className="flex items-center gap-2 p-3 bg-white/5 border border-white/10 rounded-xl mb-1">
                       <div className="w-7 h-7 bg-alphabag-blue/20 rounded flex items-center justify-center text-alphabag-blue">
                         <CheckCircle2 size={14} />
                       </div>
@@ -247,7 +247,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     </div>
                     <Button
                       onClick={handleSiwe}
-                      className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-3 bg-white text-black hover:bg-alphabag-blue hover:text-white rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="w-full h-12 text-[10px] font-black tracking-[0.2em] shadow-2xl uppercase flex items-center justify-center gap-2 bg-white text-black hover:bg-alphabag-blue hover:text-white rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
                       disabled={loading}
                     >
                       {loading ? (
@@ -263,7 +263,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 )}
 
                 {step === 'SUCCESS' && (
-                  <div className="flex flex-col items-center justify-center py-6 space-y-4 animate-in zoom-in duration-500">
+                  <div className="flex flex-col items-center justify-center py-3 space-y-2 animate-in zoom-in duration-500">
                     <div className="w-20 h-20 bg-alphabag-green/20 rounded-full flex items-center justify-center text-alphabag-green shadow-[0_0_40px_rgba(0,255,163,0.2)]">
                       <CheckCircle2 size={40} strokeWidth={2.5} />
                     </div>
@@ -277,7 +277,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           )}
 
           <div className="mt-8 pt-6 border-t border-white/5">
-            <div className="flex items-center justify-center gap-3 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
+            <div className="flex items-center justify-center gap-2 opacity-30 grayscale hover:grayscale-0 transition-all duration-500">
               <div className="flex items-center gap-2">
                 <Shield size={10} className="text-alphabag-subtext" />
                 <span className="text-[8px] font-black uppercase tracking-widest text-alphabag-subtext">Secure Phase 1</span>

@@ -142,9 +142,9 @@ export const GenesisManifesto: React.FC = () => {
         <div className="bg-alphabag-black min-h-screen text-white font-sans pt-12 pb-16 px-6">
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="mb-4">
+                <div className="mb-2">
                     <div className="flex items-center space-x-2 mb-3">
-                        <div className="w-10 h-10 bg-alphabag-yellow text-black flex items-center justify-center rounded-xl shadow-glow-yellow">
+                        <div className="w-10 h-10 bg-alphabag-yellow text-black flex items-center justify-center rounded-xl ">
                             <Rocket size={20} fill="currentColor" />
                         </div>
                         <div>
@@ -386,7 +386,7 @@ export const GenesisManifesto: React.FC = () => {
 
                     {/* Roadmap */}
                     <Section title="05. THE ROADMAP" subtitle="Your next three major deliverables.">
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             {formData.roadmap.map((item, index) => (
                                 <div key={index} className="relative">
                                     <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-alphabag-yellow text-black flex items-center justify-center rounded-full text-[9px] font-black italic">
@@ -424,8 +424,8 @@ export const GenesisManifesto: React.FC = () => {
 };
 
 const Section = ({ title, subtitle, children }: { title: string, subtitle: string, children: React.ReactNode }) => (
-    <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 md:p-6 backdrop-blur-sm">
-        <div className="mb-4">
+    <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 md:p-4 backdrop-blur-sm">
+        <div className="mb-2">
             <h2 className="text-base font-black text-white uppercase tracking-tight mb-0.5">{title}</h2>
             <p className="text-alphabag-muted text-[9px] font-black uppercase tracking-widest opacity-60">{subtitle}</p>
         </div>

@@ -104,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </div>
       )}
 
-      <header className={`fixed left-0 right-0 h-16 bg-alphabag-black border-b border-alphabag-gray z-[60] px-6 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-7' : 'top-0'}`}>
+      <header className={`fixed left-0 md:left-64 right-0 h-14 bg-alphabag-darkgray border border-alphabag-gray rounded-xl z-[60] px-4 mx-2 flex items-center justify-between transition-all ${IS_DEMO_MODE ? 'top-9' : 'top-2'}`}>
         <div className="flex items-center">
           <button
             onClick={toggleSidebar}
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
           </Link>
 
-          <nav className="hidden md:flex items-center ml-8 space-x-6 text-sm font-medium text-alphabag-subtext">
+          <nav className="hidden md:flex items-center ml-8 space-x-2 text-sm font-medium text-alphabag-subtext">
             <Link to="/markets" className="hover:text-alphabag-text transition-colors">
               Markets
             </Link>
@@ -149,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
           />
         </form>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
           <button
             onClick={toggleTheme}
             className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
@@ -166,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                         setShowNotifications(!showNotifications);
                         setShowUserMenu(false);
                     }}
-                    className={`p-2 rounded-xl transition-all duration-300 active:scale-[0.98] relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow shadow-[0_0_15px_rgba(252,213,53,0.3)]' : 'bg-transparent text-alphabag-muted hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10'}`}
+                    className={`p-2 rounded-xl transition-all duration-300 active:scale-[0.98] relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow ' : 'bg-transparent text-alphabag-muted hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10'}`}
                 >
                     <Bell size={20} />
                     {notifications.some(n => !n.read) && (

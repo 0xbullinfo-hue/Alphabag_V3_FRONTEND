@@ -16,8 +16,8 @@ export const FearAndGreed: React.FC = () => {
   const rotation = (data.value / 100) * 180;
 
   return (
-    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-6 flex flex-col items-center justify-between relative overflow-hidden">
-      <h3 className="font-bold text-white mb-4">Fear & Greed Index</h3>
+    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-4 flex flex-col items-center justify-between relative overflow-hidden">
+      <h3 className="font-bold text-white mb-2">Fear & Greed Index</h3>
       
       <div className="relative w-48 h-24 mb-2 overflow-hidden">
         {/* Gauge Background */}

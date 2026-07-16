@@ -138,7 +138,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             className={`flex w-full ${isAi ? 'justify-start' : 'justify-end'} group mt-2 mb-2`}
         >
-            <div className={`flex max-w-[85%] sm:max-w-3xl gap-4 w-full ${isAi ? 'flex-row' : 'flex-row-reverse'}`}>
+            <div className={`flex max-w-[85%] sm:max-w-3xl gap-2 w-full ${isAi ? 'flex-row' : 'flex-row-reverse'}`}>
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${isAi ? 'bg-alphabag-yellow text-alphabag-black' : 'bg-alphabag-darkgray text-zinc-50 border border-alphabag-border'}`}>
                     {isAi ? <Bot size={20} /> : <User size={20} />}
                 </div>

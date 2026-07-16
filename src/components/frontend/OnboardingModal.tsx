@@ -47,7 +47,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-2xl animate-fade-in overflow-y-auto">
             <div className="w-full max-w-xl bg-alphabag-dark/95 border border-white/10 rounded-xl shadow-[0_0_70px_rgba(0,0,0,0.65)] overflow-hidden">
-                <div className="p-5 md:p-8">
+                <div className="p-5 md:p-4">
                     {step === 'ROLE' ? (
                         <div className="text-center relative">
                             {onExit && (
@@ -64,7 +64,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                             <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-1.5 leading-none">
                                 Choose Your <span className="text-alphabag-yellow">Path</span>
                             </h2>
-                            <p className="text-alphabag-subtext text-[11px] mb-6 max-w-xs mx-auto opacity-60 font-medium">
+                            <p className="text-alphabag-subtext text-[11px] mb-2 max-w-xs mx-auto opacity-60 font-medium">
                                 Define your role to access the Alpha Radar ecosystem.
                             </p>
 
@@ -106,17 +106,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                         <div className="animate-slide-up">
                             <button 
                                 onClick={() => setStep('ROLE')}
-                                className="text-alphabag-muted hover:text-white mb-4 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-colors"
+                                className="text-alphabag-muted hover:text-white mb-2 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest transition-colors"
                             >
                                 <ArrowRight className="rotate-180" size={12} /> Back
                             </button>
 
-                            <h2 className="text-lg font-black text-white uppercase tracking-tighter mb-4 leading-none">
+                            <h2 className="text-lg font-black text-white uppercase tracking-tighter mb-2 leading-none">
                                 {selectedRole === 'FOUNDER' ? 'Project Manifesto' : 'Trader Profile'}
                             </h2>
 
                             {selectedRole === 'FOUNDER' ? (
-                                <form onSubmit={handleFounderSubmit} className="space-y-4">
+                                <form onSubmit={handleFounderSubmit} className="space-y-2">
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                         <div className="space-y-1">
                                             <label className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest ml-1 opacity-60">Project Name</label>
@@ -187,12 +187,12 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                                         </div>
                                     </div>
 
-                                    <Button className="w-full h-11 bg-alphabag-yellow text-black font-black uppercase tracking-[0.2em] rounded-lg shadow-glow-yellow text-[10px] mt-2">
+                                    <Button className="w-full h-11 bg-alphabag-yellow text-black font-black uppercase tracking-[0.2em] rounded-lg  text-[10px] mt-2">
                                         Save & Access
                                     </Button>
                                 </form>
                             ) : (
-                                <form onSubmit={handleTraderSubmit} className="space-y-4">
+                                <form onSubmit={handleTraderSubmit} className="space-y-2">
                                      <div className="space-y-1">
                                         <label className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest ml-1 opacity-60">Username</label>
                                         <div className="relative">

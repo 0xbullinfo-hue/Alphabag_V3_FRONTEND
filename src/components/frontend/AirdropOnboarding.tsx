@@ -64,7 +64,7 @@ export const AirdropOnboarding: React.FC = () => {
 
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-500">
-            <div className="w-full max-w-lg bg-alphabag-dark/95 border border-white/10 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.85)] overflow-hidden relative group">
+            <div className="w-full max-w-lg bg-alphabag-dark/95 border border-white/10 rounded-xl  overflow-hidden relative group">
                 {/* Decorative Elements */}
                 <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${currentStep.color} transition-all duration-700`} style={{width: `${(step + 1) * 25}%`}}></div>
                 <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-[100px] opacity-20 transition-all duration-700 bg-gradient-to-br ${currentStep.color}`}></div>
@@ -76,14 +76,14 @@ export const AirdropOnboarding: React.FC = () => {
                     <X size={20} />
                 </button>
 
-                <div className="p-6 md:p-10 text-center">
-                    <div className="flex justify-center mb-6">
+                <div className="p-4 md:p-10 text-center">
+                    <div className="flex justify-center mb-2">
                         <div className={`w-16 h-16 rounded-xl ${currentStep.bg} flex items-center justify-center animate-bounce-slow border border-white/5 shadow-inner`}>
                             {currentStep.icon}
                         </div>
                     </div>
 
-                    <div className="space-y-2 mb-8">
+                    <div className="space-y-2 mb-2">
                         <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-[8px] text-alphabag-muted font-black uppercase tracking-widest">
                             <Sparkles size={10} className="text-alphabag-yellow" /> Deployment Step {step + 1} of 4
                         </div>
@@ -98,7 +98,7 @@ export const AirdropOnboarding: React.FC = () => {
                     <div className="flex flex-col gap-2">
                         <Button 
                             onClick={nextStep}
-                            className={`w-full py-4 bg-gradient-to-r ${currentStep.color} text-black font-black uppercase tracking-[0.3em] rounded-xl transition-all shadow-[0_20px_80px_rgba(252,213,53,0.18)] text-[11px] h-11`}
+                            className={`w-full py-4 bg-gradient-to-r ${currentStep.color} text-black font-black uppercase tracking-[0.3em] rounded-xl transition-all  text-[11px] h-11`}
                         >
                             {step < 3 ? 'Initiate Next Phase' : 'Access Control Deck'}
                         </Button>

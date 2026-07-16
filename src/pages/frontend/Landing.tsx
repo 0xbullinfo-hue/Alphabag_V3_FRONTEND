@@ -470,13 +470,13 @@ export const Landing: React.FC = () => {
   };
 
   return (
-    <div className="bg-alphabag-black min-h-screen text-alphabag-text overflow-x-hidden">
+    <div className="min-h-screen text-alphabag-text overflow-x-hidden" style={{ backgroundColor: '#181a20' }}>
 
       {/* ── TEASER TOAST NOTIFICATION ── */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
         showTeaserToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="flex items-center gap-3 bg-alphabag-dark border border-alphabag-yellow/40 text-white px-5 py-3.5 rounded-xl shadow-[0_0_40px_rgba(252,213,53,0.2)] backdrop-blur-xl">
+        <div className="flex items-center gap-2 bg-alphabag-dark border border-alphabag-yellow/40 text-white px-5 py-3.5 rounded-xl  backdrop-blur-xl">
           <BellRing size={16} className="text-alphabag-yellow animate-bounce" />
           <span className="text-sm font-bold">Testnet is launching soon — <span className="text-alphabag-yellow">stay tuned on Telegram & X.</span></span>
           <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-white">
@@ -487,7 +487,7 @@ export const Landing: React.FC = () => {
 
       {/* ── ANNOUNCEMENT BANNER ── */}
       {IS_TEASER_MODE && !bannerDismissed && (
-        <div className="w-full bg-gradient-to-r from-alphabag-yellow/10 via-alphabag-yellow/20 to-alphabag-yellow/10 border-b border-alphabag-yellow/20 py-2.5 px-4 flex items-center justify-center gap-3 relative">
+        <div className="w-full bg-gradient-to-r from-alphabag-yellow/10 via-alphabag-yellow/20 to-alphabag-yellow/10 border-b border-alphabag-yellow/20 py-2.5 px-4 flex items-center justify-center gap-2 relative">
           <span className="flex h-2 w-2 relative shrink-0">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-yellow opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
@@ -495,7 +495,7 @@ export const Landing: React.FC = () => {
           <p className="text-xs font-medium text-white text-center">
             Testnet Launching Soon &mdash; Join our community for early access
           </p>
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
             <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
               <Send size={11} /> Telegram <ChevronRight size={11} />
@@ -512,18 +512,18 @@ export const Landing: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray" style={{ backgroundColor: 'rgba(30, 35, 41, 0.95)' }}>
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray" style={{ backgroundColor: 'rgba(24, 26, 32, 0.95)' }}>
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
           
           {/* Left Side: Logo + Nav Links (Binance layout) */}
           <div className="flex items-center space-x-10">
             <div className="flex items-center space-x-2 cursor-pointer shrink-0" onClick={() => handleNavClick('home')}>
-              <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full shadow-[0_0_20px_rgba(252,213,53,0.1)]" />
+              <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full " />
               <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
             </div>
 
             {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-alphabag-subtext">
+            <div className="hidden md:flex items-center space-x-2 text-sm font-medium text-alphabag-subtext">
               <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_home')}</button>
               <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_features')}</button>
               <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_tokenomics')}</button>
@@ -534,7 +534,7 @@ export const Landing: React.FC = () => {
           </div>
 
           {/* Right Side: Translation Globe + Theme + Wallet/Login Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2">
             
             {/* World Globe Language Switcher */}
             <div className="relative">
@@ -595,7 +595,7 @@ export const Landing: React.FC = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-2">
             
             {/* World Globe Language Switcher Mobile */}
             <div className="relative">
@@ -641,7 +641,7 @@ export const Landing: React.FC = () => {
 
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-6 flex flex-col space-y-4 animate-slide-in" style={{ backgroundColor: 'rgba(30, 35, 41, 0.95)' }}>
+          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in" style={{ backgroundColor: 'rgba(24, 26, 32, 0.95)' }}>
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
@@ -688,10 +688,10 @@ export const Landing: React.FC = () => {
                     ))}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 animate-fade-in-up delay-200">
+                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 animate-fade-in-up delay-200">
                     {IS_TEASER_MODE ? (
                       <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={handleLaunchApp}>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none  transition-all" onClick={handleLaunchApp}>
                           {t('btn_notify_me')}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
@@ -702,7 +702,7 @@ export const Landing: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none shadow-[0_0_20px_rgba(252,213,53,0.3)] transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none  transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
                           {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
@@ -715,7 +715,7 @@ export const Landing: React.FC = () => {
                   </div>
 
                   {/* Stats Section */}
-                  <div className="flex flex-wrap gap-3 md:gap-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
+                  <div className="flex flex-wrap gap-2 md:gap-2 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
                     <div>
                       <div className="text-2xl font-bold text-alphabag-text mb-1">{t('stat_assets')}</div>
                       <div className="text-xs font-semibold text-alphabag-subtext">{t('stat_assets_lbl')}</div>
@@ -732,9 +732,9 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Calculator Card */}
-                <div className="lg:col-span-6 w-full bg-[#2b323c] border border-alphabag-gray rounded-2xl p-6 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
-                  <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
-                  <div className="flex items-center justify-between mb-4 border-b border-alphabag-gray pb-3">
+                <div className="lg:col-span-6 w-full bg-[#2b323c] border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
+                  
+                  <div className="flex items-center justify-between mb-2 border-b border-alphabag-gray pb-3">
                     <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
                       <CalculatorIcon size={16} className="text-alphabag-yellow" /> {t('calculator_title')}
                     </h3>
@@ -765,7 +765,7 @@ export const Landing: React.FC = () => {
           <section id="features" className="py-32 px-6 min-h-[85vh] flex flex-col justify-center">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-20 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-6 tracking-tight text-alphabag-text">{t('features_title')} <span className="text-alphabag-yellow">{t('features_title_alpha')}</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">{t('features_title')} <span className="text-alphabag-yellow">{t('features_title_alpha')}</span></h2>
                 <p className="text-xl text-alphabag-subtext">{t('features_subtitle')}</p>
               </div>
 
@@ -807,15 +807,15 @@ export const Landing: React.FC = () => {
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
                 
                 <div className="text-center mb-16">
-                  <h2 className="text-3xl md:text-4xl font-semibold mb-6 tracking-tight text-alphabag-text">{t('why_title')} <span className="text-alphabag-yellow">{t('why_title_alpha')}</span></h2>
+                  <h2 className="text-3xl md:text-4xl font-semibold mb-2 tracking-tight text-alphabag-text">{t('why_title')} <span className="text-alphabag-yellow">{t('why_title_alpha')}</span></h2>
                   <p className="text-base text-alphabag-subtext max-w-2xl mx-auto">
                     {t('why_desc')}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-5xl mx-auto items-center">
-                  <div className="space-y-4">
-                    <div className="flex gap-4">
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
                       <div className="w-10 h-10 shrink-0 bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center rounded-xl border border-alphabag-yellow/20">
                         <Zap size={20} />
                       </div>
@@ -824,7 +824,7 @@ export const Landing: React.FC = () => {
                         <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_latency_desc')}</p>
                       </div>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2">
                       <div className="w-10 h-10 shrink-0 bg-green-500/10 text-green-500 flex items-center justify-center rounded-xl border border-green-500/20">
                         <ShieldCheck size={20} />
                       </div>
@@ -833,7 +833,7 @@ export const Landing: React.FC = () => {
                         <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_privacy_desc')}</p>
                       </div>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-2">
                       <div className="w-10 h-10 shrink-0 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-xl border border-blue-500/20">
                         <Bot size={20} />
                       </div>
@@ -845,7 +845,7 @@ export const Landing: React.FC = () => {
                   </div>
                   <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-[#2b323c] overflow-hidden flex items-center justify-center group shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
-                    <div className="w-24 h-24 bg-[#1e2329] border border-white/5 rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(252,213,53,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(252,213,53,0.2)] transition-all duration-700 relative z-10">
+                    <div className="w-24 h-24 bg-[#1e2329] border border-white/5 rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
                       <Lock size={40} className="text-alphabag-yellow" />
                     </div>
                     <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -863,7 +863,7 @@ export const Landing: React.FC = () => {
             
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-alphabag-text">Alphabag <span className="text-alphabag-yellow">Tokenomics</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alphabag <span className="text-alphabag-yellow">Tokenomics</span></h2>
                 <p className="text-alphabag-subtext text-sm max-w-4xl mx-auto leading-relaxed">Detailed token distribution and exact tokenomics for Alphabag ecosystem</p>
               </div>
 
@@ -878,7 +878,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Allocations Unmasked */}
-                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-8 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-4 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full h-full">
                     <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
                     <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
@@ -900,7 +900,7 @@ export const Landing: React.FC = () => {
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center md:text-left mb-20 relative">
-                <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                   <div className="h-px w-8 bg-alphabag-yellow"></div>
                   <span className="text-[10px] font-bold text-alphabag-yellow uppercase tracking-[0.3em]">Get Started</span>
                 </div>
@@ -946,7 +946,7 @@ export const Landing: React.FC = () => {
               </div>
 
               <div className="mt-24 flex justify-center">
-                <div className="bg-[#2b323c] border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-3">
+                <div className="bg-[#2b323c] border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-2">
                   <ArrowRight size={18} /> Swap on PancakeSwap (coming soon)
                 </div>
               </div>
@@ -960,12 +960,12 @@ export const Landing: React.FC = () => {
 
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
-              <div className="text-center mb-8 mt-12">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-alphabag-text">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
+              <div className="text-center mb-2 mt-12">
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
                 <p className="text-alphabag-subtext text-sm">Network Deployment Phases</p>
               </div>
 
-              <div className="relative w-full overflow-x-auto pb-12 pt-12 custom-scrollbar snap-x snap-mandatory">
+              <div className="relative w-full overflow-x-auto pb-2 pt-12 custom-scrollbar snap-x snap-mandatory">
                 {/* Main Horizontal Trace */}
                 <div className="absolute top-[68px] left-0 right-0 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/50 to-alphabag-gray min-w-[max(100%,1200px)]"></div>
 
@@ -1022,7 +1022,7 @@ export const Landing: React.FC = () => {
           <section id="faq" className="py-24 px-6 border-y border-alphabag-border bg-alphabag-black min-h-[85vh] flex flex-col justify-center">
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-4 tracking-tight text-alphabag-text">System <span className="text-alphabag-yellow">FAQ</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">System <span className="text-alphabag-yellow">FAQ</span></h2>
                 <p className="text-lg text-alphabag-subtext max-w-2xl mx-auto">Everything you need to know about the AlphaBAG hub and ecosystem.</p>
               </div>
 
@@ -1080,7 +1080,7 @@ export const Landing: React.FC = () => {
             <span className="text-white text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <X size={14} /> X.com
             </a>
@@ -1129,10 +1129,10 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
             ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
           `}>
           <div className={`bg-[#2b323c] border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
-               ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray'}
+               ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 ' : 'border-alphabag-gray'}
             `}>
             {/* Header Info */}
-            <div className="flex justify-between items-start mb-4 gap-2">
+            <div className="flex justify-between items-start mb-2 gap-2">
               <div>
                 <div className="text-[10px] font-mono text-alphabag-subtext mb-1 tracking-widest">{phase}</div>
                 <h3 className={`text-sm font-bold font-mono tracking-tight uppercase ${status === 'EXECUTING' ? 'text-alphabag-yellow' : 'text-white'}`}>
@@ -1166,7 +1166,7 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray bg-[#2b323c] hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
+    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 ' : 'border-alphabag-gray bg-[#2b323c] hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 text-left"
@@ -1207,7 +1207,7 @@ const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNo
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-6 rounded-2xl flex items-center gap-4 md:gap-5 hover:border-[#474d57] transition-all group h-full shadow-lg">
+  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-[#474d57] transition-all group h-full shadow-lg">
     <div className="w-12 h-12 shrink-0 bg-[#1e2329] border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
@@ -1221,7 +1221,7 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
 );
 
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
-  <div className={`p-6 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-[#fcd535] shadow-[0_0_20px_rgba(252,213,53,0.1)]' : 'bg-[#2b323c] border-alphabag-gray hover:border-[#474d57]'} transition-all`}>
+  <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-[#fcd535] ' : 'bg-[#2b323c] border-alphabag-gray hover:border-[#474d57]'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
         <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>
@@ -1246,19 +1246,19 @@ const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spread
 );
 
 const PricingCard = ({ tier, tokens, price, features, recommended = false, onAction }: { tier: string, tokens: string, price: string, features: string[], recommended?: boolean, onAction: () => void }) => (
-  <div className={`relative flex flex-col p-6 rounded-xl border ${recommended ? 'bg-[#2b323c] border-alphabag-yellow shadow-[0_0_40px_rgba(252,213,53,0.1)] scale-105 z-10' : 'bg-[#2b323c] border-white/10'}`}>
+  <div className={`relative flex flex-col p-4 rounded-xl border ${recommended ? 'bg-[#2b323c] border-alphabag-yellow  scale-105 z-10' : 'bg-[#2b323c] border-white/10'}`}>
     {recommended && (
       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
         <Crown size={10} className="mr-1" fill="currentColor" /> Best Value
       </div>
     )}
-    <div className="mb-6 text-center">
+    <div className="mb-2 text-center">
       <h3 className="text-alphabag-subtext text-[9px] font-black uppercase tracking-[0.3em] mb-1.5 opacity-60">{tier}</h3>
       <div className="text-3xl font-black mb-1.5 uppercase tracking-tighter text-white">{price}</div>
       {recommended && <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest mb-1.5">ELIGIBILITY: GENESIS HOLDER</div>}
       <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest bg-alphabag-yellow/5 inline-block px-2.5 py-1 rounded border border-alphabag-yellow/20">{tokens}</div>
     </div>
-    <ul className="space-y-2 mb-8 flex-1 text-[11px] font-bold">
+    <ul className="space-y-2 mb-2 flex-1 text-[11px] font-bold">
       {features.map((f, i) => (
         <li key={i} className="flex items-center space-x-2.5 text-gray-400">
           <div className="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">

@@ -59,17 +59,17 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
 
             <div className="max-h-[400px] overflow-y-auto">
                 {loading ? (
-                    <div className="p-8 text-center text-alphabag-subtext text-xs space-y-2">
+                    <div className="p-4 text-center text-alphabag-subtext text-xs space-y-2">
                         <RefreshCw size={20} className="animate-spin mx-auto mb-2 text-alphabag-yellow" />
                         <p>Scanning mempool & blocks...</p>
                     </div>
                 ) : error ? (
-                    <div className="p-8 text-center text-alphabag-red text-xs flex flex-col items-center">
+                    <div className="p-4 text-center text-alphabag-red text-xs flex flex-col items-center">
                         <AlertCircle size={20} className="mb-2" />
                         {error}
                     </div>
                 ) : transactions.length === 0 ? (
-                    <div className="p-8 text-center text-alphabag-subtext text-xs">No recent transactions found.</div>
+                    <div className="p-4 text-center text-alphabag-subtext text-xs">No recent transactions found.</div>
                 ) : (
                     <table className="w-full text-left text-[10px] md:text-xs">
                         <thead className="bg-alphabag-black/40 text-alphabag-subtext font-bold uppercase tracking-wider sticky top-0">

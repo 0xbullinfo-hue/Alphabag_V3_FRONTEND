@@ -44,15 +44,15 @@ export const IntegrationConnectModal: React.FC<IntegrationConnectModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-4">
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
       
       <div className="relative w-full max-w-md bg-alphabag-dark border border-alphabag-gray rounded-2xl shadow-2xl overflow-hidden animate-scale-up">
-        <div className="flex justify-between items-center p-6 border-b border-alphabag-gray/50">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center p-4 border-b border-alphabag-gray/50">
+          <div className="flex items-center gap-2">
              <img src={integration.icon} alt={integration.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
              <h2 className="text-xl font-bold text-white">Connect {integration.name}</h2>
           </div>
@@ -64,20 +64,20 @@ export const IntegrationConnectModal: React.FC<IntegrationConnectModalProps> = (
           </button>
         </div>
 
-        <div className="p-6">
-          <p className="text-sm text-alphabag-subtext mb-6">{integration.description}</p>
+        <div className="p-4">
+          <p className="text-sm text-alphabag-subtext mb-2">{integration.description}</p>
           
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start text-red-400 text-sm">
+            <div className="mb-2 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start text-red-400 text-sm">
               <AlertTriangle size={18} className="mr-3 shrink-0 mt-0.5" />
               <p>{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleConnect} className="space-y-4">
+          <form onSubmit={handleConnect} className="space-y-2">
             {integration.requiresApiKeys ? (
                 <>
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <div>
                       <label className="block text-sm font-medium text-alphabag-muted mb-2">API Key</label>
                       <div className="relative">
@@ -115,8 +115,8 @@ export const IntegrationConnectModal: React.FC<IntegrationConnectModalProps> = (
                   </div>
                 </>
             ) : (
-                <div className="p-6 bg-alphabag-black border border-dashed border-alphabag-gray rounded-xl text-center">
-                    <Shield size={32} className="mx-auto text-alphabag-subtext mb-4 opacity-50" />
+                <div className="p-4 bg-alphabag-black border border-dashed border-alphabag-gray rounded-xl text-center">
+                    <Shield size={32} className="mx-auto text-alphabag-subtext mb-2 opacity-50" />
                     <h3 className="text-white font-medium mb-2">Web3 Authorization Required</h3>
                     <p className="text-sm text-alphabag-subtext">Connecting this integration requires a secure signature from your verified Web3 wallet.</p>
                 </div>

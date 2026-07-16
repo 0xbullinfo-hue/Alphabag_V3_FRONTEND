@@ -38,7 +38,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
               key={notif.id} 
               className={`p-3 rounded-xl border transition-all ${notif.read ? 'bg-white/[0.02] border-white/5' : 'bg-alphabag-yellow/[0.03] border-alphabag-yellow/20'}`}
             >
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <div className={`p-2 rounded-lg shrink-0 ${
                   notif.type === 'REWARD' ? 'bg-alphabag-green/10 text-alphabag-green' : 
                   notif.type === 'SYSTEM' ? 'bg-blue-500/10 text-blue-400' : 'bg-alphabag-red/10 text-alphabag-red'

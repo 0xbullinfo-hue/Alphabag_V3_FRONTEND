@@ -114,8 +114,8 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
   return (
     <div className="fixed inset-0 z-[50] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-xl animate-fade-in">
       <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-3xl shadow-[0_0_50px_rgba(252,213,53,0.2)] overflow-hidden relative border-t-alphabag-yellow/50">
-        <div className="p-8 text-center">
-          <div className="flex justify-between items-center mb-8">
+        <div className="p-4 text-center">
+          <div className="flex justify-between items-center mb-2">
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-alphabag-yellow text-alphabag-black flex items-center justify-center rounded-xl">
                 <Crown size={22} fill="currentColor" />
@@ -129,8 +129,8 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
             </button>
           </div>
 
-          <div className="mb-6 bg-alphabag-black/40 border border-alphabag-gray/50 rounded-2xl p-6 relative group overflow-hidden">
-            <div className="relative mb-4">
+          <div className="mb-2 bg-alphabag-black/40 border border-alphabag-gray/50 rounded-2xl p-4 relative group overflow-hidden">
+            <div className="relative mb-2">
               <ShieldCheck size={48} className="mx-auto text-alphabag-yellow" />
             </div>
             <p className="text-sm text-alphabag-text font-bold leading-relaxed mb-1 uppercase tracking-tight">
@@ -141,7 +141,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 mb-6">
+          <div className="grid grid-cols-3 gap-2 mb-2">
             {[
               'Unlimited AI',
               'Priority alerts',
@@ -154,7 +154,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
           </div>
 
           {verificationError && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-left">
+            <div className="mb-2 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-left">
               <AlertTriangle className="text-red-500 shrink-0" size={20} />
               <p className="text-xs text-red-400 font-bold">{verificationError}</p>
             </div>
@@ -165,7 +165,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
               onClick={handleConnect}
               className="w-full flex items-center justify-between p-5 bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow hover:bg-alphabag-yellow/5 rounded-2xl transition-all group"
             >
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
                 <div className="w-12 h-12 flex items-center justify-center bg-blue-500/10 border border-blue-500/20 rounded-xl group-hover:scale-105 transition-all">
                   <Smartphone size={24} className="text-blue-400" />
                 </div>
@@ -204,14 +204,14 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
                 href="https://pancakeswap.finance/swap"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full block text-center py-3 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow font-black uppercase tracking-widest rounded-xl hover:bg-alphabag-yellow/10 transition-all hover:shadow-[0_0_15px_rgba(252,213,53,0.2)] text-xs"
+                className="w-full block text-center py-3 bg-alphabag-black border border-alphabag-yellow/30 text-alphabag-yellow font-black uppercase tracking-widest rounded-xl hover:bg-alphabag-yellow/10 transition-all hover: text-xs"
               >
                 Secure Initial Allocation (DEX)
               </a>
             </div>
           )}
 
-          <div className="mt-8 flex items-center justify-center space-x-6 grayscale opacity-40">
+          <div className="mt-8 flex items-center justify-center space-x-2 grayscale opacity-40">
             <div className="flex items-center space-x-2 text-white">
               <Zap size={16} fill="currentColor" />
               <span className="text-[10px] font-black uppercase tracking-tighter">Read-Only Verification — No Funds Moved</span>

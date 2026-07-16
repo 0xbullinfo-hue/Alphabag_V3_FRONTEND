@@ -87,7 +87,7 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
 };
 
 const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
-  <div className="mb-4">
+  <div className="mb-2">
     <div className="px-6 mb-1.5 text-[10px] font-semibold text-[#474d57] uppercase tracking-wider">
       {title}
     </div>
@@ -116,7 +116,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
 
       <aside className={`
         fixed left-0 bottom-0 w-64 bg-alphabag-dark border-r border-alphabag-gray z-40 transition-transform duration-300 ease-in-out
-        md:translate-x-0 pt-6 pb-6 flex flex-col justify-between overflow-y-auto custom-scrollbar
+        md:translate-x-0 pt-6 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         ${IS_DEMO_MODE ? 'top-[92px]' : 'top-16'}
       `}>

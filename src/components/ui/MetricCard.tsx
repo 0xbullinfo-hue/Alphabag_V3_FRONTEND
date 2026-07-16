@@ -17,17 +17,17 @@ interface MetricCardProps {
 export const MetricCard: React.FC<MetricCardProps> = ({ title, value, change, icon, isLoading }) => {
   if (isLoading) {
     return (
-      <div className="glass-panel p-8 h-32 animate-pulse">
-        <div className="w-1/3 h-3 bg-white/5 rounded mb-4"></div>
+      <div className="glass-panel p-4 h-32 animate-pulse">
+        <div className="w-1/3 h-3 bg-white/5 rounded mb-2"></div>
         <div className="w-2/3 h-8 bg-white/5 rounded"></div>
       </div>
     );
   }
 
   return (
-    <div className="glass-panel p-8 relative overflow-hidden group hover:border-white/10 transition-all duration-200">
+    <div className="glass-panel p-4 relative overflow-hidden group hover:border-white/10 transition-all duration-200">
       {icon && (
-        <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:scale-110 transition-transform duration-300">
+        <div className="absolute top-0 right-0 p-4 opacity-[0.03] group-hover:scale-110 transition-transform duration-300">
           {icon}
         </div>
       )}
