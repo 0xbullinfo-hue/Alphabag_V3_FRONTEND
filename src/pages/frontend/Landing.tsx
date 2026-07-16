@@ -641,7 +641,7 @@ export const Landing: React.FC = () => {
 
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full bg-alphabag-darkgray/95 backdrop-blur-xl border-b border-alphabag-gray p-6 flex flex-col space-y-4 animate-slide-in">
+          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-6 flex flex-col space-y-4 animate-slide-in" style={{ backgroundColor: 'rgba(30, 35, 41, 0.95)' }}>
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
@@ -732,7 +732,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Calculator Card */}
-                <div className="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
+                <div className="lg:col-span-6 w-full bg-[#2b323c] border border-alphabag-gray rounded-2xl p-6 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
                   <div className="absolute top-[-50px] right-[-30px] w-40 h-40 bg-[#fcd535] filter blur-[80px] opacity-[0.06] pointer-events-none"></div>
                   <div className="flex items-center justify-between mb-4 border-b border-alphabag-gray pb-3">
                     <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
@@ -843,9 +843,9 @@ export const Landing: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-alphabag-dark overflow-hidden flex items-center justify-center group shadow-2xl">
+                  <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-[#2b323c] overflow-hidden flex items-center justify-center group shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
-                    <div className="w-24 h-24 bg-alphabag-black border border-white/5 rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(252,213,53,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(252,213,53,0.2)] transition-all duration-700 relative z-10">
+                    <div className="w-24 h-24 bg-[#1e2329] border border-white/5 rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(252,213,53,0.1)] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(252,213,53,0.2)] transition-all duration-700 relative z-10">
                       <Lock size={40} className="text-alphabag-yellow" />
                     </div>
                     <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -878,7 +878,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Allocations Unmasked */}
-                <div className="lg:col-span-2 relative bg-alphabag-dark border border-white/5 rounded-3xl p-8 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-8 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full h-full">
                     <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
                     <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
@@ -946,7 +946,7 @@ export const Landing: React.FC = () => {
               </div>
 
               <div className="mt-24 flex justify-center">
-                <div className="bg-alphabag-darkgray border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-3">
+                <div className="bg-[#2b323c] border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-3">
                   <ArrowRight size={18} /> Swap on PancakeSwap (coming soon)
                 </div>
               </div>
@@ -1128,7 +1128,7 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
         <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
             ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
           `}>
-          <div className={`bg-alphabag-darkgray border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
+          <div className={`bg-[#2b323c] border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
                ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray'}
             `}>
             {/* Header Info */}
@@ -1166,7 +1166,7 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray bg-alphabag-dark hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
+    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 shadow-[0_0_30px_rgba(252,213,53,0.05)]' : 'border-alphabag-gray bg-[#2b323c] hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 text-left"
@@ -1187,8 +1187,8 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 rounded-xl hover:border-[#474d57] transition-all group cursor-default shadow-lg">
-    <div className="mb-2.5 bg-alphabag-dark w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
+  <div className="bg-[#2b323c] border border-alphabag-gray p-5 rounded-xl hover:border-[#474d57] transition-all group cursor-default shadow-lg">
+    <div className="mb-2.5 bg-[#1e2329] w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <h3 className="text-lg font-semibold text-white mb-1.5 leading-tight">{title}</h3>
@@ -1197,8 +1197,8 @@ const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, des
 );
 
 const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
-  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-alphabag-darkgray shadow-lg">
-    <div className="w-12 h-12 bg-alphabag-dark border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
+  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-[#2b323c] shadow-lg">
+    <div className="w-12 h-12 bg-[#1e2329] border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
       {step}
     </div>
     <h3 className="text-sm font-semibold text-white mb-2 h-8 flex items-center justify-center">{title}</h3>
@@ -1207,8 +1207,8 @@ const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNo
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 md:p-6 rounded-2xl flex items-center gap-4 md:gap-5 hover:border-[#474d57] transition-all group h-full shadow-lg">
-    <div className="w-12 h-12 shrink-0 bg-alphabag-dark border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
+  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-6 rounded-2xl flex items-center gap-4 md:gap-5 hover:border-[#474d57] transition-all group h-full shadow-lg">
+    <div className="w-12 h-12 shrink-0 bg-[#1e2329] border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <div>
@@ -1221,7 +1221,7 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
 );
 
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
-  <div className={`p-6 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-alphabag-darkgray border-[#fcd535] shadow-[0_0_20px_rgba(252,213,53,0.1)]' : 'bg-alphabag-darkgray border-alphabag-gray hover:border-[#474d57]'} transition-all`}>
+  <div className={`p-6 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-[#fcd535] shadow-[0_0_20px_rgba(252,213,53,0.1)]' : 'bg-[#2b323c] border-alphabag-gray hover:border-[#474d57]'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
         <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>
@@ -1246,7 +1246,7 @@ const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spread
 );
 
 const PricingCard = ({ tier, tokens, price, features, recommended = false, onAction }: { tier: string, tokens: string, price: string, features: string[], recommended?: boolean, onAction: () => void }) => (
-  <div className={`relative flex flex-col p-6 rounded-xl border ${recommended ? 'bg-alphabag-dark border-alphabag-yellow shadow-[0_0_40px_rgba(252,213,53,0.1)] scale-105 z-10' : 'bg-alphabag-black border-white/10'}`}>
+  <div className={`relative flex flex-col p-6 rounded-xl border ${recommended ? 'bg-[#2b323c] border-alphabag-yellow shadow-[0_0_40px_rgba(252,213,53,0.1)] scale-105 z-10' : 'bg-[#2b323c] border-white/10'}`}>
     {recommended && (
       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
         <Crown size={10} className="mr-1" fill="currentColor" /> Best Value
