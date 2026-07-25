@@ -123,7 +123,7 @@ export const CexBag: React.FC = () => {
                         <img src={d.icon} className="w-5 h-5 rounded-full" alt={d.name} />
                         <span className="font-semibold text-alphabag-text">{d.name}</span>
                     </div>
-                    <div className="text-[#fcd535] font-semibold tabular-nums">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                    <div className="text-alphabag-yellow font-semibold tabular-nums">${d.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
                     <div className="text-alphabag-subtext text-xs">{d.pct}% of total</div>
                 </div>
             );
@@ -138,7 +138,7 @@ export const CexBag: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Layers size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">CEX Portfolio</h1>
@@ -148,12 +148,12 @@ export const CexBag: React.FC = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#0ecb81] font-semibold uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-pulse"></span> API Sync
+                    <div className="bg-alphabag-gray px-3 py-1.5 rounded-md text-[11px] text-alphabag-green font-semibold uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></span> API Sync
                     </div>
                     <button
                         onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}
-                        className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] active:scale-[0.98] transition-all"
+                        className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] active:scale-[0.98] transition-all"
                     >
                         <Plus size={16} /> Add Exchange
                     </button>
@@ -167,23 +167,23 @@ export const CexBag: React.FC = () => {
                     <div className="text-3xl font-semibold text-alphabag-text tracking-tight tabular-nums mb-2">
                         ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
-                    <div className="bg-[#fcd535]/10 text-[#fcd535] px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">Consolidated Assets</div>
+                    <div className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">Consolidated Assets</div>
                 </div>
                 <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Consolidated PnL</span>
                     {hasCexPnLData ? (
                         <div className={`flex items-center gap-2 mb-2`}>
-                            <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}`}>
+                            <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                 {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
-                            <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#f6465d]/10 text-[#f6465d]'}`}>
+                            <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
                                 {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
                             </div>
                         </div>
                     ) : (
                         <div className="text-lg font-semibold text-alphabag-subtext mb-2">Not available yet</div>
                     )}
-                    <div className="bg-[#2b3139] text-alphabag-subtext px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">24H Metrics</div>
+                    <div className="bg-alphabag-gray text-alphabag-subtext px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">24H Metrics</div>
                 </div>
             </div>
 
@@ -205,7 +205,7 @@ export const CexBag: React.FC = () => {
                                 <p className="text-alphabag-subtext text-xs">Connect a read-only API key to view your allocation.</p>
                                 <button
                                     onClick={() => { setActiveExchange(null); setIsModalOpen(true); }}
-                                    className="mt-1 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                                    className="mt-1 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
                                 >
                                     <Plus size={14} className="inline mr-1" /> Connect First Exchange
                                 </button>
@@ -258,12 +258,12 @@ export const CexBag: React.FC = () => {
                                         <th className="p-4 px-6 text-right">Source</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-[#2b3139] text-sm">
+                                <tbody className="divide-y divide-alphabag-gray text-sm">
                                     {connectedCex.length === 0 ? (
                                         <tr><td colSpan={4} className="p-16 text-center text-alphabag-subtext text-xs">No data. Connect an exchange API key to view balances.</td></tr>
                                     ) : (
                                         MOCK_ASSETS.map((asset, idx) => (
-                                            <tr key={idx} className="hover:bg-[#2b3139]/40 transition-colors">
+                                            <tr key={idx} className="hover:bg-alphabag-gray/40 transition-colors">
                                                 <td className="p-4 px-6">
                                                     <div className="flex items-center gap-2">
                                                         <img src={asset.img} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -281,7 +281,7 @@ export const CexBag: React.FC = () => {
                                                     <div className="text-[10px] text-alphabag-subtext mt-1">@ ${asset.price.toLocaleString()}</div>
                                                 </td>
                                                 <td className="p-4 px-6 text-right">
-                                                    <span className="text-[10px] font-semibold uppercase text-alphabag-subtext bg-[#2b3139] px-2 py-0.5 rounded-md border border-[#474d57]">{asset.exchange}</span>
+                                                    <span className="text-[10px] font-semibold uppercase text-alphabag-subtext bg-alphabag-gray px-2 py-0.5 rounded-md border border-alphabag-muted">{asset.exchange}</span>
                                                 </td>
                                             </tr>
                                         ))
@@ -304,14 +304,14 @@ export const CexBag: React.FC = () => {
                                             <img src={cex.icon} alt={cex.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
                                             <div>
                                                 <h3 className="font-semibold text-alphabag-text text-sm">{cex.name}</h3>
-                                                <div className="flex items-center text-[9px] text-[#0ecb81] font-semibold uppercase tracking-wider mt-0.5">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] mr-1.5 animate-pulse"></div>
+                                                <div className="flex items-center text-[9px] text-alphabag-green font-semibold uppercase tracking-wider mt-0.5">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5 animate-pulse"></div>
                                                     Live API
                                                 </div>
                                                 <div className="text-alphabag-subtext text-[9px] font-mono mt-0.5">{cex.apiKey}</div>
                                             </div>
                                         </div>
-                                        <button onClick={() => removeConnection(cex.id)} className="text-alphabag-subtext hover:text-[#f6465d] transition-colors p-2">
+                                        <button onClick={() => removeConnection(cex.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-2">
                                             <Trash2 size={14} />
                                         </button>
                                     </div>
@@ -333,7 +333,7 @@ export const CexBag: React.FC = () => {
                                 <button
                                     key={cex.id}
                                     onClick={() => openConnectModal(cex.id)}
-                                    className="flex items-center justify-center p-2 bg-alphabag-black border border-alphabag-gray rounded-md hover:border-[#fcd535]/40 hover:bg-[#2b3139] transition-all group"
+                                    className="flex items-center justify-center p-2 bg-alphabag-black border border-alphabag-gray rounded-md hover:border-alphabag-yellow/40 hover:bg-alphabag-gray transition-all group"
                                     title={`Connect ${cex.name}`}
                                 >
                                     <img src={cex.icon} alt={cex.name} className="w-6 h-6 rounded-full bg-white p-0.5 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" />

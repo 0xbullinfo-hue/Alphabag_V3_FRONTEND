@@ -79,18 +79,18 @@ export const CoinDetail: React.FC = () => {
             let label = 'High Risk';
             let color = 'text-alphabag-red';
             let bgClass = 'from-alphabag-red to-red-400';
-            let shadowClass = 'shadow-[0_0_10px_rgba(246,70,93,0.5)]';
+            let shadowClass = '';
 
             if (score >= 85) {
                 label = 'Professional Grade';
                 color = 'text-alphabag-green';
                 bgClass = 'from-alphabag-green to-emerald-400';
-                shadowClass = 'shadow-[0_0_10px_rgba(14,203,129,0.5)]';
+                shadowClass = '';
             } else if (score >= 60) {
                 label = 'Moderate Risk';
                 color = 'text-alphabag-yellow';
                 bgClass = 'from-alphabag-yellow to-yellow-400';
-                shadowClass = 'shadow-[0_0_10px_rgba(252,213,53,0.5)]';
+                shadowClass = '';
             }
 
             setAudit({ score, label, color, bgClass, shadowClass });

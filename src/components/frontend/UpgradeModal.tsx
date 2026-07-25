@@ -113,7 +113,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
 
   return (
     <div className="fixed inset-0 z-[50] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-xl animate-fade-in">
-      <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-3xl shadow-[0_0_50px_rgba(252,213,53,0.2)] overflow-hidden relative border-t-alphabag-yellow/50">
+      <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-3xl overflow-hidden relative border-t-alphabag-yellow/50">
         <div className="p-4 text-center">
           <div className="flex justify-between items-center mb-2">
             <div className="flex items-center space-x-2">

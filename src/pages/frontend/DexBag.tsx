@@ -64,7 +64,7 @@ export const DexBag: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
                             <Wallet2 size={20} />
                         </div>
                         <h1 className="text-3xl font-black text-alphabag-text tracking-tight uppercase">DEX Portfolio</h1>
@@ -78,7 +78,7 @@ export const DexBag: React.FC = () => {
                     <select
                         value={filterChain}
                         onChange={e => setFilterChain(e.target.value)}
-                        className="bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-1.5 text-xs text-alphabag-text focus:border-[#fcd535] outline-none font-semibold uppercase"
+                        className="bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-1.5 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none font-semibold uppercase"
                     >
                         <option value="ALL">All Chains</option>
                         <option value="eth">Ethereum</option>
@@ -88,7 +88,7 @@ export const DexBag: React.FC = () => {
                     <button
                         onClick={fetchBalances}
                         disabled={loading || !isConnected}
-                        className="bg-[#2b3139] text-alphabag-text border border-[#474d57] rounded-lg px-3 py-1.5 hover:bg-[#474d57] transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-bold uppercase"
+                        className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-lg px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-bold uppercase"
                     >
                         <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
                         Refresh
@@ -104,7 +104,7 @@ export const DexBag: React.FC = () => {
                     <p className="text-alphabag-subtext text-xs font-medium mb-2">Connect your EVM wallet to view your on-chain DEX holdings.</p>
                     <Link
                         to="/settings"
-                        className="inline-flex items-center gap-2 bg-[#fcd535] text-black font-black text-xs uppercase tracking-widest px-5 py-2.5 rounded-lg hover:bg-yellow-400 transition-all"
+                        className="inline-flex items-center gap-2 bg-alphabag-yellow text-black font-black text-xs uppercase tracking-widest px-5 py-2.5 rounded-lg hover:bg-yellow-400 transition-all"
                     >
                         Setup Connections <ChevronRight size={14} />
                     </Link>
@@ -152,7 +152,7 @@ export const DexBag: React.FC = () => {
             {isConnected && !error && (
                 <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                     <div className="px-6 py-4 border-b border-alphabag-gray flex items-center gap-2">
-                        <Layers size={16} className="text-[#fcd535]" />
+                        <Layers size={16} className="text-alphabag-yellow" />
                         <span className="text-xs font-black uppercase tracking-widest text-alphabag-text">On-Chain Holdings</span>
                         <span className="ml-auto text-[10px] text-alphabag-subtext font-mono uppercase tracking-widest">Read-Only View</span>
                     </div>
@@ -169,17 +169,17 @@ export const DexBag: React.FC = () => {
                                     <th className="p-4 text-center">Explorer</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#2b3139] text-sm">
+                            <tbody className="divide-y divide-alphabag-gray text-sm">
                                 {loading ? (
                                     Array.from({ length: 5 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
-                                            <td className="p-4 pl-6"><div className="h-4 w-24 bg-[#2b3139] rounded" /></td>
-                                            <td className="p-4"><div className="h-4 w-10 bg-[#2b3139] rounded" /></td>
-                                            <td className="p-4 text-right"><div className="h-4 w-16 bg-[#2b3139] rounded ml-auto" /></td>
-                                            <td className="p-4 text-right"><div className="h-4 w-14 bg-[#2b3139] rounded ml-auto" /></td>
-                                            <td className="p-4 text-right"><div className="h-4 w-10 bg-[#2b3139] rounded ml-auto" /></td>
-                                            <td className="p-4 text-right"><div className="h-4 w-16 bg-[#2b3139] rounded ml-auto" /></td>
-                                            <td className="p-4"><div className="h-4 w-8 bg-[#2b3139] rounded mx-auto" /></td>
+                                            <td className="p-4 pl-6"><div className="h-4 w-24 bg-alphabag-gray rounded" /></td>
+                                            <td className="p-4"><div className="h-4 w-10 bg-alphabag-gray rounded" /></td>
+                                            <td className="p-4 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
+                                            <td className="p-4 text-right"><div className="h-4 w-14 bg-alphabag-gray rounded ml-auto" /></td>
+                                            <td className="p-4 text-right"><div className="h-4 w-10 bg-alphabag-gray rounded ml-auto" /></td>
+                                            <td className="p-4 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
+                                            <td className="p-4"><div className="h-4 w-8 bg-alphabag-gray rounded mx-auto" /></td>
                                         </tr>
                                     ))
                                 ) : filtered.length > 0 ? (
@@ -187,14 +187,14 @@ export const DexBag: React.FC = () => {
                                         const chain = CHAIN_LABELS[token.chain] || { label: token.chain?.toUpperCase() || '—', color: 'text-alphabag-subtext', bg: 'bg-white/5' };
                                         const isPositive = (token.change24h || 0) >= 0;
                                         return (
-                                            <tr key={i} className="hover:bg-[#2b3139]/40 transition-colors group">
+                                            <tr key={i} className="hover:bg-alphabag-gray/40 transition-colors group">
                                                 <td className="p-4 pl-6">
                                                     <div className="flex items-center gap-2">
                                                         {token.logo ? (
-                                                            <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-[#2b3139]" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                            <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-alphabag-gray" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                                         ) : (
-                                                            <div className="w-8 h-8 rounded-full bg-[#fcd535]/10 flex items-center justify-center">
-                                                                <span className="text-[#fcd535] font-black text-[10px]">{token.symbol?.slice(0, 2)}</span>
+                                                            <div className="w-8 h-8 rounded-full bg-alphabag-yellow/10 flex items-center justify-center">
+                                                                <span className="text-alphabag-yellow font-black text-[10px]">{token.symbol?.slice(0, 2)}</span>
                                                             </div>
                                                         )}
                                                         <div>
@@ -227,7 +227,7 @@ export const DexBag: React.FC = () => {
                                                             href={`https://bscscan.com/token/${token.contractAddress}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-[#fcd535]"
+                                                            className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow"
                                                         >
                                                             <ExternalLink size={13} />
                                                         </a>
@@ -253,7 +253,7 @@ export const DexBag: React.FC = () => {
                             <span className="text-[10px] text-alphabag-subtext font-medium uppercase tracking-wider">
                                 {filtered.length} token{filtered.length !== 1 ? 's' : ''} · Read-only · Prices via Alchemy
                             </span>
-                            <Link to="/portfolio" className="text-[10px] text-[#fcd535] font-black uppercase tracking-widest hover:underline flex items-center gap-1">
+                            <Link to="/portfolio" className="text-[10px] text-alphabag-yellow font-black uppercase tracking-widest hover:underline flex items-center gap-1">
                                 Full Portfolio View <ChevronRight size={11} />
                             </Link>
                         </div>

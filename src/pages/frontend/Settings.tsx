@@ -82,7 +82,7 @@ const ManualHoldingsSection: React.FC = () => {
             {/* Add Form */}
             <div className="bg-alphabag-black border border-alphabag-gray/60 p-5 rounded-xl mb-2">
                 <h3 className="text-sm font-semibold text-alphabag-text mb-2 flex items-center gap-2">
-                    <Search size={14} className="text-[#fcd535]" /> Add Holding
+                    <Search size={14} className="text-alphabag-yellow" /> Add Holding
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-3">
                     <input
@@ -252,8 +252,8 @@ export const Settings: React.FC = () => {
     const TierCard = ({ level, minTokens, current }: { level: UserTier, minTokens: string, current: boolean }) => {
         const label = level === 'FREE' ? 'Beta Tester' : 'Alphabag (coming soon)';
         return (
-            <div className={`border rounded-lg p-4 relative overflow-hidden transition-all ${current ? 'border-[#fcd535] bg-[#fcd535]/10' : 'border-alphabag-gray bg-alphabag-darkgray opacity-60'}`}>
-                {current && <div className="absolute top-2 right-2 text-[8px] bg-[#fcd535] text-black font-extrabold px-2 py-1 rounded tracking-widest uppercase">ACTIVE: CURRENT ALPHA</div>}
+            <div className={`border rounded-lg p-4 relative overflow-hidden transition-all ${current ? 'border-alphabag-yellow bg-alphabag-yellow/10' : 'border-alphabag-gray bg-alphabag-darkgray opacity-60'}`}>
+                {current && <div className="absolute top-2 right-2 text-[8px] bg-alphabag-yellow text-black font-extrabold px-2 py-1 rounded tracking-widest uppercase">ACTIVE: CURRENT ALPHA</div>}
                 {!current && <div className="absolute top-2 right-2 text-[8px] bg-white/10 text-alphabag-muted font-extrabold px-2 py-1 rounded tracking-widest uppercase">COMING SOON</div>}
                 
                 <h3 className="text-xl font-bold text-white mb-2">{label}</h3>
@@ -263,10 +263,10 @@ export const Settings: React.FC = () => {
                 <ul className="space-y-2 text-sm">
                     {level === 'FREE' ? (
                         <>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Portfolio Connections</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 CEX API Connections</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Whale Watch Slots</li>
-                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full mr-2"></span>5 Daily AlphaAi Requests</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></span>5 Portfolio Connections</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></span>5 CEX API Connections</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></span>5 Whale Watch Slots</li>
+                            <li className="flex items-center"><span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></span>5 Daily AlphaAi Requests</li>
                         </>
                     ) : (
                         <>
@@ -288,7 +288,7 @@ export const Settings: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <LinkIcon size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Membership & Connections</h1>
@@ -299,9 +299,9 @@ export const Settings: React.FC = () => {
                     <span className="text-alphabag-subtext text-[9px] font-semibold uppercase tracking-widest mb-1">Network Verified Balance</span>
                     <div className="flex items-center gap-2">
                         <div className="text-2xl font-semibold text-alphabag-text leading-none tracking-tight tabular-nums">
-                            {premiumTokenBalance.toLocaleString()} <span className="text-[#fcd535] text-base">BAG</span>
+                            {premiumTokenBalance.toLocaleString()} <span className="text-alphabag-yellow text-base">BAG</span>
                         </div>
-                        <button onClick={() => {}} disabled={true} className="h-7 bg-[#fcd535] text-[#181a20] text-[10px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
+                        <button onClick={() => {}} disabled={true} className="h-7 bg-alphabag-yellow text-alphabag-dark text-[10px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
                     </div>
                 </div>
             </div>
@@ -312,7 +312,7 @@ export const Settings: React.FC = () => {
                     <button
                         onClick={() => {}}
                         disabled={true}
-                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
+                        className="flex items-center gap-1.5 text-[10px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
                     >
                         View All <ExternalLink size={11} />
                     </button>
@@ -321,8 +321,8 @@ export const Settings: React.FC = () => {
                 {/* Count Summary Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
-                            <Wallet size={18} className="text-[#0ecb81]" />
+                        <div className="w-10 h-10 rounded-md bg-alphabag-green/10 flex items-center justify-center shrink-0">
+                            <Wallet size={18} className="text-alphabag-green" />
                         </div>
                         <div>
                             <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">DEX Wallets</div>
@@ -330,12 +330,12 @@ export const Settings: React.FC = () => {
                                 <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{portfolioCount}</span>
                                 <span className="text-[10px] text-alphabag-subtext">/ {limits.maxPortfolios} max</span>
                             </div>
-                            <div className="text-[9px] text-[#0ecb81] font-semibold mt-0.5">Portfolio Wallets</div>
+                            <div className="text-[9px] text-alphabag-green font-semibold mt-0.5">Portfolio Wallets</div>
                         </div>
                     </div>
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
-                            <Eye size={18} className="text-[#fcd535]" />
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow/10 flex items-center justify-center shrink-0">
+                            <Eye size={18} className="text-alphabag-yellow" />
                         </div>
                         <div>
                             <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">Whale Watch</div>
@@ -343,7 +343,7 @@ export const Settings: React.FC = () => {
                                 <span className="text-2xl font-semibold text-alphabag-text tabular-nums">{whaleCount}</span>
                                 <span className="text-[10px] text-alphabag-subtext">/ {limits.maxWhales} max</span>
                             </div>
-                            <div className="text-[9px] text-[#fcd535] font-semibold mt-0.5">Wallet Trackers</div>
+                            <div className="text-[9px] text-alphabag-yellow font-semibold mt-0.5">Wallet Trackers</div>
                         </div>
                     </div>
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
@@ -386,7 +386,7 @@ export const Settings: React.FC = () => {
                         </Button>
                     </div>
                     {error && <div className="text-alphabag-red text-xs mt-2 bg-alphabag-red/10 p-2 rounded flex items-center"><AlertCircle size={12} className="mr-2" /> {error}</div>}
-                    <p className="text-[10px] text-alphabag-subtext mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                    <p className="text-[10px] text-alphabag-subtext mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-alphabag-yellow underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 
@@ -400,7 +400,7 @@ export const Settings: React.FC = () => {
                     <button
                         onClick={() => {}}
                         disabled={true}
-                        className="flex items-center gap-1.5 text-[10px] text-[#fcd535] font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
+                        className="flex items-center gap-1.5 text-[10px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
                     >
                         Manage <ExternalLink size={11} />
                     </button>
@@ -409,8 +409,8 @@ export const Settings: React.FC = () => {
                 {/* CEX Count Card */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535]/10 flex items-center justify-center shrink-0">
-                            <Key size={18} className="text-[#fcd535]" />
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow/10 flex items-center justify-center shrink-0">
+                            <Key size={18} className="text-alphabag-yellow" />
                         </div>
                         <div>
                             <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">CEX APIs Connected</div>
@@ -419,14 +419,14 @@ export const Settings: React.FC = () => {
                                 <span className="text-[10px] text-alphabag-subtext">/ {MAX_CEX} max</span>
                             </div>
                             <div className="flex items-center gap-1 mt-0.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] shadow-[0_0_4px_rgba(14,203,129,0.8)]"></span>
-                                <span className="text-[9px] text-[#0ecb81] font-semibold">{connectedCex.length > 0 ? 'Live Read-Only' : 'None Connected'}</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-alphabag-green"></span>
+                                <span className="text-[9px] text-alphabag-green font-semibold">{connectedCex.length > 0 ? 'Live Read-Only' : 'None Connected'}</span>
                             </div>
                         </div>
                     </div>
                     <div className="bg-alphabag-black border border-alphabag-gray/60 rounded-xl p-4 flex items-center gap-2">
-                        <div className="w-10 h-10 rounded-md bg-[#0ecb81]/10 flex items-center justify-center shrink-0">
-                            <TrendingUp size={18} className="text-[#0ecb81]" />
+                        <div className="w-10 h-10 rounded-md bg-alphabag-green/10 flex items-center justify-center shrink-0">
+                            <TrendingUp size={18} className="text-alphabag-green" />
                         </div>
                         <div>
                             <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-0.5">Available Slots</div>
@@ -448,7 +448,7 @@ export const Settings: React.FC = () => {
                                 <div key={cex.id} className="flex items-center gap-2 bg-alphabag-black border border-alphabag-gray/60 rounded-lg px-3 py-2">
                                     <img src={cex.icon} alt={cex.name} className="w-5 h-5 rounded-full bg-white p-0.5" />
                                     <span className="text-[10px] font-semibold text-alphabag-text">{cex.name}</span>
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] shadow-[0_0_4px_rgba(14,203,129,0.8)]"></span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-alphabag-green"></span>
                                 </div>
                             ))}
                         </div>
@@ -480,7 +480,7 @@ export const Settings: React.FC = () => {
                             <p className="text-alphabag-green font-bold text-sm">All {MAX_CEX} slots filled!</p>
                         </div>
                     )}
-                    <p className="text-[10px] text-alphabag-subtext mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-[#fcd535] underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                    <p className="text-[10px] text-alphabag-subtext mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-alphabag-yellow underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
                 </div>
             </section>
 

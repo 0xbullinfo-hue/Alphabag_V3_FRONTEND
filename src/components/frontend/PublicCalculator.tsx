@@ -115,7 +115,7 @@ export const PublicCalculator: React.FC = () => {
                             <button
                                 onClick={() => setDirection('LONG')}
                                 className={`py-2 rounded-xl border flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-widest transition-all ${direction === 'LONG'
-                                    ? 'bg-alphabag-green/20 border-alphabag-green text-alphabag-green shadow-[0_0_10px_rgba(14,203,129,0.2)]'
+                                    ? 'bg-alphabag-green/20 border-alphabag-green text-alphabag-green'
                                     : 'border-alphabag-gray text-alphabag-subtext hover:border-alphabag-gray/80'
                                     }`}
                             >
@@ -124,7 +124,7 @@ export const PublicCalculator: React.FC = () => {
                             <button
                                 onClick={() => setDirection('SHORT')}
                                 className={`py-2 rounded-xl border flex items-center justify-center gap-1.5 text-[11px] font-black uppercase tracking-widest transition-all ${direction === 'SHORT'
-                                    ? 'bg-alphabag-red/20 border-alphabag-red text-alphabag-red shadow-[0_0_10px_rgba(246,70,93,0.2)]'
+                                    ? 'bg-alphabag-red/20 border-alphabag-red text-alphabag-red'
                                     : 'border-alphabag-gray text-alphabag-subtext hover:border-alphabag-gray/80'
                                     }`}
                             >

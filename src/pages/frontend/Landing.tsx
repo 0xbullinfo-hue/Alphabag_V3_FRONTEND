@@ -519,7 +519,7 @@ export const Landing: React.FC = () => {
           <div className="flex items-center space-x-10">
             <div className="flex items-center space-x-2 cursor-pointer shrink-0" onClick={() => handleNavClick('home')}>
               <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full " />
-              <span className="text-lg font-bold tracking-tight text-[#fcd535]">ALPHABAG</span>
+              <span className="text-lg font-bold tracking-tight text-alphabag-yellow">ALPHABAG</span>
             </div>
 
             {/* Desktop Nav Links */}
@@ -557,7 +557,7 @@ export const Landing: React.FC = () => {
                           localStorage.setItem('alphabag_language', lang.code);
                           setIsLangDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-[#fcd535]' : 'text-alphabag-subtext'}`}
+                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`}
                       >
                         {lang.label}
                       </button>
@@ -579,16 +579,16 @@ export const Landing: React.FC = () => {
             {/* Main Auth/Demo CTAs */}
             {!isAuthenticated ? (
               IS_DEMO_MODE ? (
-                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
                   {t('btn_demo_login') || 'Demo Login'}
                 </Button>
               ) : (
-                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
                   {t('btn_connect_wallet') || 'Connect Wallet'}
                 </Button>
               )
             ) : (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-[#fcd535] text-black hover:bg-yellow-400 border-none">
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
                 Open App
               </Button>
             )}
@@ -617,7 +617,7 @@ export const Landing: React.FC = () => {
                           localStorage.setItem('alphabag_language', lang.code);
                           setIsLangDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-[#fcd535]' : 'text-alphabag-subtext'}`}
+                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`}
                       >
                         {lang.label}
                       </button>
@@ -648,7 +648,7 @@ export const Landing: React.FC = () => {
             {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 text-sm font-medium ${activeTab === 'buy' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_buy')}</button>}
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
-            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold bg-[#fcd535] text-black">{isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet'}</Button>
+            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold bg-alphabag-yellow text-black">{isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet'}</Button>
           </div>
         )}
       </nav>
@@ -669,7 +669,7 @@ export const Landing: React.FC = () => {
                 <div className="lg:col-span-6 text-left space-y-2 flex flex-col justify-center">
                   <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-white leading-[1.1] tracking-tight">
                     {t('hero_title_1')}
-                    <span className="block text-[#fcd535] mt-1">{t('hero_title_2')}</span>
+                    <span className="block text-alphabag-yellow mt-1">{t('hero_title_2')}</span>
                   </h1>
 
                   <p className="text-base md:text-lg text-alphabag-subtext leading-relaxed font-normal animate-fade-in-up delay-100 max-w-xl">
@@ -691,7 +691,7 @@ export const Landing: React.FC = () => {
                   <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 animate-fade-in-up delay-200">
                     {IS_TEASER_MODE ? (
                       <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none  transition-all" onClick={handleLaunchApp}>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none  transition-all" onClick={handleLaunchApp}>
                           {t('btn_notify_me')}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
@@ -702,7 +702,7 @@ export const Landing: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-[#fcd535] text-black hover:bg-yellow-400 border-none  transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
+                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none  transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
                           {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
@@ -738,7 +738,7 @@ export const Landing: React.FC = () => {
                     <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
                       <CalculatorIcon size={16} className="text-alphabag-yellow" /> {t('calculator_title')}
                     </h3>
-                    <span className="text-[10px] bg-[#fcd535]/10 text-alphabag-yellow px-2 py-0.5 rounded font-semibold">{t('calculator_badge')}</span>
+                    <span className="text-[10px] bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded font-semibold">{t('calculator_badge')}</span>
                   </div>
                   <Calculator minimal={true} />
                 </div>
@@ -845,7 +845,7 @@ export const Landing: React.FC = () => {
                   </div>
                   <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-[#2b323c] overflow-hidden flex items-center justify-center group shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
-                    <div className="w-24 h-24 bg-[#1e2329] border border-white/5 rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
+                    <div className="w-24 h-24 bg-alphabag-darkgray border border-white/5 rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
                       <Lock size={40} className="text-alphabag-yellow" />
                     </div>
                     <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -878,7 +878,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Allocations Unmasked */}
-                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-4 flex flex-col shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-4 flex flex-col">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full h-full">
                     <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
                     <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
@@ -1104,8 +1104,8 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
   };
 
   const statusIndicatorColors = {
-    VERIFIED: "bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)]",
-    EXECUTING: "bg-alphabag-yellow shadow-[0_0_15px_rgba(252,213,53,0.5)]",
+    VERIFIED: "bg-green-500",
+    EXECUTING: "bg-alphabag-yellow",
     PENDING: "bg-[#8BA1C9] border border-white/20",
     QUEUED: "bg-alphabag-gray"
   };
@@ -1187,8 +1187,8 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-[#2b323c] border border-alphabag-gray p-5 rounded-xl hover:border-[#474d57] transition-all group cursor-default shadow-lg">
-    <div className="mb-2.5 bg-[#1e2329] w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
+  <div className="bg-[#2b323c] border border-alphabag-gray p-5 rounded-xl hover:border-alphabag-muted transition-all group cursor-default shadow-lg">
+    <div className="mb-2.5 bg-alphabag-darkgray w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <h3 className="text-lg font-semibold text-white mb-1.5 leading-tight">{title}</h3>
@@ -1198,7 +1198,7 @@ const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, des
 
 const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
   <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-[#2b323c] shadow-lg">
-    <div className="w-12 h-12 bg-[#1e2329] border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
+    <div className="w-12 h-12 bg-alphabag-darkgray border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
       {step}
     </div>
     <h3 className="text-sm font-semibold text-white mb-2 h-8 flex items-center justify-center">{title}</h3>
@@ -1207,8 +1207,8 @@ const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNo
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-[#474d57] transition-all group h-full shadow-lg">
-    <div className="w-12 h-12 shrink-0 bg-[#1e2329] border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
+  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-alphabag-muted transition-all group h-full shadow-lg">
+    <div className="w-12 h-12 shrink-0 bg-alphabag-darkgray border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <div>
@@ -1221,7 +1221,7 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
 );
 
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
-  <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-[#fcd535] ' : 'bg-[#2b323c] border-alphabag-gray hover:border-[#474d57]'} transition-all`}>
+  <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-alphabag-yellow ' : 'bg-[#2b323c] border-alphabag-gray hover:border-alphabag-muted'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
         <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>

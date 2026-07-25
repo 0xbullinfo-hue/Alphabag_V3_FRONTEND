@@ -72,6 +72,24 @@ export const CHAIN_SYMBOL_TO_COINGECKO_ID: Record<string, string> = {
   SOL: 'solana',
 };
 
+// Common assets held on centralized exchanges, for converting the raw
+// per-currency balances returned by /api/cex/connect (via ccxt) into a
+// USD total. This is a bounded, pragmatic list — not exhaustive of every
+// asset any exchange might return. Any currency not in this map is left
+// out of the computed total rather than guessed at.
+export const CEX_SYMBOL_TO_COINGECKO_ID: Record<string, string> = {
+  BTC: 'bitcoin', ETH: 'ethereum', USDT: 'tether', USDC: 'usd-coin',
+  BNB: 'binancecoin', SOL: 'solana', XRP: 'ripple', ADA: 'cardano',
+  DOGE: 'dogecoin', MATIC: 'matic-network', DOT: 'polkadot', AVAX: 'avalanche-2',
+  LINK: 'chainlink', UNI: 'uniswap', LTC: 'litecoin', TRX: 'tron',
+  SHIB: 'shiba-inu', ATOM: 'cosmos', XLM: 'stellar', ETC: 'ethereum-classic',
+  FIL: 'filecoin', APT: 'aptos', ARB: 'arbitrum', OP: 'optimism',
+  NEAR: 'near', ALGO: 'algorand', VET: 'vechain', SAND: 'the-sandbox',
+  MANA: 'decentraland', AAVE: 'aave', GRT: 'the-graph', FTM: 'fantom',
+  EOS: 'eos', XTZ: 'tezos', THETA: 'theta-token', DAI: 'dai',
+  BUSD: 'binance-usd', TUSD: 'true-usd',
+};
+
 export const BLOCKCHAIN_CONFIG = {
   // Chain IDs
   BSC_MAINNET: 56,

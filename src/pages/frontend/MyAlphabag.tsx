@@ -53,8 +53,8 @@ export const MyAlphabag: React.FC = () => {
         let txs = [
             { id: 't1', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> PEPE', net: 'Ethereum', fee: 34.20, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
             { id: 't2', asset: 'USDT', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png', action: 'Bridge USDT -> Base', net: 'Base Network', fee: 12.50, status: 'Average Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-            { id: 't3', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> JUP', net: 'Solana', fee: 0.003, status: 'Highly Efficient', color: 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/20' },
-            { id: 't4', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.15, status: 'Highly Efficient', color: 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/20' },
+            { id: 't3', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> JUP', net: 'Solana', fee: 0.003, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
+            { id: 't4', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.15, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
             { id: 't5', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Mint NFT', net: 'Ethereum', fee: 52.80, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
         ];
 
@@ -72,7 +72,7 @@ export const MyAlphabag: React.FC = () => {
             baseLeakage = 15;
 
             txs = [
-                { id: 'c1', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> PYTH', net: 'Solana', fee: 0.004, status: 'Highly Efficient', color: 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/20' },
+                { id: 'c1', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> PYTH', net: 'Solana', fee: 0.004, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
                 { id: 'c2', asset: 'USDC', logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png', action: 'Bridge USDC -> Solana', net: 'Solana', fee: 8.50, status: 'Average Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
                 { id: 'c3', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> UNI', net: 'Ethereum', fee: (seed * 0.8) + 15.0, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
             ];
@@ -89,7 +89,7 @@ export const MyAlphabag: React.FC = () => {
             baseLeakage = 20;
 
             txs = [
-                { id: 'w1', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.18, status: 'Highly Efficient', color: 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/20' },
+                { id: 'w1', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.18, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
                 { id: 'w2', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Bridge ETH -> Arbitrum', net: 'Arbitrum Network', fee: 18.20, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
             ];
         }
@@ -143,11 +143,11 @@ export const MyAlphabag: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <PieChartIcon size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">My AlphaBAG</h1>
-                        <span className="text-[10px] bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
+                        <span className="text-[10px] bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
                     </div>
                     <p className="text-alphabag-subtext text-sm">Consolidated portfolio overview of your centralized and decentralized assets.</p>
                 </div>
@@ -168,7 +168,7 @@ export const MyAlphabag: React.FC = () => {
                             <span className="font-bold text-alphabag-text">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> CEX Bag &nbsp;·&nbsp; <span className="font-bold text-alphabag-text">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> DEX Bag
                         </p>
                     </div>
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-[#0ecb81] font-bold text-xs shrink-0 self-start md:self-auto border border-green-500/20">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-alphabag-green font-bold text-xs shrink-0 self-start md:self-auto border border-green-500/20">
                         <TrendingUp size={14} /> +3.9% Today
                     </div>
                 </div>
@@ -222,7 +222,7 @@ export const MyAlphabag: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 
                 {/* CEX Card */}
-                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-[#474d57] transition-all relative flex flex-col justify-between h-[280px]">
+                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-alphabag-muted transition-all relative flex flex-col justify-between h-[280px]">
                     <div>
                         <div className="flex justify-between items-start mb-2">
                             <div className="flex items-center gap-2">
@@ -240,7 +240,7 @@ export const MyAlphabag: React.FC = () => {
                         </div>
                         <div>
                             <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                            <div className="text-xs text-[#0ecb81] font-semibold mt-1 flex items-center gap-1">
+                            <div className="text-xs text-alphabag-green font-semibold mt-1 flex items-center gap-1">
                                 <TrendingUp size={12} /> +2.1% Today
                             </div>
                         </div>
@@ -262,7 +262,7 @@ export const MyAlphabag: React.FC = () => {
                         
                         <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
                             <span className="text-[10px] text-alphabag-subtext font-medium">{cexConnections.length} Exchanges Connected</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-[#fcd535] hover:underline">
+                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline">
                                 Configure API Keys &rarr;
                             </button>
                         </div>
@@ -270,11 +270,11 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* DEX Card */}
-                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-[#474d57] transition-all relative flex flex-col justify-between h-[280px]">
+                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-alphabag-muted transition-all relative flex flex-col justify-between h-[280px]">
                     <div>
                         <div className="flex justify-between items-start mb-2">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-lg bg-[#fcd535]/10 text-[#fcd535] flex items-center justify-center font-black text-base border border-[#fcd535]/20">D</div>
+                                <div className="w-10 h-10 rounded-lg bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center font-black text-base border border-alphabag-yellow/20">D</div>
                                 <div>
                                     <h3 className="text-sm font-bold text-white uppercase">DEX Portfolio</h3>
                                     <p className="text-[10px] text-alphabag-subtext">
@@ -288,7 +288,7 @@ export const MyAlphabag: React.FC = () => {
                         </div>
                         <div>
                             <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                            <div className="text-xs text-[#0ecb81] font-semibold mt-1 flex items-center gap-1">
+                            <div className="text-xs text-alphabag-green font-semibold mt-1 flex items-center gap-1">
                                 <TrendingUp size={12} /> +5.4% Today
                             </div>
                         </div>
@@ -310,7 +310,7 @@ export const MyAlphabag: React.FC = () => {
 
                         <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
                             <span className="text-[10px] text-alphabag-subtext font-medium">{dexWallets.length} Wallets Tracked</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-[#fcd535] hover:underline">
+                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline">
                                 Configure Wallets &rarr;
                             </button>
                         </div>
@@ -323,13 +323,13 @@ export const MyAlphabag: React.FC = () => {
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-3 flex gap-4">
                 <button
                     onClick={() => setActiveSection('overview')}
-                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'overview' ? 'bg-[#fcd535] text-[#181a20]' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'overview' ? 'bg-alphabag-yellow text-alphabag-dark' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
                 >
                     Overview
                 </button>
                 <button
                     onClick={() => setActiveSection('fee-auditor')}
-                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'fee-auditor' ? 'bg-[#fcd535] text-[#181a20]' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
+                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'fee-auditor' ? 'bg-alphabag-yellow text-alphabag-dark' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
                 >
                     Fee Auditor
                 </button>
@@ -358,7 +358,7 @@ export const MyAlphabag: React.FC = () => {
                                         <th className="pb-3 px-2 text-right">Value</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-[#2b3139]/20 text-xs">
+                                <tbody className="divide-y divide-alphabag-gray/20 text-xs">
                                     <tr className="hover:bg-white/5 transition-colors">
                                         <td className="py-3 px-2">
                                             <div className="flex items-center gap-2.5">
@@ -369,7 +369,7 @@ export const MyAlphabag: React.FC = () => {
                                         <td className="py-3 px-2">
                                             <span className="text-[9px] font-black uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">CEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-[#0ecb81] font-bold tabular-data">+2.5%</td>
+                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+2.5%</td>
                                         <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$29,032.18</td>
                                     </tr>
                                     <tr className="hover:bg-white/5 transition-colors">
@@ -380,9 +380,9 @@ export const MyAlphabag: React.FC = () => {
                                             </div>
                                         </td>
                                         <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 px-2 py-0.5 rounded">DEX</span>
+                                            <span className="text-[9px] font-black uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded">DEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-[#0ecb81] font-bold tabular-data">+5.6%</td>
+                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+5.6%</td>
                                         <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$7,492.80</td>
                                     </tr>
                                     <tr className="hover:bg-white/5 transition-colors">
@@ -395,7 +395,7 @@ export const MyAlphabag: React.FC = () => {
                                         <td className="py-3 px-2">
                                             <span className="text-[9px] font-black uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">CEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-[#0ecb81] font-bold tabular-data">+2.1%</td>
+                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+2.1%</td>
                                         <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$14,490.84</td>
                                     </tr>
                                     <tr className="hover:bg-white/5 transition-colors">
@@ -406,9 +406,9 @@ export const MyAlphabag: React.FC = () => {
                                             </div>
                                         </td>
                                         <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 px-2 py-0.5 rounded">DEX</span>
+                                            <span className="text-[9px] font-black uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded">DEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-[#f6465d] font-bold tabular-data">-4.2%</td>
+                                        <td className="py-3 px-2 text-right text-alphabag-red font-bold tabular-data">-4.2%</td>
                                         <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$1,638.00</td>
                                     </tr>
                                 </tbody>
@@ -436,7 +436,7 @@ export const MyAlphabag: React.FC = () => {
                             </div>
 
                             <div className="flex gap-2 items-start border-b border-alphabag-gray/40 pb-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#fcd535]/10 text-alphabag-yellow border border-[#fcd535]/20 flex items-center justify-center shrink-0 text-xs font-black">A</div>
+                                <div className="w-8 h-8 rounded-lg bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 flex items-center justify-center shrink-0 text-xs font-black">A</div>
                                 <div className="space-y-0.5 min-w-0">
                                     <p className="text-xs text-alphabag-text leading-relaxed">
                                         <span className="font-bold">Alpha call</span> flagged <span className="font-bold text-alphabag-yellow">$JUP</span> &mdash; 3 analysts bullish.
@@ -446,7 +446,7 @@ export const MyAlphabag: React.FC = () => {
                             </div>
 
                             <div className="flex gap-2 items-start">
-                                <div className="w-8 h-8 rounded-lg bg-green-500/10 text-[#0ecb81] border border-green-500/20 flex items-center justify-center shrink-0 text-xs font-black">S</div>
+                                <div className="w-8 h-8 rounded-lg bg-green-500/10 text-alphabag-green border border-green-500/20 flex items-center justify-center shrink-0 text-xs font-black">S</div>
                                 <div className="space-y-0.5 min-w-0">
                                     <p className="text-xs text-alphabag-text leading-relaxed">
                                         New airdrop mission is live for <span className="font-bold">Genesis</span> members.
@@ -466,7 +466,7 @@ export const MyAlphabag: React.FC = () => {
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-2">
                         <div className="space-y-1">
                             <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                                <ShieldCheck size={16} className="text-[#fcd535]" /> Select Audit Target
+                                <ShieldCheck size={16} className="text-alphabag-yellow" /> Select Audit Target
                             </h4>
                             <p className="text-xs text-alphabag-subtext">Choose a connected portfolio address or paste a custom wallet target.</p>
                         </div>
@@ -484,7 +484,7 @@ export const MyAlphabag: React.FC = () => {
                                         setAuditingWallet(val);
                                     }
                                 }}
-                                className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-[#fcd535] min-w-[200px]"
+                                className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-alphabag-yellow min-w-[200px]"
                             >
                                 <option value="all">Consolidated (All Connected)</option>
                                 {dexWallets.map((w, i) => (
@@ -500,7 +500,7 @@ export const MyAlphabag: React.FC = () => {
                                         placeholder="Paste EVM / Solana Address (0x... or 3M4...)"
                                         value={customWalletInput}
                                         onChange={(e) => setCustomWalletInput(e.target.value)}
-                                        className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-[#fcd535] flex-1 md:w-[280px]"
+                                        className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-alphabag-yellow flex-1 md:w-[280px]"
                                     />
                                     <button
                                         onClick={() => {
@@ -517,7 +517,7 @@ export const MyAlphabag: React.FC = () => {
                                                 color: '#FFF'
                                             });
                                         }}
-                                        className="bg-[#fcd535] hover:bg-yellow-400 text-black text-xs font-bold px-4 py-2.5 rounded-lg transition-colors shrink-0"
+                                        className="bg-alphabag-yellow hover:bg-yellow-400 text-black text-xs font-bold px-4 py-2.5 rounded-lg transition-colors shrink-0"
                                     >
                                         Audit Address
                                     </button>
@@ -588,7 +588,7 @@ export const MyAlphabag: React.FC = () => {
                                                 <span className="text-alphabag-muted">{feeAuditData.bscLeakage}%</span>
                                             </div>
                                             <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-[#fcd535] h-full rounded-full" style={{ width: `${feeAuditData.bscLeakage}%` }}></div>
+                                                <div className="bg-alphabag-yellow h-full rounded-full" style={{ width: `${feeAuditData.bscLeakage}%` }}></div>
                                             </div>
                                         </div>
                                         <div>
@@ -606,7 +606,7 @@ export const MyAlphabag: React.FC = () => {
                                                 <span className="text-alphabag-muted">{feeAuditData.solLeakage}%</span>
                                             </div>
                                             <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-[#0ECB81] h-full rounded-full" style={{ width: `${feeAuditData.solLeakage}%` }}></div>
+                                                <div className="bg-alphabag-green h-full rounded-full" style={{ width: `${feeAuditData.solLeakage}%` }}></div>
                                             </div>
                                         </div>
                                     </div>
@@ -619,15 +619,15 @@ export const MyAlphabag: React.FC = () => {
                                     </h3>
                                     <div className="space-y-2.5 text-xs text-alphabag-subtext leading-relaxed">
                                         <div className="flex items-start gap-2.5">
-                                            <span className="text-[#fcd535] shrink-0 mt-0.5">▪</span>
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
                                             <p>Your **Ethereum** network fee share is **{feeAuditData.ethLeakage}%** of your total cumulative bleed. Recommend routing token trades through L2 aggregators like **Arbitrum** or **Optimism** to cut swap gas by 85%.</p>
                                         </div>
                                         <div className="flex items-start gap-2.5">
-                                            <span className="text-[#fcd535] shrink-0 mt-0.5">▪</span>
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
                                             <p>Estimated slippage leakage is **${feeAuditData.slippageLoss.toFixed(2)}**. This is likely due to direct swap interactions with standard DEX router pools. Consider switching to private RPC endpoints (e.g. **Flashbots Protect**) in your Web3 wallet extension to mitigate MEV sandwiching.</p>
                                         </div>
                                         <div className="flex items-start gap-2.5">
-                                            <span className="text-[#fcd535] shrink-0 mt-0.5">▪</span>
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
                                             <p>Cross-chain bridges accounted for **${feeAuditData.bridgeFriction.toFixed(2)}** in friction toll fees. Recommend using cheaper messaging bridges like **Stargate** or **Across** rather than high-margin direct layer-1 portals.</p>
                                         </div>
                                     </div>
@@ -649,7 +649,7 @@ export const MyAlphabag: React.FC = () => {
                                                 <th className="pb-3 px-2 text-right">Audit Assessment</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-[#2b3139]/20 text-xs">
+                                        <tbody className="divide-y divide-alphabag-gray/20 text-xs">
                                             {feeAuditData.txs.map((tx) => (
                                                 <tr key={tx.id} className="hover:bg-white/5 transition-colors">
                                                     <td className="py-3 px-2 font-bold text-white flex items-center gap-2">

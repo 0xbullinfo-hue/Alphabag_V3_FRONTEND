@@ -398,7 +398,7 @@ export const Airdrop: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Gift size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
@@ -410,7 +410,7 @@ export const Airdrop: React.FC = () => {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <div className="bg-[#2b3139] px-3 py-1.5 rounded-md text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider flex items-center gap-2">
+                    <div className="bg-alphabag-gray px-3 py-1.5 rounded-md text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider flex items-center gap-2">
                         <Zap size={14} fill="currentColor" /> Live Tracking
                     </div>
                 </div>
@@ -448,14 +448,14 @@ export const Airdrop: React.FC = () => {
                                     <span className="text-[10px] text-alphabag-subtext font-medium">{100 - myTeamSize} slots left</span>
                                 </div>
                                 <div className="w-full h-1.5 bg-alphabag-black rounded-full overflow-hidden">
-                                    <div className="h-full rounded-full transition-all duration-1000 bg-[#fcd535]" style={{width: `${progress}%`}}></div>
+                                    <div className="h-full rounded-full transition-all duration-1000 bg-alphabag-yellow" style={{width: `${progress}%`}}></div>
                                 </div>
                                 <div className="text-[10px] text-alphabag-subtext font-medium">{myTeamSize} / 100 MAX</div>
                             </div>
                             <div className="mt-auto pt-6">
-                                <div className="bg-[#0ecb81]/10 px-4 rounded-md border border-[#0ecb81]/20 flex justify-between items-center h-10">
-                                    <div className="text-[10px] font-semibold uppercase text-[#0ecb81]">Tasks Completed</div>
-                                    <div className="text-sm font-semibold text-[#0ecb81]">
+                                <div className="bg-alphabag-green/10 px-4 rounded-md border border-alphabag-green/20 flex justify-between items-center h-10">
+                                    <div className="text-[10px] font-semibold uppercase text-alphabag-green">Tasks Completed</div>
+                                    <div className="text-sm font-semibold text-alphabag-green">
                                         {user?.completedTasks?.length || 0}
                                     </div>
                                 </div>
@@ -468,7 +468,7 @@ export const Airdrop: React.FC = () => {
                     {/* Header */}
                     <div className="flex justify-between items-center mb-2 pb-4 border-b border-alphabag-gray">
                         <span className="text-xs font-semibold uppercase text-alphabag-subtext">Earned ITEMS</span>
-                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] px-2 py-1 rounded-md text-[10px] font-semibold">ELIGIBLE</span>
+                        <span className="bg-alphabag-green/10 text-alphabag-green px-2 py-1 rounded-md text-[10px] font-semibold">ELIGIBLE</span>
                     </div>
 
                     {/* Main Balance (Total) */}
@@ -486,13 +486,13 @@ export const Airdrop: React.FC = () => {
                             <div className="text-xl font-semibold text-alphabag-text tabular-nums">{itemsBalance.toLocaleString()}</div>
                         </div>
                         <div className="flex-1">
-                            <div className="text-[10px] text-[#fcd535] font-semibold uppercase mb-1 flex items-center justify-between">
+                            <div className="text-[10px] text-alphabag-yellow font-semibold uppercase mb-1 flex items-center justify-between">
                                 <span>Reserve</span>
                                 {itemsToBagRate && itemsToBagRate > 0 && (
                                     <span className="text-[8px] text-alphabag-subtext normal-case tracking-normal">({itemsToBagRate}:1 rate)</span>
                                 )}
                             </div>
-                            <div className="text-xl font-semibold text-[#fcd535] tabular-nums">{bagBalance.toLocaleString()}</div>
+                            <div className="text-xl font-semibold text-alphabag-yellow tabular-nums">{bagBalance.toLocaleString()}</div>
                         </div>
                     </div>
 
@@ -504,25 +504,25 @@ export const Airdrop: React.FC = () => {
                                     {itemsBalance > 0 ? (
                                         <button 
                                             onClick={handleConvertItems} 
-                                            className="w-full bg-[#fcd535] text-[#181a20] px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#e0bd2e] active:scale-[0.98] transition-all h-full"
+                                            className="w-full bg-alphabag-yellow text-alphabag-dark px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#e0bd2e] active:scale-[0.98] transition-all h-full"
                                         >
                                             Convert Items to $BAG
                                         </button>
                                     ) : bagBalance > 0 && !payoutRequest ? (
                                         <button
                                             onClick={handleRequestPayout}
-                                            className="w-full bg-[#0ecb81] text-[#181a20] px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#0cba76] active:scale-[0.98] transition-all h-full"
+                                            className="w-full bg-alphabag-green text-alphabag-dark px-4 rounded-md text-xs font-bold uppercase tracking-wider hover:bg-[#0cba76] active:scale-[0.98] transition-all h-full"
                                         >
                                             Request Withdrawal
                                         </button>
                                     ) : (
-                                        <div className="w-full bg-[#2b3139]/40 border border-alphabag-gray text-alphabag-subtext rounded-md flex items-center justify-center text-[10px] font-bold uppercase tracking-wider h-full">
+                                        <div className="w-full bg-alphabag-gray/40 border border-alphabag-gray text-alphabag-subtext rounded-md flex items-center justify-center text-[10px] font-bold uppercase tracking-wider h-full">
                                             Campaign Completed
                                         </div>
                                     )}
                                 </>
                             ) : (
-                                <div className="w-full bg-[#2b3139] rounded-md flex items-center justify-center text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider h-full">
+                                <div className="w-full bg-alphabag-gray rounded-md flex items-center justify-center text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider h-full">
                                     Locked until campaign end
                                 </div>
                             )}
@@ -540,14 +540,14 @@ export const Airdrop: React.FC = () => {
                         <div className="mb-2">
                             {campaignEnded ? (
                                 <div className="animate-in fade-in zoom-in duration-500">
-                                    <div className="text-[10px] text-[#fcd535] font-semibold uppercase text-center mb-3">Wallet Distribution Protocol</div>
+                                    <div className="text-[10px] text-alphabag-yellow font-semibold uppercase text-center mb-3">Wallet Distribution Protocol</div>
                                     <TGECountdown targetDate={new Date(new Date(stats.tgeDate).getTime() + 72 * 60 * 60 * 1000).toISOString()} />
                                 </div>
                             ) : (
                                 <>
                                     <TGECountdown targetDate={stats?.tgeDate || new Date().toISOString()} />
                                     <div className="mt-4 text-center">
-                                        <span className="bg-[#2b3139] text-alphabag-text px-3 py-1.5 rounded-md text-[10px] font-semibold border border-[#474d57]">
+                                        <span className="bg-alphabag-gray text-alphabag-text px-3 py-1.5 rounded-md text-[10px] font-semibold border border-alphabag-muted">
                                             Target: {stats?.tgeDate ? new Date(stats.tgeDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Q4 2026'}
                                         </span>
                                     </div>
@@ -556,12 +556,12 @@ export const Airdrop: React.FC = () => {
                         </div>
 
                             <div className="mt-auto pt-6 border-t border-alphabag-gray">
-                                <div className={`text-[10px] font-semibold uppercase text-center mb-1 ${campaignEnded ? 'text-[#fcd535]' : 'text-alphabag-subtext'}`}>
+                                <div className={`text-[10px] font-semibold uppercase text-center mb-1 ${campaignEnded ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`}>
                                     {campaignEnded ? "Final Allocation" : "Final Allocation"}
                                 </div>
                                 <div className="text-center font-semibold transition-all duration-700 py-1 text-2xl text-alphabag-text relative flex justify-center">
                                     {campaignEnded && itemsBalance === 0 ? (
-                                        <span className="text-3xl text-[#fcd535]">{bagBalance.toLocaleString()} <span className="text-base">$BAG</span></span>
+                                        <span className="text-3xl text-alphabag-yellow">{bagBalance.toLocaleString()} <span className="text-base">$BAG</span></span>
                                     ) : (
                                         <div className="relative w-fit mx-auto flex justify-center items-center select-none">
                                             <span className="text-alphabag-subtext text-2xl blur-[5px] opacity-40 select-none">00000</span>
@@ -591,11 +591,11 @@ export const Airdrop: React.FC = () => {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
                                 <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
-                                    payoutRequest?.status === 'SENT'     ? 'bg-[#0ecb81]/20 text-[#0ecb81]' :
+                                    payoutRequest?.status === 'SENT'     ? 'bg-alphabag-green/20 text-alphabag-green' :
                                     payoutRequest?.status === 'APPROVED' ? 'bg-blue-500/20 text-blue-400' :
-                                    payoutRequest?.status === 'REJECTED' ? 'bg-[#f6465d]/20 text-[#f6465d]' :
-                                    payoutRequest?.status === 'PENDING'  ? 'bg-[#fcd535]/10 text-[#fcd535]' :
-                                                                           'bg-[#2b3139] text-alphabag-subtext'
+                                    payoutRequest?.status === 'REJECTED' ? 'bg-alphabag-red/20 text-alphabag-red' :
+                                    payoutRequest?.status === 'PENDING'  ? 'bg-alphabag-yellow/10 text-alphabag-yellow' :
+                                                                           'bg-alphabag-gray text-alphabag-subtext'
                                 }`}>
                                     {payoutRequest?.status === 'SENT' ? <CheckCircle2 size={20} /> :
                                      payoutRequest?.status === 'REJECTED' ? <Shield size={20} /> :
@@ -609,11 +609,11 @@ export const Airdrop: React.FC = () => {
                                             {payoutRequest ? Number(payoutRequest.expectedTokens).toLocaleString() : '0,000'} <span className="text-sm text-alphabag-subtext">$BAG</span>
                                         </span>
                                         <span className={`text-[9px] font-black px-2 py-0.5 rounded border uppercase ${
-                                            payoutRequest?.status === 'SENT'     ? 'text-[#0ecb81] bg-[#0ecb81]/10 border-[#0ecb81]/30' :
+                                            payoutRequest?.status === 'SENT'     ? 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/30' :
                                             payoutRequest?.status === 'APPROVED' ? 'text-blue-400 bg-blue-500/10 border-blue-500/20' :
-                                            payoutRequest?.status === 'REJECTED' ? 'text-[#f6465d] bg-[#f6465d]/10 border-[#f6465d]/20' :
-                                            payoutRequest?.status === 'PENDING'  ? 'text-[#fcd535] bg-[#fcd535]/10 border-[#fcd535]/20' :
-                                                                                   'text-alphabag-subtext bg-[#2b3139] border-alphabag-gray'
+                                            payoutRequest?.status === 'REJECTED' ? 'text-alphabag-red bg-alphabag-red/10 border-alphabag-red/20' :
+                                            payoutRequest?.status === 'PENDING'  ? 'text-alphabag-yellow bg-alphabag-yellow/10 border-alphabag-yellow/20' :
+                                                                                   'text-alphabag-subtext bg-alphabag-gray border-alphabag-gray'
                                         }`}>{payoutRequest?.status || 'NO REQUEST'}</span>
                                     </div>
                                     <div className="text-[10px] text-alphabag-subtext mt-1">
@@ -628,7 +628,7 @@ export const Airdrop: React.FC = () => {
                             {payoutRequest && (
                                 <div className="text-right text-[9px] text-alphabag-subtext font-mono shrink-0">
                                     <div>Requested: {new Date(payoutRequest.createdAt).toLocaleDateString()}</div>
-                                    {payoutRequest.sentAt && <div className="text-[#0ecb81] mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
+                                    {payoutRequest.sentAt && <div className="text-alphabag-green mt-0.5">Sent: {new Date(payoutRequest.sentAt).toLocaleDateString()}</div>}
                                     <div className="mt-1 text-[8px] opacity-50">{payoutRequest.walletAddress?.slice(0, 10)}...</div>
                                 </div>
                             )}
@@ -638,18 +638,18 @@ export const Airdrop: React.FC = () => {
                                 {['PENDING', 'APPROVED', 'SENT'].map((step, i) => (
                                     <React.Fragment key={step}>
                                         <div className={`flex items-center gap-1.5 text-[9px] font-bold uppercase ${
-                                            (step === payoutRequest.status) ? 'text-[#fcd535]' :
-                                            (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'text-[#0ecb81]' :
-                                            'text-[#2b3139]'
+                                            (step === payoutRequest.status) ? 'text-alphabag-yellow' :
+                                            (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'text-alphabag-green' :
+                                            'text-alphabag-gray'
                                         }`}>
                                             <div className={`w-5 h-5 rounded-full border flex items-center justify-center text-[7px] ${
-                                                (step === payoutRequest.status) ? 'border-[#fcd535] bg-[#fcd535]/20 text-[#fcd535]' :
-                                                (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-[#0ecb81] bg-[#0ecb81]/20 text-[#0ecb81]' :
-                                                'border-alphabag-gray text-[#2b3139]'
+                                                (step === payoutRequest.status) ? 'border-alphabag-yellow bg-alphabag-yellow/20 text-alphabag-yellow' :
+                                                (['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status)) ? 'border-alphabag-green bg-alphabag-green/20 text-alphabag-green' :
+                                                'border-alphabag-gray text-alphabag-gray'
                                             }`}>{i + 1}</div>
                                             {step}
                                         </div>
-                                        {i < 2 && <div className={`flex-1 h-px ${['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status) - 1 ? 'bg-[#0ecb81]' : 'bg-[#2b3139]'}`} />}
+                                        {i < 2 && <div className={`flex-1 h-px ${['PENDING','APPROVED','SENT'].indexOf(step) < ['PENDING','APPROVED','SENT'].indexOf(payoutRequest.status) - 1 ? 'bg-alphabag-green' : 'bg-alphabag-gray'}`} />}
                                     </React.Fragment>
                                 ))}
                             </div>
@@ -670,9 +670,9 @@ export const Airdrop: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0 self-stretch md:self-auto w-full md:w-auto">
-                            <div className="bg-[#f6465d]/10 p-3 px-4 rounded-md border border-[#f6465d]/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
-                                <div className="text-[10px] font-semibold uppercase text-[#f6465d] mb-0.5 whitespace-nowrap">Strike Protocol</div>
-                                <div className="text-sm font-semibold text-[#f6465d]">
+                            <div className="bg-alphabag-red/10 p-3 px-4 rounded-md border border-alphabag-red/20 flex flex-col items-start md:items-end justify-center flex-1 md:flex-initial">
+                                <div className="text-[10px] font-semibold uppercase text-alphabag-red mb-0.5 whitespace-nowrap">Strike Protocol</div>
+                                <div className="text-sm font-semibold text-alphabag-red">
                                     {user?.strikes || 0}/5
                                 </div>
                             </div>
@@ -687,9 +687,9 @@ export const Airdrop: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                         <div>
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
-                                <Users size={18} className="text-[#fcd535]" /> Network Hub
+                                <Users size={18} className="text-alphabag-yellow" /> Network Hub
                             </h2>
-                            <p className="text-xs text-alphabag-subtext mt-1 font-medium">Recruit new members and earn <span className="text-[#fcd535] font-semibold">100 ITEMS</span> per successful sync.</p>
+                            <p className="text-xs text-alphabag-subtext mt-1 font-medium">Recruit new members and earn <span className="text-alphabag-yellow font-semibold">100 ITEMS</span> per successful sync.</p>
                         </div>
                         
                         <div className="flex flex-col items-end gap-2 w-full md:w-auto">
@@ -701,7 +701,7 @@ export const Airdrop: React.FC = () => {
                                 <button 
                                     onClick={copyReferralLink}
                                     title="Copy referral link"
-                                    className="p-2 bg-[#2b3139] text-alphabag-text rounded-md hover:bg-[#474d57] transition-all shrink-0"
+                                    className="p-2 bg-alphabag-gray text-alphabag-text rounded-md hover:bg-alphabag-muted transition-all shrink-0"
                                 >
                                     <Copy size={16} />
                                 </button>
@@ -712,7 +712,7 @@ export const Airdrop: React.FC = () => {
                                         window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
                                     }}
                                     title="Share on X"
-                                    className="p-2 bg-[#2b3139] text-alphabag-text rounded-md hover:bg-[#474d57] transition-all shrink-0"
+                                    className="p-2 bg-alphabag-gray text-alphabag-text rounded-md hover:bg-alphabag-muted transition-all shrink-0"
                                 >
                                     <Twitter size={16} />
                                 </button>
@@ -728,7 +728,7 @@ export const Airdrop: React.FC = () => {
                         <h2 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-2">
                             <Shield className="text-alphabag-yellow " /> Mission Hub
                         </h2>
-                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase bg-[#2b3139] px-3 py-1.5 rounded-md border border-[#474d57]">
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase bg-alphabag-gray px-3 py-1.5 rounded-md border border-alphabag-muted">
                             Available Missions: {tasks.filter((t) => (t.type as string) !== 'unlimited').length}
                         </div>
                     </div>
@@ -763,17 +763,17 @@ export const Airdrop: React.FC = () => {
                             })();
                             const type = task.frequency?.toLowerCase() || task.type?.toLowerCase();
                             return (
-                                <div key={task.id} className={`flex flex-col justify-between h-full p-4 transition-all relative overflow-hidden border ${isCompleted ? 'bg-alphabag-dark border-[#0ecb81]/30 rounded-lg' : 'bg-alphabag-darkgray border-alphabag-gray rounded-lg hover:border-[#fcd535] hover:bg-[#2b3139]'}`}>
+                                <div key={task.id} className={`flex flex-col justify-between h-full p-4 transition-all relative overflow-hidden border ${isCompleted ? 'bg-alphabag-dark border-alphabag-green/30 rounded-lg' : 'bg-alphabag-darkgray border-alphabag-gray rounded-lg hover:border-alphabag-yellow hover:bg-alphabag-gray'}`}>
                                     <div className="flex justify-between items-start mb-2">
-                                        <div className={`p-2.5 rounded-md ${isCompleted ? 'bg-[#0ecb81]/10 text-[#0ecb81]' : 'bg-[#fcd535]/10 text-[#fcd535]'}`}>
+                                        <div className={`p-2.5 rounded-md ${isCompleted ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-yellow/10 text-alphabag-yellow'}`}>
                                             <Zap size={18} fill="currentColor" />
                                         </div>
                                         {isCompleted ? (
-                                            <div className="flex items-center gap-1 text-[10px] text-[#0ecb81] font-semibold uppercase">
+                                            <div className="flex items-center gap-1 text-[10px] text-alphabag-green font-semibold uppercase">
                                                 <CheckCircle2 size={14} /> Completed
                                             </div>
                                         ) : (
-                                            <div className="bg-[#fcd535]/10 text-[#fcd535] px-2 py-1 rounded-md text-[10px] font-semibold uppercase">
+                                            <div className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-1 rounded-md text-[10px] font-semibold uppercase">
                                                 +{task.rewardTokens || 0} ITEMS
                                             </div>
                                         )}
@@ -788,7 +788,7 @@ export const Airdrop: React.FC = () => {
                                         <div className="mb-2">
                                             <Button
                                                 onClick={() => window.open(task.actionUrl, '_blank')}
-                                                className="w-full py-2.5 bg-[#2b3139] text-alphabag-text hover:bg-[#474d57] border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
+                                                className="w-full py-2.5 bg-alphabag-gray text-alphabag-text hover:bg-alphabag-muted border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
                                                 variant="secondary"
                                                 size="sm"
                                             >
@@ -805,7 +805,7 @@ export const Airdrop: React.FC = () => {
                                                 {(task.frequency?.toUpperCase() === 'DAILY' ? dailyCountdown : weeklyCountdown).split(':').map((val, idx) => (
                                                     <div key={idx} className="flex flex-col items-center">
                                                         <div className="bg-alphabag-black border border-alphabag-gray rounded-md w-12 h-12 flex items-center justify-center mb-1">
-                                                            <span className="text-xl font-semibold text-[#fcd535] tabular-nums">
+                                                            <span className="text-xl font-semibold text-alphabag-yellow tabular-nums">
                                                                 {val || '00'}
                                                             </span>
                                                         </div>
@@ -823,7 +823,7 @@ export const Airdrop: React.FC = () => {
                                             <input 
                                                 type="text" 
                                                 placeholder={task.title.toLowerCase().includes('telegram') ? "@Telegram_Username" : "Activity Proof Link: https://..."}
-                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
+                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text focus:border-alphabag-yellow outline-none transition-all"
                                                 value={taskLinks[task.id] || ''}
                                                 onChange={(e) => handleTaskLinkChange(task.id, e.target.value)}
                                             />
@@ -834,7 +834,7 @@ export const Airdrop: React.FC = () => {
                                         <div className="mb-2">
                                             <textarea 
                                                 placeholder="Provide your mission feedback here..."
-                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text h-20 resize-none focus:border-[#fcd535] outline-none transition-all"
+                                                className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2.5 text-xs font-mono text-alphabag-text h-20 resize-none focus:border-alphabag-yellow outline-none transition-all"
                                                 value={taskFeedback[task.id] || ''}
                                                 onChange={(e) => handleTaskFeedbackChange(task.id, e.target.value)}
                                             />
@@ -846,7 +846,7 @@ export const Airdrop: React.FC = () => {
                                             onClick={() => {
                                                 handleCompleteTask(task.id, task.requiresLink);
                                             }}
-                                            className={`w-full py-2.5 text-xs font-semibold uppercase transition-all rounded-md ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-[#2b3139] text-alphabag-subtext cursor-not-allowed border-none' : 'bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]'}`}
+                                            className={`w-full py-2.5 text-xs font-semibold uppercase transition-all rounded-md ${missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id]) ? 'bg-alphabag-gray text-alphabag-subtext cursor-not-allowed border-none' : 'bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]'}`}
                                             size="sm"
                                             disabled={isTaskLoading || missionPaused || (task.requiresLink && !taskLinks[task.id]) || (task.requiresFeedback && !taskFeedback[task.id])}
                                         >
@@ -854,7 +854,7 @@ export const Airdrop: React.FC = () => {
                                         </Button>
                                     ) : (
                                         <Button
-                                            className="w-full py-2.5 text-xs font-semibold uppercase bg-[#2b3139] text-alphabag-subtext cursor-not-allowed border-none rounded-md"
+                                            className="w-full py-2.5 text-xs font-semibold uppercase bg-alphabag-gray text-alphabag-subtext cursor-not-allowed border-none rounded-md"
                                             size="sm"
                                             disabled
                                         >
@@ -875,7 +875,7 @@ export const Airdrop: React.FC = () => {
                     <div className="rounded-2xl p-4 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-2">
                             <h2 className="text-xl font-semibold text-alphabag-text flex items-center gap-2">
-                                <Send className="text-[#fcd535]" size={20} /> Submission Hub
+                                <Send className="text-alphabag-yellow" size={20} /> Submission Hub
                             </h2>
                             <p className="text-xs text-alphabag-subtext mt-2 font-medium">Connect your final social identity and mission proof.</p>
                         </div>
@@ -887,7 +887,7 @@ export const Airdrop: React.FC = () => {
                                     type="text" 
                                     required
                                     placeholder="0x..."
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-alphabag-yellow outline-none transition-all"
                                     value={bscWallet}
                                     onChange={(e) => setBscWallet(e.target.value)}
                                 />
@@ -898,7 +898,7 @@ export const Airdrop: React.FC = () => {
                                 <input 
                                     type="url"
                                     placeholder="https://x.com/yourhandle"
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text focus:border-alphabag-yellow outline-none transition-all"
                                     value={xLink}
                                     onChange={(e) => setXLink(e.target.value)}
                                 />
@@ -908,7 +908,7 @@ export const Airdrop: React.FC = () => {
                                 <label className="text-xs text-alphabag-subtext font-semibold">Final Mission Feedback (Compulsory)</label>
                                 <textarea 
                                     required
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text h-24 resize-none focus:border-[#fcd535] outline-none transition-all"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-2.5 text-sm text-alphabag-text h-24 resize-none focus:border-alphabag-yellow outline-none transition-all"
                                     placeholder="Please provide your feedback on the platform UI/UX and features."
                                     value={review}
                                     onChange={(e) => setReview(e.target.value)}
@@ -918,7 +918,7 @@ export const Airdrop: React.FC = () => {
                             <Button 
                                 type="submit" 
                                 disabled={isSubmitting || !review}
-                                className="w-full py-3 bg-[#fcd535] text-[#181a20] font-semibold uppercase rounded-md hover:bg-[#e0bd2e] transition-all flex flex-col items-center justify-center gap-1"
+                                className="w-full py-3 bg-alphabag-yellow text-alphabag-dark font-semibold uppercase rounded-md hover:bg-[#e0bd2e] transition-all flex flex-col items-center justify-center gap-1"
                             >
                                 {isSubmitting ? 'SYNCING DATA...' : (
                                     <>
@@ -933,9 +933,9 @@ export const Airdrop: React.FC = () => {
                     </div>
                 </div>
             ) : (
-                <div className="p-4 bg-[#0ecb81]/10 border border-[#0ecb81]/30 rounded-lg text-center space-y-2">
-                    <div className="w-12 h-12 bg-[#0ecb81]/20 rounded-full flex items-center justify-center mx-auto border border-[#0ecb81]/40">
-                        <CheckCircle2 size={24} className="text-[#0ecb81]" />
+                <div className="p-4 bg-alphabag-green/10 border border-alphabag-green/30 rounded-lg text-center space-y-2">
+                    <div className="w-12 h-12 bg-alphabag-green/20 rounded-full flex items-center justify-center mx-auto border border-alphabag-green/40">
+                        <CheckCircle2 size={24} className="text-alphabag-green" />
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold text-alphabag-text uppercase">Identity Synchronized</h2>
@@ -952,11 +952,11 @@ export const Airdrop: React.FC = () => {
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 border-b border-alphabag-gray pb-4">
                         <div className="space-y-1">
                             <h2 className="text-lg font-semibold text-alphabag-text flex items-center gap-2">
-                                <BarChart3 className="text-[#fcd535]" size={20} /> AlphaBAG Allocation
+                                <BarChart3 className="text-alphabag-yellow" size={20} /> AlphaBAG Allocation
                             </h2>
                             <p className="text-xs text-alphabag-subtext">Strategic token distribution for sustainable ecosystem growth.</p>
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#fcd535] text-[#181a20] rounded-md">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-alphabag-yellow text-alphabag-dark rounded-md">
                             <Zap size={14} fill="currentColor" />
                             <span className="text-[10px] font-semibold uppercase tracking-wider">Total Supply: 21,000,000</span>
                         </div>
@@ -966,10 +966,10 @@ export const Airdrop: React.FC = () => {
                     <div className="relative group/allocation">
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-2 filter blur-[2px] transition-all duration-700 opacity-60">
                             {[
-                                { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'bg-[#fcd535] text-black', desc: 'Locked Forever.' },
+                                { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'bg-alphabag-yellow text-black', desc: 'Locked Forever.' },
                                 { label: 'Task-to-Earn', pct: '35%', tokens: '7.35M', color: 'bg-[#1DA1F2] text-white', desc: 'Mined (4-5y)' },
-                                { label: 'Dev & Eco', pct: '15%', tokens: '3.15M', color: 'bg-[#0ecb81] text-black', desc: '6m cliff' },
-                                { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'bg-[#f6465d] text-white', desc: 'Partnerships' },
+                                { label: 'Dev & Eco', pct: '15%', tokens: '3.15M', color: 'bg-alphabag-green text-black', desc: '6m cliff' },
+                                { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'bg-alphabag-red text-white', desc: 'Partnerships' },
                                 { label: 'Team', pct: '10%', tokens: '2.1M', color: 'bg-[#9333EA] text-white', desc: '12m cliff' },
                             ].map((item) => (
                                 <div key={item.label} className="flex flex-col items-center p-4 bg-alphabag-black border border-alphabag-gray rounded-md text-center">
@@ -985,7 +985,7 @@ export const Airdrop: React.FC = () => {
                         {/* Translucent Mask Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                             <div className="bg-alphabag-dark border border-alphabag-gray px-4 py-2 rounded-md flex items-center gap-2">
-                                <Lock size={14} className="text-[#fcd535]" />
+                                <Lock size={14} className="text-alphabag-yellow" />
                                 <span className="text-[10px] text-alphabag-text font-semibold uppercase tracking-wider">Allocation Locked • Verification in Progress</span>
                             </div>
                         </div>
@@ -997,14 +997,14 @@ export const Airdrop: React.FC = () => {
                     {/* Utility & Key Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="flex items-start gap-2 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
-                            <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Zap size={14} className="text-[#fcd535]"/></div>
+                            <div className="w-8 h-8 rounded-md bg-alphabag-gray flex items-center justify-center shrink-0"><Zap size={14} className="text-alphabag-yellow"/></div>
                             <div>
                                 <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">Utility</div>
                                 <div className="text-xs font-semibold text-alphabag-text mt-1 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
-                            <div className="w-8 h-8 rounded-md bg-[#2b3139] flex items-center justify-center shrink-0"><Gift size={14} className="text-[#0ecb81]"/></div>
+                            <div className="w-8 h-8 rounded-md bg-alphabag-gray flex items-center justify-center shrink-0"><Gift size={14} className="text-alphabag-green"/></div>
                             <div>
                                 <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">TGE Distribution</div>
                                 <div className="text-xs font-semibold text-alphabag-text mt-1">Proportional to future utility reward conversion</div>
@@ -1030,11 +1030,11 @@ export const Airdrop: React.FC = () => {
                             <div className="relative flex items-center justify-center">
                                 <input 
                                 type="checkbox" 
-                                className="w-6 h-6 rounded-md appearance-none bg-alphabag-dark border border-[#474d57] checked:bg-[#1DA1F2] checked:border-[#1DA1F2] transition-all cursor-pointer peer"
+                                className="w-6 h-6 rounded-md appearance-none bg-alphabag-dark border border-alphabag-muted checked:bg-[#1DA1F2] checked:border-[#1DA1F2] transition-all cursor-pointer peer"
                                 checked={isFounderApplication}
                                 onChange={(e) => setIsFounderApplication(e.target.checked)}
                                 />
-                                <CheckCircle2 size={14} className="absolute text-[#181a20] pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" />
+                                <CheckCircle2 size={14} className="absolute text-alphabag-dark pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" />
                             </div>
                         </div>
                     </div>

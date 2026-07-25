@@ -51,7 +51,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
 
                     <div className="flex gap-2 mb-2">
                         {[1, 2, 3].map(i => (
-                            <div key={i} className={`h-1.5 flex-1 rounded-full transition-all ${step >= i ? 'bg-alphabag-yellow shadow-[0_0_10px_rgba(252,213,53,0.3)]' : 'bg-white/5'}`}></div>
+                            <div key={i} className={`h-1.5 flex-1 rounded-full transition-all ${step >= i ? 'bg-alphabag-yellow' : 'bg-white/5'}`}></div>
                         ))}
                     </div>
 

@@ -108,14 +108,14 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         <div className="flex items-center flex-1">
           <button
             onClick={toggleSidebar}
-            className="mr-4 p-2 rounded-md text-alphabag-subtext hover:text-alphabag-text hover:bg-[#2b3139] md:hidden transition-all duration-200"
+            className="mr-4 p-2 rounded-md text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray md:hidden transition-all duration-200"
           >
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           <Link to="/" className="flex items-center space-x-2 group">
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full group-hover:scale-105 transition-transform" />
-            <span className="text-lg font-bold text-[#fcd535] tracking-tight">ALPHABAG</span>
+            <span className="text-lg font-bold text-alphabag-yellow tracking-tight">ALPHABAG</span>
           </Link>
 
           <nav className="hidden md:flex flex-1 items-center justify-between max-w-[440px] ml-16 mr-8 text-sm font-medium text-alphabag-subtext">
@@ -143,7 +143,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search coin, pair, or contract..."
-            className="w-full bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text text-sm rounded-md focus:border-[#fcd535] focus:ring-1 focus:ring-[#fcd535] block pl-10 p-2 outline-none transition-all duration-200"
+            className="w-full bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text text-sm rounded-md focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow block pl-10 p-2 outline-none transition-all duration-200"
           />
         </form>
 
@@ -177,13 +177,13 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                         setShowUserMenu(!showUserMenu);
                         setShowNotifications(false);
                     }}
-                    className="flex items-center space-x-2 bg-transparent px-3 py-1.5 rounded-md hover:bg-[#2b3139] transition-all duration-300"
+                    className="flex items-center space-x-2 bg-transparent px-3 py-1.5 rounded-md hover:bg-alphabag-gray transition-all duration-300"
                 >
                     <div className="hidden sm:block text-right">
                     <div className="text-sm font-medium text-alphabag-text leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
-                    <div className="text-[10px] font-medium text-[#fcd535] uppercase">Verified</div>
+                    <div className="text-[10px] font-medium text-alphabag-yellow uppercase">Verified</div>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#fcd535] to-orange-500"></div>
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-alphabag-yellow to-orange-500"></div>
                     <ChevronDown size={14} className={`text-alphabag-subtext transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
                 </button>
               </div>
@@ -200,7 +200,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                     <p className="text-[10px] text-alphabag-subtext font-medium uppercase mb-1">Account</p>
                     <p className="text-sm text-alphabag-text font-medium truncate">{user?.email}</p>
                     <div className="mt-2">
-                      <span className="px-2 py-1 bg-[#fcd535]/10 text-[#fcd535] text-[10px] font-medium rounded-md">
+                      <span className="px-2 py-1 bg-alphabag-yellow/10 text-alphabag-yellow text-[10px] font-medium rounded-md">
                         Standard User
                       </span>
                     </div>

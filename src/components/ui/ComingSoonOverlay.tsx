@@ -20,7 +20,7 @@ export const ComingSoonOverlay: React.FC<ComingSoonOverlayProps> = ({
       absolute z-50 flex items-center justify-center p-4 bg-alphabag-black/40 backdrop-blur-2xl overflow-hidden transition-all duration-500
       ${fullPage ? '-inset-4 md:-inset-6 lg:-inset-8' : 'inset-0 rounded-3xl border border-white/5'}
     `}>
-      <div className="max-w-md w-full bg-alphabag-dark border border-alphabag-yellow/20 p-4 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] text-center relative overflow-hidden group">
+      <div className="max-w-md w-full bg-alphabag-dark border border-alphabag-yellow/20 p-4 rounded-3xl text-center relative overflow-hidden group">
         {/* Animated Background Glow */}
         
         

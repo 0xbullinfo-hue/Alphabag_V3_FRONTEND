@@ -41,16 +41,16 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
       className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${
         isDisabled ? 'opacity-50 cursor-not-allowed' : ''
       } ${active
-        ? 'bg-[#2b3139] text-alphabag-text border-l-2 border-[#fcd535]'
-        : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text border-l-2 border-transparent'
+        ? 'bg-alphabag-gray text-alphabag-text border-l-2 border-alphabag-yellow'
+        : 'text-alphabag-subtext hover:bg-alphabag-gray hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
       <div className="flex items-center space-x-2 relative z-10">
-        {Icon && <Icon size={18} className={active ? 'text-[#fcd535]' : 'group-hover:text-alphabag-text'} />}
+        {Icon && <Icon size={18} className={active ? 'text-alphabag-yellow' : 'group-hover:text-alphabag-text'} />}
         <span className="font-medium text-sm">{label}</span>
       </div>
       {isDisabled && (
-        <span className="text-[7px] font-black bg-[#fcd535]/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-[#fcd535]/20 shrink-0">SOON</span>
+        <span className="text-[7px] font-black bg-alphabag-yellow/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-alphabag-yellow/20 shrink-0">SOON</span>
       )}
     </Link>
   );
@@ -67,8 +67,8 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-[calc(100%-1rem)] flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-200 mx-2 ${isActive
-          ? 'bg-[#2b3139] text-alphabag-text'
-          : 'text-alphabag-subtext hover:bg-[#2b3139] hover:text-alphabag-text'
+          ? 'bg-alphabag-gray text-alphabag-text'
+          : 'text-alphabag-subtext hover:bg-alphabag-gray hover:text-alphabag-text'
           }`}
       >
         <div className="flex items-center space-x-2">
@@ -88,7 +88,7 @@ const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], c
 
 const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-2">
-    <div className="px-6 mb-1.5 text-[10px] font-semibold text-[#474d57] uppercase tracking-wider">
+    <div className="px-6 mb-1.5 text-[10px] font-semibold text-alphabag-muted uppercase tracking-wider">
       {title}
     </div>
     <div className="space-y-1">
@@ -118,7 +118,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         fixed left-2 bottom-2 w-60 bg-alphabag-dark border border-alphabag-gray rounded-2xl z-40 transition-transform duration-300 ease-in-out
         md:translate-x-0 pt-6 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-        ${IS_DEMO_MODE ? 'top-[100px]' : 'top-[72px]'}
+        ${IS_DEMO_MODE ? 'top-[108px]' : 'top-[80px]'}
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
@@ -142,7 +142,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
           </NavGroup>
 
           <NavGroup title="Market Analytics">
-            <NavItem to="/alpha-screener" icon={Flame} label="ALPHA SCREENER" active={location.pathname === '/alpha-screener'} />
+            <NavItem to="/alpha-screener" icon={Flame} label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" icon={BarChart3} label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" icon={Layers} label="DeFi Tracker" active={location.pathname === '/defi'} />
             <NavItem to="/news" icon={Newspaper} label="News" active={location.pathname === '/news'} />
@@ -154,7 +154,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         <div className="px-4">
           <div className="border-t border-alphabag-gray pt-6 mb-2 space-y-1">
             <NavItem to="/profile" icon={UserCircle} label="My Profile" active={location.pathname === '/profile'} />
-            <button onClick={handleLogout} className="w-full flex items-center space-x-2 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-[#f6465d]/10 hover:text-[#f6465d] mx-2">
+            <button onClick={handleLogout} className="w-full flex items-center space-x-2 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-alphabag-red/10 hover:text-alphabag-red mx-2">
               <LogOut size={18} />
               <span className="font-medium text-xs uppercase">Logout</span>
             </button>

@@ -81,7 +81,7 @@ export const WhaleDetail: React.FC = () => {
 
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-96">
-            <div className="w-10 h-10 border-2 border-[#fcd535] border-t-transparent rounded-full animate-spin mb-2"></div>
+            <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-2"></div>
             <span className="text-alphabag-subtext font-semibold uppercase tracking-widest text-[10px]">Scanning whale wallet...</span>
         </div>
     );
@@ -89,8 +89,8 @@ export const WhaleDetail: React.FC = () => {
     return (
         <div className="space-y-2 animate-in fade-in duration-700 relative">
             {showToast && (
-                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-[#fcd535]/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-2">
-                    <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-[#0ecb81]/20 text-[#0ecb81]' : 'bg-[#f6465d]/20 text-[#f6465d]'}`}>
+                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-alphabag-yellow/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-2">
+                    <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-alphabag-green/20 text-alphabag-green' : 'bg-alphabag-red/20 text-alphabag-red'}`}>
                         {alertsEnabled ? <Bell size={16} /> : <BellOff size={16} />}
                     </div>
                     <div>
@@ -102,20 +102,20 @@ export const WhaleDetail: React.FC = () => {
 
             <div className="flex items-center justify-between py-3 border-b border-alphabag-gray">
                 <div className="flex items-center space-x-2">
-                    <Link to="/whales" className="p-1.5 bg-[#2b3139] hover:bg-[#474d57] text-alphabag-text rounded-md transition-colors">
+                    <Link to="/whales" className="p-1.5 bg-alphabag-gray hover:bg-alphabag-muted text-alphabag-text rounded-md transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div>
                         <div className="flex items-center space-x-2">
                             <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight">{whaleInfo?.label || 'Unknown Whale'}</h1>
-                            <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-[#fcd535]/20">Verified Whale</span>
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-alphabag-yellow/20">Verified Whale</span>
                         </div>
                         <div className="text-[11px] font-mono text-alphabag-subtext mt-0.5">{address}</div>
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <button className="p-2 bg-[#2b3139] text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Share2 size={16} /></button>
-                    <button className="p-2 bg-[#2b3139] text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><MoreHorizontal size={16} /></button>
+                    <button className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Share2 size={16} /></button>
+                    <button className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><MoreHorizontal size={16} /></button>
                 </div>
             </div>
 
@@ -170,9 +170,9 @@ export const WhaleDetail: React.FC = () => {
                                         <th className="p-4 text-right pr-8">Value (USD)</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-[#2b3139] text-[13px]">
+                                <tbody className="divide-y divide-alphabag-gray text-[13px]">
                                     {filteredHoldings.map((h, i) => (
-                                        <tr key={h.coinId} className="hover:bg-[#2b3139]/30 transition-colors">
+                                        <tr key={h.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                             <td className="p-3 pl-6">
                                                 <div className="flex items-center space-x-2.5">
                                                     <img src={h.image} className="w-7 h-7 rounded-full shadow-inner" />
@@ -211,7 +211,7 @@ export const WhaleDetail: React.FC = () => {
                                 {filteredHoldings.slice(0, 5).map((item, index) => (
                                     <div key={item.coinId} className="flex justify-between items-center group">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)]" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
                                             <span className="text-xs font-bold text-white uppercase tracking-wider">{item.symbol}</span>
                                         </div>
                                         <div className="text-right">
@@ -278,12 +278,12 @@ export const WhaleDetail: React.FC = () => {
 
                     <div className={`p-4 rounded-2xl border transition-all duration-500 ${
                         alertsEnabled
-                            ? 'bg-[#0ecb81]/10 border-[#0ecb81]/30'
-                            : 'bg-[#fcd535]/10 border-[#fcd535]/30'
+                            ? 'bg-alphabag-green/10 border-alphabag-green/30'
+                            : 'bg-alphabag-yellow/10 border-alphabag-yellow/30'
                     }`}>
                         <div className="flex items-center space-x-2 mb-3">
                             <div className="bg-alphabag-black/30 rounded-md p-1.5 flex items-center justify-center">
-                                {alertsEnabled ? <Bell size={18} className="text-[#0ecb81]" /> : <DollarSign size={18} className="text-[#fcd535]" />}
+                                {alertsEnabled ? <Bell size={18} className="text-alphabag-green" /> : <DollarSign size={18} className="text-alphabag-yellow" />}
                             </div>
                             <h4 className="font-semibold text-base uppercase tracking-tight text-alphabag-text">
                                 {alertsEnabled ? 'Alerts active' : 'Alpha alerts'}
@@ -298,8 +298,8 @@ export const WhaleDetail: React.FC = () => {
                             onClick={handleToggle}
                             className={`w-full py-2 rounded-md text-sm font-semibold uppercase transition-all border ${
                                 alertsEnabled
-                                    ? 'bg-[#0ecb81]/20 text-[#0ecb81] border-[#0ecb81]/30 hover:bg-[#0ecb81]/30'
-                                    : 'bg-[#fcd535] text-[#181a20] border-[#fcd535] hover:bg-[#e0bd2e]'
+                                    ? 'bg-alphabag-green/20 text-alphabag-green border-alphabag-green/30 hover:bg-alphabag-green/30'
+                                    : 'bg-alphabag-yellow text-alphabag-dark border-alphabag-yellow hover:bg-[#e0bd2e]'
                             }`}
                         >
                             {alertsEnabled ? <span className="flex items-center justify-center"><Check size={16} className="mr-2" /> Monitoring active</span> : 'Enable alerts'}
@@ -322,7 +322,7 @@ export const WhaleDetail: React.FC = () => {
                                         <th className="p-4 text-right">Value</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-[#2b3139] text-xs">
+                                <tbody className="divide-y divide-alphabag-gray text-xs">
                                     {transactions.length === 0 ? (
                                         <tr>
                                             <td colSpan={5} className="p-4 text-center text-alphabag-subtext">No recent transactions found</td>
@@ -334,7 +334,7 @@ export const WhaleDetail: React.FC = () => {
                                             const label = WalletLabels.getLabel(otherAddr);
 
                                             return (
-                                                <tr key={tx.hash} className="hover:bg-[#2b3139]/30 transition-colors">
+                                                <tr key={tx.hash} className="hover:bg-alphabag-gray/30 transition-colors">
                                                     <td className="p-4 pl-6 font-mono text-alphabag-yellow cursor-pointer" title={tx.hash}>
                                                         <a href={`https://etherscan.io/tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
                                                             {tx.hash.substring(0, 8)}...

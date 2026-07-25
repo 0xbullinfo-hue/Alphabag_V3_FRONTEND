@@ -13,17 +13,13 @@ import { UpgradeModal } from './components/frontend/UpgradeModal';
 import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
 import { DISABLED_PAGES } from './services/config';
-
-
-// Solana Imports
-import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
-
-// Default styles for Solana wallet adapter
-import '@solana/wallet-adapter-react-ui/styles.css';
+// NOTE: Solana wallet-adapter support previously lived here, wrapping the
+// entire app unconditionally. Nothing in the codebase calls
+// useWallet()/useConnection() from those packages, yet every page load
+// fetched and parsed ~383KB (minified) / ~117KB (gzip) of Solana SDK for
+// zero functional benefit. The provider setup still exists at
+// src/lib/SolanaProviders.tsx; wrap only the specific feature that needs
+// it when one is actually built, rather than restoring it here at the root.
 
 const queryClient = new QueryClient();
 
@@ -192,32 +188,18 @@ const AppContent = () => {
 };
 
 function App() {
-  // Solana config
-  const network = WalletAdapterNetwork.Mainnet;
-  const endpoint = import.meta.env.VITE_ALCHEMY_API_KEY 
-    ? `https://solana-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_API_KEY}`
-    : clusterApiUrl(network);
-    
-  const wallets = [new PhantomWalletAdapter()];
-
   return (
     <ErrorBoundary>
       <WagmiConfig config={config as any}>
-        <ConnectionProvider endpoint={endpoint}>
-          <SolanaWalletProvider wallets={wallets} autoConnect>
-            <WalletModalProvider>
-              <QueryClientProvider client={queryClient}>
-                <AuthProvider>
-                  <WalletProvider>
-                    <HashRouter>
-                      <AppContent />
-                    </HashRouter>
-                  </WalletProvider>
-                </AuthProvider>
-              </QueryClientProvider>
-            </WalletModalProvider>
-          </SolanaWalletProvider>
-        </ConnectionProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <WalletProvider>
+              <HashRouter>
+                <AppContent />
+              </HashRouter>
+            </WalletProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </WagmiConfig>
     </ErrorBoundary>
   );

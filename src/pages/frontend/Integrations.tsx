@@ -73,11 +73,11 @@ export const Integrations: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Zap size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Connections Hub</h1>
-                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live</span>
+                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live</span>
                     </div>
                     <p className="text-alphabag-subtext text-sm">Unified dashboard for all live API keys and Web3 wallets streaming into AlphaBAG.</p>
                 </div>
@@ -87,7 +87,7 @@ export const Integrations: React.FC = () => {
                     </div>
                     <input type="text" placeholder="Search connections..." value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-4 py-2 text-xs text-alphabag-text focus:outline-none focus:border-[#fcd535] w-full md:w-64 transition-colors" />
+                        className="bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-4 py-2 text-xs text-alphabag-text focus:outline-none focus:border-alphabag-yellow w-full md:w-64 transition-colors" />
                 </div>
             </div>
 
@@ -118,8 +118,8 @@ export const Integrations: React.FC = () => {
              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                 className={`flex-shrink-0 px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     activeTab === tab.id 
-                    ? 'bg-[#fcd535] text-[#181a20]' 
-                    : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-[#474d57]'
+                    ? 'bg-alphabag-yellow text-alphabag-dark' 
+                    : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-muted'
                 }`}>{tab.label}</button>
          ))}
       </div>
@@ -132,7 +132,7 @@ export const Integrations: React.FC = () => {
                 <p className="text-[11px] opacity-60">You haven't linked any CEX APIs or Web3 Wallets yet.</p>
             </div>
         ) : (
-            <div className="divide-y divide-[#2b3139]">
+            <div className="divide-y divide-alphabag-gray">
                 {filtered.map((item) => (
                     <div key={item.id} className="p-3.5 hover:bg-alphabag-black transition-colors flex flex-col md:flex-row md:items-center justify-between gap-2 group">
                         

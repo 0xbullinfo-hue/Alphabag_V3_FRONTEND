@@ -105,16 +105,16 @@ export const AlphaCalls: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Radio className="animate-pulse" size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
                     </div>
                     <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
                 </div>
-                <div className="bg-[#2b3139] border border-[#fcd535]/20 px-3 py-1.5 rounded-md flex items-center gap-2">
-                    <ShieldAlert size={12} className="text-[#fcd535]" />
-                    <span className="text-[9px] text-[#fcd535] font-semibold uppercase tracking-wider">E2E Encryption Active</span>
+                <div className="bg-alphabag-gray border border-alphabag-yellow/20 px-3 py-1.5 rounded-md flex items-center gap-2">
+                    <ShieldAlert size={12} className="text-alphabag-yellow" />
+                    <span className="text-[9px] text-alphabag-yellow font-semibold uppercase tracking-wider">E2E Encryption Active</span>
                 </div>
             </div>
 
@@ -126,8 +126,8 @@ export const AlphaCalls: React.FC = () => {
                         onClick={() => setActiveCategory(cat)}
                         className={`flex-shrink-0 px-4 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                             activeCategory === cat 
-                            ? 'bg-[#fcd535] text-[#181a20]' 
-                            : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-[#474d57]'
+                            ? 'bg-alphabag-yellow text-alphabag-dark' 
+                            : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-muted'
                         }`}
                     >
                         {cat}
@@ -137,7 +137,7 @@ export const AlphaCalls: React.FC = () => {
 
             {loading ? (
                 <div className="text-center py-32 flex flex-col items-center">
-                    <div className="animate-spin w-8 h-8 border-2 border-[#fcd535] border-t-transparent rounded-full mx-auto mb-2"></div>
+                    <div className="animate-spin w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full mx-auto mb-2"></div>
                     <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext animate-pulse">Decrypting Alpha Stream...</p>
                 </div>
             ) : signals.length === 0 ? (
@@ -158,7 +158,7 @@ export const AlphaCalls: React.FC = () => {
                         return (
                             <div 
                                 key={signal.id} 
-                                className="bg-alphabag-darkgray border border-alphabag-gray p-4 rounded-lg relative overflow-hidden hover:border-[#474d57] transition-all"
+                                className="bg-alphabag-darkgray border border-alphabag-gray p-4 rounded-lg relative overflow-hidden hover:border-alphabag-muted transition-all"
                                 style={{ animationDelay: `${index * 100}ms` }}
                             >
 

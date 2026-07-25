@@ -39,7 +39,7 @@ export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({ source, classN
   }
 
   return (
-    <span className={`${base} bg-yellow-500/5 border-yellow-500/10 text-[#fcd535] ${className}`}>
+    <span className={`${base} bg-yellow-500/5 border-yellow-500/10 text-alphabag-yellow ${className}`}>
       <Database size={11} /> {label}
     </span>
   );

@@ -22,7 +22,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <main className={`md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 ${IS_DEMO_MODE ? 'pt-[100px]' : 'pt-[72px]'}`}>
         <AnimatePresence mode="wait">
           <PageTransition>
-            <div className="pl-2 md:pl-0 pr-2 pb-2 w-full">
+            <div className="pt-2 pl-2 md:pl-0 pr-2 pb-2 w-full">
               {children}
             </div>
           </PageTransition>

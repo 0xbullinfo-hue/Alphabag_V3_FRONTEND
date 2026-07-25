@@ -104,15 +104,15 @@ export const Portfolio: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Wallet2 size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DEX Portfolio</h1>
-                        <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
+                        <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
                         {hasMockData ? (
-                            <span className="bg-[#fcd535]/10 text-[#fcd535] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
                         ) : (
-                            <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">{isSyncing ? 'Syncing…' : 'Live Sync'}</span>
+                            <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">{isSyncing ? 'Syncing…' : 'Live Sync'}</span>
                         )}
                         <DataSourceBadge className="ml-auto" actuallyMock={hasMockData} />
                     </div>
@@ -126,7 +126,7 @@ export const Portfolio: React.FC = () => {
                     
                     <div className="flex items-center gap-2 mt-2">
                         <div className={`flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border ${
-                            totalPnL24h >= 0 ? 'bg-[#0ecb81]/10 text-[#0ecb81] border-[#0ecb81]/20' : 'bg-[#f6465d]/10 text-[#f6465d] border-[#f6465d]/20'
+                            totalPnL24h >= 0 ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/20' : 'bg-alphabag-red/10 text-alphabag-red border-alphabag-red/20'
                         }`}>
                             {totalPnL24h >= 0 ? <ChevronUp size={13} className="mr-1" /> : <ChevronDown size={13} className="mr-1" />}
                             {totalPnLPercent24h.toFixed(2)}%
@@ -140,7 +140,7 @@ export const Portfolio: React.FC = () => {
                     <div className="flex items-center gap-2 mr-2">
                         <span className="text-[11px] text-alphabag-subtext uppercase font-semibold tracking-wider">Charts</span>
                         <div
-                            className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-[#fcd535]' : 'bg-[#2b3139]'}`}
+                            className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-alphabag-yellow' : 'bg-alphabag-gray'}`}
                             onClick={() => setShowCharts(!showCharts)}
                         >
                             <div className={`w-3 h-3 bg-alphabag-dark rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
@@ -149,7 +149,7 @@ export const Portfolio: React.FC = () => {
 
                     <button
                         onClick={handleManageConnections}
-                        className="bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e] active:scale-[0.98] border-none rounded-md px-5 py-2 font-semibold text-[11px] uppercase tracking-wider transition-all"
+                        className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] active:scale-[0.98] border-none rounded-md px-5 py-2 font-semibold text-[11px] uppercase tracking-wider transition-all"
                     >
                         Manage
                     </button>
@@ -165,7 +165,7 @@ export const Portfolio: React.FC = () => {
                             link.click();
                             document.body.removeChild(link);
                         }}
-                        className="bg-[#2b3139] text-alphabag-text border border-[#474d57] rounded-md px-4 py-2 text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center gap-1.5"
+                        className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-md px-4 py-2 text-xs font-semibold hover:bg-alphabag-muted transition-all flex items-center gap-1.5"
                     >
                         <Download size={14} /> Export
                     </button>
@@ -174,8 +174,8 @@ export const Portfolio: React.FC = () => {
 
             {/* Navigation Tabs */}
             <div className="flex gap-2 border-b border-alphabag-gray">
-                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
-                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-[#fcd535]' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
+                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
+                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
             </div>
 
             {activeTab === 'overview' ? (

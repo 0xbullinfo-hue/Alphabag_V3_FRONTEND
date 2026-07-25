@@ -46,7 +46,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-2xl animate-fade-in overflow-y-auto">
-            <div className="w-full max-w-xl bg-alphabag-dark/95 border border-white/10 rounded-xl shadow-[0_0_70px_rgba(0,0,0,0.65)] overflow-hidden">
+            <div className="w-full max-w-xl bg-alphabag-dark/95 border border-white/10 rounded-xl overflow-hidden">
                 <div className="p-5 md:p-4">
                     {step === 'ROLE' ? (
                         <div className="text-center relative">
@@ -71,7 +71,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button 
                                     onClick={() => handleRoleSelect('FOUNDER')}
-                                    className="group relative p-5 bg-white/5 border border-white/10 rounded-xl text-left transition-all hover:bg-alphabag-yellow/5 hover:border-alphabag-yellow/40 shadow-[0_0_30px_rgba(252,213,53,0.1)]"
+                                    className="group relative p-5 bg-white/5 border border-white/10 rounded-xl text-left transition-all hover:bg-alphabag-yellow/5 hover:border-alphabag-yellow/40"
                                 >
                                     <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-lg flex items-center justify-center text-alphabag-yellow mb-3">
                                         <Shield size={20} />
@@ -87,7 +87,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
 
                                 <button 
                                     onClick={() => handleRoleSelect('TRADER')}
-                                    className="group relative p-5 bg-white/5 border border-white/10 rounded-xl text-left transition-all hover:bg-blue-500/5 hover:border-blue-500/40 shadow-[0_0_30px_rgba(96,165,250,0.12)]"
+                                    className="group relative p-5 bg-white/5 border border-white/10 rounded-xl text-left transition-all hover:bg-blue-500/5 hover:border-blue-500/40"
                                 >
                                     <div className="w-10 h-10 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 mb-3">
                                         <Target size={20} />
@@ -238,7 +238,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
                                         </select>
                                     </div>
 
-                                    <Button className="w-full h-11 bg-blue-500 text-white font-black uppercase tracking-[0.2em] rounded-lg shadow-[0_0_30px_rgba(96,165,250,0.18)] text-[10px] mt-2">
+                                    <Button className="w-full h-11 bg-blue-500 text-white font-black uppercase tracking-[0.2em] rounded-lg text-[10px] mt-2">
                                         Join Hub
                                     </Button>
                                 </form>

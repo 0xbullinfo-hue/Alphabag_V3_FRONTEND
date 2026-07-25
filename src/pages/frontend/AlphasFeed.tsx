@@ -312,7 +312,7 @@ export const AlphasFeed: React.FC = () => {
                     <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                         <div className="p-2.5 border-b border-alphabag-gray bg-alphabag-black flex items-center justify-between">
                             <span className="text-[10px] font-semibold uppercase tracking-widest text-alphabag-text flex items-center gap-2">
-                                <Users size={12} className="text-[#fcd535]" /> Featured Founders
+                                <Users size={12} className="text-alphabag-yellow" /> Featured Founders
                             </span>
                         </div>
                         <div className="divide-y divide-white/5">

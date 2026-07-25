@@ -44,11 +44,11 @@ export const DeFi: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Layers size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DeFi Operations</h1>
-                        <span className="bg-[#0ecb81]/10 text-[#0ecb81] text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
+                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
                     </div>
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-3">
@@ -58,25 +58,25 @@ export const DeFi: React.FC = () => {
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Borrowed</span>
-                            <h2 className="text-2xl font-semibold text-[#f6465d] tabular-nums">${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-red tabular-nums">${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Net APY</span>
-                            <h2 className="text-2xl font-semibold text-[#0ecb81] tabular-nums">+{netApy.toFixed(2)}%</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-green tabular-nums">+{netApy.toFixed(2)}%</h2>
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Pending</span>
-                            <h2 className="text-2xl font-semibold text-[#fcd535] tabular-nums">${pendingYield.toFixed(2)}</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-yellow tabular-nums">${pendingYield.toFixed(2)}</h2>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray px-3 py-1.5 rounded-md flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#0ecb81] animate-pulse"></div>
+                        <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></div>
                         <span className="text-[8px] font-semibold uppercase tracking-widest text-alphabag-subtext">Nodes Live</span>
                     </div>
-                    <button className="flex items-center gap-1.5 bg-[#2b3139] text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all">
+                    <button className="flex items-center gap-1.5 bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all">
                         <Activity size={13} /> Protocol Audit
                     </button>
                 </div>
@@ -117,7 +117,7 @@ export const DeFi: React.FC = () => {
                                   <th className="p-3 px-6 text-center">Health</th>
                               </tr>
                           </thead>
-                          <tbody className="divide-y divide-[#2b3139] text-[13px]">
+                          <tbody className="divide-y divide-alphabag-gray text-[13px]">
                               {filtered.length === 0 ? (
                                   <tr>
                                       <td colSpan={6} className="p-12 text-center text-alphabag-subtext bg-alphabag-black/10">No positions found.</td>

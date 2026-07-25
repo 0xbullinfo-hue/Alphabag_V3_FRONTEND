@@ -228,7 +228,7 @@ export const SecurityScanner: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
                             <ShieldCheck size={20} />
                         </div>
                         <h1 className="text-3xl font-black text-white tracking-tighter uppercase">

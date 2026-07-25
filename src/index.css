@@ -141,40 +141,40 @@
 
   /* ── Solid Panels (Binance Style) ── */
   .glass-panel {
-    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
+    @apply bg-alphabag-darkgray border border-alphabag-gray rounded-lg;
   }
   .glass-panel-heavy {
-    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg shadow-md;
+    @apply bg-alphabag-darkgray border border-alphabag-gray rounded-lg shadow-md;
   }
   .glass-card {
-    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
+    @apply bg-alphabag-darkgray border border-alphabag-gray rounded-lg;
     transition: all var(--transition-base);
   }
   .glass-card:hover {
-    @apply border-[#474d57] bg-[#2b3139];
+    @apply border-alphabag-muted bg-alphabag-gray;
     transform: translateY(-2px);
   }
 
   .card-panel {
-    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
+    @apply bg-alphabag-darkgray border border-alphabag-gray rounded-lg;
   }
 
   .card-panel-soft {
-    @apply bg-[#1e2329] border border-[#2b3139] rounded-lg;
+    @apply bg-alphabag-darkgray border border-alphabag-gray rounded-lg;
   }
 
   /* ── Sidebar Nav Items ── */
   .nav-item {
-    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-[#848e9c] hover:text-[#eaecef] hover:bg-[#2b3139] cursor-pointer text-sm font-normal;
+    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray cursor-pointer text-sm font-normal;
   }
   .nav-item-active {
-    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 bg-[#fcd535]/10 text-alphabag-yellow font-medium text-sm;
+    @apply flex items-center space-x-3 px-4 py-2.5 rounded-md transition-all duration-200 bg-alphabag-yellow/10 text-alphabag-yellow font-medium text-sm;
   }
 
   /* ── Status Badges (Binance-style) ── */
-  .badge-green  { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-green-500/10 text-[#0ecb81] border border-green-500/20; }
+  .badge-green  { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-green-500/10 text-alphabag-green border border-green-500/20; }
   .badge-yellow { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20; }
-  .badge-red    { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-red-500/10 text-[#f6465d] border border-red-500/20; }
+  .badge-red    { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-red-500/10 text-alphabag-red border border-red-500/20; }
   .badge-blue   { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20; }
   .badge-muted  { @apply text-xs font-medium px-2.5 py-0.5 rounded bg-white/5 text-alphabag-muted border border-white/10; }
 
@@ -183,12 +183,12 @@
     @apply text-xs font-medium text-alphabag-muted;
   }
   .section-title {
-    @apply text-xl md:text-2xl font-semibold text-[#eaecef] tracking-tight;
+    @apply text-xl md:text-2xl font-semibold text-alphabag-text tracking-tight;
   }
 
   /* ── Input Base (Binance-style) ── */
   .input-base {
-    @apply w-full bg-[#2b3139] border border-[#2b3139] rounded px-4 py-2.5 text-sm text-[#eaecef] placeholder-[#474d57] focus:border-[#fcd535]/50 focus:outline-none transition-all duration-200;
+    @apply w-full bg-alphabag-gray border border-alphabag-gray rounded px-4 py-2.5 text-sm text-alphabag-text placeholder-alphabag-muted focus:border-alphabag-yellow/50 focus:outline-none transition-all duration-200;
   }
 }
 

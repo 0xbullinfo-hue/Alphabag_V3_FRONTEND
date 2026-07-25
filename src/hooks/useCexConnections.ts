@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 import { api } from '../services/api';
+import { MarketService } from '../services/MarketService';
+import { CEX_SYMBOL_TO_COINGECKO_ID } from '../services/config';
 
 const STORAGE_KEY = 'alphabag_cex_connections';
 
@@ -44,24 +46,14 @@ export function useCexConnections() {
     }, []);
 
     /**
-     * Real CEX connection flow. This REPLACES the previous pattern (still
-     * duplicated in CexBag.tsx and Settings.tsx before this fix) which did:
-     *   await new Promise(r => setTimeout(r, 1500));
-     *   addConnection({ ...info, balance: Math.random() * 8000 + 500, isConnected: true });
-     *   Swal.fire({ title: 'Connected', text: '... verified!' })
-     * i.e. it never validated the API key/secret against the exchange at
-     * all, told the user it was "verified" regardless, and stored a
-     * random fake balance. A real exchange balance read requires signed,
-     * exchange-specific REST calls (e.g. HMAC-SHA256 signed requests for
-     * Binance) that must happen server-side — the API secret should never
-     * be sent anywhere except directly to your own backend over HTTPS,
-     * and never logged or persisted in the frontend.
-     *
-     * This function calls the backend, which must implement
-     * POST /api/cex/connect { exchange, apiKey, secret } -> { balance, verified }
-     * performing the real signed balance check and returning the actual
-     * total. Until that endpoint exists, this throws instead of silently
-     * faking success.
+     * Real CEX connection flow — calls the backend (src/controllers/
+     * cexController.js, using ccxt for real signed exchange balance
+     * reads). Backend contract:
+     *   POST /api/cex/connect { exchangeId, apiKey, secret }
+     *   -> { success, verified, balances: { BTC: 0.5, USDT: 100, ... }, raw }
+     * Note the field is `exchangeId` (a real ccxt exchange id like
+     * 'binance'), not `exchange` — sending the wrong field name silently
+     * fails against the real backend contract even once the route exists.
      */
     const connectExchange = useCallback(async (
         exchangeInfo: { id: string; name: string; icon: string },
@@ -69,7 +61,7 @@ export function useCexConnections() {
         secret: string
     ): Promise<CexConnection> => {
         const res = await api.post('/api/cex/connect', {
-            exchange: exchangeInfo.id,
+            exchangeId: exchangeInfo.id,
             apiKey,
             secret,
         });
@@ -78,12 +70,38 @@ export function useCexConnections() {
             throw new Error(res.data?.message || 'Could not verify this API key with the exchange.');
         }
 
+        // The backend returns real per-currency balances, not a single
+        // USD figure — compute that here using the cached/deduped price
+        // service, rather than asking the backend to guess USD
+        // conversion for 100+ exchanges' worth of possible assets.
+        const balancesByCurrency: Record<string, number> = res.data.balances || {};
+        const currencies = Object.keys(balancesByCurrency);
+        const coingeckoIds = currencies
+            .map(sym => CEX_SYMBOL_TO_COINGECKO_ID[sym.toUpperCase()])
+            .filter(Boolean);
+
+        let totalUsd = 0;
+        if (coingeckoIds.length > 0) {
+            try {
+                const priceData = await MarketService.getPrice(Array.from(new Set(coingeckoIds)));
+                if (priceData) {
+                    currencies.forEach(sym => {
+                        const id = CEX_SYMBOL_TO_COINGECKO_ID[sym.toUpperCase()];
+                        const price = id ? Number(priceData[id]?.usd || 0) : 0;
+                        totalUsd += balancesByCurrency[sym] * price;
+                    });
+                }
+            } catch (priceErr) {
+                console.warn('[useCexConnections] Price lookup failed, balance will show as $0:', priceErr);
+            }
+        }
+
         const conn: CexConnection = {
             id: exchangeInfo.id,
             name: exchangeInfo.name,
             icon: exchangeInfo.icon,
             apiKey: apiKey.substring(0, 4) + '••••',
-            balance: Number(res.data.balance) || 0,
+            balance: totalUsd,
             isConnected: true,
         };
         addConnection(conn);

@@ -137,13 +137,13 @@ export const AlphaAi: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
               <Bot size={20} />
             </div>
             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
-            <div className="bg-[#0ecb81]/10 border border-[#0ecb81]/20 px-2 py-1 rounded-md flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full animate-pulse"></div>
-              <span className="text-[9px] text-[#0ecb81] font-semibold uppercase tracking-wider">Link Active</span>
+            <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
+              <span className="text-[9px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
             </div>
           </div>
           <p className="text-alphabag-subtext text-sm">Intelligence hub for on-chain analytics, portfolio modeling, and market forecasting.</p>
@@ -181,7 +181,7 @@ export const AlphaAi: React.FC = () => {
                 disabled={!hasLimitRemaining || isStreaming}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-24 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus:shadow-[0_0_15px_rgba(252,213,53,0.1)] outline-none transition-all placeholder:text-zinc-600 shadow-inner"
+                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-24 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus: outline-none transition-all placeholder:text-zinc-600 shadow-inner"
               />
               <div className="absolute right-1.5 top-1.5 bottom-1.5 flex items-center gap-1">
                 <button

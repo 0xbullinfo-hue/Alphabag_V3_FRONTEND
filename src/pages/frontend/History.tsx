@@ -56,7 +56,7 @@ export const HistoryPage: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-alphabag-black">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
                             <History size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Transaction History</h1>
@@ -67,14 +67,14 @@ export const HistoryPage: React.FC = () => {
                     <select
                         value={filterChain}
                         onChange={(e) => setFilterChain(e.target.value)}
-                        className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-1.5 text-xs text-alphabag-text focus:border-[#fcd535] outline-none uppercase font-semibold"
+                        className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-1.5 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none uppercase font-semibold"
                     >
                         <option value="ALL">All Networks</option>
                         <option value="eth">Ethereum</option>
                         <option value="bsc">BSC</option>
                         <option value="sol">Solana</option>
                     </select>
-                    <button onClick={() => window.location.reload()} className="bg-[#2b3139] text-alphabag-text border border-[#474d57] rounded-md px-3 py-1.5 hover:bg-[#474d57] transition-all">
+                    <button onClick={() => window.location.reload()} className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-md px-3 py-1.5 hover:bg-alphabag-muted transition-all">
                         <RefreshCw size={13} />
                     </button>
                 </div>
@@ -93,21 +93,21 @@ export const HistoryPage: React.FC = () => {
                                 <th className="p-3 text-center">Status</th>
                             </tr>
                         </thead>
-                                <tbody className="divide-y divide-[#2b3139] text-[13px]">
+                                <tbody className="divide-y divide-alphabag-gray text-[13px]">
                                     {loading ? (
                                         Array.from({ length: 5 }).map((_, i) => (
                                             <tr key={i} className="animate-pulse">
-                                                <td className="p-3 pl-6"><div className="h-4 w-16 bg-[#2b3139] rounded"></div></td>
-                                                <td className="p-3"><div className="h-4 w-24 bg-[#2b3139] rounded"></div></td>
-                                                <td className="p-3 text-right"><div className="h-4 w-12 bg-[#2b3139] rounded ml-auto"></div></td>
-                                                <td className="p-3 text-right"><div className="h-4 w-10 bg-[#2b3139] rounded ml-auto"></div></td>
-                                                <td className="p-3 text-right"><div className="h-4 w-16 bg-[#2b3139] rounded ml-auto"></div></td>
-                                                <td className="p-3"><div className="h-5 w-12 bg-[#2b3139] rounded mx-auto"></div></td>
+                                                <td className="p-3 pl-6"><div className="h-4 w-16 bg-alphabag-gray rounded"></div></td>
+                                                <td className="p-3"><div className="h-4 w-24 bg-alphabag-gray rounded"></div></td>
+                                                <td className="p-3 text-right"><div className="h-4 w-12 bg-alphabag-gray rounded ml-auto"></div></td>
+                                                <td className="p-3 text-right"><div className="h-4 w-10 bg-alphabag-gray rounded ml-auto"></div></td>
+                                                <td className="p-3 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto"></div></td>
+                                                <td className="p-3"><div className="h-5 w-12 bg-alphabag-gray rounded mx-auto"></div></td>
                                             </tr>
                                         ))
                                     ) : filteredTxs.length > 0 ? (
                                         filteredTxs.map((tx) => (
-                                            <tr key={tx.id} className="hover:bg-[#2b3139]/40 transition-colors group">
+                                            <tr key={tx.id} className="hover:bg-alphabag-gray/40 transition-colors group">
                                                 <td className="p-3 pl-6">
                                                     <div className="flex items-center space-x-2">
                                                         <div className={`p-1.5 rounded-md ${tx.type === 'TRANSFER' ? 'bg-blue-500/10 text-blue-400' : 'bg-alphabag-gray/20 text-alphabag-subtext'}`}>

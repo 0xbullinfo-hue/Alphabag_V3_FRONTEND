@@ -167,7 +167,7 @@ export const AlphaScreener: React.FC = () => {
         if (c === 'bsc') return 'from-[#F3BA2F] to-[#D89F0E] text-black';
         if (c === 'base') return 'from-[#0052FF] to-[#003DC6] text-white';
         if (c === 'ethereum') return 'from-[#627EEA] to-[#3B4E99] text-white';
-        return 'from-[#848e9c] to-[#474d57] text-white';
+        return 'from-alphabag-subtext to-alphabag-muted text-white';
     };
 
     // Filter and Sort pairs
@@ -213,10 +213,10 @@ export const AlphaScreener: React.FC = () => {
                 <div>
                     <div className="flex items-center gap-2 mb-1">
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
-                            <Flame size={22} className="text-[#fcd535]" /> Alpha Screener
+                            <Flame size={22} className="text-alphabag-yellow" /> Alpha Screener
                         </h1>
-                        <span className="bg-[#fcd535]/15 text-[#fcd535] text-[10px] font-medium px-2 py-0.5 rounded border border-[#fcd535]/25 flex items-center gap-1.5 shrink-0">
-                            <span className="w-1.5 h-1.5 bg-[#fcd535] rounded-full"></span>
+                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow text-[10px] font-medium px-2 py-0.5 rounded border border-alphabag-yellow/25 flex items-center gap-1.5 shrink-0">
+                            <span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full"></span>
                             DEX Gainers
                         </span>
                         <DataSourceBadge />
@@ -236,7 +236,7 @@ export const AlphaScreener: React.FC = () => {
                         <input 
                             type="text"
                             placeholder="Token symbol or paste CA..."
-                            className="bg-alphabag-dark border border-alphabag-gray rounded-md py-2 pl-9 pr-4 text-xs text-alphabag-text focus:border-[#fcd535] outline-none w-full md:w-64"
+                            className="bg-alphabag-dark border border-alphabag-gray rounded-md py-2 pl-9 pr-4 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none w-full md:w-64"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -244,10 +244,10 @@ export const AlphaScreener: React.FC = () => {
                     <button 
                         onClick={() => loadData(true)} 
                         disabled={isRefreshing}
-                        className="border border-alphabag-gray text-alphabag-subtext h-8 px-3 rounded-md bg-alphabag-darkgray hover:bg-[#2b3139] hover:text-white transition-all flex items-center justify-center gap-1 shrink-0"
+                        className="border border-alphabag-gray text-alphabag-subtext h-8 px-3 rounded-md bg-alphabag-darkgray hover:bg-alphabag-gray hover:text-white transition-all flex items-center justify-center gap-1 shrink-0"
                         title="Sync Live Data"
                     >
-                        <RefreshCw size={13} className={`shrink-0 ${isRefreshing ? 'animate-spin text-[#fcd535]' : ''}`} />
+                        <RefreshCw size={13} className={`shrink-0 ${isRefreshing ? 'animate-spin text-alphabag-yellow' : ''}`} />
                         <span className="text-xs font-semibold hidden sm:inline">Sync</span>
                     </button>
                 </div>
@@ -265,8 +265,8 @@ export const AlphaScreener: React.FC = () => {
                                 onClick={() => setChainFilter(filterVal)}
                                 className={`h-7 px-3.5 text-[11px] font-semibold rounded transition-all border ${
                                     chainFilter === filterVal 
-                                        ? 'bg-[#fcd535] border-[#fcd535] text-black shadow-md' 
-                                        : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-[#2b3139] hover:text-white'
+                                        ? 'bg-alphabag-yellow border-alphabag-yellow text-black shadow-md' 
+                                        : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-alphabag-gray hover:text-white'
                                 }`}
                             >
                                 {chain}
@@ -283,8 +283,8 @@ export const AlphaScreener: React.FC = () => {
                             onClick={() => setTimeframe(tf)}
                             className={`h-7 px-3 text-[11px] font-semibold rounded transition-all border ${
                                 timeframe === tf 
-                                    ? 'bg-[#2b3139] border-[#fcd535] text-[#fcd535]' 
-                                    : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-[#2b3139] hover:text-white'
+                                    ? 'bg-alphabag-gray border-alphabag-yellow text-alphabag-yellow' 
+                                    : 'bg-alphabag-dark border-alphabag-gray text-alphabag-subtext hover:bg-alphabag-gray hover:text-white'
                             }`}
                         >
                             {tf === 'm5' ? '5m' : tf === 'h1' ? '1h' : tf === 'h6' ? '6h' : '24h'}
@@ -295,21 +295,21 @@ export const AlphaScreener: React.FC = () => {
 
             {/* ── Highlighted Specific CA Lookup Result ── */}
             {searchingCa && (
-                <div className="bg-alphabag-darkgray border border-dashed border-[#fcd535]/30 rounded-lg p-4 text-center">
-                    <div className="w-5 h-5 border-2 border-[#fcd535] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                <div className="bg-alphabag-darkgray border border-dashed border-alphabag-yellow/30 rounded-lg p-4 text-center">
+                    <div className="w-5 h-5 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                     <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-wider">Querying blockchain for contract address details...</p>
                 </div>
             )}
             
             {!searchingCa && searchedPair && (
-                <div className="bg-[#fcd535]/5 border-2 border-[#fcd535]/30 rounded-lg p-4 animate-in slide-in-from-top-2 duration-300">
-                    <div className="text-[9px] text-[#fcd535] font-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                <div className="bg-alphabag-yellow/5 border-2 border-alphabag-yellow/30 rounded-lg p-4 animate-in slide-in-from-top-2 duration-300">
+                    <div className="text-[9px] text-alphabag-yellow font-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
                         <Globe size={11} />
                         FOUND VIA DIRECT BLOCKCHAIN CA LOOKUP
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center space-x-2">
-                            <div className="w-10 h-10 bg-[#fcd535] text-black rounded flex items-center justify-center font-black text-sm">
+                            <div className="w-10 h-10 bg-alphabag-yellow text-black rounded flex items-center justify-center font-black text-sm">
                                 {searchedPair.baseToken.symbol?.[0] || 'T'}
                             </div>
                             <div>
@@ -318,7 +318,7 @@ export const AlphaScreener: React.FC = () => {
                                     <span className={`text-[9px] font-black px-2 py-0.5 rounded bg-gradient-to-r ${getChainColor(searchedPair.chainId)}`}>
                                         {searchedPair.chainId.toUpperCase()}
                                     </span>
-                                    <span className="text-[9px] text-alphabag-muted bg-[#2b3139] px-1.5 py-0.5 rounded font-semibold uppercase">{searchedPair.dexId}</span>
+                                    <span className="text-[9px] text-alphabag-muted bg-alphabag-gray px-1.5 py-0.5 rounded font-semibold uppercase">{searchedPair.dexId}</span>
                                 </div>
                                 <div className="text-xs text-alphabag-muted font-mono mt-0.5">{searchedPair.baseToken.address}</div>
                             </div>
@@ -341,7 +341,7 @@ export const AlphaScreener: React.FC = () => {
                             </div>
                             <button
                                 onClick={() => window.open(searchedPair.url, '_blank')}
-                                className="bg-[#fcd535] text-black hover:bg-[#e0bd2e] h-9 px-4 rounded font-black text-xs uppercase tracking-widest transition-all self-center flex items-center gap-1.5 shadow-md shadow-[#fcd535]/10 active:scale-[0.98]"
+                                className="bg-alphabag-yellow text-black hover:bg-[#e0bd2e] h-9 px-4 rounded font-black text-xs uppercase tracking-widest transition-all self-center flex items-center gap-1.5 shadow-md shadow-alphabag-yellow/10 active:scale-[0.98]"
                             >
                                 <ExternalLink size={12} />
                                 Trade Token
@@ -367,7 +367,7 @@ export const AlphaScreener: React.FC = () => {
                                 <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-24"></th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#2b3139] text-[14px]">
+                        <tbody className="divide-y divide-alphabag-gray text-[14px]">
                             {loading ? (
                                 <tr>
                                     <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
@@ -383,7 +383,7 @@ export const AlphaScreener: React.FC = () => {
                                 </tr>
                             ) : (
                                 displayedPairs.map((pair, index) => (
-                                    <tr key={pair.pairAddress} className="hover:bg-[#2b3139]/40 transition-colors group">
+                                    <tr key={pair.pairAddress} className="hover:bg-alphabag-gray/40 transition-colors group">
                                         <td className="px-4 py-3 font-medium text-alphabag-subtext text-center text-xs">
                                             {index + 1}
                                         </td>
@@ -398,7 +398,7 @@ export const AlphaScreener: React.FC = () => {
                                                         <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded leading-none bg-gradient-to-r ${getChainColor(pair.chainId)}`}>
                                                             {pair.chainId === 'bsc' ? 'BSC' : pair.chainId?.charAt(0).toUpperCase() + pair.chainId?.slice(1)}
                                                         </span>
-                                                        <span className="text-[9px] text-alphabag-subtext bg-[#2b3139] px-1.5 rounded leading-none py-0.5 font-medium">{pair.dexId}</span>
+                                                        <span className="text-[9px] text-alphabag-subtext bg-alphabag-gray px-1.5 rounded leading-none py-0.5 font-medium">{pair.dexId}</span>
                                                     </div>
                                                     <div className="text-[12px] text-alphabag-subtext truncate max-w-[180px] mt-0.5">{pair.baseToken?.name}</div>
                                                 </div>
@@ -408,7 +408,7 @@ export const AlphaScreener: React.FC = () => {
                                             ${Number(pair.priceUsd) < 0.01 ? Number(pair.priceUsd).toFixed(8) : Number(pair.priceUsd).toFixed(4)}
                                         </td>
                                         <td className="px-4 py-3 text-right font-semibold tabular-data text-[14px]">
-                                            <span className={Number(pair.priceChange?.[timeframe] || 0) >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]'}>
+                                            <span className={Number(pair.priceChange?.[timeframe] || 0) >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}>
                                                 {formatPriceChange(pair.priceChange?.[timeframe])}
                                             </span>
                                         </td>
@@ -424,7 +424,7 @@ export const AlphaScreener: React.FC = () => {
                                         <td className="px-4 py-3 text-right">
                                             <button 
                                                 onClick={() => window.open(pair.url, '_blank')}
-                                                className="p-1.5 text-[#fcd535] hover:text-black hover:bg-[#fcd535] transition-all border border-[#fcd535]/30 hover:border-[#fcd535] rounded opacity-0 group-hover:opacity-100 flex items-center justify-center inline-block"
+                                                className="p-1.5 text-alphabag-yellow hover:text-black hover:bg-alphabag-yellow transition-all border border-alphabag-yellow/30 hover:border-alphabag-yellow rounded opacity-0 group-hover:opacity-100 flex items-center justify-center inline-block"
                                                 title="View on DexScreener"
                                             >
                                                 <ArrowUpRight size={13} strokeWidth={2.5} />

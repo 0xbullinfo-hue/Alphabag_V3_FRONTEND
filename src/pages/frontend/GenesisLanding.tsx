@@ -66,7 +66,7 @@ export const GenesisLanding: React.FC = () => {
                     <div className="relative z-10 flex flex-col items-center">
                         <div className="text-[9px] font-black text-alphabag-subtext uppercase tracking-[0.5em] mb-3 opacity-60">Live Genesis Counter</div>
                         <div className="flex items-center justify-center space-x-2">
-                            <div className="text-7xl md:text-8xl font-black text-white tracking-tighter tabular-nums drop-shadow-[0_0_30px_rgba(252,213,53,0.2)]">
+                            <div className="text-7xl md:text-8xl font-black text-white tracking-tighter tabular-nums drop-">
                                 {100 - projectCount}
                             </div>
                             <div className="h-16 w-px bg-white/10"></div>

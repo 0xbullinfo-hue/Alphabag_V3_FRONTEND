@@ -100,15 +100,15 @@ export const Markets: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
               <BarChart3 size={20} />
             </div>
             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
               Global Market
             </h1>
             <span className="relative flex h-2 w-2 mt-1">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0ecb81] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0ecb81]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-green opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-green"></span>
             </span>
             <DataSourceBadge className="ml-auto md:ml-4" />
           </div>
@@ -118,7 +118,7 @@ export const Markets: React.FC = () => {
             <button
               onClick={handleManualRefresh}
               disabled={isRefreshing}
-              className="text-[11px] text-[#fcd535] font-semibold uppercase tracking-wider hover:text-alphabag-text transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              className="text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider hover:text-alphabag-text transition-colors disabled:opacity-50 flex items-center gap-1.5"
             >
               <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
               {isRefreshing ? 'Syncing...' : 'Refresh'}
@@ -134,7 +134,7 @@ export const Markets: React.FC = () => {
             placeholder="Search token..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2.5 pl-10 pr-4 text-[13px] text-alphabag-text placeholder-[#848e9c] focus:border-[#fcd535] outline-none transition-colors"
+            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2.5 pl-10 pr-4 text-[13px] text-alphabag-text placeholder-alphabag-subtext focus:border-alphabag-yellow outline-none transition-colors"
           />
         </div>
       </div>
@@ -156,7 +156,7 @@ export const Markets: React.FC = () => {
                 <th className="py-3 px-4 text-right hidden xl:table-cell">7d Chart</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2b3139] text-[14px]">
+            <tbody className="divide-y divide-alphabag-gray text-[14px]">
               {loading ? (
                 Array.from({ length: 8 }).map((_, index) => (
                   <tr key={`skeleton-${index}`}>
@@ -176,18 +176,18 @@ export const Markets: React.FC = () => {
                   const pch1h = coin.price_change_percentage_1h_in_currency || 0;
                   const pch24h = coin.price_change_percentage_24h_in_currency || coin.price_change_percentage_24h || 0;
                   const pch7d = coin.price_change_percentage_7d_in_currency || 0;
-                  const getPchColor = (val: number) => val >= 0 ? 'text-[#0ecb81]' : 'text-[#f6465d]';
+                  const getPchColor = (val: number) => val >= 0 ? 'text-alphabag-green' : 'text-alphabag-red';
                   const getPchIcon = (val: number) => val >= 0 ? '▲' : '▼';
 
                   return (
                     <tr
                       key={coin.id}
-                      className="hover:bg-[#2b3139]/50 transition-colors cursor-pointer"
+                      className="hover:bg-alphabag-gray/50 transition-colors cursor-pointer"
                       onClick={() => navigate(`/markets/${coin.id}`)}
                     >
                       <td className="py-3 px-3 pl-5 text-center text-alphabag-subtext font-medium tabular-nums text-xs">
                         <div className="flex items-center justify-center gap-2">
-                          <Star size={11} className="text-[#474d57] hover:text-[#fcd535] cursor-pointer hidden sm:block shrink-0" />
+                          <Star size={11} className="text-alphabag-muted hover:text-alphabag-yellow cursor-pointer hidden sm:block shrink-0" />
                           {coin.market_cap_rank}
                         </div>
                       </td>
@@ -236,7 +236,7 @@ export const Markets: React.FC = () => {
                             />
                           </svg>
                         ) : (
-                          <div className="w-[90px] h-[28px] ml-auto bg-[#2b3139] rounded"></div>
+                          <div className="w-[90px] h-[28px] ml-auto bg-alphabag-gray rounded"></div>
                         )}
                       </td>
                     </tr>

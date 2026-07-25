@@ -112,7 +112,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-alphabag-black/95 backdrop-blur-2xl animate-in fade-in duration-300">
-      <div className="bg-alphabag-dark border border-white/10 w-full max-w-sm rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden relative group">
+      <div className="bg-alphabag-dark border border-white/10 w-full max-w-sm rounded-xl overflow-hidden relative group">
         
         {/* Animated Background Glow */}
         
@@ -264,7 +264,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 {step === 'SUCCESS' && (
                   <div className="flex flex-col items-center justify-center py-3 space-y-2 animate-in zoom-in duration-500">
-                    <div className="w-20 h-20 bg-alphabag-green/20 rounded-full flex items-center justify-center text-alphabag-green shadow-[0_0_40px_rgba(0,255,163,0.2)]">
+                    <div className="w-20 h-20 bg-alphabag-green/20 rounded-full flex items-center justify-center text-alphabag-green">
                       <CheckCircle2 size={40} strokeWidth={2.5} />
                     </div>
                     <div className="h-1 w-24 bg-white/10 rounded-full overflow-hidden">

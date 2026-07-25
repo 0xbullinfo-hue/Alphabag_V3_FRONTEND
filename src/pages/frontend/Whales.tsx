@@ -44,19 +44,19 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     }, [whale.address]);
 
     return (
-        <div key={whale.id} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 hover:border-[#fcd535]/30 transition-all">
+        <div key={whale.id} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 hover:border-alphabag-yellow/30 transition-all">
             <div className="flex justify-between items-start mb-2">
                 <div className="flex items-center gap-2">
                     <div className="w-9 h-9 bg-alphabag-black rounded-md flex items-center justify-center border border-alphabag-gray">
-                        <Eye size={18} className="text-[#fcd535]" />
+                        <Eye size={18} className="text-alphabag-yellow" />
                     </div>
                     {hasAlerts && (
-                        <div className="bg-[#0ecb81]/10 text-[#0ecb81] px-2 py-1 rounded-md text-[9px] font-semibold uppercase flex items-center gap-1">
+                        <div className="bg-alphabag-green/10 text-alphabag-green px-2 py-1 rounded-md text-[9px] font-semibold uppercase flex items-center gap-1">
                             <Bell size={10} /> Alert
                         </div>
                     )}
                 </div>
-                <button onClick={() => removeTrackedWallet(whale.id)} className="text-alphabag-subtext hover:text-[#f6465d] transition-colors p-1.5">
+                <button onClick={() => removeTrackedWallet(whale.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-1.5">
                     <Trash2 size={15} />
                 </button>
             </div>
@@ -71,8 +71,8 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
             <div className="grid grid-cols-2 gap-2 mb-2">
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
                     <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Status</div>
-                    <div className="flex items-center text-[#0ecb81] text-xs font-semibold">
-                        <div className="w-1.5 h-1.5 bg-[#0ecb81] rounded-full mr-1.5 animate-pulse"></div>
+                    <div className="flex items-center text-alphabag-green text-xs font-semibold">
+                        <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-1.5 animate-pulse"></div>
                         Live
                     </div>
                 </div>
@@ -85,7 +85,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
             </div>
 
             <Link to={`/whales/${whale.address}`}>
-                <button className="w-full py-2 bg-[#2b3139] text-alphabag-text rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all flex items-center justify-center gap-2">
+                <button className="w-full py-2 bg-alphabag-gray text-alphabag-text rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all flex items-center justify-center gap-2">
                     View Analytics <ArrowRight size={13} />
                 </button>
             </Link>
@@ -135,7 +135,7 @@ export const Whales: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-[#fcd535] flex items-center justify-center text-[#181a20]">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Eye size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
@@ -147,7 +147,7 @@ export const Whales: React.FC = () => {
                     <UpgradeCmd />
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="flex items-center gap-2 bg-[#fcd535] text-[#181a20] px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                        className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
                     >
                         <Plus size={15} /> Add Whale
                     </button>
@@ -168,7 +168,7 @@ export const Whales: React.FC = () => {
                         <p className="text-alphabag-subtext text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
                         <button 
                             onClick={() => setIsAddOpen(true)}
-                            className="bg-[#2b3139] text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#474d57] transition-all"
+                            className="bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all"
                         >
                             Add Whale Wallet
                         </button>
@@ -182,9 +182,9 @@ export const Whales: React.FC = () => {
                 {whaleWallets.length < limits.maxWhales && (
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-[#fcd535]/30 transition-all group"
+                        className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group"
                     >
-                        <div className="w-9 h-9 bg-[#2b3139] rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-[#fcd535] group-hover:text-[#181a20] transition-all">
+                        <div className="w-9 h-9 bg-alphabag-gray rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-alphabag-yellow group-hover:text-alphabag-dark transition-all">
                             <Plus size={18} />
                         </div>
                         <span className="text-sm font-semibold text-alphabag-text">Add Whale Slot</span>
@@ -199,7 +199,7 @@ export const Whales: React.FC = () => {
                     <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-4 shadow-2xl relative">
                         <div className="flex justify-between items-center mb-2">
                             <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                                <Eye size={18} className="text-[#fcd535]" /> Add Whale Wallet
+                                <Eye size={18} className="text-alphabag-yellow" /> Add Whale Wallet
                             </h3>
                             <button 
                                 onClick={() => { setIsAddOpen(false); setErrorMsg(null); }} 
@@ -223,7 +223,7 @@ export const Whales: React.FC = () => {
                                     value={newAddress}
                                     onChange={(e) => setNewAddress(e.target.value)}
                                     placeholder="0x... or Solana address" 
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
                                     required
                                 />
                             </div>
@@ -235,7 +235,7 @@ export const Whales: React.FC = () => {
                                     value={newLabel}
                                     onChange={(e) => setNewLabel(e.target.value)}
                                     placeholder="e.g. Vitalik, Binance Hot Wallet" 
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
                                     required
                                 />
                             </div>
@@ -245,7 +245,7 @@ export const Whales: React.FC = () => {
                                 <select 
                                     value={newChain}
                                     onChange={(e) => setNewChain(e.target.value as Chain)}
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-[#fcd535] transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
                                 >
                                     <option value="BSC">Binance Smart Chain (BSC)</option>
                                     <option value="ETH">Ethereum (ETH)</option>
@@ -259,7 +259,7 @@ export const Whales: React.FC = () => {
                             <Button 
                                 type="submit" 
                                 isLoading={isSubmitting} 
-                                className="w-full py-3 mt-4 text-xs font-black tracking-widest uppercase bg-[#fcd535] text-[#181a20] hover:bg-[#e0bd2e]"
+                                className="w-full py-3 mt-4 text-xs font-black tracking-widest uppercase bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]"
                             >
                                 Track Wallet
                             </Button>
