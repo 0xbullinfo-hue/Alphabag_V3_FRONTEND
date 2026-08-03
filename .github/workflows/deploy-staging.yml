@@ -1,0 +1,64 @@
+name: Build and Deploy Frontend to Namecheap (Staging)
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy-staging:
+    name: Build & Deploy Staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Application (Staging)
+        run: npm run build
+        env:
+          # Use staging-specific API endpoints/keys where available.
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_STAGING }}
+          VITE_MARKET_PROXY_BASE_URL: ${{ secrets.VITE_MARKET_PROXY_BASE_URL_STAGING }}
+
+          VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.VITE_WALLETCONNECT_PROJECT_ID }}
+          VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
+
+          VITE_BAG_TOKEN_ADDRESS_MAINNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_MAINNET }}
+          VITE_BAG_TOKEN_ADDRESS_TESTNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_TESTNET }}
+          VITE_MIN_BAG_REQUIRED: ${{ secrets.VITE_MIN_BAG_REQUIRED }}
+          VITE_ENABLE_TOKEN_GATING: ${{ secrets.VITE_ENABLE_TOKEN_GATING }}
+          VITE_ENVIRONMENT: staging
+
+          VITE_DATA_MODE: ${{ secrets.VITE_DATA_MODE }}
+          VITE_LAUNCH_MODE: full
+          VITE_DEMO_MODE: false
+          VITE_ENABLE_BACKGROUND_SYNC: ${{ secrets.VITE_ENABLE_BACKGROUND_SYNC }}
+
+          VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
+          VITE_COVALENT_API_KEY: ${{ secrets.VITE_COVALENT_API_KEY }}
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+          VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
+
+      - name: Sync Files to Namecheap FTP (Staging)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_STAGING_SERVER }}
+          username: ${{ secrets.FTP_STAGING_USERNAME }}
+          password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          local-dir: ./dist/
+          # For Namecheap shared hosting, this maps to:
+          # https://yourdomain.com/staging/
+          # or to a staging subdomain if that subdomain points here.
+          server-dir: /public_html/staging/
+          protocol: ftp
+          port: 21
