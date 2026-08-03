@@ -13,6 +13,16 @@ import { UpgradeModal } from './components/frontend/UpgradeModal';
 import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
 import { DISABLED_PAGES } from './services/config';
+
+// When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
+// wallet-connect auto-trigger, no other routes, regardless of what URL a
+// visitor types or clicks. Landing.tsx already hides its own login CTA in
+// this mode, but every other route (including some like /markets that
+// aren't behind PrivateRoute at all) was still fully live before this,
+// and the wallet-connect effect below would still pop the SIWE auth
+// modal and try to hit a backend that isn't deployed yet during a
+// pre-launch campaign.
+const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
 // NOTE: Solana wallet-adapter support previously lived here, wrapping the
 // entire app unconditionally. Nothing in the codebase calls
 // useWallet()/useConnection() from those packages, yet every page load
@@ -108,6 +118,7 @@ const AppContent = () => {
 
   // Automatic SIWE Trigger after connection — but skip if already authenticated
   useEffect(() => {
+    if (IS_TEASER_MODE) return;
     if (isConnected && !isAuthenticated && !isLoading) {
       setIsAuthModalOpen(true);
     }
@@ -139,6 +150,18 @@ const AppContent = () => {
       window.removeEventListener('open-upgrade-modal', handleOpenUpgrade);
     };
   }, []);
+
+  if (IS_TEASER_MODE) {
+    return (
+      <>
+        <Suspense fallback={<GlobalLoader />}>
+          <Routes>
+            <Route path="*" element={<Landing />} />
+          </Routes>
+        </Suspense>
+      </>
+    );
+  }
 
   return (
     <>

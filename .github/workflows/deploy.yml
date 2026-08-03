@@ -25,10 +25,38 @@ jobs:
     - name: Build Application
       run: npm run build
       env:
-        VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
-        VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
+        # Backend lives on its own host (Node/Express + Postgres — this
+        # cannot run on Namecheap shared hosting). This MUST point at
+        # wherever alphabag_v3_backend is actually deployed, or every
+        # API call from the built app will 404 against myalphabag.com
+        # itself, which only serves static files.
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        VITE_MARKET_PROXY_BASE_URL: ${{ secrets.VITE_MARKET_PROXY_BASE_URL }}
+
+        # Required for the wallet-connect flow to work at all.
+        VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.VITE_WALLETCONNECT_PROJECT_ID }}
+        VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
+
+        # Token gating
+        VITE_BAG_TOKEN_ADDRESS_MAINNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_MAINNET }}
+        VITE_BAG_TOKEN_ADDRESS_TESTNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_TESTNET }}
+        VITE_MIN_BAG_REQUIRED: ${{ secrets.VITE_MIN_BAG_REQUIRED }}
+        VITE_ENABLE_TOKEN_GATING: ${{ secrets.VITE_ENABLE_TOKEN_GATING }}
+        VITE_ENVIRONMENT: ${{ secrets.VITE_ENVIRONMENT }}
+
+        # Data source / feature flags
+        VITE_DATA_MODE: ${{ secrets.VITE_DATA_MODE }}
         VITE_LAUNCH_MODE: full
         VITE_DEMO_MODE: false
+        VITE_ENABLE_BACKGROUND_SYNC: ${{ secrets.VITE_ENABLE_BACKGROUND_SYNC }}
+
+        # Third-party keys still read client-side today (see the
+        # traffic-capacity audit — these are candidates to move behind
+        # the backend proxy that already exists for some of them).
+        VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
+        VITE_COVALENT_API_KEY: ${{ secrets.VITE_COVALENT_API_KEY }}
+        VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+        VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
 
     - name: Sync Files to Namecheap FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5

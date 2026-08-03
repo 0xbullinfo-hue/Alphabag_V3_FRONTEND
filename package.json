@@ -9,6 +9,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:start": "powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1",
+    "dev:stop": "powershell -ExecutionPolicy Bypass -File scripts/stop-local.ps1",
     "build": "vite build",
     "preview": "vite preview",
     "generate:openapi-types": "node scripts/generate-types-from-openapi.js",
