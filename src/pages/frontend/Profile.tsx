@@ -571,14 +571,14 @@ export const Profile: React.FC = () => {
 
                                     <div className="flex flex-wrap gap-2">
                                         <Button 
-                                            onClick={() => window.open(project.buyLink, '_blank')}
+                                            onClick={() => window.open(project.buyLink, '_blank', 'noopener,noreferrer')}
                                             className="bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3  shadow-lg hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all"
                                         >
                                             Buy $ {project.symbol}
                                         </Button>
                                         <Button 
                                             variant="outline"
-                                            onClick={() => window.open(project.websiteUrl, '_blank')}
+                                            onClick={() => window.open(project.websiteUrl, '_blank', 'noopener,noreferrer')}
                                             className="border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3"
                                         >
                                             <Globe size={16} className="mr-2" /> Website

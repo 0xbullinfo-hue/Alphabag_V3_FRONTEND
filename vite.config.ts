@@ -18,8 +18,9 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '/api': {
           // VITE_API_BASE_URL is the single source of truth for the backend URL.
-          // In dev: falls back to https://alpha-api.figmentstudio.ng. In prod: set to https://api.yourdomain.com
-          target: env.VITE_API_BASE_URL || 'https://alpha-api.figmentstudio.ng',
+          // In dev: falls back to localhost backend to avoid accidental remote calls.
+          // In prod: set VITE_API_BASE_URL to your deployed backend domain.
+          target: env.VITE_API_BASE_URL || 'http://localhost:3003',
           changeOrigin: true,
           secure: false,
           agent: new https.Agent({ family: 4 })
@@ -30,7 +31,7 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       nodePolyfills({
-        include: ['buffer', 'crypto', 'stream', 'util', 'vm'],
+        include: ['buffer', 'crypto', 'stream', 'util'],
         globals: { Buffer: true, global: true, process: true },
         protocolImports: true,
       })

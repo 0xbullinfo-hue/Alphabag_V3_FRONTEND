@@ -709,7 +709,7 @@ export const Airdrop: React.FC = () => {
                                     onClick={() => {
                                         const refUrl = `https://alphabag.com/?ref=${user?.referralCode || ''}`;
                                         const tweet = encodeURIComponent(`🚀 Join me on AlphaBAG — complete missions & earn ITEMS for future utility rewards!\n\nSign up here 👇\n${refUrl}\n\n#AlphaBAG #Crypto`);
-                                        window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank');
+                                        window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank', 'noopener,noreferrer');
                                     }}
                                     title="Share on X"
                                     className="p-2 bg-alphabag-gray text-alphabag-text rounded-md hover:bg-alphabag-muted transition-all shrink-0"
@@ -787,7 +787,7 @@ export const Airdrop: React.FC = () => {
                                     {task.actionUrl && !isCompleted && (
                                         <div className="mb-2">
                                             <Button
-                                                onClick={() => window.open(task.actionUrl, '_blank')}
+                                                onClick={() => window.open(task.actionUrl, '_blank', 'noopener,noreferrer')}
                                                 className="w-full py-2.5 bg-alphabag-gray text-alphabag-text hover:bg-alphabag-muted border-none text-[10px] font-semibold uppercase transition-all flex items-center justify-center gap-2 rounded-md"
                                                 variant="secondary"
                                                 size="sm"

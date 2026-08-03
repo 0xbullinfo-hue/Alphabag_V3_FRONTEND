@@ -340,7 +340,7 @@ export const AlphaScreener: React.FC = () => {
                                 <div className="font-mono font-bold text-white mt-0.5">{formatUsd(searchedPair.liquidity?.usd)}</div>
                             </div>
                             <button
-                                onClick={() => window.open(searchedPair.url, '_blank')}
+                                onClick={() => window.open(searchedPair.url, '_blank', 'noopener,noreferrer')}
                                 className="bg-alphabag-yellow text-black hover:bg-[#e0bd2e] h-9 px-4 rounded font-black text-xs uppercase tracking-widest transition-all self-center flex items-center gap-1.5 shadow-md shadow-alphabag-yellow/10 active:scale-[0.98]"
                             >
                                 <ExternalLink size={12} />
@@ -423,7 +423,7 @@ export const AlphaScreener: React.FC = () => {
                                         </td>
                                         <td className="px-4 py-3 text-right">
                                             <button 
-                                                onClick={() => window.open(pair.url, '_blank')}
+                                                onClick={() => window.open(pair.url, '_blank', 'noopener,noreferrer')}
                                                 className="p-1.5 text-alphabag-yellow hover:text-black hover:bg-alphabag-yellow transition-all border border-alphabag-yellow/30 hover:border-alphabag-yellow rounded opacity-0 group-hover:opacity-100 flex items-center justify-center inline-block"
                                                 title="View on DexScreener"
                                             >
