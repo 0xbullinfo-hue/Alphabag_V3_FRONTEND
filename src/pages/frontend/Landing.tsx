@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon, Calculator as CalculatorIcon, Globe } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon, Calculator as CalculatorIcon } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -11,6 +11,41 @@ import { IS_DEMO_MODE } from '../../services/config';
 
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
+const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || '2026-12-01T12:00:00Z';
+
+type CountdownState = {
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+  isLive: boolean;
+};
+
+function getTeaserCountdown(targetIso: string): CountdownState {
+  const launchMs = new Date(targetIso).getTime();
+  if (!Number.isFinite(launchMs)) {
+    return { days: '00', hours: '00', minutes: '00', seconds: '00', isLive: false };
+  }
+
+  const diffMs = launchMs - Date.now();
+  if (diffMs <= 0) {
+    return { days: '00', hours: '00', minutes: '00', seconds: '00', isLive: true };
+  }
+
+  const totalSeconds = Math.floor(diffMs / 1000);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return {
+    days: String(days).padStart(2, '0'),
+    hours: String(hours).padStart(2, '0'),
+    minutes: String(minutes).padStart(2, '0'),
+    seconds: String(seconds).padStart(2, '0'),
+    isLive: false
+  };
+}
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
@@ -381,29 +416,14 @@ export const Landing: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
   const [showTeaserToast, setShowTeaserToast] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
-  const [language, setLanguage] = useState<string>(() => localStorage.getItem('alphabag_language') || 'en');
-  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.dir = language.startsWith('ar') ? 'rtl' : 'ltr';
-    document.documentElement.lang = language;
-    localStorage.setItem('alphabag_language', language);
-  }, [language]);
+  const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
+  const [waitlistEmail, setWaitlistEmail] = useState('');
+  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
+  const [waitlistError, setWaitlistError] = useState('');
 
   const t = (key: string): string => {
-    return TRANSLATIONS[language]?.[key] || TRANSLATIONS['en']?.[key] || '';
+    return TRANSLATIONS['en']?.[key] || '';
   };
-
-  const languagesList = [
-    { code: 'en', label: 'English' },
-    { code: 'ar', label: 'العربية' },
-    { code: 'ar-bh', label: 'العربية (البحرين)' },
-    { code: 'az', label: 'Azərbaycan' },
-    { code: 'de', label: 'Deutsch' },
-    { code: 'en-ae', label: 'English (UAE)' },
-    { code: 'en-au', label: 'English (Australia)' },
-    { code: 'en-bh', label: 'English (Bahrain)' },
-  ];
 
   // Theme state
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -429,6 +449,14 @@ export const Landing: React.FC = () => {
       navigate('/airdrop');
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (!IS_TEASER_MODE) return;
+    const tick = () => setTeaserCountdown(getTeaserCountdown(TEASER_LAUNCH_AT));
+    tick();
+    const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const handleLaunchApp = () => {
     if (IS_TEASER_MODE) {
@@ -458,6 +486,41 @@ export const Landing: React.FC = () => {
     window.location.reload();
   };
 
+  const handleWaitlistSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const email = waitlistEmail.trim().toLowerCase();
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setWaitlistError('Enter a valid email address to join the early-access waitlist.');
+      return;
+    }
+
+    const storageKey = 'alphabag_waitlist_signups';
+    const raw = localStorage.getItem(storageKey);
+    let list: Array<{ email: string; source: string; createdAt: string }> = [];
+    if (raw) {
+      try {
+        list = JSON.parse(raw);
+      } catch {
+        list = [];
+      }
+    }
+
+    if (!list.some(item => item.email === email)) {
+      list.push({
+        email,
+        source: 'teaser-landing',
+        createdAt: new Date().toISOString()
+      });
+      // Keep local cache bounded.
+      localStorage.setItem(storageKey, JSON.stringify(list.slice(-500)));
+    }
+
+    setWaitlistSubmitted(true);
+    setWaitlistError('');
+    setWaitlistEmail('');
+  };
+
   const handleViewMarkets = () => {
     setActiveTab('markets');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -478,7 +541,10 @@ export const Landing: React.FC = () => {
       }`}>
         <div className="flex items-center gap-2 bg-alphabag-dark border border-alphabag-yellow/40 text-white px-5 py-3.5 rounded-xl  backdrop-blur-xl">
           <BellRing size={16} className="text-alphabag-yellow animate-bounce" />
-          <span className="text-sm font-bold">Testnet is launching soon — <span className="text-alphabag-yellow">stay tuned on Telegram & X.</span></span>
+          <span className="text-sm font-bold">
+            {teaserCountdown.isLive ? 'Testnet is live now.' : `Testnet launch in ${teaserCountdown.days}d ${teaserCountdown.hours}h ${teaserCountdown.minutes}m ${teaserCountdown.seconds}s.`}
+            <span className="text-alphabag-yellow"> Stay tuned on Telegram & X.</span>
+          </span>
           <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-white">
             <X size={14} />
           </button>
@@ -523,7 +589,7 @@ export const Landing: React.FC = () => {
             </div>
 
             {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center space-x-2 text-sm font-medium text-alphabag-subtext">
+            <div className="hidden md:flex items-center space-x-5 text-sm font-medium text-alphabag-subtext">
               <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_home')}</button>
               <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_features')}</button>
               <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_tokenomics')}</button>
@@ -533,39 +599,8 @@ export const Landing: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Side: Translation Globe + Theme + Wallet/Login Buttons */}
+          {/* Right Side: Theme + Wallet/Login Buttons */}
           <div className="hidden md:flex items-center space-x-2">
-            
-            {/* World Globe Language Switcher */}
-            <div className="relative">
-              <button
-                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
-                title="Change Language"
-              >
-                <Globe size={18} />
-              </button>
-              {isLangDropdownOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsLangDropdownOpen(false)}></div>
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl bg-alphabag-darkgray border border-alphabag-gray shadow-2xl py-2 z-50 animate-slide-in">
-                    {languagesList.map(lang => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                          localStorage.setItem('alphabag_language', lang.code);
-                          setIsLangDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`}
-                      >
-                        {lang.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
 
             {/* Theme Toggle Button */}
             <button
@@ -596,37 +631,6 @@ export const Landing: React.FC = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center gap-2">
-            
-            {/* World Globe Language Switcher Mobile */}
-            <div className="relative">
-              <button
-                onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="p-2 rounded-xl text-alphabag-subtext"
-              >
-                <Globe size={18} />
-              </button>
-              {isLangDropdownOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsLangDropdownOpen(false)}></div>
-                  <div className="absolute right-0 mt-2 w-48 rounded-xl bg-alphabag-darkgray border border-alphabag-gray shadow-2xl py-2 z-50 animate-slide-in">
-                    {languagesList.map(lang => (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setLanguage(lang.code);
-                          localStorage.setItem('alphabag_language', lang.code);
-                          setIsLangDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-xs font-semibold hover:bg-white/5 transition-all ${language === lang.code ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`}
-                      >
-                        {lang.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
             <button
               onClick={toggleTheme}
               className="p-2 rounded-xl text-alphabag-subtext"
@@ -714,21 +718,88 @@ export const Landing: React.FC = () => {
                     )}
                   </div>
 
+                  {IS_TEASER_MODE && (
+                    <div className="mt-2 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-4 max-w-xl backdrop-blur-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">Testnet Countdown</div>
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access Onboarding</div>
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-2 mb-3">
+                        {[
+                          { label: 'Days', value: teaserCountdown.days },
+                          { label: 'Hours', value: teaserCountdown.hours },
+                          { label: 'Min', value: teaserCountdown.minutes },
+                          { label: 'Sec', value: teaserCountdown.seconds }
+                        ].map((item) => (
+                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-2 text-center">
+                            <div className="text-xl md:text-2xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                            <div className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-2">
+                        <input
+                          type="email"
+                          value={waitlistEmail}
+                          onChange={(e) => {
+                            setWaitlistEmail(e.target.value);
+                            if (waitlistError) setWaitlistError('');
+                            if (waitlistSubmitted) setWaitlistSubmitted(false);
+                          }}
+                          placeholder="Email for early access"
+                          className="w-full rounded-lg border border-alphabag-gray bg-alphabag-black px-3 py-2 text-sm text-white placeholder:text-alphabag-subtext outline-none focus:border-alphabag-yellow"
+                          required
+                        />
+                        <Button
+                          type="submit"
+                          size="sm"
+                          className="px-4 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none font-semibold whitespace-nowrap"
+                        >
+                          Join Waitlist
+                        </Button>
+                      </form>
+
+                      {waitlistError && <div className="mt-2 text-[11px] text-red-400 font-medium">{waitlistError}</div>}
+                      {waitlistSubmitted && <div className="mt-2 text-[11px] text-alphabag-green font-medium">You are in. Watch your inbox for early-access onboarding.</div>}
+                    </div>
+                  )}
+
                   {/* Stats Section */}
-                  <div className="flex flex-wrap gap-2 md:gap-2 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
-                    <div>
-                      <div className="text-2xl font-bold text-alphabag-text mb-1">{t('stat_assets')}</div>
-                      <div className="text-xs font-semibold text-alphabag-subtext">{t('stat_assets_lbl')}</div>
+                  <div className="flex flex-wrap gap-x-5 gap-y-3 md:gap-x-8 md:gap-y-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
+                    <div className="space-y-1.5">
+                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_assets')}</div>
+                      <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_assets_lbl')}</div>
                     </div>
-                    <div>
-                      <div className="text-2xl font-bold text-alphabag-text mb-1">{t('stat_members')}</div>
-                      <div className="text-xs font-semibold text-alphabag-subtext">{t('stat_members_lbl')}</div>
+                    <div className="space-y-1.5">
+                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_members')}</div>
+                      <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_members_lbl')}</div>
                     </div>
-                    <div>
-                      <div className="text-2xl font-bold text-alphabag-text mb-1">{t('stat_crypto')}</div>
-                      <div className="text-xs font-semibold text-alphabag-subtext">{t('stat_crypto_lbl')}</div>
+                    <div className="space-y-1.5">
+                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_crypto')}</div>
+                      <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_crypto_lbl')}</div>
                     </div>
                   </div>
+
+                  {IS_TEASER_MODE && (
+                    <div className="mt-3 p-3 rounded-xl border border-alphabag-yellow/20 bg-alphabag-black/40 max-w-xl">
+                      <div className="text-[10px] text-alphabag-subtext uppercase tracking-[0.18em] font-semibold mb-2">Launch Countdown</div>
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { label: 'Days', value: teaserCountdown.days },
+                          { label: 'Hours', value: teaserCountdown.hours },
+                          { label: 'Min', value: teaserCountdown.minutes },
+                          { label: 'Sec', value: teaserCountdown.seconds }
+                        ].map(item => (
+                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray/80 text-center py-1.5">
+                            <div className="text-base md:text-lg font-bold text-alphabag-yellow tabular-nums">{item.value}</div>
+                            <div className="text-[9px] uppercase tracking-wider text-alphabag-subtext font-medium">{item.label}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Right Column: Calculator Card */}
