@@ -221,7 +221,11 @@
 
 /* Theme toggle removed: hide any stale cached toggle controls. */
 button[title="Switch to Light Mode"],
-button[title="Switch to Dark Mode"] {
+button[title="Switch to Dark Mode"],
+button[title="Toggle Theme"],
+button[aria-label="Toggle theme"],
+button[aria-label="theme toggle"],
+[data-theme-toggle] {
   display: none !important;
 }
 
