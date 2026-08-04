@@ -64,6 +64,12 @@ jobs:
         VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
         VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
 
+    - name: Validate FTP Secrets
+      run: |
+        [ -n "${{ secrets.FTP_SERVER }}" ] || { echo "Missing FTP_SERVER secret"; exit 1; }
+        [ -n "${{ secrets.FTP_USERNAME }}" ] || { echo "Missing FTP_USERNAME secret"; exit 1; }
+        [ -n "${{ secrets.FTP_PASSWORD }}" ] || { echo "Missing FTP_PASSWORD secret"; exit 1; }
+
     - name: Sync Files to Namecheap FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:

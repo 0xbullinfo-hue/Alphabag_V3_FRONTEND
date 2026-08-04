@@ -10,6 +10,10 @@ jobs:
   build-and-deploy-staging:
     name: Build & Deploy Staging
     runs-on: ubuntu-latest
+    env:
+      FTP_SERVER_EFFECTIVE: ${{ secrets.FTP_STAGING_SERVER || secrets.FTP_SERVER }}
+      FTP_USERNAME_EFFECTIVE: ${{ secrets.FTP_STAGING_USERNAME || secrets.FTP_USERNAME }}
+      FTP_PASSWORD_EFFECTIVE: ${{ secrets.FTP_STAGING_PASSWORD || secrets.FTP_PASSWORD }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -55,12 +59,18 @@ jobs:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
           VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
 
+      - name: Validate FTP Secrets
+        run: |
+          [ -n "${FTP_SERVER_EFFECTIVE}" ] || { echo "Missing FTP server secret. Set FTP_STAGING_SERVER or FTP_SERVER."; exit 1; }
+          [ -n "${FTP_USERNAME_EFFECTIVE}" ] || { echo "Missing FTP username secret. Set FTP_STAGING_USERNAME or FTP_USERNAME."; exit 1; }
+          [ -n "${FTP_PASSWORD_EFFECTIVE}" ] || { echo "Missing FTP password secret. Set FTP_STAGING_PASSWORD or FTP_PASSWORD."; exit 1; }
+
       - name: Sync Files to Namecheap FTP (Staging)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_STAGING_SERVER }}
-          username: ${{ secrets.FTP_STAGING_USERNAME }}
-          password: ${{ secrets.FTP_STAGING_PASSWORD }}
+          server: ${{ env.FTP_SERVER_EFFECTIVE }}
+          username: ${{ env.FTP_USERNAME_EFFECTIVE }}
+          password: ${{ env.FTP_PASSWORD_EFFECTIVE }}
           local-dir: ./dist/
           # Use path relative to the FTP account root.
           server-dir: /staging/
