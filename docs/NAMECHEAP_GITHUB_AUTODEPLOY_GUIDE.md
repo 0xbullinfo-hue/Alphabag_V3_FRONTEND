@@ -79,7 +79,7 @@ Do this before launch so visitors do not see security warnings.
    - FTP username
    - FTP password
    - FTP port (usually 21)
-4. Confirm web root folder is /public_html/.
+4. Confirm deploy folder is /myalphabag.com/alphabag-deploy2/.
 
 ---
 
@@ -180,6 +180,7 @@ If update does not appear:
 2. Open in private window.
 3. Check GitHub Actions run logs.
 4. Confirm files uploaded to /public_html/.
+4. Confirm files uploaded to /myalphabag.com/alphabag-deploy2/.
 
 ---
 
