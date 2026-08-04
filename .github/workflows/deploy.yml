@@ -81,3 +81,31 @@ jobs:
         server-dir: /public_html/
         protocol: ftp
         port: 21
+
+    - name: Fallback Sync to FTP Root
+      if: success()
+      continue-on-error: true
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        # Some Namecheap FTP accounts are already rooted to the live doc root.
+        server-dir: /
+        protocol: ftp
+        port: 21
+
+    - name: Fallback Sync to Domain Subroot
+      if: success()
+      continue-on-error: true
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        # Some setups serve from /myalphabag.com/public_html within account root.
+        server-dir: /myalphabag.com/public_html/
+        protocol: ftp
+        port: 21
