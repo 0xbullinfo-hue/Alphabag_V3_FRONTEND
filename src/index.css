@@ -25,24 +25,6 @@
     --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .light {
-    --bg-color: #f6f6f6;
-    --panel-color: #ffffff;
-    --card-color: #eaecef;
-    --border-color: #eaecef;
-    --border-light: rgba(0, 0, 0, 0.03);
-    
-    --text-color: #1e2329;
-    --subtext-color: #474d57;
-    --muted-color: #707a8a;
-    
-    --yellow: #fcd535;
-    --yellow-hover: #e0bd2e;
-    --green: #03a66d;
-    --red: #cf304a;
-    --blue: #2f80ed;
-  }
-
   html {
     font-size: 17px;
     scroll-behavior: smooth;

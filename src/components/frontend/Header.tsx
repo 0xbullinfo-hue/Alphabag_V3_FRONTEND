@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap, Sun, Moon } from 'lucide-react';
+import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchGlobalStats } from '../../services/mockData';
 import { useAuth } from '../../context/AuthContext';
@@ -23,24 +23,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
   const [searchValue, setSearchValue] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  
-  // Theme state
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
-  });
-
-  useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
 
   const [notifications, setNotifications] = useState<any[]>([
     {
@@ -148,14 +130,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         </form>
 
         <div className="flex items-center space-x-2">
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
-
           {isAuthenticated ? (
             <div className="relative">
               <div className="flex items-center gap-2">

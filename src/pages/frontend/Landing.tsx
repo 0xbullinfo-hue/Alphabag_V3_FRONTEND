@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Sun, Moon, Calculator as CalculatorIcon } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Calculator as CalculatorIcon } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -425,24 +425,6 @@ export const Landing: React.FC = () => {
     return TRANSLATIONS['en']?.[key] || '';
   };
 
-  // Theme state
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('theme') as 'dark' | 'light') || 'dark';
-  });
-
-  useEffect(() => {
-    if (theme === 'light') {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
   useEffect(() => {
     // Only redirect to app if NOT in teaser mode and user is authenticated
     if (!IS_TEASER_MODE && isAuthenticated) {
@@ -599,17 +581,8 @@ export const Landing: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Side: Theme + Wallet/Login Buttons */}
+          {/* Right Side: Wallet/Login Buttons */}
           <div className="hidden md:flex items-center space-x-2">
-
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray/40 border border-transparent hover:border-alphabag-gray shrink-0"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
 
             {/* Main Auth/Demo CTAs */}
             {!isAuthenticated ? (
@@ -631,12 +604,6 @@ export const Landing: React.FC = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-xl text-alphabag-subtext"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
             <button className="text-alphabag-text" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X /> : <LayoutGrid />}
             </button>
