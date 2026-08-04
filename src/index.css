@@ -219,6 +219,12 @@
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 }
 
+/* Theme toggle removed: hide any stale cached toggle controls. */
+button[title="Switch to Light Mode"],
+button[title="Switch to Dark Mode"] {
+  display: none !important;
+}
+
 /* datetime-local dark mode */
 input[type="datetime-local"],
 input[type="date"],
