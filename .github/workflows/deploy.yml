@@ -65,6 +65,8 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
-        server-dir: /public_html/
+        # Namecheap FTP users are often jailed/chrooted to a specific
+        # directory. Deploy to FTP account root to avoid path errors.
+        server-dir: /
         protocol: ftp
         port: 21

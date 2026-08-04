@@ -56,9 +56,7 @@ jobs:
           username: ${{ secrets.FTP_STAGING_USERNAME }}
           password: ${{ secrets.FTP_STAGING_PASSWORD }}
           local-dir: ./dist/
-          # For Namecheap shared hosting, this maps to:
-          # https://yourdomain.com/staging/
-          # or to a staging subdomain if that subdomain points here.
-          server-dir: /public_html/staging/
+          # Use path relative to the FTP account root.
+          server-dir: /staging/
           protocol: ftp
           port: 21

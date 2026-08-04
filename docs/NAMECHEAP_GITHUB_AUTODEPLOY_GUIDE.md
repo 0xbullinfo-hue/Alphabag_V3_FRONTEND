@@ -1,17 +1,18 @@
-# Alphabag Landing Page Hosting Guide (Namecheap + Auto Deploy)
+# Alphabag Frontend Hosting Guide for myalphabag.com (Namecheap + Auto Deploy)
 
 This guide is for beginners.
-Goal: every push to GitHub main should automatically update your live domain on Namecheap.
+Goal: every push to the Alphabag frontend repo should automatically update myalphabag.com on Namecheap.
 
 ## What you are setting up
 
-- Frontend hosting on Namecheap shared hosting (static files only)
+- Frontend hosting for the Alphabag frontend repo on Namecheap shared hosting (static files only)
 - Automatic deploy from GitHub Actions using FTP
 - Domain with HTTPS (SSL)
 
 Important:
 - Your backend API is separate and must stay deployed on a backend host.
 - This frontend already has a deploy workflow and Apache config in the repo.
+- The Namecheap site only serves the built files from this frontend repo; it does not run the backend.
 
 ## Files already prepared in this repo
 
@@ -21,13 +22,18 @@ Important:
 
 These handle build + FTP upload and browser caching/rewrite behavior.
 
+This is the repo that should be connected to Namecheap:
+- Alphabag frontend repository
+- GitHub branch: main for production
+- GitHub branch: staging for preview
+
 ---
 
 ## Step 1: Buy/prepare Namecheap hosting
 
 1. Log in to Namecheap.
 2. Make sure you have:
-   - A domain (for example, myalphabag.com)
+   - Domain: myalphabag.com
    - A shared hosting plan linked to that domain
 3. Open cPanel from Namecheap dashboard.
 
@@ -41,7 +47,7 @@ If your domain uses Namecheap BasicDNS:
 
 1. Go to Domain List -> Manage -> Advanced DNS.
 2. Add or confirm records:
-   - A record for @ pointing to your hosting server IP
+   - A record for @ pointing to your Namecheap hosting server IP
    - CNAME for www pointing to @
 3. Save changes.
 4. Wait for DNS propagation (5 minutes to 24 hours).
@@ -57,8 +63,8 @@ How to find hosting server IP:
 2. Run AutoSSL for your domain.
 3. Wait until certificate is active.
 4. Test:
-   - https://yourdomain.com
-   - https://www.yourdomain.com
+   - https://myalphabag.com
+   - https://www.myalphabag.com
 
 Do this before launch so visitors do not see security warnings.
 
@@ -138,10 +144,10 @@ If you want deploy from a different branch later, edit:
 You can use either:
 
 Option A: Folder URL (fastest)
-- https://yourdomain.com/staging/
+- https://myalphabag.com/staging/
 
 Option B: Subdomain URL (cleaner)
-- Create subdomain in cPanel (for example, staging.yourdomain.com)
+- Create subdomain in cPanel (for example, staging.myalphabag.com)
 - Point subdomain document root to public_html/staging
 
 Either option works with the staging workflow in this repo.
@@ -151,10 +157,10 @@ Either option works with the staging workflow in this repo.
 ## Step 7: First deployment test
 
 1. Make a tiny homepage change (example: edit one heading).
-2. Commit and push to main.
-3. In GitHub, open Actions tab.
+2. Commit and push to the Alphabag frontend repo.
+3. In GitHub, open the Actions tab for this repo.
 4. Open workflow run: Build and Deploy Frontend to Namecheap.
-5. Wait for all steps to pass.
+5. Wait for all steps to pass and publish the built `dist/` folder to Namecheap.
 
 Expected result:
 - Site updates in a few seconds to a few minutes.
@@ -204,11 +210,11 @@ If update does not appear:
 ## Daily workflow (after setup)
 
 1. Edit code locally.
-2. Push to staging first.
-3. GitHub Actions deploys to staging URL.
+2. Push to the Alphabag frontend repo's staging branch first.
+3. GitHub Actions in this repo deploys to the staging URL.
 4. Review and approve changes on staging.
-5. Merge staging into main.
-6. Production workflow deploys to live domain.
+5. Merge staging into main in the same frontend repo.
+6. Production workflow in the frontend repo deploys to the live domain.
 
 That is your safer staging-to-production deployment loop.
 
