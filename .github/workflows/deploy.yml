@@ -9,8 +9,6 @@ jobs:
   build-and-deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    env:
-      FTP_SERVER_DIR_EFFECTIVE: ${{ secrets.FTP_SERVER_DIR || '/public_html/' }}
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -71,7 +69,6 @@ jobs:
         [ -n "${{ secrets.FTP_SERVER }}" ] || { echo "Missing FTP_SERVER secret"; exit 1; }
         [ -n "${{ secrets.FTP_USERNAME }}" ] || { echo "Missing FTP_USERNAME secret"; exit 1; }
         [ -n "${{ secrets.FTP_PASSWORD }}" ] || { echo "Missing FTP_PASSWORD secret"; exit 1; }
-        [ -n "${FTP_SERVER_DIR_EFFECTIVE}" ] || { echo "Missing effective FTP server-dir"; exit 1; }
 
     - name: Sync Files to Namecheap FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -80,8 +77,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
-        # Default to Namecheap web root. Override with FTP_SERVER_DIR
-        # secret if your document root differs.
-        server-dir: ${{ env.FTP_SERVER_DIR_EFFECTIVE }}
+        # Force Namecheap live document root to avoid accidental secret drift.
+        server-dir: /public_html/
         protocol: ftp
         port: 21
