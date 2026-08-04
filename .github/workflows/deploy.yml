@@ -109,3 +109,29 @@ jobs:
         server-dir: /myalphabag.com/public_html/
         protocol: ftp
         port: 21
+
+    - name: Fallback Sync to Public HTML Domain Folder
+      if: success()
+      continue-on-error: true
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        server-dir: /public_html/myalphabag.com/
+        protocol: ftp
+        port: 21
+
+    - name: Fallback Sync to Domain Root Folder
+      if: success()
+      continue-on-error: true
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        server-dir: /myalphabag.com/
+        protocol: ftp
+        port: 21
