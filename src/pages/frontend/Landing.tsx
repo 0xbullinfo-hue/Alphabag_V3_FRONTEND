@@ -533,19 +533,19 @@ export const Landing: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-alphabag-text overflow-x-hidden" style={{ backgroundColor: '#181a20' }}>
+    <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black">
 
       {/* ── TEASER TOAST NOTIFICATION ── */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
         showTeaserToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}>
-        <div className="flex items-center gap-2 bg-alphabag-dark border border-alphabag-yellow/40 text-white px-5 py-3.5 rounded-xl  backdrop-blur-xl">
+        <div className="flex items-center gap-2 bg-alphabag-dark border border-alphabag-yellow/40 text-alphabag-text px-5 py-3.5 rounded-xl  backdrop-blur-xl">
           <BellRing size={16} className="text-alphabag-yellow animate-bounce" />
           <span className="text-sm font-bold">
             {teaserCountdown.isLive ? 'Testnet is live now.' : `Testnet launch in ${teaserCountdown.days}d ${teaserCountdown.hours}h ${teaserCountdown.minutes}m ${teaserCountdown.seconds}s.`}
             <span className="text-alphabag-yellow"> Stay tuned on Telegram & X.</span>
           </span>
-          <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-white">
+          <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-alphabag-text">
             <X size={14} />
           </button>
         </div>
@@ -558,7 +558,7 @@ export const Landing: React.FC = () => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-yellow opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
           </span>
-          <p className="text-xs font-medium text-white text-center">
+          <p className="text-xs font-medium text-alphabag-text text-center">
             Testnet Launching Soon &mdash; Join our community for early access
           </p>
           <div className="flex items-center gap-2 shrink-0">
@@ -571,14 +571,14 @@ export const Landing: React.FC = () => {
               <X size={11} /> Follow <ChevronRight size={11} />
             </a>
           </div>
-          <button onClick={() => setBannerDismissed(true)} className="absolute right-4 top-1/2 -translate-y-1/2 text-alphabag-subtext hover:text-white">
+          <button onClick={() => setBannerDismissed(true)} className="absolute right-4 top-1/2 -translate-y-1/2 text-alphabag-subtext hover:text-alphabag-text">
             <X size={12} />
           </button>
         </div>
       )}
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray" style={{ backgroundColor: 'rgba(24, 26, 32, 0.95)' }}>
+      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray bg-alphabag-dark/95">
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
           
           {/* Left Side: Logo + Nav Links (Binance layout) */}
@@ -605,7 +605,7 @@ export const Landing: React.FC = () => {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-white/5 border border-transparent hover:border-white/10 shrink-0"
+              className="p-2 rounded-xl transition-all duration-300 active:scale-[0.98] bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray/40 border border-transparent hover:border-alphabag-gray shrink-0"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
@@ -637,7 +637,7 @@ export const Landing: React.FC = () => {
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className="text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button className="text-alphabag-text" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X /> : <LayoutGrid />}
             </button>
           </div>
@@ -645,7 +645,7 @@ export const Landing: React.FC = () => {
 
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in" style={{ backgroundColor: 'rgba(24, 26, 32, 0.95)' }}>
+          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in bg-alphabag-dark/95">
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
@@ -671,7 +671,7 @@ export const Landing: React.FC = () => {
                 
                 {/* Left Column: Copy & Stats */}
                 <div className="lg:col-span-6 text-left space-y-2 flex flex-col justify-center">
-                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-white leading-[1.1] tracking-tight">
+                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-alphabag-text leading-[1.1] tracking-tight">
                     {t('hero_title_1')}
                     <span className="block text-alphabag-yellow mt-1">{t('hero_title_2')}</span>
                   </h1>
@@ -699,7 +699,7 @@ export const Landing: React.FC = () => {
                           {t('btn_notify_me')}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
+                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center gap-2">
                             <Send size={16} /> {t('btn_join_community')}
                           </Button>
                         </a>
@@ -710,7 +710,7 @@ export const Landing: React.FC = () => {
                           {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-white/10 hover:border-white/20 hover:bg-white/5 backdrop-blur-md text-white font-medium transition-all flex items-center gap-2">
+                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center gap-2">
                             <Send size={16} /> {t('btn_join_community')}
                           </Button>
                         </a>
@@ -749,7 +749,7 @@ export const Landing: React.FC = () => {
                             if (waitlistSubmitted) setWaitlistSubmitted(false);
                           }}
                           placeholder="Email for early access"
-                          className="w-full rounded-lg border border-alphabag-gray bg-alphabag-black px-3 py-2 text-sm text-white placeholder:text-alphabag-subtext outline-none focus:border-alphabag-yellow"
+                          className="w-full rounded-lg border border-alphabag-gray bg-alphabag-black px-3 py-2 text-sm text-alphabag-text placeholder:text-alphabag-subtext outline-none focus:border-alphabag-yellow"
                           required
                         />
                         <Button
@@ -803,7 +803,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Calculator Card */}
-                <div className="lg:col-span-6 w-full bg-[#2b323c] border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
+                <div className="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
                   
                   <div className="flex items-center justify-between mb-2 border-b border-alphabag-gray pb-3">
                     <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
@@ -874,7 +874,7 @@ export const Landing: React.FC = () => {
               </div>
 
               {/* Why AlphaBAG Section */}
-              <div className="mt-32 pt-20 border-t border-white/5 relative">
+              <div className="mt-32 pt-20 border-t border-alphabag-gray relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
                 
                 <div className="text-center mb-16">
@@ -914,9 +914,9 @@ export const Landing: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="relative h-full min-h-[300px] rounded-3xl border border-white/10 bg-[#2b323c] overflow-hidden flex items-center justify-center group shadow-2xl">
+                  <div className="relative h-full min-h-[300px] rounded-3xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden flex items-center justify-center group shadow-2xl">
                     <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
-                    <div className="w-24 h-24 bg-alphabag-darkgray border border-white/5 rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
+                    <div className="w-24 h-24 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
                       <Lock size={40} className="text-alphabag-yellow" />
                     </div>
                     <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
@@ -949,7 +949,7 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Allocations Unmasked */}
-                <div className="lg:col-span-2 relative bg-[#2b323c] border border-white/5 rounded-3xl p-4 flex flex-col">
+                <div className="lg:col-span-2 relative bg-alphabag-darkgray border border-alphabag-gray rounded-3xl p-4 flex flex-col">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full h-full">
                     <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
                     <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
@@ -980,7 +980,7 @@ export const Landing: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-5 gap-2 relative">
                 {/* Horizontal Connection Line */}
-                <div className="hidden md:block absolute top-8 left-10 right-10 h-px bg-white/10 z-0"></div>
+                <div className="hidden md:block absolute top-8 left-10 right-10 h-px bg-alphabag-gray z-0"></div>
 
                 <BuyStepCard 
                   step="01" 
@@ -1017,7 +1017,7 @@ export const Landing: React.FC = () => {
               </div>
 
               <div className="mt-24 flex justify-center">
-                <div className="bg-[#2b323c] border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-2">
+                <div className="bg-alphabag-darkgray border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-2">
                   <ArrowRight size={18} /> Swap on PancakeSwap (coming soon)
                 </div>
               </div>
@@ -1142,20 +1142,20 @@ export const Landing: React.FC = () => {
 
       </div> {/* End Dynamic Content Area */}
 
-      <footer className="py-12 px-6 border-t border-white/10 bg-alphabag-black">
+      <footer className="py-12 px-6 border-t border-alphabag-gray bg-alphabag-black">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
           <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-zinc-900 border border-white/10 text-alphabag-yellow flex items-center justify-center rounded">
+            <div className="w-6 h-6 bg-alphabag-dark border border-alphabag-gray text-alphabag-yellow flex items-center justify-center rounded">
               <Lock size={14} fill="currentColor" />
             </div>
-            <span className="text-white text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span>
+            <span className="text-alphabag-text text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <X size={14} /> X.com
             </a>
-            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-white uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <Send size={14} /> Telegram
             </a>
           </div>
@@ -1170,14 +1170,14 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
   const statusColors = {
     VERIFIED: "text-green-500 bg-green-500/10 border-green-500/20",
     EXECUTING: "text-alphabag-yellow bg-alphabag-yellow/10 border-alphabag-yellow/20 animate-pulse",
-    PENDING: "text-[#8BA1C9] bg-white/5 border-white/10",
+    PENDING: "text-[#8BA1C9] bg-alphabag-gray/40 border-alphabag-gray",
     QUEUED: "text-alphabag-subtext bg-transparent border-alphabag-border"
   };
 
   const statusIndicatorColors = {
     VERIFIED: "bg-green-500",
     EXECUTING: "bg-alphabag-yellow",
-    PENDING: "bg-[#8BA1C9] border border-white/20",
+    PENDING: "bg-[#8BA1C9] border border-alphabag-gray",
     QUEUED: "bg-alphabag-gray"
   };
 
@@ -1192,21 +1192,21 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
       </div>
 
       {/* Vertical Connector Line (from horizontal trace to box) */}
-      <div className={`absolute -top-12 w-px h-12 border-l border-dashed ${status === 'VERIFIED' ? 'border-green-500/30' : status === 'EXECUTING' ? 'border-alphabag-yellow/30' : 'border-white/10'}`}></div>
+      <div className={`absolute -top-12 w-px h-12 border-l border-dashed ${status === 'VERIFIED' ? 'border-green-500/30' : status === 'EXECUTING' ? 'border-alphabag-yellow/30' : 'border-alphabag-gray'}`}></div>
 
       {/* Content Box */}
       <div className="w-full">
         <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
-            ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-white/10 via-transparent to-transparent'}
+            ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-alphabag-gray via-transparent to-transparent'}
           `}>
-          <div className={`bg-[#2b323c] border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
+          <div className={`bg-alphabag-darkgray border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
                ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 ' : 'border-alphabag-gray'}
             `}>
             {/* Header Info */}
             <div className="flex justify-between items-start mb-2 gap-2">
               <div>
                 <div className="text-[10px] font-mono text-alphabag-subtext mb-1 tracking-widest">{phase}</div>
-                <h3 className={`text-sm font-bold font-mono tracking-tight uppercase ${status === 'EXECUTING' ? 'text-alphabag-yellow' : 'text-white'}`}>
+                <h3 className={`text-sm font-bold font-mono tracking-tight uppercase ${status === 'EXECUTING' ? 'text-alphabag-yellow' : 'text-alphabag-text'}`}>
                   {">"} {title}
                 </h3>
               </div>
@@ -1237,13 +1237,13 @@ const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: s
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 ' : 'border-alphabag-gray bg-[#2b323c] hover:border-alphabag-gray/80 hover:bg-white/5'}`}>
+    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 ' : 'border-alphabag-gray bg-alphabag-darkgray hover:border-alphabag-gray/80 hover:bg-alphabag-gray/40'}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 text-left"
       >
-        <span className="font-bold text-white uppercase tracking-wider text-sm">{question}</span>
-        <div className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-alphabag-yellow text-black' : 'bg-white/10 text-white'}`}>
+        <span className="font-bold text-alphabag-text uppercase tracking-wider text-sm">{question}</span>
+        <div className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-alphabag-yellow text-black' : 'bg-alphabag-gray/40 text-alphabag-text'}`}>
           {isOpen ? <X size={14} /> : <span className="text-lg leading-none font-light mb-1">+</span>}
         </div>
       </button>
@@ -1258,33 +1258,33 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 
 // Component Helpers
 const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-[#2b323c] border border-alphabag-gray p-5 rounded-xl hover:border-alphabag-muted transition-all group cursor-default shadow-lg">
+  <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 rounded-xl hover:border-alphabag-muted transition-all group cursor-default shadow-lg">
     <div className="mb-2.5 bg-alphabag-darkgray w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
-    <h3 className="text-lg font-semibold text-white mb-1.5 leading-tight">{title}</h3>
+    <h3 className="text-lg font-semibold text-alphabag-text mb-1.5 leading-tight">{title}</h3>
     <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
   </div>
 );
 
 const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
-  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-[#2b323c] shadow-lg">
+  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-alphabag-darkgray shadow-lg">
     <div className="w-12 h-12 bg-alphabag-darkgray border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
       {step}
     </div>
-    <h3 className="text-sm font-semibold text-white mb-2 h-8 flex items-center justify-center">{title}</h3>
+    <h3 className="text-sm font-semibold text-alphabag-text mb-2 h-8 flex items-center justify-center">{title}</h3>
     <p className="text-xs text-alphabag-subtext leading-relaxed font-medium px-2">{desc}</p>
   </div>
 );
 
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
-  <div className="bg-[#2b323c] border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-alphabag-muted transition-all group h-full shadow-lg">
+  <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-alphabag-muted transition-all group h-full shadow-lg">
     <div className="w-12 h-12 shrink-0 bg-alphabag-darkgray border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <div>
       <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">{label}</div>
-      <div className={`text-lg md:text-xl font-bold text-white tracking-tight leading-none ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-white' : ''}`}>
+      <div className={`text-lg md:text-xl font-bold text-alphabag-text tracking-tight leading-none ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-alphabag-text' : ''}`}>
         {value}
       </div>
     </div>
@@ -1292,21 +1292,21 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
 );
 
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
-  <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-[#2b323c] border-alphabag-yellow ' : 'bg-[#2b323c] border-alphabag-gray hover:border-alphabag-muted'} transition-all`}>
+  <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-alphabag-darkgray border-alphabag-yellow ' : 'bg-alphabag-darkgray border-alphabag-gray hover:border-alphabag-muted'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
-        <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{title}</h4>
+        <h4 className={`text-sm md:text-base font-semibold uppercase tracking-tight ${highlight ? 'text-alphabag-yellow' : 'text-alphabag-text'}`}>{title}</h4>
         {subtitle && <div className="text-xs md:text-sm font-semibold text-alphabag-yellow mt-1">{subtitle}</div>}
       </div>
-      <div className={`text-xl md:text-2xl font-bold ${highlight ? 'text-alphabag-yellow' : 'text-white'}`}>{percentage}</div>
+      <div className={`text-xl md:text-2xl font-bold ${highlight ? 'text-alphabag-yellow' : 'text-alphabag-text'}`}>{percentage}</div>
     </div>
-    <p className="text-xs md:text-sm text-gray-300 leading-relaxed font-medium">{desc}</p>
+    <p className="text-xs md:text-sm text-alphabag-subtext leading-relaxed font-medium">{desc}</p>
   </div>
 );
 
 const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spreadsheet: boolean, alphabag: boolean }) => (
   <div className="grid grid-cols-3 gap-2 py-4 border-b border-alphabag-border items-center">
-    <div className="col-span-1 font-semibold text-white text-sm md:text-base">{label}</div>
+    <div className="col-span-1 font-semibold text-alphabag-text text-sm md:text-base">{label}</div>
     <div className="col-span-1 flex justify-center">
       {spreadsheet ? <CheckCircle2 className="text-green-500" size={20} /> : <X className="text-white/20" size={20} />}
     </div>
@@ -1317,7 +1317,7 @@ const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spread
 );
 
 const PricingCard = ({ tier, tokens, price, features, recommended = false, onAction }: { tier: string, tokens: string, price: string, features: string[], recommended?: boolean, onAction: () => void }) => (
-  <div className={`relative flex flex-col p-4 rounded-xl border ${recommended ? 'bg-[#2b323c] border-alphabag-yellow  scale-105 z-10' : 'bg-[#2b323c] border-white/10'}`}>
+  <div className={`relative flex flex-col p-4 rounded-xl border ${recommended ? 'bg-alphabag-darkgray border-alphabag-yellow  scale-105 z-10' : 'bg-alphabag-darkgray border-alphabag-gray'}`}>
     {recommended && (
       <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
         <Crown size={10} className="mr-1" fill="currentColor" /> Best Value
@@ -1325,7 +1325,7 @@ const PricingCard = ({ tier, tokens, price, features, recommended = false, onAct
     )}
     <div className="mb-2 text-center">
       <h3 className="text-alphabag-subtext text-[9px] font-black uppercase tracking-[0.3em] mb-1.5 opacity-60">{tier}</h3>
-      <div className="text-3xl font-black mb-1.5 uppercase tracking-tighter text-white">{price}</div>
+      <div className="text-3xl font-black mb-1.5 uppercase tracking-tighter text-alphabag-text">{price}</div>
       {recommended && <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest mb-1.5">ELIGIBILITY: GENESIS HOLDER</div>}
       <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest bg-alphabag-yellow/5 inline-block px-2.5 py-1 rounded border border-alphabag-yellow/20">{tokens}</div>
     </div>
