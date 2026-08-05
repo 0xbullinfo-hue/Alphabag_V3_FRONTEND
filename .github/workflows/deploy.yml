@@ -77,7 +77,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./dist/
-        # Deploy to the live Namecheap document root.
-        server-dir: /public_html/
+        # FTP account is rooted at public_html; deploy to that root directly.
+        server-dir: /
         protocol: ftp
         port: 21
