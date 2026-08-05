@@ -647,18 +647,6 @@ export const Landing: React.FC = () => {
                     {t('hero_desc')}
                   </p>
 
-                  <div className="flex flex-wrap items-center gap-2 animate-fade-in-up delay-150">
-                    {[
-                      t('tag_pulse') || 'Real-time market pulse',
-                      t('tag_coverage') || 'Multi-chain coverage',
-                      t('tag_insights') || 'Institutional-grade insights'
-                    ].map((item) => (
-                      <span key={item} className="inline-flex items-center rounded-full border border-alphabag-gray bg-alphabag-darkgray px-3 py-1.5 text-xs font-medium text-alphabag-subtext">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-
                   <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 animate-fade-in-up delay-200">
                     {IS_TEASER_MODE ? (
                       <>
