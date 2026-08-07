@@ -47,6 +47,59 @@ function getTeaserCountdown(targetIso: string): CountdownState {
   };
 }
 
+const FALLBACK_SITE_URL = 'https://myalphabag.com';
+
+const LANDING_TOP_SEARCHES = [
+  'crypto portfolio tracker',
+  'web3 portfolio dashboard',
+  'whale wallet tracker',
+  'crypto AI market analysis',
+  'futures leverage calculator',
+  'multi-chain wallet analytics'
+];
+
+function setMetaTag(name: string, content: string): void {
+  let meta = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('name', name);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', content);
+}
+
+function setPropertyMetaTag(property: string, content: string): void {
+  let meta = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement | null;
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('property', property);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', content);
+}
+
+function setCanonicalLink(href: string): void {
+  let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute('href', href);
+}
+
+function upsertStructuredData(id: string, payload: unknown): HTMLScriptElement {
+  let script = document.getElementById(id) as HTMLScriptElement | null;
+  if (!script) {
+    script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = id;
+    document.head.appendChild(script);
+  }
+  script.textContent = JSON.stringify(payload);
+  return script;
+}
+
 const TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
     nav_home: "Home",
@@ -413,7 +466,7 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
   const [showTeaserToast, setShowTeaserToast] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
@@ -438,6 +491,120 @@ export const Landing: React.FC = () => {
     tick();
     const timer = window.setInterval(tick, 1000);
     return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const siteUrl = import.meta.env.VITE_SITE_URL || FALLBACK_SITE_URL;
+    const canonical = `${window.location.origin}${window.location.pathname}`;
+    const pageTitle = 'AlphaBAG | Crypto Portfolio Tracker, Whale Alerts & AI Market Intelligence';
+    const pageDescription = 'AlphaBAG helps crypto investors track multi-chain portfolios, monitor whale activity, and use AI-powered market intelligence with a live leverage simulator.';
+
+    document.title = pageTitle;
+    setCanonicalLink(canonical || siteUrl);
+
+    setMetaTag('description', pageDescription);
+    setMetaTag('keywords', LANDING_TOP_SEARCHES.join(', '));
+    setMetaTag('robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    setMetaTag('author', 'AlphaBAG');
+    setMetaTag('twitter:card', 'summary_large_image');
+    setMetaTag('twitter:title', pageTitle);
+    setMetaTag('twitter:description', pageDescription);
+    setMetaTag('twitter:image', `${siteUrl}/hero-dashboard.png`);
+
+    setPropertyMetaTag('og:type', 'website');
+    setPropertyMetaTag('og:site_name', 'AlphaBAG');
+    setPropertyMetaTag('og:url', canonical || siteUrl);
+    setPropertyMetaTag('og:title', pageTitle);
+    setPropertyMetaTag('og:description', pageDescription);
+    setPropertyMetaTag('og:image', `${siteUrl}/hero-dashboard.png`);
+
+    const websiteLd = {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'AlphaBAG',
+      url: siteUrl,
+      description: pageDescription,
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${siteUrl}/#/markets?search={search_term_string}`,
+        'query-input': 'required name=search_term_string'
+      }
+    };
+
+    const softwareLd = {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'AlphaBAG',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        description: 'Beta access and teaser launch waitlist'
+      },
+      featureList: [
+        'Multi-chain portfolio tracking',
+        'Whale wallet movement alerts',
+        'AI market intelligence and analysis',
+        'Leverage and PnL simulation calculator',
+        'Trade-to-earn ecosystem onboarding'
+      ],
+      url: siteUrl
+    };
+
+    const orgLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AlphaBAG',
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
+      sameAs: ['https://x.com/myalphabag', 'https://t.me/alphabag_access']
+    };
+
+    const faqLd = {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is AlphaBAG?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'AlphaBAG is a crypto intelligence hub that combines multi-chain portfolio tracking, whale monitoring, and AI-driven market analysis in one interface.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Is AlphaBAG wallet tracking secure?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. AlphaBAG uses read-only tracking and does not require private keys, so users can monitor portfolios without exposing signing credentials.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What can AlphaAI do in AlphaBAG?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'AlphaAI can summarize market sentiment, review portfolio context, and provide natural-language insights using near real-time market and ecosystem signals.'
+          }
+        }
+      ]
+    };
+
+    const scripts = [
+      upsertStructuredData('alphabag-schema-website', websiteLd),
+      upsertStructuredData('alphabag-schema-software', softwareLd),
+      upsertStructuredData('alphabag-schema-org', orgLd),
+      upsertStructuredData('alphabag-schema-faq', faqLd)
+    ];
+
+    return () => {
+      scripts.forEach((script) => {
+        if (script.parentNode) script.parentNode.removeChild(script);
+      });
+    };
   }, []);
 
   const handleLaunchApp = () => {
@@ -508,14 +675,14 @@ export const Landing: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleNavClick = (tab: 'home' | 'features' | 'buy' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
+  const handleNavClick = (tab: 'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
     setActiveTab(tab);
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black">
+    <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
 
       {/* ── TEASER TOAST NOTIFICATION ── */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
@@ -575,7 +742,6 @@ export const Landing: React.FC = () => {
               <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_home')}</button>
               <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_features')}</button>
               <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_tokenomics')}</button>
-              {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`transition-colors ${activeTab === 'buy' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_buy')}</button>}
               <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_roadmap')}</button>
               <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_faq')}</button>
             </div>
@@ -616,7 +782,6 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
-            {!IS_TEASER_MODE && <button onClick={() => handleNavClick('buy')} className={`text-left py-2 text-sm font-medium ${activeTab === 'buy' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_buy')}</button>}
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold bg-alphabag-yellow text-black">{isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet'}</Button>
@@ -734,6 +899,20 @@ export const Landing: React.FC = () => {
                     <div className="space-y-1.5">
                       <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_crypto')}</div>
                       <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_crypto_lbl')}</div>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 max-w-xl">
+                    <div className="text-[11px] uppercase tracking-[0.14em] text-alphabag-subtext font-semibold mb-2">Top Searches</div>
+                    <div className="flex flex-wrap gap-2">
+                      {LANDING_TOP_SEARCHES.map((search) => (
+                        <span
+                          key={search}
+                          className="text-[11px] px-3 py-1 rounded-full border border-alphabag-gray bg-alphabag-darkgray text-alphabag-subtext"
+                        >
+                          {search}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
@@ -913,67 +1092,6 @@ export const Landing: React.FC = () => {
                     <TokenomicsDetailCard title="Team & Advisors" percentage="10%" desc="Distributed to team custody at deployment, guarded by strict multi-sig parameters and long-term ecosystem commitment thresholds. locked for 12months with stiff unlock strategy (more details soon)" />
                     <TokenomicsDetailCard title="TOTAL SUPPLY" percentage="100%" subtitle="21,000,000" desc="Strictly hard-capped supply. No mint function exists post-deployment." highlight />
                   </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* How to Buy Section */}
-        {activeTab === 'buy' && (
-          <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
-
-
-            <div className="max-w-7xl mx-auto relative z-10 w-full">
-              <div className="text-center md:text-left mb-20 relative">
-                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                  <div className="h-px w-8 bg-alphabag-yellow"></div>
-                  <span className="text-[10px] font-bold text-alphabag-yellow uppercase tracking-[0.3em]">Get Started</span>
-                </div>
-                <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-alphabag-text">How to <span className="text-alphabag-yellow">Buy</span></h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-2 relative">
-                {/* Horizontal Connection Line */}
-                <div className="hidden md:block absolute top-8 left-10 right-10 h-px bg-alphabag-gray z-0"></div>
-
-                <BuyStepCard 
-                  step="01" 
-                  title="CREATE WALLET" 
-                  desc="Download Trust Wallet or MetaMask and create a new wallet. Save your seed phrase securely."
-                />
-                <BuyStepCard 
-                  step="02" 
-                  title="FUND WITH BNB" 
-                  desc="Purchase BNB from any exchange (Binance, Coinbase) and transfer it to your wallet."
-                />
-                <BuyStepCard 
-                  step="03" 
-                  title="CONNECT TO DEX" 
-                  desc="Visit PancakeSwap and connect your wallet to the BNB Smart Chain network."
-                />
-                <BuyStepCard 
-                  step="04" 
-                  title="PASTE CONTRACT" 
-                  desc={
-                    <span>
-                      In the swap interface, paste the <span className="text-white/20 blur-[3px] select-none">$BAG</span> contract address to find the token. 
-                      <span className="block mt-2 text-[10px] text-alphabag-yellow font-bold uppercase tracking-tight">
-                        ONLY USE CA FROM OUR WEBSITE OR OFFICIAL COMMUNITY CHANELS/GROUPS WHEN WE ARE LIVE.
-                      </span>
-                    </span>
-                  }
-                />
-                <BuyStepCard 
-                  step="05" 
-                  title={<span>SWAP FOR <span className="text-white/20 blur-[4px] select-none inline-block">$BAG</span></span>}
-                  desc={<span>Enter the amount of BNB, confirm the swap, and welcome to the <span className="text-white/20 blur-[3px] select-none inline-block">$BAG</span> community.</span>}
-                />
-              </div>
-
-              <div className="mt-24 flex justify-center">
-                <div className="bg-alphabag-darkgray border border-alphabag-yellow text-alphabag-yellow font-semibold px-8 py-4 rounded cursor-not-allowed flex items-center gap-2">
-                  <ArrowRight size={18} /> Swap on PancakeSwap (coming soon)
                 </div>
               </div>
             </div>
@@ -1219,16 +1337,6 @@ const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, des
     </div>
     <h3 className="text-lg font-semibold text-alphabag-text mb-1.5 leading-tight">{title}</h3>
     <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
-  </div>
-);
-
-const BuyStepCard = ({ step, title, desc }: { step: string, title: React.ReactNode, desc: React.ReactNode }) => (
-  <div className="relative flex flex-col items-center text-center group mt-8 md:mt-0 p-5 rounded-xl border border-alphabag-gray bg-alphabag-darkgray shadow-lg">
-    <div className="w-12 h-12 bg-alphabag-darkgray border border-alphabag-yellow/30 text-alphabag-yellow text-base font-semibold rounded-lg flex items-center justify-center mb-3 relative z-10 group-hover:scale-110 transition-all duration-300">
-      {step}
-    </div>
-    <h3 className="text-sm font-semibold text-alphabag-text mb-2 h-8 flex items-center justify-center">{title}</h3>
-    <p className="text-xs text-alphabag-subtext leading-relaxed font-medium px-2">{desc}</p>
   </div>
 );
 
