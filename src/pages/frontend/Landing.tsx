@@ -902,20 +902,6 @@ export const Landing: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mt-5 max-w-xl">
-                    <div className="text-[11px] uppercase tracking-[0.14em] text-alphabag-subtext font-semibold mb-2">Top Searches</div>
-                    <div className="flex flex-wrap gap-2">
-                      {LANDING_TOP_SEARCHES.map((search) => (
-                        <span
-                          key={search}
-                          className="text-[11px] px-3 py-1 rounded-full border border-alphabag-gray bg-alphabag-darkgray text-alphabag-subtext"
-                        >
-                          {search}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
                   {IS_TEASER_MODE && (
                     <div className="mt-3 p-3 rounded-xl border border-alphabag-yellow/20 bg-alphabag-black/40 max-w-xl">
                       <div className="text-[10px] text-alphabag-subtext uppercase tracking-[0.18em] font-semibold mb-2">Launch Countdown</div>

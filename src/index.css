@@ -258,6 +258,51 @@ input[type="time"] {
 .calculator-container .text-xs {
   font-size: 0.85rem !important;
 }
+
+/* Calculator slider: enforce visible thumb across Chromium/WebKit/Firefox */
+.alphabag-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 3px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+.alphabag-range::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.alphabag-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  border: 2px solid #0f131a;
+  background: var(--yellow);
+  box-shadow: 0 0 0 2px rgba(245, 203, 66, 0.25);
+  margin-top: -7px;
+}
+
+.alphabag-range::-moz-range-track {
+  height: 3px;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.alphabag-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #0f131a;
+  border-radius: 9999px;
+  background: var(--yellow);
+  box-shadow: 0 0 0 2px rgba(245, 203, 66, 0.25);
+}
 .calculator-container .text-sm {
   font-size: 1.02rem !important;
 }

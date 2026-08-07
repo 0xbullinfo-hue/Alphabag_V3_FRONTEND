@@ -258,7 +258,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <span className="text-alphabag-yellow font-bold bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20 text-xs">{levSlider}x</span>
                             </div>
                             <div className="relative pt-1">
-                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                                <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="alphabag-range w-full" />
                             </div>
                             <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold px-1 mt-[-2px]">
                                 <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
@@ -550,7 +550,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                         </span>
                                     </div>
                                     <div className="relative pt-1">
-                                        <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="w-full h-[3px] bg-black/40 rounded appearance-none cursor-pointer accent-alphabag-yellow border border-white/5" />
+                                        <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="alphabag-range w-full" />
                                     </div>
                                     <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold mt-1 px-1">
                                         <span>Safe (0%)</span>
