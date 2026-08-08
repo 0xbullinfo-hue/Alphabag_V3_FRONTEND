@@ -12,6 +12,7 @@ import { IS_DEMO_MODE } from '../../services/config';
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
 const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || '2026-12-01T12:00:00Z';
+const IS_FULL_LAUNCH = import.meta.env.VITE_FULL_LAUNCH === 'true';
 
 type CountdownState = {
   days: string;
@@ -461,6 +462,62 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
   }
 };
 
+type RoadmapStatus = 'VERIFIED' | 'EXECUTING' | 'PENDING' | 'QUEUED';
+
+type RoadmapPhase = {
+  phase: string;
+  title: string;
+  status: RoadmapStatus;
+  points: string[];
+};
+
+const ROADMAP_PHASES: RoadmapPhase[] = [
+  {
+    phase: 'PHASE_01',
+    title: 'FOUNDATION_AND_CORE_SYSTEMS',
+    status: 'VERIFIED',
+    points: [
+      'Core architecture finalized for multi-chain portfolio indexing and real-time market ingestion.',
+      'Initial AlphaAI pipelines shipped for signal extraction, narrative scoring, and watchlist prioritization.',
+      'Security baseline completed with read-only wallet tracking model and hardened auth flows.',
+      'V1 internal stress testing passed for dashboard performance, data consistency, and uptime readiness.'
+    ]
+  },
+  {
+    phase: 'PHASE_02',
+    title: 'BETA_LAUNCH_AND_ECOSYSTEM_ONBOARDING',
+    status: 'EXECUTING',
+    points: [
+      'Genesis cohort onboarding in progress with structured waitlist activation and community migration.',
+      'Public beta rollout for portfolio tracking, whale alerts, and execution-grade market dashboards.',
+      'AlphaAI assistant expanded with context-aware portfolio insights and actionable strategy summaries.',
+      'Feedback loops activated to iterate UX, improve alert quality, and tighten data refresh latency.'
+    ]
+  },
+  {
+    phase: 'PHASE_03',
+    title: 'TOKEN_UTILITY_AND_PREMIUM_LAYER',
+    status: 'PENDING',
+    points: [
+      'Activate utility architecture for premium feature access and ecosystem participation.',
+      'Launch Pro Terminal tier with advanced analytics, custom intelligence feeds, and deeper wallet diagnostics.',
+      'Expand partner integrations across market data providers, social intelligence channels, and execution venues.',
+      'Release tier-gated workflows for power users requiring higher frequency and deeper signal resolution.'
+    ]
+  },
+  {
+    phase: 'PHASE_04',
+    title: 'GLOBAL_SCALE_AND_INTELLIGENCE_NETWORK',
+    status: 'QUEUED',
+    points: [
+      'Regional expansion across key markets with localized onboarding and compliance-aware deployment.',
+      'Mobile-first intelligence experience with push alerts, watchlist actions, and real-time portfolio updates.',
+      'Institutional-grade reliability targets for scale, observability, and cross-chain data resilience.',
+      'Progressive AI upgrades toward autonomous research workflows and adaptive strategy guidance.'
+    ]
+  }
+];
+
 export const Landing: React.FC = () => {
   const { open } = useWeb3Modal();
   const navigate = useNavigate();
@@ -473,6 +530,7 @@ export const Landing: React.FC = () => {
   const [waitlistEmail, setWaitlistEmail] = useState('');
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
   const [waitlistError, setWaitlistError] = useState('');
+  const [openRoadmapItems, setOpenRoadmapItems] = useState<number[]>([0]);
 
   const t = (key: string): string => {
     return TRANSLATIONS['en']?.[key] || '';
@@ -571,7 +629,7 @@ export const Landing: React.FC = () => {
           name: 'What is AlphaBAG?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'AlphaBAG is a crypto intelligence hub that combines multi-chain portfolio tracking, whale monitoring, and AI-driven market analysis in one interface.'
+            text: 'AlphaBAG is a crypto intelligence terminal that combines multi-chain portfolio tracking, whale activity monitoring, and AI-powered market analysis in one dashboard.'
           }
         },
         {
@@ -579,7 +637,15 @@ export const Landing: React.FC = () => {
           name: 'Is AlphaBAG wallet tracking secure?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. AlphaBAG uses read-only tracking and does not require private keys, so users can monitor portfolios without exposing signing credentials.'
+            text: 'Yes. AlphaBAG uses a strict read-only model and never requests private keys, so users can monitor wallets without exposing signing credentials.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'How does Genesis access work?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'During the Genesis phase, access is rolled out in tiers. Eligible users from the AlphaBAG community unlock expanded tools as release milestones are completed.'
           }
         },
         {
@@ -587,7 +653,15 @@ export const Landing: React.FC = () => {
           name: 'What can AlphaAI do in AlphaBAG?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'AlphaAI can summarize market sentiment, review portfolio context, and provide natural-language insights using near real-time market and ecosystem signals.'
+            text: 'AlphaAI analyzes portfolio context, market structure, and momentum signals to generate concise, actionable insights for faster decision-making.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Which blockchain networks are supported?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'AlphaBAG currently supports major EVM networks including Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, and Base, plus Solana, with additional integrations in development.'
           }
         }
       ]
@@ -681,6 +755,14 @@ export const Landing: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const toggleRoadmapItem = (index: number) => {
+    setOpenRoadmapItems((prev) => (
+      prev.includes(index)
+        ? prev.filter((item) => item !== index)
+        : [...prev, index]
+    ));
+  };
+
   return (
     <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
 
@@ -757,8 +839,13 @@ export const Landing: React.FC = () => {
                   {t('btn_demo_login') || 'Demo Login'}
                 </Button>
               ) : (
-                <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
-                  {t('btn_connect_wallet') || 'Connect Wallet'}
+                <Button
+                  size="sm"
+                  onClick={IS_FULL_LAUNCH ? handleLaunchApp : undefined}
+                  disabled={!IS_FULL_LAUNCH}
+                  className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none"
+                >
+                  {t('btn_connect_wallet') || 'Connect (Soon)'}
                 </Button>
               )
             ) : (
@@ -784,7 +871,14 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
-            <Button size="lg" onClick={handleLaunchApp} className="w-full font-semibold bg-alphabag-yellow text-black">{isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet'}</Button>
+            <Button
+              size="lg"
+              onClick={IS_FULL_LAUNCH ? handleLaunchApp : undefined}
+              disabled={!IS_FULL_LAUNCH}
+              className="w-full font-semibold bg-alphabag-yellow text-black"
+            >
+              {isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect (Soon)'}
+            </Button>
           </div>
         )}
       </nav>
@@ -826,7 +920,12 @@ export const Landing: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none  transition-all" onClick={isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)}>
+                        <Button
+                          size="lg"
+                          className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all"
+                          onClick={IS_FULL_LAUNCH ? (isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)) : undefined}
+                          disabled={!IS_FULL_LAUNCH}
+                        >
                           {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
                         </Button>
                         <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
@@ -1091,57 +1190,57 @@ export const Landing: React.FC = () => {
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
               <div className="text-center mb-2 mt-12">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Execution <span className="text-alphabag-yellow">Sequence</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alpha<span className="text-alphabag-yellow">Map</span></h2>
                 <p className="text-alphabag-subtext text-sm">Network Deployment Phases</p>
               </div>
 
-              <div className="relative w-full overflow-x-auto pb-2 pt-12 custom-scrollbar snap-x snap-mandatory">
-                {/* Main Horizontal Trace */}
-                <div className="absolute top-[68px] left-0 right-0 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/50 to-alphabag-gray min-w-[max(100%,1200px)]"></div>
+              {/* Unified roadmap accordion for all breakpoints */}
+              <div className="mt-8 space-y-2 max-w-5xl mx-auto">
+                {ROADMAP_PHASES.map((phase, index) => {
+                  const isOpen = openRoadmapItems.includes(index);
+                  const statusClasses = {
+                    VERIFIED: 'text-green-500 border-green-500/30 bg-green-500/10',
+                    EXECUTING: 'text-alphabag-yellow border-alphabag-yellow/30 bg-alphabag-yellow/10',
+                    PENDING: 'text-[#8BA1C9] border-alphabag-gray bg-alphabag-gray/30',
+                    QUEUED: 'text-alphabag-subtext border-alphabag-border bg-transparent'
+                  } as const;
 
-                <div className="flex flex-row gap-2 md:gap-2 w-max px-6 mx-auto min-w-full justify-between items-start mt-4">
-                  <RoadmapStep
-                    phase="PHASE_01"
-                    title="CORE_INITIALIZATION"
-                    status="VERIFIED"
-                    points={[
-                      "System Core Architecture Defined: Finalize full-stack infrastructure for high-frequency data.",
-                      "Smart Contract Beta Deployment: Develop 21M fixed-supply $BAG contract with internal auto-tax logic.",
-                      "Internal AlphaAi Logic Initialized: Develop core tracking and SocialFi algorithms for the Alpha Radar.",
-                      "V1 Platform Launch & Stress Testing: Conduct internal testing of dashboard performance and security."
-                    ]}
-                  />
-                  <RoadmapStep
-                    phase="PHASE_02"
-                    title="SYSTEM_EXPANSION & DEPLOYMENT"
-                    status="EXECUTING"
-                    points={[
-                      "Community Onboarding & Genesis Campaign: Launch initial marketing to acquire high-conviction holders.",
-                      "Smart Contract Finalization: Final audit of the automated protection and renounce logic.",
-                      "Utility Token Launch: Deploy token on BSC with pre-set allocations. Execute contract renouncement post-launch for immutable security. Burn liquidity.",
-                      "V1 Beta Deployment: Implement upgraded mechanics dashboard features launch for user testing."
-                    ]}
-                  />
-                  <RoadmapStep
-                    phase="PHASE_03"
-                    title="LIQUIDITY_DEPLOYMENT"
-                    status="PENDING"
-                    points={[
-                      "Synthetic Utility Token Implementation: Integrate Utility token as the primary engine for platform features access.",
-                      "Strategic Community Collaborations: Partner with institutional data providers to scale all features in Alphabag.",
-                      "Pro-Terminal Release: Launch top tier functions on Alphabag for tier holders"
-                    ]}
-                  />
-                  <RoadmapStep
-                    phase="PHASE_04"
-                    title="GLOBAL_DOMINANCE"
-                    status="QUEUED"
-                    points={[
-                      "Global Scaling: Expand narrative reach and platform infrastructure to international markets.",
-                      "Future development: Expand use-case to adapt to mobile usage"
-                    ]}
-                  />
-                </div>
+                  return (
+                    <div key={phase.phase} className="rounded-xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => toggleRoadmapItem(index)}
+                        aria-expanded={isOpen}
+                        className="w-full p-4 text-left"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <div className="text-[10px] font-mono text-alphabag-subtext mb-1 tracking-widest">{phase.phase}</div>
+                            <h3 className="text-[13px] leading-snug font-bold font-mono tracking-tight uppercase text-alphabag-text break-words [overflow-wrap:anywhere]">{">"} {phase.title}</h3>
+                          </div>
+                          <ChevronRight size={14} className={`text-alphabag-subtext transition-transform duration-200 mt-0.5 shrink-0 ${isOpen ? 'rotate-90' : ''}`} />
+                        </div>
+                        <div className="mt-2 flex items-center justify-start">
+                          <span className={`px-2 py-1 text-[9px] font-mono uppercase font-bold tracking-widest rounded border ${statusClasses[phase.status]}`}>
+                            {phase.status}
+                          </span>
+                        </div>
+                      </button>
+                      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[420px] opacity-100 border-t border-alphabag-border' : 'max-h-0 opacity-0'}`}>
+                        <ul className="p-4 space-y-2 font-mono text-[11px] leading-tight">
+                          {phase.points.map((point, itemIndex) => (
+                            <li key={itemIndex} className="flex items-start gap-2">
+                              <span className={`text-[9px] mt-0.5 shrink-0 ${phase.status === 'VERIFIED' ? 'text-green-500' : 'text-alphabag-subtext'}`}>
+                                {phase.status === 'VERIFIED' ? '[✓]' : '[ ]'}
+                              </span>
+                              <span className={`${phase.status === 'QUEUED' ? 'text-alphabag-subtext/50' : 'text-[#8BA1C9]'}`}>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </section>
@@ -1161,15 +1260,15 @@ export const Landing: React.FC = () => {
                 <div className="space-y-2">
                   <FaqItem
                     question="What is AlphaBAG?"
-                    answer="AlphaBAG is an advanced centralized intelligence hub for smart investors. It aggregates portfolio tracking, whale watching, and AI-driven market analysis into a single, professional interface."
+                    answer="AlphaBAG is a crypto intelligence terminal for serious traders and investors. It combines multi-chain portfolio tracking, whale activity monitoring, and AI-powered market analysis in one dashboard."
                   />
                   <FaqItem
                     question="Is my wallet data secure?"
-                    answer="Absolutely. AlphaBAG operates on a strict read-only basis for portfolio tracking. We never ask for your private keys, and our hub cannot execute transactions on your behalf without explicit confirmation via your wallet provider."
+                    answer="Yes. AlphaBAG runs on a strict read-only model for tracking. We never ask for private keys, and no transaction can be executed from your wallet through the platform."
                   />
                   <FaqItem
-                    question="How does AlphaBAG conversion work?"
-                    answer="AlphaBAG is the synthetic utility metric powering the hub ecosystem during the Genesis Phase. Upon official launch, top-tier AlphaBAG members who have verified their wallets holdings will be eligible to access Alphabag feature."
+                    question="How does Genesis access work?"
+                    answer="During the Genesis phase, access is rolled out in tiers. Eligible community members unlock expanded tools as roadmap milestones are completed and feature gates are opened."
                   />
                 </div>
 
@@ -1177,11 +1276,11 @@ export const Landing: React.FC = () => {
                 <div className="space-y-2">
                   <FaqItem
                     question="How does AlphaAI work?"
-                    answer="AlphaAI utilizes fine-tuned large language models (LLMs) with access to real-time market data. It can analyze your specific portfolio composition against current market trends to provide actionable, natural-language insights."
+                    answer="AlphaAI evaluates portfolio context, market structure, and momentum signals to generate concise, actionable insights that help users make faster decisions."
                   />
                   <FaqItem
                     question="Which blockchain networks are supported?"
-                    answer="Currently, tracking is fully integrated across all major EVM-compatible networks (Ethereum, BSC, Polygon, Arbitrum, Avalanche, Base) as well as the Solana network. We are actively developing support for more non-EVM ecosystems."
+                    answer="AlphaBAG supports major EVM networks including Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, and Base, plus Solana. Additional integrations are in active development."
                   />
                 </div>
               </div>
@@ -1225,74 +1324,6 @@ export const Landing: React.FC = () => {
 };
 
 // Component Helpers
-const RoadmapStep = ({ phase, title, status, points }: { phase: string, title: string, status: 'VERIFIED' | 'EXECUTING' | 'PENDING' | 'QUEUED', points: string[] }) => {
-  const statusColors = {
-    VERIFIED: "text-green-500 bg-green-500/10 border-green-500/20",
-    EXECUTING: "text-alphabag-yellow bg-alphabag-yellow/10 border-alphabag-yellow/20 animate-pulse",
-    PENDING: "text-[#8BA1C9] bg-alphabag-gray/40 border-alphabag-gray",
-    QUEUED: "text-alphabag-subtext bg-transparent border-alphabag-border"
-  };
-
-  const statusIndicatorColors = {
-    VERIFIED: "bg-green-500",
-    EXECUTING: "bg-alphabag-yellow",
-    PENDING: "bg-[#8BA1C9] border border-alphabag-gray",
-    QUEUED: "bg-alphabag-gray"
-  };
-
-  return (
-    <div className="relative flex flex-col items-center w-[280px] shrink-0 snap-center group">
-
-      {/* Horizontal Timeline Indicator */}
-      <div className={`absolute -top-12 w-4 h-4 rounded-full z-20 ${statusIndicatorColors[status]}`}>
-        {status === 'EXECUTING' && (
-          <div className="absolute inset-0 rounded-full border-2 border-alphabag-yellow animate-ping"></div>
-        )}
-      </div>
-
-      {/* Vertical Connector Line (from horizontal trace to box) */}
-      <div className={`absolute -top-12 w-px h-12 border-l border-dashed ${status === 'VERIFIED' ? 'border-green-500/30' : status === 'EXECUTING' ? 'border-alphabag-yellow/30' : 'border-alphabag-gray'}`}></div>
-
-      {/* Content Box */}
-      <div className="w-full">
-        <div className={`p-[1px] rounded-xl bg-gradient-to-br transition-all duration-300 transform group-hover:-translate-y-2
-            ${status === 'EXECUTING' ? 'from-alphabag-yellow/30 via-alphabag-yellow/5 to-transparent' : status === 'VERIFIED' ? 'from-green-500/20 via-green-500/5 to-transparent' : 'from-alphabag-gray via-transparent to-transparent'}
-          `}>
-          <div className={`bg-alphabag-darkgray border rounded-xl p-4 h-full flex flex-col min-h-[320px] transition-colors duration-300
-               ${status === 'EXECUTING' ? 'border-alphabag-yellow/50 ' : 'border-alphabag-gray'}
-            `}>
-            {/* Header Info */}
-            <div className="flex justify-between items-start mb-2 gap-2">
-              <div>
-                <div className="text-[10px] font-mono text-alphabag-subtext mb-1 tracking-widest">{phase}</div>
-                <h3 className={`text-sm font-bold font-mono tracking-tight uppercase ${status === 'EXECUTING' ? 'text-alphabag-yellow' : 'text-alphabag-text'}`}>
-                  {">"} {title}
-                </h3>
-              </div>
-              <div className={`px-2 py-1 text-[9px] font-mono uppercase font-bold tracking-widest rounded border shrink-0 ${statusColors[status]}`}>
-                {status}
-              </div>
-            </div>
-
-            {/* Tasks List */}
-            <ul className="space-y-2 font-mono text-[11px] leading-tight">
-              {points.map((p, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className={`text-[9px] mt-0.5 shrink-0 ${status === 'VERIFIED' ? 'text-green-500' : 'text-alphabag-subtext'}`}>
-                    {status === 'VERIFIED' ? '[✓]' : '[ ]'}
-                  </span>
-                  <span className={`${status === 'QUEUED' ? 'text-alphabag-subtext/50' : 'text-[#8BA1C9]'}`}>{p}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  );
-};
-
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
