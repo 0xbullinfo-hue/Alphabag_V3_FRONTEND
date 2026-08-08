@@ -1148,7 +1148,7 @@ export const Landing: React.FC = () => {
 
         {/* Tokenomics Section */}
         {activeTab === 'tokenomics' && (
-          <section className="relative pt-40 pb-24 px-6 min-h-[85vh] flex flex-col justify-center">
+          <section className="relative py-32 px-6 min-h-[85vh] flex flex-col justify-center">
 
             
             <div className="max-w-7xl mx-auto relative z-10 w-full">
@@ -1185,11 +1185,11 @@ export const Landing: React.FC = () => {
 
         {/* Terminal Roadmap Section */}
         {activeTab === 'roadmap' && (
-          <section id="roadmap" className="pt-40 pb-24 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
+          <section id="roadmap" className="py-32 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
 
 
             <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
-              <div className="text-center mb-2 mt-12">
+              <div className="text-center mb-2">
                 <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alpha<span className="text-alphabag-yellow">Map</span></h2>
                 <p className="text-alphabag-subtext text-sm">Network Deployment Phases</p>
               </div>
