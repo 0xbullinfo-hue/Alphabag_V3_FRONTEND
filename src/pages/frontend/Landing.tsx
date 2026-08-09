@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, BellRing, ChevronRight, Calculator as CalculatorIcon } from 'lucide-react';
+import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, ChevronRight, Calculator as CalculatorIcon } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -524,7 +524,6 @@ export const Landing: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
-  const [showTeaserToast, setShowTeaserToast] = useState(false);
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
   const [waitlistEmail, setWaitlistEmail] = useState('');
@@ -535,6 +534,10 @@ export const Landing: React.FC = () => {
   const t = (key: string): string => {
     return TRANSLATIONS['en']?.[key] || '';
   };
+
+  const launchCountdownLabel = teaserCountdown.isLive
+    ? 'Live now'
+    : `${parseInt(teaserCountdown.days, 10)}d ${teaserCountdown.hours}h ${teaserCountdown.minutes}m`;
 
   useEffect(() => {
     // Only redirect to app if NOT in teaser mode and user is authenticated
@@ -683,9 +686,8 @@ export const Landing: React.FC = () => {
 
   const handleLaunchApp = () => {
     if (IS_TEASER_MODE) {
-      // In teaser mode — show a "coming soon" notification instead of login
-      setShowTeaserToast(true);
-      setTimeout(() => setShowTeaserToast(false), 4000);
+      // In teaser mode, convert visitors to the community funnel directly.
+      window.open('https://t.me/alphabag_access', '_blank', 'noopener,noreferrer');
       return;
     }
     if (isAuthenticated) {
@@ -766,22 +768,6 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
 
-      {/* ── TEASER TOAST NOTIFICATION ── */}
-      <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] transition-all duration-500 ${
-        showTeaserToast ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
-      }`}>
-        <div className="flex items-center gap-2 bg-alphabag-dark border border-alphabag-yellow/40 text-alphabag-text px-5 py-3.5 rounded-xl  backdrop-blur-xl">
-          <BellRing size={16} className="text-alphabag-yellow animate-bounce" />
-          <span className="text-sm font-bold">
-            {teaserCountdown.isLive ? 'Testnet is live now.' : `Testnet launch in ${teaserCountdown.days}d ${teaserCountdown.hours}h ${teaserCountdown.minutes}m ${teaserCountdown.seconds}s.`}
-            <span className="text-alphabag-yellow"> Stay tuned on Telegram & X.</span>
-          </span>
-          <button onClick={() => setShowTeaserToast(false)} className="ml-2 text-alphabag-subtext hover:text-alphabag-text">
-            <X size={14} />
-          </button>
-        </div>
-      </div>
-
       {/* ── ANNOUNCEMENT BANNER ── */}
       {IS_TEASER_MODE && !bannerDismissed && (
         <div className="w-full bg-gradient-to-r from-alphabag-yellow/10 via-alphabag-yellow/20 to-alphabag-yellow/10 border-b border-alphabag-yellow/20 py-2.5 px-4 flex items-center justify-center gap-2 relative">
@@ -790,7 +776,7 @@ export const Landing: React.FC = () => {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
           </span>
           <p className="text-xs font-medium text-alphabag-text text-center">
-            Testnet Launching Soon &mdash; Join our community for early access
+            Testnet Launching In <span className="text-alphabag-yellow font-bold tabular-nums">{launchCountdownLabel}</span> &mdash; Join our community for early access
           </p>
           <div className="flex items-center gap-2 shrink-0">
             <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer"
@@ -833,7 +819,11 @@ export const Landing: React.FC = () => {
           <div className="hidden md:flex items-center space-x-2">
 
             {/* Main Auth/Demo CTAs */}
-            {!isAuthenticated ? (
+            {IS_TEASER_MODE ? (
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
+                JOIN US
+              </Button>
+            ) : !isAuthenticated ? (
               IS_DEMO_MODE ? (
                 <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
                   {t('btn_demo_login') || 'Demo Login'}
@@ -873,11 +863,11 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              onClick={IS_FULL_LAUNCH ? handleLaunchApp : undefined}
-              disabled={!IS_FULL_LAUNCH}
+              onClick={IS_TEASER_MODE ? handleLaunchApp : (IS_FULL_LAUNCH ? handleLaunchApp : undefined)}
+              disabled={IS_TEASER_MODE ? false : !IS_FULL_LAUNCH}
               className="w-full font-semibold bg-alphabag-yellow text-black"
             >
-              {isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect (Soon)'}
+              {IS_TEASER_MODE ? 'Join Community' : (isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect (Soon)')}
             </Button>
           </div>
         )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useWallet } from '../../context/WalletContext';
 import { useNavigate } from 'react-router-dom';
-import { PieChart as PieChartIcon, Briefcase, Layers, Wallet as WalletIcon, ArrowUpRight, TrendingUp, Search, Radio, ChevronRight, Eye, ShieldCheck, HelpCircle } from 'lucide-react';
+import { PieChart as PieChartIcon, Briefcase, Layers, Wallet as WalletIcon, ArrowUpRight, TrendingUp, Search, Radio, ChevronRight, Eye, ShieldCheck, HelpCircle, AlertTriangle } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { PieChart as RePieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
@@ -461,6 +461,13 @@ export const MyAlphabag: React.FC = () => {
             ) : (
                 /* Fee Auditor Tab Content */
                 <div className="space-y-2 animate-in fade-in duration-300">
+
+                    <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-xl p-3 flex items-center gap-2">
+                        <AlertTriangle size={16} className="text-alphabag-yellow shrink-0" />
+                        <p className="text-xs text-alphabag-yellow font-semibold">
+                            Preview data — figures below are illustrative and not yet calculated from real on-chain transaction history.
+                        </p>
+                    </div>
                     
                     {/* Wallet input controller banner */}
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-2">

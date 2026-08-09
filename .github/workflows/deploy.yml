@@ -52,7 +52,8 @@ jobs:
 
         # Data source / feature flags
         VITE_DATA_MODE: ${{ secrets.VITE_DATA_MODE }}
-        VITE_LAUNCH_MODE: full
+        # BUG FIX: do not hardcode to full; use secret so teaser mode can deploy.
+        VITE_LAUNCH_MODE: ${{ secrets.VITE_LAUNCH_MODE }}
         VITE_DEMO_MODE: false
         VITE_ENABLE_BACKGROUND_SYNC: ${{ secrets.VITE_ENABLE_BACKGROUND_SYNC }}
 
