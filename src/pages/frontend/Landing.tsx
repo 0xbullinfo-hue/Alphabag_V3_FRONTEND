@@ -536,6 +536,7 @@ export const Landing: React.FC = () => {
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
   const [waitlistError, setWaitlistError] = useState('');
   const [openRoadmapItems, setOpenRoadmapItems] = useState<number[]>([0]);
+  const [legalModal, setLegalModal] = useState<'terms' | 'privacy' | null>(null);
 
   const t = (key: string): string => {
     return TRANSLATIONS['en']?.[key] || '';
@@ -559,6 +560,17 @@ export const Landing: React.FC = () => {
     const timer = window.setInterval(tick, 1000);
     return () => window.clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (!legalModal) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLegalModal(null);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [legalModal]);
 
   useEffect(() => {
     const siteUrl = import.meta.env.VITE_SITE_URL || FALLBACK_SITE_URL;
@@ -985,11 +997,10 @@ export const Landing: React.FC = () => {
                 {/* Right Column: Calculator Card */}
                 <div className="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
                   
-                  <div className="flex items-center justify-between mb-2 border-b border-alphabag-gray pb-3">
+                  <div className="mb-2 border-b border-alphabag-gray pb-3">
                     <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
                       <CalculatorIcon size={16} className="text-alphabag-yellow" /> {t('calculator_title')}
                     </h3>
-                    <span className="text-[10px] bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded font-semibold">{t('calculator_badge')}</span>
                   </div>
                   <Calculator minimal={true} />
                 </div>
@@ -1009,6 +1020,66 @@ export const Landing: React.FC = () => {
               </div>
             </div>
           </section>
+        )}
+
+        {legalModal && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center px-4 py-6">
+            <button
+              type="button"
+              aria-label="Close legal information"
+              className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+              onClick={() => setLegalModal(null)}
+            />
+
+            <div className="relative z-10 w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl border border-alphabag-gray/80 bg-alphabag-darkgray p-6 shadow-2xl">
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <h3 className="text-xl font-bold text-alphabag-text">
+                  {legalModal === 'terms' ? 'Terms & Conditions' : 'Privacy Policy'}
+                </h3>
+                <button
+                  type="button"
+                  aria-label="Close dialog"
+                  onClick={() => setLegalModal(null)}
+                  className="rounded-full border border-alphabag-gray bg-alphabag-black/60 p-2 text-alphabag-subtext transition-colors hover:text-alphabag-text"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              <div className="space-y-4 text-sm leading-7 text-alphabag-subtext">
+                {legalModal === 'terms' ? (
+                  <>
+                    <p>These Terms & Conditions govern access to the AlphaBAG teaser experience and any future AlphaBAG products, services, or community access made available through the platform.</p>
+                    <p>By using this website, you confirm that you are at least 18 years old and that you are accessing the materials for informational purposes only. AlphaBAG does not provide regulated financial, legal, or tax advice.</p>
+                    <p>All product features, launch timing, waitlist status, and community access are subject to change without notice. We reserve the right to pause, alter, or discontinue any feature, beta access, or early-access program at our discretion.</p>
+                    <p>Any references to portfolio performance, market signals, calculators, or projected returns are illustrative and should not be interpreted as guarantees of profit, investment advice, or contractual commitments.</p>
+                    <p>Users remain responsible for their own decisions, including any trades, wallet actions, or financial commitments made using data or tools available through AlphaBAG.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>AlphaBAG respects your privacy and is designed with a read-only, privacy-first model. We do not require your private keys or seed phrases to access informational features on this site.</p>
+                    <p>We may collect basic usage, analytics, and contact information when you interact with the site, sign up for early access, or join our community channels. This information is used to improve service quality, support product onboarding, and communicate launch updates.</p>
+                    <p>We do not sell personal data. We may share necessary information with trusted service providers that support hosting, analytics, or communication infrastructure under strict confidentiality obligations.</p>
+                    <p>Cookies and similar technologies may be used to improve site performance, remember preferences, and monitor aggregate engagement patterns. You can manage cookies through your browser settings.</p>
+                    <p>By continuing to use the site, you agree to the collection and processing of information described in this privacy notice. For any questions, contact the AlphaBAG team through official community channels or support contacts published on the site.</p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {IS_TEASER_MODE && (
+          <footer className="w-full border-t border-alphabag-gray/80 px-6 py-4">
+            <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 text-[11px] text-alphabag-subtext">
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => setLegalModal('terms')} className="hover:text-alphabag-text transition-colors">Terms</button>
+                <span>•</span>
+                <button type="button" onClick={() => setLegalModal('privacy')} className="hover:text-alphabag-text transition-colors">Privacy</button>
+              </div>
+              <div className="text-alphabag-muted">© 2026 AlphaBAG</div>
+            </div>
+          </footer>
         )}
 
         {/* Features Grid */}
