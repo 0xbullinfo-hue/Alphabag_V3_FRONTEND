@@ -956,23 +956,31 @@ export const Landing: React.FC = () => {
                   {IS_TEASER_MODE && (
                     <div className="mt-2 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm">
                       <div className="flex items-center justify-between mb-2">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">Testnet Countdown</div>
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">
+                          {teaserCountdown.isLive ? 'Live now' : 'Testnet Countdown'}
+                        </div>
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2">
-                        {[
-                          { label: 'Days', value: teaserCountdown.days },
-                          { label: 'Hours', value: teaserCountdown.hours },
-                          { label: 'Min', value: teaserCountdown.minutes },
-                          { label: 'Sec', value: teaserCountdown.seconds }
-                        ].map((item) => (
-                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
-                            <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
-                            <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
-                          </div>
-                        ))}
-                      </div>
+                      {teaserCountdown.isLive ? (
+                        <div className="rounded-lg border border-alphabag-yellow/40 bg-alphabag-black/60 px-4 py-3 text-center">
+                          <div className="text-xl md:text-2xl font-black text-alphabag-yellow">LIVE NOW</div>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-4 gap-2">
+                          {[
+                            { label: 'Days', value: teaserCountdown.days },
+                            { label: 'Hours', value: teaserCountdown.hours },
+                            { label: 'Min', value: teaserCountdown.minutes },
+                            { label: 'Sec', value: teaserCountdown.seconds }
+                          ].map((item) => (
+                            <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
+                              <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                              <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
 
