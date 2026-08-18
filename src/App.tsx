@@ -12,7 +12,7 @@ import { AuthModal } from './components/frontend/AuthModal';
 import { UpgradeModal } from './components/frontend/UpgradeModal';
 import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
-import { DISABLED_PAGES } from './services/config';
+import { DISABLED_PAGES, IS_TEASER_MODE } from './services/config';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
 // wallet-connect auto-trigger, no other routes, regardless of what URL a
@@ -22,7 +22,7 @@ import { DISABLED_PAGES } from './services/config';
 // and the wallet-connect effect below would still pop the SIWE auth
 // modal and try to hit a backend that isn't deployed yet during a
 // pre-launch campaign.
-const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
+const IS_LOCALHOST_DEV = import.meta.env.DEV && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
 // NOTE: Solana wallet-adapter support previously lived here, wrapping the
 // entire app unconditionally. Nothing in the codebase calls
 // useWallet()/useConnection() from those packages, yet every page load
@@ -62,16 +62,11 @@ const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ d
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
 const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
 
-const GlobalLoader = () => (
-  <div className="min-h-screen bg-alphabag-black flex flex-col items-center justify-center space-y-3">
-    <div className="w-12 h-12 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
-    <p className="text-[10px] text-alphabag-yellow font-black uppercase tracking-[0.4em] animate-pulse">Synchronizing Protocol Hub...</p>
-  </div>
-);
+const GlobalLoader = () => null;
 
 const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
   const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return <GlobalLoader />;
+  if (isLoading && !IS_LOCALHOST_DEV) return <GlobalLoader />;
   return isAuthenticated ? <Layout>{children}</Layout> : <Navigate to="/" replace />;
 };
 
@@ -154,7 +149,7 @@ const AppContent = () => {
   if (IS_TEASER_MODE) {
     return (
       <>
-        <Suspense fallback={<GlobalLoader />}>
+        <Suspense fallback={null}>
           <Routes>
             <Route path="*" element={<Landing />} />
           </Routes>
@@ -166,10 +161,10 @@ const AppContent = () => {
   return (
     <>
       <AirdropTracker />
-      <Suspense fallback={<GlobalLoader />}>
+      <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={
-            isLoading ? <GlobalLoader /> :
+            isLoading && !IS_LOCALHOST_DEV ? <GlobalLoader /> :
             isAuthenticated ? <Layout><MyAlphabag /></Layout> : <Landing />
           } />
           <Route path="/genesis" element={<GenesisLanding />} />

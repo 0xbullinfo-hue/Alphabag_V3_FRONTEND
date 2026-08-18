@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fetchGlobalStats } from '../../services/mockData';
 import { useAuth } from '../../context/AuthContext';
 import { TierBadge } from '../ui/TierBadge';
@@ -8,7 +8,7 @@ import { Button } from '../ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { NotificationCenter } from './NotificationCenter';
 import { useWallet } from '../../context/WalletContext';
-import { IS_DEMO_MODE } from '../../services/config';
+import { IS_DEMO_MODE, IS_TEASER_MODE } from '../../services/config';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -35,6 +35,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
     }
   ]);
   const navigate = useNavigate();
+  const location = useLocation();
   const { open } = useWeb3Modal();
 
   const attemptConnect = async () => {
@@ -47,7 +48,12 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
   useEffect(() => {
     fetchGlobalStats().then(setStats);
-    
+
+    if (IS_TEASER_MODE && !['/', '/airdrop'].includes(location.pathname)) {
+      navigate('/');
+      return;
+    }
+
     // Calculate CEX Total
     const savedCex = localStorage.getItem('alphabag_cex_connections');
     if (savedCex) {
@@ -57,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         setCexTotal(total);
       } catch (e) { console.error("Error parsing CEX data in Header", e); }
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   const dexTotal = portfolioItems?.reduce((acc, item) => acc + (item.value || 0), 0) || 0;
   const totalAssets = dexTotal + cexTotal;

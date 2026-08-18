@@ -37,7 +37,10 @@ export const TOKEN_GATING_CONFIG = {
 };
 
 // Global Demo Mode Toggle
-export const IS_DEMO_MODE = import.meta.env.VITE_DEMO_MODE !== 'false';
+const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
+const IS_LOCALHOST_DEV = import.meta.env.DEV && LOCALHOST_HOSTNAMES.has(window.location.hostname);
+
+export const IS_DEMO_MODE = IS_LOCALHOST_DEV && import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
 export const DISABLED_PAGES = [
@@ -52,6 +55,10 @@ export const DISABLED_PAGES = [
   '/defi',
 ];
 
+// Launch mode is configured via environment so the same codebase can support
+// teaser-mode marketing pages and the full dashboard without a hardcoded flag.
+export const IS_TEASER_MODE = (import.meta.env.VITE_LAUNCH_MODE || 'full').toLowerCase() === 'teaser';
+export const IS_FULL_LAUNCH = !IS_TEASER_MODE;
 
 // Maps the chain symbols ChainService returns (one row per chain's native
 // balance) to CoinGecko ids so MarketService can fetch a real price + 24h

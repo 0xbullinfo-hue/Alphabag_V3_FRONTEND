@@ -13,6 +13,7 @@
     "dev:stop": "powershell -ExecutionPolicy Bypass -File scripts/stop-local.ps1",
     "build": "vite build",
     "preview": "vite preview",
+    "verify:crawlability": "node scripts/verify-crawlability.cjs",
     "generate:openapi-types": "node scripts/generate-types-from-openapi.js",
     "verify:openapi-types": "node scripts/generate-types-from-openapi.js && git diff --exit-code src/types/openapi-contracts.ts"
   },

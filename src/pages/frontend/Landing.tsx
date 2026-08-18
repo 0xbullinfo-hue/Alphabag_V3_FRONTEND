@@ -11,7 +11,13 @@ import { IS_DEMO_MODE } from '../../services/config';
 
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
-const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || '2026-12-01T12:00:00Z';
+// Pre-TGE countdown: anchored to 2026-08-31 with a 62-day runway; the timer
+// begins counting on 2026-09-01 and resolves on the 62-day target.
+const PRE_LAUNCH_ANCHOR = '2026-08-31T00:00:00Z';
+const PRE_LAUNCH_WINDOW_DAYS = 62;
+const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || new Date(
+  new Date(PRE_LAUNCH_ANCHOR).getTime() + PRE_LAUNCH_WINDOW_DAYS * 24 * 60 * 60 * 1000
+).toISOString();
 const IS_FULL_LAUNCH = import.meta.env.VITE_FULL_LAUNCH === 'true';
 
 type CountdownState = {
@@ -698,6 +704,9 @@ export const Landing: React.FC = () => {
   };
 
   const handleDemoLogin = () => {
+    if (!IS_DEMO_MODE) {
+      return;
+    }
     sessionStorage.setItem('alphabag_token', 'mock_dev_token_2026');
     sessionStorage.setItem('alphabag_user', JSON.stringify({
       id: 'mock-user-id',
@@ -887,91 +896,71 @@ export const Landing: React.FC = () => {
                 
                 {/* Left Column: Copy & Stats */}
                 <div className="lg:col-span-6 text-left space-y-2 flex flex-col justify-center">
-                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-alphabag-text leading-[1.1] tracking-tight">
-                    {t('hero_title_1')}
-                    <span className="block text-alphabag-yellow mt-1">{t('hero_title_2')}</span>
+                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-alphabag-text leading-[0.88] tracking-[-0.04em]">
+                    <span className="block">{t('hero_title_1')}</span>
+                    <span className="block mt-1">
+                      <span className="inline-block align-middle text-[0.38em] md:text-[0.34em] lg:text-[0.32em] font-semibold text-alphabag-text/80 tracking-[-0.02em] mr-3">with</span>
+                      <span className="inline-block align-middle text-alphabag-yellow">{t('hero_title_2')}</span>
+                    </span>
                   </h1>
 
                   <p className="text-base md:text-lg text-alphabag-subtext leading-relaxed font-normal animate-fade-in-up delay-100 max-w-xl">
                     {t('hero_desc')}
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 animate-fade-in-up delay-200">
-                    {IS_TEASER_MODE ? (
-                      <>
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none  transition-all" onClick={handleLaunchApp}>
-                          {t('btn_notify_me')}
-                        </Button>
-                        <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center gap-2">
-                            <Send size={16} /> {t('btn_join_community')}
+                  <div className="w-full max-w-xl animate-fade-in-up delay-200">
+                    <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3">
+                      {IS_TEASER_MODE ? (
+                        <>
+                          <Button size="lg" className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all" onClick={handleLaunchApp}>
+                            {t('btn_notify_me')}
                           </Button>
-                        </a>
-                      </>
-                    ) : (
-                      <>
-                        <Button
-                          size="lg"
-                          className="w-full sm:w-auto px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all"
-                          onClick={IS_FULL_LAUNCH ? (isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)) : undefined}
-                          disabled={!IS_FULL_LAUNCH}
-                        >
-                          {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
-                        </Button>
-                        <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer">
-                          <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center gap-2">
-                            <Send size={16} /> {t('btn_join_community')}
+                          <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
+                            <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2">
+                              <Send size={16} /> {t('btn_join_community')}
+                            </Button>
+                          </a>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            size="lg"
+                            className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all"
+                            onClick={IS_FULL_LAUNCH ? (isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)) : undefined}
+                            disabled={!IS_FULL_LAUNCH}
+                          >
+                            {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
                           </Button>
-                        </a>
-                      </>
-                    )}
+                          <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
+                            <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2">
+                              <Send size={16} /> {t('btn_join_community')}
+                            </Button>
+                          </a>
+                        </>
+                      )}
+                    </div>
                   </div>
 
                   {IS_TEASER_MODE && (
-                    <div className="mt-2 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-4 max-w-xl backdrop-blur-sm">
-                      <div className="flex items-center justify-between mb-3">
+                    <div className="mt-2 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm">
+                      <div className="flex items-center justify-between mb-2">
                         <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">Testnet Countdown</div>
-                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access Onboarding</div>
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2 mb-3">
+                      <div className="grid grid-cols-4 gap-2">
                         {[
                           { label: 'Days', value: teaserCountdown.days },
                           { label: 'Hours', value: teaserCountdown.hours },
                           { label: 'Min', value: teaserCountdown.minutes },
                           { label: 'Sec', value: teaserCountdown.seconds }
                         ].map((item) => (
-                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-2 text-center">
-                            <div className="text-xl md:text-2xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
-                            <div className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
+                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
+                            <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                            <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
                           </div>
                         ))}
                       </div>
-
-                      <form onSubmit={handleWaitlistSubmit} className="flex flex-col sm:flex-row gap-2">
-                        <input
-                          type="email"
-                          value={waitlistEmail}
-                          onChange={(e) => {
-                            setWaitlistEmail(e.target.value);
-                            if (waitlistError) setWaitlistError('');
-                            if (waitlistSubmitted) setWaitlistSubmitted(false);
-                          }}
-                          placeholder="Email for early access"
-                          className="w-full rounded-lg border border-alphabag-gray bg-alphabag-black px-3 py-2 text-sm text-alphabag-text placeholder:text-alphabag-subtext outline-none focus:border-alphabag-yellow"
-                          required
-                        />
-                        <Button
-                          type="submit"
-                          size="sm"
-                          className="px-4 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none font-semibold whitespace-nowrap"
-                        >
-                          Join Waitlist
-                        </Button>
-                      </form>
-
-                      {waitlistError && <div className="mt-2 text-[11px] text-red-400 font-medium">{waitlistError}</div>}
-                      {waitlistSubmitted && <div className="mt-2 text-[11px] text-alphabag-green font-medium">You are in. Watch your inbox for early-access onboarding.</div>}
                     </div>
                   )}
 
@@ -982,8 +971,8 @@ export const Landing: React.FC = () => {
                       <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_assets_lbl')}</div>
                     </div>
                     <div className="space-y-1.5">
-                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_members')}</div>
-                      <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_members_lbl')}</div>
+                      <div className="text-2xl font-bold text-alphabag-text leading-tight">AlphaCalls</div>
+                      <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">Trade smarter</div>
                     </div>
                     <div className="space-y-1.5">
                       <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_crypto')}</div>
@@ -991,24 +980,6 @@ export const Landing: React.FC = () => {
                     </div>
                   </div>
 
-                  {IS_TEASER_MODE && (
-                    <div className="mt-3 p-3 rounded-xl border border-alphabag-yellow/20 bg-alphabag-black/40 max-w-xl">
-                      <div className="text-[10px] text-alphabag-subtext uppercase tracking-[0.18em] font-semibold mb-2">Launch Countdown</div>
-                      <div className="grid grid-cols-4 gap-2">
-                        {[
-                          { label: 'Days', value: teaserCountdown.days },
-                          { label: 'Hours', value: teaserCountdown.hours },
-                          { label: 'Min', value: teaserCountdown.minutes },
-                          { label: 'Sec', value: teaserCountdown.seconds }
-                        ].map(item => (
-                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray/80 text-center py-1.5">
-                            <div className="text-base md:text-lg font-bold text-alphabag-yellow tabular-nums">{item.value}</div>
-                            <div className="text-[9px] uppercase tracking-wider text-alphabag-subtext font-medium">{item.label}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* Right Column: Calculator Card */}

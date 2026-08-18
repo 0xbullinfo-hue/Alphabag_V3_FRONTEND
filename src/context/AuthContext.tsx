@@ -5,6 +5,23 @@ import { bsc } from 'wagmi/chains';
 import { TOKEN_GATING_CONFIG } from '../services/config';
 import { api } from '../services/api';
 
+const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
+
+function createLocalDevUser(): User {
+  const now = new Date().toISOString();
+
+  return {
+    id: 'local-dev-user',
+    email: 'local-dev@alphabag.local',
+    tier: 'ULTIMATE',
+    alphaAiUsageSeconds: 0,
+    lastAlphaAiReset: now,
+    isAdmin: true,
+    isPro: true,
+    onboardingComplete: true,
+  };
+}
+
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -105,6 +122,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let savedUserStr = sessionStorage.getItem('alphabag_user');
     let savedToken = sessionStorage.getItem('alphabag_token');
+
+    if (!savedUserStr && !savedToken && import.meta.env.DEV && LOCALHOST_HOSTNAMES.has(window.location.hostname)) {
+      const localUser = createLocalDevUser();
+      const localToken = 'local-dev-token';
+
+      setUser(localUser);
+      setToken(localToken);
+      sessionStorage.setItem('alphabag_user', JSON.stringify(localUser));
+      sessionStorage.setItem('alphabag_token', localToken);
+      setIsLoading(false);
+      return;
+    }
 
 
 
