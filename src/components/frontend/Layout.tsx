@@ -7,7 +7,6 @@ import { useWallet } from '../../context/WalletContext';
 import { X, CheckCircle, Info, AlertCircle } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { PageTransition } from '../ui/PageTransition';
-import { IS_DEMO_MODE } from '../../services/config';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +18,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className={`md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 ${IS_DEMO_MODE ? 'pt-[100px]' : 'pt-[72px]'}`}>
+      <main className="md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 pt-[72px]">
         <AnimatePresence mode="wait">
           <PageTransition>
             <div className="pt-2 pl-2 md:pl-0 pr-2 pb-2 w-full">

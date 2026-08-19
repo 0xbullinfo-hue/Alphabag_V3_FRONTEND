@@ -530,7 +530,6 @@ export const Landing: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
-  const [bannerDismissed, setBannerDismissed] = useState(false);
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
   const [waitlistEmail, setWaitlistEmail] = useState('');
   const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
@@ -789,32 +788,6 @@ export const Landing: React.FC = () => {
   return (
     <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
 
-      {/* ── ANNOUNCEMENT BANNER ── */}
-      {IS_TEASER_MODE && !bannerDismissed && (
-        <div className="w-full bg-gradient-to-r from-alphabag-yellow/10 via-alphabag-yellow/20 to-alphabag-yellow/10 border-b border-alphabag-yellow/20 py-2.5 px-4 flex items-center justify-center gap-2 relative">
-          <span className="flex h-2 w-2 relative shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-alphabag-yellow opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-alphabag-yellow"></span>
-          </span>
-          <p className="text-xs font-medium text-alphabag-text text-center">
-            Testnet Launching In <span className="text-alphabag-yellow font-bold tabular-nums">{launchCountdownLabel}</span> &mdash; Join our community for early access
-          </p>
-          <div className="flex items-center gap-2 shrink-0">
-            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
-              <Send size={11} /> Telegram <ChevronRight size={11} />
-            </a>
-            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-alphabag-yellow text-xs font-medium hover:underline">
-              <X size={11} /> Follow <ChevronRight size={11} />
-            </a>
-          </div>
-          <button onClick={() => setBannerDismissed(true)} className="absolute right-4 top-1/2 -translate-y-1/2 text-alphabag-subtext hover:text-alphabag-text">
-            <X size={12} />
-          </button>
-        </div>
-      )}
-
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray bg-alphabag-dark/95">
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
@@ -924,7 +897,7 @@ export const Landing: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3">
                       {IS_TEASER_MODE ? (
                         <>
-                          <Button size="lg" className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all" onClick={handleLaunchApp}>
+                          <Button size="lg" disabled className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 disabled:opacity-100 disabled:cursor-default border-none transition-all">
                             {t('btn_notify_me')}
                           </Button>
                           <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
@@ -1075,19 +1048,6 @@ export const Landing: React.FC = () => {
               </div>
             </div>
           </div>
-        )}
-
-        {IS_TEASER_MODE && (
-          <footer className="w-full border-t border-alphabag-gray/80 px-6 py-4">
-            <div className="max-w-[1400px] mx-auto flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 text-[11px] text-alphabag-subtext">
-              <div className="flex items-center gap-3">
-                <button type="button" onClick={() => setLegalModal('terms')} className="hover:text-alphabag-text transition-colors">Terms</button>
-                <span>•</span>
-                <button type="button" onClick={() => setLegalModal('privacy')} className="hover:text-alphabag-text transition-colors">Privacy</button>
-              </div>
-              <div className="text-alphabag-muted">© 2026 AlphaBAG</div>
-            </div>
-          </footer>
         )}
 
         {/* Features Grid */}
@@ -1341,7 +1301,7 @@ export const Landing: React.FC = () => {
       </div> {/* End Dynamic Content Area */}
 
       <footer className="py-12 px-6 border-t border-alphabag-gray bg-alphabag-black">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-2">
             <div className="w-6 h-6 bg-alphabag-dark border border-alphabag-gray text-alphabag-yellow flex items-center justify-center rounded">
               <Lock size={14} fill="currentColor" />
@@ -1349,7 +1309,13 @@ export const Landing: React.FC = () => {
             <span className="text-alphabag-text text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+            <button type="button" onClick={() => setLegalModal('terms')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
+              Terms
+            </button>
+            <button type="button" onClick={() => setLegalModal('privacy')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
+              Privacy
+            </button>
             <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <X size={14} /> X.com
             </a>
