@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- VERSION 12349 -->
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AlphaBAG | Professional Crypto Intelligence</title>
+  <meta name="description" content="AlphaBAG is a crypto intelligence platform for multi-chain portfolio tracking, whale movement alerts, AI market analysis, and leverage simulation." />
+  <meta name="keywords" content="crypto portfolio tracker, whale tracker, AI crypto analysis, multi-chain dashboard, leverage calculator, web3 analytics" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="AlphaBAG" />
+  <link rel="canonical" href="https://myalphabag.com/" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/logo.png?v=3" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/logo.png?v=3" />
+  <link rel="shortcut icon" href="/logo.png?v=3" />
+  <link rel="apple-touch-icon" href="/logo.png?v=3" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AlphaBAG" />
+  <meta property="og:title" content="AlphaBAG | Professional Crypto Intelligence" />
+  <meta property="og:description" content="Track portfolios, monitor whale moves, and get AI-backed crypto intelligence in one dashboard." />
+  <meta property="og:url" content="https://myalphabag.com/" />
+  <meta property="og:image" content="https://myalphabag.com/hero-dashboard.png" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AlphaBAG | Professional Crypto Intelligence" />
+  <meta name="twitter:description" content="Track portfolios, monitor whale moves, and get AI-backed crypto intelligence in one dashboard." />
+  <meta name="twitter:image" content="https://myalphabag.com/hero-dashboard.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Preload fonts to prevent render blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    // Force single-theme mode and clear stale client-side theme state.
+    try {
+      localStorage.removeItem('theme');
+      document.documentElement.classList.remove('light');
+    } catch (_) {}
+
+    // Safe Service Worker cleanup — only unregisters same-origin workers
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => {
+          if (r.scope.includes(window.location.origin)) r.unregister();
+        });
+      });
+    }
+
+    // Global polyfills for Web3/AI SDKs - Non-destructive augmentation
+    window.global = window;
+    window.process = window.process || {};
+    window.process.env = window.process.env || {};
+    window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'production';
+    window.process.browser = true;
+    window.process.version = window.process.version || '';
+    window.process.nextTick = window.process.nextTick || ((cb) => setTimeout(cb, 0));
+
+    window.Buffer = window.Buffer || {
+      isBuffer: () => false,
+      from: (str, enc) => {
+        if (enc === 'base64') return { toString: () => btoa(str) };
+        return str;
+      }
+    };
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "AlphaBAG",
+      "url": "https://myalphabag.com/",
+      "logo": "https://myalphabag.com/logo.png",
+      "sameAs": [
+        "https://x.com/myalphabag",
+        "https://t.me/alphabag_access"
+      ]
+    }
+  </script>
+  <script type="module" crossorigin src="/assets/index-BOXGpyJ_.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-GVxFAV9n.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-CO3XxQOT.js">
+  <link rel="modulepreload" crossorigin href="/assets/web3-DPdocuBV.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-SjLzv8sv.css">
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+
+</html>

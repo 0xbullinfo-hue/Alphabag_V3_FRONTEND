@@ -1,0 +1,20 @@
+{
+  "name": "AlphaBAG",
+  "short_name": "AlphaBAG",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#161a22",
+  "theme_color": "#161a22",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
