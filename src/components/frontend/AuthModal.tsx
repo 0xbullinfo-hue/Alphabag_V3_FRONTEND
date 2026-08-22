@@ -73,6 +73,27 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const handleEnterHub = () => {
+    if (!isAuthenticated) {
+      const explorerUser = {
+        id: 'alphabag-explorer',
+        email: 'explorer@alphabag.pro',
+        tier: 'FREE',
+        alphaAiUsageSeconds: 0,
+        lastAlphaAiReset: new Date().toISOString(),
+        isAdmin: false,
+        isPro: false,
+        onboardingComplete: true,
+      };
+      const explorerToken = 'alphabag-explorer-session';
+      sessionStorage.setItem('alphabag_user', JSON.stringify(explorerUser));
+      sessionStorage.setItem('alphabag_token', explorerToken);
+    }
+    onClose();
+    navigate('/');
+    window.location.reload();
+  };
+
   const handleConnect = async () => {
     try {
       setLoading(true);
@@ -163,8 +184,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     if (carouselStep < 3) {
                       setCarouselStep(carouselStep + 1);
                     } else {
-                      // Transition to real wallet connection
-                      setStep('CONNECT');
+                      handleEnterHub();
                     }
                   }}
                   className={`w-full py-4 bg-gradient-to-r ${carouselSteps[carouselStep].color} text-black font-black uppercase tracking-[0.2em] rounded-xl transition-all shadow-xl hover:scale-[1.02] active:scale-[0.98] text-[9px] flex items-center justify-center gap-2 h-11`}
