@@ -638,8 +638,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                 </div>
             )}
 
-            {/* Tab Bar */}
-            <div className="bg-[#121418]/95 backdrop-blur-md border border-white/10 rounded-xl p-1 flex gap-1 overflow-x-auto custom-scrollbar shadow-inner">
+            {/* Tab Bar - Sleek Yellow Underline Style */}
+            <div className="bg-[#121418]/90 backdrop-blur-md border border-white/10 rounded-xl p-1 flex gap-1 overflow-x-auto custom-scrollbar shadow-inner">
                 {[
                     { id: 'LEVERAGE', label: 'Leverage' },
                     { id: 'SPOT', label: 'Spot' },
@@ -650,13 +650,18 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     <button
                         key={t.id}
                         onClick={() => setMode(t.id)}
-                        className={`flex-1 min-w-[70px] sm:min-w-0 py-2 sm:py-2.5 px-2.5 rounded-lg text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap active:scale-95 ${
+                        className={`relative flex-1 min-w-[72px] sm:min-w-0 py-2 sm:py-2.5 px-2 rounded-lg text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all whitespace-nowrap flex flex-col items-center justify-center gap-1 active:scale-95 ${
                             mode === t.id
-                                ? 'bg-alphabag-yellow text-black shadow-[0_0_16px_rgba(240,185,11,0.4)] scale-[1.01]'
-                                : 'text-alphabag-subtext hover:text-white hover:bg-white/5'
+                                ? 'text-alphabag-yellow font-black bg-alphabag-yellow/[0.08]'
+                                : 'text-alphabag-subtext hover:text-white hover:bg-white/[0.03]'
                         }`}
                     >
-                        {t.label}
+                        <span>{t.label}</span>
+                        {mode === t.id ? (
+                            <span className="w-5 sm:w-6 h-[2px] bg-alphabag-yellow rounded-full shadow-[0_0_8px_#fcd535] transition-all animate-fade-in" />
+                        ) : (
+                            <span className="w-5 sm:w-6 h-[2px] bg-transparent" />
+                        )}
                     </button>
                 ))}
             </div>
