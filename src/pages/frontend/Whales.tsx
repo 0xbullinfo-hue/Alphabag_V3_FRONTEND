@@ -95,7 +95,8 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
 
 export const Whales: React.FC = () => {
     const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts } = useWallet();
-    const whaleWallets = trackedWallets.filter(w => w.type === 'WHALE');
+    const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
+    const whaleWallets = safeTrackedWallets.filter(w => w?.type === 'WHALE');
     const limits = getLimits();
 
     const [isAddOpen, setIsAddOpen] = React.useState(false);

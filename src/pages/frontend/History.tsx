@@ -43,8 +43,9 @@ export const HistoryPage: React.FC = () => {
         }
     }, [trackedWallets]);
 
-    const filteredTxs = filterChain === 'ALL' ? transactions : transactions.filter(tx => tx.chain.includes(filterChain.toLowerCase()));
-    const hasMockData = transactions.some(tx => tx.isMockData);
+    const safeTxs = Array.isArray(transactions) ? transactions : [];
+    const filteredTxs = filterChain === 'ALL' ? safeTxs : safeTxs.filter(tx => tx?.chain?.includes(filterChain.toLowerCase()));
+    const hasMockData = safeTxs.some(tx => tx?.isMockData);
 
     return (
         <div className="space-y-2 animate-in fade-in duration-700 pb-20">

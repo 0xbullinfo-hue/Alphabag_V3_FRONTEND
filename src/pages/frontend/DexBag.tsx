@@ -35,8 +35,9 @@ export const DexBag: React.FC = () => {
     staleTime: 60_000,
   });
 
-  const totalUSD = balances.reduce((sum, t) => sum + (t.valueUSD || 0), 0);
-  const filtered = filterChain === 'ALL' ? balances : balances.filter((t) => t.chain === filterChain);
+  const safeBalances = Array.isArray(balances) ? balances : [];
+  const totalUSD = safeBalances.reduce((sum, t) => sum + (t?.valueUSD || 0), 0);
+  const filtered = filterChain === 'ALL' ? safeBalances : safeBalances.filter((t) => t?.chain === filterChain);
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt) : null;
 
   return (

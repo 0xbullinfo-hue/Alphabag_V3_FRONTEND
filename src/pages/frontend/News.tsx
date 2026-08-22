@@ -11,18 +11,25 @@ export const News: React.FC = () => {
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredNews = news.filter(item => 
-    item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    item.summary.toLowerCase().includes(searchTerm.toLowerCase())
+  const safeNews = Array.isArray(news) ? news : [];
+  const filteredNews = safeNews.filter(item => 
+    Boolean(item && (
+      item.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      item.summary?.toLowerCase().includes(searchTerm.toLowerCase())
+    ))
   );
 
   useEffect(() => {
     const fetchNewsData = async () => {
       try {
         const res = await api.get('/api/news');
-        setNews(res.data);
+        const list = Array.isArray(res.data) 
+          ? res.data 
+          : (Array.isArray(res.data?.news) ? res.data.news : (Array.isArray(res.data?.data) ? res.data.data : []));
+        setNews(list);
       } catch (error) {
         console.error("Failed to fetch news", error);
+        setNews([]);
       } finally {
         setLoading(false);
       }

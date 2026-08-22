@@ -22,15 +22,16 @@ export const DeFi: React.FC = () => {
         fetchDefiPositions().then(setPositions);
     }, []);
 
-    const filtered = positions.filter(p => activeTab === 'ALL' || p.type === activeTab);
+    const safePositions = Array.isArray(positions) ? positions : [];
+    const filtered = safePositions.filter(p => activeTab === 'ALL' || p?.type === activeTab);
 
     // Calculations
-    const totalValueLocked = positions.reduce((acc, p) => p.balance > 0 ? acc + p.balance : acc, 0);
-    const totalDebt = positions.reduce((acc, p) => p.balance < 0 ? acc + Math.abs(p.balance) : acc, 0);
+    const totalValueLocked = safePositions.reduce((acc, p) => p.balance > 0 ? acc + p.balance : acc, 0);
+    const totalDebt = safePositions.reduce((acc, p) => p.balance < 0 ? acc + Math.abs(p.balance) : acc, 0);
 
     // Weighted APY Calculation
     let totalWeightedApy = 0;
-    positions.forEach(p => {
+    safePositions.forEach(p => {
         if (p.balance > 0) totalWeightedApy += (p.balance * p.apy);
     });
     const netApy = totalValueLocked > 0 ? (totalWeightedApy / totalValueLocked) : 0;

@@ -21,36 +21,34 @@ export const Portfolio: React.FC = () => {
     const navigate = useNavigate();
 
     const limits = getLimits();
-    const activeWallets = trackedWallets.filter(w => w.type === 'PORTFOLIO');
+    const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
+    const safePortfolioItems = Array.isArray(portfolioItems) ? portfolioItems : [];
+    const activeWallets = safeTrackedWallets.filter(w => w?.type === 'PORTFOLIO');
 
     // Apply Filters
     const filteredItems = hideSmallBalances
-        ? portfolioItems.filter(item => item.value >= 1)
-        : portfolioItems;
+        ? safePortfolioItems.filter(item => item?.value >= 1)
+        : safePortfolioItems;
     const hasVisibleAssets = filteredItems.length > 0;
 
     // Derived Metrics
-    const totalValue = portfolioItems.reduce((acc, item) => acc + item.value, 0);
-    const totalPnL = portfolioItems.reduce((acc, item) => acc + item.pnl, 0);
-    const totalCost = portfolioItems.reduce((acc, item) => acc + (item.amount * (item.avgBuyPrice || item.currentPrice)), 0);
+    const totalValue = safePortfolioItems.reduce((acc, item) => acc + (item?.value || 0), 0);
+    const totalPnL = safePortfolioItems.reduce((acc, item) => acc + (item?.pnl || 0), 0);
+    const totalCost = safePortfolioItems.reduce((acc, item) => acc + ((item?.amount || 0) * (item?.avgBuyPrice || item?.currentPrice || 0)), 0);
     const totalPnLPercent = totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
 
     // 24h metrics (Mocked based on current price change for UI demonstration)
-    const totalPnL24h = portfolioItems.reduce((acc, item) => acc + (item.value * (item.priceChange24h / 100)), 0);
+    const totalPnL24h = safePortfolioItems.reduce((acc, item) => acc + ((item?.value || 0) * ((item?.priceChange24h || 0) / 100)), 0);
     const totalPnLPercent24h = totalValue > 0 ? (totalPnL24h / totalValue) * 100 : 0;
 
-    // Find Best/Worst Performers — only among assets where we actually know
-    // the cost basis. Wallet-synced tokens without a logged buy price
-    // always carry pnlPercent === 0 (see WalletContext), so they're
-    // naturally excluded by the `> 0` / `< 0` checks below, but we filter
-    // explicitly too so this stays correct if that invariant ever changes.
-    const knownCostBasisItems = portfolioItems.filter(item => item.costBasisKnown);
-    const sortedByPnL = [...knownCostBasisItems].filter(item => item.amount > 0).sort((a, b) => b.pnlPercent - a.pnlPercent);
+    // Find Best/Worst Performers
+    const knownCostBasisItems = safePortfolioItems.filter(item => item?.costBasisKnown);
+    const sortedByPnL = [...knownCostBasisItems].filter(item => (item?.amount || 0) > 0).sort((a, b) => b.pnlPercent - a.pnlPercent);
     const bestPerformer = sortedByPnL.length > 0 && sortedByPnL[0].pnlPercent > 0 ? sortedByPnL[0] : null;
     const worstPerformer = sortedByPnL.length > 0 && sortedByPnL[sortedByPnL.length - 1].pnlPercent < 0 ? sortedByPnL[sortedByPnL.length - 1] : null;
 
     // Honesty flags for the badges/labels below.
-    const hasMockData = portfolioItems.some(item => item.isMockData);
+    const hasMockData = safePortfolioItems.some(item => item?.isMockData);
     const hasAnyKnownCostBasis = knownCostBasisItems.length > 0;
 
     useEffect(() => {

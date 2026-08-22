@@ -36,8 +36,9 @@ export const Markets: React.FC = () => {
       if (!silent) setLoading(true);
       setIsRefreshing(true);
       const data = await MarketService.getMarketData([], false);
-      if (data && data.length > 0) {
-        setCoins(data);
+      const list = Array.isArray(data) ? data : (Array.isArray((data as any)?.data) ? (data as any).data : []);
+      if (list && list.length > 0) {
+        setCoins(list);
         setLastUpdated(new Date());
       }
     } catch (error) {
@@ -78,9 +79,10 @@ export const Markets: React.FC = () => {
   };
 
   const filteredCoins = useMemo(() => {
+    const safeCoins = Array.isArray(coins) ? coins : [];
     const query = searchQuery.toLowerCase();
-    return coins.filter((coin) =>
-      coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
+    return safeCoins.filter((coin) =>
+      Boolean(coin && (coin.name?.toLowerCase().includes(query) || coin.symbol?.toLowerCase().includes(query)))
     );
   }, [coins, searchQuery]);
 

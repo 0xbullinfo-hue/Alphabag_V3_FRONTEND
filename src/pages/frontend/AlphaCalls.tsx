@@ -68,11 +68,13 @@ export const AlphaCalls: React.FC = () => {
         const fetchSignals = async () => {
             try {
                 const res = await api.get('/api/signals');
-                // Use demo data if backend is empty (for the read-only showcase)
-                if (!res.data || res.data.length === 0) {
+                const incoming = Array.isArray(res.data)
+                    ? res.data
+                    : (Array.isArray(res.data?.signals) ? res.data.signals : (Array.isArray(res.data?.data) ? res.data.data : []));
+                if (incoming.length === 0) {
                     setSignals(DEMO_SIGNALS);
                 } else {
-                    setSignals(res.data);
+                    setSignals(incoming);
                 }
             } catch (error) {
                 console.error("Failed to fetch signals, using demo data", error);
@@ -97,6 +99,9 @@ export const AlphaCalls: React.FC = () => {
             color: '#FFF'
         });
     };
+
+    const safeSignals = Array.isArray(signals) ? signals : DEMO_SIGNALS;
+    const filteredSignals = safeSignals.filter(s => activeCategory === 'ALL' || s?.category === activeCategory);
 
     return (
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full animate-in fade-in duration-700">
@@ -140,7 +145,7 @@ export const AlphaCalls: React.FC = () => {
                     <div className="animate-spin w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full mx-auto mb-2"></div>
                     <p className="text-xs font-semibold uppercase tracking-widest text-alphabag-subtext animate-pulse">Decrypting Alpha Stream...</p>
                 </div>
-            ) : signals.length === 0 ? (
+            ) : filteredSignals.length === 0 ? (
                 <div className="text-center py-32 rounded-lg border border-dashed border-alphabag-gray mx-2">
                     <Target size={40} className="mx-auto text-alphabag-subtext mb-2 opacity-30" />
                     <h3 className="text-base font-semibold text-alphabag-text mb-2">No Active Intelligence</h3>
@@ -148,7 +153,7 @@ export const AlphaCalls: React.FC = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
-                    {signals.filter(s => activeCategory === 'ALL' || s.category === activeCategory).map((signal, index) => {
+                    {filteredSignals.map((signal, index) => {
                         const theme = signal.category === 'DEGEN' 
                             ? { color: '#a78bfa', bg: 'rgba(167,139,250,0.1)', border: 'rgba(167,139,250,0.2)', icon: <Rocket size={18} /> }
                             : signal.category === 'LONGTERM'
