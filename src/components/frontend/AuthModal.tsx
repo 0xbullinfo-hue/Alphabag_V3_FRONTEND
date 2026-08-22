@@ -74,24 +74,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const handleEnterHub = () => {
-    if (!isAuthenticated) {
-      const explorerUser = {
-        id: 'alphabag-explorer',
-        email: 'explorer@alphabag.pro',
-        tier: 'FREE',
-        alphaAiUsageSeconds: 0,
-        lastAlphaAiReset: new Date().toISOString(),
-        isAdmin: false,
-        isPro: false,
-        onboardingComplete: true,
-      };
-      const explorerToken = 'alphabag-explorer-session';
-      sessionStorage.setItem('alphabag_user', JSON.stringify(explorerUser));
-      sessionStorage.setItem('alphabag_token', explorerToken);
-    }
     onClose();
     navigate('/');
-    window.location.reload();
   };
 
   const handleConnect = async () => {
