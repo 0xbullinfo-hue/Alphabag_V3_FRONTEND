@@ -7,18 +7,17 @@ import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
 import { Markets } from './Markets';
 
-import { IS_DEMO_MODE } from '../../services/config';
+import { IS_DEMO_MODE, IS_TEASER_MODE as CONFIG_IS_TEASER_MODE, IS_FULL_LAUNCH as CONFIG_IS_FULL_LAUNCH } from '../../services/config';
 
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
-// Pre-TGE countdown: anchored to 2026-08-31 with a 62-day runway; the timer
-// begins counting on 2026-09-01 and resolves on the 62-day target.
+// Pre-TGE countdown: anchored to 2026-08-31 with a 62-day runway
 const PRE_LAUNCH_ANCHOR = '2026-08-31T00:00:00Z';
 const PRE_LAUNCH_WINDOW_DAYS = 62;
 const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || new Date(
   new Date(PRE_LAUNCH_ANCHOR).getTime() + PRE_LAUNCH_WINDOW_DAYS * 24 * 60 * 60 * 1000
 ).toISOString();
-const IS_FULL_LAUNCH = import.meta.env.VITE_FULL_LAUNCH === 'true';
+const IS_FULL_LAUNCH = true;
 
 type CountdownState = {
   days: string;
@@ -553,7 +552,6 @@ export const Landing: React.FC = () => {
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (!IS_TEASER_MODE) return;
     const tick = () => setTeaserCountdown(getTeaserCountdown(TEASER_LAUNCH_AT));
     tick();
     const timer = window.setInterval(tick, 1000);
@@ -814,26 +812,19 @@ export const Landing: React.FC = () => {
 
             {/* Main Auth/Demo CTAs */}
             {IS_TEASER_MODE ? (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
                 JOIN US
               </Button>
             ) : !isAuthenticated ? (
-              IS_DEMO_MODE ? (
-                <Button size="sm" onClick={handleDemoLogin} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
-                  {t('btn_demo_login') || 'Demo Login'}
-                </Button>
-              ) : (
-                <Button
-                  size="sm"
-                  onClick={IS_FULL_LAUNCH ? handleLaunchApp : undefined}
-                  disabled={!IS_FULL_LAUNCH}
-                  className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none"
-                >
-                  {t('btn_connect_wallet') || 'Connect (Soon)'}
-                </Button>
-              )
+              <Button
+                size="sm"
+                onClick={handleLaunchApp}
+                className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer"
+              >
+                {t('btn_connect_wallet') || 'Connect Wallet'}
+              </Button>
             ) : (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none">
+              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
                 Open App
               </Button>
             )}
@@ -857,11 +848,10 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              onClick={IS_TEASER_MODE ? handleLaunchApp : (IS_FULL_LAUNCH ? handleLaunchApp : undefined)}
-              disabled={IS_TEASER_MODE ? false : !IS_FULL_LAUNCH}
-              className="w-full font-semibold bg-alphabag-yellow text-black"
+              onClick={handleLaunchApp}
+              className="w-full font-semibold bg-alphabag-yellow text-black cursor-pointer"
             >
-              {IS_TEASER_MODE ? 'Join Community' : (isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect (Soon)')}
+              {IS_TEASER_MODE ? 'Join Community' : (isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet')}
             </Button>
           </div>
         )}
@@ -895,67 +885,51 @@ export const Landing: React.FC = () => {
 
                   <div className="w-full max-w-xl animate-fade-in-up delay-200">
                     <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3">
-                      {IS_TEASER_MODE ? (
-                        <>
-                          <Button size="lg" disabled className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 disabled:opacity-100 disabled:cursor-default border-none transition-all">
-                            {t('btn_notify_me')}
-                          </Button>
-                          <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
-                            <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2">
-                              <Send size={16} /> {t('btn_join_community')}
-                            </Button>
-                          </a>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            size="lg"
-                            className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all"
-                            onClick={IS_FULL_LAUNCH ? (isAuthenticated ? handleLaunchApp : (IS_DEMO_MODE ? handleDemoLogin : handleLaunchApp)) : undefined}
-                            disabled={!IS_FULL_LAUNCH}
-                          >
-                            {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : (IS_DEMO_MODE ? `${t('btn_build_portfolio')} (Demo)` : t('btn_build_portfolio'))}
-                          </Button>
-                          <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
-                            <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2">
-                              <Send size={16} /> {t('btn_join_community')}
-                            </Button>
-                          </a>
-                        </>
-                      )}
+                      <Button
+                        size="lg"
+                        className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all cursor-pointer"
+                        onClick={handleLaunchApp}
+                      >
+                        {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : t('btn_build_portfolio')}
+                      </Button>
+                      <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
+                        <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                          <Send size={16} /> {t('btn_join_community')}
+                        </Button>
+                      </a>
                     </div>
                   </div>
 
-                  {IS_TEASER_MODE && (
-                    <div className="mt-2 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow">
-                          {teaserCountdown.isLive ? 'Live now' : 'Testnet Countdown'}
-                        </div>
-                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
+                  {/* Pre-TGE Countdown Timer */}
+                  <div className="mt-3 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm animate-fade-in-up delay-300">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-ping inline-block"></span>
+                        {teaserCountdown.isLive ? 'Live now' : 'Pre-TGE Launch Countdown'}
                       </div>
-
-                      {teaserCountdown.isLive ? (
-                        <div className="rounded-lg border border-alphabag-yellow/40 bg-alphabag-black/60 px-4 py-3 text-center">
-                          <div className="text-xl md:text-2xl font-black text-alphabag-yellow">LIVE NOW</div>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-4 gap-2">
-                          {[
-                            { label: 'Days', value: teaserCountdown.days },
-                            { label: 'Hours', value: teaserCountdown.hours },
-                            { label: 'Min', value: teaserCountdown.minutes },
-                            { label: 'Sec', value: teaserCountdown.seconds }
-                          ].map((item) => (
-                            <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
-                              <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
-                              <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
                     </div>
-                  )}
+
+                    {teaserCountdown.isLive ? (
+                      <div className="rounded-lg border border-alphabag-yellow/40 bg-alphabag-black/60 px-4 py-3 text-center">
+                        <div className="text-xl md:text-2xl font-black text-alphabag-yellow">LIVE NOW</div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-4 gap-2">
+                        {[
+                          { label: 'Days', value: teaserCountdown.days },
+                          { label: 'Hours', value: teaserCountdown.hours },
+                          { label: 'Min', value: teaserCountdown.minutes },
+                          { label: 'Sec', value: teaserCountdown.seconds }
+                        ].map((item) => (
+                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
+                            <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                            <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Stats Section */}
                   <div className="flex flex-wrap gap-x-5 gap-y-3 md:gap-x-8 md:gap-y-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
