@@ -183,32 +183,30 @@ const AppContent = () => {
             isAuthenticated ? <Layout><MyAlphabag /></Layout> : <Landing />
           } />
           <Route path="/genesis" element={<GenesisLanding />} />
-          <Route path="/genesis-manifesto" element={<PrivateRoute><GenesisManifesto /></PrivateRoute>} />
-          <Route path="/cex-bag" element={<PrivateRoute><RouteGuard path="/cex-bag" title="CEX Portfolio" description="Centralized exchange balance tracking is in final staging. Launching in Phase 2.0."><CexBag /></RouteGuard></PrivateRoute>} />
-          <Route path="/dex-bag" element={<PrivateRoute><RouteGuard path="/dex-bag" title="DEX Portfolio" description="Decentralized wallet tracking is in final staging. Launching in Phase 2.0."><DexBag /></RouteGuard></PrivateRoute>} />
-          <Route path="/calculator" element={<PrivateRoute><Calculator /></PrivateRoute>} />
-          <Route path="/portfolio" element={<PrivateRoute><RouteGuard path="/portfolio" title="DEX Portfolio" description="Decentralized wallet tracking is in final staging. Launching in Phase 2.0."><Portfolio /></RouteGuard></PrivateRoute>} />
-          <Route path="/history" element={<PrivateRoute><History /></PrivateRoute>} />
-          <Route path="/alpha-screener" element={<PrivateRoute><RouteGuard path="/alpha-screener" title="Alpha Screener" description="Real-time multi-chain token screening is in final staging. Launching in Phase 2.0."><AlphaScreener /></RouteGuard></PrivateRoute>} />
-          <Route path="/my-alphabag" element={<PrivateRoute><MyAlphabag /></PrivateRoute>} />
+          <Route path="/genesis-manifesto" element={<Layout><GenesisManifesto /></Layout>} />
+          <Route path="/cex-bag" element={<Layout><CexBag /></Layout>} />
+          <Route path="/dex-bag" element={<Layout><DexBag /></Layout>} />
+          <Route path="/calculator" element={<Layout><Calculator /></Layout>} />
+          <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
+          <Route path="/history" element={<Layout><History /></Layout>} />
+          <Route path="/alpha-screener" element={<Layout><AlphaScreener /></Layout>} />
+          <Route path="/my-alphabag" element={<Layout><MyAlphabag /></Layout>} />
 
           <Route path="/markets" element={<Layout><Markets /></Layout>} />
           <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
-          <Route path="/whales" element={<PrivateRoute><RouteGuard path="/whales" title="Alpha Radar" description="Smart money wallet tracking is in staging. Launching in Phase 2.0."><Whales /></RouteGuard></PrivateRoute>} />
-          <Route path="/whales/:address" element={<PrivateRoute><RouteGuard path="/whales" title="Alpha Radar" description="Smart money wallet tracking is in staging. Launching in Phase 2.0."><WhaleDetail /></RouteGuard></PrivateRoute>} />
-          <Route path="/defi" element={<Layout><RouteGuard path="/defi" title="DeFi Operations" description="Real-time multi-chain protocol yield and pool tracking is in final staging. Launching in Phase 2.0."><DeFi /></RouteGuard></Layout>} />
-          <Route path="/security" element={<PrivateRoute><RouteGuard path="/security" title="Security Radar" description="Real-time approval scanning and risk audit tools are in staging. Launching in Phase 2.0."><SecurityScanner /></RouteGuard></PrivateRoute>} />
-          <Route path="/integrations" element={<Layout><RouteGuard path="/integrations" title="Integrations Hub" description="API connections and integrations are in staging. Launching in Phase 2.0."><Integrations /></RouteGuard></Layout>} />
-          <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
-          <Route path="/alpha-ai" element={<PrivateRoute><RouteGuard path="/alpha-ai" title="Alpha Analyst" description="AI analytics and insight terminal is in staging. Launching in Phase 2.0."><AlphaAi /></RouteGuard></PrivateRoute>} />
-          <Route path="/alpha-calls" element={<Layout><RouteGuard path="/alpha-calls" title="Alpha Calls" description="Alpha Calls board is in staging. Launching in Phase 2.0."><AlphaCalls /></RouteGuard></Layout>} />
-          <Route path="/alphas-feed" element={<Layout><RouteGuard path="/alphas-feed" title="Alphas Feed" description="Classified community alpha feeds are in staging. Launching in Phase 2.0."><AlphasFeed /></RouteGuard></Layout>} />
+          <Route path="/whales" element={<Layout><Whales /></Layout>} />
+          <Route path="/whales/:address" element={<Layout><WhaleDetail /></Layout>} />
+          <Route path="/defi" element={<Layout><DeFi /></Layout>} />
+          <Route path="/security" element={<Layout><SecurityScanner /></Layout>} />
+          <Route path="/integrations" element={<Layout><Integrations /></Layout>} />
+          <Route path="/news" element={<Layout><News /></Layout>} />
+          <Route path="/alpha-ai" element={<Layout><AlphaAi /></Layout>} />
+          <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
+          <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
 
-          {/* LivePairs route removed */}
-          <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} />
-
-          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-          <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/settings" element={<Layout><Settings /></Layout>} />
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
+          <Route path="/profile/:id" element={<Layout><Profile /></Layout>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
