@@ -2,10 +2,14 @@ import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { mainnet, bsc, polygon, arbitrum, base, avalanche } from 'wagmi/chains';
 
 const rawProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
-// Provide fallback project ID for dev/testing when environment variable is unset
-const projectId = (rawProjectId && rawProjectId.trim() !== '') ? rawProjectId : '3fcc6bba6f1de962d911bb5b5c3dba68';
 const isLocalhost = typeof window !== 'undefined' && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
-const shouldEnableWalletConnect = Boolean(projectId);
+const projectId = rawProjectId?.trim() || (isLocalhost ? '3fcc6bba6f1de962d911bb5b5c3dba68' : '');
+
+if (!projectId && !isLocalhost) {
+  console.warn('[Web3Modal] VITE_WALLETCONNECT_PROJECT_ID is not set. WalletConnect will be disabled.');
+}
+
+const shouldEnableWalletConnect = !isLocalhost && Boolean(projectId);
 
 const metadata = {
   name: 'AlphaBAG Pro',

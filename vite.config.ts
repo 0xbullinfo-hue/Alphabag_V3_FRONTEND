@@ -66,6 +66,9 @@ export default defineConfig(({ mode }) => {
         '@': path.resolve(__dirname, './src'),
       }
     },
+    esbuild: {
+      drop: ['console', 'debugger'],
+    },
     build: {
       cssMinify: false,
       chunkSizeWarningLimit: 1500,
