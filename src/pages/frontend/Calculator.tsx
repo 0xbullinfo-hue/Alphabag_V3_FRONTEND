@@ -639,7 +639,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             )}
 
             {/* Tab Bar */}
-            <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-1 flex gap-1">
+            <div className="bg-[#121418]/95 backdrop-blur-md border border-white/10 rounded-xl p-1 flex gap-1 overflow-x-auto custom-scrollbar shadow-inner">
                 {[
                     { id: 'LEVERAGE', label: 'Leverage' },
                     { id: 'SPOT', label: 'Spot' },
@@ -650,10 +650,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     <button
                         key={t.id}
                         onClick={() => setMode(t.id)}
-                        className={`flex-1 py-2.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
+                        className={`flex-1 min-w-[70px] sm:min-w-0 py-2 sm:py-2.5 px-2.5 rounded-lg text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap active:scale-95 ${
                             mode === t.id
-                                ? 'bg-alphabag-yellow text-alphabag-dark'
-                                : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray'
+                                ? 'bg-alphabag-yellow text-black shadow-[0_0_16px_rgba(240,185,11,0.4)] scale-[1.01]'
+                                : 'text-alphabag-subtext hover:text-white hover:bg-white/5'
                         }`}
                     >
                         {t.label}
