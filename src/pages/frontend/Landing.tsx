@@ -820,7 +820,7 @@ export const Landing: React.FC = () => {
                 size="sm"
                 className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none"
               >
-                Connect Wallet
+                Connect Soon
               </Button>
             ) : (
               <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
@@ -849,7 +849,7 @@ export const Landing: React.FC = () => {
               size="lg"
               className="w-full font-semibold bg-alphabag-yellow text-black cursor-default opacity-90 select-none"
             >
-              Connect Wallet
+              Connect Soon
             </Button>
           </div>
         )}
