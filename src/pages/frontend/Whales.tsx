@@ -93,10 +93,18 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     );
 };
 
+const DEFAULT_SMART_WHALES: TrackedWallet[] = [
+    { id: 'whale_vitalik', address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', label: 'Vitalik Buterin (ETH Pioneer)', chain: 'ETH', type: 'WHALE', createdAt: new Date().toISOString() },
+    { id: 'whale_binance_cold', address: '0xF977814e90dA44bFA03b6295A0616a897441aceC', label: 'Binance Smart Money Cold 8', chain: 'BSC', type: 'WHALE', createdAt: new Date().toISOString() },
+    { id: 'whale_wintermute', address: '0xdbF5E9c5206d0dB70a90108bf936DA60221dC080', label: 'Wintermute Algorithmic Trading', chain: 'ETH', type: 'WHALE', createdAt: new Date().toISOString() },
+    { id: 'whale_dwf_labs', address: '0xD4B6A66A2A69A5A43D2c2BCE3b246a4805A128b7', label: 'DWF Labs Alpha Syndicate', chain: 'BSC', type: 'WHALE', createdAt: new Date().toISOString() }
+];
+
 export const Whales: React.FC = () => {
     const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts } = useWallet();
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const whaleWallets = safeTrackedWallets.filter(w => w?.type === 'WHALE');
+    const activeWhales = whaleWallets.length > 0 ? whaleWallets : DEFAULT_SMART_WHALES;
     const limits = getLimits();
 
     const [isAddOpen, setIsAddOpen] = React.useState(false);
@@ -120,17 +128,17 @@ export const Whales: React.FC = () => {
                 setNewAddress('');
                 setNewLabel('');
             } else {
-                setErrorMsg(res.error || 'Failed to track whale.');
+                setErrorMsg(res.error || 'Failed to add whale wallet');
             }
-        } catch (err: any) {
-            setErrorMsg(err.message || 'An error occurred.');
+        } catch (e: any) {
+            setErrorMsg(e.message || 'Network error');
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
+        <div className="space-y-2 animate-in fade-in duration-700 pb-20">
 
             {/* Page Header */}
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
@@ -142,7 +150,7 @@ export const Whales: React.FC = () => {
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
                         <DataSourceBadge />
                     </div>
-                    <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{whaleWallets.length}</span> addresses.</p>
+                    <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{activeWhales.length}</span> addresses.</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <UpgradeCmd />
@@ -162,25 +170,11 @@ export const Whales: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {whaleWallets.length === 0 ? (
-                    <div className="col-span-full py-20 rounded-lg border border-dashed border-alphabag-gray text-center">
-                        <Eye size={40} className="mx-auto mb-2 text-alphabag-subtext opacity-30" />
-                        <h3 className="text-base font-semibold text-alphabag-text mb-2">No Whales Tracked</h3>
-                        <p className="text-alphabag-subtext text-sm max-w-xs mx-auto mb-5">Start following smart money by adding a wallet address to your watch list.</p>
-                        <button 
-                            onClick={() => setIsAddOpen(true)}
-                            className="bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all"
-                        >
-                            Add Whale Wallet
-                        </button>
-                    </div>
-                ) : (
-                    whaleWallets.map(whale => (
-                        <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
-                    ))
-                )}
+                {activeWhales.map(whale => (
+                    <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
+                ))}
 
-                {whaleWallets.length < limits.maxWhales && (
+                {activeWhales.length < limits.maxWhales && (
                     <button 
                         onClick={() => setIsAddOpen(true)}
                         className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group"

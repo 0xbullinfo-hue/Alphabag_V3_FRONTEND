@@ -119,6 +119,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } finally {
         setIsLoading(false);
       }
+    } else if (import.meta.env.DEV && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)) {
+      // Localhost dev review session for dashboard inspection
+      const devUser: User = {
+        id: 'dev_user_001',
+        email: 'dev@alphabag.com',
+        tier: 'ULTIMATE',
+        createdAt: new Date().toISOString()
+      };
+      setUser(devUser);
+      setToken('mock_dev_jwt_token');
+      sessionStorage.setItem('alphabag_user', JSON.stringify(devUser));
+      sessionStorage.setItem('alphabag_token', 'mock_dev_jwt_token');
+      setIsLoading(false);
     } else {
       setIsLoading(false);
     }
