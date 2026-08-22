@@ -818,10 +818,9 @@ export const Landing: React.FC = () => {
             ) : !isAuthenticated ? (
               <Button
                 size="sm"
-                onClick={handleLaunchApp}
-                className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer"
+                className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none"
               >
-                {t('btn_connect_wallet') || 'Connect Wallet'}
+                Connect Wallet
               </Button>
             ) : (
               <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
@@ -848,10 +847,9 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              onClick={handleLaunchApp}
-              className="w-full font-semibold bg-alphabag-yellow text-black cursor-pointer"
+              className="w-full font-semibold bg-alphabag-yellow text-black cursor-default opacity-90 select-none"
             >
-              {IS_TEASER_MODE ? 'Join Community' : (isAuthenticated ? 'Open App' : t('btn_connect_wallet') || 'Connect Wallet')}
+              Connect Wallet
             </Button>
           </div>
         )}
@@ -887,10 +885,9 @@ export const Landing: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3">
                       <Button
                         size="lg"
-                        className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none transition-all cursor-pointer"
-                        onClick={handleLaunchApp}
+                        className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black border-none transition-all cursor-default opacity-90 select-none"
                       >
-                        {isAuthenticated ? (t('btn_open_hub') || 'Open Hub') : t('btn_build_portfolio')}
+                        Track Smart
                       </Button>
                       <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
                         <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
