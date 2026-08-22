@@ -1,7 +1,9 @@
 import React, { useEffect, Suspense, lazy, useState } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { WagmiConfig, useAccount } from 'wagmi';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { queryClient } from './lib/queryClient';
 import { config } from './lib/wagmi';
 import { Layout } from './components/frontend/Layout';
 import { ErrorBoundary } from './components/frontend/ErrorBoundary';
@@ -12,7 +14,9 @@ import { AuthModal } from './components/frontend/AuthModal';
 import { UpgradeModal } from './components/frontend/UpgradeModal';
 import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
 import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
-import { DISABLED_PAGES, IS_TEASER_MODE } from './services/config';
+import { getDisabledPages, IS_TEASER_MODE } from './services/config';
+import { usePortfolioStream } from './hooks/usePortfolioStream';
+import { useFeatures } from './hooks/useFeatures';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
 // wallet-connect auto-trigger, no other routes, regardless of what URL a
@@ -31,7 +35,6 @@ const IS_LOCALHOST_DEV = import.meta.env.DEV && ['localhost', '127.0.0.1', '::1'
 // src/lib/SolanaProviders.tsx; wrap only the specific feature that needs
 // it when one is actually built, rather than restoring it here at the root.
 
-const queryClient = new QueryClient();
 
 // Lazy pages
 
@@ -72,7 +75,18 @@ const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
 
 const RouteGuard = ({ path, title, description, children }: { path: string; title: string; description: string; children: React.ReactNode }) => {
   const navigate = useNavigate();
-  if (DISABLED_PAGES.includes(path)) {
+  const { data: features, isLoading } = useFeatures();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  const disabledPages = features?.disabledPages || getDisabledPages();
+  if (disabledPages.includes(path)) {
     return (
       <div className="relative min-h-[calc(100vh-12rem)] flex items-center justify-center">
         <ComingSoonOverlay
@@ -106,10 +120,11 @@ const AirdropTracker = () => {
 };
 
 const AppContent = () => {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, token } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  usePortfolioStream(token, address);
 
   // Automatic SIWE Trigger after connection — but skip if already authenticated
   useEffect(() => {
@@ -217,7 +232,8 @@ function App() {
               </HashRouter>
             </WalletProvider>
           </AuthProvider>
-        </QueryClientProvider>
+          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+</QueryClientProvider>
       </WagmiConfig>
     </ErrorBoundary>
   );

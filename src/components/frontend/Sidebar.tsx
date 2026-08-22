@@ -3,6 +3,7 @@ import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as Lin
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DISABLED_PAGES, IS_DEMO_MODE } from '../../services/config';
+import { useFeatures } from '../../hooks/useFeatures';
 import Swal from 'sweetalert2';
 
 interface NavItemProps {
@@ -13,7 +14,9 @@ interface NavItemProps {
 }
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
-  const isDisabled = DISABLED_PAGES.includes(to);
+  const { data: features } = useFeatures();
+  const disabledPages = features?.disabledPages || DISABLED_PAGES;
+  const isDisabled = disabledPages.includes(to);
 
   const handleClick = (e: React.MouseEvent) => {
     if (isDisabled) {
@@ -101,6 +104,8 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const { data: features } = useFeatures();
+  const disabledPages = features?.disabledPages || DISABLED_PAGES;
 
   const handleLogout = () => {
     logout();
@@ -110,8 +115,12 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
 
   return (
     <>
+      {/* Mobile Backdrop */}
       {isOpen && (
-        <div className="fixed inset-0 bg-alphabag-black bg-opacity-50 z-20 md:hidden" onClick={onClose} />
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden animate-fade-in"
+        />
       )}
 
       <aside className={`
@@ -124,7 +133,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
           <NavGroup title="Personal">
             <NavItem to="/my-alphabag" icon={PieChart} label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
-            {!DISABLED_PAGES.includes('/airdrop') && (
+            {!disabledPages.includes('/airdrop') && (
               <div className="relative">
                 <NavItem to="/airdrop" icon={Gift} label="Alpha Missions" active={location.pathname === '/airdrop'} />
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">LIVE</div>

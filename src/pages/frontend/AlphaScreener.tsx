@@ -60,7 +60,7 @@ export const AlphaScreener: React.FC = () => {
             // Generic keywords like popular base/quote assets on main chains
             const queries = ['USDT', 'USDC', 'SOL', 'WBNB', 'WETH'];
             const promises = queries.map(q =>
-                fetch(`https://api.dexscreener.com/latest/dex/search?q=${q}`)
+                api.get('/api/dex/search', { params: { q } }).then((r) => r.data)
                     .then(res => res.json())
                     .catch(() => ({ pairs: [] }))
             );
@@ -123,7 +123,7 @@ export const AlphaScreener: React.FC = () => {
             if (trimmed.length >= 32) {
                 setSearchingCa(true);
                 try {
-                    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${trimmed}`);
+                    const res = await api.get(`/api/dex/tokens/${trimmed}`).then((r) => r.data);
                     const data = await res.json();
                     if (data.pairs && data.pairs.length > 0) {
                         // Use the highest liquidity pair found for this contract

@@ -1,53 +1,63 @@
-import axios from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
-// Centralized API Configuration
-// ALL API calls will be prefixed with this base URL.
-// In dev: empty string (proxied to localhost:3003)
-// In prod: /adminbxp (or whatever is set in .env)
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
-// Create axios instance — baseURL is empty so calls stay on the frontend port
+interface RetryConfig extends InternalAxiosRequestConfig {
+  retryCount?: number;
+}
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 1000;
+
 export const api = axios.create({
-    baseURL: API_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+  baseURL: API_BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 30000,
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INTERCEPTORS
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Request Interceptor: Attach JWT Authorization header
 api.interceptors.request.use(
-    (config) => {
-        const token = sessionStorage.getItem('alphabag_token');
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  (config: RetryConfig) => {
+    const token = sessionStorage.getItem('alphabag_token');
+    if (token) config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['X-Request-ID'] = crypto.randomUUID();
+    config.headers['X-Client-Timestamp'] = Date.now().toString();
+    return config;
+  },
+  (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Handle auth expiry
 api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        // Handle unauthorized / expired sessions
-        if (error.response?.status === 401) {
-            sessionStorage.removeItem('alphabag_token');
-            sessionStorage.removeItem('alphabag_user');
-            
-            // Redirect to landing if we are in a protected area
-            if (window.location.hash !== '#/' && window.location.hash !== '#/airdrop') {
-                window.location.hash = '#/';
-            }
-        }
-        return Promise.reject(error);
+  (response) => response,
+  async (error: AxiosError) => {
+    const config = error.config as RetryConfig | undefined;
+    if (!config) return Promise.reject(error);
+
+    const isRetryable = !error.response || [502, 503, 504].includes(error.response.status);
+    config.retryCount = config.retryCount || 0;
+
+    if (isRetryable && config.retryCount < MAX_RETRIES) {
+      config.retryCount += 1;
+      const delay = Math.pow(2, config.retryCount) * RETRY_DELAY_MS;
+      await new Promise((r) => setTimeout(r, delay));
+      return api(config);
     }
+
+    if (error.response?.status === 401) {
+      sessionStorage.removeItem('alphabag_token');
+      sessionStorage.removeItem('alphabag_user');
+      window.dispatchEvent(new CustomEvent('auth:expired'));
+      if (window.location.hash !== '#/' && window.location.hash !== '#/airdrop') {
+        window.location.hash = '#/';
+      }
+    }
+
+    return Promise.reject({
+      ...error,
+      isRetryable,
+      retryCount: config.retryCount,
+      requestId: config.headers?.['X-Request-ID'],
+    });
+  }
 );
 
 export default api;

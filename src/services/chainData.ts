@@ -1,34 +1,43 @@
 import { TokenBalance, DefiPosition, Transaction } from '../types';
+import { api } from './api';
 
-const COVALENT_API_KEY = import.meta.env.VITE_COVALENT_API_KEY;
-const BASE_URL = 'https://api.covalenthq.com/v1';
+export async function fetchTokenBalances(walletAddress: string, chainId: string | number = 1): Promise<TokenBalance[]> {
+  try {
+    const res = await api.get('/api/portfolio/balances', {
+      params: { address: walletAddress, chain: chainId, chainId }
+    });
+    const items = res.data?.items || res.data?.tokens || res.data?.data?.items || (Array.isArray(res.data) ? res.data : []);
+    return items.map((item: any): TokenBalance => ({
+      tokenAddress: item.contract_address || '',
+      symbol: item.contract_ticker_symbol || 'UNK',
+      name: item.contract_name || 'Unknown Token',
+      decimals: item.contract_decimals || 18,
+      balance: item.balance ? String(item.balance) : '0',
+      guiBalance: Number(item.balance || 0) / Math.pow(10, item.contract_decimals || 18),
+      price: item.quote_rate || 0,
+      value: (Number(item.balance || 0) / Math.pow(10, item.contract_decimals || 18)) * (item.quote_rate || 0),
+      logo: item.logo_url,
+      chain: String(chainId) === '56' ? 'BSC' : String(chainId) === '1399811149' ? 'SOL' : 'ETH',
+      isMockData: !!item._is_mock
+    }));
+  } catch (err) {
+    console.error('[chainData] Failed to fetch balances:', err);
+    return [];
+  }
+}
 
 export const chainData = {
     async getTransactionHistory(address: string, chainId: number = 1): Promise<Transaction[]> {
-        if (!COVALENT_API_KEY) return this._getMockTransactions().map(tx => ({ ...tx, isMockData: true }));
         try {
-            const auth = btoa(`${COVALENT_API_KEY}:`);
-            const response = await fetch(
-                `${BASE_URL}/${chainId}/address/${address}/transactions_v2/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${auth}`
-                    }
-                }
-            );
-            if (!response.ok) {
-                const err = await response.text();
-                console.error(`Transaction fetch failed: ${response.status}`, err);
-                throw new Error(`Failed to fetch transactions: ${response.status}`);
-            }
-            const data = await response.json();
-            const items = data.data.items || [];
+            const response = await api.get('/api/portfolio/transactions', {
+                params: { address, chainId }
+            });
+            const items = response.data?.items || response.data?.data?.items || [];
 
             return items.map((item: any): Transaction => ({
                 id: item.tx_hash,
-                type: 'TRANSFER', // Simplified for PoC
-                coin: 'ETH', // Placeholder, would need log parsing for actual token
+                type: 'TRANSFER',
+                coin: 'ETH',
                 price: 0,
                 amount: 0,
                 date: item.block_signed_at,
@@ -47,28 +56,12 @@ export const chainData = {
     },
 
     async getBalances(address: string, chainId: number = 1): Promise<any[]> {
-        if (!COVALENT_API_KEY) return [];
         try {
-            const auth = btoa(`${COVALENT_API_KEY}:`);
-            const response = await fetch(
-                `${BASE_URL}/${chainId}/address/${address}/balances_v2/`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Basic ${auth}`
-                    }
-                }
-            );
-            if (!response.ok) {
-                console.warn(`Balance fetch failed for chain ${chainId}: ${response.status}`);
-                // Tagged so callers never mistake this for a live balance —
-                // previously this was indistinguishable from a real API
-                // response and a global "Live API" badge would still show
-                // green while these fabricated numbers were on screen.
-                return this._getMockBalances(chainId).map(item => ({ ...item, _is_mock: true }));
-            }
-            const data = await response.json();
-            return data.data.items || [];
+            const response = await api.get('/api/portfolio/balances', {
+                params: { address, chainId }
+            });
+            const items = response.data?.items || response.data?.tokens || response.data?.data?.items || [];
+            return Array.isArray(items) ? items : [];
         } catch (e) {
             console.warn(`Balance Fetch Error (${chainId}) - Using Mock Data`, e);
             return this._getMockBalances(chainId).map(item => ({ ...item, _is_mock: true }));
@@ -76,13 +69,9 @@ export const chainData = {
     },
 
     async getMultiChainBalances(address: string): Promise<TokenBalance[]> {
-        // Chains: ETH, BSC, POLY, ARB, AVAX, BASE, OP, SOL
         const chains = [1, 56, 137, 42161, 43114, 8453, 10, 1399811149];
 
         try {
-            // Fetch all chains in parallel instead of one-at-a-time — the
-            // previous sequential `for...of` loop meant every portfolio
-            // refresh paid the full network round-trip cost 8 times over.
             const perChainResults = await Promise.all(
                 chains.map(async chainId => {
                     const items = await this.getBalances(address, chainId);
@@ -91,7 +80,6 @@ export const chainData = {
             );
             const allItems = perChainResults.flat();
 
-            // Flatten and map to TokenBalance
             const tokens: TokenBalance[] = allItems.map((item: any) => {
                 return {
                     symbol: item.contract_ticker_symbol || 'UNK',
@@ -121,11 +109,8 @@ export const chainData = {
     },
 
     async getDefiPositions(address: string): Promise<DefiPosition[]> {
-        // Fetch all balances first
         const allTokens = await this.getMultiChainBalances(address);
 
-        // Filter and Map to DefiPosition based on heuristics
-        // In a real app, this would use a dedicated endpoint or SDK
         return allTokens.filter(t => {
             const name = t.name.toLowerCase();
             const symbol = t.symbol.toLowerCase();
@@ -135,8 +120,8 @@ export const chainData = {
                 name.includes('pancakeswap') ||
                 name.includes('lido') ||
                 name.includes('staked') ||
-                symbol.startsWith('a') || // aTokens (Aave)
-                symbol.startsWith('c') || // cTokens (Compound)
+                symbol.startsWith('a') ||
+                symbol.startsWith('c') ||
                 symbol.includes('lp');
         }).map((t, idx) => {
             let type: 'Lending' | 'Liquidity' | 'Staking' | 'Farming' | 'Governance' = 'Staking';
@@ -146,7 +131,7 @@ export const chainData = {
             if (t.name.toLowerCase().includes('aave') || t.symbol.startsWith('a')) {
                 type = 'Lending';
                 protocol = 'Aave V3';
-                apy = 4.5; // Mock APY
+                apy = 4.5;
             } else if (t.name.toLowerCase().includes('uniswap') || t.symbol.includes('lp')) {
                 type = 'Liquidity';
                 protocol = 'Uniswap V3';
@@ -166,17 +151,15 @@ export const chainData = {
                 protocol,
                 name: t.name,
                 icon: t.logo || '',
-                chain: t.chain || 'ETH',
+                chain: (t.chain || 'ETH') as any,
                 type,
                 apy,
-                balance: t.value || 0, // In USD
+                balance: t.value || 0,
                 healthFactor: type === 'Lending' ? 1.65 : undefined
             };
         });
     },
 
-    // MOCK DATA GENERATORS FOR DEMO MODE
-    // Used when API keys are invalid or rate limited (Beta Stability)
     _getMockTransactions(): Transaction[] {
         const now = new Date();
         return [
@@ -186,7 +169,7 @@ export const chainData = {
                 coin: 'ETH',
                 price: 3200,
                 amount: 0.5,
-                date: new Date(now.getTime() - 1000 * 60 * 5).toISOString(), // 5 mins ago
+                date: new Date(now.getTime() - 1000 * 60 * 5).toISOString(),
                 value: 1600,
                 hash: '0x712...982',
                 from: '0xUserWallet...123',
@@ -201,7 +184,7 @@ export const chainData = {
                 coin: 'ETH',
                 price: 3200,
                 amount: 0.1,
-                date: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+                date: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(),
                 value: 320,
                 hash: '0x891...231',
                 from: '0xUserWallet...123',
@@ -216,7 +199,7 @@ export const chainData = {
                 coin: 'USDC',
                 price: 1,
                 amount: 5000,
-                date: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+                date: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(),
                 value: 5000,
                 hash: '0x555...111',
                 from: '0xCoinbase...Hot',
@@ -229,15 +212,14 @@ export const chainData = {
     },
 
     _getMockBalances(chainId: number): any[] {
-        // Return rich data for varied portfolio look
-        if (chainId === 1) { // ETH
+        if (chainId === 1) {
             return [
                 { contract_ticker_symbol: 'ETH', contract_name: 'Ethereum', contract_decimals: 18, balance: '1250000000000000000', quote: 4000, logo_url: 'https://logos.covalenthq.com/tokens/1/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png' },
                 { contract_ticker_symbol: 'USDC', contract_name: 'USD Coin', contract_decimals: 6, balance: '5000000000', quote: 5000, logo_url: 'https://logos.covalenthq.com/tokens/1/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png' },
                 { contract_ticker_symbol: 'PEPE', contract_name: 'Pepe', contract_decimals: 18, balance: '5000000000000000000000000', quote: 850, logo_url: 'https://logos.covalenthq.com/tokens/1/0x6982508145454ce325ddbe47a25d4ec3d2311933.png' }
             ];
         }
-        if (chainId === 1399811149) { // SOL
+        if (chainId === 1399811149) {
             return [
                 { contract_ticker_symbol: 'SOL', contract_name: 'Solana', contract_decimals: 9, balance: '15500000000', quote: 2200, logo_url: 'https://logos.covalenthq.com/tokens/1399811149/0x11111111111111111111111111111111.png' },
                 { contract_ticker_symbol: 'JUP', contract_name: 'Jupiter', contract_decimals: 6, balance: '5000000000', quote: 600, logo_url: 'https://logos.covalenthq.com/tokens/1399811149/JUPyiwrYJFskUPiHa7hkeR8VUtkCwH93orp1bnwi3Q5.png' }

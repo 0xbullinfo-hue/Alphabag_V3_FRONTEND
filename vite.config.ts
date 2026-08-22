@@ -14,6 +14,18 @@ export default defineConfig(({ mode }) => {
   const devHost = env.VITE_DEV_HOST || '0.0.0.0';
   const devPort = Number(env.VITE_DEV_PORT || '3005');
   const proxyTarget = env.VITE_API_BASE_URL || 'http://localhost:3003';
+  const isProductionDeployment = mode === 'production' && env.VITE_ENVIRONMENT === 'production';
+
+  if (isProductionDeployment) {
+    if (!env.VITE_API_BASE_URL) {
+      throw new Error('VITE_API_BASE_URL must be set for a production deployment.');
+    }
+    const apiUrl = new URL(env.VITE_API_BASE_URL);
+    if (apiUrl.protocol !== 'https:') {
+      throw new Error('VITE_API_BASE_URL must use HTTPS for a production deployment.');
+    }
+  }
+
   const proxyAgent = proxyTarget.startsWith('https://')
     ? new https.Agent({ family: 4 })
     : new http.Agent({ family: 4 });
@@ -62,11 +74,11 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom'],
             web3: ['wagmi', 'viem', '@web3modal/wagmi'],
-            solana: ['@solana/web3.js', '@solana/wallet-adapter-base', '@solana/wallet-adapter-react'],
             walletconnect: ['@walletconnect/ethereum-provider'],
             recharts: ['recharts'],
             ui: ['lucide-react', 'framer-motion', 'sweetalert2'],
-            ai: ['@google/genai']
+            ai: ['@google/genai'],
+            query: ['@tanstack/react-query']
           }
         }
       }

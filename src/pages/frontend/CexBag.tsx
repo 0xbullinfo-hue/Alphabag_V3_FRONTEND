@@ -37,13 +37,6 @@ export const SUPPORTED_CEX = [
     { id: 'upbit',    name: 'Upbit',    icon: 'https://s2.coinmarketcap.com/static/img/exchanges/64x64/375.png' },
 ];
 
-const MOCK_ASSETS = [
-    { coin: 'Bitcoin',  symbol: 'BTC',  balance: 0.452, price: 64230.50, value: 29032.18, exchange: 'Binance',  img: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png'  },
-    { coin: 'Ethereum', symbol: 'ETH',  balance: 4.2,   price: 3450.20,  value: 14490.84, exchange: 'Binance',  img: 'https://cryptologos.cc/logos/ethereum-eth-logo.png'  },
-    { coin: 'Solana',   symbol: 'SOL',  balance: 145.5, price: 145.20,   value: 21126.60, exchange: 'Coinbase', img: 'https://cryptologos.cc/logos/solana-sol-logo.png'    },
-    { coin: 'Tether',   symbol: 'USDT', balance: 3500,  price: 1.00,     value: 3500.00,  exchange: 'Kraken',   img: 'https://cryptologos.cc/logos/tether-usdt-logo.png'   },
-];
-
 export const CexBag: React.FC = () => {
     const { tier } = useWallet();
     const { connections: connectedCex, removeConnection, connectExchange, totalBalance } = useCexConnections();
@@ -262,29 +255,31 @@ export const CexBag: React.FC = () => {
                                     {connectedCex.length === 0 ? (
                                         <tr><td colSpan={4} className="p-16 text-center text-alphabag-subtext text-xs">No data. Connect an exchange API key to view balances.</td></tr>
                                     ) : (
-                                        MOCK_ASSETS.map((asset, idx) => (
+                                        connectedCex.flatMap((cex) =>
+                                            (cex.balances || []).map((asset: any, idx: number) => (
                                             <tr key={idx} className="hover:bg-alphabag-gray/40 transition-colors">
                                                 <td className="p-4 px-6">
                                                     <div className="flex items-center gap-2">
-                                                        <img src={asset.img} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                        <img src={asset.img || `https://cryptologos.cc/logos/${asset.symbol?.toLowerCase()}-${asset.symbol?.toLowerCase()}-logo.png`} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                                         <div>
                                                             <div className="text-alphabag-text font-semibold">{asset.symbol}</div>
-                                                            <div className="text-alphabag-subtext text-[10px] mt-0.5">{asset.coin}</div>
+                                                            <div className="text-alphabag-subtext text-[10px] mt-0.5">{asset.coin || asset.name}</div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-4 px-6 text-right tabular-nums">
-                                                    <div className="font-semibold text-alphabag-text">{asset.balance.toLocaleString()}</div>
+                                                    <div className="font-semibold text-alphabag-text">{Number(asset.balance).toLocaleString()}</div>
                                                 </td>
                                                 <td className="py-4 px-6 text-right tabular-nums">
-                                                    <div className="font-semibold text-alphabag-text">${asset.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                                                    <div className="text-[10px] text-alphabag-subtext mt-1">@ ${asset.price.toLocaleString()}</div>
+                                                    <div className="font-semibold text-alphabag-text">${Number(asset.value).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                                                    <div className="text-[10px] text-alphabag-subtext mt-1">@ ${Number(asset.price).toLocaleString()}</div>
                                                 </td>
                                                 <td className="p-4 px-6 text-right">
                                                     <span className="text-[10px] font-semibold uppercase text-alphabag-subtext bg-alphabag-gray px-2 py-0.5 rounded-md border border-alphabag-muted">{asset.exchange}</span>
                                                 </td>
                                             </tr>
                                         ))
+                                        )
                                     )}
                                 </tbody>
                             </table>

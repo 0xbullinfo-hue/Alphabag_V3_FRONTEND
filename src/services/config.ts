@@ -43,17 +43,8 @@ const IS_LOCALHOST_DEV = import.meta.env.DEV && LOCALHOST_HOSTNAMES.has(window.l
 export const IS_DEMO_MODE = IS_LOCALHOST_DEV && import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
-export const DISABLED_PAGES = [
-  '/cex-bag',
-  '/portfolio',
-  '/alphas-feed',
-  '/alpha-ai',
-  '/integrations',
-  '/whales',
-  '/security',
-  '/alpha-calls',
-  '/defi',
-];
+export const getDisabledPages = (): string[] => [];
+export const DISABLED_PAGES: string[] = getDisabledPages();
 
 // Launch mode is configured via environment so the same codebase can support
 // teaser-mode marketing pages and the full dashboard without a hardcoded flag.

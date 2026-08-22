@@ -3,6 +3,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { ShieldCheck, ShieldAlert, AlertTriangle, CheckCircle, RefreshCw, Key, ArrowRight, Lock, HelpCircle } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { useWallet } from '../../context/WalletContext';
+import { api } from '../../services/api';
 import { TOKEN_GATING_CONFIG } from '../../services/config';
 
 // ERC-20 Minimal ABI for approve transaction
@@ -84,51 +85,24 @@ export const SecurityScanner: React.FC = () => {
         setLoading(true);
         setApprovals([]);
 
-        const COVALENT_API_KEY = import.meta.env.VITE_COVALENT_API_KEY;
-
         try {
-            if (!COVALENT_API_KEY) {
-                // Fallback to rich Mock Data for Demo mode if API key is not present
-                console.log("[SecurityScanner] No Covalent API key found — using mock security approvals.");
-                await new Promise(r => setTimeout(r, 1200));
-                setApprovals(getMockApprovals());
-                return;
-            }
-
-            const auth = btoa(`${COVALENT_API_KEY}:`);
-            const url = `https://api.covalenthq.com/v1/${chain.slug}/approvals/${targetAddress}/`;
-            
-            console.log(`[SecurityScanner] Fetching approvals for ${targetAddress} on chain ${chain.slug}`);
-            const response = await fetch(url, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Basic ${auth}`
-                }
+            const res = await api.get('/api/security/approvals', {
+                params: { address: targetAddress, chain: chain.slug }
             });
+            const rawItems = res.data?.items || [];
 
-            if (!response.ok) {
-                throw new Error(`Covalent API failed with status ${response.status}`);
-            }
-
-            const resData = await response.json();
-            const rawItems = resData.data?.items || [];
-            
-            // Map Covalent data to ApprovalItem structure
             const mapped: ApprovalItem[] = rawItems.map((item: any): ApprovalItem => {
                 const balance = Number(item.balance || 0) / Math.pow(10, item.contract_decimals || 18);
                 const price = item.quote_rate || 0;
-                
+
                 const spenders: SpenderAllowance[] = (item.allowances || []).map((allow: any): SpenderAllowance => {
                     const allowanceValue = allow.allowance_amount || '0';
                     const isInfinite = allowanceValue.length > 25 || allowanceValue.startsWith('1157920892');
-                    
                     const valueAtRiskUsd = balance * price;
-                    
-                    // Risk heuristics: Infinite allowance + unverified contract is high risk
+
                     let riskLevel: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
                     if (isInfinite) {
                         const lowSpender = (allow.spender_address || '').toLowerCase();
-                        // Mark standard known protocols as Medium Risk instead of High Risk
                         const isCommonProtocol = lowSpender.includes('router') || lowSpender.includes('uniswap') || lowSpender.includes('pancake');
                         riskLevel = isCommonProtocol ? 'MEDIUM' : 'HIGH';
                     } else if (valueAtRiskUsd > 100) {
