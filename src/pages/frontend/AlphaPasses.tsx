@@ -476,7 +476,7 @@ export const AlphaPasses: React.FC = () => {
               {/* Quantity Selector */}
               <div className="mt-4 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-semibold uppercase text-alphabag-subtext">Select Quantity (Max 5 / tx)</span>
+                  <span className="text-xs font-semibold uppercase text-alphabag-subtext">Select Quantity (Max 10 / tx)</span>
                   <span className="text-xs text-alphabag-subtext font-mono">
                     Wallet: <strong className="text-alphabag-text">{bagBalance.toLocaleString()} $BAG</strong>
                   </span>
@@ -507,7 +507,7 @@ export const AlphaPasses: React.FC = () => {
 
                   {/* Preset Buttons */}
                   <div className="flex items-center gap-1.5 flex-1">
-                    {[1, 2, 3, 5].map((preset) => (
+                    {[1, 2, 5, 10].map((preset) => (
                       <button
                         key={preset}
                         type="button"
