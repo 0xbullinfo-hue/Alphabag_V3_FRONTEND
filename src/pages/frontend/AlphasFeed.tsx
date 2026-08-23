@@ -304,11 +304,11 @@ export const AlphasFeed: React.FC = () => {
     const isNearLimit = postLength > MAX_POST_LENGTH * 0.85;
 
     return (
-        <div className="relative min-h-screen">
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-2 transition-all duration-700">
+        <div className="relative min-h-screen max-w-7xl mx-auto px-0 sm:px-2 lg:px-0">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 transition-all duration-700">
 
-                {/* Left Sidebar: Featured Founders */}
-                <div className="hidden lg:block lg:col-span-3 sticky top-0 h-screen overflow-y-auto pt-0 pb-10 hide-scrollbar">
+                {/* Left Sidebar: Featured Founders (Desktop) */}
+                <div className="hidden lg:block lg:col-span-3 sticky top-0 h-[calc(100vh-80px)] overflow-y-auto pt-0 pb-10 hide-scrollbar">
                     <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                         <div className="p-2.5 border-b border-alphabag-gray bg-alphabag-black flex items-center justify-between">
                             <span className="text-[10px] font-semibold uppercase tracking-widest text-alphabag-text flex items-center gap-2">
@@ -384,34 +384,94 @@ export const AlphasFeed: React.FC = () => {
                 </div>
 
                 {/* Main Feed */}
-                <div className="lg:col-span-6 border-x border-white/5 min-h-screen">
-                    <div className="p-3 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
-                        <div className="flex items-center gap-2 mb-1">
-                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black ">
-                                <Zap size={14} />
+                <div className="lg:col-span-6 border-x border-white/5 min-h-screen min-w-0">
+                    {/* Header */}
+                    <div className="p-3 sm:p-4 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                            <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shrink-0">
+                                    <Zap size={15} />
+                                </div>
+                                <h1 className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase relative flex items-center">
+                                    Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 ml-1.5 sm:ml-2">Feed</span>
+                                </h1>
                             </div>
-                            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                                Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600  ml-2">Feed</span>
-                            </h1>
+                            {/* Mobile profile link */}
+                            <button
+                                onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
+                                className="lg:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-[10px] font-bold text-alphabag-yellow uppercase tracking-wider"
+                            >
+                                Profile
+                            </button>
                         </div>
-                        <p className="text-[9px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
+                        <p className="text-[9px] sm:text-[10px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
+                    </div>
+
+                    {/* Mobile Featured Founders Tray */}
+                    {foundersProjects.length > 0 && (
+                        <div className="block lg:hidden border-b border-white/5 bg-alphabag-darkgray/40 p-2.5">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-alphabag-text flex items-center gap-1.5">
+                                    <Users size={12} className="text-alphabag-yellow" /> Featured Founders
+                                </span>
+                                <button
+                                    onClick={handleShowMoreFounders}
+                                    className="text-[9px] font-black uppercase text-alphabag-yellow hover:underline"
+                                >
+                                    View All
+                                </button>
+                            </div>
+                            <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
+                                {foundersProjects.map(project => (
+                                    <button
+                                        key={project.id}
+                                        onClick={() => window.location.hash = `#/alpha-radar?project=${project.id}`}
+                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-alphabag-black border border-white/10 shrink-0 hover:border-alphabag-yellow/50 transition-all text-left"
+                                    >
+                                        <div className="w-5 h-5 rounded-full overflow-hidden bg-alphabag-yellow/10 flex items-center justify-center text-[9px] font-black text-alphabag-yellow shrink-0">
+                                            {project.logoUrl ? (
+                                                <img src={project.logoUrl} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                project.name.charAt(0)
+                                            )}
+                                        </div>
+                                        <span className="text-[11px] font-bold text-white max-w-[90px] truncate">{project.name}</span>
+                                        {project.isPaidSponsor && <Star size={8} className="text-alphabag-yellow fill-current shrink-0" />}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Mobile Search Input */}
+                    <div className="block lg:hidden p-2.5 border-b border-white/5 bg-alphabag-black/30">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-muted" size={14} />
+                            <input
+                                type="text"
+                                placeholder="Search alphas, tickers ($BAG), strategy..."
+                                className="w-full bg-white/5 border border-white/10 focus:border-alphabag-yellow/50 rounded-full py-1.5 pl-9 pr-3 text-xs text-white outline-none placeholder:text-alphabag-muted transition-all"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
                     </div>
 
                     {/* Top Tabs */}
-                    <div className="sticky top-0 z-20 bg-alphabag-black/80 backdrop-blur-xl border-b border-white/5">
+                    <div className="sticky top-0 z-20 bg-alphabag-black/90 backdrop-blur-xl border-b border-white/5">
                         <div className="flex w-full">
                             {tabs.map(({ label, value }) => {
                                 return (
                                     <button
                                         key={label}
                                         onClick={() => setActiveTab(value)}
-                                        className="flex-1 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all relative group"
+                                        className="flex-1 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-all relative group"
                                     >
                                         <span className={activeTab === value ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
                                             {label}
                                         </span>
                                         {activeTab === value && (
-                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow " />
+                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow" />
                                         )}
                                     </button>
                                 );
@@ -420,88 +480,98 @@ export const AlphasFeed: React.FC = () => {
                     </div>
 
                     {/* Create Post */}
-                    <div className="p-3 border-b border-white/5">
-                        <div className="flex gap-2">
-                            <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden">
+                    <div className="p-3 sm:p-4 border-b border-white/5 bg-alphabag-darkgray/20">
+                        <div className="flex gap-2.5">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden shrink-0 mt-0.5">
                                 {(user?.email?.[0] || 'G').toUpperCase()}
                             </div>
-                            <div className="flex-1 space-y-2">
-                                    <textarea
-                                        className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-1.5 text-lg leading-snug"
-                                        placeholder={user ? "What's happening?" : "What's happening? You are posting as Guest."}
-                                        rows={2}
-                                        value={newPostContent}
-                                        maxLength={MAX_POST_LENGTH}
-                                        onChange={(e) => setNewPostContent(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                                                e.preventDefault();
-                                                handleCreatePost();
-                                            }
-                                        }}
-                                    />
+                            <div className="flex-1 min-w-0 space-y-2">
+                                <textarea
+                                    className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-1 text-sm sm:text-base leading-snug outline-none"
+                                    placeholder={user ? "What's the alpha signal?" : "What's the alpha signal? (Posting as Guest)"}
+                                    rows={2}
+                                    value={newPostContent}
+                                    maxLength={MAX_POST_LENGTH}
+                                    onChange={(e) => setNewPostContent(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleCreatePost();
+                                        }
+                                    }}
+                                />
 
-                                    <div className="space-y-1">
-                                        <div className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
-                                            <div
-                                                className={`h-full transition-all duration-300 ${isNearLimit ? 'bg-orange-400' : 'bg-alphabag-yellow'}`}
-                                                style={{ width: `${postLengthPct}%` }}
-                                            />
+                                <div className="space-y-1">
+                                    <div className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
+                                        <div
+                                            className={`h-full transition-all duration-300 ${isNearLimit ? 'bg-orange-400' : 'bg-alphabag-yellow'}`}
+                                            style={{ width: `${postLengthPct}%` }}
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
+                                        <span className="text-alphabag-muted hidden sm:inline">Ctrl/Cmd + Enter to post</span>
+                                        <span className="text-alphabag-muted sm:hidden">AlphaBAG Signal</span>
+                                        <span className={isNearLimit ? 'text-orange-400' : 'text-alphabag-muted'}>{postLength}/{MAX_POST_LENGTH}</span>
+                                    </div>
+                                </div>
+
+                                {/* Composer Tools & Actions */}
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-white/5">
+                                    {/* Left Tools */}
+                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                        <div className="flex items-center text-alphabag-yellow">
+                                            {[ImageIcon, BarChart2, Smile, Calendar, MapPin].map((Icon, idx) => (
+                                                <button
+                                                    key={idx}
+                                                    type="button"
+                                                    onClick={() => handleComposerToolClick(Icon.displayName || Icon.name || 'Composer tool')}
+                                                    className={`p-1.5 hover:bg-alphabag-yellow/10 rounded-full transition-colors ${idx >= 3 ? 'hidden sm:inline-flex' : 'inline-flex'}`}
+                                                >
+                                                    <Icon size={15} />
+                                                </button>
+                                            ))}
                                         </div>
-                                        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest">
-                                            <span className="text-alphabag-muted">Ctrl/Cmd + Enter to post</span>
-                                            <span className={isNearLimit ? 'text-orange-400' : 'text-alphabag-muted'}>{postLength}/{MAX_POST_LENGTH}</span>
-                                        </div>
+                                        <select
+                                            className="bg-alphabag-black border border-white/10 text-[9px] sm:text-[10px] text-white font-bold uppercase tracking-wider rounded-lg px-2 py-1 outline-none"
+                                            value={selectedStrategy}
+                                            onChange={(e) => setSelectedStrategy(e.target.value as StrategyFilter)}
+                                        >
+                                            <option value="">Tag: None</option>
+                                            <option value="DEGEN">DEGEN</option>
+                                            <option value="SHORT">SHORT</option>
+                                            <option value="LONGTERM">LONGTERM</option>
+                                            <option value="AIRDROP">AIRDROP</option>
+                                        </select>
                                     </div>
 
-                                    <div className="flex items-center justify-between pt-2">
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex gap-1 -ml-2 text-alphabag-yellow">
-                                                {[ImageIcon, BarChart2, Smile, Calendar, MapPin].map((Icon, idx) => (
-                                                    <button
-                                                        key={idx}
-                                                        onClick={() => handleComposerToolClick(Icon.displayName || Icon.name || 'Composer tool')}
-                                                        className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors"
-                                                    >
-                                                        <Icon size={18} />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                            <div className="flex items-center gap-2 ml-2">
-                                                <select
-                                                    className="bg-alphabag-black/50 border border-white/10 text-[10px] text-white font-bold uppercase tracking-widest rounded-lg px-2 py-1 outline-none appearance-none"
-                                                    value={selectedStrategy}
-                                                    onChange={(e) => setSelectedStrategy(e.target.value as StrategyFilter)}
-                                                >
-                                                    <option value="">No Tag</option>
-                                                    <option value="DEGEN">DEGEN</option>
-                                                    <option value="SHORT">SHORT</option>
-                                                    <option value="LONGTERM">LONGTERM</option>
-                                                    <option value="AIRDROP">AIRDROP</option>
-                                                </select>
-                                                <button
-                                                    onClick={() => window.location.hash = '#/genesis-manifesto'}
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[10px] text-alphabag-yellow font-black uppercase tracking-widest hover:bg-alphabag-yellow/20 transition-all"
-                                                >
-                                                    <Rocket size={12} /> Manifesto
-                                                </button>
-                                                <button
-                                                    onClick={() => setIsListingOpen(true)}
-                                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/10 border border-blue-500/30 rounded-full text-[10px] text-blue-400 font-black uppercase tracking-widest hover:bg-blue-500/20 transition-all"
-                                                >
-                                                    <Plus size={12} /> List Project
-                                                </button>
-                                            </div>
+                                    {/* Right Actions & Post Button */}
+                                    <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => window.location.hash = '#/genesis-manifesto'}
+                                                className="flex items-center gap-1 px-2 py-1 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[9px] text-alphabag-yellow font-bold uppercase tracking-wider hover:bg-alphabag-yellow/20 transition-all shrink-0"
+                                            >
+                                                <Rocket size={10} /> <span className="hidden xs:inline">Manifesto</span>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsListingOpen(true)}
+                                                className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full text-[9px] text-blue-400 font-bold uppercase tracking-wider hover:bg-blue-500/20 transition-all shrink-0"
+                                            >
+                                                <Plus size={10} /> <span className="hidden xs:inline">List Project</span>
+                                            </button>
                                         </div>
                                         <Button
                                             size="sm"
                                             onClick={handleCreatePost}
                                             disabled={!newPostContent.trim() || newPostContent.length > MAX_POST_LENGTH}
-                                            className="px-4 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-1 disabled:opacity-50 text-[10px]"
+                                            className="px-3.5 sm:px-4 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-1 disabled:opacity-50 text-[10px] shrink-0 h-7"
                                         >
                                             Post
                                         </Button>
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -518,7 +588,7 @@ export const AlphasFeed: React.FC = () => {
                                 />
                             ))
                         ) : (
-                            <div className="p-4 text-center space-y-2">
+                            <div className="p-8 text-center space-y-2">
                                 <div className="mx-auto w-12 h-12 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/20 flex items-center justify-center">
                                     <Search size={20} className="text-alphabag-yellow" />
                                 </div>
@@ -535,9 +605,9 @@ export const AlphasFeed: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Sidebar Widgets */}
-                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-2 sticky top-0 h-screen overflow-y-auto hide-scrollbar">
-                    {/* My Profile Quick Access [NEW] */}
+                {/* Right Sidebar: Widgets (Desktop) */}
+                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-3 sticky top-0 h-[calc(100vh-80px)] overflow-y-auto hide-scrollbar">
+                    {/* My Profile Quick Access */}
                     <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-2xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
                         onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
                     >
@@ -576,13 +646,13 @@ export const AlphasFeed: React.FC = () => {
                         </p>
                         <Button
                             onClick={handleExploreFeatures}
-                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5 "
+                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5"
                         >
                             Explore Features
                         </Button>
                     </div>
 
-                    {/* NEW: Promotions & Ads Section */}
+                    {/* Promotions & Ads Section */}
                     <div className="bg-gradient-to-br from-alphabag-dark to-alphabag-black border border-white/10 rounded-xl overflow-hidden shadow-xl">
                         <div className="p-4 border-b border-white/5 flex items-center justify-between">
                             <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
@@ -630,7 +700,7 @@ export const AlphasFeed: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Trending / Live Widget (Sponsored) */}
+                    {/* Trending / Live Widget */}
                     <div className="bg-white/5 border border-white/5 rounded-xl overflow-hidden">
                         <h3 className="text-base font-black text-white uppercase tracking-tight p-3.5">Live on AlphaBag</h3>
                         <div className="divide-y divide-white/5">
@@ -643,31 +713,31 @@ export const AlphasFeed: React.FC = () => {
                                 ))
                             ) : sidebarAds.length > 0 ? (
                                 sidebarAds.map(ad => (
-                                <div
-                                    key={ad.id}
-                                    onClick={() => window.location.hash = '#/alpha-radar'}
-                                    className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
-                                >
-                                    <div className="flex justify-between items-start mb-1">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-4 h-4 bg-alphabag-dark rounded flex items-center justify-center text-[7px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
-                                                {ad.symbol?.[0]}
-                                            </div>
-                                            <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-wider">{ad.name} <span className="text-red-500 ml-1">Live</span></span>
-                                        </div>
-                                        <div className="flex -space-x-1.5">
-                                            {[...Array(3)].map((_, i) => (
-                                                <div key={i} className="w-5 h-5 rounded-full border-2 border-alphabag-dark bg-alphabag-yellow/20 flex items-center justify-center text-[7px] font-black text-alphabag-yellow">
-                                                    {i === 2 ? '+48' : 'U'}
+                                    <div
+                                        key={ad.id}
+                                        onClick={() => window.location.hash = '#/alpha-radar'}
+                                        className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
+                                    >
+                                        <div className="flex justify-between items-start mb-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-4 h-4 bg-alphabag-dark rounded flex items-center justify-center text-[7px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
+                                                    {ad.symbol?.[0]}
                                                 </div>
-                                            ))}
+                                                <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-wider">{ad.name} <span className="text-red-500 ml-1">Live</span></span>
+                                            </div>
+                                            <div className="flex -space-x-1.5">
+                                                {[...Array(3)].map((_, i) => (
+                                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-alphabag-dark bg-alphabag-yellow/20 flex items-center justify-center text-[7px] font-black text-alphabag-yellow">
+                                                        {i === 2 ? '+48' : 'U'}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
+                                        <h4 className="text-[12px] font-bold text-white leading-snug line-clamp-2">
+                                            {ad.description}
+                                        </h4>
                                     </div>
-                                    <h4 className="text-[12px] font-bold text-white leading-snug line-clamp-2">
-                                        {ad.description}
-                                    </h4>
-                                </div>
-                            ))
+                                ))
                             ) : (
                                 <div className="p-4 text-[11px] text-alphabag-muted">No live promoted signals available right now.</div>
                             )}
@@ -804,12 +874,12 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
     };
 
     return (
-        <div className="p-3 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
-            <div className="flex gap-2">
+        <div className="p-2.5 sm:p-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
+            <div className="flex gap-2 sm:gap-2.5">
                 {/* Avatar */}
                 <div
                     onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                    className="w-9 h-9 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow shadow-inner overflow-hidden uppercase cursor-pointer hover:border-alphabag-yellow/50 transition-all mt-1"
+                    className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow shadow-inner overflow-hidden uppercase cursor-pointer hover:border-alphabag-yellow/50 transition-all mt-0.5"
                 >
                     {post.logoUrl ? (
                         <img src={post.logoUrl} alt={authorName} className="w-full h-full object-cover" />
@@ -819,28 +889,28 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                 </div>
 
                 <div className="flex-1 min-w-0">
-                    {/* Header - Wrap flex items to fix collision */}
-                    <div className="flex justify-between items-start mb-2">
-                        <div className="flex flex-col gap-1.5 min-w-0">
+                    {/* Header */}
+                    <div className="flex justify-between items-start gap-1.5 mb-1.5">
+                        <div className="flex flex-col gap-1 min-w-0 flex-1">
                             {/* Name and Handle line */}
-                            <div className="flex items-center flex-wrap gap-1.5">
+                            <div className="flex items-center flex-wrap gap-x-1.5 gap-y-0.5 min-w-0">
                                 <span
                                     onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                                    className="font-bold text-white text-[14px] truncate cursor-pointer hover:underline"
+                                    className="font-bold text-white text-xs sm:text-sm truncate cursor-pointer hover:underline"
                                 >
                                     {authorName}
                                 </span>
                                 {isFounderPost ? (
-                                    <CheckCircle size={13} className="text-alphabag-yellow flex-shrink-0" fill="currentColor" />
+                                    <CheckCircle size={12} className="text-alphabag-yellow flex-shrink-0" fill="currentColor" />
                                 ) : (
-                                    <Zap size={13} className="text-alphabag-muted flex-shrink-0" />
+                                    <Zap size={12} className="text-alphabag-muted flex-shrink-0" />
                                 )}
-                                <span className="text-alphabag-muted text-[13px] truncate">{authorHandle}</span>
-                                <span className="text-alphabag-muted text-[13px]">· {relativeTime}</span>
+                                <span className="text-alphabag-muted text-[11px] sm:text-xs truncate">{authorHandle}</span>
+                                <span className="text-alphabag-muted text-[11px] sm:text-xs shrink-0">· {relativeTime}</span>
                             </div>
 
                             {/* Role Badges line */}
-                            <div className="flex flex-wrap items-center gap-2">
+                            <div className="flex flex-wrap items-center gap-1.5">
                                 <div className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${isFounderPost ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
                                     {isFounderPost ? 'FOUNDER' : 'ELITE TRADER'}
                                 </div>
@@ -850,27 +920,27 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                                     </div>
                                 )}
                                 {post.strategy && (
-                                    <div className={`px-2 py-0.5 rounded flex items-center gap-1 text-[8px] font-black uppercase tracking-widest border
+                                    <div className={`px-1.5 py-0.5 rounded flex items-center gap-1 text-[8px] font-black uppercase tracking-widest border
                                         ${post.strategy === 'DEGEN' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
                                             post.strategy === 'SHORT' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
                                                 post.strategy === 'LONGTERM' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
                                                     'bg-purple-500/20 text-purple-400 border-purple-500/30'}
                                     `}>
-                                        {post.strategy === 'DEGEN' && <Zap size={10} />}
-                                        {post.strategy === 'SHORT' && <TrendingUp size={10} className="rotate-180" />}
-                                        {post.strategy === 'LONGTERM' && <Shield size={10} />}
-                                        {post.strategy === 'AIRDROP' && <Target size={10} />}
-                                        {post.strategy} STRATEGY
+                                        {post.strategy === 'DEGEN' && <Zap size={9} />}
+                                        {post.strategy === 'SHORT' && <TrendingUp size={9} className="rotate-180" />}
+                                        {post.strategy === 'LONGTERM' && <Shield size={9} />}
+                                        {post.strategy === 'AIRDROP' && <Target size={9} />}
+                                        {post.strategy}
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* Right side interactions */}
-                        <div className="flex items-center gap-2 shrink-0 ml-2">
+                        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                             <button
                                 onClick={(e) => { e.stopPropagation(); onFollowToggle(); }}
-                                className={`text-[10px] font-black uppercase px-3 py-1 rounded-full border transition-all ${isFollowing ? 'border-white/20 text-white bg-white/5' : 'border-alphabag-yellow text-alphabag-yellow hover:bg-alphabag-yellow/10'}`}
+                                className={`text-[9px] sm:text-[10px] font-black uppercase px-2.5 sm:px-3 py-1 rounded-full border transition-all ${isFollowing ? 'border-white/20 text-white bg-white/5' : 'border-alphabag-yellow text-alphabag-yellow hover:bg-alphabag-yellow/10'}`}
                             >
                                 {isFollowing ? 'Following' : 'Follow'}
                             </button>
@@ -878,19 +948,19 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
                                 onClick={handleMoreActions}
                                 className="text-alphabag-muted hover:text-white transition-colors p-1 rounded-full hover:bg-white/5"
                             >
-                                <MoreHorizontal size={18} />
+                                <MoreHorizontal size={16} />
                             </button>
                         </div>
                     </div>
 
                     {/* Content */}
-                    <div className={`p-2.5 rounded-lg mb-2 border ${post.strategy === 'DEGEN' ? 'bg-gradient-to-br from-orange-500/5 to-transparent border-orange-500/20 shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]' :
+                    <div className={`p-2 sm:p-2.5 rounded-lg mb-2 border ${post.strategy === 'DEGEN' ? 'bg-gradient-to-br from-orange-500/5 to-transparent border-orange-500/20 shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]' :
                         post.strategy === 'SHORT' ? 'bg-gradient-to-br from-red-500/5 to-transparent border-red-500/20' :
                             post.strategy === 'LONGTERM' ? 'bg-gradient-to-br from-green-500/5 to-transparent border-green-500/20' :
                                 post.strategy === 'AIRDROP' ? 'bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20' :
                                     'bg-transparent border-transparent'
                         }`}>
-                        <p className={`text-[14px] leading-relaxed whitespace-pre-wrap ${post.strategy === 'DEGEN' ? 'text-orange-50 font-medium' :
+                        <p className={`text-[13px] sm:text-[14px] leading-relaxed whitespace-pre-wrap break-words ${post.strategy === 'DEGEN' ? 'text-orange-50 font-medium' :
                             post.strategy === 'SHORT' ? 'text-red-50' :
                                 post.strategy === 'LONGTERM' ? 'text-green-50' :
                                     post.strategy === 'AIRDROP' ? 'text-purple-50' :
@@ -902,59 +972,59 @@ const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowi
 
                     {/* Banner for Manifesto posts */}
                     {isFounderPost && (
-                        <div className="rounded-lg border border-white/10 overflow-hidden mb-3 bg-white/5 shadow-2xl">
+                        <div className="rounded-lg border border-white/10 overflow-hidden mb-2 sm:mb-3 bg-white/5 shadow-2xl">
                             {post.bannerUrl ? (
                                 <img src={post.bannerUrl} alt="Manifesto Banner" className="aspect-[3/1] w-full object-cover" />
                             ) : (
                                 <div className="aspect-video bg-gradient-to-br from-alphabag-yellow/10 to-transparent flex items-center justify-center">
-                                    <Zap size={40} className="text-alphabag-yellow/20" />
+                                    <Zap size={32} className="text-alphabag-yellow/20" />
                                 </div>
                             )}
                         </div>
                     )}
 
                     {/* Interactions */}
-                    <div className="flex flex-wrap items-center justify-between -ml-2 text-alphabag-muted gap-y-2">
+                    <div className="flex items-center justify-between text-alphabag-muted pt-1 max-w-lg">
                         <button
                             onClick={handleComment}
-                            className="flex items-center gap-2 group transition-colors hover:text-blue-400 p-2 rounded-full hover:bg-blue-400/10"
+                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-blue-400 p-1.5 sm:p-2 rounded-full hover:bg-blue-400/10"
                         >
-                            <MessageCircle size={18} />
-                            <span className="text-xs font-medium">{comments}</span>
+                            <MessageCircle size={15} />
+                            <span className="text-[11px] font-medium">{comments}</span>
                         </button>
                         <button
                             onClick={handleShare}
-                            className="flex items-center gap-2 group transition-colors hover:text-alphabag-green p-2 rounded-full hover:bg-alphabag-green/10"
+                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-alphabag-green p-1.5 sm:p-2 rounded-full hover:bg-alphabag-green/10"
                         >
-                            <Share2 size={18} />
-                            <span className="text-xs font-medium">{post.shareCount || 233}</span>
+                            <Share2 size={15} />
+                            <span className="text-[11px] font-medium">{post.shareCount || 233}</span>
                         </button>
                         <button
                             onClick={handleLike}
-                            className={`flex items-center gap-2 group transition-colors p-2 rounded-full hover:bg-alphabag-yellow/10 ${isLiked ? 'text-alphabag-yellow' : 'hover:text-alphabag-yellow'}`}
+                            className={`flex items-center gap-1 sm:gap-1.5 group transition-colors p-1.5 sm:p-2 rounded-full hover:bg-alphabag-yellow/10 ${isLiked ? 'text-alphabag-yellow' : 'hover:text-alphabag-yellow'}`}
                         >
-                            <Heart size={18} fill={isLiked ? "currentColor" : "none"} />
-                            <span className="text-xs font-medium">{likes}</span>
+                            <Heart size={15} fill={isLiked ? "currentColor" : "none"} />
+                            <span className="text-[11px] font-medium">{likes}</span>
                         </button>
                         <button
                             onClick={handleViewAnalytics}
-                            className="flex items-center gap-2 group transition-colors hover:text-alphabag-yellow p-2 rounded-full hover:bg-alphabag-yellow/10"
+                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-alphabag-yellow p-1.5 sm:p-2 rounded-full hover:bg-alphabag-yellow/10"
                         >
-                            <BarChart size={18} />
-                            <span className="text-xs font-medium">6M</span>
+                            <BarChart size={15} />
+                            <span className="text-[11px] font-medium">6M</span>
                         </button>
-                        <div className="flex gap-1">
+                        <div className="flex items-center gap-0.5">
                             <button
                                 onClick={handleBookmark}
-                                className={`p-2 rounded-full transition-colors ${isBookmarked ? 'text-alphabag-yellow bg-alphabag-yellow/10' : 'hover:bg-alphabag-yellow/10 hover:text-alphabag-yellow'}`}
+                                className={`p-1.5 sm:p-2 rounded-full transition-colors ${isBookmarked ? 'text-alphabag-yellow bg-alphabag-yellow/10' : 'hover:bg-alphabag-yellow/10 hover:text-alphabag-yellow'}`}
                             >
-                                <Bookmark size={18} fill={isBookmarked ? 'currentColor' : 'none'} />
+                                <Bookmark size={15} fill={isBookmarked ? 'currentColor' : 'none'} />
                             </button>
                             <button
                                 onClick={handleShare}
-                                className="p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow"
+                                className="p-1.5 sm:p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow"
                             >
-                                <ExternalLink size={18} />
+                                <ExternalLink size={15} />
                             </button>
                         </div>
                     </div>
