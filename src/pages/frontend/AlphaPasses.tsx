@@ -25,7 +25,7 @@ import {
   Wallet,
   Loader2
 } from 'lucide-react';
-import { useAccount, useBalance, useNetwork, useSwitchNetwork, useContractWrite, useWaitForTransaction } from 'wagmi';
+import { useAccount, useBalance, useNetwork, useSwitchNetwork, useContractWrite, useWaitForTransaction, useContractRead } from 'wagmi';
 import { bsc } from 'wagmi/chains';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAuth } from '../../context/AuthContext';
@@ -125,10 +125,52 @@ export const AlphaPasses: React.FC = () => {
   const [mintPhase, setMintPhase] = useState<'IDLE' | 'APPROVING' | 'MINTING' | 'SUCCESS'>('IDLE');
   const [activeTab, setActiveTab] = useState<'MINT' | 'COLLECTION' | 'TIERS'>('MINT');
   const [txHash, setTxHash] = useState<string | null>(null);
-  const [contractMintActive] = useState<boolean>(false);
-  const [contractTotalSupply] = useState<number>(0);
-  const [contractMaxSupply] = useState<number>(NFT_CONFIG.TOTAL_SUPPLY || 10000);
-  const [walletMinted] = useState<number>(0);
+  // ── LIVE ON-CHAIN CONTRACT READS ─────────────────────────────────────────
+  const { data: mintActiveData } = useContractRead({
+    address: NFT_CONTRACT_ADDRESS,
+    abi: ALPHA_PASS_ABI,
+    functionName: 'mintActive',
+    enabled: NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
+    watch: true,
+  });
+
+  const { data: totalSupplyData } = useContractRead({
+    address: NFT_CONTRACT_ADDRESS,
+    abi: ALPHA_PASS_ABI,
+    functionName: 'totalSupply',
+    enabled: NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
+    watch: true,
+  });
+
+  const { data: maxSupplyData } = useContractRead({
+    address: NFT_CONTRACT_ADDRESS,
+    abi: ALPHA_PASS_ABI,
+    functionName: 'MAX_SUPPLY',
+    enabled: NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
+  });
+
+  const { data: walletMintData } = useContractRead({
+    address: NFT_CONTRACT_ADDRESS,
+    abi: ALPHA_PASS_ABI,
+    functionName: 'walletMintCount',
+    args: address ? [address] : undefined,
+    enabled: !!address && NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
+    watch: true,
+  });
+
+  const { data: allowanceData, refetch: refetchAllowance } = useContractRead({
+    address: BAG_TOKEN_ADDRESS,
+    abi: BAG_TOKEN_ABI,
+    functionName: 'allowance',
+    args: address && NFT_CONTRACT_ADDRESS ? [address, NFT_CONTRACT_ADDRESS] : undefined,
+    enabled: !!address && NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000' && BAG_TOKEN_ADDRESS !== '0x0000000000000000000000000000000000000000',
+    watch: true,
+  });
+
+  const contractMintActive = Boolean(mintActiveData);
+  const contractTotalSupply = Number(totalSupplyData || 0);
+  const contractMaxSupply = Number(maxSupplyData || NFT_CONFIG.TOTAL_SUPPLY || 10000);
+  const walletMinted = Number(walletMintData || 0);
   const [needsApproval, setNeedsApproval] = useState<boolean>(true);
   const [userNFTs] = useState<AlphaPassNFT[]>([]);
 
@@ -148,8 +190,13 @@ export const AlphaPasses: React.FC = () => {
       setNeedsApproval(true);
       return;
     }
-    setNeedsApproval(true);
-  }, [isConnected, address, totalBagCost]);
+    if (allowanceData !== undefined) {
+      const requiredWei = parseUnits(String(totalBagCost), 18);
+      setNeedsApproval(allowanceData < requiredWei);
+    } else {
+      setNeedsApproval(true);
+    }
+  }, [isConnected, address, totalBagCost, allowanceData]);
 
   const requiredNftForVip = NFT_CONFIG.REQUIRED_NFT_FOR_VIP || 10;
   const hasVipNfts = userNFTs.length >= requiredNftForVip;
