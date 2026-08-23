@@ -1,14 +1,22 @@
+import fs from 'fs';
+import path from 'path';
+
+const backendUiFile = 'C:/Users/1/repos/Alphabag_V3_Backend-UI/src/context/AuthContext.tsx';
+
+const content = `// SPDX-License-Identifier: MIT
+// PATCH: AuthContext.tsx — Secure session restoration
+// Fixes:
+//   1. Validates stored token via /api/auth/me on mount before restoring session
+//   2. Only restores admin session if backend confirms isAdmin
+//   3. Auto-clears invalid/expired sessions
+//   4. Shows loading state during validation to prevent UI flash
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
 import { useAccount, useDisconnect, useBalance } from 'wagmi';
 import { bsc } from 'wagmi/chains';
 import { TOKEN_GATING_CONFIG } from '../services/config';
 import { api } from '../services/api';
-
-// SECURITY: Dev override is now OPT-IN via env var, never automatic.
-// To enable in local development, set VITE_ENABLE_DEV_ULTIMATE=true in .env
-// NEVER commit .env files with this enabled.
-const IS_DEV_OVERRIDE = import.meta.env.VITE_ENABLE_DEV_ULTIMATE === 'true';
 
 interface AuthContextType {
   user: User | null;
@@ -34,12 +42,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
-  // Token Balance check for Pro status
   const tokenAddress = TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_TESTNET || TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_MAINNET || '0x0000000000000000000000000000000000000000';
-  
+
   useBalance({
     address: address,
-    token: tokenAddress as `0x${string}`,
+    token: tokenAddress as \`0x\${string}\`,
     chainId: bsc.id,
     watch: true
   });
@@ -57,26 +64,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       try {
-        api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+        // Set token for the validation request
+        api.defaults.headers.common['Authorization'] = \`Bearer \${savedToken}\`;
+
         const res = await api.get('/api/auth/me');
 
-        if (res.data) {
-          let userData = res.data;
-          if (IS_DEV_OVERRIDE) {
-            userData = { ...userData, tier: 'ULTIMATE' };
-          }
-          setUser(userData);
+        if (res.data && res.data.isAdmin) {
+          // Backend confirmed admin status — safe to restore
+          setUser(res.data);
           setToken(savedToken);
-          sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
+          console.log('[AUTH] Admin session validated and restored for:', res.data.email || res.data.id);
         } else {
-          sessionStorage.removeItem('alphabag_token');
+          // Token valid but not admin, or user no longer admin — clear session
+          console.warn('[AUTH] Stored session invalid or user is not admin. Clearing.');
           sessionStorage.removeItem('alphabag_user');
+          sessionStorage.removeItem('alphabag_token');
           delete api.defaults.headers.common['Authorization'];
         }
       } catch (err: any) {
+        // Token expired, invalid, or backend error — clear everything
         console.error('[AUTH] Session validation failed:', err?.response?.data?.error || err.message);
-        sessionStorage.removeItem('alphabag_token');
         sessionStorage.removeItem('alphabag_user');
+        sessionStorage.removeItem('alphabag_token');
         delete api.defaults.headers.common['Authorization'];
       } finally {
         setIsLoading(false);
@@ -86,27 +95,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     validateStoredSession();
   }, []);
 
-  const refreshUser = async () => {
-    try {
-      const res = await api.get('/api/auth/me');
-      if (res.data) {
-        let userData = res.data;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
-        setUser(userData);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
-      }
-    } catch (err) {
-      console.error('[AUTH] Failed to refresh user profile:', err);
-    }
-  };
-
   const siweLogin = async (address: string, signature: string, message: string) => {
     try {
-      setIsLoading(true);
       const refCode = sessionStorage.getItem('alphabag_ref_code');
-      
+
       const res = await api.post('/api/auth/siwe', { 
         address, 
         signature, 
@@ -115,16 +107,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (res.data.user && res.data.token) {
-        let userData = res.data.user;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
-        setUser(userData);
+        setUser(res.data.user);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
-        api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-        setIsLoading(false);
+        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        api.defaults.headers.common['Authorization'] = \`Bearer \${res.data.token}\`;
         return true;
       }
       return false;
@@ -134,7 +121,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else {
         console.error("SIWE Network Error:", e.message);
       }
-      setIsLoading(false);
       throw e;
     }
   };
@@ -142,18 +128,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const emailLogin = async (email: string, password: string, portal: 'main' | 'admin' = 'main') => {
     try {
       setIsLoading(true);
-      const res = await api.post('/api/auth/login', { email, password, portal });
+      const res = await api.post('/api/auth/login', {
+        email,
+        password,
+        portal,
+        adminPortalKey: import.meta.env.VITE_ADMIN_PORTAL_KEY,
+      });
 
       if (res.data.user && res.data.token) {
-        let userData = res.data.user;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
-        setUser(userData);
+        setUser(res.data.user);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
-        api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        api.defaults.headers.common['Authorization'] = \`Bearer \${res.data.token}\`;
         setIsLoading(false);
         return true;
       }
@@ -182,7 +169,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
         sessionStorage.setItem('alphabag_token', res.data.token);
-        api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+        api.defaults.headers.common['Authorization'] = \`Bearer \${res.data.token}\`;
         return res.data.user.tier === 'ULTIMATE';
       }
       return false;
@@ -196,7 +183,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user || user.tier === 'ULTIMATE' || user.isPro) return;
     const updated = { ...user, alphaAiUsageSeconds: (user.alphaAiUsageSeconds || 0) + seconds };
     setUser(updated);
-    sessionStorage.setItem('alphabag_user', JSON.stringify(updated));
+  };
+
+  const refreshUser = async () => {
+    try {
+      const res = await api.get('/api/auth/me');
+      if (res.data) {
+        setUser(res.data);
+        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data));
+      }
+    } catch (err) {
+      console.error('[AUTH] Failed to refresh user profile:', err);
+    }
   };
 
   const completeOnboarding = async (accountType: 'FOUNDER' | 'TRADER', profileData: any) => {
@@ -212,17 +210,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={{
-      user, 
-      isAuthenticated: !!user, 
-      isLoading, 
-      token, 
-      logout, 
-      upgradeToUltimate, 
-      updateAiUsage, 
-      siweLogin, 
-      emailLogin, 
-      completeOnboarding, 
-      refreshUser
+      user, isAuthenticated: !!user, isLoading, token,
+      logout, upgradeToUltimate, updateAiUsage, siweLogin, emailLogin, completeOnboarding, refreshUser
     }}>
       {children}
     </AuthContext.Provider>
@@ -234,3 +223,7 @@ export const useAuth = () => {
   if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };
+`;
+
+fs.writeFileSync(backendUiFile, content, 'utf8');
+console.log('✅ Backend-UI AuthContext.tsx written successfully');
