@@ -67,7 +67,8 @@ contract AlphaBagGenesisPass is Ownable, ReentrancyGuard, IERC2981 {
     string public constant name = "AlphaBAG Genesis Pass";
     string public constant symbol = "ALPHAPASS";
     uint256 public constant MAX_SUPPLY = 10000;
-    uint256 public constant MAX_MINT_PER_TX = 5;
+    uint256 public constant MAX_MINT_PER_TX = 10;   // max per single transaction
+    uint256 public constant MAX_MINT_PER_WALLET = 10; // hard cap per wallet address
 
     // Mint Parameters
     IERC20 public bagToken;
@@ -90,6 +91,7 @@ contract AlphaBagGenesisPass is Ownable, ReentrancyGuard, IERC2981 {
     mapping(address => uint256) private _balances;
     mapping(uint256 => address) private _tokenApprovals;
     mapping(address => mapping(address => bool)) private _operatorApprovals;
+    mapping(address => uint256) private _walletMinted; // tracks total minted per wallet
 
     // Events
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
@@ -114,11 +116,12 @@ contract AlphaBagGenesisPass is Ownable, ReentrancyGuard, IERC2981 {
 
     /**
      * @notice Mint Alpha Passes using $BAG Tokens
-     * @param quantity Number of passes to mint (1 - 5)
+     * @param quantity Number of passes to mint (1 - 10 per wallet total)
      */
     function mintWithBag(uint256 quantity) external nonReentrant {
         require(isMintActive, "Mint is not active");
         require(quantity > 0 && quantity <= MAX_MINT_PER_TX, "Invalid mint quantity");
+        require(_walletMinted[msg.sender] + quantity <= MAX_MINT_PER_WALLET, "Exceeds max 10 mints per wallet");
         require(_currentIndex + quantity - 1 <= MAX_SUPPLY, "Max supply exceeded");
 
         uint256 totalBagCost = mintPriceBag * quantity;
@@ -130,6 +133,7 @@ contract AlphaBagGenesisPass is Ownable, ReentrancyGuard, IERC2981 {
 
         uint256 startTokenId = _currentIndex;
         _balances[msg.sender] += quantity;
+        _walletMinted[msg.sender] += quantity;
 
         for (uint256 i = 0; i < quantity; i++) {
             uint256 currentId = startTokenId + i;
@@ -140,6 +144,13 @@ contract AlphaBagGenesisPass is Ownable, ReentrancyGuard, IERC2981 {
         _currentIndex += quantity;
 
         emit Minted(msg.sender, quantity, startTokenId, totalBagCost);
+    }
+
+    /**
+     * @notice Returns how many passes a wallet has minted so far
+     */
+    function walletMintCount(address wallet) external view returns (uint256) {
+        return _walletMinted[wallet];
     }
 
     /**

@@ -5,7 +5,7 @@
 1. **Smart Contract**: [`AlphaBagGenesisPass.sol`](file:///c:/Users/1/repos/Alphabag_V3_FRONTEND/contracts/AlphaBagGenesisPass.sol)
    - **Standard**: Gas-optimized ERC-721A with EIP-2981 Royalties.
    - **Payment Currency**: 100 $BAG (BEP-20) transferred directly to Protocol Treasury.
-   - **Max Supply**: 10,000 Passes (Max 5 per tx).
+   - **Max Supply**: 10,000 Passes (Max 10 per wallet / Max 10 per tx).
    - **Security**: `ReentrancyGuard`, `Ownable`, standard checks.
 
 2. **10,000 Metadata JSON Files**: Located in [`public/nft-collection/metadata/`](file:///c:/Users/1/repos/Alphabag_V3_FRONTEND/public/nft-collection/metadata)
