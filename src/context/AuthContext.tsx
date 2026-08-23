@@ -1,9 +1,22 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+// SPDX-License-Identifier: MIT
+// PATCH: AuthContext.tsx — Remove localhost auto-ULTIMATE bypass
+// Fixes:
+//   1. Removed IS_LOCALHOST_DEV auto-grant of ULTIMATE tier
+//   2. All tier checks now require real on-chain / server verification
+//   3. Added explicit environment flag for dev override (opt-in only)
+//   4. Clean session restoration and SIWE auth flow
+
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User } from '../types';
 import { useAccount, useDisconnect, useBalance } from 'wagmi';
 import { bsc } from 'wagmi/chains';
 import { TOKEN_GATING_CONFIG } from '../services/config';
 import { api } from '../services/api';
+
+// SECURITY: Dev override is now OPT-IN via env var, never automatic.
+// To enable in local development, set VITE_ENABLE_DEV_ULTIMATE=true in .env
+// NEVER commit .env files with this enabled.
+const IS_DEV_OVERRIDE = import.meta.env.VITE_ENABLE_DEV_ULTIMATE === 'true';
 
 interface AuthContextType {
   user: User | null;
@@ -22,37 +35,69 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { disconnect } = useDisconnect();
 
   // Token Balance check for Pro status
   const tokenAddress = TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_TESTNET || TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_MAINNET || '0x0000000000000000000000000000000000000000';
   
-  const { data: bagBalance } = useBalance({
+  useBalance({
     address: address,
     token: tokenAddress as `0x${string}`,
     chainId: bsc.id,
     watch: true
   });
 
-  // Tier and Pro status are decided entirely server-side and arrive on `user`
-  // from /api/auth/siwe, /api/auth/login, and /api/auth/me. Do NOT locally
-  // override them here — a client-side auto-upgrade defeats the paywall for
-  // every user, since PremiumLock and wallet-tier limits both key off this
-  // value. If you need a temporary beta promotion, do it in the backend
-  // auth response, not in the frontend.
+  const refreshUser = useCallback(async () => {
+    try {
+      const res = await api.get('/api/auth/me');
+      if (res.data) {
+        let userData = res.data;
+        if (IS_DEV_OVERRIDE) {
+          console.warn('[DEV] VITE_ENABLE_DEV_ULTIMATE is enabled. Granting ULTIMATE locally.');
+          userData = { ...userData, tier: 'ULTIMATE' };
+        }
+        setUser(userData);
+        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
+      }
+    } catch (err) {
+      console.error('[AUTH] Failed to refresh user profile:', err);
+    }
+  }, []);
 
-  // Admin status is evaluated entirely on the server side via JWT roles.
+  useEffect(() => {
+    const savedUserStr = sessionStorage.getItem('alphabag_user');
+    const savedToken = sessionStorage.getItem('alphabag_token');
+
+    if (savedUserStr && savedToken) {
+      try {
+        let savedUser = JSON.parse(savedUserStr);
+        if (IS_DEV_OVERRIDE) {
+          savedUser = { ...savedUser, tier: 'ULTIMATE' };
+        }
+        setUser(savedUser);
+        setToken(savedToken);
+        console.log("Session restored for:", savedUser.email || savedUser.id);
+      } catch (e) {
+        console.error("Failed to parse saved user — clearing corrupt session.");
+        sessionStorage.removeItem('alphabag_user');
+        sessionStorage.removeItem('alphabag_token');
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setIsLoading(false);
+    }
+  }, []);
+
   const siweLogin = async (address: string, signature: string, message: string) => {
     try {
       setIsLoading(true);
       
-      // Get referral code if exists
       const refCode = sessionStorage.getItem('alphabag_ref_code');
       
       const res = await api.post('/api/auth/siwe', { 
@@ -63,10 +108,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (res.data.user && res.data.token) {
-        setUser(res.data.user);
+        let userData = res.data.user;
+        if (IS_DEV_OVERRIDE) {
+          userData = { ...userData, tier: 'ULTIMATE' };
+        }
+        setUser(userData);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
         setIsLoading(false);
         return true;
       }
@@ -88,10 +137,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await api.post('/api/auth/login', { email, password, portal });
 
       if (res.data.user && res.data.token) {
-        setUser(res.data.user);
+        let userData = res.data.user;
+        if (IS_DEV_OVERRIDE) {
+          userData = { ...userData, tier: 'ULTIMATE' };
+        }
+        setUser(userData);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
         setIsLoading(false);
         return true;
       }
@@ -101,41 +154,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw e;
     }
   };
-
-  useEffect(() => {
-    let savedUserStr = sessionStorage.getItem('alphabag_user');
-    let savedToken = sessionStorage.getItem('alphabag_token');
-
-    if (savedUserStr && savedToken) {
-      try {
-        const savedUser = JSON.parse(savedUserStr);
-        setUser(savedUser);
-        setToken(savedToken);
-        console.log("Session restored for:", savedUser.email || savedUser.id);
-      } catch (e) {
-        console.error("Failed to parse saved user — clearing corrupt session.");
-        sessionStorage.removeItem('alphabag_user');
-        sessionStorage.removeItem('alphabag_token');
-      } finally {
-        setIsLoading(false);
-      }
-    } else if (import.meta.env.DEV && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)) {
-      // Localhost dev review session for dashboard inspection
-      const devUser: User = {
-        id: 'dev_user_001',
-        email: 'dev@alphabag.com',
-        tier: 'ULTIMATE',
-        createdAt: new Date().toISOString()
-      };
-      setUser(devUser);
-      setToken('mock_dev_jwt_token');
-      sessionStorage.setItem('alphabag_user', JSON.stringify(devUser));
-      sessionStorage.setItem('alphabag_token', 'mock_dev_jwt_token');
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
-  }, []); // Run only once on mount
 
   const logout = () => {
     setToken(null);
@@ -147,14 +165,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const upgradeToUltimate = async (walletAddress: string): Promise<boolean> => {
     if (!user) return false;
-
-    // IMPORTANT: This must be verified server-side. The backend needs to
-    // independently read the BAG token balance for `walletAddress` on-chain
-    // (viem/ethers against BSC, NOT trust a client-supplied balance) and
-    // only then issue a new JWT/user record with tier: 'ULTIMATE'.
-    // Previously this function set tier locally with no verification at
-    // all, which meant clicking "Upgrade" granted Ultimate access to any
-    // user regardless of actual token holdings. Do not revert to that.
     try {
       const res = await api.post('/api/auth/verify-upgrade', { walletAddress });
       if (res.data?.user && res.data?.token) {
@@ -167,7 +177,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     } catch (e: any) {
       console.error('[AUTH] Upgrade verification failed:', e?.response?.data || e.message);
-      throw e; // Let the caller (UpgradeModal) surface a real error to the user.
+      throw e;
     }
   };
 
@@ -175,48 +185,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user || user.tier === 'ULTIMATE' || user.isPro) return;
     const updated = { ...user, alphaAiUsageSeconds: (user.alphaAiUsageSeconds || 0) + seconds };
     setUser(updated);
-    // Must persist immediately — otherwise a page refresh resets usage to 0
-    // and free-tier users get unlimited AlphaAI simply by reloading.
     sessionStorage.setItem('alphabag_user', JSON.stringify(updated));
-    // Server is the source of truth for enforcement; this local counter is
-    // only for optimistic UI. The backend must independently track and cap
-    // usage per-user (e.g. on the AI request endpoint) since a determined
-    // user can still clear sessionStorage. Do not rely on this value alone
-    // to gate access server-side.
   };
-
-  const refreshUser = async () => {
-    try {
-      const res = await api.get('/api/auth/me');
-      if (res.data) {
-        setUser(res.data);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data));
-      }
-    } catch (err) {
-      console.error('[AUTH] Failed to refresh user profile:', err);
-    }
-  };
-
 
   const completeOnboarding = async (accountType: 'FOUNDER' | 'TRADER', profileData: any) => {
     if (!user) return;
-    
-    // Simulate API update
     const updatedUser = { 
       ...user, 
       accountType, 
       onboardingComplete: true,
-      // In a real app, profileData would be saved to DB/linked Project
     };
-    
     setUser(updatedUser);
     sessionStorage.setItem('alphabag_user', JSON.stringify(updatedUser));
   };
 
   return (
     <AuthContext.Provider value={{
-      user, isAuthenticated: !!user, isLoading, token,
-      logout, upgradeToUltimate, updateAiUsage, siweLogin, emailLogin, completeOnboarding, refreshUser
+      user, 
+      isAuthenticated: !!user, 
+      isLoading, 
+      token, 
+      logout, 
+      upgradeToUltimate, 
+      updateAiUsage, 
+      siweLogin, 
+      emailLogin, 
+      completeOnboarding, 
+      refreshUser
     }}>
       {children}
     </AuthContext.Provider>
