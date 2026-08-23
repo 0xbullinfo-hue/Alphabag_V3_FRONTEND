@@ -1132,7 +1132,7 @@ export const Landing: React.FC = () => {
                 {/* Left Column: Metrics */}
                 <div className="lg:col-span-1 flex flex-col gap-2">
                   <TokenMetricCard label="Token Name" value="AlphaBAG (Not Yet Live)" icon={<Briefcase />} />
-                  <TokenMetricCard label="Ticker" value="$BAG" isMasked icon={<TrendingUp />} />
+                  <TokenMetricCard label="Ticker" value="$BAG" icon={<TrendingUp />} />
                   <TokenMetricCard label="Network" value="BNB Smart Chain" icon={<LayoutGrid />} />
                   <TokenMetricCard label="Total Supply" value="21,000,000" icon={<PieChart />} />
                   <TokenMetricCard label="Contract Address" value="TBA" icon={<Lock />} />
@@ -1141,11 +1141,11 @@ export const Landing: React.FC = () => {
                 {/* Right Column: Allocations Unmasked */}
                 <div className="lg:col-span-2 relative bg-alphabag-darkgray border border-alphabag-gray rounded-3xl p-4 flex flex-col">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full h-full">
-                    <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" desc="Paired initially with BNB upon PancakeSwap deployment. burnt to secure the market floor." />
-                    <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" desc="Emission-based distribution. Tokens are systematically distributed to users through Our task-to-earn gamification and ecosystem engagement over an extended timeline, eliminating massive upfront supply shocks. Allocation locked for 3months. released to activate the Alpha-drops T2E dapp" />
-                    <TokenomicsDetailCard title="Development & Ecosystem" percentage="15%" desc="Allocated for infrastructure upgrades, API integrations, and core platform development. Automated post-deployment allocation." />
-                    <TokenomicsDetailCard title="Marketing & Strategic Growth" percentage="10%" desc="Distributed directly to designated marketing for ecosystem expansion and strategic partnerships." />
-                    <TokenomicsDetailCard title="Team & Advisors" percentage="10%" desc="Distributed to team custody at deployment, guarded by strict multi-sig parameters and long-term ecosystem commitment thresholds. locked for 12months with stiff unlock strategy (more details soon)" />
+                    <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" subtitle="6,300,000 $BAG" desc="Paired initially with BNB upon PancakeSwap deployment. Burnt to secure the market floor." />
+                    <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" subtitle="7,350,000 $BAG" desc="Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community." />
+                    <TokenomicsDetailCard title="Development & Ecosystem" percentage="15%" subtitle="3,150,000 $BAG" desc="Infrastructure, API integrations & core platform upgrades. Locked for 6 months." />
+                    <TokenomicsDetailCard title="Marketing & Strategic Growth" percentage="10%" subtitle="2,100,000 $BAG" desc="Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships." />
+                    <TokenomicsDetailCard title="Team & Advisors" percentage="10%" subtitle="2,100,000 $BAG" desc="Team Allocation Locked for 24 months. Unlocked in phases." />
                     <TokenomicsDetailCard title="TOTAL SUPPLY" percentage="100%" subtitle="21,000,000" desc="Strictly hard-capped supply. No mint function exists post-deployment." highlight />
                   </div>
                 </div>

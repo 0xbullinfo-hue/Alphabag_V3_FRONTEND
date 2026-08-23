@@ -64,6 +64,7 @@ const Airdrop = lazy(() => import('./pages/frontend/Airdrop').then(m => ({ defau
 const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ default: m.Portfolio })));
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
 const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
+const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => ({ default: m.AlphaPasses })));
 
 const GlobalLoader = () => null;
 
@@ -208,6 +209,8 @@ const AppContent = () => {
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/profile/:id" element={<Layout><Profile /></Layout>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />
+          <Route path="/alpha-passes" element={<Layout><AlphaPasses /></Layout>} />
+          <Route path="/passes" element={<Navigate to="/alpha-passes" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

@@ -22,6 +22,18 @@ export interface Coin {
 
 // Strict 2-tier system as per requirements
 export type UserTier = 'FREE' | 'ULTIMATE';
+export type PassTier = 'FREE' | 'PREMIUM' | 'ALPHA_VIP';
+
+export interface AlphaPassNFT {
+  tokenId: number;
+  name: string;
+  tier: 'Genesis Pass' | 'VIP Founder' | 'Alpha Elite';
+  rarity: string;
+  image: string;
+  mintedAt?: string;
+  multiplier: string;
+  perks: string[];
+}
 
 export interface User {
   id: string;

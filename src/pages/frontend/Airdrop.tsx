@@ -962,33 +962,24 @@ export const Airdrop: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Allocation Grid with Mask */}
-                    <div className="relative group/allocation">
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-2 filter blur-[2px] transition-all duration-700 opacity-60">
-                            {[
-                                { label: 'Liquidity Pool', pct: '30%', tokens: '6.3M', color: 'bg-alphabag-yellow text-black', desc: 'Locked Forever.' },
-                                { label: 'Task-to-Earn', pct: '35%', tokens: '7.35M', color: 'bg-[#1DA1F2] text-white', desc: 'Mined (4-5y)' },
-                                { label: 'Dev & Eco', pct: '15%', tokens: '3.15M', color: 'bg-alphabag-green text-black', desc: '6m cliff' },
-                                { label: 'Marketing', pct: '10%', tokens: '2.1M', color: 'bg-alphabag-red text-white', desc: 'Partnerships' },
-                                { label: 'Team', pct: '10%', tokens: '2.1M', color: 'bg-[#9333EA] text-white', desc: '12m cliff' },
-                            ].map((item) => (
-                                <div key={item.label} className="flex flex-col items-center p-4 bg-alphabag-black border border-alphabag-gray rounded-md text-center">
-                                    <div className={`w-10 h-10 rounded-md ${item.color} flex flex-col items-center justify-center mb-2`}>
-                                        <span className="font-semibold text-[11px] leading-none">{item.pct}</span>
-                                    </div>
-                                    <div className="text-alphabag-text font-semibold text-xs mb-1">{item.label}</div>
-                                    <div className="text-alphabag-subtext text-[9px]">{item.desc}</div>
+                    {/* Allocation Grid Unveiled */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
+                        {[
+                            { label: 'Liquidity Pool (LP)', pct: '30%', tokens: '6,300,000 $BAG', color: 'bg-alphabag-yellow text-black', desc: 'Paired with BNB on PancakeSwap. Burnt to secure market floor.' },
+                            { label: 'Trade-to-Earn (T2E)', pct: '35%', tokens: '7,350,000 $BAG', color: 'bg-[#1DA1F2] text-white', desc: 'Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community.' },
+                            { label: 'Dev & Ecosystem', pct: '15%', tokens: '3,150,000 $BAG', color: 'bg-alphabag-green text-black', desc: 'Infrastructure, API integrations & core platform upgrades. Locked for 6 months.' },
+                            { label: 'Marketing & Growth', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-alphabag-red text-white', desc: 'Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships.' },
+                            { label: 'Team & Advisors', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-[#9333EA] text-white', desc: 'Team Allocation Locked for 24 months. Unlocked in phases.' },
+                        ].map((item) => (
+                            <div key={item.label} className="flex flex-col items-center p-4 bg-alphabag-black border border-alphabag-gray hover:border-alphabag-muted rounded-xl text-center transition-all">
+                                <div className={`w-11 h-11 rounded-lg ${item.color} flex flex-col items-center justify-center mb-2 shadow-sm`}>
+                                    <span className="font-bold text-xs leading-none">{item.pct}</span>
                                 </div>
-                            ))}
-                        </div>
-                        
-                        {/* Translucent Mask Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                            <div className="bg-alphabag-dark border border-alphabag-gray px-4 py-2 rounded-md flex items-center gap-2">
-                                <Lock size={14} className="text-alphabag-yellow" />
-                                <span className="text-[10px] text-alphabag-text font-semibold uppercase tracking-wider">Allocation Locked • Verification in Progress</span>
+                                <div className="text-alphabag-text font-bold text-xs mb-0.5">{item.label}</div>
+                                <div className="text-alphabag-yellow font-semibold text-[10px] mb-1">{item.tokens}</div>
+                                <div className="text-alphabag-subtext text-[10px] leading-relaxed font-medium">{item.desc}</div>
                             </div>
-                        </div>
+                        ))}
                     </div>
 
 

@@ -27,3 +27,6 @@ dist-ssr
 *.sw?
 
 /generated/prisma
+
+# NFT collection generation outputs (5.8GB media for IPFS upload)
+public/nft-collection/

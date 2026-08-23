@@ -36,6 +36,18 @@ export const TOKEN_GATING_CONFIG = {
   IS_PRODUCTION: import.meta.env.VITE_ENVIRONMENT === 'production',
 };
 
+export const NFT_CONFIG = {
+  NFT_CONTRACT_ADDRESS_MAINNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_MAINNET || '',
+  NFT_CONTRACT_ADDRESS_TESTNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_TESTNET || '',
+  MINT_PRICE_BAG: 100,
+  TOTAL_SUPPLY: 10000,
+  MAX_MINT_PER_TX: 5,
+  ELEMENT_MARKET_COLLECTION_URL: import.meta.env.VITE_ELEMENT_MARKET_COLLECTION_URL || 'https://element.market/bsc',
+  PANCAKESWAP_BUY_URL: import.meta.env.VITE_PANCAKESWAP_BUY_URL || 'https://pancakeswap.finance/swap',
+  REQUIRED_BAG_FOR_PREMIUM: 10000,
+  REQUIRED_NFT_FOR_VIP: 10,
+};
+
 // Global Demo Mode Toggle
 const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
 const IS_LOCALHOST_DEV = import.meta.env.DEV && LOCALHOST_HOSTNAMES.has(window.location.hostname);

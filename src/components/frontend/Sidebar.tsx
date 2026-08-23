@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as LinkIcon, Settings, LogOut, Calculator, Eye, Radio, ShieldCheck, Briefcase, PieChart, FileClock, Flame, Zap, ChevronDown, Gift, Trophy, UserCircle, Target, Wallet2 } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as LinkIcon, Settings, LogOut, Calculator, Eye, Radio, ShieldCheck, Briefcase, PieChart, FileClock, Flame, Zap, ChevronDown, Gift, Trophy, UserCircle, Target, Wallet2, Crown, Sparkles } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { DISABLED_PAGES, IS_DEMO_MODE } from '../../services/config';
@@ -132,6 +132,11 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
         <div className="py-2">
           <NavGroup title="Personal">
             <NavItem to="/my-alphabag" icon={PieChart} label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
+
+            <div className="relative">
+              <NavItem to="/alpha-passes" icon={Crown} label="Alpha Passes" active={location.pathname === '/alpha-passes' || location.pathname === '/passes'} />
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-[7px] font-black rounded uppercase pointer-events-none shadow-sm">VIP</div>
+            </div>
 
             {!disabledPages.includes('/airdrop') && (
               <div className="relative">
