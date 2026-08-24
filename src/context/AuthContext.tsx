@@ -8,7 +8,7 @@ import { api } from '../services/api';
 // SECURITY: Dev override is now OPT-IN via env var, never automatic.
 // To enable in local development, set VITE_ENABLE_DEV_ULTIMATE=true in .env
 // NEVER commit .env files with this enabled.
-const IS_DEV_OVERRIDE = import.meta.env.VITE_ENABLE_DEV_ULTIMATE === 'true';
+// Tier is 100% verified server-side via JWT and database lookup.
 
 interface AuthContextType {
   user: User | null;
@@ -62,9 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (res.data) {
           let userData = res.data;
-          if (IS_DEV_OVERRIDE) {
-            userData = { ...userData, tier: 'ULTIMATE' };
-          }
+          
           setUser(userData);
           setToken(savedToken);
           sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
@@ -91,9 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await api.get('/api/auth/me');
       if (res.data) {
         let userData = res.data;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
+        
         setUser(userData);
         sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
       }
@@ -116,9 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (res.data.user && res.data.token) {
         let userData = res.data.user;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
+        
         setUser(userData);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
@@ -146,9 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (res.data.user && res.data.token) {
         let userData = res.data.user;
-        if (IS_DEV_OVERRIDE) {
-          userData = { ...userData, tier: 'ULTIMATE' };
-        }
+        
         setUser(userData);
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);

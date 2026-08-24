@@ -103,7 +103,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // ===== TOKEN BALANCE CHECKING =====
   const checkTokenBalance = useCallback(async (address: string) => {
     if (!TOKEN_GATING_CONFIG.ENABLE_TOKEN_GATING) {
-      setIsPremium(true);
+      // Do not auto-grant premium if token gating is off; reflect authentic tier status
+      setIsPremium(user?.tier === 'ULTIMATE' || user?.isPro || false);
       setPremiumTokenBalance(0);
       return;
     }

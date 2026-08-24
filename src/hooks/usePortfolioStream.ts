@@ -3,37 +3,66 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export const usePortfolioStream = (token: string | null, address?: string) => {
   const queryClient = useQueryClient();
-  const esRef = useRef<EventSource | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     if (!token || !address) return;
 
-    const es = new EventSource(`/api/stream/portfolio?token=${encodeURIComponent(token)}`);
-    esRef.current = es;
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
-    es.onmessage = (event) => {
-      try {
-        const update = JSON.parse(event.data);
-
-        if (update.balances) {
-          queryClient.setQueryData(['portfolio', 'dex', address], update.balances);
-        }
-        if (update.cexBalances) {
-          queryClient.setQueryData(['portfolio', 'cex'], update.cexBalances);
-        }
-      } catch (err) {
-        console.error('[SSE] Parse error:', err);
+    // Fetch stream securely with Authorization header instead of leaking JWT in query string
+    fetch('/api/stream/portfolio', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'text/event-stream'
+      },
+      signal: controller.signal
+    }).then(async (response) => {
+      if (!response.ok || !response.body) {
+        throw new Error('Stream connection failed');
       }
-    };
 
-    es.onerror = (err) => {
-      console.warn('[SSE] Connection error, falling back to polling:', err);
-      es.close();
-    };
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.startsWith('data:')) {
+            try {
+              const rawData = line.slice(5).trim();
+              if (rawData) {
+                const update = JSON.parse(rawData);
+                if (update.balances) {
+                  queryClient.setQueryData(['portfolio', 'dex', address], update.balances);
+                }
+                if (update.cexBalances) {
+                  queryClient.setQueryData(['portfolio', 'cex'], update.cexBalances);
+                }
+              }
+            } catch (err) {
+              console.error('[SSE] Parse error:', err);
+            }
+          }
+        }
+      }
+    }).catch((err) => {
+      if (err.name !== 'AbortError') {
+        console.warn('[SSE] Stream closed or unavailable, polling active:', err.message);
+      }
+    });
 
     return () => {
-      es.close();
-      esRef.current = null;
+      controller.abort();
+      abortControllerRef.current = null;
     };
   }, [token, address, queryClient]);
 };

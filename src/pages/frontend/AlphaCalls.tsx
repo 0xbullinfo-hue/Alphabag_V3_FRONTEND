@@ -9,53 +9,7 @@ import {
 import { Button } from '../../components/ui/Button';
 import Swal from 'sweetalert2';
 
-const DEMO_SIGNALS: TradeSignal[] = [
-    {
-        id: 'demo-1',
-        pair: 'SOL/USDC',
-        category: 'DEGEN',
-        type: 'BUY',
-        risk: 'HIGH',
-        status: 'ACTIVE',
-        entry: '$142.50',
-        targets: ['$165.00', '$180.00'],
-        stopLoss: '$135.00',
-        narrative: 'Accumulation pattern observed across top 50 whale wallets. Anticipating major liquidity sweep to the upside ahead of upcoming network upgrade. Early positioning is critical.',
-        timestamp: 'Just now',
-        contractAddress: 'So11111111111111111111111111111111111111112',
-        socialLinks: { twitter: '#', telegram: '#', website: '#' }
-    },
-    {
-        id: 'demo-2',
-        pair: 'PEPE/SOL',
-        category: 'LONGTERM',
-        type: 'BUY',
-        risk: 'MEDIUM',
-        status: 'ACTIVE',
-        entry: '0.0000085',
-        targets: ['0.000012', '0.000015'],
-        stopLoss: '0.000007',
-        narrative: 'Strong relative strength against the wider market dump. On-chain volume is surging. Breaking key resistance zone, targeting a 300% narrative leg up.',
-        timestamp: '2 hours ago',
-        contractAddress: 'pepe11111111111111111111111111111111111111112',
-    },
-    {
-        id: 'demo-3',
-        pair: 'ZETA/USDC',
-        category: 'AIRDROPS',
-        type: 'AIRDROP',
-        risk: 'LOW',
-        status: 'ACTIVE',
-        entry: 'N/A',
-        targets: ['TBA'],
-        stopLoss: 'N/A',
-        narrative: 'Highly classified seed-round token entering public sale. Team allocated massive supply for community airdrop. Secure your wallet interactions rapidly to qualify.',
-        timestamp: '5 hours ago',
-        relevantInfo: 'https://zeta.markets',
-        socialLinks: { twitter: '#' }
-    }
-];
-
+const DEMO_SIGNALS: TradeSignal[] = [];
 const CATEGORIES = ['ALL', 'DEGEN', 'SHORT', 'LONGTERM', 'AIRDROPS'];
 
 export const AlphaCalls: React.FC = () => {
@@ -71,14 +25,10 @@ export const AlphaCalls: React.FC = () => {
                 const incoming = Array.isArray(res.data)
                     ? res.data
                     : (Array.isArray(res.data?.signals) ? res.data.signals : (Array.isArray(res.data?.data) ? res.data.data : []));
-                if (incoming.length === 0) {
-                    setSignals(DEMO_SIGNALS);
-                } else {
-                    setSignals(incoming);
-                }
+                setSignals(incoming);
             } catch (error) {
-                console.error("Failed to fetch signals, using demo data", error);
-                setSignals(DEMO_SIGNALS);
+                console.error("Failed to fetch signals:", error);
+                setSignals([]);
             } finally {
                 setLoading(false);
             }
