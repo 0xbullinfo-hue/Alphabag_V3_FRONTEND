@@ -1,1101 +1,1471 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Swal from 'sweetalert2';
 import {
     MessageSquare, Heart, Share2, MoreHorizontal, Shield, Zap, TrendingUp,
     Filter, Search, Plus, MessageCircle, Target, Image as ImageIcon,
     BarChart2, Smile, Calendar, MapPin, CheckCircle, Bookmark, BarChart,
-    ExternalLink, Users, Rocket, Globe, Star
+    ExternalLink, Users, Rocket, Globe, Star, Radio, Mic, MicOff, Volume2,
+    VolumeX, ThumbsUp, Sparkles, Award, Lock, Eye, EyeOff, Send, HelpCircle,
+    ChevronDown, ChevronUp, AlertCircle, Coins, Layers, ArrowUpRight, Flame
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
-import { AlphaRadarService } from '../../services/alphaRadarService';
 import { FounderListingForm } from '../../components/frontend/FounderListingForm';
-import { Post, Project } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+import { PassTier } from '../../types';
 
-type FeedTab = 'FOR_YOU' | 'FOLLOWING' | 'ALPHABAG';
+// ── TYPES & ENUMS ────────────────────────────────────────────────────────────
 
-type StrategyFilter = Post['strategy'] | '';
+export type DiscussionCategory = 
+    | 'ALL' 
+    | 'TOKENOMICS' 
+    | 'UTILITY' 
+    | 'PROJECT_REVIEW' 
+    | 'ALPHA_CALL' 
+    | 'AUDIT_SECURITY';
 
-type FounderProject = Project & {
-    tickerSymbol?: string;
-    isPaidSponsor?: boolean;
-};
+export type DiscussionSentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
 
-type SidebarAd = {
+export interface DiscussionComment {
     id: string;
-    name: string;
-    symbol?: string;
-    description: string;
-    logoUrl?: string;
-    isAd?: boolean;
-    isVerified?: boolean;
+    authorWallet: string;
+    authorTier: PassTier;
+    isPro: boolean;
+    content: string;
+    sentiment?: DiscussionSentiment;
+    upvotes: number;
+    userVoted?: 'UP' | 'DOWN';
+    createdAt: string;
+    replies?: DiscussionComment[];
+}
+
+export interface DiscussionPost {
+    id: string;
+    title: string;
+    ticker: string;
+    category: Exclude<DiscussionCategory, 'ALL'>;
+    sentiment: DiscussionSentiment;
+    content: string;
+    authorWallet: string;
+    authorTier: PassTier;
+    isPro: boolean;
+    upvotes: number;
+    downvotes: number;
+    userVoted?: 'UP' | 'DOWN';
+    isInsightful?: boolean;
+    insightfulCount: number;
+    tokenMetrics?: {
+        marketCap?: string;
+        fdv?: string;
+        circulatingSupply?: string;
+        unlockDate?: string;
+    };
+    comments: DiscussionComment[];
+    createdAt: string;
+    isPinned?: boolean;
+    isSponsored?: boolean;
+    sponsorData?: {
+        partnerName: string;
+        tagline: string;
+        ctaText: string;
+        ctaUrl: string;
+        badge: string;
+        logoUrl?: string;
+    };
+}
+
+export interface LivePodcastState {
+    isLive: boolean;
+    title: string;
+    topic: string;
+    hostName: string;
+    hostWallet: string;
+    listenersCount: number;
+    isListening: boolean;
+    stageSpeakers: Array<{
+        wallet: string;
+        name: string;
+        isHost?: boolean;
+        isSpeaking?: boolean;
+        tier: string;
+    }>;
+    liveChat: Array<{
+        id: string;
+        authorWallet: string;
+        tier: PassTier;
+        isVip?: boolean;
+        message: string;
+        timestamp: string;
+    }>;
+    upvotes: number;
+    userUpvoted: boolean;
+}
+
+// ── INITIAL DATA & SPONSORED ADS ─────────────────────────────────────────────
+
+const SPONSORED_PARTNER_AD = {
+    id: 'ad-pancakeswap-bag',
+    partnerName: 'PancakeSwap & $BAG Liquidity Pool',
+    tagline: 'Official $BAG/WBNB V3 Liquidity Pool is Live with 0.25% Fee Rebates.',
+    description: 'Provide liquidity to earn transaction fees and boost your AlphaBAG ITEMS multiplier by 1.5x.',
+    badge: 'VERIFIED ECOSYSTEM PARTNER',
+    ctaText: 'TRADE ON PANCAKESWAP',
+    ctaUrl: 'https://pancakeswap.finance',
+    logoUrl: 'https://cryptologos.cc/logos/pancakeswap-cake-logo.png'
 };
 
-const FEED_DRAFT_STORAGE_KEY = 'alphabag:alphas-feed:draft';
-const MAX_POST_LENGTH = 280;
-
-const formatRelativeTime = (isoDate: string) => {
-    const date = new Date(isoDate);
-    const diffMs = date.getTime() - Date.now();
-    const seconds = Math.round(diffMs / 1000);
-    const minutes = Math.round(seconds / 60);
-    const hours = Math.round(minutes / 60);
-    const days = Math.round(hours / 24);
-
-    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
-    if (Math.abs(seconds) < 60) return rtf.format(seconds, 'second');
-    if (Math.abs(minutes) < 60) return rtf.format(minutes, 'minute');
-    if (Math.abs(hours) < 24) return rtf.format(hours, 'hour');
-    return rtf.format(days, 'day');
-};
-
-const highlightContent = (content: string) => {
-    const parts = content.split(/(https?:\/\/[^\s]+|\$[A-Za-z0-9_]{2,12})/g);
-    return parts.map((part, index) => {
-        if (/^https?:\/\//i.test(part)) {
-            return (
-                <a
-                    key={`${part}-${index}`}
-                    href={part}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-alphabag-yellow underline decoration-alphabag-yellow/30 hover:decoration-alphabag-yellow"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    {part}
-                </a>
-            );
-        }
-
-        if (/^\$[A-Za-z0-9_]{2,12}$/.test(part)) {
-            return (
-                <span key={`${part}-${index}`} className="text-alphabag-yellow font-bold">
-                    {part.toUpperCase()}
-                </span>
-            );
-        }
-
-        return <React.Fragment key={`${part}-${index}`}>{part}</React.Fragment>;
-    });
-};
-
-const MOCK_ALPHAS: Post[] = [
+const INITIAL_DISCUSSIONS: DiscussionPost[] = [
     {
-        id: '1',
-        authorId: 'user1',
-        content: "Just snagged a massive entry on $ALPHA. Community heat is off the charts and the new SDK release is imminent. Don't fade the genesis multiplier.",
-        projectId: 'pid_alpha',
-        likeCount: 1250,
-        commentCount: 85,
-        shareCount: 120,
-        createdAt: new Date().toISOString(),
-        boostMultiplier: 10,
-        logoUrl: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png',
-        bannerUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2832&auto=format&fit=crop',
-        strategy: 'DEGEN'
+        id: 'disc-1',
+        title: 'Deep Dive: $BAG Tokenomics & 100% T2E Treasury Distribution Model',
+        ticker: '$BAG',
+        category: 'TOKENOMICS',
+        sentiment: 'BULLISH',
+        content: `Analyzing the AlphaBAG tokenomics model: 0% team allocation tax, 100% of pass mint proceeds direct to community T2E treasury. With the 10,000 Genesis Pass hard cap, the deflationary buyback mechanism creates a sustainable runway for long-term intelligence staking.
+
+Key observations:
+1. Circulating float is strictly gated by on-chain activity.
+2. 5% royalty fee from Element Market secondary sales auto-compounds the prize pool.
+3. No seed investor unlock overhang compared to recent Tier-1 token launches.`,
+        authorWallet: '0x42916A998c6Bff7F36bE61749Bd1BBA9f473dB96',
+        authorTier: 'ALPHA_VIP',
+        isPro: true,
+        upvotes: 248,
+        downvotes: 6,
+        insightfulCount: 42,
+        isPinned: true,
+        tokenMetrics: {
+            marketCap: '$4.2M (Projected)',
+            fdv: '$10.0M',
+            circulatingSupply: '42.5%',
+            unlockDate: 'Zero Seed Unlocks (Fair T2E)'
+        },
+        comments: [
+            {
+                id: 'comm-1',
+                authorWallet: '0x8b32...4e19',
+                authorTier: 'PREMIUM',
+                isPro: true,
+                sentiment: 'BULLISH',
+                content: 'The zero team-dump design is refreshing. Most 2026 launches have 70% insider vesting cliffs. The treasury burn on mint is the real catalyst.',
+                upvotes: 45,
+                createdAt: new Date(Date.now() - 3600000).toISOString(),
+                replies: [
+                    {
+                        id: 'rep-1',
+                        authorWallet: '0x14f9...92ca',
+                        authorTier: 'FREE',
+                        isPro: false,
+                        sentiment: 'NEUTRAL',
+                        content: 'Agree on the vesting, but how will emissions scale if daily active users 10x? Does the ITEMS multiplier automatically adjust?',
+                        upvotes: 18,
+                        createdAt: new Date(Date.now() - 1800000).toISOString()
+                    }
+                ]
+            },
+            {
+                id: 'comm-2',
+                authorWallet: '0x992a...7710',
+                authorTier: 'ALPHA_VIP',
+                isPro: true,
+                sentiment: 'BULLISH',
+                content: 'Confirmed that the contract on BSC uses nonReentrant guards on the treasury transfer. Verified on BscScan.',
+                upvotes: 31,
+                createdAt: new Date(Date.now() - 7200000).toISOString()
+            }
+        ],
+        createdAt: new Date(Date.now() - 10800000).toISOString()
     },
     {
-        id: '2',
-        authorId: 'user2',
-        content: "Shorting $RUG on the 4H chart. Bearish divergence on RSI and volume is dropping off a cliff. Targets below support.",
-        likeCount: 450,
-        commentCount: 22,
-        shareCount: 15,
-        createdAt: new Date(Date.now() - 3600000).toISOString(),
-        strategy: 'SHORT'
+        id: 'disc-2',
+        title: 'Utility Breakdown: Why Real-time Whale Radar & Telegram Bot Outperform Standard Dashboards',
+        ticker: '$BNB',
+        category: 'UTILITY',
+        sentiment: 'BULLISH',
+        content: `Looking into the utility stack of the terminal. The automated whale wallet profiler flags smart money accumulation on BSC before DEX liquidity pools pump. 
+
+Unlike traditional platforms charging $200/mo subscriptions in fiat, holding 10,000 $BAG gives permanent access without recurring credit card charges. What other features should we propose for the Q4 DAO vote?`,
+        authorWallet: '0x71e3...a01f',
+        authorTier: 'PREMIUM',
+        isPro: true,
+        upvotes: 185,
+        downvotes: 4,
+        insightfulCount: 29,
+        tokenMetrics: {
+            marketCap: '$84.5B',
+            fdv: '$84.5B',
+            circulatingSupply: '100%',
+            unlockDate: 'Fully Circulating'
+        },
+        comments: [
+            {
+                id: 'comm-3',
+                authorWallet: '0x3219...bb21',
+                authorTier: 'FREE',
+                isPro: false,
+                sentiment: 'BULLISH',
+                content: 'Being able to track smart money on BSC without paying monthly SaaS subscriptions is the main reason I use this terminal daily.',
+                upvotes: 22,
+                createdAt: new Date(Date.now() - 5400000).toISOString()
+            }
+        ],
+        createdAt: new Date(Date.now() - 21600000).toISOString()
     },
     {
-        id: '3',
-        authorId: 'user3',
-        content: "Accumulating $ETH at these levels. The rollup thesis is intact and institutional adoption is quietly absorbing supply.",
-        likeCount: 3200,
-        commentCount: 150,
-        shareCount: 400,
-        createdAt: new Date(Date.now() - 7200000).toISOString(),
-        strategy: 'LONGTERM'
+        id: 'disc-3',
+        title: 'Project Fundamental Review: Zero-Knowledge Rollups vs. Modular Layer-2s in 2026',
+        ticker: '$ETH',
+        category: 'PROJECT_REVIEW',
+        sentiment: 'NEUTRAL',
+        content: `Conducting a comparative analysis between modular data availability layers and ZK-rollup frameworks. The fee compression on Layer 2s has shifted value capture from base layers to application utility tokens.
+
+Would love community feedback on developer retention metrics across the top 5 EVM ecosystems.`,
+        authorWallet: '0x5501...99ef',
+        authorTier: 'FREE',
+        isPro: false,
+        upvotes: 112,
+        downvotes: 8,
+        insightfulCount: 19,
+        comments: [],
+        createdAt: new Date(Date.now() - 43200000).toISOString()
     },
     {
-        id: '4',
-        authorId: 'user4',
-        content: "New testnet live for Zeta. 5 mins to bridge and interact. Potential multi-tier airdrop confirmed for Q3.",
-        likeCount: 890,
-        commentCount: 112,
-        shareCount: 340,
-        createdAt: new Date(Date.now() - 14400000).toISOString(),
-        strategy: 'AIRDROP'
+        id: 'disc-4',
+        title: 'Audit Warning: Centralization Vector Detected in New High-Yield Staking DApp',
+        ticker: '$YIELD',
+        category: 'AUDIT_SECURITY',
+        sentiment: 'BEARISH',
+        content: `⚠️ Community Safety Notice: Audited the bytecode of the newly deployed 400% APY vault on BSC. The contract contains an unverified emergencyWithdraw function with multi-sig bypass. 
+
+Recommend extreme caution or revoking approvals immediately via Security Scanner.`,
+        authorWallet: '0x620a...dd81',
+        authorTier: 'ALPHA_VIP',
+        isPro: true,
+        upvotes: 390,
+        downvotes: 2,
+        insightfulCount: 88,
+        comments: [
+            {
+                id: 'comm-4',
+                authorWallet: '0x441b...1290',
+                authorTier: 'PREMIUM',
+                isPro: true,
+                sentiment: 'BEARISH',
+                content: 'Great catch. Revoked token approval right away. This is why decentralized security checks in the community feed are essential.',
+                upvotes: 64,
+                createdAt: new Date(Date.now() - 14400000).toISOString()
+            }
+        ],
+        createdAt: new Date(Date.now() - 57600000).toISOString()
     }
 ];
 
+// ── COMPONENT ────────────────────────────────────────────────────────────────
+
 export const AlphasFeed: React.FC = () => {
     const { user } = useAuth();
-    const [search, setSearch] = useState('');
-    const [activeTab, setActiveTab] = useState<FeedTab>('FOR_YOU');
-    const [isListingOpen, setIsListingOpen] = useState(false);
-    const [sidebarAds, setSidebarAds] = useState<SidebarAd[]>([]);
-    const [newPostContent, setNewPostContent] = useState('');
-    const [selectedStrategy, setSelectedStrategy] = useState<StrategyFilter>('');
-    const [feedPosts, setFeedPosts] = useState<Post[]>(MOCK_ALPHAS);
-    const [followingIds, setFollowingIds] = useState<Set<string>>(new Set());
-    const [foundersProjects, setFoundersProjects] = useState<FounderProject[]>([]);
-    const [isSidebarLoading, setIsSidebarLoading] = useState(true);
-    const [sidebarError, setSidebarError] = useState<string | null>(null);
 
-    const showBetaNotice = React.useCallback((title: string, text: string) => {
-        void Swal.fire({
-            icon: 'info',
-            title,
-            text,
-            background: '#0a0a0a',
-            color: '#fff',
-            confirmButtonColor: '#fcd535',
+    // Channel & Search state
+    const [selectedCategory, setSelectedCategory] = useState<DiscussionCategory>('ALL');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState<'HOT' | 'TOP' | 'DEBATED' | 'LATEST'>('HOT');
+    const [privacyMode, setPrivacyMode] = useState<boolean>(true); // Mask balances & pseudonymous by default
+
+    // Discussions state
+    const [discussions, setDiscussions] = useState<DiscussionPost[]>(INITIAL_DISCUSSIONS);
+    const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set(['disc-1']));
+    const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
+    const [commentSentiments, setCommentSentiments] = useState<Record<string, DiscussionSentiment>>({});
+    const [replyingTo, setReplyingTo] = useState<Record<string, string | null>>({});
+
+    // New Discussion Composer Modal
+    const [isComposerOpen, setIsComposerOpen] = useState(false);
+    const [newTitle, setNewTitle] = useState('');
+    const [newTicker, setNewTicker] = useState('$BAG');
+    const [newCategory, setNewCategory] = useState<Exclude<DiscussionCategory, 'ALL'>>('TOKENOMICS');
+    const [newSentiment, setNewSentiment] = useState<DiscussionSentiment>('BULLISH');
+    const [newContent, setNewContent] = useState('');
+    const [newMarketCap, setNewMarketCap] = useState('');
+    const [newFdv, setNewFdv] = useState('');
+    const [newCirculating, setNewCirculating] = useState('');
+    const [newUnlock, setNewUnlock] = useState('');
+
+    // Founder Form Modal
+    const [isFounderFormOpen, setIsFounderFormOpen] = useState(false);
+
+    // ── LIVE AUDIO PODCAST / SPACE STATE ─────────────────────────────────────
+    const [podcast, setPodcast] = useState<LivePodcastState>({
+        isLive: true,
+        title: 'Weekly Alpha Space: $BAG Tokenomics, Whale Signals & Ecosystem Roadmap',
+        topic: 'Live Community AMA & On-Chain Due Diligence Roundtable',
+        hostName: 'AlphaBAG Core Team',
+        hostWallet: '0x4291...dB96',
+        listenersCount: 142,
+        isListening: false,
+        stageSpeakers: [
+            { wallet: '0x4291...dB96', name: 'Alpha Lead', isHost: true, isSpeaking: true, tier: 'ALPHA_VIP' },
+            { wallet: '0x992a...7710', name: 'Whale Tracker', isSpeaking: false, tier: 'ALPHA_VIP' },
+            { wallet: '0x8b32...4e19', name: 'Tokenomics Analyst', isSpeaking: true, tier: 'PREMIUM' }
+        ],
+        liveChat: [
+            { id: 'c1', authorWallet: '0x1290...33aa', tier: 'FREE', message: 'Tuned in from Germany! The audio quality is crisp.', timestamp: 'Just now' },
+            { id: 'c2', authorWallet: '0x8b32...4e19', tier: 'PREMIUM', isVip: true, message: 'Question for the team: When will the automated whale alerts bot roll out for Telegram?', timestamp: '1m ago' },
+            { id: 'c3', authorWallet: '0x5501...99ef', tier: 'FREE', message: 'Upvoted the stream! Love the decentralized non-social media focus.', timestamp: '2m ago' }
+        ],
+        upvotes: 384,
+        userUpvoted: false
+    });
+
+    const [podcastChatInput, setPodcastChatInput] = useState('');
+    const [isAudioMuted, setIsAudioMuted] = useState(false);
+
+    const isUserPro = user?.isPro || user?.tier === 'PREMIUM' || user?.tier === 'ULTIMATE' || user?.tier === 'ALPHA_VIP';
+    const userTier: PassTier = (user?.tier as PassTier) || 'FREE';
+
+    // Format address for privacy
+    const formatAddress = (addr?: string) => {
+        if (!addr) return '0x0000...0000';
+        return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+    };
+
+    // Current user display identity (Pseudonymous)
+    const currentDisplayWallet = formatAddress(user?.walletAddress || user?.id);
+
+    // ── FILTERING & SORTING ──────────────────────────────────────────────────
+    const filteredDiscussions = useMemo(() => {
+        let list = [...discussions];
+
+        if (selectedCategory !== 'ALL') {
+            list = list.filter(d => d.category === selectedCategory);
+        }
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase();
+            list = list.filter(d => 
+                d.title.toLowerCase().includes(q) ||
+                d.ticker.toLowerCase().includes(q) ||
+                d.content.toLowerCase().includes(q)
+            );
+        }
+
+        switch (sortBy) {
+            case 'TOP':
+                list.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+                break;
+            case 'DEBATED':
+                list.sort((a, b) => b.comments.length - a.comments.length);
+                break;
+            case 'LATEST':
+                list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                break;
+            case 'HOT':
+            default:
+                list.sort((a, b) => {
+                    if (a.isPinned && !b.isPinned) return -1;
+                    if (!a.isPinned && b.isPinned) return 1;
+                    return (b.upvotes * 2 + b.comments.length * 5) - (a.upvotes * 2 + a.comments.length * 5);
+                });
+                break;
+        }
+
+        return list;
+    }, [discussions, selectedCategory, searchQuery, sortBy]);
+
+    // ── ACTIONS: DISCUSSIONS ─────────────────────────────────────────────────
+
+    const handleUpvoteDiscussion = (discId: string, type: 'UP' | 'DOWN') => {
+        setDiscussions(prev => prev.map(d => {
+            if (d.id !== discId) return d;
+            if (d.userVoted === type) {
+                // Undo vote
+                return {
+                    ...d,
+                    userVoted: undefined,
+                    upvotes: type === 'UP' ? d.upvotes - 1 : d.upvotes,
+                    downvotes: type === 'DOWN' ? d.downvotes - 1 : d.downvotes,
+                };
+            }
+            const hadUp = d.userVoted === 'UP';
+            const hadDown = d.userVoted === 'DOWN';
+            return {
+                ...d,
+                userVoted: type,
+                upvotes: type === 'UP' ? (hadDown ? d.upvotes + 1 : d.upvotes + 1) : (hadUp ? d.upvotes - 1 : d.upvotes),
+                downvotes: type === 'DOWN' ? (hadUp ? d.downvotes + 1 : d.downvotes + 1) : (hadDown ? d.downvotes - 1 : d.downvotes),
+            };
+        }));
+    };
+
+    const handleToggleInsightful = (discId: string) => {
+        setDiscussions(prev => prev.map(d => {
+            if (d.id !== discId) return d;
+            const nextState = !d.isInsightful;
+            return {
+                ...d,
+                isInsightful: nextState,
+                insightfulCount: nextState ? d.insightfulCount + 1 : d.insightfulCount - 1
+            };
+        }));
+    };
+
+    const toggleComments = (discId: string) => {
+        setExpandedComments(prev => {
+            const next = new Set(prev);
+            if (next.has(discId)) next.delete(discId);
+            else next.add(discId);
+            return next;
         });
-    }, []);
+    };
 
-    const tabs: Array<{ label: string; value: FeedTab }> = [
-        { label: 'For you', value: 'FOR_YOU' },
-        { label: 'Following', value: 'FOLLOWING' },
-        { label: 'AlphaBAG', value: 'ALPHABAG' },
-    ];
+    const handleAddComment = (discId: string) => {
+        const text = (commentDrafts[discId] || '').trim();
+        if (!text) return;
 
-    const loadSidebarData = React.useCallback(async () => {
-        setIsSidebarLoading(true);
-        setSidebarError(null);
+        const sentiment = commentSentiments[discId] || 'NEUTRAL';
+        const targetReplyId = replyingTo[discId];
 
-        try {
-            const [ads, projects] = await Promise.all([
-                AlphaRadarService.getAds('SIDEBAR'),
-                AlphaRadarService.getAllProjects(),
-            ]);
+        const newComm: DiscussionComment = {
+            id: `comm-${Date.now()}`,
+            authorWallet: currentDisplayWallet,
+            authorTier: userTier,
+            isPro: isUserPro,
+            content: text,
+            sentiment,
+            upvotes: 1,
+            createdAt: new Date().toISOString()
+        };
 
-            setSidebarAds(Array.isArray(ads) ? ads : []);
-            setFoundersProjects(Array.isArray(projects) ? projects : []);
-        } catch (err) {
-            console.error('Failed to fetch sidebar data', err);
-            setSidebarError('Unable to load live community data right now.');
-        } finally {
-            setIsSidebarLoading(false);
-        }
-    }, []);
+        setDiscussions(prev => prev.map(d => {
+            if (d.id !== discId) return d;
+            if (targetReplyId) {
+                // Nested reply
+                return {
+                    ...d,
+                    comments: d.comments.map(c => {
+                        if (c.id === targetReplyId) {
+                            return { ...c, replies: [...(c.replies || []), newComm] };
+                        }
+                        return c;
+                    })
+                };
+            }
+            return { ...d, comments: [newComm, ...d.comments] };
+        }));
 
-    React.useEffect(() => {
-        loadSidebarData();
-    }, [loadSidebarData]);
+        setCommentDrafts(prev => ({ ...prev, [discId]: '' }));
+        setReplyingTo(prev => ({ ...prev, [discId]: null }));
+    };
 
-    React.useEffect(() => {
-        try {
-            const savedDraft = localStorage.getItem(FEED_DRAFT_STORAGE_KEY);
-            if (savedDraft) setNewPostContent(savedDraft);
-        } catch (error) {
-            console.warn('Unable to load feed draft from storage', error);
-        }
-    }, []);
-
-    React.useEffect(() => {
-        try {
-            localStorage.setItem(FEED_DRAFT_STORAGE_KEY, newPostContent);
-        } catch (error) {
-            console.warn('Unable to persist feed draft', error);
-        }
-    }, [newPostContent]);
-
-    const handleCreatePost = () => {
-        if (!newPostContent.trim()) return;
-
-        if (newPostContent.length > MAX_POST_LENGTH) {
-            void Swal.fire({
+    const handleCreateDiscussion = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newTitle.trim() || !newContent.trim()) {
+            Swal.fire({
+                title: 'Missing Details',
+                text: 'Please provide both a discussion title and analysis content.',
                 icon: 'warning',
-                title: 'Post Too Long',
-                text: `Posts are limited to ${MAX_POST_LENGTH} characters.`,
-                background: '#0b0e11',
+                background: '#0a0a0a',
                 color: '#fff',
-                confirmButtonColor: '#fcd535',
+                confirmButtonColor: '#fcd535'
             });
             return;
         }
 
-        const myPost: Post = {
-            id: Date.now().toString(),
-            authorId: user?.id || 'guest',
-            content: newPostContent.trim(),
-            likeCount: 0,
-            commentCount: 0,
-            shareCount: 0,
-            createdAt: new Date().toISOString(),
-            strategy: selectedStrategy || undefined
+        const formattedTicker = newTicker.trim().startsWith('$') ? newTicker.trim().toUpperCase() : `$${newTicker.trim().toUpperCase()}`;
+
+        const newPost: DiscussionPost = {
+            id: `disc-${Date.now()}`,
+            title: newTitle.trim(),
+            ticker: formattedTicker || '$ALPHA',
+            category: newCategory,
+            sentiment: newSentiment,
+            content: newContent.trim(),
+            authorWallet: currentDisplayWallet,
+            authorTier: userTier,
+            isPro: isUserPro,
+            upvotes: 1,
+            downvotes: 0,
+            insightfulCount: 0,
+            comments: [],
+            tokenMetrics: (newMarketCap || newFdv || newCirculating || newUnlock) ? {
+                marketCap: newMarketCap || undefined,
+                fdv: newFdv || undefined,
+                circulatingSupply: newCirculating || undefined,
+                unlockDate: newUnlock || undefined,
+            } : undefined,
+            createdAt: new Date().toISOString()
         };
 
-        setFeedPosts((prev) => [myPost, ...prev]);
-        setNewPostContent('');
-        setSelectedStrategy('');
-        localStorage.removeItem(FEED_DRAFT_STORAGE_KEY);
-    };
+        setDiscussions(prev => [newPost, ...prev]);
+        setIsComposerOpen(false);
+        setNewTitle('');
+        setNewContent('');
+        setNewMarketCap('');
+        setNewFdv('');
+        setNewCirculating('');
+        setNewUnlock('');
 
-    const handleComposerToolClick = (toolName: string) => {
-        showBetaNotice('Composer Tool In Beta', `${toolName} will be enabled in the next feed release.`);
-    };
-
-    const handleExploreFeatures = () => {
-        window.location.hash = '#/integrations';
-        showBetaNotice('All Features Open', 'Alpha Feed functionality is accessible to all users.');
-    };
-
-    const handlePromotedProjectHub = () => {
-        window.location.hash = '#/alpha-radar';
-    };
-
-    const handleAdvertise = () => {
-        void window.open('https://t.me/alphabag_access', '_blank', 'noopener,noreferrer');
-    };
-
-    const handleShowMoreFounders = () => {
-        window.location.hash = '#/alpha-radar';
-    };
-
-    const handleShowMoreLive = () => {
-        window.location.hash = '#/integrations';
-    };
-
-    const toggleFollow = (authorId: string) => {
-        const newSet = new Set(followingIds);
-        if (newSet.has(authorId)) {
-            newSet.delete(authorId);
-        } else {
-            newSet.add(authorId);
-        }
-        setFollowingIds(newSet);
-    };
-
-    const getRankedPosts = (posts: Post[]) => {
-        return [...posts].sort((a, b) => {
-            const ageHoursA = Math.max(0, (Date.now() - new Date(a.createdAt).getTime()) / (1000 * 60 * 60));
-            const ageHoursB = Math.max(0, (Date.now() - new Date(b.createdAt).getTime()) / (1000 * 60 * 60));
-
-            const scoreA = (a.likeCount * 2) + (a.commentCount * 5) + (a.shareCount * 4) + ((a.boostMultiplier || 1) * 12) + Math.max(0, 24 - ageHoursA) * 3 + (followingIds.has(a.authorId) ? 18 : 0);
-            const scoreB = (b.likeCount * 2) + (b.commentCount * 5) + (b.shareCount * 4) + ((b.boostMultiplier || 1) * 12) + Math.max(0, 24 - ageHoursB) * 3 + (followingIds.has(b.authorId) ? 18 : 0);
-            return scoreB - scoreA;
+        Swal.fire({
+            title: 'DISCUSSION POSTED',
+            text: 'Your project analysis has been published to the community hub.',
+            icon: 'success',
+            background: '#0a0a0a',
+            color: '#fff',
+            confirmButtonColor: '#fcd535'
         });
     };
 
-    const getFilteredPosts = () => {
-        let filtered = [...feedPosts];
+    // ── ACTIONS: LIVE PODCAST ────────────────────────────────────────────────
 
-        if (activeTab === 'FOLLOWING') {
-            filtered = filtered.filter(p => followingIds.has(p.authorId));
-        } else if (activeTab === 'ALPHABAG') {
-            filtered = filtered.filter(p => p.boostMultiplier && p.boostMultiplier > 1);
-        }
-
-        if (search.trim()) {
-            const query = search.toLowerCase();
-            filtered = filtered.filter(p => p.content.toLowerCase().includes(query) || p.authorId.toLowerCase().includes(query) || (p.strategy?.toLowerCase().includes(query) ?? false));
-        }
-
-        if (activeTab === 'FOR_YOU') {
-            return getRankedPosts(filtered);
-        }
-
-        return filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    const handleToggleListenPodcast = () => {
+        setPodcast(prev => {
+            const nextState = !prev.isListening;
+            return {
+                ...prev,
+                isListening: nextState,
+                listenersCount: nextState ? prev.listenersCount + 1 : prev.listenersCount - 1
+            };
+        });
     };
 
-    const filteredPosts = React.useMemo(getFilteredPosts, [feedPosts, activeTab, followingIds, search]);
+    const handleUpvotePodcast = () => {
+        setPodcast(prev => ({
+            ...prev,
+            upvotes: prev.userUpvoted ? prev.upvotes - 1 : prev.upvotes + 1,
+            userUpvoted: !prev.userUpvoted
+        }));
+    };
 
-    const postLength = newPostContent.length;
-    const postLengthPct = Math.min((postLength / MAX_POST_LENGTH) * 100, 100);
-    const isNearLimit = postLength > MAX_POST_LENGTH * 0.85;
+    const handleSendPodcastChat = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!podcastChatInput.trim()) return;
+
+        const newMsg = {
+            id: `msg-${Date.now()}`,
+            authorWallet: currentDisplayWallet,
+            tier: userTier,
+            isVip: isUserPro,
+            message: podcastChatInput.trim(),
+            timestamp: 'Just now'
+        };
+
+        setPodcast(prev => ({
+            ...prev,
+            liveChat: [newMsg, ...prev.liveChat]
+        }));
+        setPodcastChatInput('');
+    };
+
+    const handleRequestStageMic = () => {
+        if (!isUserPro) {
+            Swal.fire({
+                title: 'STAGE SPEAKING GATED',
+                html: `
+                    <div class="text-left py-2 text-xs text-alphabag-subtext leading-relaxed">
+                        <p class="mb-3 text-alphabag-text"><strong>Free listeners can listen, upvote, and comment in live chat.</strong></p>
+                        <p class="mb-3">To join the stage as a speaker, ask live audio questions, or host community AMAs, you must hold:</p>
+                        <div class="p-3 bg-alphabag-black rounded-lg border border-alphabag-yellow/30 text-alphabag-yellow font-mono space-y-1">
+                            <div>• <strong>10,000 $BAG Tokens</strong> OR</div>
+                            <div>• <strong>1+ AlphaBAG Genesis Pass</strong></div>
+                        </div>
+                    </div>
+                `,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'MINT PASS / UPGRADE',
+                cancelButtonText: 'CONTINUE LISTENING',
+                confirmButtonColor: '#fcd535',
+                background: '#0a0a0a',
+                color: '#fff'
+            }).then(r => {
+                if (r.isConfirmed) {
+                    window.location.hash = '#/alpha-passes';
+                }
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'MIC ACCESS REQUESTED',
+            text: 'You have been added to the VIP Speaker Queue. The host will invite you to the mic shortly.',
+            icon: 'success',
+            background: '#0a0a0a',
+            color: '#fff',
+            confirmButtonColor: '#fcd535'
+        });
+    };
+
+    // ── RENDER ───────────────────────────────────────────────────────────────
 
     return (
-        <div className="relative min-h-screen max-w-7xl mx-auto px-0 sm:px-2 lg:px-0">
-            <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 transition-all duration-700">
-
-                {/* Left Sidebar: Featured Founders (Desktop) */}
-                <div className="hidden lg:block lg:col-span-3 sticky top-0 h-[calc(100vh-80px)] overflow-y-auto pt-0 pb-10 hide-scrollbar">
-                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
-                        <div className="p-2.5 border-b border-alphabag-gray bg-alphabag-black flex items-center justify-between">
-                            <span className="text-[10px] font-semibold uppercase tracking-widest text-alphabag-text flex items-center gap-2">
-                                <Users size={12} className="text-alphabag-yellow" /> Featured Founders
-                            </span>
+        <div className="w-full space-y-3 pb-8 animate-in fade-in duration-500">
+            
+            {/* ── HEADER CARD ── */}
+            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                <div>
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
+                            <MessageSquare size={20} />
                         </div>
-                        <div className="divide-y divide-white/5">
-                            {isSidebarLoading ? (
-                                [...Array(4)].map((_, idx) => (
-                                    <div key={idx} className="p-2.5 flex items-start gap-2.5 animate-pulse">
-                                        <div className="w-9 h-9 rounded-full bg-white/10" />
-                                        <div className="flex-1 min-w-0 space-y-1.5 pt-0.5">
-                                            <div className="h-3 w-2/3 rounded bg-white/10" />
-                                            <div className="h-2.5 w-1/3 rounded bg-white/10" />
-                                        </div>
-                                    </div>
-                                ))
-                            ) : foundersProjects.length > 0 ? (
-                                [...foundersProjects]
-                                    .sort((a, b) => (b.isPaidSponsor ? 1 : 0) - (a.isPaidSponsor ? 1 : 0))
-                                    .map(project => (
-                                        <div
-                                            key={project.id}
-                                            onClick={() => window.location.hash = `#/alpha-radar?project=${project.id}`}
-                                            className="p-2.5 hover:bg-white/[0.02] transition-colors cursor-pointer group flex items-start gap-2.5 relative"
-                                        >
-                                            <div className="w-9 h-9 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow overflow-hidden shrink-0 uppercase shadow-inner group-hover:border-alphabag-yellow/50 transition-all">
-                                                {project.logoUrl ? (
-                                                    <img src={project.logoUrl} alt={project.name} className="w-full h-full object-cover" />
-                                                ) : (
-                                                    project.name.charAt(0)
-                                                )}
-                                            </div>
-                                            <div className="flex-1 min-w-0 pt-0.5">
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="font-bold text-[12px] text-white truncate group-hover:text-alphabag-yellow transition-colors">{project.name}</div>
-                                                    <CheckCircle className="w-3 h-3 text-alphabag-yellow shrink-0" fill="currentColor" />
-                                                </div>
-                                                <div className="text-[10px] font-medium text-alphabag-muted truncate mt-0.5">${project.tickerSymbol || project.symbol}</div>
-                                            </div>
-                                            {project.isPaidSponsor && (
-                                                <div className="absolute top-3 right-3 flex items-center text-[7px] font-black text-alphabag-yellow uppercase tracking-widest bg-alphabag-yellow/10 px-1.5 py-0.5 rounded border border-alphabag-yellow/20">
-                                                    <Star size={7} className="mr-1 fill-current" /> Promoted
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))
-                            ) : sidebarError ? (
-                                <div className="p-4 text-center space-y-2">
-                                    <div className="text-[10px] font-bold uppercase tracking-widest text-red-300">{sidebarError}</div>
-                                    <button
-                                        onClick={loadSidebarData}
-                                        className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white transition-colors"
-                                    >
-                                        Retry
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="p-4 text-center text-[10px] font-bold uppercase tracking-widest text-alphabag-muted">
-                                    No founders available.
-                                </div>
-                            )}
-                        </div>
-                        <div className="p-2.5 border-t border-white/5 bg-white/5">
-                            <button
-                                onClick={handleShowMoreFounders}
-                                className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow hover:text-white w-full text-left transition-colors"
-                            >
-                                Show more
-                            </button>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
+                                Community Discussion Hub
+                            </h1>
+                            <div className="flex items-center gap-2 text-[11px] text-alphabag-subtext">
+                                <span>Collaborative Web3 Project Due Diligence, Tokenomics & Live AMAs</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Main Feed */}
-                <div className="lg:col-span-6 border-x border-white/5 min-h-screen min-w-0">
-                    {/* Header */}
-                    <div className="p-3 sm:p-4 border-b border-white/5 bg-alphabag-black/50 backdrop-blur-md">
-                        <div className="flex items-center justify-between gap-2 mb-1">
-                            <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-alphabag-yellow to-yellow-600 flex items-center justify-center text-black shrink-0">
-                                    <Zap size={15} />
-                                </div>
-                                <h1 className="text-lg sm:text-2xl font-black text-white tracking-tighter uppercase relative flex items-center">
-                                    Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 ml-1.5 sm:ml-2">Feed</span>
-                                </h1>
-                            </div>
-                            {/* Mobile profile link */}
-                            <button
-                                onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
-                                className="lg:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-[10px] font-bold text-alphabag-yellow uppercase tracking-wider"
-                            >
-                                Profile
-                            </button>
-                        </div>
-                        <p className="text-[9px] sm:text-[10px] text-alphabag-muted font-bold uppercase tracking-widest opacity-60">Real-time signals from the AlphaBAG network</p>
-                    </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Privacy Mode Badge / Toggle */}
+                    <button
+                        onClick={() => setPrivacyMode(p => !p)}
+                        className={`px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 border transition-all ${
+                            privacyMode 
+                                ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30 hover:bg-alphabag-green/20'
+                                : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text'
+                        }`}
+                        title="Decentralized Privacy: Zero trackers, masked balances, pseudonymous wallet identity"
+                    >
+                        {privacyMode ? <EyeOff size={14} /> : <Eye size={14} />}
+                        <span>{privacyMode ? 'Privacy Shield Active' : 'Public Wallet'}</span>
+                    </button>
 
-                    {/* Mobile Featured Founders Tray */}
-                    {foundersProjects.length > 0 && (
-                        <div className="block lg:hidden border-b border-white/5 bg-alphabag-darkgray/40 p-2.5">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-alphabag-text flex items-center gap-1.5">
-                                    <Users size={12} className="text-alphabag-yellow" /> Featured Founders
+                    <button
+                        onClick={() => setIsComposerOpen(true)}
+                        className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-4 py-2 rounded-md text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition-all active:scale-[0.98]"
+                    >
+                        <Plus size={15} />
+                        <span>Start Discussion</span>
+                    </button>
+                </div>
+            </div>
+
+            {/* ── 🎙️ LIVE AUDIO PODCAST / SPACE CARD (ALL USERS CAN LISTEN & CHAT) ── */}
+            {podcast.isLive && (
+                <div className="rounded-2xl border border-alphabag-yellow/40 bg-gradient-to-r from-alphabag-darkgray via-[#141414] to-alphabag-darkgray p-4 md:p-5 relative overflow-hidden shadow-lg">
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-alphabag-yellow/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 relative z-10">
+                        {/* Live Status & Title */}
+                        <div className="space-y-2 flex-1">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-red-500/20 text-red-400 border border-red-500/40 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                                    LIVE AUDIO PODCAST
                                 </span>
-                                <button
-                                    onClick={handleShowMoreFounders}
-                                    className="text-[9px] font-black uppercase text-alphabag-yellow hover:underline"
-                                >
-                                    View All
-                                </button>
+                                <span className="text-[11px] text-alphabag-subtext font-medium flex items-center gap-1">
+                                    <Users size={12} className="text-alphabag-yellow" />
+                                    <strong className="text-alphabag-text tabular-nums">{podcast.listenersCount}</strong> Listening
+                                </span>
+                                <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[10px] uppercase font-semibold">
+                                    All Users Welcome
+                                </span>
                             </div>
-                            <div className="flex items-center gap-2 overflow-x-auto pb-1 hide-scrollbar">
-                                {foundersProjects.map(project => (
-                                    <button
-                                        key={project.id}
-                                        onClick={() => window.location.hash = `#/alpha-radar?project=${project.id}`}
-                                        className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-alphabag-black border border-white/10 shrink-0 hover:border-alphabag-yellow/50 transition-all text-left"
+
+                            <h3 className="text-lg md:text-xl font-bold text-alphabag-text leading-snug">
+                                {podcast.title}
+                            </h3>
+                            <p className="text-xs text-alphabag-subtext font-medium">
+                                Topic: {podcast.topic} • Host: <strong className="text-alphabag-yellow">{podcast.hostName}</strong> ({podcast.hostWallet})
+                            </p>
+
+                            {/* Speaker Stage Lineup */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                <span className="text-[10px] uppercase font-semibold text-alphabag-subtext">Stage Speakers:</span>
+                                {podcast.stageSpeakers.map((spk, i) => (
+                                    <div 
+                                        key={i} 
+                                        className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-semibold border ${
+                                            spk.isSpeaking 
+                                                ? 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/40 animate-pulse'
+                                                : 'bg-alphabag-black text-alphabag-subtext border-alphabag-gray'
+                                        }`}
                                     >
-                                        <div className="w-5 h-5 rounded-full overflow-hidden bg-alphabag-yellow/10 flex items-center justify-center text-[9px] font-black text-alphabag-yellow shrink-0">
-                                            {project.logoUrl ? (
-                                                <img src={project.logoUrl} alt="" className="w-full h-full object-cover" />
-                                            ) : (
-                                                project.name.charAt(0)
-                                            )}
-                                        </div>
-                                        <span className="text-[11px] font-bold text-white max-w-[90px] truncate">{project.name}</span>
-                                        {project.isPaidSponsor && <Star size={8} className="text-alphabag-yellow fill-current shrink-0" />}
-                                    </button>
+                                        <Mic size={11} className={spk.isSpeaking ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
+                                        <span>{spk.name}</span>
+                                        {spk.isHost && <span className="bg-alphabag-yellow text-alphabag-dark text-[8px] font-bold px-1 rounded">HOST</span>}
+                                    </div>
                                 ))}
                             </div>
                         </div>
-                    )}
 
-                    {/* Mobile Search Input */}
-                    <div className="block lg:hidden p-2.5 border-b border-white/5 bg-alphabag-black/30">
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-muted" size={14} />
-                            <input
-                                type="text"
-                                placeholder="Search alphas, tickers ($BAG), strategy..."
-                                className="w-full bg-white/5 border border-white/10 focus:border-alphabag-yellow/50 rounded-full py-1.5 pl-9 pr-3 text-xs text-white outline-none placeholder:text-alphabag-muted transition-all"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
+                        {/* Interactive Player & Action Controls */}
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full lg:w-auto">
+                            {/* Animated Audio Soundwave when Listening */}
+                            {podcast.isListening && (
+                                <div className="flex items-center gap-1 px-3 py-2 bg-alphabag-black border border-alphabag-yellow/30 rounded-lg justify-center">
+                                    <div className="w-1 bg-alphabag-yellow h-4 animate-bounce rounded-full" style={{ animationDelay: '0.1s' }} />
+                                    <div className="w-1 bg-alphabag-yellow h-6 animate-bounce rounded-full" style={{ animationDelay: '0.3s' }} />
+                                    <div className="w-1 bg-alphabag-yellow h-3 animate-bounce rounded-full" style={{ animationDelay: '0.2s' }} />
+                                    <div className="w-1 bg-alphabag-yellow h-7 animate-bounce rounded-full" style={{ animationDelay: '0.4s' }} />
+                                    <div className="w-1 bg-alphabag-yellow h-5 animate-bounce rounded-full" style={{ animationDelay: '0.25s' }} />
+                                    <span className="text-[10px] text-alphabag-yellow font-bold uppercase ml-1.5 font-mono">ON-AIR</span>
+                                </div>
+                            )}
+
+                            {/* Listen / Leave Button */}
+                            <button
+                                onClick={handleToggleListenPodcast}
+                                className={`px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
+                                    podcast.isListening
+                                        ? 'bg-alphabag-gray text-alphabag-text hover:bg-alphabag-gray/80 border border-alphabag-gray'
+                                        : 'bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] shadow-md active:scale-95'
+                                }`}
+                            >
+                                <Radio size={14} className={podcast.isListening ? 'animate-spin' : ''} />
+                                <span>{podcast.isListening ? 'LEAVE BROADCAST' : 'TUNE IN LIVE'}</span>
+                            </button>
+
+                            {/* Live Upvote Button */}
+                            <button
+                                onClick={handleUpvotePodcast}
+                                className={`px-3 py-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all ${
+                                    podcast.userUpvoted
+                                        ? 'bg-alphabag-yellow/20 text-alphabag-yellow border-alphabag-yellow'
+                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
+                                }`}
+                                title="Upvote Live Discussion"
+                            >
+                                <ThumbsUp size={14} />
+                                <span className="tabular-nums font-mono text-xs">{podcast.upvotes}</span>
+                            </button>
+
+                            {/* Request Mic / Speak Button */}
+                            <button
+                                onClick={handleRequestStageMic}
+                                className="px-3 py-2.5 rounded-lg text-xs font-semibold bg-alphabag-black border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-yellow/40 flex items-center justify-center gap-1.5 transition-all"
+                                title={isUserPro ? 'Request Mic on Stage' : 'Stage Speaking is for Premium Tier'}
+                            >
+                                <Mic size={14} className="text-alphabag-yellow" />
+                                <span>Request Mic</span>
+                                {!isUserPro && <Lock size={11} className="text-alphabag-subtext" />}
+                            </button>
                         </div>
                     </div>
 
-                    {/* Top Tabs */}
-                    <div className="sticky top-0 z-20 bg-alphabag-black/90 backdrop-blur-xl border-b border-white/5">
-                        <div className="flex w-full">
-                            {tabs.map(({ label, value }) => {
-                                return (
-                                    <button
-                                        key={label}
-                                        onClick={() => setActiveTab(value)}
-                                        className="flex-1 py-2.5 sm:py-3 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] transition-all relative group"
-                                    >
-                                        <span className={activeTab === value ? 'text-white' : 'text-alphabag-muted group-hover:text-white'}>
-                                            {label}
+                    {/* Live Podcast Chat & Comments Drawer (Visible to all listeners) */}
+                    {podcast.isListening && (
+                        <div className="mt-4 pt-4 border-t border-alphabag-gray/60 space-y-3 animate-in slide-in-from-top-2 duration-300">
+                            <div className="flex justify-between items-center text-xs">
+                                <span className="font-semibold text-alphabag-text uppercase text-[11px] flex items-center gap-1.5">
+                                    <MessageCircle size={13} className="text-alphabag-yellow" />
+                                    Live Broadcast Chat & Q&A
+                                </span>
+                                <span className="text-[10px] text-alphabag-subtext font-mono">
+                                    Posting as: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong>
+                                </span>
+                            </div>
+
+                            <div className="max-h-32 overflow-y-auto space-y-1.5 pr-1 text-xs">
+                                {podcast.liveChat.map((msg) => (
+                                    <div key={msg.id} className="bg-alphabag-black/60 border border-alphabag-gray/50 rounded p-2 flex items-start gap-2">
+                                        <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold uppercase shrink-0 ${
+                                            msg.isVip ? 'bg-alphabag-yellow/20 text-alphabag-yellow' : 'bg-alphabag-gray text-alphabag-subtext'
+                                        }`}>
+                                            {msg.tier}
                                         </span>
-                                        {activeTab === value && (
-                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-alphabag-yellow" />
-                                        )}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Create Post */}
-                    <div className="p-3 sm:p-4 border-b border-white/5 bg-alphabag-darkgray/20">
-                        <div className="flex gap-2.5">
-                            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase shadow-inner overflow-hidden shrink-0 mt-0.5">
-                                {(user?.email?.[0] || 'G').toUpperCase()}
-                            </div>
-                            <div className="flex-1 min-w-0 space-y-2">
-                                <textarea
-                                    className="w-full bg-transparent border-none text-white placeholder:text-alphabag-muted focus:ring-0 resize-none py-1 text-sm sm:text-base leading-snug outline-none"
-                                    placeholder={user ? "What's the alpha signal?" : "What's the alpha signal? (Posting as Guest)"}
-                                    rows={2}
-                                    value={newPostContent}
-                                    maxLength={MAX_POST_LENGTH}
-                                    onChange={(e) => setNewPostContent(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                                            e.preventDefault();
-                                            handleCreatePost();
-                                        }
-                                    }}
-                                />
-
-                                <div className="space-y-1">
-                                    <div className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
-                                        <div
-                                            className={`h-full transition-all duration-300 ${isNearLimit ? 'bg-orange-400' : 'bg-alphabag-yellow'}`}
-                                            style={{ width: `${postLengthPct}%` }}
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
-                                        <span className="text-alphabag-muted hidden sm:inline">Ctrl/Cmd + Enter to post</span>
-                                        <span className="text-alphabag-muted sm:hidden">AlphaBAG Signal</span>
-                                        <span className={isNearLimit ? 'text-orange-400' : 'text-alphabag-muted'}>{postLength}/{MAX_POST_LENGTH}</span>
-                                    </div>
-                                </div>
-
-                                {/* Composer Tools & Actions */}
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-white/5">
-                                    {/* Left Tools */}
-                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                        <div className="flex items-center text-alphabag-yellow">
-                                            {[ImageIcon, BarChart2, Smile, Calendar, MapPin].map((Icon, idx) => (
-                                                <button
-                                                    key={idx}
-                                                    type="button"
-                                                    onClick={() => handleComposerToolClick(Icon.displayName || Icon.name || 'Composer tool')}
-                                                    className={`p-1.5 hover:bg-alphabag-yellow/10 rounded-full transition-colors ${idx >= 3 ? 'hidden sm:inline-flex' : 'inline-flex'}`}
-                                                >
-                                                    <Icon size={15} />
-                                                </button>
-                                            ))}
+                                        <div className="flex-1 min-w-0">
+                                            <span className="font-mono text-[10px] text-alphabag-subtext mr-1.5">{msg.authorWallet}:</span>
+                                            <span className="text-alphabag-text leading-relaxed">{msg.message}</span>
                                         </div>
-                                        <select
-                                            className="bg-alphabag-black border border-white/10 text-[9px] sm:text-[10px] text-white font-bold uppercase tracking-wider rounded-lg px-2 py-1 outline-none"
-                                            value={selectedStrategy}
-                                            onChange={(e) => setSelectedStrategy(e.target.value as StrategyFilter)}
-                                        >
-                                            <option value="">Tag: None</option>
-                                            <option value="DEGEN">DEGEN</option>
-                                            <option value="SHORT">SHORT</option>
-                                            <option value="LONGTERM">LONGTERM</option>
-                                            <option value="AIRDROP">AIRDROP</option>
-                                        </select>
+                                        <span className="text-[9px] text-alphabag-subtext shrink-0">{msg.timestamp}</span>
                                     </div>
-
-                                    {/* Right Actions & Post Button */}
-                                    <div className="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                type="button"
-                                                onClick={() => window.location.hash = '#/genesis-manifesto'}
-                                                className="flex items-center gap-1 px-2 py-1 bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-full text-[9px] text-alphabag-yellow font-bold uppercase tracking-wider hover:bg-alphabag-yellow/20 transition-all shrink-0"
-                                            >
-                                                <Rocket size={10} /> <span className="hidden xs:inline">Manifesto</span>
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setIsListingOpen(true)}
-                                                className="flex items-center gap-1 px-2 py-1 bg-blue-500/10 border border-blue-500/30 rounded-full text-[9px] text-blue-400 font-bold uppercase tracking-wider hover:bg-blue-500/20 transition-all shrink-0"
-                                            >
-                                                <Plus size={10} /> <span className="hidden xs:inline">List Project</span>
-                                            </button>
-                                        </div>
-                                        <Button
-                                            size="sm"
-                                            onClick={handleCreatePost}
-                                            disabled={!newPostContent.trim() || newPostContent.length > MAX_POST_LENGTH}
-                                            className="px-3.5 sm:px-4 bg-alphabag-yellow text-black font-black uppercase tracking-widest rounded-full py-1 disabled:opacity-50 text-[10px] shrink-0 h-7"
-                                        >
-                                            Post
-                                        </Button>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
-                        </div>
-                    </div>
 
-                    {/* Feed Posts */}
-                    <div className="divide-y divide-white/5">
-                        {filteredPosts.length > 0 ? (
-                            filteredPosts.map(post => (
-                                <PostCard
-                                    key={post.id}
-                                    post={post}
-                                    isFollowing={followingIds.has(post.authorId)}
-                                    onFollowToggle={() => toggleFollow(post.authorId)}
+                            <form onSubmit={handleSendPodcastChat} className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={podcastChatInput}
+                                    onChange={(e) => setPodcastChatInput(e.target.value)}
+                                    placeholder="Post a question or comment to the live podcast..."
+                                    className="flex-1 bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
                                 />
-                            ))
-                        ) : (
-                            <div className="p-8 text-center space-y-2">
-                                <div className="mx-auto w-12 h-12 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/20 flex items-center justify-center">
-                                    <Search size={20} className="text-alphabag-yellow" />
-                                </div>
-                                <div className="text-sm font-black uppercase tracking-widest text-white">
-                                    {activeTab === 'FOLLOWING' ? 'No posts from your network yet' : activeTab === 'ALPHABAG' ? 'No boosted alpha signals found' : 'No posts match your search'}
-                                </div>
-                                <div className="text-xs text-alphabag-muted">
-                                    {activeTab === 'FOLLOWING'
-                                        ? 'Follow more traders and founders to shape your timeline.'
-                                        : 'Try a different search term or switch feed tabs.'}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                                <button
+                                    type="submit"
+                                    className="bg-alphabag-yellow text-alphabag-dark font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider flex items-center gap-1 shrink-0 hover:bg-[#e0bd2e]"
+                                >
+                                    <Send size={13} />
+                                    <span>Send</span>
+                                </button>
+                            </form>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* ── CHANNEL FILTER PILLS & DISCOVERY CONTROLS ── */}
+            <div className="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-2 pt-1">
+                {/* Channels */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+                    {[
+                        { id: 'ALL', label: 'All Discussions', icon: MessageSquare },
+                        { id: 'TOKENOMICS', label: 'Tokenomics & Vesting', icon: Coins },
+                        { id: 'UTILITY', label: 'Utility & Yield', icon: Zap },
+                        { id: 'PROJECT_REVIEW', label: 'Project Reviews', icon: Layers },
+                        { id: 'ALPHA_CALL', label: 'Alpha Calls', icon: Target },
+                        { id: 'AUDIT_SECURITY', label: 'Security & Audits', icon: Shield },
+                    ].map(ch => {
+                        const Icon = ch.icon;
+                        const active = selectedCategory === ch.id;
+                        return (
+                            <button
+                                key={ch.id}
+                                onClick={() => setSelectedCategory(ch.id as DiscussionCategory)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 border transition-all ${
+                                    active
+                                        ? 'bg-alphabag-yellow text-alphabag-dark font-black border-alphabag-yellow shadow-sm'
+                                        : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text hover:border-alphabag-subtext/40'
+                                }`}
+                            >
+                                <Icon size={13} />
+                                <span>{ch.label}</span>
+                            </button>
+                        );
+                    })}
                 </div>
 
-                {/* Right Sidebar: Widgets (Desktop) */}
-                <div className="hidden lg:block lg:col-span-3 pt-0 pb-10 space-y-3 sticky top-0 h-[calc(100vh-80px)] overflow-y-auto hide-scrollbar">
-                    {/* My Profile Quick Access */}
-                    <div className="bg-gradient-to-br from-alphabag-yellow/10 to-transparent border border-alphabag-yellow/20 rounded-2xl p-2.5 flex items-center justify-between group cursor-pointer hover:bg-alphabag-yellow/20 transition-all"
-                        onClick={() => window.location.hash = `#/profile/${user?.id || 'me'}`}
-                    >
-                        <div className="flex items-center gap-2">
-                            <div className="w-9 h-9 rounded-full bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center font-black text-alphabag-yellow text-sm">
-                                {user?.email?.[0].toUpperCase() || 'U'}
-                            </div>
-                            <div>
-                                <div className="text-[13px] font-black text-white uppercase tracking-tight">My Profile</div>
-                                <div className="text-[9px] text-alphabag-yellow font-bold uppercase tracking-widest">View Timeline</div>
-                            </div>
-                        </div>
-                        <ExternalLink size={14} className="text-alphabag-yellow opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-
-                    {/* Search Bar */}
-                    <div className="relative group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-muted group-focus-within:text-alphabag-yellow transition-colors" size={16} />
+                {/* Search & Sort Controls */}
+                <div className="flex items-center gap-2 shrink-0">
+                    <div className="relative flex-1 md:w-56">
+                        <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-alphabag-subtext" />
                         <input
                             type="text"
-                            placeholder="Search Alphas"
-                            className="w-full bg-white/5 border border-transparent focus:border-alphabag-yellow/50 focus:bg-transparent rounded-full py-2.5 pl-11 pr-4 text-[13px] text-white transition-all outline-none"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Filter by $TICKER or keyword..."
+                            className="w-full bg-alphabag-darkgray border border-alphabag-gray rounded-lg pl-8 pr-3 py-1.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
                         />
                     </div>
 
-                    {/* Open Access Widget */}
-                    <div className="bg-white/5 border border-white/5 rounded-2xl p-3.5 space-y-2.5">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-black text-white uppercase tracking-tight">Open Access</h3>
-                            <span className="bg-alphabag-yellow/20 text-alphabag-yellow text-[9px] px-2 py-0.5 rounded-full font-black">UNLOCKED</span>
-                        </div>
-                        <p className="text-[11px] text-alphabag-subtext leading-relaxed font-medium">
-                            Alpha Feed tools are live for everyone. Post, share, follow, and engage with full open access.
-                        </p>
-                        <Button
-                            onClick={handleExploreFeatures}
-                            className="w-full bg-alphabag-yellow text-black rounded-full font-black uppercase tracking-widest text-[10px] py-2.5"
-                        >
-                            Explore Features
-                        </Button>
-                    </div>
-
-                    {/* Promotions & Ads Section */}
-                    <div className="bg-gradient-to-br from-alphabag-dark to-alphabag-black border border-white/10 rounded-xl overflow-hidden shadow-xl">
-                        <div className="p-4 border-b border-white/5 flex items-center justify-between">
-                            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em] flex items-center gap-2">
-                                <Target size={14} className="text-alphabag-yellow" /> Promoted Projects
-                            </h3>
-                            <span className="text-[8px] bg-white/5 text-alphabag-muted px-1.5 py-0.5 rounded border border-white/10 font-bold uppercase tracking-widest">AD</span>
-                        </div>
-                        <div className="p-4 space-y-2">
-                            <div className="group cursor-pointer">
-                                <div className="aspect-video bg-alphabag-gray/50 rounded-xl mb-3 overflow-hidden relative border border-white/5">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                                    <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                                        <div className="w-8 h-8 bg-black border border-alphabag-yellow/30 rounded-lg flex items-center justify-center font-black text-alphabag-yellow text-xs italic">NB</div>
-                                        <div>
-                                            <div className="text-[10px] text-white font-black uppercase leading-none">NeuralBag V2</div>
-                                            <div className="text-[8px] text-alphabag-yellow font-bold uppercase tracking-widest">Live Integration</div>
-                                        </div>
-                                    </div>
-                                    <div className="absolute top-3 right-3">
-                                        <div className="px-2 py-1 bg-alphabag-yellow text-black text-[8px] font-black rounded uppercase flex items-center gap-1 shadow-lg">
-                                            <Zap size={8} fill="currentColor" /> x10 BOOST
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="text-[11px] text-alphabag-subtext leading-relaxed line-clamp-2 italic mb-3">
-                                    "The next evolution of AI-driven liquidity analysis is here. Join the NeuralBag genesis event."
-                                </p>
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={handlePromotedProjectHub}
-                                    className="w-full border-alphabag-yellow/20 text-alphabag-yellow text-[9px] h-8 font-black uppercase tracking-widest hover:bg-alphabag-yellow hover:text-black"
-                                >
-                                    View Project Hub
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="p-3 bg-white/5 text-center">
-                            <button
-                                onClick={handleAdvertise}
-                                className="text-[9px] text-alphabag-muted hover:text-white transition-colors font-bold uppercase tracking-widest"
-                            >
-                                Advertise with AlphaBAG
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Trending / Live Widget */}
-                    <div className="bg-white/5 border border-white/5 rounded-xl overflow-hidden">
-                        <h3 className="text-base font-black text-white uppercase tracking-tight p-3.5">Live on AlphaBag</h3>
-                        <div className="divide-y divide-white/5">
-                            {isSidebarLoading ? (
-                                [...Array(3)].map((_, idx) => (
-                                    <div key={idx} className="p-3.5 animate-pulse space-y-2">
-                                        <div className="h-3.5 w-2/3 rounded bg-white/10" />
-                                        <div className="h-3 w-full rounded bg-white/10" />
-                                    </div>
-                                ))
-                            ) : sidebarAds.length > 0 ? (
-                                sidebarAds.map(ad => (
-                                    <div
-                                        key={ad.id}
-                                        onClick={() => window.location.hash = '#/alpha-radar'}
-                                        className="p-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer group"
-                                    >
-                                        <div className="flex justify-between items-start mb-1">
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-4 h-4 bg-alphabag-dark rounded flex items-center justify-center text-[7px] text-alphabag-yellow font-black border border-white/10 group-hover:border-alphabag-yellow/50 transition-colors">
-                                                    {ad.symbol?.[0]}
-                                                </div>
-                                                <span className="text-[9px] text-alphabag-muted font-bold uppercase tracking-wider">{ad.name} <span className="text-red-500 ml-1">Live</span></span>
-                                            </div>
-                                            <div className="flex -space-x-1.5">
-                                                {[...Array(3)].map((_, i) => (
-                                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-alphabag-dark bg-alphabag-yellow/20 flex items-center justify-center text-[7px] font-black text-alphabag-yellow">
-                                                        {i === 2 ? '+48' : 'U'}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <h4 className="text-[12px] font-bold text-white leading-snug line-clamp-2">
-                                            {ad.description}
-                                        </h4>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="p-4 text-[11px] text-alphabag-muted">No live promoted signals available right now.</div>
-                            )}
-                        </div>
-                        <button
-                            onClick={handleShowMoreLive}
-                            className="w-full p-3.5 text-left text-[11px] text-alphabag-yellow hover:bg-white/5 transition-colors font-bold uppercase tracking-wider"
-                        >
-                            Show more
-                        </button>
-                    </div>
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as any)}
+                        className="bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-alphabag-yellow"
+                    >
+                        <option value="HOT">🔥 Hot Debates</option>
+                        <option value="TOP">🚀 Top Voted</option>
+                        <option value="DEBATED">💬 Most Discussed</option>
+                        <option value="LATEST">⏱️ Latest</option>
+                    </select>
                 </div>
             </div>
 
-            <FounderListingForm
-                isOpen={isListingOpen}
-                onClose={() => setIsListingOpen(false)}
-                onSuccess={() => {
-                    console.log("Project submitted successfully!");
-                }}
-            />
-        </div>
-    );
-};
+            {/* ── MAIN CONTENT GRID (FEED + SIDEBAR) ── */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
+                
+                {/* ── LEFT COLUMN: DISCUSSIONS FEED (8 COLS) ── */}
+                <div className="lg:col-span-8 space-y-3">
+                    
+                    {/* IN-FEED UNIVERSAL SPONSORED ADS BREAK */}
+                    <div className="rounded-xl border border-alphabag-yellow/30 bg-gradient-to-r from-alphabag-darkgray via-[#161616] to-alphabag-darkgray p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+                        <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow shrink-0">
+                                <Sparkles size={20} />
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <span className="bg-alphabag-yellow/15 text-alphabag-yellow px-2 py-0.2 rounded text-[9px] font-black uppercase tracking-wider border border-alphabag-yellow/20">
+                                        SPONSORED
+                                    </span>
+                                    <h4 className="text-xs font-bold text-alphabag-text">{SPONSORED_PARTNER_AD.partnerName}</h4>
+                                </div>
+                                <p className="text-[11px] text-alphabag-subtext mt-0.5 leading-relaxed">
+                                    {SPONSORED_PARTNER_AD.tagline}
+                                </p>
+                            </div>
+                        </div>
+                        <a
+                            href={SPONSORED_PARTNER_AD.ctaUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-3.5 py-1.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shrink-0 transition-all"
+                        >
+                            <span>{SPONSORED_PARTNER_AD.ctaText}</span>
+                            <ArrowUpRight size={13} />
+                        </a>
+                    </div>
 
-const PostCard = ({ post, isFollowing, onFollowToggle }: { post: Post, isFollowing: boolean, onFollowToggle: () => void }) => {
-    const { user } = useAuth();
-    const [isLiked, setIsLiked] = useState(false);
-    const [likes, setLikes] = useState(post.likeCount);
-    const [isBookmarked, setIsBookmarked] = useState(false);
-    const [comments, setComments] = useState(post.commentCount);
-    const [isCommentsOpen, setIsCommentsOpen] = useState(false);
-    const [replyDraft, setReplyDraft] = useState('');
-    const [commentThread, setCommentThread] = useState<Array<{ id: string; author: string; handle: string; content: string; createdAt: string }>>([]);
+                    {/* DISCUSSION CARDS */}
+                    {filteredDiscussions.length > 0 ? (
+                        filteredDiscussions.map((post) => {
+                            const isExpanded = expandedComments.has(post.id);
+                            const draft = commentDrafts[post.id] || '';
+                            const sentimentDraft = commentSentiments[post.id] || 'NEUTRAL';
+                            const targetReplyId = replyingTo[post.id];
 
-    // Determine info (mock logic for authorId 'user1' as founder)
-    const isFounderPost = post.projectId || post.authorId === 'user1';
-    const authorName = post.authorId === 'user1' ? 'Meme Lord' : post.authorId === user?.id ? (user?.email.split('@')[0] || 'Me') : `User_${post.authorId.substring(0, 4)}`;
-    const authorHandle = post.authorId === 'user1' ? '@memelords212' : `@${post.authorId.substring(0, 8)}`;
-    const relativeTime = formatRelativeTime(post.createdAt);
+                            return (
+                                <div 
+                                    key={post.id} 
+                                    className={`rounded-2xl border bg-alphabag-darkgray p-4 md:p-5 transition-all space-y-3 ${
+                                        post.isPinned ? 'border-alphabag-yellow/40 shadow-sm' : 'border-alphabag-gray hover:border-alphabag-subtext/30'
+                                    }`}
+                                >
+                                    {/* Post Top Row: Category, Ticker, Sentiment, Author, Time */}
+                                    <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-alphabag-gray/50 text-xs">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            {post.isPinned && (
+                                                <span className="bg-alphabag-yellow text-alphabag-dark text-[9px] font-black uppercase px-2 py-0.5 rounded">
+                                                    PINNED
+                                                </span>
+                                            )}
+                                            <span className="bg-alphabag-black border border-alphabag-gray text-alphabag-yellow font-bold font-mono px-2 py-0.5 rounded text-[11px]">
+                                                {post.ticker}
+                                            </span>
+                                            <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[10px] font-semibold uppercase">
+                                                {post.category.replace('_', ' ')}
+                                            </span>
+                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                                                post.sentiment === 'BULLISH'
+                                                    ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30'
+                                                    : post.sentiment === 'BEARISH'
+                                                    ? 'bg-red-500/10 text-red-400 border-red-500/30'
+                                                    : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray'
+                                            }`}>
+                                                {post.sentiment === 'BULLISH' ? '🐂 BULLISH' : post.sentiment === 'BEARISH' ? '🐻 BEARISH' : '⚖️ NEUTRAL'}
+                                            </span>
+                                        </div>
 
-    const handleLike = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsLiked(!isLiked);
-        setLikes(prev => isLiked ? prev - 1 : prev + 1);
+                                        <div className="flex items-center gap-1.5 text-[11px] text-alphabag-subtext font-mono">
+                                            <span>by <strong className="text-alphabag-text">{post.authorWallet}</strong></span>
+                                            <span className="bg-alphabag-gray px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase text-alphabag-subtext">
+                                                {post.authorTier}
+                                            </span>
+                                        </div>
+                                    </div>
 
-        const points = AlphaRadarService.calculateEngagementPoints('LIKE', post.boostMultiplier || 1);
-        console.log(`User earned ${points} engagement points!`);
-    };
+                                    {/* Post Title */}
+                                    <h3 className="text-base md:text-lg font-bold text-alphabag-text leading-snug">
+                                        {post.title}
+                                    </h3>
 
-    const handleComment = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsCommentsOpen((prev) => !prev);
-    };
+                                    {/* Post Content */}
+                                    <p className="text-xs md:text-sm text-alphabag-subtext whitespace-pre-line leading-relaxed">
+                                        {post.content}
+                                    </p>
 
-    const handleSubmitReply = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        const trimmed = replyDraft.trim();
-        if (!trimmed) return;
+                                    {/* Optional Tokenomics Metrics Block */}
+                                    {post.tokenMetrics && (
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-alphabag-black/70 border border-alphabag-gray rounded-xl p-3 text-center">
+                                            {post.tokenMetrics.marketCap && (
+                                                <div>
+                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Market Cap</div>
+                                                    <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.marketCap}</div>
+                                                </div>
+                                            )}
+                                            {post.tokenMetrics.fdv && (
+                                                <div>
+                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Target FDV</div>
+                                                    <div className="text-xs font-semibold text-alphabag-yellow font-mono mt-0.5">{post.tokenMetrics.fdv}</div>
+                                                </div>
+                                            )}
+                                            {post.tokenMetrics.circulatingSupply && (
+                                                <div>
+                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Circulating %</div>
+                                                    <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.circulatingSupply}</div>
+                                                </div>
+                                            )}
+                                            {post.tokenMetrics.unlockDate && (
+                                                <div>
+                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Unlock Schedule</div>
+                                                    <div className="text-xs font-semibold text-alphabag-green font-mono mt-0.5">{post.tokenMetrics.unlockDate}</div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
 
-        const author = user?.email?.split('@')[0] || 'Guest';
-        const handle = user?.id ? `@${user.id.slice(0, 8)}` : '@guest';
-        const newComment = {
-            id: `${post.id}-${Date.now()}`,
-            author,
-            handle,
-            content: trimmed,
-            createdAt: new Date().toISOString(),
-        };
+                                    {/* Post Action Bar (Upvote, Comment Drawer, Insightful) */}
+                                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-alphabag-gray/50 text-xs">
+                                        <div className="flex items-center gap-2">
+                                            {/* Upvote / Downvote */}
+                                            <div className="flex items-center bg-alphabag-black border border-alphabag-gray rounded-lg p-0.5">
+                                                <button
+                                                    onClick={() => handleUpvoteDiscussion(post.id, 'UP')}
+                                                    className={`px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 transition-all ${
+                                                        post.userVoted === 'UP'
+                                                            ? 'bg-alphabag-yellow text-alphabag-dark font-black'
+                                                            : 'text-alphabag-subtext hover:text-alphabag-text'
+                                                    }`}
+                                                    title="Upvote Analysis"
+                                                >
+                                                    <ThumbsUp size={13} />
+                                                    <span className="font-mono tabular-nums">{post.upvotes}</span>
+                                                </button>
+                                            </div>
 
-        setCommentThread((prev) => [newComment, ...prev]);
-        setComments((prev) => prev + 1);
-        setReplyDraft('');
-        setIsCommentsOpen(true);
-    };
+                                            {/* Toggle Comments Button */}
+                                            <button
+                                                onClick={() => toggleComments(post.id)}
+                                                className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                                                    isExpanded
+                                                        ? 'bg-alphabag-black border-alphabag-yellow text-alphabag-yellow'
+                                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
+                                                }`}
+                                            >
+                                                <MessageSquare size={13} />
+                                                <span>{post.comments.length} Comments</span>
+                                                {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                                            </button>
 
-    const handleShare = async (e: React.MouseEvent) => {
-        e.stopPropagation();
-        const shareText = `${authorHandle}: ${post.content.slice(0, 160)}`;
+                                            {/* Insightful Badge */}
+                                            <button
+                                                onClick={() => handleToggleInsightful(post.id)}
+                                                className={`px-2.5 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1 transition-all ${
+                                                    post.isInsightful
+                                                        ? 'bg-alphabag-yellow/15 border-alphabag-yellow/40 text-alphabag-yellow'
+                                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
+                                                }`}
+                                                title="Mark as Insightful Research"
+                                            >
+                                                <Sparkles size={12} className="text-alphabag-yellow" />
+                                                <span className="text-[11px]">{post.insightfulCount} Insightful</span>
+                                            </button>
+                                        </div>
 
-        try {
-            if (navigator.share) {
-                await navigator.share({
-                    title: 'AlphaBAG Feed',
-                    text: shareText,
-                    url: window.location.href,
-                });
-                return;
-            }
+                                        <div className="flex items-center gap-2 text-[10px] text-alphabag-subtext">
+                                            <span>Community Discussion</span>
+                                        </div>
+                                    </div>
 
-            await navigator.clipboard.writeText(shareText);
-            void Swal.fire({
-                icon: 'success',
-                title: 'Copied',
-                text: 'Post preview copied to clipboard.',
-                background: '#0a0a0a',
-                color: '#fff',
-                confirmButtonColor: '#fcd535',
-                timer: 1500,
-                showConfirmButton: false,
-            });
-        } catch (error) {
-            console.error('Share failed', error);
-        }
-    };
+                                    {/* ── EXPANDABLE NESTED COMMENT THREADS ── */}
+                                    {isExpanded && (
+                                        <div className="pt-3 border-t border-alphabag-gray/50 space-y-3 animate-in fade-in duration-300">
+                                            {/* Comment Form */}
+                                            <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-3 space-y-2">
+                                                <div className="flex justify-between items-center text-[11px]">
+                                                    <span className="font-semibold text-alphabag-text">
+                                                        {targetReplyId ? 'Replying to comment...' : 'Join the discussion'}
+                                                    </span>
+                                                    {targetReplyId && (
+                                                        <button 
+                                                            onClick={() => setReplyingTo(p => ({ ...p, [post.id]: null }))}
+                                                            className="text-alphabag-yellow hover:underline text-[10px]"
+                                                        >
+                                                            Cancel Reply
+                                                        </button>
+                                                    )}
+                                                </div>
 
-    const handleBookmark = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsBookmarked((prev) => !prev);
-    };
+                                                <textarea
+                                                    value={draft}
+                                                    onChange={(e) => setCommentDrafts(p => ({ ...p, [post.id]: e.target.value }))}
+                                                    placeholder="Share your perspective, counter-analysis, or questions..."
+                                                    rows={2}
+                                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow resize-none"
+                                                />
 
-    const handleMoreActions = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        void Swal.fire({
-            icon: 'info',
-            title: 'Post Controls',
-            text: 'Mute, report, and block actions are now in final QA for release.',
-            background: '#0a0a0a',
-            color: '#fff',
-            confirmButtonColor: '#fcd535',
-        });
-    };
+                                                <div className="flex justify-between items-center">
+                                                    {/* Sentiment Tag for Comment */}
+                                                    <div className="flex items-center gap-1">
+                                                        {(['BULLISH', 'BEARISH', 'NEUTRAL'] as DiscussionSentiment[]).map(st => (
+                                                            <button
+                                                                key={st}
+                                                                type="button"
+                                                                onClick={() => setCommentSentiments(p => ({ ...p, [post.id]: st }))}
+                                                                className={`px-2 py-0.5 rounded text-[10px] font-semibold border transition-all ${
+                                                                    sentimentDraft === st
+                                                                        ? 'bg-alphabag-yellow text-alphabag-dark font-black border-alphabag-yellow'
+                                                                        : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray'
+                                                                }`}
+                                                            >
+                                                                {st === 'BULLISH' ? '🐂' : st === 'BEARISH' ? '🐻' : '⚖️'} {st}
+                                                            </button>
+                                                        ))}
+                                                    </div>
 
-    const handleViewAnalytics = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        void Swal.fire({
-            icon: 'info',
-            title: 'Post Analytics',
-            text: 'Engagement analytics are available to all users in this feed experience.',
-            background: '#0a0a0a',
-            color: '#fff',
-            confirmButtonColor: '#fcd535',
-        });
-    };
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleAddComment(post.id)}
+                                                        disabled={!draft.trim()}
+                                                        className="bg-alphabag-yellow text-alphabag-dark disabled:opacity-40 font-bold px-3 py-1 rounded-md text-xs uppercase tracking-wider flex items-center gap-1"
+                                                    >
+                                                        <Send size={11} />
+                                                        <span>Post Comment</span>
+                                                    </button>
+                                                </div>
+                                            </div>
 
-    return (
-        <div className="p-2.5 sm:p-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer border-b border-white/5">
-            <div className="flex gap-2 sm:gap-2.5">
-                {/* Avatar */}
-                <div
-                    onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                    className="w-8 h-8 sm:w-9 sm:h-9 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow shadow-inner overflow-hidden uppercase cursor-pointer hover:border-alphabag-yellow/50 transition-all mt-0.5"
-                >
-                    {post.logoUrl ? (
-                        <img src={post.logoUrl} alt={authorName} className="w-full h-full object-cover" />
+                                            {/* Comments List */}
+                                            {post.comments.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {post.comments.map((comm) => (
+                                                        <div key={comm.id} className="bg-alphabag-black/50 border border-alphabag-gray/60 rounded-xl p-3 space-y-2 text-xs">
+                                                            <div className="flex justify-between items-center">
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="font-mono text-alphabag-text font-semibold">{comm.authorWallet}</span>
+                                                                    <span className="bg-alphabag-gray text-alphabag-subtext px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase">
+                                                                        {comm.authorTier}
+                                                                    </span>
+                                                                    {comm.sentiment && (
+                                                                        <span className="text-[10px] text-alphabag-yellow font-bold">
+                                                                            {comm.sentiment === 'BULLISH' ? '🐂 Bullish' : comm.sentiment === 'BEARISH' ? '🐻 Bearish' : '⚖️ Neutral'}
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <span className="text-[10px] text-alphabag-subtext">
+                                                                    {new Date(comm.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                </span>
+                                                            </div>
+
+                                                            <p className="text-alphabag-subtext leading-relaxed pl-1">
+                                                                {comm.content}
+                                                            </p>
+
+                                                            <div className="flex items-center gap-3 pt-1 text-[10px] text-alphabag-subtext">
+                                                                <button 
+                                                                    onClick={() => setReplyingTo(p => ({ ...p, [post.id]: comm.id }))}
+                                                                    className="text-alphabag-yellow hover:underline font-semibold"
+                                                                >
+                                                                    Reply
+                                                                </button>
+                                                                <span>•</span>
+                                                                <span className="tabular-nums">▲ {comm.upvotes} upvotes</span>
+                                                            </div>
+
+                                                            {/* Nested Replies */}
+                                                            {comm.replies && comm.replies.length > 0 && (
+                                                                <div className="ml-4 pl-3 border-l-2 border-alphabag-gray space-y-2 pt-2">
+                                                                    {comm.replies.map(rep => (
+                                                                        <div key={rep.id} className="bg-alphabag-darkgray/60 rounded p-2 text-xs space-y-1">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className="font-mono text-alphabag-text font-semibold text-[11px]">{rep.authorWallet}</span>
+                                                                                <span className="bg-alphabag-gray text-alphabag-subtext px-1 py-0.2 rounded text-[8px] uppercase">{rep.authorTier}</span>
+                                                                            </div>
+                                                                            <p className="text-alphabag-subtext text-[11px] leading-relaxed">{rep.content}</p>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center py-4 text-xs text-alphabag-subtext">
+                                                    No comments yet. Be the first to analyze this project!
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
                     ) : (
-                        authorName[0]
+                        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-12 text-center space-y-3">
+                            <div className="w-12 h-12 rounded-xl bg-alphabag-gray flex items-center justify-center text-alphabag-subtext mx-auto">
+                                <Search size={24} />
+                            </div>
+                            <h3 className="text-base font-bold text-alphabag-text">No Discussions Found</h3>
+                            <p className="text-xs text-alphabag-subtext max-w-sm mx-auto">
+                                No community discussions match the selected filters. Start a new tokenomics or utility thread!
+                            </p>
+                            <button
+                                onClick={() => setIsComposerOpen(true)}
+                                className="bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider"
+                            >
+                                Start New Discussion
+                            </button>
+                        </div>
                     )}
                 </div>
 
-                <div className="flex-1 min-w-0">
-                    {/* Header */}
-                    <div className="flex justify-between items-start gap-1.5 mb-1.5">
-                        <div className="flex flex-col gap-1 min-w-0 flex-1">
-                            {/* Name and Handle line */}
-                            <div className="flex items-center flex-wrap gap-x-1.5 gap-y-0.5 min-w-0">
-                                <span
-                                    onClick={(e) => { e.stopPropagation(); window.location.hash = `#/profile/${post.authorId}`; }}
-                                    className="font-bold text-white text-xs sm:text-sm truncate cursor-pointer hover:underline"
-                                >
-                                    {authorName}
-                                </span>
-                                {isFounderPost ? (
-                                    <CheckCircle size={12} className="text-alphabag-yellow flex-shrink-0" fill="currentColor" />
-                                ) : (
-                                    <Zap size={12} className="text-alphabag-muted flex-shrink-0" />
-                                )}
-                                <span className="text-alphabag-muted text-[11px] sm:text-xs truncate">{authorHandle}</span>
-                                <span className="text-alphabag-muted text-[11px] sm:text-xs shrink-0">· {relativeTime}</span>
-                            </div>
-
-                            {/* Role Badges line */}
-                            <div className="flex flex-wrap items-center gap-1.5">
-                                <div className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${isFounderPost ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
-                                    {isFounderPost ? 'FOUNDER' : 'ELITE TRADER'}
-                                </div>
-                                {isFounderPost && (
-                                    <div className="flex items-center gap-1 text-[8px] font-black text-alphabag-yellow uppercase tracking-widest bg-alphabag-yellow/10 px-1.5 py-0.5 rounded border border-alphabag-yellow/20">
-                                        <Bookmark size={8} fill="currentColor" /> Pinned
-                                    </div>
-                                )}
-                                {post.strategy && (
-                                    <div className={`px-1.5 py-0.5 rounded flex items-center gap-1 text-[8px] font-black uppercase tracking-widest border
-                                        ${post.strategy === 'DEGEN' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
-                                            post.strategy === 'SHORT' ? 'bg-red-500/20 text-red-400 border-red-500/30' :
-                                                post.strategy === 'LONGTERM' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
-                                                    'bg-purple-500/20 text-purple-400 border-purple-500/30'}
-                                    `}>
-                                        {post.strategy === 'DEGEN' && <Zap size={9} />}
-                                        {post.strategy === 'SHORT' && <TrendingUp size={9} className="rotate-180" />}
-                                        {post.strategy === 'LONGTERM' && <Shield size={9} />}
-                                        {post.strategy === 'AIRDROP' && <Target size={9} />}
-                                        {post.strategy}
-                                    </div>
-                                )}
-                            </div>
+                {/* ── RIGHT COLUMN: UNIVERSAL ADS & COMMUNITY WIDGETS (4 COLS) ── */}
+                <div className="lg:col-span-4 space-y-3">
+                    
+                    {/* 📢 UNIVERSAL SPONSORED PARTNER CARD (VISIBLE TO ALL USERS) */}
+                    <div className="rounded-2xl border-2 border-alphabag-yellow/40 bg-gradient-to-b from-alphabag-darkgray to-alphabag-black p-4 space-y-3 shadow-md relative overflow-hidden">
+                        <div className="flex justify-between items-center">
+                            <span className="bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider">
+                                {SPONSORED_PARTNER_AD.badge}
+                            </span>
+                            <span className="text-[10px] text-alphabag-subtext font-semibold uppercase">SPONSOR</span>
                         </div>
 
-                        {/* Right side interactions */}
-                        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                        <div className="space-y-1.5">
+                            <h3 className="text-sm font-bold text-alphabag-text">{SPONSORED_PARTNER_AD.partnerName}</h3>
+                            <p className="text-xs text-alphabag-subtext leading-relaxed">
+                                {SPONSORED_PARTNER_AD.description}
+                            </p>
+                        </div>
+
+                        <a
+                            href={SPONSORED_PARTNER_AD.ctaUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all block text-center shadow-sm"
+                        >
+                            <span>{SPONSORED_PARTNER_AD.ctaText}</span>
+                            <ExternalLink size={13} />
+                        </a>
+
+                        <div className="pt-2 border-t border-alphabag-gray/50 flex justify-between items-center text-[10px] text-alphabag-subtext">
+                            <span>Verified Web3 Ecosystem Ad</span>
                             <button
-                                onClick={(e) => { e.stopPropagation(); onFollowToggle(); }}
-                                className={`text-[9px] sm:text-[10px] font-black uppercase px-2.5 sm:px-3 py-1 rounded-full border transition-all ${isFollowing ? 'border-white/20 text-white bg-white/5' : 'border-alphabag-yellow text-alphabag-yellow hover:bg-alphabag-yellow/10'}`}
+                                onClick={() => setIsFounderFormOpen(true)}
+                                className="text-alphabag-yellow hover:underline font-semibold"
                             >
-                                {isFollowing ? 'Following' : 'Follow'}
-                            </button>
-                            <button
-                                onClick={handleMoreActions}
-                                className="text-alphabag-muted hover:text-white transition-colors p-1 rounded-full hover:bg-white/5"
-                            >
-                                <MoreHorizontal size={16} />
+                                Feature Your Project
                             </button>
                         </div>
                     </div>
 
-                    {/* Content */}
-                    <div className={`p-2 sm:p-2.5 rounded-lg mb-2 border ${post.strategy === 'DEGEN' ? 'bg-gradient-to-br from-orange-500/5 to-transparent border-orange-500/20 shadow-[inset_0_0_20px_rgba(249,115,22,0.05)]' :
-                        post.strategy === 'SHORT' ? 'bg-gradient-to-br from-red-500/5 to-transparent border-red-500/20' :
-                            post.strategy === 'LONGTERM' ? 'bg-gradient-to-br from-green-500/5 to-transparent border-green-500/20' :
-                                post.strategy === 'AIRDROP' ? 'bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20' :
-                                    'bg-transparent border-transparent'
-                        }`}>
-                        <p className={`text-[13px] sm:text-[14px] leading-relaxed whitespace-pre-wrap break-words ${post.strategy === 'DEGEN' ? 'text-orange-50 font-medium' :
-                            post.strategy === 'SHORT' ? 'text-red-50' :
-                                post.strategy === 'LONGTERM' ? 'text-green-50' :
-                                    post.strategy === 'AIRDROP' ? 'text-purple-50' :
-                                        'text-zinc-200'
-                            }`}>
-                            {highlightContent(post.content)}
+                    {/* 🔥 TRENDING TOKENS IN COMMUNITY */}
+                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
+                        <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
+                            <span className="text-xs font-semibold uppercase text-alphabag-subtext flex items-center gap-1.5">
+                                <Flame size={14} className="text-alphabag-yellow" />
+                                Trending Topics
+                            </span>
+                            <span className="text-[10px] font-semibold uppercase text-alphabag-yellow">24H Active</span>
+                        </div>
+
+                        <div className="space-y-2">
+                            {[
+                                { ticker: '$BAG', topic: 'Tokenomics & 100% Treasury Model', posts: 42, sentiment: '98% Bullish' },
+                                { ticker: '$BNB', topic: 'Smart Money Whale Accumulation', posts: 28, sentiment: '86% Bullish' },
+                                { ticker: '$CAKE', topic: 'V3 DEX Fee Share & Staking Yield', posts: 19, sentiment: '74% Bullish' },
+                                { ticker: '$ETH', topic: 'Modular DA vs ZK Rollup Fees', posts: 15, sentiment: '52% Neutral' },
+                            ].map((tr, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setSearchQuery(tr.ticker)}
+                                    className="w-full text-left bg-alphabag-black/50 hover:bg-alphabag-black border border-alphabag-gray rounded-xl p-2.5 transition-all flex items-center justify-between group"
+                                >
+                                    <div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-bold font-mono text-alphabag-yellow group-hover:underline">
+                                                {tr.ticker}
+                                            </span>
+                                            <span className="text-[10px] text-alphabag-green font-semibold">
+                                                {tr.sentiment}
+                                            </span>
+                                        </div>
+                                        <div className="text-[11px] text-alphabag-subtext line-clamp-1 mt-0.5">
+                                            {tr.topic}
+                                        </div>
+                                    </div>
+                                    <span className="text-[10px] text-alphabag-subtext font-mono shrink-0 pl-2">
+                                        {tr.posts} posts
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 🏆 TOP COMMUNITY ANALYSTS LEADERBOARD */}
+                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
+                        <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
+                            <span className="text-xs font-semibold uppercase text-alphabag-subtext flex items-center gap-1.5">
+                                <Award size={14} className="text-alphabag-yellow" />
+                                Top Analysts
+                            </span>
+                            <span className="text-[10px] text-alphabag-subtext font-mono">By Upvotes</span>
+                        </div>
+
+                        <div className="space-y-2">
+                            {[
+                                { rank: '1', wallet: '0x4291...dB96', tier: 'ALPHA_VIP', score: '1,420 Upvotes', focus: 'Tokenomics' },
+                                { rank: '2', wallet: '0x620a...dd81', tier: 'ALPHA_VIP', score: '980 Upvotes', focus: 'Security & Audits' },
+                                { rank: '3', wallet: '0x71e3...a01f', tier: 'PREMIUM', score: '760 Upvotes', focus: 'Whale Tracking' },
+                            ].map((an, i) => (
+                                <div key={i} className="flex items-center justify-between bg-alphabag-black/50 border border-alphabag-gray rounded-xl p-2.5 text-xs">
+                                    <div className="flex items-center gap-2">
+                                        <span className="w-5 h-5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-alphabag-yellow text-[10px] font-black flex items-center justify-center">
+                                            {an.rank}
+                                        </span>
+                                        <div>
+                                            <div className="font-mono font-semibold text-alphabag-text text-[11px]">{an.wallet}</div>
+                                            <div className="text-[10px] text-alphabag-subtext">{an.focus}</div>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className="text-[10px] font-mono text-alphabag-yellow font-semibold">{an.score}</span>
+                                        <div className="text-[9px] text-alphabag-subtext uppercase">{an.tier}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 🛡️ PRIVACY & DYOR COMMUNITY MANIFESTO */}
+                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-2 text-xs">
+                        <div className="flex items-center gap-1.5 text-alphabag-yellow font-bold uppercase text-[11px]">
+                            <Shield size={14} />
+                            <span>Privacy & DYOR Manifesto</span>
+                        </div>
+                        <p className="text-[11px] text-alphabag-subtext leading-relaxed">
+                            AlphaBAG Community Hub is a decentralized intelligence forum. No third-party data tracking, no algorithmic bias. All project analyses represent individual community contributor perspectives. Always verify on-chain contracts and DYOR.
                         </p>
                     </div>
 
-                    {/* Banner for Manifesto posts */}
-                    {isFounderPost && (
-                        <div className="rounded-lg border border-white/10 overflow-hidden mb-2 sm:mb-3 bg-white/5 shadow-2xl">
-                            {post.bannerUrl ? (
-                                <img src={post.bannerUrl} alt="Manifesto Banner" className="aspect-[3/1] w-full object-cover" />
-                            ) : (
-                                <div className="aspect-video bg-gradient-to-br from-alphabag-yellow/10 to-transparent flex items-center justify-center">
-                                    <Zap size={32} className="text-alphabag-yellow/20" />
+                </div>
+            </div>
+
+            {/* ── START DISCUSSION COMPOSER MODAL ── */}
+            {isComposerOpen && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl max-w-2xl w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
+                        <div className="flex justify-between items-center pb-3 border-b border-alphabag-gray">
+                            <div>
+                                <span className="text-xs font-semibold uppercase text-alphabag-subtext">Community Research</span>
+                                <h3 className="text-xl font-bold text-alphabag-text mt-0.5">Start a Project Analysis Thread</h3>
+                            </div>
+                            <button
+                                onClick={() => setIsComposerOpen(false)}
+                                className="text-alphabag-subtext hover:text-alphabag-text text-lg font-bold p-1"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCreateDiscussion} className="space-y-4">
+                            {/* Title & Ticker */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div className="sm:col-span-2 space-y-1">
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Discussion Title</label>
+                                    <input
+                                        type="text"
+                                        value={newTitle}
+                                        onChange={(e) => setNewTitle(e.target.value)}
+                                        placeholder="e.g. Deep Dive into $BAG Tokenomics and Vesting..."
+                                        required
+                                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                    />
                                 </div>
-                            )}
-                        </div>
-                    )}
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Cashtag / Ticker</label>
+                                    <input
+                                        type="text"
+                                        value={newTicker}
+                                        onChange={(e) => setNewTicker(e.target.value)}
+                                        placeholder="$BAG"
+                                        required
+                                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs font-mono text-alphabag-yellow placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow uppercase"
+                                    />
+                                </div>
+                            </div>
 
-                    {/* Interactions */}
-                    <div className="flex items-center justify-between text-alphabag-muted pt-1 max-w-lg">
-                        <button
-                            onClick={handleComment}
-                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-blue-400 p-1.5 sm:p-2 rounded-full hover:bg-blue-400/10"
-                        >
-                            <MessageCircle size={15} />
-                            <span className="text-[11px] font-medium">{comments}</span>
-                        </button>
-                        <button
-                            onClick={handleShare}
-                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-alphabag-green p-1.5 sm:p-2 rounded-full hover:bg-alphabag-green/10"
-                        >
-                            <Share2 size={15} />
-                            <span className="text-[11px] font-medium">{post.shareCount || 233}</span>
-                        </button>
-                        <button
-                            onClick={handleLike}
-                            className={`flex items-center gap-1 sm:gap-1.5 group transition-colors p-1.5 sm:p-2 rounded-full hover:bg-alphabag-yellow/10 ${isLiked ? 'text-alphabag-yellow' : 'hover:text-alphabag-yellow'}`}
-                        >
-                            <Heart size={15} fill={isLiked ? "currentColor" : "none"} />
-                            <span className="text-[11px] font-medium">{likes}</span>
-                        </button>
-                        <button
-                            onClick={handleViewAnalytics}
-                            className="flex items-center gap-1 sm:gap-1.5 group transition-colors hover:text-alphabag-yellow p-1.5 sm:p-2 rounded-full hover:bg-alphabag-yellow/10"
-                        >
-                            <BarChart size={15} />
-                            <span className="text-[11px] font-medium">6M</span>
-                        </button>
-                        <div className="flex items-center gap-0.5">
-                            <button
-                                onClick={handleBookmark}
-                                className={`p-1.5 sm:p-2 rounded-full transition-colors ${isBookmarked ? 'text-alphabag-yellow bg-alphabag-yellow/10' : 'hover:bg-alphabag-yellow/10 hover:text-alphabag-yellow'}`}
-                            >
-                                <Bookmark size={15} fill={isBookmarked ? 'currentColor' : 'none'} />
-                            </button>
-                            <button
-                                onClick={handleShare}
-                                className="p-1.5 sm:p-2 hover:bg-alphabag-yellow/10 rounded-full transition-colors hover:text-alphabag-yellow"
-                            >
-                                <ExternalLink size={15} />
-                            </button>
-                        </div>
-                    </div>
+                            {/* Category & Sentiment Stance */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Topic Channel</label>
+                                    <select
+                                        value={newCategory}
+                                        onChange={(e) => setNewCategory(e.target.value as any)}
+                                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text focus:outline-none focus:border-alphabag-yellow font-semibold"
+                                    >
+                                        <option value="TOKENOMICS">📊 Tokenomics & Vesting</option>
+                                        <option value="UTILITY">⚡ Utility & Yield</option>
+                                        <option value="PROJECT_REVIEW">🏗️ Project Review & Fundamentals</option>
+                                        <option value="ALPHA_CALL">🎯 Alpha Call & Due Diligence</option>
+                                        <option value="AUDIT_SECURITY">🛡️ Security & Audits</option>
+                                    </select>
+                                </div>
 
-                    {isCommentsOpen && (
-                        <div className="mt-3 border border-white/10 rounded-xl bg-white/[0.02] overflow-hidden">
-                            <div className="px-3 py-2 border-b border-white/10 flex items-center justify-between">
-                                <div className="text-[11px] font-black uppercase tracking-widest text-white">Conversation</div>
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Sentiment Stance</label>
+                                    <div className="grid grid-cols-3 gap-1.5">
+                                        {(['BULLISH', 'BEARISH', 'NEUTRAL'] as DiscussionSentiment[]).map(st => (
+                                            <button
+                                                key={st}
+                                                type="button"
+                                                onClick={() => setNewSentiment(st)}
+                                                className={`py-2 rounded-lg text-xs font-bold uppercase border transition-all ${
+                                                    newSentiment === st
+                                                        ? 'bg-alphabag-yellow text-alphabag-dark border-alphabag-yellow shadow-sm font-black'
+                                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
+                                                }`}
+                                            >
+                                                {st === 'BULLISH' ? '🐂 Bull' : st === 'BEARISH' ? '🐻 Bear' : '⚖️ Neutral'}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Analysis Content */}
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Detailed Analysis & Key Takeaways</label>
+                                <textarea
+                                    value={newContent}
+                                    onChange={(e) => setNewContent(e.target.value)}
+                                    placeholder="Write your in-depth thesis, token utility mechanics, smart contract breakdown, or risk notes..."
+                                    rows={5}
+                                    required
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow resize-none leading-relaxed"
+                                />
+                            </div>
+
+                            {/* Optional Tokenomics Highlights */}
+                            <div className="space-y-2 pt-2 border-t border-alphabag-gray">
+                                <span className="text-[11px] font-semibold uppercase text-alphabag-yellow">Optional: Tokenomics Key Metrics</span>
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <input
+                                        type="text"
+                                        value={newMarketCap}
+                                        onChange={(e) => setNewMarketCap(e.target.value)}
+                                        placeholder="Market Cap ($4.2M)"
+                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={newFdv}
+                                        onChange={(e) => setNewFdv(e.target.value)}
+                                        placeholder="Target FDV ($10M)"
+                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={newCirculating}
+                                        onChange={(e) => setNewCirculating(e.target.value)}
+                                        placeholder="Circulating (42%)"
+                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={newUnlock}
+                                        onChange={(e) => setNewUnlock(e.target.value)}
+                                        placeholder="Next Unlock (None/Fair)"
+                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Author Pseudonym Notice */}
+                            <div className="bg-alphabag-black p-3 rounded-lg border border-alphabag-gray flex justify-between items-center text-xs">
+                                <span className="text-alphabag-subtext font-mono">
+                                    Posting as: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong> ({userTier})
+                                </span>
+                                <span className="text-[10px] text-alphabag-green font-semibold">
+                                    🔒 Privacy Shield Protected
+                                </span>
+                            </div>
+
+                            <div className="flex justify-end gap-2 pt-2">
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsCommentsOpen(false);
-                                    }}
-                                    className="text-[10px] font-bold uppercase tracking-wider text-alphabag-muted hover:text-white"
+                                    type="button"
+                                    onClick={() => setIsComposerOpen(false)}
+                                    className="px-4 py-2 bg-alphabag-gray text-alphabag-text rounded-lg text-xs font-bold uppercase tracking-wider"
                                 >
-                                    Collapse
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-6 py-2 bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] rounded-lg text-xs font-black uppercase tracking-wider shadow-sm"
+                                >
+                                    Publish Discussion
                                 </button>
                             </div>
-
-                            <div className="p-3 border-b border-white/10 bg-black/20">
-                                <div className="flex gap-2 items-start">
-                                    <div className="w-8 h-8 rounded-full bg-alphabag-yellow/15 border border-alphabag-yellow/30 flex items-center justify-center text-[11px] font-black text-alphabag-yellow uppercase">
-                                        {(user?.email?.[0] || 'G').toUpperCase()}
-                                    </div>
-                                    <div className="flex-1 space-y-2">
-                                        <textarea
-                                            value={replyDraft}
-                                            onChange={(e) => setReplyDraft(e.target.value)}
-                                            placeholder="Post your reply"
-                                            rows={2}
-                                            maxLength={280}
-                                            className="w-full bg-transparent border border-white/10 rounded-lg px-3 py-2 text-[13px] text-white placeholder:text-alphabag-muted resize-none outline-none focus:border-alphabag-yellow/50"
-                                            onClick={(e) => e.stopPropagation()}
-                                        />
-                                        <div className="flex items-center justify-between">
-                                            <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">
-                                                {replyDraft.length}/280
-                                            </div>
-                                            <Button
-                                                size="sm"
-                                                onClick={handleSubmitReply}
-                                                disabled={!replyDraft.trim()}
-                                                className="px-3 h-8 bg-alphabag-yellow text-black text-[10px] font-black uppercase tracking-widest rounded-full disabled:opacity-50"
-                                            >
-                                                Reply
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="max-h-72 overflow-y-auto divide-y divide-white/5">
-                                {commentThread.length > 0 ? (
-                                    commentThread.map((comment) => (
-                                        <div key={comment.id} className="px-3 py-2.5">
-                                            <div className="flex items-center gap-2 text-[12px] mb-1">
-                                                <span className="font-bold text-white">{comment.author}</span>
-                                                <span className="text-alphabag-muted">{comment.handle}</span>
-                                                <span className="text-alphabag-muted">· {formatRelativeTime(comment.createdAt)}</span>
-                                            </div>
-                                            <p className="text-[13px] text-zinc-200 leading-relaxed whitespace-pre-wrap">{comment.content}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="px-3 py-4 text-[12px] text-alphabag-muted">No replies yet. Start the thread.</div>
-                                )}
-                            </div>
-                        </div>
-                    )}
+                        </form>
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {/* ── FOUNDER PROMOTION FORM MODAL ── */}
+            <FounderListingForm
+                isOpen={isFounderFormOpen}
+                onClose={() => setIsFounderFormOpen(false)}
+            />
         </div>
     );
 };
