@@ -7,12 +7,14 @@ export const usePortfolioStream = (token: string | null, address?: string) => {
 
   useEffect(() => {
     if (!token || !address) return;
+
     const es = new EventSource(`/api/stream/portfolio?token=${encodeURIComponent(token)}`);
     esRef.current = es;
 
     es.onmessage = (event) => {
       try {
         const update = JSON.parse(event.data);
+
         if (update.balances) {
           queryClient.setQueryData(['portfolio', 'dex', address], update.balances);
         }

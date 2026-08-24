@@ -18,7 +18,9 @@ export const api = axios.create({
 api.interceptors.request.use(
   (config: RetryConfig) => {
     const token = sessionStorage.getItem('alphabag_token');
-    if (token) config.headers['Authorization'] = `Bearer ${token}`;
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
     config.headers['X-Request-ID'] = crypto.randomUUID();
     config.headers['X-Client-Timestamp'] = Date.now().toString();
     return config;
@@ -38,7 +40,8 @@ api.interceptors.response.use(
     if (isRetryable && config.retryCount < MAX_RETRIES) {
       config.retryCount += 1;
       const delay = Math.pow(2, config.retryCount) * RETRY_DELAY_MS;
-      await new Promise((r) => setTimeout(r, delay));
+      console.warn(`[API] Retry ${config.retryCount}/${MAX_RETRIES} for ${config.url} in ${delay}ms`);
+      await new Promise(resolve => setTimeout(resolve, delay));
       return api(config);
     }
 
@@ -51,12 +54,13 @@ api.interceptors.response.use(
       }
     }
 
-    return Promise.reject({
+    const structuredError = {
       ...error,
       isRetryable,
       retryCount: config.retryCount,
       requestId: config.headers?.['X-Request-ID'],
-    });
+    };
+    return Promise.reject(structuredError);
   }
 );
 

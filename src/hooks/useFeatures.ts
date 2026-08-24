@@ -25,8 +25,12 @@ export const useFeatures = () => {
   return useQuery({
     queryKey: ['config', 'features'],
     queryFn: async (): Promise<FeatureFlags> => {
-      const res = await api.get('/api/config/features');
-      return { ...DEFAULT_FLAGS, ...res.data };
+      try {
+        const res = await api.get('/api/config/features');
+        return { ...DEFAULT_FLAGS, ...res.data };
+      } catch {
+        return DEFAULT_FLAGS;
+      }
     },
     staleTime: 5 * 60_000,
     retry: 3,
