@@ -22,6 +22,18 @@ import type {
 } from '../../types/openapi-contracts';
 import Swal from 'sweetalert2';
 
+// ── TOKENOMICS CONFIG ──────────────────────────────────────────────────────────
+// These values should eventually be fetched from a backend config endpoint
+// (e.g. /api/config/tokenomics) so they can be updated without redeploying.
+// For now, they are centralized here as a single source of truth.
+const TOKENOMICS_ALLOCATIONS = [
+    { label: 'Liquidity Pool (LP)', pct: '30%', tokens: '6,300,000 $BAG', color: 'bg-alphabag-yellow text-black', desc: 'Paired with BNB on PancakeSwap. Burnt to secure market floor.' },
+    { label: 'Trade-to-Earn (T2E)', pct: '35%', tokens: '7,350,000 $BAG', color: 'bg-[#1DA1F2] text-white', desc: 'Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community.' },
+    { label: 'Dev & Ecosystem', pct: '15%', tokens: '3,150,000 $BAG', color: 'bg-alphabag-green text-black', desc: 'Infrastructure, API integrations & core platform upgrades. Locked for 6 months.' },
+    { label: 'Marketing & Growth', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-alphabag-red text-white', desc: 'Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships.' },
+    { label: 'Team & Advisors', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-[#9333EA] text-white', desc: 'Team Allocation Locked for 24 months. Unlocked in phases.' },
+];
+
 export const Airdrop: React.FC = () => {
     const { user, refreshUser } = useAuth();
     const [stats, setStats] = useState<AirdropStatsResponse | null>(null);
@@ -964,13 +976,7 @@ export const Airdrop: React.FC = () => {
 
                     {/* Allocation Grid Unveiled */}
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
-                        {[
-                            { label: 'Liquidity Pool (LP)', pct: '30%', tokens: '6,300,000 $BAG', color: 'bg-alphabag-yellow text-black', desc: 'Paired with BNB on PancakeSwap. Burnt to secure market floor.' },
-                            { label: 'Trade-to-Earn (T2E)', pct: '35%', tokens: '7,350,000 $BAG', color: 'bg-[#1DA1F2] text-white', desc: 'Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community.' },
-                            { label: 'Dev & Ecosystem', pct: '15%', tokens: '3,150,000 $BAG', color: 'bg-alphabag-green text-black', desc: 'Infrastructure, API integrations & core platform upgrades. Locked for 6 months.' },
-                            { label: 'Marketing & Growth', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-alphabag-red text-white', desc: 'Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships.' },
-                            { label: 'Team & Advisors', pct: '10%', tokens: '2,100,000 $BAG', color: 'bg-[#9333EA] text-white', desc: 'Team Allocation Locked for 24 months. Unlocked in phases.' },
-                        ].map((item) => (
+                        {TOKENOMICS_ALLOCATIONS.map((item) => (
                             <div key={item.label} className="flex flex-col items-center p-4 bg-alphabag-black border border-alphabag-gray hover:border-alphabag-muted rounded-xl text-center transition-all">
                                 <div className={`w-11 h-11 rounded-lg ${item.color} flex flex-col items-center justify-center mb-2 shadow-sm`}>
                                     <span className="font-bold text-xs leading-none">{item.pct}</span>

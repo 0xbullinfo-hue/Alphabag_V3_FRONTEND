@@ -32,6 +32,7 @@ import { useAuth } from '../../context/AuthContext';
 import { NFT_CONFIG, TOKEN_GATING_CONFIG } from '../../services/config';
 import { AlphaPassNFT, PassTier } from '../../types';
 import Swal from 'sweetalert2';
+import DOMPurify from 'dompurify';
 import { parseUnits } from 'viem';
 
 // ── CONTRACT ABIs ────────────────────────────────────────────────────────────
@@ -255,7 +256,7 @@ export const AlphaPasses: React.FC = () => {
       refetchBalance();
       Swal.fire({
         title: 'PASS MINTED SUCCESSFULLY!',
-        html: `<div class="text-left py-2"><p class="text-sm text-gray-300 mb-2">Congratulations! You are now an official Alpha Pass Genesis Holder.</p><div class="p-3 bg-alphabag-black rounded-xl border border-alphabag-yellow/30 text-xs text-alphabag-yellow font-mono"><div><strong>Tx Hash:</strong> ${txHash?.slice(0, 10)}...${txHash?.slice(-8)}</div><div><strong>Quantity:</strong> ${quantity}</div><div><strong>Treasury Fee:</strong> ${totalBagCost} $BAG</div></div></div>`,
+        html: DOMPurify.sanitize(`<div class="text-left py-2"><p class="text-sm text-gray-300 mb-2">Congratulations! You are now an official Alpha Pass Genesis Holder.</p><div class="p-3 bg-alphabag-black rounded-xl border border-alphabag-yellow/30 text-xs text-alphabag-yellow font-mono"><div><strong>Tx Hash:</strong> ${txHash?.slice(0, 10)}...${txHash?.slice(-8)}</div><div><strong>Quantity:</strong> ${quantity}</div><div><strong>Treasury Fee:</strong> ${totalBagCost} $BAG</div></div></div>`, { ADD_ATTR: ['class'] }),
         icon: 'success',
         confirmButtonText: 'VIEW ON BSCSCAN',
         showCancelButton: true,

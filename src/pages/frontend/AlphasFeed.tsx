@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Swal from 'sweetalert2';
+import DOMPurify from 'dompurify';
 import {
     MessageSquare, Shield, Zap, Target, Search, Plus, MessageCircle,
     Radio, Mic, ThumbsUp, Sparkles, Award, Lock, Eye, EyeOff, Send,
@@ -9,6 +10,12 @@ import { FounderListingForm } from '../../components/frontend/FounderListingForm
 import { useAuth } from '../../context/AuthContext';
 import { PassTier } from '../../types';
 import { api } from '../../services/api';
+
+
+// ── PODCAST CHAT RATE LIMITING ───────────────────────────────────────────────
+const PODCAST_CHAT_MAX_MESSAGES = 200; // Max messages shown in chat window
+const PODCAST_CHAT_COOLDOWN_MS = 3000; // 3 second cooldown between messages
+const PODCAST_CHAT_MAX_LENGTH = 280; // Max characters per message (like a tweet)
 
 // ── TYPES & ENUMS ────────────────────────────────────────────────────────────
 
@@ -157,6 +164,7 @@ export const AlphasFeed: React.FC = () => {
     // ── LIVE AUDIO PODCAST / SPACE STATE (Loaded from API) ───────────────────
     const [podcast, setPodcast] = useState<LivePodcastState | null>(null);
     const [podcastChatInput, setPodcastChatInput] = useState('');
+    const [lastChatSentAt, setLastChatSentAt] = useState(0);
 
     const isUserPro = user?.isPro || user?.tier === 'PREMIUM' || user?.tier === 'ULTIMATE' || user?.tier === 'ALPHA_VIP';
     const userTier: PassTier = (user?.tier as PassTier) || 'FREE';
@@ -459,12 +467,24 @@ export const AlphasFeed: React.FC = () => {
         e.preventDefault();
         if (!podcastChatInput.trim() || !podcast) return;
 
+        // Rate limiting: enforce cooldown
+        const now = Date.now();
+        if (now - lastChatSentAt < PODCAST_CHAT_COOLDOWN_MS) {
+            return; // Silently reject rapid messages
+        }
+
+        // Max length enforcement
+        const trimmedMsg = podcastChatInput.trim().slice(0, PODCAST_CHAT_MAX_LENGTH);
+        if (!trimmedMsg) return;
+
+        setLastChatSentAt(now);
+
         const newMsg = {
             id: `msg-${Date.now()}`,
             authorWallet: currentDisplayWallet,
             tier: userTier,
             isVip: isUserPro,
-            message: podcastChatInput.trim(),
+            message: trimmedMsg,
             timestamp: 'Just now'
         };
 
@@ -472,7 +492,7 @@ export const AlphasFeed: React.FC = () => {
             if (!prev) return null;
             return {
                 ...prev,
-                liveChat: [newMsg, ...prev.liveChat]
+                liveChat: [newMsg, ...prev.liveChat].slice(0, PODCAST_CHAT_MAX_MESSAGES)
             };
         });
         setPodcastChatInput('');
@@ -482,7 +502,7 @@ export const AlphasFeed: React.FC = () => {
         if (!isUserPro) {
             Swal.fire({
                 title: 'STAGE SPEAKING GATED',
-                html: `
+                html: DOMPurify.sanitize(`
                     <div class="text-left py-2 text-xs text-alphabag-subtext leading-relaxed">
                         <p class="mb-3 text-alphabag-text"><strong>Free listeners can listen, upvote, and comment in live chat.</strong></p>
                         <p class="mb-3">To join the stage as a speaker, ask live audio questions, or host community AMAs, you must hold:</p>
@@ -491,7 +511,7 @@ export const AlphasFeed: React.FC = () => {
                             <div>• <strong>1+ AlphaBAG Genesis Pass</strong></div>
                         </div>
                     </div>
-                `,
+                `, { ADD_ATTR: ['class'] }),
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonText: 'MINT PASS / UPGRADE',
