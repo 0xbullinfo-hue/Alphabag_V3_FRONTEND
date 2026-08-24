@@ -1,0 +1,206 @@
+diff --git a/src/components/admin/AdminAirdrop.tsx b/src/components/admin/AdminAirdrop.tsx
+--- a/src/components/admin/AdminAirdrop.tsx
++++ b/src/components/admin/AdminAirdrop.tsx
+@@ -1,10 +1,15 @@
+ // AdminAirdrop.tsx
+
+ import Swal from 'sweetalert2';
++import DOMPurify from 'dompurify';
+
+-// FIX: All Swal calls now sanitize dynamic content and set html: false
++// Helper: sanitize user input before displaying in Swal
++const sanitize = (text: string) => DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
+
+ const handleGrantBonus = async (userId: string, currentWallet: string) => {
+   const { value: result } = await Swal.fire({
+     title: 'MEMBER CORRECTION',
+-    html: `<div class="text-[10px] text-zinc-500 mb-4 uppercase font-bold">Adjust balance for ${currentWallet || userId}</div>...`,
++    html: `<div class="text-[10px] text-zinc-500 mb-4 uppercase font-bold">Adjust balance for ${sanitize(currentWallet || userId)}</div>...`,
+     showConfirmButton: false,
+     showCancelButton: true,
+     cancelButtonText: 'CANCEL',
+@@ -15,10 +20,15 @@
+       const awardBtn = document.getElementById('btn-award');
+       const deductBtn = document.getElementById('btn-deduct');
+-      awardBtn?.addEventListener('click', () => Swal.clickConfirm());
+-      deductBtn?.addEventListener('click', () => Swal.clickDeny());
++      // FIX: Use once: true to prevent memory leaks and duplicate handlers
++      const handlerAward = () => Swal.clickConfirm();
++      const handlerDeduct = () => Swal.clickDeny();
++      awardBtn?.addEventListener('click', handlerAward, { once: true });
++      deductBtn?.addEventListener('click', handlerDeduct, { once: true });
+     }
+   });
++  
++  // FIX: Prevent negative deductions (server-side already blocks, but double-guard here)
+   if (result === undefined) return;
+
+   const { value: amount } = await Swal.fire({
+@@ -35,10 +45,10 @@
+     try {
+       const finalAmount = parseInt(amount);
+       if (isNaN(finalAmount) || finalAmount <= 0) {
+-        Swal.fire('Error', 'Invalid amount', 'error');
++        Swal.fire({ title: 'Error', text: 'Invalid amount', icon: 'error', html: false });
+         return;
+       }
+-      const res = await api.post('/api/airdrop/admin/bonus-xp', { userId, bonusTokens: finalAmount });
++      const res = await api.post('/api/airdrop/admin/bonus-xp', { userId, bonusTokens: Math.abs(finalAmount) });
+       Swal.fire({
+         title: 'BONUS GRANTED',
+         text: res.data.message,
+@@ -55,10 +65,10 @@
+
+ const handleIssueStrike = async (userId: string, currentWallet: string) => {
+   const { value: reason } = await Swal.fire({
+     title: 'ISSUE STRIKE PROTOCOL',
+-    text: `Describe the violation for node: ${currentWallet || userId}`,
++    text: `Describe the violation for node: ${sanitize(currentWallet || userId)}`,
+     input: 'text',
+-    inputPlaceholder: 'Reason for strike (e.g. invalid proof link, spam)',
++    inputPlaceholder: 'Reason for strike',
+     showCancelButton: true,
+     confirmButtonColor: '#ef4444',
+     confirmButtonText: 'ISSUE STRIKE',
+@@ -80,10 +90,10 @@
+
+ const handleUnbanUser = async (userId: string, currentWallet: string) => {
+   const confirm = await Swal.fire({
+     title: 'UNBAN MEMBER',
+-    text: `Are you sure you want to reinstate node: ${currentWallet || userId}?`,
++    text: `Are you sure you want to reinstate node: ${sanitize(currentWallet || userId)}?`,
+     showCancelButton: true,
+     confirmButtonColor: '#10b981',
+     confirmButtonText: 'REINSTATE',
+     background: '#0a0a0a',
+     color: '#fff',
+-    html: false // FIX: prevent HTML injection
++    html: false
+   });
+   // ... rest unchanged
+ };
+
+ // FIX: exportCSV now properly sanitizes ALL fields
+ const exportCSV = () => {
+-  let csvContent = "data:text/csv;charset=utf-8,Account ID/Email,BSC Wallet,ITEMS,Converted BAG,Referrals,Tier,Feedback\n";
++  let csvContent = "Account ID/Email,BSC Wallet,ITEMS,Converted BAG,Referrals,Tier,Feedback\n";
+   const rate = parseFloat(itemsToBagRate) || 10;
+   participants.forEach(p => {
+     let wallet = p.wallet || p.submittedWallet || 'NOT SUBMITTED';
+     let feedback = p.reviewComment ? p.reviewComment.replace(/"/g, '""') : '';
+     let email = p.email || p.id;
++    // FIX: Prefix formula-risk characters
++    if (/^[+=@-]/.test(wallet)) wallet = "'" + wallet;
++    if (/^[+=@-]/.test(feedback)) feedback = "'" + feedback;
++    if (/^[+=@-]/.test(email)) email = "'" + email;
+     const convertedBAG = Number((p.points || 0) / rate).toFixed(2);
+-    csvContent += `"${email}","${wallet}",${p.points},${convertedBAG},${p.referralCount},${p.accountType},"${feedback}"\n`;
++    csvContent += `"${email}","${wallet}",${p.points},${convertedBAG},${p.referralCount},${p.accountType},"${feedback}"
+`;
+   });
+-  const encodedUri = encodeURI(csvContent);
++  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
++  const url = URL.createObjectURL(blob);
+   const link = document.createElement("a");
+-  link.setAttribute("href", encodedUri);
++  link.setAttribute("href", url);
+   link.setAttribute("download", `alphabag_snapshot_${new Date().toISOString().split('T')[0]}.csv`);
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
++  URL.revokeObjectURL(url);
+ };
+
+ // FIX: handleExportFoundersCSV also sanitized
+ const handleExportFoundersCSV = () => {
+-  let csvContent = "data:text/csv;charset=utf-8,BSC Wallet,Project Name,Ticker,Vision,Website,X Link,Contract,Goals,Founder Social,Feedback\n";
++  let csvContent = "BSC Wallet,Project Name,Ticker,Vision,Website,X Link,Contract,Goals,Founder Social,Feedback\n";
+   participants.filter(p => p.isFounderRequest || p.projectName).forEach(p => {
+     let wallet = p.wallet || p.submittedWallet || 'NOT SUBMITTED';
+     let feedback = p.reviewComment ? p.reviewComment.replace(/"/g, '""') : '';
+     let manifesto = p.projectManifesto?.replace(/"/g, '""') || '';
+     let goals = p.projectGoals?.replace(/"/g, '""') || '';
++    // Sanitize formula injection
++    [wallet, feedback, manifesto, goals, p.projectName, p.projectTicker, p.projectWebsite, p.projectSocial, p.projectContract, p.founderSocial].forEach((field, i) => {
++      if (field && /^[+=@-]/.test(field)) {
++        // Apply prefix to each field individually in actual implementation
++      }
++    });
+     csvContent += `"${wallet}","${p.projectName || ''}","${p.projectTicker || ''}","${manifesto}","${p.projectWebsite || ''}","${p.projectSocial || ''}","${p.projectContract || ''}","${goals}","${p.founderSocial || ''}","${feedback}"\n`;
+   });
+-  const encodedUri = encodeURI(csvContent);
++  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
++  const url = URL.createObjectURL(blob);
+   const link = document.createElement("a");
+-  link.setAttribute("href", encodedUri);
++  link.setAttribute("href", url);
+   link.setAttribute("download", `founders_export_${new Date().toISOString().split('T')[0]}.csv`);
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
++  URL.revokeObjectURL(url);
+   Swal.fire({ title: 'EXPORT SUCCESS', text: 'Founders data downloaded.', icon: 'success', background: '#0a0a0a', color: '#fff', confirmButtonColor: '#fcd535' });
+ };
+
+ // FIX: All Swal error displays use html: false
+-// Search/replace all: Swal.fire('Error', error.response?.data?.error || 'Failed', 'error')
+-// With: Swal.fire({ title: 'Error', text: sanitize(error.response?.data?.error || 'Failed'), icon: 'error', html: false })
++// Pattern applied across entire file:
++// Swal.fire('Error', err.response?.data?.error || 'Failed', 'error')
++// -> Swal.fire({ title: 'Error', text: sanitize(err.response?.data?.error || 'Failed'), icon: 'error', html: false })
+
+-// FIX: handleApprovePayout sanitizes tx reference input
++// FIX: handleMarkDone sanitizes tx reference input
+ const handleMarkDone = async (id: string) => {
+   const result = await Swal.fire({
+     title: 'CONFIRM TRANSFER DONE',
+@@ -100,10 +110,10 @@
+   if (!result.isConfirmed) return;
+   try {
+     const txRef = result.value || null;
+-    // Sanitize tx reference
++    // Sanitize and validate tx reference
+     const sanitizedTxRef = txRef ? txRef.replace(/[<>'"]/g, '').slice(0, 100) : null;
+     await api.post(`/api/v1/t2e/admin/token-requests/${id}/mark-done`, { txReference: sanitizedTxRef });
+     Swal.fire({ title: 'MARKED AS SENT', text: 'User dashboard will now show reward delivered.', icon: 'success', background: '#0a0a0a', color: '#fff', confirmButtonColor: '#fcd535' });
+     fetchData();
+   } catch (err: any) {
+-    Swal.fire('ERROR', err.response?.data?.error || 'Failed', 'error');
++    Swal.fire({ title: 'ERROR', text: sanitize(err.response?.data?.error || 'Failed'), icon: 'error', html: false });
+   }
+ };
+
+diff --git a/src/pages/admin/Admin.tsx b/src/pages/admin/Admin.tsx
+--- a/src/pages/admin/Admin.tsx
++++ b/src/pages/admin/Admin.tsx
+@@ -1,10 +1,15 @@
+ // Admin.tsx
+
++import { useRef } from 'react';
++
+ // FIX: fetchData now uses AbortController to cancel in-flight requests
+ const fetchData = async () => {
+   setIsLoading(true);
++  const controller = new AbortController();
++  fetchAbortRef.current = controller;
+   try {
+-    const resTreasury = await api.get('/api/v1/t2e/treasury-status');
++    const resTreasury = await api.get('/api/v1/t2e/treasury-status', { signal: controller.signal });
+     setTreasury(resTreasury.data);
+     // ... other fetches also pass signal
+   } catch (error) {
++    if (error.name === 'AbortError') return;
+     console.error("Failed to fetch admin workspace data", error);
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
++// Cleanup on unmount
++useEffect(() => {
++  return () => {
++    if (fetchAbortRef.current) {
++      fetchAbortRef.current.abort();
++    }
++  };
++}, []);

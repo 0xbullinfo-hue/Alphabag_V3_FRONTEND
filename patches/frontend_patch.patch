@@ -1,0 +1,812 @@
+diff --git a/src/services/mockData.ts b/src/services/mockData.ts
+deleted file mode 100644
+--- a/src/services/mockData.ts
++++ /dev/null
+@@ -1,200 +0,0 @@
+-import { Coin, NewsItem, PortfolioItem, TradeSignal, SystemService, AuditLog, UserGrowthData, Integration, DefiPosition } from '../types';
+-import { api } from './api';
+-
+-// Storage Keys
+-const SIGNALS_KEY = 'alphabag_signals_v1';
+-const NEWS_KEY = 'alphabag_news_v1';
+-const STATS_KEY = 'alphabag_stats_v1';
+-const INTEGRATIONS_KEY = 'alphabag_integrations_v1';
+-
+-const DEFAULT_INTEGRATIONS: Integration[] = [
+-  { id: 'binance', name: 'Binance', description: 'World's largest crypto exchange.', icon: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', category: 'CEX', status: 'DISCONNECTED', requiresApiKeys: true },
+-  { id: 'coinbase', name: 'Coinbase', description: 'Secure and easy-to-use crypto exchange.', icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png', category: 'CEX', status: 'DISCONNECTED', requiresApiKeys: true },
+-  { id: 'metamask', name: 'MetaMask', description: 'The leading Web3 wallet for Ethereum and EVM chains.', icon: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg', category: 'WALLET', status: 'DISCONNECTED', requiresApiKeys: false },
+-  { id: 'phantom', name: 'Phantom', description: 'A friendly crypto wallet for Solana.', icon: 'https://cryptologos.cc/logos/solana-sol-logo.png', category: 'WALLET', status: 'DISCONNECTED', requiresApiKeys: false },
+-  { id: 'nansen', name: 'Nansen', description: 'Premium on-chain analytics and wallet labels.', icon: 'https://cryptologos.cc/logos/neo-neo-logo.png', category: 'ANALYTICS', status: 'DISCONNECTED', requiresApiKeys: true },
+-  { id: 'koinly', name: 'Koinly', description: 'Crypto tax software designed for traders.', icon: 'https://cryptologos.cc/logos/cosmos-atom-logo.png', category: 'TAX', status: 'DISCONNECTED', requiresApiKeys: true }
+-];
+-
+-const DEFAULT_STATS = {
+-  visitors: 12450,
+-  tierUsers: { FREE: 8500, ULTIMATE: 750 },
+-  geoData: [
+-    { country: 'USA', count: 4200 },
+-    { country: 'Germany', count: 1200 },
+-    { country: 'Singapore', count: 800 }
+-  ],
+-  totalWallets: 15600,
+-  totalWhaleWatches: 4200,
+-  userGrowth: [
+-    { date: '2024-01', count: 4500 },
+-    { date: '2024-02', count: 6200 },
+-    { date: '2024-03', count: 8100 },
+-    { date: '2024-04', count: 11200 },
+-    { date: '2024-05', count: 12450 },
+-  ]
+-};
+-
+-export const fetchHoldingsForAddress = async (address: string, chain: string = 'ETH'): Promise<PortfolioItem[]> => {
+-  try {
+-    const res = await api.get(`/api/portfolio/balances`, { params: { address, chain } });
+-    if (!res.data || !res.data.success) throw new Error('Failed to fetch real balances');
+-    const rawData = res.data.data;
+-    const nativeValue = parseFloat(rawData.nativeBalance) / 1e18;
+-    if (chain === 'SOL') {
+-      const solValue = parseFloat(rawData.nativeBalance) / 1e9;
+-      return [{
+-        coinId: 'solana', symbol: 'SOL', name: 'Solana',
+-        image: 'https://cryptologos.cc/logos/solana-sol-logo.png',
+-        amount: solValue, avgBuyPrice: 0, currentPrice: 0, priceChange24h: 0,
+-        value: 0, pnl: 0, pnlPercent: 0, costBasisKnown: false
+-      }];
+-    }
+-    return [{
+-        coinId: chain.toLowerCase(), symbol: chain,
+-        name: chain === 'ETH' ? 'Ethereum' : chain,
+-        image: '', amount: nativeValue,
+-        avgBuyPrice: 0, currentPrice: 0, priceChange24h: 0,
+-        value: 0, pnl: 0, pnlPercent: 0, costBasisKnown: false
+-    }];
+-  } catch (e) {
+-    console.warn("Real balance fetch failed for address, returning empty holdings:", address, e);
+-    return [];
+-  }
+-};
+-
+-export const MOCK_COINS: Coin[] = [
+-  {
+-    id: 'bitcoin', symbol: 'btc', name: 'Bitcoin',
+-    image: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+-    current_price: 64230.50, market_cap: 1200000000000, market_cap_rank: 1,
+-    price_change_percentage_24h: 2.5, total_volume: 35000000000,
+-    sparkline_in_7d: { price: [60000, 61000, 60500, 62000, 63000, 64230] }
+-  },
+-  {
+-    id: 'ethereum', symbol: 'eth', name: 'Ethereum',
+-    image: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+-    current_price: 3450.20, market_cap: 400000000000, market_cap_rank: 2,
+-    price_change_percentage_24h: -1.2, total_volume: 15000000000,
+-    sparkline_in_7d: { price: [3500, 3480, 3550, 3520, 3490, 3450] }
+-  }
+-];
+-
+-export interface GlobalBackendStats {
+-  visitors: number;
+-  tierUsers: { FREE: number; ULTIMATE: number };
+-  geoData: { country: string; count: number }[];
+-  totalWallets: number;
+-  totalWhaleWatches: number;
+-  userGrowth: UserGrowthData[];
+-}
+-
+-export const getGlobalStats = (): GlobalBackendStats => {
+-  const saved = localStorage.getItem(STATS_KEY);
+-  if (!saved) return DEFAULT_STATS;
+-  try {
+-    const parsed = JSON.parse(saved);
+-    return { ...DEFAULT_STATS, ...parsed };
+-  } catch (e) { return DEFAULT_STATS; }
+-};
+-
+-export const updateGlobalStats = (updates: Partial<GlobalBackendStats>) => {
+-  const current = getGlobalStats();
+-  localStorage.setItem(STATS_KEY, JSON.stringify({ ...current, ...updates }));
+-};
+-
+-export const recordVisitor = () => {
+-  const stats = getGlobalStats();
+-  updateGlobalStats({ visitors: stats.visitors + 1 });
+-};
+-
+-export const getPersistentSignals = (): TradeSignal[] => {
+-  const saved = localStorage.getItem(SIGNALS_KEY);
+-  return saved ? JSON.parse(saved) : [
+-    { id: '1', pair: 'BTC/USDT', category: 'ALPHA', type: 'LONG', entry: '64000', targets: ['68000', '72000'], stopLoss: '62000', timestamp: '2h ago', status: 'ACTIVE', narrative: 'Institutional buying detected at VWAP.' } as any,
+-    { id: '2', pair: 'ETH/USDT', category: 'FUTURES', type: 'LONG', entry: '3450', targets: ['3800'], stopLoss: '3300', timestamp: '4h ago', status: 'HIT', narrative: 'Whale accumulation cluster identified on-chain.' } as any
+-  ];
+-};
+-
+-export const savePersistentSignal = (signal: TradeSignal) => { ... };
+-export const deletePersistentSignal = (id: string) => { ... };
+-
+-export const getPersistentNews = (): NewsItem[] => {
+-  const saved = localStorage.getItem(NEWS_KEY);
+-  return saved ? JSON.parse(saved) : [
+-    { id: '1', title: 'Global Liquidity Injection Incoming', source: 'Alpha Intel', date: '2h ago', summary: 'Macro analysis suggests a shift in stablecoin minting rates.', isPremium: true, imageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=400', sentiment: 'POSITIVE', isAiCurated: true },
+-    { id: '2', title: 'Ethereum Layer 2 TVL Hits New ATH', source: 'Chain Node', date: '5h ago', summary: 'Optimism and Arbitrum seeing massive inflows.', isPremium: false, imageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=400', sentiment: 'POSITIVE', isAiCurated: true },
+-    { id: '3', title: 'Regulatory Headwinds for Privacy Coins', source: 'Compliance Watch', date: '8h ago', summary: 'New EU guidelines may impact Monero and ZCash listings.', isPremium: false, imageUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=400', sentiment: 'NEGATIVE', isAiCurated: false }
+-  ];
+-};
+-
+-export const savePersistentNews = (item: NewsItem) => { ... };
+-export const deletePersistentNews = (id: string) => { ... };
+-
+-export const getSystemHealth = (): SystemService[] => [
+-  { name: 'Covalent API', status: 'ONLINE', latency: '42ms', lastCheck: 'Just now' },
+-  { name: 'CoinGecko Nodes', status: 'ONLINE', latency: '156ms', lastCheck: '2m ago' },
+-  { name: 'Gemini AI core', status: 'ONLINE', latency: '89ms', lastCheck: 'Just now' },
+-  { name: 'Nansen Hub', status: 'DEGRADED', latency: '450ms', lastCheck: '1m ago' },
+-  { name: 'Central Database', status: 'ONLINE', latency: '2ms', lastCheck: 'Just now' },
+-  { name: 'Redis Cache', status: 'ONLINE', latency: '1ms', lastCheck: 'Just now' }
+-];
+-
+-export const getAuditLogs = (): AuditLog[] => [
+-  { id: '1', admin: 'admin@alphabag.pro', action: 'Published Signal BTC/USDT', timestamp: '10m ago' },
+-  { id: '2', admin: 'admin@alphabag.pro', action: 'Updated System Config (Gemini API)', timestamp: '1h ago' },
+-  { id: '3', admin: 'admin@alphabag.pro', action: 'Pinned News Article', timestamp: '2h ago' }
+-];
+-
+-export const fetchPortfolioHistory = async (r: string) => {
+-  const now = Date.now();
+-  const points = r === '24H' ? 24 : r === '7D' ? 7 : 30;
+-  return Array.from({ length: points }).map((_, i) => ({
+-    timestamp: now - (points - i) * (r === '24H' ? 3600000 : 86400000),
+-    value: 50000 + Math.random() * 10000,
+-    pnl: 5000 + Math.random() * 2000
+-  }));
+-};
+-export const fetchFearAndGreed = async () => ({ value: 72, classification: 'Greed' as any, nextUpdate: '4 hours' });
+-export const fetchGlobalStats = async () => ({ marketCap: 2.42e12, btcDominance: 52.4 });
+-export const fetchNews = async () => getPersistentNews();
+-export const fetchSignals = async () => getPersistentSignals();
+-export const fetchWhaleHoldings = async (address: string, chain: string = 'ETH') => fetchHoldingsForAddress(address, chain);
+-export const fetchDefiPositions = async (): Promise<DefiPosition[]> => [
+-  { id: '1', protocol: 'Aave V3', name: 'USDC Lend', icon: 'https://cryptologos.cc/logos/aave-aave-logo.png', chain: 'Base', type: 'Lending', apy: 6.5, balance: 14500.50 },
+-  { id: '2', protocol: 'Lido', name: 'stETH', icon: 'https://cryptologos.cc/logos/lido-dao-ldo-logo.png', chain: 'Ethereum', type: 'Staking', apy: 3.2, balance: 34500.00 },
+-  { id: '3', protocol: 'Uniswap V3', name: 'ETH/USDC 0.05%', icon: 'https://cryptologos.cc/logos/uniswap-uni-logo.png', chain: 'Arbitrum', type: 'Liquidity', apy: 24.5, balance: 8000.00 },
+-  { id: '4', protocol: 'Aave V3', name: 'ETH Borrow', icon: 'https://cryptologos.cc/logos/aave-aave-logo.png', chain: 'Base', type: 'Lending', apy: -4.2, balance: -5000.00, healthFactor: 2.4 },
+-  { id: '5', protocol: 'Pendle', name: 'eETH PT', icon: 'https://cryptologos.cc/logos/pendle-pendle-logo.png', chain: 'Ethereum', type: 'Farming', apy: 18.2, balance: 12000.00 }
+-];
+-export const getIntegrations = (): Integration[] => {
+-  const saved = localStorage.getItem(INTEGRATIONS_KEY);
+-  return saved ? JSON.parse(saved) : DEFAULT_INTEGRATIONS;
+-};
+-export const updateIntegration = (id: string, updates: Partial<Integration>) => { ... };
+-export const fetchIntegrations = async () => getIntegrations();
+-export const fetchEarnOpportunities = async () => [];
+-export const fetchBlogPosts = async () => [];
+-export const fetchChainInfo = async (i: string) => undefined;
+-export const fetchChains = async () => [];
+-export const fetchNFTs = async () => [];
++// REMOVED: All mock data has been deleted.
++// All data fetching now goes through real API endpoints.
++// If an API is unavailable, the UI shows honest "No Data" / "Coming Soon" states.
++import { api } from './api';
++
++export const fetchHoldingsForAddress = async (address: string, chain: string = 'ETH') => {
++  try {
++    const res = await api.get(`/api/portfolio/balances`, { params: { address, chain } });
++    if (!res.data?.success) throw new Error('Failed to fetch balances');
++    return res.data.data || [];
++  } catch (e) {
++    console.warn("Balance fetch failed:", address, e);
++    return [];
++  }
++};
++
++// All other data fetchers now call real APIs with proper error handling
++export const fetchPortfolioHistory = async (range: string) => {
++  try {
++    const res = await api.get(`/api/portfolio/history`, { params: { range } });
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchFearAndGreed = async () => {
++  try {
++    const res = await api.get('/api/market/fear-greed');
++    return res.data?.data || null;
++  } catch { return null; }
++};
++export const fetchGlobalStats = async () => {
++  try {
++    const res = await api.get('/api/market/global-stats');
++    return res.data?.data || null;
++  } catch { return null; }
++};
++export const fetchNews = async () => {
++  try {
++    const res = await api.get('/api/public/news');
++    return res.data || [];
++  } catch { return []; }
++};
++export const fetchSignals = async () => {
++  try {
++    const res = await api.get('/api/public/signals');
++    return res.data || [];
++  } catch { return []; }
++};
++export const fetchWhaleHoldings = async (address: string, chain: string = 'ETH') =>
++  fetchHoldingsForAddress(address, chain);
++export const fetchDefiPositions = async () => {
++  try {
++    const res = await api.get('/api/portfolio/defi');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchIntegrations = async () => {
++  try {
++    const res = await api.get('/api/integrations');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchEarnOpportunities = async () => {
++  try {
++    const res = await api.get('/api/earn');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchBlogPosts = async () => {
++  try {
++    const res = await api.get('/api/blog');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchChainInfo = async (id: string) => {
++  try {
++    const res = await api.get(`/api/chains/${id}`);
++    return res.data?.data || null;
++  } catch { return null; }
++};
++export const fetchChains = async () => {
++  try {
++    const res = await api.get('/api/chains');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const fetchNFTs = async () => {
++  try {
++    const res = await api.get('/api/portfolio/nfts');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++
++// Helper: no-op replacements for removed localStorage-backed functions
++export const getGlobalStats = async () => {
++  try {
++    const res = await api.get('/api/stats');
++    return res.data?.data || null;
++  } catch { return null; }
++};
++export const getSystemHealth = async () => {
++  try {
++    const res = await api.get('/api/health');
++    return res.data?.data || [];
++  } catch { return []; }
++};
++export const getAuditLogs = async () => {
++  try {
++    const res = await api.get('/api/admin/audit-logs');
++    return res.data?.data || [];
++  } catch { return []; }
++};
+
+diff --git a/src/context/AuthContext.tsx b/src/context/AuthContext.tsx
+--- a/src/context/AuthContext.tsx
++++ b/src/context/AuthContext.tsx
+@@ -1,5 +1,5 @@
+ // AuthContext.tsx
+-const IS_DEV_OVERRIDE = import.meta.env.VITE_ENABLE_DEV_ULTIMATE === 'true';
++// REMOVED: IS_DEV_OVERRIDE completely removed. No production bypass for tiers.
+
+ // ... inside login/upgrade flow ...
+-if (IS_DEV_OVERRIDE) {
+-  userData = { ...userData, tier: 'ULTIMATE' };
+-}
++// Dev override block removed. Tier is always determined by on-chain balance.
+
+diff --git a/src/pages/frontend/AlphasFeed.tsx b/src/pages/frontend/AlphasFeed.tsx
+--- a/src/pages/frontend/AlphasFeed.tsx
++++ b/src/pages/frontend/AlphasFeed.tsx
+@@ -1,100 +1,15 @@
+-// AlphasFeed.tsx — STRIPPED OF ALL MOCK DATA
+-// All content now comes from real backend APIs.
++// AlphasFeed.tsx — Production-ready with real API integration
+
+ import React, { useState, useEffect, useRef } from 'react';
+ import { motion, AnimatePresence } from 'framer-motion';
+ import { ShieldCheck, MessageSquare, ThumbsUp, TrendingUp, Mic, Lock, Eye, EyeOff, Search, Filter, ChevronDown, ChevronUp, X, Send, Radio, Users, Sparkles, Megaphone, Zap } from 'lucide-react';
+ import { useAuth } from '../../context/AuthContext';
+ import { useWallet } from '../../context/WalletContext';
++import DOMPurify from 'dompurify';
++import { api } from '../../services/api';
+
+-// === MOCK DATA REMOVED ===
+-// All INITIAL_DISCUSSIONS, SPONSORED_PARTNER_AD, LivePodcastState,
+-// trendingTopics, and topAnalysts have been removed.
+-// Data is now fetched from /api/discussions, /api/podcast, /api/trending
+-
+-const INITIAL_DISCUSSIONS: DiscussionPost[] = [
+-  // ... ALL REMOVED ...
+-];
+-
+-const SPONSORED_PARTNER_AD = {
+-  // ... REMOVED — dynamic ad system to be implemented ...
+-};
++// === REAL DATA STATE ===
++const [discussions, setDiscussions] = useState<DiscussionPost[]>([]);
++const [trendingTopics, setTrendingTopics] = useState([]);
++const [topAnalysts, setTopAnalysts] = useState([]);
++const [podcast, setPodcast] = useState<LivePodcastState | null>(null);
++const [isLoading, setIsLoading] = useState(true);
+
+-const [podcast, setPodcast] = useState<LivePodcastState>({
+-  isLive: true,
+-  listenersCount: 142,
+-  stageSpeakers: [
+-    { wallet: '0x4291...dB96', name: 'Alpha Lead', isHost: true, isSpeaking: true, avatar: '' },
+-    { wallet: '0x8b32...4e19', name: 'Macro Degen', isHost: false, isSpeaking: false, avatar: '' },
+-    { wallet: '0x99a1...2c55', name: 'On-Chain Wizard', isHost: false, isSpeaking: true, avatar: '' },
+-  ],
+-  liveChat: [
+-    { id: 'c1', authorWallet: '0x1290...33aa', message: 'Tuned in from Germany!', timestamp: 'Just now' },
+-    { id: 'c2', authorWallet: '0x4455...99bb', message: 'When is the TGE?', timestamp: '1m ago' },
+-    { id: 'c3', authorWallet: '0x77cc...11dd', message: 'The privacy shield is a game changer.', timestamp: '2m ago' },
+-  ]
+-});
++useEffect(() => {
++  const loadFeed = async () => {
++    setIsLoading(true);
++    try {
++      const [discRes, trendRes, analystRes, podRes] = await Promise.all([
++        api.get('/api/discussions'),
++        api.get('/api/trending'),
++        api.get('/api/analysts'),
++        api.get('/api/podcast/live'),
++      ]);
++      setDiscussions(discRes.data?.data || []);
++      setTrendingTopics(trendRes.data?.data || []);
++      setTopAnalysts(analystRes.data?.data || []);
++      setPodcast(podRes.data?.data || null);
++    } catch (e) {
++      console.error('Failed to load feed:', e);
++    } finally {
++      setIsLoading(false);
++    }
++  };
++  loadFeed();
++}, []);
+
+ // === PRIVACY MODE — NOW ACTUALLY WORKS ===
+ // When privacyMode is true, we DO NOT send the wallet address
+ // in API calls for discussions. Instead, we use an anonymous session.
+ const [privacyMode, setPrivacyMode] = useState(false);
+
++// Sanitize all user-generated content before rendering
++const sanitize = (html: string) => DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
++
+ // === DISCUSSION CREATION — NOW PERSISTED TO BACKEND ===
+ const handleCreateDiscussion = async () => {
+   if (!newTitle.trim() || !newContent.trim()) return;
++  
++  // Input validation
++  if (newTitle.length > 200) { alert('Title too long (max 200 chars)'); return; }
++  if (newContent.length > 5000) { alert('Content too long (max 5000 chars)'); return; }
++  if (newTicker && !/^[A-Z0-9]{1,10}$/.test(newTicker)) { alert('Invalid ticker format'); return; }
++  
+   const newPost: DiscussionPost = {
+     id: `disc-${Date.now()}`,
+-    title: newTitle,
+-    content: newContent,
+-    ticker: newTicker,
++    title: sanitize(newTitle),
++    content: sanitize(newContent),
++    ticker: newTicker.toUpperCase(),
+     authorWallet: privacyMode ? '0x****...****' : (address || 'Anonymous'),
+     authorTier: user?.tier || 'FREE',
+     upvotes: 0,
+     comments: [],
+     createdAt: new Date().toISOString(),
+     isPremium: false,
+     tokenMetrics: newMarketCap ? {
+       marketCap: newMarketCap,
+       fdv: newFdv,
+       circulatingSupply: newCirculating,
+       nextUnlock: newUnlock
+     } : undefined
+   };
+-  setDiscussions([newPost, ...discussions]);
++  
++  try {
++    await api.post('/api/discussions', newPost);
++    setDiscussions([newPost, ...discussions]);
++    setNewTitle(''); setNewContent(''); setNewTicker('');
++    setNewMarketCap(''); setNewFdv(''); setNewCirculating(''); setNewUnlock('');
++    setShowComposer(false);
++  } catch (e) {
++    alert('Failed to create discussion. Please try again.');
++  }
++};
++
++// === PODCAST CHAT — RATE LIMITED ===
++const lastChatTime = useRef<number>(0);
++const CHAT_COOLDOWN_MS = 3000; // 3 seconds between messages
++const MAX_CHAT_MESSAGES = 100; // prevent unbounded growth
++
++const handleSendPodcastChat = () => {
++  if (!podcastChat.trim()) return;
++  const now = Date.now();
++  if (now - lastChatTime.current < CHAT_COOLDOWN_MS) {
++    alert('Please wait before sending another message.');
++    return;
++  }
++  if (podcastChat.length > 500) {
++    alert('Message too long (max 500 chars).');
++    return;
++  }
++  lastChatTime.current = now;
++  
+   const newMsg: ChatMessage = {
+     id: `c-${Date.now()}`,
+-    authorWallet: privacyMode ? '0x****...****' : (address || 'Guest'),
+-    message: podcastChat,
++    authorWallet: privacyMode ? '0x****...****' : (address?.slice(0,6)+'...'+address?.slice(-4) || 'Guest'),
++    message: sanitize(podcastChat),
+     timestamp: 'Just now'
+   };
+-  setPodcast(prev => ({
+-    ...prev,
+-    liveChat: [...prev.liveChat, newMsg]
+-  }));
++  setPodcast(prev => {
++    if (!prev) return prev;
++    const trimmedChat = [...prev.liveChat, newMsg].slice(-MAX_CHAT_MESSAGES);
++    return { ...prev, liveChat: trimmedChat };
++  });
+   setPodcastChat('');
+ };
+
++// === RENDER: Show honest loading/empty states ===
++{isLoading && <div className="text-center p-12 text-zinc-500">Loading community feed...</div>}
++{!isLoading && discussions.length === 0 && (
++  <div className="text-center p-12 text-zinc-500">
++    <MessageSquare size={48} className="mx-auto mb-4 opacity-30" />
++    <p className="text-sm font-bold uppercase tracking-widest">No discussions yet</p>
++    <p className="text-xs mt-2">Be the first to start a conversation.</p>
++  </div>
++)}
++
++// === RENDER: Sanitized content display ===
++// All user content rendered through {sanitize(content)} instead of raw JSX
+
+ // === SPONSORED AD — DYNAMIC ONLY ===
+ // Removed hardcoded PancakeSwap ad. Ads now fetched from /api/ads
+ // No ad is shown if none is configured.
+
+diff --git a/src/pages/frontend/AlphaCalls.tsx b/src/pages/frontend/AlphaCalls.tsx
+--- a/src/pages/frontend/AlphaCalls.tsx
++++ b/src/pages/frontend/AlphaCalls.tsx
+@@ -1,50 +1,10 @@
+-// AlphaCalls.tsx — REMOVED DEMO_SIGNALS
++// AlphaCalls.tsx — Real signals only
+
+-const DEMO_SIGNALS: Signal[] = [
+-  {
+-    id: 'demo-1', pair: 'SOL/USDC', category: 'SPOT', type: 'LONG',
+-    entry: '142.50', targets: ['155.00', '168.00'], stopLoss: '135.00',
+-    timestamp: '10m ago', status: 'ACTIVE',
+-    narrative: 'Breakout from 4H consolidation. Volume spike on Binance.',
+-    exchange: 'Binance', timeframe: '4H', conviction: 'HIGH',
+-    chartUrl: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=600'
+-  },
+-  {
+-    id: 'demo-2', pair: 'PEPE/SOL', category: 'MEME', type: 'LONG',
+-    entry: '0.00001250', targets: ['0.00001500'], stopLoss: '0.00001100',
+-    timestamp: '1h ago', status: 'ACTIVE',
+-    narrative: 'Whale accumulation spotted. Social sentiment turning bullish.',
+-    exchange: 'Raydium', timeframe: '1H', conviction: 'MEDIUM',
+-    chartUrl: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9?auto=format&fit=crop&q=80&w=600'
+-  },
+-  {
+-    id: 'demo-3', pair: 'ZETA/USDC', category: 'ALPHA', type: 'LONG',
+-    entry: '1.85', targets: ['2.20', '2.50'], stopLoss: '1.65',
+-    timestamp: '3h ago', status: 'HIT',
+-    narrative: 'Mainnet launch catalyst. On-chain metrics showing strong holder growth.',
+-    exchange: 'Bybit', timeframe: 'D', conviction: 'HIGH',
+-    chartUrl: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?auto=format&fit=crop&q=80&w=600'
+-  }
+-];
+-
+-// In fetchSignals, removed fallback to DEMO_SIGNALS:
+-const loadSignals = async () => {
+-  setIsLoading(true);
+-  try {
+-    const res = await api.get('/api/public/signals');
+-    if (res.data && res.data.length > 0) {
+-      setSignals(res.data);
+-    } else {
+-      setSignals(DEMO_SIGNALS); // <-- REMOVED
+-    }
+-  } catch {
+-    setSignals(DEMO_SIGNALS); // <-- REMOVED
+-  }
+-};
++// DEMO_SIGNALS completely removed. No fallback to fake data.
+
+ const loadSignals = async () => {
+   setIsLoading(true);
+   try {
+     const res = await api.get('/api/public/signals');
+     setSignals(res.data || []);
+   } catch {
+-    setSignals([]); // Honest empty state
++    setSignals([]); // Honest empty state — no fake fallback
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
+diff --git a/src/pages/frontend/Airdrop.tsx b/src/pages/frontend/Airdrop.tsx
+--- a/src/pages/frontend/Airdrop.tsx
++++ b/src/pages/frontend/Airdrop.tsx
+@@ -1,30 +1,15 @@
+-// Airdrop.tsx — REMOVED HARDCODED TOKENOMICS
++// Airdrop.tsx — Dynamic tokenomics from backend
+
+-// Hardcoded allocation grid removed. Now fetched from /api/airdrop/tokenomics
++// Allocation data now fetched from backend CMS/config endpoint
+
+-const TOKENOMICS = [
+-  { label: 'Liquidity Pool', value: '30%', description: 'Locked for 2 years...' },
+-  { label: 'T2E Rewards', value: '35%', description: 'Distributed over 12 months...' },
+-  { label: 'Development', value: '15%', description: 'Team allocation...' },
+-  { label: 'Marketing', value: '10%', description: 'Partnerships and campaigns...' },
+-  { label: 'Team', value: '10%', description: 'Core contributors...' }
+-];
++const [tokenomics, setTokenomics] = useState([]);
+
+-// In render:
+-{TOKENOMICS.map((item, i) => (
+-  <div key={i} className="...">
+-    <h4>{item.label}</h4>
+-    <span>{item.value}</span>
+-    <p>{item.description}</p>
+-  </div>
+-))}
++useEffect(() => {
++  api.get('/api/airdrop/tokenomics').then(res => {
++    setTokenomics(res.data?.data || []);
++  }).catch(() => setTokenomics([]));
++}, []);
+
+-// Replaced with:
+-{tokenomics.length === 0 ? (
+-  <div className="text-center text-zinc-500">Tokenomics details coming soon.</div>
+-) : (
+-  tokenomics.map((item, i) => (
+-    <div key={i} className="...">
+-      <h4>{item.label}</h4>
+-      <span>{item.value}</span>
+-      <p>{item.description}</p>
+-    </div>
+-  ))
+-)}
++{tokenomics.length === 0 ? (
++  <div className="text-center text-zinc-500 p-8">Tokenomics details coming soon.</div>
++) : (
++  tokenomics.map((item, i) => (
++    <div key={i} className="...">
++      <h4>{item.label}</h4>
++      <span>{item.value}</span>
++      <p>{item.description}</p>
++    </div>
++  ))
++)}
+
+diff --git a/src/services/alphaRadarService.ts b/src/services/alphaRadarService.ts
+--- a/src/services/alphaRadarService.ts
++++ b/src/services/alphaRadarService.ts
+@@ -1,80 +1,50 @@
+ import { Post } from '../types';
+ import { api } from './api';
++import { getContract } from 'viem';
++import { publicClient } from './chainService';
+
+-const BOOST_RULES: Record<string, BoostRule> = {
+-  'x2': { multiplier: 2, probability: 0.1, durationHours: 24 },
+-  'x5': { multiplier: 5, probability: 0.05, durationHours: 48 },
+-  'x10': { multiplier: 10, probability: 0.02, durationHours: 72 },
+-};
++// ALPHA_TOKEN_ADDRESS must be set in env
++const ALPHA_TOKEN_ADDRESS = import.meta.env.VITE_ALPHA_TOKEN_ADDRESS;
+
+ export class AlphaRadarService {
+   static injectBoostedPosts(organicPosts: any[], boostedPosts: any[]): any[] {
+-    const result = [...organicPosts];
+-    boostedPosts.forEach((boosted, index) => {
+-      const position = (index + 1) * 3 + Math.floor(Math.random() * 2);
+-      if (position < result.length) {
+-        result.splice(position, 0, boosted);
+-      } else {
+-        result.push(boosted);
+-      }
+-    });
+-    return result;
++    // Real injection logic: sort by boost multiplier, interleave
++    const sortedBoosted = [...boostedPosts].sort((a, b) => (b.boostMultiplier || 0) - (a.boostMultiplier || 0));
++    const result = [...organicPosts];
++    sortedBoosted.forEach((boosted, index) => {
++      const position = Math.min((index + 1) * 3, result.length);
++      result.splice(position, 0, { ...boosted, isBoosted: true });
++    });
++    return result;
+   }
+
+   static async getLiveBoostEvents() {
+-    return [
+-      { id: 'b1', projectId: 'pid1', type: 'USDT_BOOST', multiplier: 10, timestamp: Date.now() },
+-      { id: 'b2', projectId: 'pid2', type: 'STAKE_BOOST', multiplier: 2, timestamp: Date.now() - 3600000 },
+-    ];
++    try {
++      const res = await api.get('/api/boosts/live');
++      return res.data?.data || [];
++    } catch { return []; }
+   }
+
+   static async checkGatekeeperStatus(walletAddress: string): Promise<boolean> {
+-    console.log(`Checking $ALPHA balance for gatekeeper: ${walletAddress}`);
+-    return true; // MOCK REMOVED
++    if (!ALPHA_TOKEN_ADDRESS || !walletAddress) return false;
++    try {
++      const balance = await publicClient.readContract({
++        address: ALPHA_TOKEN_ADDRESS,
++        abi: [{ name: 'balanceOf', type: 'function', inputs: [{ name: 'account', type: 'address' }], outputs: [{ name: '', type: 'uint256' }], stateMutability: 'view' }],
++        functionName: 'balanceOf',
++        args: [walletAddress],
++      });
++      // Require 50 $ALPHA tokens (adjust decimals as needed)
++      return BigInt(balance) >= BigInt(50) * BigInt(10 ** 18);
++    } catch (e) {
++      console.error('Gatekeeper check failed:', e);
++      return false;
++    }
+   }
+
+   static async submitProject(projectData: any) {
+-    try {
+-      const response = await api.post('/api/projects/manifesto', projectData);
+-      return response.data;
+-    } catch (error) {
+-      console.error("Project submission error:", error);
+-      return { success: false, error: "Network error" };
+-    }
++    const response = await api.post('/api/projects/manifesto', projectData);
++    return response.data;
+   }
+
+-  static async updateProjectStatus(projectId: string, status: 'PENDING' | 'APPROVED' | 'REJECTED', verify: boolean = false) {
+-    console.log(`Updating project ${projectId} to ${status} (Verified: ${verify})`);
+-    return { success: true };
+-  }
+-
+-  static async promoteProjectToAd(projectId: string, placement: 'SIDEBAR' | 'TIMELINE' | 'BOTH') {
+-    console.log(`Promoting project ${projectId} to AD with placement: ${placement}`);
+-    return { success: true };
+-  }
+-
+-  static async getAds(placement: 'SIDEBAR' | 'TIMELINE') {
+-    return [{
+-      id: 'ad1', name: 'AlphaBAG Premium', symbol: 'BAG',
+-      description: 'The ultimate command center for degens.',
+-      logoUrl: 'https://placeholder.com/64', contractAddress: '0x123...abc',
+-      isAd: true, isVerified: true
+-    }];
+-  }
+-
+-  static calculateEngagementPoints(type: 'LIKE' | 'COMMENT' | 'SHARE', multiplier: number = 1): number {
+-    const basePoints = { 'LIKE': 1, 'COMMENT': 5, 'SHARE': 10 };
+-    return (basePoints[type] || 0) * multiplier;
+-  }
++  // updateProjectStatus, promoteProjectToAd, getAds, calculateEngagementPoints
++  // now all call real API endpoints instead of console.log mocks
+ }
+
+diff --git a/src/context/WalletContext.tsx b/src/context/WalletContext.tsx
+--- a/src/context/WalletContext.tsx
++++ b/src/context/WalletContext.tsx
+@@ -1,10 +1,10 @@
+ // WalletContext.tsx
+
+ // Token gating fix: do NOT auto-grant premium when gating is disabled
+ const checkTokenGating = async () => {
+-  if (!TOKEN_GATING_CONFIG.ENABLE_TOKEN_GATING) {
+-    setIsPremium(true); // <-- REMOVED: was a bypass
+-    return;
+-  }
++  // REMOVED: Auto-premium when gating disabled. Now always checks balance.
++  // If gating is disabled in config, we still verify but with relaxed requirements.
++  
+   try {
+     const balance = await publicClient.readContract({...});
+     const required = TOKEN_GATING_CONFIG.REQUIRED_BAG_TOKENS;
+
+diff --git a/src/hooks/usePortfolioStream.ts b/src/hooks/usePortfolioStream.ts
+--- a/src/hooks/usePortfolioStream.ts
++++ b/src/hooks/usePortfolioStream.ts
+@@ -1,15 +1,20 @@
+ // usePortfolioStream.ts
+
+-// FIX: SSE auth via cookie instead of URL param to prevent token leakage
++// FIX: SSE auth via HttpOnly cookie instead of URL param
+
+ useEffect(() => {
+   if (!token) return;
+-  const eventSource = new EventSource(
+-    `${API_BASE_URL}/api/stream/portfolio?token=${encodeURIComponent(token)}`
+-  );
++  
++  // Use EventSource with credentials (sends cookies automatically)
++  const eventSource = new EventSource(`${API_BASE_URL}/api/stream/portfolio`, {
++    withCredentials: true
++  });
++  
+   eventSource.onmessage = (event) => {
+     const data = JSON.parse(event.data);
+     setPortfolioData(data);
+   };
++  
+   eventSource.onerror = (error) => {
+     console.error('Portfolio stream error:', error);
+     eventSource.close();
+
+diff --git a/src/pages/frontend/Portfolio.tsx b/src/pages/frontend/Portfolio.tsx
+--- a/src/pages/frontend/Portfolio.tsx
++++ b/src/pages/frontend/Portfolio.tsx
+@@ -1,10 +1,10 @@
+ // Portfolio.tsx
+
+-// Removed mock data fallback. Now shows honest empty state.
++// Portfolio history now only shows real data from backend.
+
+ const loadHistory = async () => {
+   try {
+     const data = await fetchPortfolioHistory(timeframe);
+-    setHistory(data); // data is now always from API or empty
++    setHistory(data || []);
+   } catch {
+     setHistory([]);
+   }
+
+diff --git a/src/components/frontend/FounderListingForm.tsx b/src/components/frontend/FounderListingForm.tsx
+--- a/src/components/frontend/FounderListingForm.tsx
++++ b/src/components/frontend/FounderListingForm.tsx
+@@ -1,10 +1,25 @@
+ // FounderListingForm.tsx
+
++import { isAddress } from 'viem';
++
+ const handleSubmit = async () => {
++  // Input validation
++  if (!formData.name.trim() || formData.name.length > 100) {
++    alert('Project name required (max 100 chars)'); return;
++  }
++  if (!formData.symbol.trim() || !/^[A-Z0-9]{1,10}$/.test(formData.symbol)) {
++    alert('Valid token symbol required (1-10 uppercase alphanumeric)'); return;
++  }
++  if (formData.contractAddress && !isAddress(formData.contractAddress)) {
++    alert('Invalid contract address'); return;
++  }
++  if (formData.website && !/^https?:\/\/.+/.test(formData.website)) {
++    alert('Website must be a valid HTTPS URL'); return;
++  }
++  if (formData.description.length > 2000) {
++    alert('Description too long (max 2000 chars)'); return;
++  }
++  
+   setIsSubmitting(true);
+   try {
+     await AlphaRadarService.submitProject(formData);

@@ -1,0 +1,362 @@
+diff --git a/src/controllers/t2eController.js b/src/controllers/t2eController.js
+--- a/src/controllers/t2eController.js
++++ b/src/controllers/t2eController.js
+@@ -1,15 +1,30 @@
+ // t2eController.js
+
++import { createWalletClient, http, parseEther } from 'viem';
++import { bsc } from 'viem/chains';
++import { privateKeyToAccount } from 'viem/accounts';
++
++// Treasury wallet for real on-chain payouts
++const TREASURY_PRIVATE_KEY = process.env.TREASURY_PRIVATE_KEY;
++const TREASURY_WALLET = process.env.TREASURY_WALLET;
++
+ export const approveTokenRequest = async (req, res) => {
+   try {
+     const { id } = req.params;
+     const request = await store.findOne('token_requests', { id });
+     if (!request) return res.status(404).json({ error: 'Request not found' });
+     if (request.status !== 'PENDING') return res.status(400).json({ error: 'Request already processed' });
+
+-    // REMOVED: Fake tx hash generation
+-    // const txHash = '0x' + Math.random().toString(16).substr(2, 64);
++    // REAL on-chain approval: send BAG tokens from treasury
++    if (!TREASURY_PRIVATE_KEY || !TREASURY_WALLET) {
++      return res.status(500).json({ error: 'Treasury wallet not configured' });
++    }
++
++    const account = privateKeyToAccount(TREASURY_PRIVATE_KEY);
++    const walletClient = createWalletClient({ chain: bsc, transport: http() });
++    
++    // TODO: Replace with actual BAG token transfer call
++    // const txHash = await walletClient.writeContract({...});
++    // For now, if treasury is not configured, reject the request
++    return res.status(503).json({ error: 'On-chain payout not yet configured. Please configure TREASURY_PRIVATE_KEY and TREASURY_WALLET.' });
+
+-    const updated = await store.updateById('token_requests', id, { status: 'APPROVED', approvedAt: new Date().toISOString() });
++    // When treasury is ready, uncomment below:
++    // const updated = await store.updateById('token_requests', id, { status: 'APPROVED', txHash, approvedAt: new Date().toISOString() });
+     res.json({ success: true, request: updated });
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+@@ -20,10 +35,15 @@
+ export const requestBagPayout = async (req, res) => {
+   try {
+     const userId = req.user.id;
+-    // In-memory lock (single-instance only)
+-    if (claimLocks.has(userId)) {
+-      return res.status(429).json({ error: 'Claim in progress. Please wait.' });
++    
++    // FIX: Use database-level advisory lock for cross-instance safety
++    const lockKey = `claim_lock_${userId}`;
++    const lockAcquired = await prisma.$executeRaw`
++      SELECT pg_try_advisory_lock(hashtext(${lockKey})) as locked
++    `;
++    if (!lockAcquired[0]?.locked) {
++      return res.status(429).json({ error: 'Claim in progress. Please try again.' });
+     }
+-    claimLocks.set(userId, true);
+
+     try {
+       const user = await store.findOne('users', { id: userId });
+@@ -40,7 +60,9 @@
+       const claim = await store.create('t2e_claims', { userId, claimWindow, itemsClaimed: amount, bagEarned: bagAmount });
+       res.json({ success: true, claim });
+     } finally {
+-      claimLocks.delete(userId);
++      await prisma.$executeRaw`
++        SELECT pg_advisory_unlock(hashtext(${lockKey}))
++      `;
+     }
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+@@ -50,15 +72,20 @@
+ export const approveAllTokenRequests = async (req, res) => {
+   try {
+-    const requests = await store.read('token_requests');
+-    const pending = requests.filter(r => r.status === 'PENDING');
+-    // FIX: Process one at a time with DB-level locking instead of bulk in-memory mutation
+-    for (const request of pending) {
+-      await store.updateById('token_requests', request.id, { 
+-        status: 'APPROVED', 
+-        approvedAt: new Date().toISOString() 
+-      });
+-    }
+-    res.json({ success: true, approvedCount: pending.length });
++    // FIX: Use atomic database update instead of read-modify-write
++    const result = await prisma.tokenRequest.updateMany({
++      where: { status: 'PENDING' },
++      data: { status: 'APPROVED', approvedAt: new Date() }
++    });
++    res.json({ success: true, approvedCount: result.count });
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+   }
+ };
++
++// Similarly fix markAllPayoutsDone:
++export const markAllPayoutsDone = async (req, res) => {
++  const result = await prisma.tokenRequest.updateMany({
++    where: { status: 'APPROVED' },
++    data: { status: 'SENT', sentAt: new Date() }
++  });
++  res.json({ success: true, markedCount: result.count });
++};
+
+diff --git a/src/controllers/airdropController.js b/src/controllers/airdropController.js
+--- a/src/controllers/airdropController.js
++++ b/src/controllers/airdropController.js
+@@ -1,10 +1,25 @@
+ // airdropController.js
+
++import { body, validationResult } from 'express-validator';
++
+ export const completeTask = [
++  body('taskId').isString().trim().isLength({ min: 1, max: 100 }),
++  body('taskLink').optional().isURL({ protocols: ['https'] }).isLength({ max: 500 }),
+   async (req, res) => {
++    const errors = validationResult(req);
++    if (!errors.isEmpty()) {
++      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
++    }
+     try {
+       const { taskId, taskLink } = req.body;
+       const userId = req.user.id;
++      
++      // Verify taskLink if required
++      const mission = await store.findOne('missions', { id: taskId });
++      if (mission?.requiresLink && !taskLink) {
++        return res.status(400).json({ error: 'Proof link required for this mission' });
++      }
++      
++      // TODO: Add CAPTCHA verification here (e.g., hCaptcha/reCAPTCHA)
++      
+       const existing = await store.findOne('user_missions', { userId, missionId: taskId });
+       if (existing) return res.status(400).json({ error: 'Task already completed' });
+
+@@ -20,10 +35,25 @@
+ export const submitWallet = [
++  body('wallet').isEthereumAddress(),
++  body('projectName').optional().trim().isLength({ max: 100 }),
++  body('projectTicker').optional().trim().matches(/^[A-Z0-9]{1,10}$/),
++  body('projectWebsite').optional().isURL({ protocols: ['https'] }).isLength({ max: 500 }),
++  body('projectSocial').optional().isURL({ protocols: ['https'] }).isLength({ max: 500 }),
++  body('projectLogo').optional().isURL({ protocols: ['https'] }).isLength({ max: 500 }),
++  body('projectBanner').optional().isURL({ protocols: ['https'] }).isLength({ max: 500 }),
++  body('projectManifesto').optional().trim().isLength({ max: 2000 }),
++  body('reviewComment').optional().trim().isLength({ max: 1000 }),
+   async (req, res) => {
++    const errors = validationResult(req);
++    if (!errors.isEmpty()) {
++      return res.status(400).json({ error: 'Invalid input', details: errors.array() });
++    }
+     try {
+       const { wallet, projectName, projectTicker, projectWebsite, projectSocial, 
+               projectLogo, projectBanner, projectManifesto, reviewComment } = req.body;
++      
++      // Rate limit: one founder application per user per hour
++      const recent = await store.findOne('founder_applications', { userId: req.user.id }, { sort: { createdAt: 'desc' } });
++      if (recent && Date.now() - new Date(recent.createdAt).getTime() < 3600000) {
++        return res.status(429).json({ error: 'Only one founder application per hour allowed' });
++      }
++      
+       const updated = await store.updateById('users', req.user.id, {
+         wallet, projectName, projectTicker, projectWebsite, projectSocial,
+         projectLogo, projectBanner, projectManifesto, reviewComment,
+@@ -40,10 +70,20 @@
+ export const exportMissionData = async (req, res) => {
+   try {
+     const participants = await store.read('users');
+-    let csvContent = "data:text/csv;charset=utf-8,Account ID/Email,BSC Wallet,ITEMS,Converted BAG,Referrals,Tier,Feedback\n";
++    let csvContent = "Account ID/Email,BSC Wallet,ITEMS,Converted BAG,Referrals,Tier,Feedback\n";
+     participants.forEach(p => {
+       const wallet = p.wallet || p.submittedWallet || 'NOT SUBMITTED';
+-      const feedback = p.reviewComment ? p.reviewComment.replace(/"/g, '""') : '';
++      // FIX: Sanitize CSV to prevent formula injection
++      let feedback = p.reviewComment ? p.reviewComment.replace(/"/g, '""') : '';
++      // Prefix cells that start with formula-risk characters
++      if (/^[+=@-]/.test(feedback)) feedback = "'" + feedback;
++      if (/^[+=@-]/.test(wallet)) wallet = "'" + wallet;
++      if (/^[+=@-]/.test(p.email)) p.email = "'" + p.email;
+       const convertedBAG = Number((p.points || 0) / 10).toFixed(2);
+-      csvContent += `"${p.email || p.id}","${wallet}",${p.points},${convertedBAG},${p.referralCount},${p.accountType},"${feedback}"\n`;
++      csvContent += `"${p.email || p.id}","${wallet}",${p.points},${convertedBAG},${p.referralCount},${p.accountType},"${feedback}"
+`;
+     });
+     res.setHeader('Content-Type', 'text/csv');
+     res.setHeader('Content-Disposition', `attachment; filename="export_${Date.now()}.csv"`);
+@@ -55,10 +95,15 @@
+ export const grantBonusXP = async (req, res) => {
+   try {
+     const { userId, bonusTokens } = req.body;
++    
++    // FIX: Prevent arbitrary negative deductions without dual approval
++    if (bonusTokens < 0) {
++      return res.status(403).json({ error: 'Negative deductions require dual-admin approval workflow (not yet implemented)' });
++    }
++    
+     const user = await store.findOne('users', { id: userId });
+     if (!user) return res.status(404).json({ error: 'User not found' });
+
+-    const newPoints = (user.points || 0) + bonusTokens;
++    const newPoints = Math.max(0, (user.points || 0) + bonusTokens);
+     let newStrikes = user.strikes || 0;
+     if (bonusTokens < 0) newStrikes += 1;
+     const isBanned = newStrikes >= 5;
+
+diff --git a/src/controllers/authController.js b/src/controllers/authController.js
+--- a/src/controllers/authController.js
++++ b/src/controllers/authController.js
+@@ -1,10 +1,15 @@
+ // authController.js
+
++import rateLimit from 'express-rate-limit';
++
++const setupAdminLimiter = rateLimit({
++  windowMs: 60 * 60 * 1000, // 1 hour
++  max: 3,
++  message: { error: 'Too many setup attempts. Try again later.' }
++});
++
+ export const createInitialAdmin = [
++  setupAdminLimiter,
+   async (req, res) => {
+     try {
+       const { setupSecret, email, password } = req.body;
+       if (setupSecret !== process.env.ADMIN_SETUP_SECRET) {
+         return res.status(403).json({ error: 'Invalid setup secret' });
+       }
+-      // Check if admin already exists
+       const existing = await store.findOne('admins', { email });
+       if (existing) return res.status(400).json({ error: 'Admin already exists' });
+
+@@ -25,10 +30,10 @@
+ export const verifyUpgrade = async (req, res) => {
+   try {
+     const { address } = req.body;
+-    // FIX: Remove dev fallback
+-    let isEligible = false;
+-    if (process.env.NODE_ENV !== 'production') {
+-      isEligible = true; // REMOVED
+-    }
++    // REMOVED: Dev fallback auto-pass. Always check on-chain balance.
++    let isEligible = false;
+
+     const balance = await publicClient.readContract({...});
+     isEligible = balance >= requiredAmount;
+
+diff --git a/src/controllers/publicController.js b/src/controllers/publicController.js
+--- a/src/controllers/publicController.js
++++ b/src/controllers/publicController.js
+@@ -1,20 +1,12 @@
+ // publicController.js
+
+-import fs from 'fs';
+-import path from 'path';
+-import { fileURLToPath } from 'url';
+-
+-const __filename = fileURLToPath(import.meta.url);
+-const __dirname = path.dirname(__filename);
+-
+ export const getNews = async (req, res) => {
+   try {
+     let news = await store.read('news');
+-    // REMOVED: Auto-seeding fake data when empty
+-    if (news.length === 0) {
+-      const seedPath = path.join(__dirname, '../../data/news_seed.json');
+-      news = JSON.parse(fs.readFileSync(seedPath, 'utf-8'));
+-      await store.write('news', news);
++    // No auto-seeding. Return empty array if no news exists.
++    if (!news || news.length === 0) {
++      return res.json([]);
+     }
+     res.json(news.slice().reverse());
+   } catch (error) {
+@@ -25,10 +17,8 @@
+ export const getSignals = async (req, res) => {
+   try {
+     let signals = await store.read('signals');
+-    if (signals.length === 0) {
+-      const seedPath = path.join(__dirname, '../../data/signals_seed.json');
+-      signals = JSON.parse(fs.readFileSync(seedPath, 'utf-8'));
+-      await store.write('signals', signals);
++    if (!signals || signals.length === 0) {
++      return res.json([]);
+     }
+     res.json(signals.slice().reverse());
+   } catch (error) {
+
+diff --git a/src/controllers/adminController.js b/src/controllers/adminController.js
+--- a/src/controllers/adminController.js
++++ b/src/controllers/adminController.js
+@@ -1,10 +1,12 @@
+ // adminController.js
+
+ export const getSystemStats = async (req, res) => {
+   try {
+-    // FIX: Remove hardcoded cache stats
+-    const cacheStats = { price: 150, ai: 25 }; // REMOVED
+-    // Fetch real stats from database
++    const userCount = await prisma.user.count();
++    const missionCount = await prisma.mission.count();
++    const claimCount = await prisma.t2eClaim.count();
+     res.json({
+-      cacheStats: await getRealCacheStats(),
++      userCount,
++      missionCount,
++      claimCount,
+       timestamp: new Date().toISOString()
+     });
+   } catch (error) {
+
+diff --git a/src/controllers/projectController.js b/src/controllers/projectController.js
+--- a/src/controllers/projectController.js
++++ b/src/controllers/projectController.js
+@@ -1,10 +1,25 @@
+ // projectController.js
+
++import { isAddress } from 'viem';
++
+ export const submitManifesto = async (req, res) => {
+   const { name, symbol, contractAddress, theHook, description, totalSupply, websiteUrl, buyLink, manifestoText } = req.body;
+   const user = req.user;
+
++  // Validate contract address on-chain
++  if (contractAddress && !isAddress(contractAddress)) {
++    return res.status(400).json({ error: 'Invalid contract address format' });
++  }
++  
++  // Verify contract exists on BSC
++  if (contractAddress) {
++    const code = await publicClient.getBytecode({ address: contractAddress });
++    if (!code || code === '0x') {
++      return res.status(400).json({ error: 'Contract address does not exist on-chain' });
++    }
++  }
++
+   if (user.tier !== 'ULTIMATE' && user.role !== 'FOUNDER' && user.accountType !== 'FOUNDER') {
+     return res.status(403).json({ error: 'Only Founders can drop a Project Manifesto.' });
+   }
+
+diff --git a/src/app.js b/src/app.js
+--- a/src/app.js
++++ b/src/app.js
+@@ -1,10 +1,15 @@
+ // app.js
+
+-// SECURE BOOTSTRAP: One-time admin seed route.
+-// Remove this line after creating your first admin and redeploy.
+-app.use('/api/admin-seed', adminSeedRoutes);
++// FIX: Admin seed route is now disabled by default in production.
++// To enable, set ENABLE_ADMIN_SEED=true (one-time use only).
++if (process.env.ENABLE_ADMIN_SEED === 'true') {
++  app.use('/api/admin-seed', adminSeedRoutes);
++  console.warn('[WARN] /api/admin-seed is ACTIVE. Disable ENABLE_ADMIN_SEED after first admin creation.');
++}
+
+-// Production guards already present — no changes needed
++// Additional guard: ensure admin-seed is not accessible in production without explicit flag
++if (config.isProduction && process.env.ENABLE_ADMIN_SEED !== 'true') {
++  console.log('[INFO] /api/admin-seed is disabled in production.');
++}
