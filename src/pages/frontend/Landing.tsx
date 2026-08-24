@@ -1132,7 +1132,7 @@ export const Landing: React.FC = () => {
                 {/* Left Column: Metrics */}
                 <div className="lg:col-span-1 flex flex-col gap-2">
                   <TokenMetricCard label="Token Name" value="AlphaBAG (Not Yet Live)" icon={<Briefcase />} />
-                  <TokenMetricCard label="Ticker" value="$BAG" icon={<TrendingUp />} />
+                  <TokenMetricCard label="Ticker" value="TBA" icon={<TrendingUp />} />
                   <TokenMetricCard label="Network" value="BNB Smart Chain" icon={<LayoutGrid />} />
                   <TokenMetricCard label="Total Supply" value="21,000,000" icon={<PieChart />} />
                   <TokenMetricCard label="Contract Address" value="TBA" icon={<Lock />} />
