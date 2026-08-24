@@ -1141,11 +1141,36 @@ export const Landing: React.FC = () => {
                 {/* Right Column: Allocations Unmasked */}
                 <div className="lg:col-span-2 relative bg-alphabag-darkgray border border-alphabag-gray rounded-3xl p-4 flex flex-col">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full h-full">
-                    <TokenomicsDetailCard title="Liquidity Pool (LP)" percentage="30%" subtitle="6,300,000 $BAG" desc="Paired initially with BNB upon PancakeSwap deployment. Burnt to secure the market floor." />
-                    <TokenomicsDetailCard title="Trade-to-Earn (T2E)" percentage="35%" subtitle="7,350,000 $BAG" desc="Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community." />
-                    <TokenomicsDetailCard title="Development & Ecosystem" percentage="15%" subtitle="3,150,000 $BAG" desc="Infrastructure, API integrations & core platform upgrades. Locked for 6 months." />
-                    <TokenomicsDetailCard title="Marketing & Strategic Growth" percentage="10%" subtitle="2,100,000 $BAG" desc="Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships." />
-                    <TokenomicsDetailCard title="Team & Advisors" percentage="10%" subtitle="2,100,000 $BAG" desc="Team Allocation Locked for 24 months. Unlocked in phases." />
+                    <TokenomicsDetailCard 
+                      title="Liquidity Pool (LP)" 
+                      percentage="30%" 
+                      subtitle={<>6,300,000 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-alphabag-black border border-alphabag-yellow/40 text-alphabag-yellow text-[11px] font-mono font-bold tracking-wider select-none shadow-sm ml-1"><Lock size={10} className="inline opacity-80" />***</span></>} 
+                      desc="Paired initially with BNB upon PancakeSwap deployment. Burnt to secure the market floor." 
+                    />
+                    <TokenomicsDetailCard 
+                      title="Trade-to-Earn (T2E)" 
+                      percentage="35%" 
+                      subtitle={<>7,350,000 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-alphabag-black border border-alphabag-yellow/40 text-alphabag-yellow text-[11px] font-mono font-bold tracking-wider select-none shadow-sm ml-1"><Lock size={10} className="inline opacity-80" />***</span></>} 
+                      desc="Systematic emissions for missions & platform rewards. Locked for 6 months. Unlocked to begin T2E reward system for all community." 
+                    />
+                    <TokenomicsDetailCard 
+                      title="Development & Ecosystem" 
+                      percentage="15%" 
+                      subtitle={<>3,150,000 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-alphabag-black border border-alphabag-yellow/40 text-alphabag-yellow text-[11px] font-mono font-bold tracking-wider select-none shadow-sm ml-1"><Lock size={10} className="inline opacity-80" />***</span></>} 
+                      desc="Infrastructure, API integrations & core platform upgrades. Locked for 6 months." 
+                    />
+                    <TokenomicsDetailCard 
+                      title="Marketing & Strategic Growth" 
+                      percentage="10%" 
+                      subtitle={<>2,100,000 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-alphabag-black border border-alphabag-yellow/40 text-alphabag-yellow text-[11px] font-mono font-bold tracking-wider select-none shadow-sm ml-1"><Lock size={10} className="inline opacity-80" />***</span></>} 
+                      desc="Ecosystem expansion & strategic partnerships. Locked for 6 months to build organic community and partnerships." 
+                    />
+                    <TokenomicsDetailCard 
+                      title="Team & Advisors" 
+                      percentage="10%" 
+                      subtitle={<>2,100,000 <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-alphabag-black border border-alphabag-yellow/40 text-alphabag-yellow text-[11px] font-mono font-bold tracking-wider select-none shadow-sm ml-1"><Lock size={10} className="inline opacity-80" />***</span></>} 
+                      desc="Team Allocation Locked for 24 months. Unlocked in phases." 
+                    />
                     <TokenomicsDetailCard title="TOTAL SUPPLY" percentage="100%" subtitle="21,000,000" desc="Strictly hard-capped supply. No mint function exists post-deployment." highlight />
                   </div>
                 </div>
@@ -1348,7 +1373,7 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
   </div>
 );
 
-const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: string, desc: string, highlight?: boolean }) => (
+const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: React.ReactNode, desc: string, highlight?: boolean }) => (
   <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-alphabag-darkgray border-alphabag-yellow ' : 'bg-alphabag-darkgray border-alphabag-gray hover:border-alphabag-muted'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
       <div>
