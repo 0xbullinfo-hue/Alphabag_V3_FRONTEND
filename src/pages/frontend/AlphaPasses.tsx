@@ -218,18 +218,21 @@ export const AlphaPasses: React.FC = () => {
     watch: true,
   });
 
+  const [selectedOwnedIndex, setSelectedOwnedIndex] = useState<number>(0);
+
   const userNFTs: AlphaPassNFT[] = useMemo(() => {
     if (!ownedTokenIdsData) return [];
     return ownedTokenIdsData
       .filter((r) => r.status === 'success' && r.result !== undefined)
       .map((r) => {
         const tokenId = Number(r.result as bigint);
+        const imageIndex = ((tokenId - 1) % 100) + 1;
         return {
           tokenId,
           name: `AlphaBAG Genesis Pass #${tokenId}`,
           tier: 'Genesis Pass',
           rarity: 'Genesis',
-          image: '',
+          image: `/nft-collection/images/${imageIndex}.png`,
           multiplier: '1.5x',
           perks: ['1.5x ITEMS Boost', 'Lifetime VIP Access', 'Alpha Mission Multiplier'],
         };
@@ -519,7 +522,7 @@ export const AlphaPasses: React.FC = () => {
       {activeTab === 'MINT' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 items-stretch">
           <div className="lg:col-span-5 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between relative">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-3">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark font-black"><Crown size={16} /></div>
                 <div>
@@ -527,21 +530,124 @@ export const AlphaPasses: React.FC = () => {
                   <div className="text-[10px] text-alphabag-yellow font-semibold uppercase">Official Utility Pass</div>
                 </div>
               </div>
-              <span className="bg-alphabag-gray px-2.5 py-1 rounded-md text-[10px] font-semibold text-alphabag-subtext uppercase">ERC-721</span>
+              {userNFTs.length > 0 ? (
+                <span className="bg-alphabag-green/20 text-alphabag-green border border-alphabag-green/40 px-2.5 py-1 rounded-md text-[10px] font-black uppercase flex items-center gap-1 shadow-sm">
+                  <ShieldCheck size={12} /> {userNFTs.length} OWNED
+                </span>
+              ) : (
+                <span className="bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/30 px-2.5 py-1 rounded-md text-[10px] font-black uppercase">
+                  {quantity}x MINT PREVIEW
+                </span>
+              )}
             </div>
-            <div className="my-4 rounded-xl bg-alphabag-black border border-alphabag-gray p-6 text-center flex flex-col items-center justify-center relative overflow-hidden">
-              <div className="w-20 h-20 rounded-2xl bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow mb-3"><Zap size={38} className="fill-alphabag-yellow/80" /></div>
-              <h3 className="text-xl font-bold text-alphabag-text uppercase tracking-tight">VIP GENESIS PASS</h3>
-              <p className="text-xs text-alphabag-subtext font-mono mt-1">Token Pass ID: #0001 - #10000</p>
-              <div className="flex items-center gap-2 mt-3">
-                <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">1.5x ITEMS Boost</span>
-                <span className="bg-alphabag-green/10 text-alphabag-green px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-green/20">Lifetime VIP</span>
+
+            {userNFTs.length > 0 ? (
+              /* ── USER MINTED NFT DISPLAY ── */
+              <div className="my-3 rounded-xl bg-alphabag-black border border-alphabag-yellow/40 p-5 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-[0_0_25px_rgba(252,213,53,0.1)]">
+                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-alphabag-yellow/50 mb-3 shadow-[0_0_20px_rgba(252,213,53,0.2)] group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={userNFTs[selectedOwnedIndex]?.image || `/nft-collection/images/${((userNFTs[0]?.tokenId || 1) % 100) || 1}.png`}
+                    alt={userNFTs[selectedOwnedIndex]?.name || 'Genesis Pass'}
+                    className="w-full h-full object-cover"
+                    onError={(e: any) => {
+                      e.currentTarget.src = '/nft-collection/images/1.png';
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1">
+                    <span className="text-[9px] font-black font-mono text-alphabag-yellow">
+                      #{userNFTs[selectedOwnedIndex]?.tokenId?.toString().padStart(4, '0') || '0001'}
+                    </span>
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-black text-alphabag-text uppercase tracking-tight">
+                  {userNFTs[selectedOwnedIndex]?.name || `AlphaBAG Genesis Pass #${userNFTs[0]?.tokenId}`}
+                </h3>
+                <p className="text-[11px] text-alphabag-subtext font-mono mt-0.5">
+                  Verified On-Chain Asset • VIP Status Active
+                </p>
+
+                {/* Multiple owned passes selector pills */}
+                {userNFTs.length > 1 && (
+                  <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto max-w-full py-1">
+                    {userNFTs.map((nft, idx) => (
+                      <button
+                        key={nft.tokenId}
+                        type="button"
+                        onClick={() => setSelectedOwnedIndex(idx)}
+                        className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
+                          selectedOwnedIndex === idx
+                            ? 'bg-alphabag-yellow text-alphabag-dark font-black shadow-sm'
+                            : 'bg-alphabag-darkgray text-alphabag-subtext hover:text-white border border-alphabag-gray'
+                        }`}
+                      >
+                        #{nft.tokenId}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 mt-3">
+                  <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">
+                    1.5x ITEMS Boost
+                  </span>
+                  <span className="bg-alphabag-green/10 text-alphabag-green px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-green/20">
+                    Lifetime VIP
+                  </span>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* ── QUANTITY-DEPENDENT MINT PREVIEW ── */
+              <div className="my-3 rounded-xl bg-alphabag-black border border-alphabag-gray p-5 text-center flex flex-col items-center justify-center relative overflow-hidden group">
+                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-alphabag-yellow/30 mb-3 shadow-[0_0_20px_rgba(252,213,53,0.15)] group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={`/nft-collection/images/${quantity}.png`}
+                    alt={`Genesis Pass ${quantity}x Preview`}
+                    className="w-full h-full object-cover"
+                    onError={(e: any) => {
+                      e.currentTarget.src = '/nft-collection/images/1.png';
+                    }}
+                  />
+                  <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-alphabag-black/90 border border-alphabag-yellow/40 text-[9px] font-black text-alphabag-yellow font-mono">
+                    {quantity}x BUNDLE
+                  </div>
+                </div>
+
+                <h3 className="text-lg font-bold text-alphabag-text uppercase tracking-tight">
+                  VIP GENESIS PASS
+                </h3>
+                <p className="text-[11px] text-alphabag-subtext font-mono mt-0.5">
+                  Allocating: {quantity} Pass{quantity > 1 ? 'es' : ''} (#{contractTotalSupply + 1} - #{contractTotalSupply + quantity})
+                </p>
+
+                <div className="flex items-center gap-2 mt-3">
+                  <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">
+                    {quantity > 1 ? `${quantity}x Multiplier Power` : '1.5x ITEMS Boost'}
+                  </span>
+                  <span className="bg-alphabag-green/10 text-alphabag-green px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-green/20">
+                    Lifetime VIP
+                  </span>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-3 gap-2 text-center pt-2">
-              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2"><div className="text-[9px] font-semibold text-alphabag-subtext uppercase">Max Supply</div><div className="text-xs font-semibold text-alphabag-text mt-0.5">10,000</div></div>
-              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2"><div className="text-[9px] font-semibold text-alphabag-subtext uppercase">Chain</div><div className="text-xs font-semibold text-alphabag-yellow mt-0.5">BSC</div></div>
-              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2"><div className="text-[9px] font-semibold text-alphabag-subtext uppercase">Standard</div><div className="text-xs font-semibold text-alphabag-text mt-0.5">ERC-721</div></div>
+              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2">
+                <div className="text-[9px] font-semibold text-alphabag-subtext uppercase">
+                  {userNFTs.length > 0 ? 'Your Holdings' : 'Quantity'}
+                </div>
+                <div className="text-xs font-semibold text-alphabag-text mt-0.5">
+                  {userNFTs.length > 0 ? `${userNFTs.length} Pass(es)` : `${quantity}x`}
+                </div>
+              </div>
+              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2">
+                <div className="text-[9px] font-semibold text-alphabag-subtext uppercase">Chain</div>
+                <div className="text-xs font-semibold text-alphabag-yellow mt-0.5">BSC</div>
+              </div>
+              <div className="bg-alphabag-black border border-alphabag-gray rounded-lg p-2">
+                <div className="text-[9px] font-semibold text-alphabag-subtext uppercase">Standard</div>
+                <div className="text-xs font-semibold text-alphabag-text mt-0.5">ERC-721</div>
+              </div>
             </div>
           </div>
 
@@ -636,8 +742,17 @@ export const AlphaPasses: React.FC = () => {
                     <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">{nft.tier}</span>
                     <span className="bg-alphabag-green/10 text-alphabag-green px-2 py-0.5 rounded text-[10px] font-semibold border border-alphabag-green/20">{nft.multiplier} Boost</span>
                   </div>
-                  <div className="text-center py-4">
-                    <div className="w-14 h-14 mx-auto rounded-xl bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow mb-2"><Zap size={28} className="fill-alphabag-yellow/80" /></div>
+                  <div className="text-center py-3">
+                    <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border border-alphabag-yellow/30 mb-2 shadow-sm">
+                      <img
+                        src={nft.image || `/nft-collection/images/${((nft.tokenId || 1) % 100) || 1}.png`}
+                        alt={nft.name}
+                        className="w-full h-full object-cover"
+                        onError={(e: any) => {
+                          e.currentTarget.src = '/nft-collection/images/1.png';
+                        }}
+                      />
+                    </div>
                     <h4 className="text-base font-semibold text-alphabag-text">{nft.name}</h4>
                     <span className="text-[10px] text-alphabag-subtext font-mono">Minted: {nft.mintedAt || 'Genesis'}</span>
                   </div>
