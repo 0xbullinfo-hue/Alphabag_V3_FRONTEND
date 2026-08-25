@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
@@ -18,10 +17,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      <main className="md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 pt-[72px]">
+      {/* FIX: md:pl-[248px] matches sidebar width (w-60=240px + left-2=8px) eliminating dead gap */}
+      {/* FIX: px-4 py-3 replaces asymmetric pt-2 pl-2 md:pl-0 pr-2 pb-2 for balanced breathing room */}
+      <main className="md:pl-[248px] min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 pt-[72px]">
         <AnimatePresence mode="wait">
           <PageTransition>
-            <div className="pt-2 pl-2 md:pl-0 pr-2 pb-2 w-full">
+            <div className="px-4 py-3 w-full">
               {children}
             </div>
           </PageTransition>
@@ -36,7 +37,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         {toasts.map(toast => (
           <div
             key={toast.id}
-            className="pointer-events-auto glass-panel px-4 py-3 rounded-xl  flex items-center space-x-2 min-w-[280px] animate-slide-in overflow-hidden"
+            className="pointer-events-auto glass-panel px-4 py-3 rounded-xl flex items-center space-x-2 min-w-[280px] animate-slide-in overflow-hidden"
           >
             <div className={`
                     w-1 h-full absolute left-0 top-0 

@@ -33,14 +33,14 @@ export default {
                 mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
             },
             borderRadius: {
-                DEFAULT: '0.5rem',
-                sm: '0.25rem',
-                md: '0.5rem',
-                lg: '0.5rem',
-                xl: '0.5rem',
-                '2xl': '0.5rem',
-                '3xl': '0.5rem',
-                '4xl': '0.5rem',
+                DEFAULT: '0.5rem',   // 8px
+                sm: '0.25rem',       // 4px
+                md: '0.375rem',      // 6px
+                lg: '0.5rem',        // 8px
+                xl: '0.75rem',       // 12px
+                '2xl': '1rem',       // 16px
+                '3xl': '1.25rem',    // 20px
+                '4xl': '1.5rem',     // 24px
             },
             boxShadow: {
                 'glass':       '0 8px 32px 0 rgba(0,0,0,0.6)',
