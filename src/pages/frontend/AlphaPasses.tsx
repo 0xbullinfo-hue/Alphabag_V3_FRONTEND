@@ -23,7 +23,10 @@ import {
   CheckCircle2,
   Award,
   Wallet,
-  Loader2
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck
 } from 'lucide-react';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork, useContractWrite, useWaitForTransaction, useContractRead, useContractReads } from 'wagmi';
 import { bsc } from 'wagmi/chains';
@@ -219,6 +222,13 @@ export const AlphaPasses: React.FC = () => {
   });
 
   const [selectedOwnedIndex, setSelectedOwnedIndex] = useState<number>(0);
+  const [previewCarouselIndex, setPreviewCarouselIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (previewCarouselIndex >= quantity) {
+      setPreviewCarouselIndex(0);
+    }
+  }, [quantity, previewCarouselIndex]);
 
   const userNFTs: AlphaPassNFT[] = useMemo(() => {
     if (!ownedTokenIdsData) return [];
@@ -542,48 +552,82 @@ export const AlphaPasses: React.FC = () => {
             </div>
 
             {userNFTs.length > 0 ? (
-              /* ── USER MINTED NFT DISPLAY ── */
+              /* ── USER MINTED NFTS CAROUSEL (Left/Right Navigation) ── */
               <div className="my-3 rounded-xl bg-alphabag-black border border-alphabag-yellow/40 p-5 text-center flex flex-col items-center justify-center relative overflow-hidden group shadow-[0_0_25px_rgba(252,213,53,0.1)]">
-                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-alphabag-yellow/50 mb-3 shadow-[0_0_20px_rgba(252,213,53,0.2)] group-hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={userNFTs[selectedOwnedIndex]?.image || `/nft-collection/images/${((userNFTs[0]?.tokenId || 1) % 100) || 1}.png`}
-                    alt={userNFTs[selectedOwnedIndex]?.name || 'Genesis Pass'}
-                    className="w-full h-full object-cover"
-                    onError={(e: any) => {
-                      e.currentTarget.src = '/nft-collection/images/1.png';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1">
-                    <span className="text-[9px] font-black font-mono text-alphabag-yellow">
-                      #{userNFTs[selectedOwnedIndex]?.tokenId?.toString().padStart(4, '0') || '0001'}
-                    </span>
+                {/* Main Showcase with Left / Right Navigation */}
+                <div className="relative flex items-center justify-center w-full my-1">
+                  {userNFTs.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOwnedIndex((prev) => (prev > 0 ? prev - 1 : userNFTs.length - 1))}
+                      className="absolute left-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
+                      title="Previous Pass"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                  )}
+
+                  <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-2 border-alphabag-yellow/50 shadow-[0_0_20px_rgba(252,213,53,0.2)] group-hover:scale-105 transition-transform duration-300">
+                    <img
+                      src={userNFTs[selectedOwnedIndex]?.image || `/nft-collection/images/${((userNFTs[selectedOwnedIndex]?.tokenId || 1) % 100) || 1}.png`}
+                      alt={userNFTs[selectedOwnedIndex]?.name || 'Genesis Pass'}
+                      className="w-full h-full object-cover"
+                      onError={(e: any) => {
+                        e.currentTarget.src = '/nft-collection/images/1.png';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1">
+                      <span className="text-[9px] font-black font-mono text-alphabag-yellow">
+                        #{userNFTs[selectedOwnedIndex]?.tokenId?.toString().padStart(4, '0') || '0001'}
+                      </span>
+                    </div>
                   </div>
+
+                  {userNFTs.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedOwnedIndex((prev) => (prev < userNFTs.length - 1 ? prev + 1 : 0))}
+                      className="absolute right-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
+                      title="Next Pass"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  )}
                 </div>
 
-                <h3 className="text-lg font-black text-alphabag-text uppercase tracking-tight">
+                <h3 className="text-lg font-black text-alphabag-text uppercase tracking-tight mt-2">
                   {userNFTs[selectedOwnedIndex]?.name || `AlphaBAG Genesis Pass #${userNFTs[0]?.tokenId}`}
                 </h3>
                 <p className="text-[11px] text-alphabag-subtext font-mono mt-0.5">
-                  Verified On-Chain Asset • VIP Status Active
+                  Verified On-Chain Asset • Pass {selectedOwnedIndex + 1} of {userNFTs.length}
                 </p>
 
-                {/* Multiple owned passes selector pills */}
+                {/* Horizontal Scrollable Thumbnails Filmstrip */}
                 {userNFTs.length > 1 && (
-                  <div className="flex items-center gap-1.5 mt-2.5 overflow-x-auto max-w-full py-1">
-                    {userNFTs.map((nft, idx) => (
-                      <button
-                        key={nft.tokenId}
-                        type="button"
-                        onClick={() => setSelectedOwnedIndex(idx)}
-                        className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-                          selectedOwnedIndex === idx
-                            ? 'bg-alphabag-yellow text-alphabag-dark font-black shadow-sm'
-                            : 'bg-alphabag-darkgray text-alphabag-subtext hover:text-white border border-alphabag-gray'
-                        }`}
-                      >
-                        #{nft.tokenId}
-                      </button>
-                    ))}
+                  <div className="w-full mt-3 pt-2 border-t border-alphabag-gray/50">
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar justify-start sm:justify-center px-1">
+                      {userNFTs.map((nft, idx) => (
+                        <button
+                          key={nft.tokenId}
+                          type="button"
+                          onClick={() => setSelectedOwnedIndex(idx)}
+                          className={`relative w-11 h-11 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
+                            selectedOwnedIndex === idx
+                              ? 'border-alphabag-yellow scale-105 shadow-[0_0_10px_rgba(252,213,53,0.3)]'
+                              : 'border-alphabag-gray/60 opacity-60 hover:opacity-100 hover:border-alphabag-subtext'
+                          }`}
+                        >
+                          <img
+                            src={nft.image}
+                            alt={`Pass #${nft.tokenId}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] font-mono text-center font-bold text-alphabag-yellow">
+                            #{nft.tokenId}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 )}
 
@@ -597,28 +641,87 @@ export const AlphaPasses: React.FC = () => {
                 </div>
               </div>
             ) : (
-              /* ── QUANTITY-DEPENDENT MINT PREVIEW ── */
+              /* ── MULTI-BUNDLE QUANTITY SCROLL CAROUSEL PREVIEW ── */
               <div className="my-3 rounded-xl bg-alphabag-black border border-alphabag-gray p-5 text-center flex flex-col items-center justify-center relative overflow-hidden group">
-                <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-alphabag-yellow/30 mb-3 shadow-[0_0_20px_rgba(252,213,53,0.15)] group-hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={`/nft-collection/images/${quantity}.png`}
-                    alt={`Genesis Pass ${quantity}x Preview`}
-                    className="w-full h-full object-cover"
-                    onError={(e: any) => {
-                      e.currentTarget.src = '/nft-collection/images/1.png';
-                    }}
-                  />
-                  <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-alphabag-black/90 border border-alphabag-yellow/40 text-[9px] font-black text-alphabag-yellow font-mono">
-                    {quantity}x BUNDLE
+                {/* Main Showcase with Left / Right Navigation */}
+                <div className="relative flex items-center justify-center w-full my-1">
+                  {quantity > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewCarouselIndex((prev) => (prev > 0 ? prev - 1 : quantity - 1))}
+                      className="absolute left-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
+                      title="Previous Pass in Bundle"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                  )}
+
+                  <div className="relative w-32 h-32 rounded-2xl overflow-hidden border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.15)] group-hover:scale-105 transition-transform duration-300">
+                    <img
+                      src={`/nft-collection/images/${((previewCarouselIndex) % 100) + 1}.png`}
+                      alt={`Genesis Pass Allocation #${previewCarouselIndex + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e: any) => {
+                        e.currentTarget.src = '/nft-collection/images/1.png';
+                      }}
+                    />
+                    <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-alphabag-black/90 border border-alphabag-yellow/40 text-[9px] font-black text-alphabag-yellow font-mono">
+                      {quantity}x BUNDLE
+                    </div>
+                    <div className="absolute bottom-1 inset-x-0 flex justify-center">
+                      <span className="bg-black/80 px-2 py-0.5 rounded text-[9px] font-mono text-alphabag-yellow border border-alphabag-yellow/20">
+                        Pass #{contractTotalSupply + previewCarouselIndex + 1}
+                      </span>
+                    </div>
                   </div>
+
+                  {quantity > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setPreviewCarouselIndex((prev) => (prev < quantity - 1 ? prev + 1 : 0))}
+                      className="absolute right-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
+                      title="Next Pass in Bundle"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  )}
                 </div>
 
-                <h3 className="text-lg font-bold text-alphabag-text uppercase tracking-tight">
+                <h3 className="text-lg font-bold text-alphabag-text uppercase tracking-tight mt-2">
                   VIP GENESIS PASS
                 </h3>
                 <p className="text-[11px] text-alphabag-subtext font-mono mt-0.5">
-                  Allocating: {quantity} Pass{quantity > 1 ? 'es' : ''} (#{contractTotalSupply + 1} - #{contractTotalSupply + quantity})
+                  {quantity > 1 ? `Bundle Item ${previewCarouselIndex + 1} of ${quantity} • Estimated Token ID #${contractTotalSupply + previewCarouselIndex + 1}` : `Allocating: 1 Pass (#${contractTotalSupply + 1})`}
                 </p>
+
+                {/* Horizontal Scrollable Filmstrip for Multi-Mint Bundle */}
+                {quantity > 1 && (
+                  <div className="w-full mt-3 pt-2 border-t border-alphabag-gray/50">
+                    <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar justify-start sm:justify-center px-1">
+                      {Array.from({ length: quantity }, (_, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setPreviewCarouselIndex(i)}
+                          className={`relative w-11 h-11 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
+                            previewCarouselIndex === i
+                              ? 'border-alphabag-yellow scale-105 shadow-[0_0_10px_rgba(252,213,53,0.3)]'
+                              : 'border-alphabag-gray/60 opacity-60 hover:opacity-100 hover:border-alphabag-subtext'
+                          }`}
+                        >
+                          <img
+                            src={`/nft-collection/images/${(i % 100) + 1}.png`}
+                            alt={`Pass Allocation #${i + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] font-mono text-center font-bold text-alphabag-yellow">
+                            #{i + 1}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-center gap-2 mt-3">
                   <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2.5 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">
