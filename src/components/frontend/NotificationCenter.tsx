@@ -1,5 +1,5 @@
+import { Bell,Info,Shield,X,Zap } from 'lucide-react';
 import React from 'react';
-import { Bell, Zap, Info, Shield, CheckCircle2, X } from 'lucide-react';
 
 interface Notification {
   id: string;

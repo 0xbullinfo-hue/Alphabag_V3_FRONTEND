@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { API_BASE_URL } from '../../services/api';
+import { useCallback,useState } from 'react';
+import { resolveApiUrl } from '../../services/api';
 
 export interface ChatMessage {
     role: 'user' | 'ai';
@@ -36,10 +36,9 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
         setMessages((prev) => [...prev, { role: 'ai', content: '' }]);
 
         try {
-            // API_BASE_URL is the single source of truth (VITE_API_BASE_URL env var)
-            // fetch is used instead of axios here to support ReadableStream responses
+            // Fetch is used instead of axios here to support ReadableStream responses.
             const token = sessionStorage.getItem('alphabag_token');
-            const response = await fetch(`${API_BASE_URL}/api/neural-core`, {
+            const response = await fetch(resolveApiUrl('/api/ai/neural-core'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -89,8 +88,15 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
             }
         } catch (error) {
             console.error("Neural Core Sync Failed:", error);
-            // Add error toast notification here
-            setMessages(prev => [...prev, { role: 'ai', content: "Neural core gateway connection timed out or failed to stream. Please try again." }]);
+            setMessages((prev) => {
+                const updatedMessages = [...prev];
+                const lastIndex = updatedMessages.length - 1;
+                updatedMessages[lastIndex] = {
+                    role: 'ai',
+                    content: 'Alpha Analyst is unavailable right now. Check your connection and try again.',
+                };
+                return updatedMessages;
+            });
         } finally {
             setIsStreaming(false);
         }

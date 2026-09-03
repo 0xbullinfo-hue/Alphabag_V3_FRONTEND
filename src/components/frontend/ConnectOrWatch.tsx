@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Wallet, Search, Eye } from 'lucide-react';
+import { Eye,Search,Wallet } from 'lucide-react';
+import React,{ useState } from 'react';
 import { useWallet } from '../../context/WalletContext';
+import { Button } from '../ui/Button';
 
 export const ConnectOrWatch: React.FC = () => {
   const { connectWallet, connectManually, isConnecting } = useWallet();

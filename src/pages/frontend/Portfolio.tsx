@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { Briefcase,ChevronDown,ChevronUp,Download,Eye,Layers,PieChart as PieChartIcon,Plus,TrendingUp,Wallet2 } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Area,AreaChart,CartesianGrid,Cell,Pie,PieChart as RePieChart,Tooltip as ReTooltip,ResponsiveContainer,XAxis,YAxis } from 'recharts';
+import { Button } from '../../components/ui/Button';
+import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { useWallet } from '../../context/WalletContext';
 import { fetchPortfolioHistory } from '../../services/mockData';
 import { PortfolioHistoryPoint } from '../../types';
-import { Button } from '../../components/ui/Button';
-import { Plus, Settings, Briefcase, Eye, ChevronUp, ChevronDown, Download, PieChart as PieChartIcon, Layers, BarChart3, Shield, Zap, TrendingUp, Wallet2 } from 'lucide-react';
-import { PieChart as RePieChart, Pie, Cell, Tooltip as ReTooltip, ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
-import { useWallet } from '../../context/WalletContext';
 import { HistoryPage } from './History';
-import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 
 const COLORS = ['#FCD535', '#0ECB81', '#3B82F6', '#8B5CF6', '#F6465D', '#848E9C'];
 
 export const Portfolio: React.FC = () => {
-    const { portfolioItems, trackedWallets, isSyncing, getLimits, hideSmallBalances, toggleHideSmallBalances } = useWallet();
+    const { portfolioItems, trackedWallets, isSyncing, hideSmallBalances, toggleHideSmallBalances } = useWallet();
     const [history, setHistory] = useState<PortfolioHistoryPoint[]>([]);
     const [timeframe, setTimeframe] = useState<'24H' | '7D' | '30D' | '90D' | 'ALL'>('ALL');
     const [loadingHistory, setLoadingHistory] = useState(false);
@@ -20,7 +20,6 @@ export const Portfolio: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'overview' | 'transactions'>('overview');
     const navigate = useNavigate();
 
-    const limits = getLimits();
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const safePortfolioItems = Array.isArray(portfolioItems) ? portfolioItems : [];
     const activeWallets = safeTrackedWallets.filter(w => w?.type === 'PORTFOLIO');
@@ -332,7 +331,7 @@ export const Portfolio: React.FC = () => {
                                         <ResponsiveContainer width="100%" height="100%">
                                             <RePieChart>
                                                 <Pie data={filteredItems} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={2} dataKey="value" stroke="none">
-                                                    {filteredItems.map((entry, index) => (
+                                                    {filteredItems.map((_entry, index) => (
                                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                                     ))}
                                                 </Pie>

@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useEffect,useRef } from 'react';
+import { resolveApiUrl } from '../services/api';
 
 export const usePortfolioStream = (token: string | null, address?: string) => {
   const queryClient = useQueryClient();
@@ -12,7 +13,7 @@ export const usePortfolioStream = (token: string | null, address?: string) => {
     abortControllerRef.current = controller;
 
     // Fetch stream securely with Authorization header instead of leaking JWT in query string
-    fetch('/api/stream/portfolio', {
+    fetch(resolveApiUrl('/api/stream/portfolio'), {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'text/event-stream'

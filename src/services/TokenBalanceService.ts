@@ -1,4 +1,4 @@
-import { TOKEN_GATING_CONFIG, ONE_MINUTE } from './config';
+import { ONE_MINUTE,TOKEN_GATING_CONFIG } from './config';
 
 export interface TokenBalance {
   address: string;
@@ -97,10 +97,9 @@ export class TokenBalanceService {
    * Get tier based on token balance
    * 
    * @param balance - Current BAG token balance
-   * @param minimumRequired - Minimum BAG required for premium
    * @returns 'PREMIUM' or 'FREE'
    */
-  static getTier(balance: number, minimumRequired: number): 'PREMIUM' | 'FREE' {
+  static getTier(balance: number): 'PREMIUM' | 'FREE' {
     return this.isQualifiedForPremium(balance) ? 'PREMIUM' : 'FREE';
   }
 

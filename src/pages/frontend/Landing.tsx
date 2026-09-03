@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Shield, Zap, BarChart3, Lock, CheckCircle2, ArrowRight, Wallet, Briefcase, TrendingUp, Bot, Send, Crown, LayoutGrid, X, ShieldCheck, Rocket, Trophy, PieChart, ChevronRight, Calculator as CalculatorIcon } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useNavigate, Link } from 'react-router-dom';
+import { BarChart3,Bot,Briefcase,Calculator as CalculatorIcon,ChevronRight,LayoutGrid,Lock,PieChart,Rocket,Send,ShieldCheck,TrendingUp,Trophy,Wallet,X,Zap } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
 import { Markets } from './Markets';
 
-import { IS_DEMO_MODE, IS_TEASER_MODE as CONFIG_IS_TEASER_MODE, IS_FULL_LAUNCH as CONFIG_IS_FULL_LAUNCH } from '../../services/config';
 
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
@@ -17,7 +16,6 @@ const PRE_LAUNCH_WINDOW_DAYS = 62;
 const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || new Date(
   new Date(PRE_LAUNCH_ANCHOR).getTime() + PRE_LAUNCH_WINDOW_DAYS * 24 * 60 * 60 * 1000
 ).toISOString();
-const IS_FULL_LAUNCH = true;
 
 type CountdownState = {
   days: string;
@@ -524,15 +522,12 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
 ];
 
 export const Landing: React.FC = () => {
-  const { open } = useWeb3Modal();
+  useWeb3Modal();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
-  const [waitlistEmail, setWaitlistEmail] = useState('');
-  const [waitlistSubmitted, setWaitlistSubmitted] = useState(false);
-  const [waitlistError, setWaitlistError] = useState('');
   const [openRoadmapItems, setOpenRoadmapItems] = useState<number[]>([0]);
   const [legalModal, setLegalModal] = useState<'terms' | 'privacy' | null>(null);
 
@@ -540,9 +535,6 @@ export const Landing: React.FC = () => {
     return TRANSLATIONS['en']?.[key] || '';
   };
 
-  const launchCountdownLabel = teaserCountdown.isLive
-    ? 'Live now'
-    : `${parseInt(teaserCountdown.days, 10)}d ${teaserCountdown.hours}h ${teaserCountdown.minutes}m`;
 
   useEffect(() => {
     // Only redirect to app if NOT in teaser mode and user is authenticated
@@ -712,62 +704,8 @@ export const Landing: React.FC = () => {
     }
   };
 
-  const handleDemoLogin = () => {
-    if (!IS_DEMO_MODE) {
-      return;
-    }
-    sessionStorage.setItem('alphabag_token', 'mock_dev_token_2026');
-    sessionStorage.setItem('alphabag_user', JSON.stringify({
-      id: 'mock-user-id',
-      email: 'alpha_tester@alphabag.pro',
-      tier: 'ULTIMATE',
-      alphaAiUsageSeconds: 0,
-      lastAlphaAiReset: new Date().toISOString(),
-      isAdmin: true,
-      onboardingComplete: true
-    }));
-    window.location.reload();
-  };
 
-  const handleWaitlistSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const email = waitlistEmail.trim().toLowerCase();
 
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setWaitlistError('Enter a valid email address to join the early-access waitlist.');
-      return;
-    }
-
-    const storageKey = 'alphabag_waitlist_signups';
-    const raw = localStorage.getItem(storageKey);
-    let list: Array<{ email: string; source: string; createdAt: string }> = [];
-    if (raw) {
-      try {
-        list = JSON.parse(raw);
-      } catch {
-        list = [];
-      }
-    }
-
-    if (!list.some(item => item.email === email)) {
-      list.push({
-        email,
-        source: 'teaser-landing',
-        createdAt: new Date().toISOString()
-      });
-      // Keep local cache bounded.
-      localStorage.setItem(storageKey, JSON.stringify(list.slice(-500)));
-    }
-
-    setWaitlistSubmitted(true);
-    setWaitlistError('');
-    setWaitlistEmail('');
-  };
-
-  const handleViewMarkets = () => {
-    setActiveTab('markets');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const handleNavClick = (tab: 'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
     setActiveTab(tab);
@@ -1358,7 +1296,6 @@ const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, des
     <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
   </div>
 );
-
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
   <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 md:p-4 rounded-2xl flex items-center gap-2 md:gap-2 hover:border-alphabag-muted transition-all group h-full shadow-lg">
     <div className="w-12 h-12 shrink-0 bg-alphabag-darkgray border border-alphabag-gray rounded-xl flex items-center justify-center text-alphabag-yellow group-hover:scale-110 transition-transform shadow-inner">
@@ -1372,7 +1309,6 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
     </div>
   </div>
 );
-
 const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: { title: string, percentage: string, subtitle?: React.ReactNode, desc: string, highlight?: boolean }) => (
   <div className={`p-4 rounded-2xl border flex flex-col h-full ${highlight ? 'bg-alphabag-darkgray border-alphabag-yellow ' : 'bg-alphabag-darkgray border-alphabag-gray hover:border-alphabag-muted'} transition-all`}>
     <div className="flex justify-between items-start mb-3">
@@ -1383,46 +1319,5 @@ const TokenomicsDetailCard = ({ title, percentage, subtitle, desc, highlight }: 
       <div className={`text-xl md:text-2xl font-bold ${highlight ? 'text-alphabag-yellow' : 'text-alphabag-text'}`}>{percentage}</div>
     </div>
     <p className="text-xs md:text-sm text-alphabag-subtext leading-relaxed font-medium">{desc}</p>
-  </div>
-);
-
-const ComparisonRow = ({ label, spreadsheet, alphabag }: { label: string, spreadsheet: boolean, alphabag: boolean }) => (
-  <div className="grid grid-cols-3 gap-2 py-4 border-b border-alphabag-border items-center">
-    <div className="col-span-1 font-semibold text-alphabag-text text-sm md:text-base">{label}</div>
-    <div className="col-span-1 flex justify-center">
-      {spreadsheet ? <CheckCircle2 className="text-green-500" size={20} /> : <X className="text-white/20" size={20} />}
-    </div>
-    <div className="col-span-1 flex justify-center">
-      {alphabag ? <div className="bg-alphabag-yellow/20 p-1 rounded-full"><CheckCircle2 className="text-alphabag-yellow" size={20} /></div> : <X className="text-red-500" size={20} />}
-    </div>
-  </div>
-);
-
-const PricingCard = ({ tier, tokens, price, features, recommended = false, onAction }: { tier: string, tokens: string, price: string, features: string[], recommended?: boolean, onAction: () => void }) => (
-  <div className={`relative flex flex-col p-4 rounded-xl border ${recommended ? 'bg-alphabag-darkgray border-alphabag-yellow  scale-105 z-10' : 'bg-alphabag-darkgray border-alphabag-gray'}`}>
-    {recommended && (
-      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-alphabag-yellow text-black text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg flex items-center">
-        <Crown size={10} className="mr-1" fill="currentColor" /> Best Value
-      </div>
-    )}
-    <div className="mb-2 text-center">
-      <h3 className="text-alphabag-subtext text-[9px] font-black uppercase tracking-[0.3em] mb-1.5 opacity-60">{tier}</h3>
-      <div className="text-3xl font-black mb-1.5 uppercase tracking-tighter text-alphabag-text">{price}</div>
-      {recommended && <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest mb-1.5">ELIGIBILITY: GENESIS HOLDER</div>}
-      <div className="text-alphabag-yellow font-black text-[9px] uppercase tracking-widest bg-alphabag-yellow/5 inline-block px-2.5 py-1 rounded border border-alphabag-yellow/20">{tokens}</div>
-    </div>
-    <ul className="space-y-2 mb-2 flex-1 text-[11px] font-bold">
-      {features.map((f, i) => (
-        <li key={i} className="flex items-center space-x-2.5 text-gray-400">
-          <div className="w-4 h-4 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
-            <CheckCircle2 size={8} className="text-green-400" />
-          </div>
-          <span className="uppercase tracking-widest opacity-80">{f}</span>
-        </li>
-      ))}
-    </ul>
-    <Button variant={recommended ? 'primary' : 'secondary'} size="lg" className="w-full font-black py-4 uppercase tracking-widest text-[11px] h-12 rounded-xl" onClick={onAction}>
-      {tier.includes('Free') ? 'Start for Free' : 'Secure Ultimate Access'}
-    </Button>
   </div>
 );

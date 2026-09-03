@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Briefcase, Crown, ShieldCheck, Zap, Rocket, CheckCircle2, Lock, ArrowRight } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { ArrowRight,Briefcase,Crown,ShieldCheck,Zap } from 'lucide-react';
+import React,{ useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 
 export const GenesisLanding: React.FC = () => {
-    const { open } = useWeb3Modal();
+    useWeb3Modal();
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
-    const [projectCount, setProjectCount] = useState(82); // This would eventually come from the backend
+    const [projectCount] = useState(82); // This would eventually come from the backend
 
     const handleClaimSpot = async () => {
         if (!isAuthenticated) {

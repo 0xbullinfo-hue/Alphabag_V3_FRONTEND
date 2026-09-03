@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { X, Globe, Shield, Tag, FileText, Send, Loader2 } from 'lucide-react';
-import { Button } from '../ui/Button';
+import { FileText,Globe,Shield,Tag,X } from 'lucide-react';
+import React,{ useState } from 'react';
 import { AlphaRadarService } from '../../services/alphaRadarService';
+import { Button } from '../ui/Button';
 
 interface FounderListingFormProps {
     isOpen: boolean;
     onClose: () => void;
-    onSuccess: () => void;
+    onSuccess?: () => void;
 }
 
 export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, onClose, onSuccess }) => {
@@ -27,7 +27,7 @@ export const FounderListingForm: React.FC<FounderListingFormProps> = ({ isOpen, 
         setIsSubmitting(true);
         try {
             await AlphaRadarService.submitProject(formData);
-            onSuccess();
+            onSuccess?.();
             onClose();
         } catch (error) {
             console.error("Submission failed", error);

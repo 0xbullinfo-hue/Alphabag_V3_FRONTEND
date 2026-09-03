@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useWallet } from '../../context/WalletContext';
-import { Search, Settings2, ExternalLink, Activity, Network, Wallet, Zap } from 'lucide-react';
+import { Activity,ExternalLink,Search,Settings2,Wallet,Zap } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
+import { useWallet } from '../../context/WalletContext';
 
 type Tab = 'ALL' | 'CEX' | 'WALLET';
 

@@ -1,11 +1,14 @@
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
-import { mainnet, bsc, polygon, arbitrum, base, avalanche } from 'wagmi/chains';
+import { createWeb3Modal,defaultWagmiConfig } from '@web3modal/wagmi/react';
+import { arbitrum,avalanche,base,bsc,mainnet,polygon } from 'wagmi/chains';
 
-// WalletConnect Project ID - uses environment variable or fallback to guarantee Web3Modal initializes
+// WalletConnect requires a real project ID. A placeholder causes background relay
+// failures on every page load, including public landing and teaser views.
 const rawProjectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
-const projectId = (rawProjectId && rawProjectId.trim() !== '') 
-  ? rawProjectId.trim() 
-  : '3fcc6bba6f1de962d911bb5b5c3dba68';
+const normalizedProjectId = rawProjectId?.trim() || '';
+const projectId = ['your_project_id', 'replace_me', 'changeme'].includes(normalizedProjectId.toLowerCase())
+  ? ''
+  : normalizedProjectId;
+const modalProjectId = projectId || '00000000000000000000000000000000';
 
 const isLocalhost = typeof window !== 'undefined' && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
 const shouldEnableWalletConnect = Boolean(projectId);
@@ -39,7 +42,7 @@ const chains = [
 
 export const config = defaultWagmiConfig({
   chains,
-  projectId,
+  projectId: modalProjectId,
   metadata,
   enableWalletConnect: shouldEnableWalletConnect,
   enableInjected: true,
@@ -50,7 +53,7 @@ export const config = defaultWagmiConfig({
 try {
   createWeb3Modal({
     wagmiConfig: config,
-    projectId,
+    projectId: modalProjectId,
     chains,
     enableAnalytics: false,
     themeMode: 'dark',
@@ -60,4 +63,4 @@ try {
   console.warn('[Web3Modal] Initialization skipped:', error);
 }
 
-export { chains, projectId, shouldEnableWalletConnect };
+export { chains,projectId,shouldEnableWalletConnect };

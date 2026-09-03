@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Shield, Zap, ArrowRight, Rocket, Target, User as UserIcon, Globe, Code, X } from 'lucide-react';
+import { ArrowRight,Code,Globe,Rocket,Shield,Target,User as UserIcon,X,Zap } from 'lucide-react';
+import React,{ useState } from 'react';
 import { Button } from '../ui/Button';
 
 interface OnboardingModalProps {

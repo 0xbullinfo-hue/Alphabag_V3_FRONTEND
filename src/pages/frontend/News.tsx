@@ -1,9 +1,8 @@
 
-import React, { useEffect, useState } from 'react';
+import { ArrowRight,Bookmark,Clock,Facebook,Instagram,Newspaper,Search,Send,Twitter,X,Zap } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { api } from '../../services/api';
 import { NewsItem } from '../../types';
-import { Clock, X, Zap, Newspaper, ArrowRight, Bookmark, Search, Twitter, Facebook, Instagram, Send } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 
 export const News: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);

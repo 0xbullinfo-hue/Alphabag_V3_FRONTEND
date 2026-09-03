@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { Key,Layers,Plus,Trash2 } from 'lucide-react';
+import React,{ useState } from 'react';
+import { Cell,Pie,PieChart,ResponsiveContainer,Tooltip } from 'recharts';
 import Swal from 'sweetalert2';
-import { Activity, Trash2, ArrowUpRight, ArrowDownRight, RefreshCcw, Plus, Key, TrendingUp, Layers } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const CHART_COLORS = [
     '#FCD535','#F97316','#22D3EE','#A78BFA','#34D399',
@@ -38,7 +37,7 @@ export const SUPPORTED_CEX = [
 ];
 
 export const CexBag: React.FC = () => {
-    const { tier } = useWallet();
+    useWallet();
     const { connections: connectedCex, removeConnection, connectExchange, totalBalance } = useCexConnections();
 
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useCallback,useState } from 'react';
 import { api } from '../services/api';
-import { MarketService } from '../services/MarketService';
 import { CEX_SYMBOL_TO_COINGECKO_ID } from '../services/config';
+import { MarketService } from '../services/MarketService';
 
 const STORAGE_KEY = 'alphabag_cex_connections';
 
@@ -11,7 +11,17 @@ export interface CexConnection {
     icon: string;
     apiKey: string;
     balance: number;
+    balances: CexAsset[];
     isConnected: boolean;
+}
+
+export interface CexAsset {
+    symbol: string;
+    name: string;
+    balance: number;
+    price: number;
+    value: number;
+    exchange: string;
 }
 
 export function useCexConnections() {
@@ -23,11 +33,6 @@ export function useCexConnections() {
             return [];
         }
     });
-
-    const save = useCallback((updated: CexConnection[]) => {
-        setConnections(updated);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    }, []);
 
     const addConnection = useCallback((conn: CexConnection) => {
         setConnections(prev => {
@@ -80,21 +85,29 @@ export function useCexConnections() {
             .map(sym => CEX_SYMBOL_TO_COINGECKO_ID[sym.toUpperCase()])
             .filter(Boolean);
 
-        let totalUsd = 0;
+        let priceData: Record<string, { usd?: number }> | null = null;
         if (coingeckoIds.length > 0) {
             try {
-                const priceData = await MarketService.getPrice(Array.from(new Set(coingeckoIds)));
-                if (priceData) {
-                    currencies.forEach(sym => {
-                        const id = CEX_SYMBOL_TO_COINGECKO_ID[sym.toUpperCase()];
-                        const price = id ? Number(priceData[id]?.usd || 0) : 0;
-                        totalUsd += balancesByCurrency[sym] * price;
-                    });
-                }
+                priceData = await MarketService.getPrice(Array.from(new Set(coingeckoIds)));
             } catch (priceErr) {
                 console.warn('[useCexConnections] Price lookup failed, balance will show as $0:', priceErr);
             }
         }
+
+        const balances = currencies.map((symbol): CexAsset => {
+            const id = CEX_SYMBOL_TO_COINGECKO_ID[symbol.toUpperCase()];
+            const price = id ? Number(priceData?.[id]?.usd || 0) : 0;
+            const balance = Number(balancesByCurrency[symbol] || 0);
+            return {
+                symbol,
+                name: symbol,
+                balance,
+                price,
+                value: balance * price,
+                exchange: exchangeInfo.name,
+            };
+        });
+        const totalUsd = balances.reduce((total, asset) => total + asset.value, 0);
 
         const conn: CexConnection = {
             id: exchangeInfo.id,
@@ -102,6 +115,7 @@ export function useCexConnections() {
             icon: exchangeInfo.icon,
             apiKey: apiKey.substring(0, 4) + '••••',
             balance: totalUsd,
+            balances,
             isConnected: true,
         };
         addConnection(conn);

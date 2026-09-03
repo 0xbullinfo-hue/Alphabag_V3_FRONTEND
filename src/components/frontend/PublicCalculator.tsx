@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, DollarSign, Percent, Activity } from 'lucide-react';
+import { Activity,DollarSign,Percent,TrendingDown,TrendingUp } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 
 type CalcMode = 'FUTURES' | 'DEGEN';
 type Direction = 'LONG' | 'SHORT';

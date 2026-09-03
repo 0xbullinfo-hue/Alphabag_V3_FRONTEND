@@ -1,9 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
+import { AlertCircle,ArrowDownLeft,ArrowUpRight,ExternalLink,RefreshCw } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { chainData } from '../../services/chainData';
-import { Transaction } from '../../types';
 import { WalletLabels } from '../../services/WalletLabels';
-import { RefreshCw, ExternalLink, ArrowUpRight, ArrowDownLeft, AlertCircle } from 'lucide-react';
+import { Transaction } from '../../types';
 
 interface TransactionFeedProps {
     address: string;

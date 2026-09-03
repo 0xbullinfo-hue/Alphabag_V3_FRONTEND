@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Shield, Zap, Rocket, CheckCircle2, Info, ArrowRight, Plus, Trash2, Link as LinkIcon, Lock } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import { Link as LinkIcon,Lock,Plus,Rocket,Trash2 } from 'lucide-react';
+import React,{ useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
-import Swal from 'sweetalert2';
 
 export const GenesisManifesto: React.FC = () => {
     const navigate = useNavigate();

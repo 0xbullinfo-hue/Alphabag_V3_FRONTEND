@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Shield, Key, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye,EyeOff,Key,Loader2,Shield,X } from 'lucide-react';
+import React,{ useState } from 'react';
 import { Button } from '../ui/Button';
 
 interface CexConnectModalProps {

@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  X, Briefcase, Wallet, Mail, ArrowRight, Loader, 
-  Shield, CheckCircle2, Zap, Rocket, Target, Send, Sparkles 
-} from 'lucide-react';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAccount, useSignMessage } from 'wagmi';
-import { Button } from '../ui/Button';
-import { useAuth } from '../../context/AuthContext';
+import {
+ArrowRight,
+CheckCircle2,
+Loader,
+Rocket,
+Send,
+Shield,
+Sparkles,
+Target,
+Wallet,
+X,
+Zap
+} from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAccount,useNetwork,useSignMessage } from 'wagmi';
+import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
+import { Button } from '../ui/Button';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -17,6 +27,7 @@ interface AuthModalProps {
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const { open } = useWeb3Modal();
   const { address: wagmiAddress, isConnected: wagmiIsConnected } = useAccount();
+  const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { siweLogin, isAuthenticated } = useAuth();
   
@@ -95,7 +106,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setLoading(true);
     setError('');
     try {
-      const message = `Sign in to AlphaBAG Protocol Hub.\nTimestamp: ${Date.now()}`;
+      const nonceResponse = await api.get('/api/auth/nonce');
+      const nonce = nonceResponse.data?.nonce;
+      if (!nonce) throw new Error('Could not initialize secure sign-in. Please try again.');
+
+      const issuedAt = new Date().toISOString();
+      const domain = window.location.host;
+      const message = `${domain} wants you to sign in with your Ethereum account:
+    ${address}
+
+    Sign in to AlphaBAG Protocol Hub.
+
+    URI: ${window.location.origin}
+    Version: 1
+    Chain ID: ${chain?.id || 1}
+    Nonce: ${nonce}
+    Issued At: ${issuedAt}`;
       
       const signature = await signMessageAsync({ message });
 

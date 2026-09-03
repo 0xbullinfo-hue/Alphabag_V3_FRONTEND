@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { X, ShieldCheck, ArrowRight, Zap, Globe, Crown, Smartphone, AlertTriangle, Loader2 } from 'lucide-react';
-import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
-import { bsc } from 'wagmi/chains';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { AlertTriangle,ArrowRight,Crown,ShieldCheck,Smartphone,X,Zap } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { useAccount,useBalance,useNetwork,useSwitchNetwork } from 'wagmi';
+import { bsc } from 'wagmi/chains';
 import { useAuth } from '../../context/AuthContext';
-import { Button } from '../ui/Button';
 import { TOKEN_GATING_CONFIG } from '../../services/config';
+import { Button } from '../ui/Button';
 
 interface UpgradeModalProps {
   isOpen: boolean;

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { Activity,AlertTriangle,Download,Layers,ShieldCheck } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { Button } from '../../components/ui/Button';
 import { fetchDefiPositions } from '../../services/mockData';
 import { DefiPosition } from '../../types';
-import { Button } from '../../components/ui/Button';
-import { Layers, Activity, Search, ShieldCheck, AlertTriangle, ChevronDown, ChevronUp, Download } from 'lucide-react';
 
 type Tab = 'ALL' | 'Lending' | 'Liquidity' | 'Staking' | 'Farming';
 

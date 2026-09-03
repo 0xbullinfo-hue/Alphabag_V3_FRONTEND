@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_COINS } from '../../services/mockData';
-import { Coin, PortfolioItem } from '../../types';
+import { ArrowLeft,BarChart,Share2,ShieldCheck,Star,Wallet,Zap } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { Link,useNavigate,useParams } from 'react-router-dom';
+import { Area,AreaChart,CartesianGrid,ResponsiveContainer,Tooltip,XAxis,YAxis } from 'recharts';
 import { Button } from '../../components/ui/Button';
-import { ArrowLeft, Lock, Star, Share2, Wallet, Zap, Globe, ShieldCheck, TrendingUp, BarChart, LogOut } from 'lucide-react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-import { GoogleGenAI } from "@google/genai";
 import { useWallet } from '../../context/WalletContext';
+import { MOCK_COINS } from '../../services/mockData';
+import { Coin,PortfolioItem } from '../../types';
 
 import { MarketService } from '../../services/MarketService';
+import { api } from '../../services/api';
 
 export const CoinDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -101,21 +101,12 @@ export const CoinDetail: React.FC = () => {
         setIsFetchingAi(true);
         setGroundingLinks([]);
         try {
-            const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-            const response = await ai.models.generateContent({
-                model: 'gemini-3-flash-preview',
-                contents: `Provide a professional, concise market update (max 3 sentences) for ${coinName} (${symbol}). Focus on recent price action, technical sentiment, and expert narrative using current real-time market data.`,
-                config: {
-                    tools: [{ googleSearch: {} }],
-                    temperature: 0.2
-                }
+            const response = await api.post('/api/ai/briefing', {
+                assets: [{ symbol, amount: 0 }],
+                userMessage: `Provide a concise market update for ${coinName} (${symbol}). Focus on recent price action, technical sentiment, and current market narrative.`,
+                tier: 'FREE',
             });
-            setAiInsight(response.text || "Market data is currently being calibrated. Technical sentiment remains constructive for top assets.");
-
-            const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-            if (chunks) {
-                setGroundingLinks(chunks);
-            }
+            setAiInsight(response.data?.briefing || "Market data is currently being calibrated. Technical sentiment remains constructive for top assets.");
         } catch (e) {
             console.error("AI Insight Error:", e);
             setAiInsight("Unable to fetch live technical analysis at this moment. Asset remains in a consolidation phase.");

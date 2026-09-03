@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Menu, Search, X, TrendingUp, Briefcase, LogOut, ChevronDown, ShieldCheck, Layers, Settings, Bell, Zap } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fetchGlobalStats } from '../../services/mockData';
+import { Bell,Briefcase,ChevronDown,LogOut,Menu,Search,Settings,X } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { Link,useLocation,useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { TierBadge } from '../ui/TierBadge';
-import { Button } from '../ui/Button';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { NotificationCenter } from './NotificationCenter';
-import { useWallet } from '../../context/WalletContext';
 import { IS_TEASER_MODE } from '../../services/config';
+import { Button } from '../ui/Button';
+import { NotificationCenter } from './NotificationCenter';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -16,15 +12,12 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
-  const [stats, setStats] = useState<any>(null);
   const { user, logout, isAuthenticated } = useAuth();
-  const { portfolioItems } = useWallet();
-  const [cexTotal, setCexTotal] = useState(0);
   const [searchValue, setSearchValue] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const [notifications, setNotifications] = useState<any[]>([
+  const [notifications] = useState<any[]>([
     {
       id: '1',
       type: 'SYSTEM',
@@ -36,37 +29,13 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
   ]);
   const navigate = useNavigate();
   const location = useLocation();
-  const { open } = useWeb3Modal();
-
-  const attemptConnect = async () => {
-    try {
-      await open();
-    } catch (e) {
-      console.error("Failed to open Web3Modal", e);
-    }
-  };
-
   useEffect(() => {
-    fetchGlobalStats().then(setStats);
-
     if (IS_TEASER_MODE && !['/', '/airdrop'].includes(location.pathname)) {
       navigate('/');
       return;
     }
 
-    // Calculate CEX Total
-    const savedCex = localStorage.getItem('alphabag_cex_connections');
-    if (savedCex) {
-      try {
-        const parsed = JSON.parse(savedCex);
-        const total = parsed.reduce((acc: number, item: any) => acc + (item.balance || 0), 0);
-        setCexTotal(total);
-      } catch (e) { console.error("Error parsing CEX data in Header", e); }
-    }
   }, [location.pathname, navigate]);
-
-  const dexTotal = portfolioItems?.reduce((acc, item) => acc + (item.value || 0), 0) || 0;
-  const totalAssets = dexTotal + cexTotal;
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

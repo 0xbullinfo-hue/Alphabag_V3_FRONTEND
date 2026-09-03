@@ -8,35 +8,35 @@
 //   5. Added proper error handling with user-friendly messages
 //   6. Added BAG token approval flow before mint
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  Crown, 
-  Zap, 
-  ExternalLink, 
-  Check, 
-  Lock, 
-  Coins, 
-  Layers, 
-  ArrowRight, 
-  Clock, 
-  Info,
-  CheckCircle2,
-  Award,
-  Wallet,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck
-} from 'lucide-react';
-import { useAccount, useBalance, useNetwork, useSwitchNetwork, useContractWrite, useWaitForTransaction, useContractRead, useContractReads } from 'wagmi';
-import { bsc } from 'wagmi/chains';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { useAuth } from '../../context/AuthContext';
-import { NFT_CONFIG, TOKEN_GATING_CONFIG } from '../../services/config';
-import { AlphaPassNFT, PassTier } from '../../types';
-import Swal from 'sweetalert2';
 import DOMPurify from 'dompurify';
+import {
+ArrowRight,
+Award,
+Check,
+CheckCircle2,
+ChevronLeft,
+ChevronRight,
+Clock,
+Coins,
+Crown,
+ExternalLink,
+Info,
+Layers,
+Loader2,
+Lock,
+ShieldCheck,
+Wallet,
+Zap
+} from 'lucide-react';
+import React,{ useEffect,useMemo,useState } from 'react';
+import Swal from 'sweetalert2';
 import { parseUnits } from 'viem';
+import { useAccount,useBalance,useContractRead,useContractReads,useContractWrite,useNetwork,useSwitchNetwork,useWaitForTransaction } from 'wagmi';
+import { bsc } from 'wagmi/chains';
+import { useAuth } from '../../context/AuthContext';
+import { NFT_CONFIG,TOKEN_GATING_CONFIG } from '../../services/config';
+import { AlphaPassNFT,PassTier } from '../../types';
 
 // ── CONTRACT ABIs ────────────────────────────────────────────────────────────
 

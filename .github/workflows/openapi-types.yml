@@ -26,5 +26,11 @@ jobs:
       - name: Verify generated OpenAPI types are up to date
         run: npm run verify:openapi-types
 
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
       - name: Build
         run: npm run build

@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => {
   const devPort = Number(env.VITE_DEV_PORT || '3005');
   const proxyTarget = env.VITE_API_BASE_URL || 'http://localhost:3003';
   const isProductionDeployment = mode === 'production' && env.VITE_ENVIRONMENT === 'production';
+  const isDevelopment = mode === 'development';
+  const contentSecurityPolicy = isDevelopment
+    ? "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' http://localhost:3003 http://127.0.0.1:3003 https: wss:; font-src 'self' data: https:;"
+    : "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https: wss:; font-src 'self' data: https:;";
 
   if (isProductionDeployment) {
     if (!env.VITE_API_BASE_URL) {
@@ -54,9 +58,26 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
+      {
+        name: 'inject-content-security-policy',
+        transformIndexHtml() {
+          return {
+            tags: [
+              {
+                tag: 'meta',
+                attrs: {
+                  'http-equiv': 'Content-Security-Policy',
+                  content: contentSecurityPolicy,
+                },
+                injectTo: 'head-prepend',
+              },
+            ],
+          };
+        },
+      },
       tailwindcss(),
       nodePolyfills({
-        include: ['buffer', 'crypto', 'stream', 'util'],
+        include: ['buffer', 'stream', 'util'],
         globals: { Buffer: true, global: true, process: true },
         protocolImports: true,
       })
@@ -77,10 +98,8 @@ export default defineConfig(({ mode }) => {
           manualChunks: {
             vendor: ['react', 'react-dom', 'react-router-dom'],
             web3: ['wagmi', 'viem', '@web3modal/wagmi'],
-            walletconnect: ['@walletconnect/ethereum-provider'],
             recharts: ['recharts'],
             ui: ['lucide-react', 'framer-motion', 'sweetalert2'],
-            ai: ['@google/genai'],
             query: ['@tanstack/react-query']
           }
         }

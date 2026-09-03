@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Rocket, Skull, AlertTriangle, Activity, Calculator as CalculatorIcon, ArrowRightLeft, Percent } from 'lucide-react';
+import { Activity,AlertTriangle,ArrowRightLeft,Calculator as CalculatorIcon,Percent,Rocket,Skull } from 'lucide-react';
+import React,{ useState } from 'react';
+import { api } from '../../services/api';
 
 type CalcMode = 'LEVERAGE' | 'SPOT' | 'DEGEN' | 'IL' | 'CONVERTER';
 type Direction = 'LONG' | 'SHORT';
@@ -43,6 +44,7 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
             type="text"
             inputMode="decimal"
             value={value}
+            disabled={minimal}
             onChange={e => {
                 const v = e.target.value;
                 if (v === '' || /^\d*\.?\d*$/.test(v)) {
@@ -50,7 +52,7 @@ const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'b
                 }
             }}
             placeholder={placeholder}
-            className={`bg-alphabag-dark border ${borderClass} text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left ${minimal ? 'px-3 py-1.5' : 'px-3.5 py-2.5'}`}
+            className={`bg-alphabag-dark border ${borderClass} text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left disabled:cursor-not-allowed disabled:opacity-70 ${minimal ? 'px-3 py-1.5' : 'px-3.5 py-2.5'}`}
             autoComplete="off"
         />
         {labelSub && <span className="text-alphabag-subtext/60 text-[11px] font-medium h-4 mt-0.5">{labelSub}</span>}
@@ -70,27 +72,27 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
     // Leverage State
     const [direction, setDirection] = useState<Direction>('LONG');
-    const [levEntry, setLevEntry] = useState('');
-    const [levMargin, setLevMargin] = useState('');
+    const [levEntry, setLevEntry] = useState(minimal ? '65000' : '');
+    const [levMargin, setLevMargin] = useState(minimal ? '1000' : '');
     const [levSlider, setLevSlider] = useState(10);
-    const [levTP, setLevTP] = useState('');
-    const [levSL, setLevSL] = useState('');
+    const [levTP, setLevTP] = useState(minimal ? '70000' : '');
+    const [levSL, setLevSL] = useState(minimal ? '62500' : '');
 
     // Spot State
-    const [spotBuy, setSpotBuy] = useState('');
-    const [spotSell, setSpotSell] = useState('');
-    const [spotAmount, setSpotAmount] = useState('');
+    const [spotBuy, setSpotBuy] = useState(minimal ? '3200' : '');
+    const [spotSell, setSpotSell] = useState(minimal ? '3600' : '');
+    const [spotAmount, setSpotAmount] = useState(minimal ? '2.5' : '');
     const [spotFee, setSpotFee] = useState('0.1');
 
     // Degen State
-    const [degenInv, setDegenInv] = useState('');
-    const [degenEntryMC, setDegenEntryMC] = useState('');
-    const [degenTargetMC, setDegenTargetMC] = useState('');
+    const [degenInv, setDegenInv] = useState(minimal ? '1000' : '');
+    const [degenEntryMC, setDegenEntryMC] = useState(minimal ? '250000' : '');
+    const [degenTargetMC, setDegenTargetMC] = useState(minimal ? '1000000' : '');
     const [degenRugProb, setDegenRugProb] = useState(30);
 
     // IL State
-    const [ilPriceA, setIlPriceA] = useState('');
-    const [ilPriceB, setIlPriceB] = useState('');
+    const [ilPriceA, setIlPriceA] = useState(minimal ? '50' : '');
+    const [ilPriceB, setIlPriceB] = useState(minimal ? '10' : '');
 
     // Converter State
     const [convAmount, setConvAmount] = useState('1');
@@ -104,31 +106,32 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     });
 
     React.useEffect(() => {
+        if (minimal) return;
+
         const fetchLivePrices = async () => {
             try {
-                const response = await fetch('https://api.binance.com/api/v3/ticker/price');
-                const data = await response.json();
-                
-                // Binance symbols typically end with USDT
-                const symbolsToMap: Record<string, string> = {
-                    'BTCUSDT': 'BTC',
-                    'ETHUSDT': 'ETH',
-                    'SOLUSDT': 'SOL',
-                    'BNBUSDT': 'BNB',
-                    'XRPUSDT': 'XRP',
-                    'ADAUSDT': 'ADA',
-                    'AVAXUSDT': 'AVAX',
-                    'DOGEUSDT': 'DOGE'
+                const response = await api.get('/api/market/prices', {
+                    params: { ids: 'bitcoin,ethereum,solana,binancecoin,ripple,cardano,avalanche-2,dogecoin' },
+                });
+                const symbolsToIds: Record<string, string> = {
+                    BTC: 'bitcoin',
+                    ETH: 'ethereum',
+                    SOL: 'solana',
+                    BNB: 'binancecoin',
+                    XRP: 'ripple',
+                    ADA: 'cardano',
+                    AVAX: 'avalanche-2',
+                    DOGE: 'dogecoin',
                 };
 
-                const newRates = { ...rates };
-                data.forEach((item: any) => {
-                    if (symbolsToMap[item.symbol]) {
-                        newRates[symbolsToMap[item.symbol]] = parseFloat(item.price);
-                    }
+                setRates((currentRates) => {
+                    const nextRates = { ...currentRates };
+                    Object.entries(symbolsToIds).forEach(([symbol, id]) => {
+                        const price = Number(response.data?.[id]?.usd);
+                        if (Number.isFinite(price) && price > 0) nextRates[symbol] = price;
+                    });
+                    return nextRates;
                 });
-                
-                setRates(newRates);
             } catch (error) {
                 console.error("Failed to fetch live prices:", error);
             }
@@ -137,7 +140,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         fetchLivePrices();
         const interval = setInterval(fetchLivePrices, 30000); // Update every 30s
         return () => clearInterval(interval);
-    }, []);
+    }, [minimal]);
 
     const formatNum = (val: number, decimals: number = 2) => {
         return val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
@@ -463,7 +466,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} />
                                 <div className="flex flex-col gap-1">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Token</label>
-                                    <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold">
+                                    <select value={convFrom} disabled={minimal} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-70">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>
@@ -477,7 +480,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Token</label>
-                                    <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold">
+                                    <select value={convTo} disabled={minimal} onChange={e => setConvTo(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-70">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>

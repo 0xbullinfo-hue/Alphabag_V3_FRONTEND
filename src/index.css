@@ -241,7 +241,6 @@ input[type="time"] {
 .screener-container .text-\[12px\] {
   font-size: 0.85rem !important;
 }
-.screener-container .text-[14px],
 .screener-container .text-\[14px\] {
   font-size: 15.5px !important;
 }
@@ -306,11 +305,9 @@ input[type="time"] {
 .calculator-container .text-sm {
   font-size: 1.02rem !important;
 }
-.calculator-container .text-[11px],
 .calculator-container .text-\[11px\] {
   font-size: 13.5px !important;
 }
-.calculator-container .text-[10px],
 .calculator-container .text-\[10px\] {
   font-size: 12.5px !important;
 }

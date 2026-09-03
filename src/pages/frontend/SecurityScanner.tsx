@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useAccount, useWalletClient } from 'wagmi';
-import { ShieldCheck, ShieldAlert, AlertTriangle, CheckCircle, RefreshCw, Key, ArrowRight, Lock, HelpCircle } from 'lucide-react';
+import { AlertTriangle,CheckCircle,Key,RefreshCw,ShieldAlert,ShieldCheck } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { useAccount,useWalletClient } from 'wagmi';
 import { Button } from '../../components/ui/Button';
+import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 import { api } from '../../services/api';
-import { TOKEN_GATING_CONFIG } from '../../services/config';
 
 // ERC-20 Minimal ABI for approve transaction
 const ERC20_ABI = [
@@ -62,6 +62,7 @@ export const SecurityScanner: React.FC = () => {
     const { address: connectedAddress, isConnected } = useAccount();
     const { data: walletClient } = useWalletClient();
     const { addToast } = useWallet();
+    const { isAuthenticated } = useAuth();
 
     const [scanAddress, setScanAddress] = useState('');
     const [selectedChain, setSelectedChain] = useState<ScanChain>(SUPPORTED_CHAINS[1]); // Default to BSC
@@ -184,6 +185,10 @@ export const SecurityScanner: React.FC = () => {
 
     const handleQuickScan = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!isAuthenticated) {
+            window.dispatchEvent(new Event('open-login-modal'));
+            return;
+        }
         fetchApprovals(scanAddress, selectedChain);
     };
 
@@ -205,59 +210,66 @@ export const SecurityScanner: React.FC = () => {
                         <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
                             <ShieldCheck size={20} />
                         </div>
-                        <h1 className="text-3xl font-black text-white tracking-tighter uppercase">
-                            Security <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600 ">Radar</span>
+                        <h1 className="text-3xl font-black text-white tracking-tight uppercase">
+                            Security <span className="text-alphabag-yellow">Radar</span>
                         </h1>
                     </div>
-                    <p className="text-alphabag-subtext text-xs font-medium uppercase tracking-[0.2em] mt-1">
-                        DeBank-style Approval Revocation & Security Scanner
+                    <p className="text-alphabag-subtext text-xs font-medium mt-1">
+                        Review token allowances before they can be used by connected contracts.
                     </p>
                 </div>
             </div>
 
             {/* Quick Scan Input */}
-            <div className="glass-panel p-4 rounded-2xl relative overflow-hidden border border-white/5">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
                 
-                <form onSubmit={handleQuickScan} className="flex flex-col lg:flex-row items-center gap-2">
-                    <div className="w-full lg:w-1/4">
-                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1.5">Scanning Network</label>
-                        <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
+                <form onSubmit={handleQuickScan} className="space-y-4">
+                    <div>
+                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-2">Network</label>
+                        <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
                             {SUPPORTED_CHAINS.map(chain => (
                                 <button
                                     key={chain.id}
                                     type="button"
                                     onClick={() => setSelectedChain(chain)}
-                                    className={`p-2.5 rounded-xl border flex flex-col items-center justify-center gap-1.5 transition-all group ${selectedChain.id === chain.id ? 'bg-alphabag-yellow/10 border-alphabag-yellow text-white' : 'bg-black/30 border-white/5 hover:border-white/20 text-alphabag-subtext'}`}
+                                    className={`shrink-0 h-9 px-3 rounded-md border flex items-center justify-center gap-2 text-[10px] font-bold transition-colors ${selectedChain.id === chain.id ? 'bg-alphabag-yellow text-alphabag-black border-alphabag-yellow' : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-muted'}`}
                                 >
-                                    <img src={chain.logo} className="w-5 h-5 object-contain" alt={chain.name} />
-                                    <span className="text-[8px] font-black uppercase tracking-wider block sm:hidden md:block">{chain.name.split(' ')[0]}</span>
+                                    <img src={chain.logo} className="w-4 h-4 object-contain" alt="" />
+                                    <span>{chain.name}</span>
                                 </button>
                             ))}
                         </div>
                     </div>
 
+                    <div className="flex flex-col lg:flex-row lg:items-end gap-3">
                     <div className="w-full lg:flex-1">
-                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1.5">Wallet Address</label>
+                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-2">Wallet Address</label>
                         <input
                             type="text"
                             value={scanAddress}
                             onChange={(e) => setScanAddress(e.target.value)}
                             placeholder="Paste EVM Wallet Address (0x...)"
-                            className="w-full bg-black/40 border border-white/10 text-white font-mono text-sm rounded-xl p-3 outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow transition-all"
+                            className="w-full h-11 bg-alphabag-black border border-alphabag-gray text-white font-mono text-sm rounded-md px-3 outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow transition-colors"
                             required
                         />
                     </div>
 
-                    <div className="w-full lg:w-auto self-end">
+                    <div className="w-full lg:w-auto">
                         <Button
                             type="submit"
                             isLoading={loading}
-                            className="w-full lg:w-auto px-8 py-3.5 text-xs font-black tracking-widest uppercase bg-alphabag-yellow text-alphabag-black"
+                            className="w-full lg:w-auto h-11 px-6 text-xs font-black tracking-widest uppercase bg-alphabag-yellow text-alphabag-black"
                             leftIcon={<RefreshCw size={14} className={loading ? 'animate-spin' : ''} />}
                         >
-                            {loading ? 'Scanning Approvals...' : 'Scan Approvals'}
+                            {loading ? 'Scanning Approvals...' : isAuthenticated ? 'Scan Approvals' : 'Connect to Scan'}
                         </Button>
                     </div>
+                    </div>
+                    {!isAuthenticated && (
+                        <p className="text-xs text-alphabag-subtext">
+                            Sign in with your wallet to scan approvals and revoke permissions.
+                        </p>
+                    )}
                 </form>
             </div>
 
@@ -299,8 +311,8 @@ export const SecurityScanner: React.FC = () => {
             )}
 
             {/* Main Scanner Results */}
-            <div className="bg-black/20 border border-white/5 rounded-2xl overflow-hidden p-4">
-                <div className="flex justify-between items-center mb-2">
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden">
+                <div className="flex justify-between items-center px-4 py-3 border-b border-alphabag-gray">
                     <span className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                         <Key size={14} className="text-alphabag-yellow" /> Active Approvals Result
                     </span>
@@ -312,18 +324,18 @@ export const SecurityScanner: React.FC = () => {
                 </div>
 
                 {loading ? (
-                    <div className="py-24 text-center space-y-2">
+                    <div className="py-16 text-center space-y-2">
                         <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto"></div>
                         <p className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow animate-pulse">Running smart contract allowance check...</p>
                     </div>
                 ) : approvals.length === 0 ? (
-                    <div className="py-24 text-center max-w-sm mx-auto space-y-2">
-                        <div className="w-12 h-12 bg-white/5 border border-white/10 text-alphabag-subtext flex items-center justify-center rounded-2xl mx-auto">
+                    <div className="py-16 text-center max-w-md mx-auto space-y-3 px-6">
+                        <div className="w-11 h-11 bg-alphabag-black border border-alphabag-gray text-alphabag-yellow flex items-center justify-center rounded-md mx-auto">
                             <ShieldCheck size={26} />
                         </div>
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider">Zero Vulnerabilities Checked</h3>
+                        <h3 className="text-sm font-black text-white uppercase tracking-wider">Ready to Scan</h3>
                         <p className="text-xs text-alphabag-subtext font-medium leading-relaxed">
-                            No token approvals detected or no scan has been initiated. Connect your wallet above or paste an address to begin scanning.
+                            Select a network and enter an EVM wallet address to review active token approvals.
                         </p>
                     </div>
                 ) : (

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Crown } from 'lucide-react';
+import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../ui/Button';
 

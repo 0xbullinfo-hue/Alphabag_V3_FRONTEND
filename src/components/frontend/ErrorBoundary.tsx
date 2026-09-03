@@ -1,5 +1,5 @@
-import React, { ErrorInfo, ReactNode } from 'react';
-import { ShieldAlert, RefreshCw } from 'lucide-react';
+import { RefreshCw,ShieldAlert } from 'lucide-react';
+import React,{ ErrorInfo,ReactNode } from 'react';
 import { Button } from '../ui/Button';
 
 interface Props {

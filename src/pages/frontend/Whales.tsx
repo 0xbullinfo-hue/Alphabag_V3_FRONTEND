@@ -1,15 +1,15 @@
 
+import { ArrowRight,Bell,Eye,Plus,ShieldAlert,Trash2 } from 'lucide-react';
 import React from 'react';
-import { useWallet } from '../../context/WalletContext';
-import { Eye, Plus, ArrowRight, Trash2, AlertCircle, ShieldAlert, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '../../components/ui/Button';
 import { UpgradeCmd } from '../../components/frontend/UpgradeCmd';
+import { Button } from '../../components/ui/Button';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { useWallet } from '../../context/WalletContext';
 
 
-import { Chain } from '../../types';
 import { X } from 'lucide-react';
+import { Chain,TrackedWallet } from '../../types';
 
 // Sub-component to handle individual whale data fetching
 const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) => void, hasAlerts: boolean }> = ({ whale, removeTrackedWallet, hasAlerts }) => {
@@ -101,7 +101,7 @@ const DEFAULT_SMART_WHALES: TrackedWallet[] = [
 ];
 
 export const Whales: React.FC = () => {
-    const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, tier, whaleAlerts } = useWallet();
+    const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, whaleAlerts } = useWallet();
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const whaleWallets = safeTrackedWallets.filter(w => w?.type === 'WHALE');
     const activeWhales = whaleWallets.length > 0 ? whaleWallets : DEFAULT_SMART_WHALES;

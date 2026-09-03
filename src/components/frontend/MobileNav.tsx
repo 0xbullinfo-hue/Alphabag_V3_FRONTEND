@@ -1,7 +1,7 @@
 
+import { BarChart3,Bot,LayoutDashboard,Radio,Wallet } from 'lucide-react';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Wallet, Radio, Bot, BarChart3 } from 'lucide-react';
+import { Link,useLocation } from 'react-router-dom';
 
 export const MobileNav: React.FC = () => {
   const location = useLocation();

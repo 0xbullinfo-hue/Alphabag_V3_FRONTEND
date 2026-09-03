@@ -1,18 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { 
-    Calendar, MapPin, Link as LinkIcon, Users, MessageSquare, 
-    Heart, Share2, Rocket, Edit3, ShieldCheck, Zap, ArrowLeft,
-    Flame, CheckCircle2, Globe, ExternalLink, Bookmark, BarChart,
-    TrendingUp, Award, DollarSign, Save, X, Camera
+import {
+ArrowLeft,
+Calendar,
+Camera,
+CheckCircle2,Globe,
+MapPin,
+MessageSquare,
+Rocket,
+Share2,
+ShieldCheck,
+Users,
+Zap
 } from 'lucide-react';
+import React,{ useEffect,useRef,useState } from 'react';
+import { useNavigate,useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 import { api } from '../../services/api';
-import { Project, Post } from '../../types';
-import Swal from 'sweetalert2';
-import { extractSyncData, injectSyncData } from '../../services/syncService';
+import { extractSyncData,injectSyncData } from '../../services/syncService';
+import { Post,Project } from '../../types';
 
 const getProfileName = (userObj: any) => {
     if (userObj?.email) {
@@ -95,7 +102,11 @@ export const Profile: React.FC = () => {
 
     useEffect(() => {
         const fetchProfileData = async () => {
-            if (!targetId) return;
+            if (!targetId) {
+                setProfileUser(null);
+                setIsLoading(false);
+                return;
+            }
             setIsLoading(true);
             try {
                 // Fetch latest user data if it's "me"
@@ -239,6 +250,28 @@ export const Profile: React.FC = () => {
         return (
             <div className="min-h-screen bg-alphabag-black flex items-center justify-center">
                 <div className="w-8 h-8 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    if (!profileUser) {
+        return (
+            <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center px-4">
+                <div className="w-full max-w-md border border-alphabag-gray bg-alphabag-darkgray rounded-lg p-6 text-center">
+                    <div className="w-11 h-11 mx-auto mb-4 rounded-md bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow flex items-center justify-center">
+                        <ShieldCheck size={22} />
+                    </div>
+                    <h1 className="text-lg font-black text-alphabag-text uppercase">Profile unavailable</h1>
+                    <p className="mt-2 text-sm text-alphabag-subtext leading-relaxed">
+                        Connect and sign in with your wallet to view and manage your AlphaBAG profile.
+                    </p>
+                    <Button
+                        className="mt-5 w-full"
+                        onClick={() => window.dispatchEvent(new Event('open-login-modal'))}
+                    >
+                        Connect wallet
+                    </Button>
+                </div>
             </div>
         );
     }

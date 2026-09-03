@@ -1,4 +1,4 @@
-import { Coin, NewsItem, PortfolioItem, TradeSignal, SystemService, AuditLog, UserGrowthData, Integration, DefiPosition } from '../types';
+import { AuditLog,Coin,DefiPosition,Integration,NewsItem,PortfolioItem,SystemService,TradeSignal,UserGrowthData } from '../types';
 import { api } from './api';
 
 export const fetchHoldingsForAddress = async (address: string, chain: string = 'ETH'): Promise<PortfolioItem[]> => {

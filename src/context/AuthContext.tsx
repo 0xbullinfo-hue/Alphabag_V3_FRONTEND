@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '../types';
-import { useAccount, useDisconnect, useBalance } from 'wagmi';
+import React,{ createContext,useContext,useEffect,useState } from 'react';
+import { useAccount,useBalance,useDisconnect } from 'wagmi';
 import { bsc } from 'wagmi/chains';
-import { TOKEN_GATING_CONFIG } from '../services/config';
 import { api } from '../services/api';
+import { TOKEN_GATING_CONFIG } from '../services/config';
+import { User } from '../types';
 
 // SECURITY: Dev override is now OPT-IN via env var, never automatic.
 // To enable in local development, set VITE_ENABLE_DEV_ULTIMATE=true in .env
@@ -165,6 +165,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     disconnect();
   };
 
+  useEffect(() => {
+    const handleAuthExpired = () => logout();
+    window.addEventListener('auth:expired', handleAuthExpired);
+    return () => window.removeEventListener('auth:expired', handleAuthExpired);
+  }, [disconnect]);
+
   const upgradeToUltimate = async (walletAddress: string): Promise<boolean> => {
     if (!user) return false;
     try {
@@ -191,7 +197,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sessionStorage.setItem('alphabag_user', JSON.stringify(updated));
   };
 
-  const completeOnboarding = async (accountType: 'FOUNDER' | 'TRADER', profileData: any) => {
+  const completeOnboarding = async (accountType: 'FOUNDER' | 'TRADER') => {
     if (!user) return;
     const updatedUser = { 
       ...user, 

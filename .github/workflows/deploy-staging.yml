@@ -31,8 +31,13 @@ jobs:
           npm -v
 
       - name: Install Dependencies
-        run: |
-          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
 
       - name: Build Application (Staging)
         run: npm run build
@@ -42,7 +47,6 @@ jobs:
           VITE_MARKET_PROXY_BASE_URL: ${{ secrets.VITE_MARKET_PROXY_BASE_URL_STAGING }}
 
           VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.VITE_WALLETCONNECT_PROJECT_ID }}
-          VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
 
           VITE_BAG_TOKEN_ADDRESS_MAINNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_MAINNET }}
           VITE_BAG_TOKEN_ADDRESS_TESTNET: ${{ secrets.VITE_BAG_TOKEN_ADDRESS_TESTNET }}
@@ -55,10 +59,6 @@ jobs:
           VITE_DEMO_MODE: false
           VITE_ENABLE_BACKGROUND_SYNC: ${{ secrets.VITE_ENABLE_BACKGROUND_SYNC }}
 
-          VITE_MORALIS_API_KEY: ${{ secrets.VITE_MORALIS_API_KEY }}
-          VITE_COVALENT_API_KEY: ${{ secrets.VITE_COVALENT_API_KEY }}
-          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
-          VITE_BIRDEYE_API_KEY: ${{ secrets.VITE_BIRDEYE_API_KEY }}
 
       - name: Validate FTP Secrets
         run: |

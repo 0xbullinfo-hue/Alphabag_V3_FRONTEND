@@ -1,10 +1,10 @@
 
 import type {
-  AirdropStatusResponse as OpenAPIAirdropStatusResponse,
-  ClaimMissionResponse as OpenAPIClaimMissionResponse,
-  Mission as OpenAPIMission,
-  MissionListResponse as OpenAPIMissionListResponse,
-  PayoutRequest as OpenAPIPayoutRequest,
+AirdropStatusResponse as OpenAPIAirdropStatusResponse,
+ClaimMissionResponse as OpenAPIClaimMissionResponse,
+Mission as OpenAPIMission,
+MissionListResponse as OpenAPIMissionListResponse,
+PayoutRequest as OpenAPIPayoutRequest,
 } from './types/openapi-contracts';
 
 export interface Coin {
@@ -21,7 +21,7 @@ export interface Coin {
 }
 
 // Strict 2-tier system as per requirements
-export type UserTier = 'FREE' | 'ULTIMATE';
+export type UserTier = 'FREE' | 'PREMIUM' | 'ALPHA_VIP' | 'ULTIMATE';
 export type PassTier = 'FREE' | 'PREMIUM' | 'ALPHA_VIP';
 
 export interface AlphaPassNFT {
@@ -40,6 +40,7 @@ export interface User {
   email: string;
   tier: UserTier;
   verifiedWallet?: string;
+  walletAddress?: string;
   alphaAiUsageSeconds: number;
   lastAlphaAiReset: string;
   isAdmin: boolean;
@@ -98,7 +99,10 @@ export interface WalletEntry {
   label: string;
   chain: Chain;
   type: 'PORTFOLIO' | 'WHALE';
+  createdAt?: string;
 }
+
+export type TrackedWallet = WalletEntry;
 
 export interface PortfolioItem {
   coinId: string;
@@ -340,13 +344,17 @@ export interface CovalentToken {
 export interface TokenBalance {
   symbol: string;
   name: string;
-  decimals: number;
+  decimals?: number;
   balance: string; // Raw balance
-  guiBalance: number; // Human readable
+  guiBalance?: number; // Human readable
   price?: number;
   value?: number;
-  tokenAddress: string;
+  tokenAddress?: string;
+  contractAddress?: string;
   logo?: string;
   chain?: string; // Added to track source chain
+  priceUSD?: number;
+  valueUSD?: number;
+  change24h?: number;
   isMockData?: boolean; // True when this row came from a mock/fallback source, not a live API
 }

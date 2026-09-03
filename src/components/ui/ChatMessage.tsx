@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { Bot, User, Copy, Check, ExternalLink } from 'lucide-react';
+import { Bot,Check,Copy,ExternalLink,User } from 'lucide-react';
+import React,{ useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Area,AreaChart,Cell,Legend,Pie,PieChart,Tooltip as RechartsTooltip,ResponsiveContainer,XAxis,YAxis } from 'recharts';
 import remarkGfm from 'remark-gfm';
 
 interface ChatMessageProps {
@@ -70,7 +70,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
-                                    {data.map((entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />)}
+                                    {data.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />)}
                                 </Pie>
                                 <RechartsTooltip contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '8px', color: '#FFFFFF' }} itemStyle={{ color: '#FFFFFF' }} />
                                 <Legend verticalAlign="bottom" height={36} iconSize={8} formatter={(val) => <span className="text-[10px] uppercase text-alphabag-muted ml-1">{val}</span>} />
@@ -136,21 +136,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             layout
             initial={{ opacity: 0, y: 15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            className={`flex w-full ${isAi ? 'justify-start' : 'justify-end'} group mt-2 mb-2`}
+            className={`flex w-full ${isAi ? 'justify-start' : 'justify-end'} group my-1.5`}
         >
-            <div className={`flex max-w-[85%] sm:max-w-3xl gap-2 w-full ${isAi ? 'flex-row' : 'flex-row-reverse'}`}>
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${isAi ? 'bg-alphabag-yellow text-alphabag-black' : 'bg-alphabag-darkgray text-zinc-50 border border-alphabag-border'}`}>
-                    {isAi ? <Bot size={20} /> : <User size={20} />}
+            <div className={`flex max-w-[92%] sm:max-w-3xl gap-2 w-full ${isAi ? 'flex-row' : 'flex-row-reverse'}`}>
+                <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${isAi ? 'bg-alphabag-yellow text-alphabag-black' : 'bg-alphabag-darkgray text-zinc-50 border border-alphabag-border'}`}>
+                    {isAi ? <Bot size={15} /> : <User size={15} />}
                 </div>
 
-                <div className={`relative p-5 rounded-2xl text-sm leading-relaxed shadow-lg overflow-hidden flex-1 ${isAi
-                    ? 'bg-alphabag-black/50 border-l-2 border-alphabag-yellow pl-4 text-zinc-50'
-                    : 'bg-gradient-to-br from-alphabag-darkgray to-alphabag-black border border-alphabag-border text-zinc-50 w-full max-w-fit ml-auto'
+                <div className={`relative px-3 py-2.5 rounded-md text-sm leading-relaxed overflow-hidden flex-1 ${isAi
+                    ? 'bg-alphabag-black/30 border-l-2 border-alphabag-yellow text-zinc-50'
+                    : 'bg-alphabag-dark border border-alphabag-gray text-zinc-50 w-full max-w-fit ml-auto'
                     }`}>
                     {isAi && (
                         <button
                             onClick={handleCopy}
-                            className="absolute top-3 right-3 p-1.5 rounded-lg bg-alphabag-darkgray text-alphabag-muted hover:text-white border border-alphabag-border hover:bg-alphabag-border/50 transition-all opacity-0 group-hover:opacity-100 z-10"
+                            className="absolute top-2 right-2 p-1 rounded-md bg-alphabag-darkgray text-alphabag-muted hover:text-white border border-alphabag-border hover:bg-alphabag-border/50 transition-all opacity-0 group-hover:opacity-100 z-10"
                             title="Copy output"
                         >
                             {copied ? <Check size={14} className="text-alphabag-yellow" /> : <Copy size={14} />}

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Sidebar } from './Sidebar';
+import { AnimatePresence } from 'framer-motion';
+import { AlertCircle,CheckCircle,Info,X } from 'lucide-react';
+import React,{ useState } from 'react';
+import { useWallet } from '../../context/WalletContext';
+import { PageTransition } from '../ui/PageTransition';
 import { Header } from './Header';
 import { MobileNav } from './MobileNav';
-import { useWallet } from '../../context/WalletContext';
-import { X, CheckCircle, Info, AlertCircle } from 'lucide-react';
-import { AnimatePresence } from 'framer-motion';
-import { PageTransition } from '../ui/PageTransition';
+import { Sidebar } from './Sidebar';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

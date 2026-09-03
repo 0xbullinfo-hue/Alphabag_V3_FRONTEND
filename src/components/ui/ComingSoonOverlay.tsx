@@ -1,5 +1,5 @@
-import React from 'react';
 import { Lock } from 'lucide-react';
+import React from 'react';
 import { Button } from './Button';
 
 interface ComingSoonOverlayProps {

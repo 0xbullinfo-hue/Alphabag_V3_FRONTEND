@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useWallet } from '../../context/WalletContext';
+import { AlertTriangle,Briefcase,PieChart as PieChartIcon,Radio,Search,ShieldCheck,TrendingUp } from 'lucide-react';
+import React,{ useEffect,useMemo,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PieChart as PieChartIcon, Briefcase, Layers, Wallet as WalletIcon, ArrowUpRight, TrendingUp, Search, Radio, ChevronRight, Eye, ShieldCheck, HelpCircle, AlertTriangle } from 'lucide-react';
+import { Cell,Pie,PieChart as RePieChart,ResponsiveContainer } from 'recharts';
 import Swal from 'sweetalert2';
-import { PieChart as RePieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { useWallet } from '../../context/WalletContext';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
@@ -103,21 +103,6 @@ export const MyAlphabag: React.FC = () => {
         };
     }, [selectedWallet, auditingWallet, dexWallets]);
 
-    const triggerComingSoon = (feature: string) => {
-        Swal.fire({
-            title: 'COMING SOON',
-            text: `${feature} is in final testing. Launching in Phase 2.0.`,
-            icon: 'info',
-            confirmButtonText: 'ACKNOWLEDGE',
-            confirmButtonColor: '#fcd535',
-            background: 'var(--panel-color)',
-            color: 'var(--text-color)',
-            customClass: {
-                popup: 'border border-alphabag-gray rounded-2xl',
-                confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
-            }
-        });
-    };
 
     const allocationData = useMemo(() => {
         const dataMap: Record<string, { name: string, value: number, color: string }> = {

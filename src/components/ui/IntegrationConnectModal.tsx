@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Key, Shield, AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertTriangle,Key,Loader2,Shield,X } from 'lucide-react';
+import React,{ useState } from 'react';
 import { Integration } from '../../types';
 import { Button } from './Button';
 

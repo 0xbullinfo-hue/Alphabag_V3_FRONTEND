@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Search, TrendingUp, TrendingDown, Star, RefreshCw, Activity, BarChart3 } from 'lucide-react';
+import { BarChart3,RefreshCw,Search,Star } from 'lucide-react';
+import React,{ useCallback,useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MarketService } from '../../services/MarketService';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { MarketService } from '../../services/MarketService';
 
 interface CoinData {
   id: string;

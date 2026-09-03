@@ -1,8 +1,7 @@
-import { ONE_MINUTE } from './constants';
-import { API_CONFIG, DATA_SOURCE_CONFIG } from './config';
 import { api } from './api';
+import { DATA_SOURCE_CONFIG } from './config';
+import { ONE_MINUTE } from './constants';
 
-const MARKET_PROXY_BASE = API_CONFIG.MARKET_PROXY_BASE_URL;
 
 interface CacheItem { data: any; timestamp: number; }
 const cache: Record<string, CacheItem> = {};
@@ -32,7 +31,7 @@ export const MarketService = {
   getPrice: async (ids: string[], vs_currencies = 'usd') => {
     const key = `price_${ids.join('_')}_${vs_currencies}`;
     return withCache(key, () =>
-      api.get('/api/market/price', { params: { ids: ids.join(','), vs_currencies } }).then((r) => r.data),
+      api.get('/api/market/prices', { params: { ids: ids.join(','), vs_currencies } }).then((r) => r.data),
       null
     );
   },

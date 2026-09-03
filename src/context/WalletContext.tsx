@@ -1,11 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAccount, useDisconnect } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import React,{ createContext,useCallback,useContext,useEffect,useState } from 'react';
+import { useAccount,useDisconnect } from 'wagmi';
 import { ChainService } from '../services/ChainService';
-import { TokenBalanceService } from '../services/TokenBalanceService';
 import { MarketService } from '../services/MarketService';
-import { TOKEN_GATING_CONFIG, BLOCKCHAIN_CONFIG, TIER_LIMITS, CHAIN_SYMBOL_TO_COINGECKO_ID } from '../services/config';
-import { WalletEntry, PortfolioItem, Chain } from '../types';
+import { CHAIN_SYMBOL_TO_COINGECKO_ID,TIER_LIMITS,TOKEN_GATING_CONFIG } from '../services/config';
+import { Chain,PortfolioItem,WalletEntry } from '../types';
 import { useAuth } from './AuthContext';
 
 export interface Toast {
@@ -51,12 +50,12 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { open } = useWeb3Modal();
   const { address: wagmiAddress, isConnected: wagmiIsConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { user, upgradeToUltimate } = useAuth();
+  const { user } = useAuth();
 
   const isWeb3ModalReady = typeof window !== 'undefined' && Boolean((window as any).__W3M__);
 
   const [isSyncing, setIsSyncing] = useState(false);
-  const [isCheckingBalance, setIsCheckingBalance] = useState(false);
+  const [isCheckingBalance] = useState(false);
   const [tokenCheckError, setTokenCheckError] = useState<string | null>(null);
   const [premiumTokenBalance, setPremiumTokenBalance] = useState(0);
   const [isPremium, setIsPremium] = useState(false);
@@ -101,7 +100,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const toggleHideSmallBalances = () => setHideSmallBalances((prev: boolean) => !prev);
 
   // ===== TOKEN BALANCE CHECKING =====
-  const checkTokenBalance = useCallback(async (address: string) => {
+  const checkTokenBalance = useCallback(() => {
     if (!TOKEN_GATING_CONFIG.ENABLE_TOKEN_GATING) {
       // Do not auto-grant premium if token gating is off; reflect authentic tier status
       setIsPremium(user?.tier === 'ULTIMATE' || user?.isPro || false);
@@ -109,33 +108,18 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return;
     }
 
-    setIsCheckingBalance(true);
+    // Tier entitlement is issued only by the backend after it verifies the
+    // wallet bound to the signed session. Do not grant or revoke access from
+    // an independently computed browser balance.
+    setIsPremium(user?.tier === 'ULTIMATE' || user?.isPro || false);
+    setPremiumTokenBalance(0);
     setTokenCheckError(null);
-
-    try {
-      const balance = await TokenBalanceService.checkTokenBalance(address);
-      setPremiumTokenBalance(balance);
-
-      const qualified = TokenBalanceService.isQualifiedForPremium(balance);
-      setIsPremium(qualified);
-
-      if (qualified && user?.tier !== 'ULTIMATE') {
-        await upgradeToUltimate(address);
-      }
-    } catch (error) {
-      console.error('Token balance check failed:', error);
-      setTokenCheckError(error instanceof Error ? error.message : 'Failed to check token balance');
-      setIsPremium(false);
-      setPremiumTokenBalance(0);
-    } finally {
-      setIsCheckingBalance(false);
-    }
-  }, [user?.tier, upgradeToUltimate]);
+  }, [user?.tier, user?.isPro]);
 
   // Auto-Upgrade Logic - Check token balance on wallet connect
   useEffect(() => {
     if (wagmiAddress && wagmiIsConnected) {
-      checkTokenBalance(wagmiAddress);
+      checkTokenBalance();
     }
   }, [wagmiAddress, wagmiIsConnected, checkTokenBalance]);
 

@@ -1,4 +1,4 @@
-import { TokenBalance, DefiPosition, Transaction } from '../types';
+import { DefiPosition,TokenBalance,Transaction } from '../types';
 import { api } from './api';
 
 export async function fetchTokenBalances(walletAddress: string, chainId: string | number = 1): Promise<TokenBalance[]> {

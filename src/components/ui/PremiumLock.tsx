@@ -1,8 +1,8 @@
+import { ArrowRight,Lock } from 'lucide-react';
 import React from 'react';
-import { Lock, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from './Button';
-import { useNavigate } from 'react-router-dom';
 
 interface PremiumLockProps {
   children: React.ReactNode;

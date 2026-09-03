@@ -1,26 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { 
-    Gift, Twitter, Send, CheckCircle2, Lock, Timer, MousePointer2, 
-    ArrowRight, Shield, ShieldAlert, Zap, ExternalLink, Users, BarChart3, Copy, Star, ChevronRight, Bell, X,
+import {
+BarChart3,
+Bell,
+CheckCircle2,
+Copy,
+Gift,
+Lock,
+Send,
+Shield,ShieldAlert,
+Timer,
+Twitter,
+Users,
+X,
+Zap
 } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import Swal from 'sweetalert2';
+import { TGECountdown } from '../../components/frontend/TGECountdown';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
-import { TGECountdown } from '../../components/frontend/TGECountdown';
-import { AirdropStatsResponse, ReferralEntry } from '../../types';
+import { AirdropStatsResponse,ReferralEntry } from '../../types';
 import type {
-    ConvertItemsResponse,
-    AirdropStatusResponse,
-    ClaimMissionRequest,
-    ClaimMissionResponse,
-    Mission,
-    MissionListResponse,
-    PayoutRequestResponse,
-    PayoutRequest,
-    SubmitWalletRequest,
-    SubmitWalletResponse,
+AirdropStatusResponse,
+ClaimMissionRequest,
+ClaimMissionResponse,
+ConvertItemsResponse,
+Mission,
+MissionListResponse,
+PayoutRequest,
+PayoutRequestResponse,
+SubmitWalletRequest,
+SubmitWalletResponse,
 } from '../../types/openapi-contracts';
-import Swal from 'sweetalert2';
 
 // ── TOKENOMICS CONFIG ──────────────────────────────────────────────────────────
 const TOKENOMICS_ALLOCATIONS = [
@@ -35,7 +46,7 @@ export const Airdrop: React.FC = () => {
     const { user, refreshUser } = useAuth();
     const [stats, setStats] = useState<AirdropStatsResponse | null>(null);
     const [tasks, setTasks] = useState<Mission[]>([]);
-    const [referrals, setReferrals] = useState<ReferralEntry[]>([]);
+    const [, setReferrals] = useState<ReferralEntry[]>([]);
     const [isTaskLoading, setIsTaskLoading] = useState(false);
     const [missionPaused, setMissionPaused] = useState(false);
     const [bagBalance, setBagBalance] = useState<number>(0);
@@ -749,7 +760,6 @@ export const Airdrop: React.FC = () => {
 
                                 return (user as any).completedTasks?.includes(taskId) || (user as any).completedMissions?.includes(taskId);
                             })();
-                            const type = task.frequency?.toLowerCase() || task.type?.toLowerCase();
                             return (
                                 <div key={task.id} className={`flex flex-col h-full p-4 transition-all relative overflow-hidden border ${isCompleted ? 'bg-alphabag-dark border-alphabag-green/30 rounded-lg' : 'bg-alphabag-darkgray border-alphabag-gray rounded-lg hover:border-alphabag-yellow hover:bg-alphabag-gray'}`}>
                                     <div className="flex justify-between items-start mb-3">

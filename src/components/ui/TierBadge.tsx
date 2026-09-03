@@ -1,6 +1,6 @@
 
+import { Crown,Shield } from 'lucide-react';
 import React from 'react';
-import { Shield, Crown } from 'lucide-react';
 import { UserTier } from '../../types';
 
 interface TierConfig {

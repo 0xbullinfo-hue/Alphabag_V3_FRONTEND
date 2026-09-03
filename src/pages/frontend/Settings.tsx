@@ -1,210 +1,33 @@
 
-import React, { useState } from 'react';
-import { useWallet } from '../../context/WalletContext';
-import { Button } from '../../components/ui/Button';
-import { 
-  Trash2, 
-  Plus, 
-  Shield, 
-  Crown, 
-  Zap, 
-  AlertCircle, 
-  Radio, 
-  Loader2, 
-  Search, 
-  Eye, 
-  Key, 
-  ShieldCheck, 
-  Link as LinkIcon, 
-  ExternalLink, 
-  Database, 
-  TrendingUp, 
-  Wallet,
-  Check,
-  X,
-  CheckCircle2,
-  Layers,
-  Lock
+import {
+AlertCircle,
+CheckCircle2,
+Check,
+Crown,
+Database,
+ExternalLink,
+Eye,
+Key,
+Link as LinkIcon,
+Lock,
+Plus,
+Search,
+TrendingUp,
+Wallet,
+Zap
 } from 'lucide-react';
-import { UserTier, Chain } from '../../types';
-import { useAuth } from '../../context/AuthContext';
-import { useCexConnections } from '../../hooks/useCexConnections';
-import { SUPPORTED_CEX } from './CexBag';
-import { CexConnectModal } from '../../components/frontend/CexConnectModal';
+import React,{ useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NFT_CONFIG } from '../../services/config';
 import Swal from 'sweetalert2';
-
-const MANUAL_HOLDINGS_KEY = 'alphabag_manual_holdings';
-
-interface ManualHolding {
-    id: string;
-    coin: string;
-    symbol: string;
-    amount: number;
-    buyPrice: number;
-    currentPrice?: number;
-    notes: string;
-    addedAt: string;
-}
-
-const ManualHoldingsSection: React.FC = () => {
-    const [holdings, setHoldings] = useState<ManualHolding[]>(() => {
-        try { return JSON.parse(localStorage.getItem(MANUAL_HOLDINGS_KEY) || '[]'); } catch { return []; }
-    });
-    const [coin, setCoin] = useState('');
-    const [symbol, setSymbol] = useState('');
-    const [amount, setAmount] = useState('');
-    const [buyPrice, setBuyPrice] = useState('');
-    const [notes, setNotes] = useState('');
-    const [formError, setFormError] = useState<string | null>(null);
-
-    const save = (updated: ManualHolding[]) => {
-        setHoldings(updated);
-        localStorage.setItem(MANUAL_HOLDINGS_KEY, JSON.stringify(updated));
-    };
-
-    const handleAdd = () => {
-        if (!coin || !symbol || !amount || !buyPrice) { setFormError('Fill in all required fields.'); return; }
-        if (isNaN(Number(amount)) || isNaN(Number(buyPrice))) { setFormError('Amount and price must be numbers.'); return; }
-        setFormError(null);
-        const newHolding: ManualHolding = {
-            id: Date.now().toString(),
-            coin: coin.trim(),
-            symbol: symbol.trim().toUpperCase(),
-            amount: Number(amount),
-            buyPrice: Number(buyPrice),
-            notes: notes.trim(),
-            addedAt: new Date().toISOString(),
-        };
-        save([...holdings, newHolding]);
-        setCoin(''); setSymbol(''); setAmount(''); setBuyPrice(''); setNotes('');
-    };
-
-    const handleRemove = (id: string) => {
-        save(holdings.filter(h => h.id !== id));
-    };
-
-    const totalValue = holdings.reduce((acc, h) => acc + h.amount * h.buyPrice, 0);
-
-    return (
-        <section className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4">
-            <div className="flex items-center justify-between mb-2">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Plus size={18} className="text-alphabag-yellow" /> Manual Holdings
-                </h2>
-                {holdings.length > 0 && (
-                    <span className="text-[10px] font-black text-alphabag-muted uppercase tracking-widest truncate max-w-[200px]" title={`$${totalValue.toLocaleString()}`}>
-                        Total Cost Basis: <span className="text-white tracking-tighter">${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                    </span>
-                )}
-            </div>
-            <p className="text-alphabag-muted text-xs mb-5">
-                Track holdings manually — no wallet connection required. Data is stored <span className="text-alphabag-yellow font-bold">locally on your device only</span> and never synced to any server.
-            </p>
-
-            {/* Add Form */}
-            <div className="bg-alphabag-black border border-alphabag-gray/60 p-5 rounded-xl mb-2">
-                <h3 className="text-sm font-semibold text-alphabag-text mb-2 flex items-center gap-2">
-                    <Search size={14} className="text-alphabag-yellow" /> Add Holding
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-3">
-                    <input
-                        type="text" placeholder="Name" value={coin}
-                        onChange={e => setCoin(e.target.value)}
-                        disabled={true}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
-                    />
-                    <input
-                        type="text" placeholder="Ticker" value={symbol}
-                        onChange={e => setSymbol(e.target.value)}
-                        disabled={true}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none uppercase opacity-50 cursor-not-allowed"
-                    />
-                    <input
-                        type="number" placeholder="Amount" value={amount}
-                        onChange={e => setAmount(e.target.value)}
-                        disabled={true}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
-                    />
-                    <input
-                        type="number" placeholder="Price ($)" value={buyPrice}
-                        onChange={e => setBuyPrice(e.target.value)}
-                        disabled={true}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
-                    />
-                    <input
-                        type="text" placeholder="Notes" value={notes}
-                        onChange={e => setNotes(e.target.value)}
-                        disabled={true}
-                        className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed"
-                    />
-                </div>
-                {formError && <div className="text-alphabag-red text-xs mb-3 flex items-center gap-2"><AlertCircle size={12} />{formError}</div>}
-                <Button onClick={handleAdd} disabled={true} className="w-full sm:w-auto font-bold opacity-50 cursor-not-allowed">
-                    <Plus size={16} className="mr-2" /> Add Holding
-                </Button>
-            </div>
-
-            {/* Holdings List */}
-            {holdings.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-24 border border-dashed border-alphabag-gray/40 rounded-2xl text-center px-4">
-                    <p className="text-alphabag-subtext text-sm font-bold">No manual holdings yet</p>
-                    <p className="text-alphabag-muted text-xs mt-1">Add entries above for coins you don't want to sync.</p>
-                </div>
-            ) : (
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left text-sm min-w-[540px]">
-                        <thead className="text-alphabag-muted text-[10px] uppercase font-black border-b border-alphabag-gray/50">
-                            <tr>
-                                <th className="pb-2 pr-4">Asset</th>
-                                <th className="pb-2 pr-4 text-right">Amount</th>
-                                <th className="pb-2 pr-4 text-right">Buy Price</th>
-                                <th className="pb-2 pr-4 text-right">Cost Basis</th>
-                                <th className="pb-2 pr-4">Notes</th>
-                                <th className="pb-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-alphabag-gray/20">
-                            {holdings.map(h => (
-                                <tr key={h.id} className="hover:bg-white/5 transition-colors">
-                                    <td className="py-3 pr-4">
-                                        <div className="font-bold text-white">{h.symbol}</div>
-                                        <div className="text-alphabag-muted text-[10px]">{h.coin}</div>
-                                    </td>
-                                    <td className="py-3 pr-4 text-right font-mono text-white tabular-data tracking-tighter truncate" title={h.amount.toLocaleString()}>{h.amount.toLocaleString()}</td>
-                                    <td className="py-3 pr-4 text-right font-mono text-white tabular-data tracking-tighter truncate" title={`$${h.buyPrice.toLocaleString()}`}>${h.buyPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                                    <td className="py-3 pr-4 text-right font-black text-alphabag-yellow tabular-data tracking-tighter truncate" title={`$${(h.amount * h.buyPrice).toLocaleString()}`}>
-                                        ${(h.amount * h.buyPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                                    </td>
-                                    <td className="py-3 pr-4 text-alphabag-muted text-xs truncate max-w-[120px]">{h.notes || '—'}</td>
-                                    <td className="py-3">
-                                        <button onClick={() => {}} disabled={true} className="text-alphabag-subtext p-1 opacity-30 cursor-not-allowed">
-                                            <Trash2 size={14} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </section>
-    );
-};
+import { CexConnectModal } from '../../components/frontend/CexConnectModal';
+import { Button } from '../../components/ui/Button';
+import { useWallet } from '../../context/WalletContext';
+import { useCexConnections } from '../../hooks/useCexConnections';
+import { Chain } from '../../types';
+import { SUPPORTED_CEX } from './CexBag';
 
 export const Settings: React.FC = () => {
-    const {
-        trackedWallets,
-        addTrackedWallet,
-        removeTrackedWallet,
-        premiumTokenBalance,
-        getLimits,
-        isSyncing
-    } = useWallet();
-
-    const { user } = useAuth();
-    const tier = user?.tier || 'FREE';
+    const { trackedWallets, addTrackedWallet, premiumTokenBalance, getLimits } = useWallet();
     const navigate = useNavigate();
 
     const [newAddress, setNewAddress] = useState('');
@@ -214,9 +37,9 @@ export const Settings: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     // CEX API State
-    const { connections: connectedCex, removeConnection: removeCex, connectExchange } = useCexConnections();
+    const { connections: connectedCex, connectExchange } = useCexConnections();
     const [isCexModalOpen, setIsCexModalOpen] = useState(false);
-    const [activeCexId, setActiveCexId] = useState<string | null>(null);
+    const [activeCexId] = useState<string | null>(null);
     const [isConnectingCex, setIsConnectingCex] = useState(false);
     const MAX_CEX = 20;
 
@@ -236,18 +59,6 @@ export const Settings: React.FC = () => {
         }
     };
 
-    const openCexModal = (cexId: string) => {
-        if (connectedCex.find(c => c.id === cexId)) {
-            Swal.fire({ title: 'Already Connected', text: 'Remove it first to reconnect.', icon: 'info', background: '#1E2329', color: '#FFF' });
-            return;
-        }
-        if (connectedCex.length >= MAX_CEX) {
-            Swal.fire({ title: 'Limit Reached', text: `Max ${MAX_CEX} exchanges allowed.`, icon: 'warning', background: '#1E2329', color: '#FFF' });
-            return;
-        }
-        setActiveCexId(cexId);
-        setIsCexModalOpen(true);
-    };
 
     const handleCexConnect = async (apiKey: string, secret: string) => {
         if (!activeCexId) return;

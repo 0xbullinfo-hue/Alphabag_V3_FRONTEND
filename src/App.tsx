@@ -1,22 +1,18 @@
-import React, { useEffect, Suspense, lazy, useState } from 'react';
-import { HashRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { WagmiConfig, useAccount } from 'wagmi';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Suspense,lazy,useEffect,useState } from 'react';
+import { HashRouter,Navigate,Route,Routes,useLocation } from 'react-router-dom';
+import { WagmiConfig,useAccount } from 'wagmi';
+import { AuthModal } from './components/frontend/AuthModal';
+import { ErrorBoundary } from './components/frontend/ErrorBoundary';
+import { Layout } from './components/frontend/Layout';
+import { UpgradeModal } from './components/frontend/UpgradeModal';
+import { AuthProvider,useAuth } from './context/AuthContext';
+import { WalletProvider } from './context/WalletContext';
+import { usePortfolioStream } from './hooks/usePortfolioStream';
 import { queryClient } from './lib/queryClient';
 import { config } from './lib/wagmi';
-import { Layout } from './components/frontend/Layout';
-import { ErrorBoundary } from './components/frontend/ErrorBoundary';
-import { WalletProvider } from './context/WalletContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { recordVisitor } from './services/mockData';
-import { AuthModal } from './components/frontend/AuthModal';
-import { UpgradeModal } from './components/frontend/UpgradeModal';
-import { AirdropOnboarding } from './components/frontend/AirdropOnboarding';
-import { ComingSoonOverlay } from './components/ui/ComingSoonOverlay';
-import { getDisabledPages, IS_TEASER_MODE } from './services/config';
-import { usePortfolioStream } from './hooks/usePortfolioStream';
-import { useFeatures } from './hooks/useFeatures';
+import { IS_TEASER_MODE } from './services/config';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
 // wallet-connect auto-trigger, no other routes, regardless of what URL a
@@ -68,38 +64,7 @@ const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => 
 
 const GlobalLoader = () => null;
 
-const PrivateRoute = ({ children }: React.PropsWithChildren<{}>) => {
-  const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading && !IS_LOCALHOST_DEV) return <GlobalLoader />;
-  return isAuthenticated ? <Layout>{children}</Layout> : <Navigate to="/" replace />;
-};
 
-const RouteGuard = ({ path, title, description, children }: { path: string; title: string; description: string; children: React.ReactNode }) => {
-  const navigate = useNavigate();
-  const { data: features, isLoading } = useFeatures();
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
-  const disabledPages = features?.disabledPages || getDisabledPages();
-  if (disabledPages.includes(path)) {
-    return (
-      <div className="relative min-h-[calc(100vh-12rem)] flex items-center justify-center">
-        <ComingSoonOverlay
-          title={title}
-          description={description}
-          onClose={() => navigate('/')}
-        />
-      </div>
-    );
-  }
-  return <>{children}</>;
-};
 
 
 
@@ -121,7 +86,7 @@ const AirdropTracker = () => {
 };
 
 const AppContent = () => {
-  const { user, isAuthenticated, isLoading, token } = useAuth();
+  const { isAuthenticated, isLoading, token } = useAuth();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
   const { isConnected, address } = useAccount();
@@ -141,7 +106,6 @@ const AppContent = () => {
 
 
   useEffect(() => {
-    recordVisitor();
     const handleOpenAuth = () => setIsAuthModalOpen(true);
     const handleOpenUpgrade = () => setIsUpgradeModalOpen(true);
 

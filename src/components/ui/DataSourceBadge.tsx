@@ -1,6 +1,6 @@
+import { Database,Radio,RefreshCw } from 'lucide-react';
 import React from 'react';
-import { Database, Radio, Shuffle, RefreshCw } from 'lucide-react';
-import { DATA_SOURCE_CONFIG, getConfiguredDataLabel } from '../../services/config';
+import { DATA_SOURCE_CONFIG } from '../../services/config';
 
 interface DataSourceBadgeProps {
   source?: 'LIVE' | 'MOCK' | 'CACHED';

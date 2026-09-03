@@ -1,6 +1,14 @@
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios,{ AxiosError,InternalAxiosRequestConfig } from 'axios';
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+const useDevelopmentProxy = import.meta.env.DEV;
+
+export const API_BASE_URL = useDevelopmentProxy ? '' : configuredApiBaseUrl || '';
+
+export const resolveApiUrl = (path: string): string => {
+  if (useDevelopmentProxy || !configuredApiBaseUrl) return path;
+  return new URL(path, configuredApiBaseUrl).toString();
+};
 
 interface RetryConfig extends InternalAxiosRequestConfig {
   retryCount?: number;
@@ -45,7 +53,8 @@ api.interceptors.response.use(
       return api(config);
     }
 
-    if (error.response?.status === 401) {
+    const requestHadToken = Boolean(sessionStorage.getItem('alphabag_token'));
+    if (error.response?.status === 401 && requestHadToken) {
       sessionStorage.removeItem('alphabag_token');
       sessionStorage.removeItem('alphabag_user');
       window.dispatchEvent(new CustomEvent('auth:expired'));

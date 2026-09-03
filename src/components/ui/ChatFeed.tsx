@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { ChatMessage } from './ChatMessage';
+import { AnimatePresence,motion } from 'framer-motion';
 import { Bot } from 'lucide-react';
+import React,{ useEffect,useRef } from 'react';
+import { ChatMessage } from './ChatMessage';
 
 interface ChatFeedProps {
     messages: any[];
@@ -23,7 +23,7 @@ export const ChatFeed: React.FC<ChatFeedProps> = ({ messages, isTyping }) => {
     return (
         <div
             ref={scrollRef}
-            className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700"
+            className="flex-1 overflow-y-auto p-4 space-y-1 custom-scrollbar scrollbar-thin scrollbar-thumb-zinc-700"
         >
             <AnimatePresence initial={false}>
                 {messages.map((msg, i) => (
@@ -40,13 +40,13 @@ export const ChatFeed: React.FC<ChatFeedProps> = ({ messages, isTyping }) => {
                             opacity: { repeat: Infinity, duration: 2, ease: "easeInOut" },
                             layout: { duration: 0.3 }
                         }}
-                        className="flex w-full justify-start mt-2"
+                        className="flex w-full justify-start mt-1.5"
                     >
-                        <div className="flex max-w-[85%] sm:max-w-3xl gap-2 flex-row w-full">
-                            <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg bg-alphabag-yellow text-alphabag-black">
-                                <Bot size={20} className="animate-pulse" />
+                        <div className="flex max-w-[92%] sm:max-w-3xl gap-2 flex-row w-full">
+                            <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 bg-alphabag-yellow text-alphabag-black">
+                                <Bot size={15} className="animate-pulse" />
                             </div>
-                            <div className="p-4 rounded-2xl text-sm leading-relaxed shadow-lg bg-alphabag-black/50 border-l-2 border-alphabag-yellow pl-4 flex items-center">
+                            <div className="px-3 py-2.5 rounded-md text-sm leading-relaxed bg-alphabag-black/30 border-l-2 border-alphabag-yellow flex items-center">
                                 <span className="italic text-alphabag-muted font-medium tracking-wide">Synchronizing neural core...</span>
                             </div>
                         </div>

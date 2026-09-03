@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { api } from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
-import { TradeSignal } from '../../types';
 import {
-    Radio, Lock, Rocket, Target, Gift, Clock,
-    MessageSquare, Volume2, Copy, History, Layers, ExternalLink, Loader2, ShieldAlert
+Clock,
+Copy,
+ExternalLink,
+Gift,
+Layers,
+MessageSquare,
+Radio,
+Rocket,
+ShieldAlert,
+Target
 } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import React,{ useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
+import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
+import { TradeSignal } from '../../types';
 
 const DEMO_SIGNALS: TradeSignal[] = [];
 const CATEGORIES = ['ALL', 'DEGEN', 'SHORT', 'LONGTERM', 'AIRDROPS'];
 
 export const AlphaCalls: React.FC = () => {
-    const { user, token } = useAuth();
+    const { token } = useAuth();
     const [signals, setSignals] = useState<TradeSignal[]>([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState<string>('ALL');

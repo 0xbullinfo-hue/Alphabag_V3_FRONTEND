@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { ArrowUpRight,ExternalLink,History,RefreshCw } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { useWallet } from '../../context/WalletContext';
 import { chainData } from '../../services/chainData';
 import { Transaction } from '../../types';
-import { History, ArrowUpRight, ArrowDownLeft, RefreshCw, ExternalLink, Filter } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 
 const getExplorerLink = (chain: string, hash: string) => {
     if (chain.includes('bsc')) return `https://bscscan.com/tx/${hash}`;

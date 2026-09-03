@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query';
+import { ChevronRight,ExternalLink,Layers,RefreshCw,TrendingDown,TrendingUp,Wallet2 } from 'lucide-react';
+import React,{ useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { api } from '../../services/api';
 import { TokenBalance } from '../../types';
-import { Wallet2, RefreshCw, ExternalLink, TrendingUp, TrendingDown, Layers, AlertTriangle, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   eth: { label: 'ETH', color: 'text-blue-400', bg: 'bg-blue-500/10' },
@@ -150,7 +150,7 @@ export const DexBag: React.FC = () => {
                   ))
                 ) : filtered.length > 0 ? (
                   filtered.map((token, i) => {
-                    const chain = CHAIN_LABELS[token.chain] || { label: token.chain?.toUpperCase() || '—', color: 'text-alphabag-subtext', bg: 'bg-white/5' };
+                    const chain = CHAIN_LABELS[token.chain || ''] || { label: token.chain?.toUpperCase() || '—', color: 'text-alphabag-subtext', bg: 'bg-white/5' };
                     const isPositive = (token.change24h || 0) >= 0;
                     return (
                       <tr key={`${token.contractAddress}-${i}`} className="hover:bg-alphabag-gray/40 transition-colors group">

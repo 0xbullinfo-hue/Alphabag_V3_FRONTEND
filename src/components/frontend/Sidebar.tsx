@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { LayoutDashboard, Newspaper, Wallet, Layers, BarChart3, Bot, Link as LinkIcon, Settings, LogOut, Calculator, Eye, Radio, ShieldCheck, Briefcase, PieChart, FileClock, Flame, Zap, ChevronDown, Gift, Trophy, UserCircle, Target, Wallet2, Crown, Sparkles } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { DISABLED_PAGES, IS_DEMO_MODE } from '../../services/config';
-import { useFeatures } from '../../hooks/useFeatures';
+import { BarChart3,Bot,Calculator,Crown,Eye,Flame,Gift,Layers,Link as LinkIcon,LogOut,Newspaper,PieChart,Radio,ShieldCheck,UserCircle,Zap } from 'lucide-react';
+import React from 'react';
+import { Link,useLocation,useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useAuth } from '../../context/AuthContext';
+import { useFeatures } from '../../hooks/useFeatures';
+import { DISABLED_PAGES } from '../../services/config';
 
 interface NavItemProps {
   to: string;
@@ -60,34 +60,6 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
 };
 
 
-const NavDropdown: React.FC<{ icon: any, label: string, activePaths: string[], children: React.ReactNode }> = ({ icon: Icon, label, activePaths, children }) => {
-  const location = useLocation();
-  const isActive = activePaths.some(path => location.pathname === path || (path !== '/' && location.pathname.startsWith(path)));
-  const [isOpen, setIsOpen] = useState(isActive);
-
-  return (
-    <div className="mb-1">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-[calc(100%-1rem)] flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-200 mx-2 ${isActive
-          ? 'bg-alphabag-gray text-alphabag-text'
-          : 'text-alphabag-subtext hover:bg-alphabag-gray hover:text-alphabag-text'
-          }`}
-      >
-        <div className="flex items-center space-x-2">
-          <Icon size={18} />
-          <span className="font-medium text-sm">{label}</span>
-        </div>
-        <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {isOpen && (
-        <div className="mt-1 ml-4 border-l border-white/5 space-y-1">
-          {children}
-        </div>
-      )}
-    </div>
-  );
-};
 
 const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-2">
@@ -103,7 +75,7 @@ const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ titl
 export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const { data: features } = useFeatures();
   const disabledPages = features?.disabledPages || DISABLED_PAGES;
 

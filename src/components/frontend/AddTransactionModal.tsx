@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import { X, Calendar, Search, TrendingUp } from 'lucide-react';
-import { Button } from '../ui/Button';
+import { Calendar,Search,TrendingUp,X } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { MOCK_COINS } from '../../services/mockData';
+import { Button } from '../ui/Button';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -18,7 +18,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   const [price, setPrice] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [isPriceLive, setIsPriceLive] = useState(false);
+  const [, setIsPriceLive] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
   const isCustomAsset = coin === 'Custom Asset (MANUAL)';

@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { 
-    Gift, Zap, Shield, Target, ArrowRight, X, 
-    CheckCircle2, MousePointer2, Send, Rocket, Sparkles
+import {
+Rocket,
+Send,
+Shield,
+Sparkles,
+Target,
+X,
+Zap
 } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
 import { Button } from '../ui/Button';
 
 export const AirdropOnboarding: React.FC = () => {

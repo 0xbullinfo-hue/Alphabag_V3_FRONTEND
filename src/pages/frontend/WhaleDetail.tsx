@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ChainService } from '../../services/ChainService';
-import { WhaleService, WhaleTransaction } from '../../services/WhaleService';
-import { PortfolioItem } from '../../types';
-import { useWallet } from '../../context/WalletContext';
-import { WalletLabels } from '../../services/WalletLabels';
-import { ArrowLeft, Eye, ShieldCheck, Share2, MoreHorizontal, TrendingUp, DollarSign, Bell, BellOff, Check } from 'lucide-react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { ArrowLeft,Bell,BellOff,Check,DollarSign,MoreHorizontal,Share2,ShieldCheck,TrendingUp } from 'lucide-react';
+import React,{ useEffect,useState } from 'react';
+import { Link,useParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
+import { useWallet } from '../../context/WalletContext';
+import { ChainService } from '../../services/ChainService';
+import { WalletLabels } from '../../services/WalletLabels';
+import { WhaleService,WhaleTransaction } from '../../services/WhaleService';
+import { PortfolioItem } from '../../types';
 
 const COLORS = ['#FCD535', '#0ECB81', '#3B82F6', '#8B5CF6', '#F6465D', '#848E9C'];
 
@@ -38,11 +37,11 @@ export const WhaleDetail: React.FC = () => {
 
                     // Map balances to PortfolioItem
                     const mappedHoldings = balances.map(t => ({
-                        coinId: t.tokenAddress,
+                        coinId: t.tokenAddress || t.contractAddress || t.symbol,
                         symbol: t.symbol,
                         name: t.name,
                         image: t.logo || '',
-                        amount: t.guiBalance,
+                        amount: t.guiBalance || 0,
                         currentPrice: t.price || 0,
                         value: t.value || 0, // Ensure value is populated
                         priceChange24h: 0,
@@ -171,7 +170,7 @@ export const WhaleDetail: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-alphabag-gray text-[13px]">
-                                    {filteredHoldings.map((h, i) => (
+                                    {filteredHoldings.map((h) => (
                                         <tr key={h.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                             <td className="p-3 pl-6">
                                                 <div className="flex items-center space-x-2.5">

@@ -65,6 +65,39 @@ export interface ErrorResponse {
   details?: string;
 }
 
+export interface FeatureFlags {
+  disabledPages: string[];
+  enableTokenGating: boolean;
+  isTeaserMode: boolean;
+  maxPortfolios: number;
+  maxWhales: number;
+  enableAlphaAi: boolean;
+  enableSecurityScanner: boolean;
+  updatedAt: string;
+}
+
+export interface TokenBalance {
+  contractAddress: string;
+  symbol: string;
+  name: string;
+  chain: 'ethereum' | 'bsc' | 'polygon' | 'arbitrum' | 'base' | 'avalanche' | 'solana';
+  balance: string;
+  priceUSD: number;
+  valueUSD: number;
+  change24h?: number;
+  logo?: string;
+}
+
+export interface PortfolioBalancesResponse {
+  tokens: TokenBalance[];
+  updatedAt: string;
+}
+
+export interface SecurityApprovalsResponse {
+  items: any[];
+  updatedAt: string;
+}
+
 export interface AirdropSettings {
   status?: 'ACTIVE' | 'WAITING' | 'ENDED' | 'INACTIVE';
   tokenTicker?: string;
@@ -311,6 +344,10 @@ export namespace OpenAPI {
   export type ClaimMissionRequest = import('./openapi-contracts').ClaimMissionRequest;
   export type ClaimMissionResponse = import('./openapi-contracts').ClaimMissionResponse;
   export type ErrorResponse = import('./openapi-contracts').ErrorResponse;
+  export type FeatureFlags = import('./openapi-contracts').FeatureFlags;
+  export type TokenBalance = import('./openapi-contracts').TokenBalance;
+  export type PortfolioBalancesResponse = import('./openapi-contracts').PortfolioBalancesResponse;
+  export type SecurityApprovalsResponse = import('./openapi-contracts').SecurityApprovalsResponse;
   export type AirdropSettings = import('./openapi-contracts').AirdropSettings;
   export type UserAirdropStatus = import('./openapi-contracts').UserAirdropStatus;
   export type AirdropStatusResponse = import('./openapi-contracts').AirdropStatusResponse;

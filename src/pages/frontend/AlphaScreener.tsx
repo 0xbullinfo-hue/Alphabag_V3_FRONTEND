@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { TrendingUp, Filter, Search, ArrowUpRight, Flame, Globe, ExternalLink, RefreshCw, Eye } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import { ArrowUpRight,ExternalLink,Flame,Globe,RefreshCw,Search } from 'lucide-react';
+import React,{ useCallback,useEffect,useMemo,useState } from 'react';
 import { useDebounce } from '../../components/hooks/useDebounce';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { api } from '../../services/api';
 
 interface DexPair {
     chainId: string;
@@ -61,7 +61,6 @@ export const AlphaScreener: React.FC = () => {
             const queries = ['USDT', 'USDC', 'SOL', 'WBNB', 'WETH'];
             const promises = queries.map(q =>
                 api.get('/api/dex/search', { params: { q } }).then((r) => r.data)
-                    .then(res => res.json())
                     .catch(() => ({ pairs: [] }))
             );
 
@@ -123,8 +122,7 @@ export const AlphaScreener: React.FC = () => {
             if (trimmed.length >= 32) {
                 setSearchingCa(true);
                 try {
-                    const res = await api.get(`/api/dex/tokens/${trimmed}`).then((r) => r.data);
-                    const data = await res.json();
+                    const data = (await api.get(`/api/dex/tokens/${trimmed}`)).data;
                     if (data.pairs && data.pairs.length > 0) {
                         // Use the highest liquidity pair found for this contract
                         const sortedPairs = [...data.pairs].sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0));

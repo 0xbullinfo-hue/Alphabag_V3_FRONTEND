@@ -1,13 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { api } from '../../services/api';
+import { Bot,ChevronRight,Fingerprint,Mic,Send,Trash2,Wallet,Zap } from 'lucide-react';
+import React,{ useEffect,useRef,useState } from 'react';
 import Swal from 'sweetalert2';
-import { useWallet } from '../../context/WalletContext';
-import { useAuth } from '../../context/AuthContext';
-import { Bot, Send, User, Zap, ExternalLink, Mic, MicOff, Clock, AlertTriangle, Sparkles, Briefcase, RefreshCw, ArrowDown, PieChart as PieChartIcon, TrendingUp, BarChart3, Shield, Lightbulb, ChevronRight, Wallet, Check, TerminalSquare, Trash2, Fingerprint } from 'lucide-react';
+import { useNeuralCore } from '../../components/hooks/useNeuralCore';
 import { Button } from '../../components/ui/Button';
 import { ChatFeed } from '../../components/ui/ChatFeed';
-import { UpgradeCmd } from '../../components/frontend/UpgradeCmd';
-import { useNeuralCore } from '../../components/hooks/useNeuralCore';
+import { useAuth } from '../../context/AuthContext';
+import { useWallet } from '../../context/WalletContext';
 
 const SUGGESTIONS = [
   { label: "Market News", prompt: "Summarize the most important crypto news from the last 24 hours." },
@@ -20,7 +18,7 @@ const SUGGESTIONS = [
 
 export const AlphaAi: React.FC = () => {
   const { portfolioItems } = useWallet();
-  const { user, updateAiUsage } = useAuth();
+  const { user, isAuthenticated, updateAiUsage } = useAuth();
   const tier = user?.tier || 'FREE';
   const isUltimate = tier === 'ULTIMATE';
 
@@ -62,7 +60,6 @@ export const AlphaAi: React.FC = () => {
   } = useNeuralCore(unifiedPortfolio, tier);
 
   const [isLiveMode, setIsLiveMode] = useState(false);
-  const nextStartTimeRef = useRef<number>(0);
   const liveSessionRef = useRef<any>(null);
   const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
 
@@ -110,20 +107,19 @@ export const AlphaAi: React.FC = () => {
   };
 
   const handleSendMessage = (userMsg: string) => {
+    if (!isAuthenticated) {
+      window.dispatchEvent(new Event('open-login-modal'));
+      return;
+    }
     if (!hasLimitRemaining) return;
     if (!isUltimate) updateAiUsage(10);
     sendMessage(userMsg);
   };
 
-  const handleQuickAction = (actionLabel: string) => {
-    handleSendMessage(`Tell me more about ${actionLabel}`);
+  const handleQuickAction = (prompt: string) => {
+    handleSendMessage(prompt);
   };
 
-  const formatTime = (sec: number) => {
-    const hours = Math.floor(sec / 3600);
-    const mins = Math.floor((sec % 3600) / 60);
-    return `${hours}h ${mins}m`;
-  };
 
   const dexTotal = portfolioItems.reduce((acc, item) => acc + item.value, 0);
   const totalValue = dexTotal + cexTotal;
@@ -132,7 +128,7 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
+    <div className="flex flex-col min-h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
       {/* Header */}
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
         <div>
@@ -146,57 +142,57 @@ export const AlphaAi: React.FC = () => {
               <span className="text-[9px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
             </div>
           </div>
-          <p className="text-alphabag-subtext text-sm">Intelligence hub for on-chain analytics, portfolio modeling, and market forecasting.</p>
+          <p className="text-alphabag-subtext text-sm">Ask about market structure, portfolio risk, and on-chain activity.</p>
         </div>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-2 overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-2">
 
         {/* Left Side: Chat Area */}
-        <div className="lg:col-span-2 flex flex-col bg-alphabag-darkgray rounded-lg overflow-hidden border border-alphabag-gray relative">
+        <div className="flex flex-col min-h-[620px] bg-alphabag-darkgray rounded-lg overflow-hidden border border-alphabag-gray relative">
           
           
-          <div className="flex justify-between items-center px-4 py-2 border-b border-white/5 bg-black/20">
+           <div className="flex justify-between items-center px-4 py-3 border-b border-alphabag-gray bg-alphabag-black/30">
               <span className="text-[9px] text-alphabag-subtext uppercase font-black tracking-widest flex items-center gap-2">
-                 <TerminalSquare size={11} className="text-alphabag-yellow" /> Interaction Terminal
+                <Bot size={13} className="text-alphabag-yellow" /> Research Session
               </span>
               <button 
                   onClick={clearChat}
                   className="flex items-center gap-1 text-[8px] uppercase font-bold tracking-widest text-zinc-500 hover:text-red-400 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded-lg border border-transparent hover:border-red-500/20"
               >
-                  <Trash2 size={9} /> Clear Cache
+                  <Trash2 size={11} /> Clear chat
               </button>
           </div>
 
-          <div className="flex-1 relative z-10 bg-gradient-to-b from-transparent to-black/20 custom-scrollbar overflow-hidden">
+          <div className="flex-1 relative z-10 custom-scrollbar overflow-hidden">
               <ChatFeed messages={messages} isTyping={isStreaming} />
           </div>
 
-          <div className="p-3 bg-black/40 border-t border-white/5 relative z-10">
+          <div className="p-4 bg-alphabag-black/40 border-t border-alphabag-gray relative z-10">
             <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(inputText); }} className="relative flex items-center group/form">
-              <span className="absolute left-4 text-alphabag-yellow font-mono text-xs font-bold opacity-70 cursor-default">{'>_'}</span>
               <input
                 type="text"
-                placeholder={hasLimitRemaining ? "Query the neural core..." : "Daily bandwidth exceeded..."}
-                disabled={!hasLimitRemaining || isStreaming}
+                placeholder={!isAuthenticated ? "Connect your wallet to start a research session" : hasLimitRemaining ? "Ask Alpha Analyst about a market, asset, or portfolio decision" : "Daily usage limit reached"}
+                disabled={!isAuthenticated || !hasLimitRemaining || isStreaming}
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="w-full bg-[#0c0c0c] border border-white/10 rounded-xl pl-10 pr-24 py-3 text-xs font-mono text-zinc-50 focus:border-alphabag-yellow/50 focus: outline-none transition-all placeholder:text-zinc-600 shadow-inner"
+                className="w-full h-12 bg-alphabag-dark border border-alphabag-gray rounded-md pl-4 pr-24 py-3 text-sm text-alphabag-text focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 focus:outline-none transition-colors placeholder:text-alphabag-muted"
               />
               <div className="absolute right-1.5 top-1.5 bottom-1.5 flex items-center gap-1">
                 <button
                   type="button"
                   onClick={startLiveMode}
-                  className="h-full px-2.5 rounded-lg text-zinc-400 hover:text-alphabag-yellow transition-colors hover:bg-white/5"
-                  title="Voice Assistant (Staging)"
+                  disabled={!isAuthenticated}
+                  className="h-full px-2.5 rounded-md text-zinc-400 hover:text-alphabag-yellow transition-colors hover:bg-white/5"
+                  title="Voice assistant"
                 >
                   <Mic size={14} />
                 </button>
                 <Button
                   type="submit"
-                  disabled={!inputText.trim() || isStreaming || !hasLimitRemaining}
-                  className={`h-full rounded-lg px-2.5 transition-colors ${!inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400 hover:'}`}
-                  title="Send Command"
+                  disabled={!isAuthenticated || !inputText.trim() || isStreaming || !hasLimitRemaining}
+                  className={`h-full rounded-md px-3 transition-colors ${!isAuthenticated || !inputText.trim() || isStreaming || !hasLimitRemaining ? 'bg-white/5 text-zinc-500' : 'bg-alphabag-yellow text-black hover:bg-yellow-400'}`}
+                  title="Send message"
                 >
                   <Send size={12} />
                 </Button>
@@ -206,38 +202,30 @@ export const AlphaAi: React.FC = () => {
         </div>
 
         {/* Right Side: Sidebar */}
-        <div className="lg:col-span-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-2">
 
           {/* Quick Actions (2-Column Dense Grid) */}
-          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-xl p-4 relative overflow-hidden">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
             <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-3 flex items-center gap-2">
                 <Zap size={12} className="text-alphabag-yellow"/> Neural Prompts
             </h3>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { icon: <PieChartIcon size={12} />, label: "Analyze Port" },
-                { icon: <TrendingUp size={12} />, label: "Pulse Check" },
-                { icon: <BarChart3 size={12} />, label: "Strategies" },
-                { icon: <Briefcase size={12} />, label: "Whale Moves" },
-                { icon: <Shield size={12} />, label: "Risk Matrix" },
-                { icon: <Lightbulb size={12} />, label: "Alpha Scans" },
-              ].map((action, idx) => (
+            <div className="space-y-1.5">
+              {SUGGESTIONS.map((action) => (
                 <button
-                  key={idx}
-                  onClick={() => handleQuickAction(action.label)}
-                  className="flex flex-col items-center justify-center gap-1 p-2.5 rounded-xl bg-black/40 hover:bg-alphabag-yellow/10 border border-white/5 hover:border-alphabag-yellow/30 transition-all group"
+                  key={action.label}
+                  onClick={() => handleQuickAction(action.prompt)}
+                  disabled={!isAuthenticated || isStreaming || !hasLimitRemaining}
+                  className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-md bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow/60 hover:bg-alphabag-yellow/5 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
-                  <div className="text-alphabag-muted group-hover:text-alphabag-yellow transition-colors">
-                    {action.icon}
-                  </div>
-                  <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-400 group-hover:text-alphabag-yellow transition-colors">{action.label}</span>
+                  <span className="text-xs font-semibold text-alphabag-text group-hover:text-alphabag-yellow transition-colors">{action.label}</span>
+                  <ChevronRight size={14} className="text-alphabag-muted group-hover:text-alphabag-yellow" />
                 </button>
               ))}
             </div>
           </div>
 
           {/* Portfolio Matrix */}
-          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
             
             <div className="flex items-center justify-between mb-2 relative z-10">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
@@ -269,25 +257,15 @@ export const AlphaAi: React.FC = () => {
             </div>
           </div>
 
-          {/* Chat History */}
-          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-5 relative overflow-hidden">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-2">
-                <Clock size={12} className="text-alphabag-yellow"/> Chat History
+            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-3">
+              <Fingerprint size={12} className="text-alphabag-yellow"/> Session Context
             </h3>
-            <div className="space-y-2">
-                {messages.length <= 1 ? (
-                    <div className="p-3 text-center">
-                        <p className="text-[9px] text-alphabag-muted font-bold tracking-widest uppercase">No conversation history yet</p>
-                    </div>
-                ) : (
-                    <div className="p-3 text-center">
-                        <p className="text-[9px] text-alphabag-muted font-bold tracking-widest uppercase">Chat history coming soon</p>
-                    </div>
-                )}
-            </div>
-            <button className="w-full mt-4 py-2 text-[9px] text-alphabag-muted hover:text-white font-bold uppercase tracking-widest transition-colors border border-transparent hover:border-white/10 rounded-lg">
-                View All Archives
-            </button>
+            <dl className="space-y-3 text-xs">
+              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Portfolio assets</dt><dd className="font-semibold text-alphabag-text">{numAssets}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Data scope</dt><dd className="font-semibold text-alphabag-text">Current session</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Messages</dt><dd className="font-semibold text-alphabag-text">{messages.length}</dd></div>
+            </dl>
           </div>
 
         </div>

@@ -1,10 +1,9 @@
 
-import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { Bot, User, ExternalLink, Copy, Check } from 'lucide-react';
+import { Bot,Check,Copy,ExternalLink,User } from 'lucide-react';
+import React,{ useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { Area,AreaChart,Cell,Legend,Pie,PieChart,ResponsiveContainer,Tooltip,XAxis,YAxis } from 'recharts';
 import remarkGfm from 'remark-gfm';
-import { useState } from 'react';
 
 interface MessageRendererProps {
     message: {
@@ -55,7 +54,7 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
-                                    {data.map((entry: any, index: number) => (
+                                    {data.map((_entry: any, index: number) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
                                     ))}
                                 </Pie>

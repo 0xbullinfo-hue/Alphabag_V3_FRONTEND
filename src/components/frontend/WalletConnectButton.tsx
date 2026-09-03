@@ -1,8 +1,8 @@
+import { Crown,Eye,Globe,LogOut,Wallet } from 'lucide-react';
 import React from 'react';
-import { Button } from '../ui/Button';
-import { Wallet, LogOut, Crown, Eye, Globe } from 'lucide-react';
-import { useWallet } from '../../context/WalletContext';
 import { useNetwork } from 'wagmi';
+import { useWallet } from '../../context/WalletContext';
+import { Button } from '../ui/Button';
 
 export const WalletConnectButton: React.FC = () => {
   const { address, isConnecting, connectWallet, disconnectWallet, isPremium, connectionType } = useWallet();
