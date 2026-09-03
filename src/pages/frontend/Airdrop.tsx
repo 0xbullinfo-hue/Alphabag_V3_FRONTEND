@@ -1,3 +1,5 @@
+import { SEO } from '../../components/common/SEO';
+import { buildBreadcrumbs } from '../../lib/structuredData';
 import {
 BarChart3,
 Bell,
@@ -394,6 +396,12 @@ export const Airdrop: React.FC = () => {
 
     return (
         <div className="w-full space-y-3 pb-2 animate-in fade-in duration-700">
+        <SEO
+          title="Airdrop Rewards & Ecosystem Points | AlphaBAG"
+          description="Participate in AlphaBAG ecosystem quests, earn airdrop points, and verify your wallet eligibility for early community rewards."
+          canonicalUrl="/airdrop"
+          structuredData={buildBreadcrumbs([{ name: 'Home', path: '/' }, { name: 'Airdrop', path: '/airdrop' }])}
+        />
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">

@@ -1,3 +1,5 @@
+import { SEO } from '../../components/common/SEO';
+import { buildWebsiteSchema, buildOrganizationSchema, buildSoftwareAppSchema } from '../../lib/structuredData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { BarChart3,Bot,Briefcase,Calculator as CalculatorIcon,ChevronRight,LayoutGrid,Lock,PieChart,Rocket,Send,ShieldCheck,TrendingUp,Trophy,Wallet,X,Zap } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
@@ -722,7 +724,14 @@ export const Landing: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
+    
+      <div className="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style={{ backgroundImage: 'radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)' }}>
+      <SEO
+        title="AlphaBAG | Crypto Portfolio Tracker, Whale Alerts & AI Market Intelligence"
+        description="AlphaBAG helps crypto investors track multi-chain portfolios, monitor whale activity, and use AI-powered market intelligence with a live leverage simulator."
+        canonicalUrl="/"
+        structuredData={[buildWebsiteSchema(), buildOrganizationSchema(), buildSoftwareAppSchema()]}
+      />
 
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray bg-alphabag-dark/95">

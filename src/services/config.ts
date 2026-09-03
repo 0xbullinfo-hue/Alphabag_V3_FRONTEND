@@ -51,7 +51,7 @@ export const NFT_CONFIG = {
 
 // Global Demo Mode Toggle
 const LOCALHOST_HOSTNAMES = new Set(['localhost', '127.0.0.1', '::1']);
-const IS_LOCALHOST_DEV = import.meta.env.DEV && LOCALHOST_HOSTNAMES.has(window.location.hostname);
+const IS_LOCALHOST_DEV = import.meta.env.DEV && typeof window !== 'undefined' && LOCALHOST_HOSTNAMES.has(window.location.hostname);
 
 export const IS_DEMO_MODE = IS_LOCALHOST_DEV && import.meta.env.VITE_DEMO_MODE !== 'false';
 

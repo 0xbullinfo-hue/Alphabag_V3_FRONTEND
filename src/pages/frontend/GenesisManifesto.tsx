@@ -1,3 +1,5 @@
+import { SEO } from '../../components/common/SEO';
+import { buildBreadcrumbs } from '../../lib/structuredData';
 import { Link as LinkIcon,Lock,Plus,Rocket,Trash2 } from 'lucide-react';
 import React,{ useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -140,6 +142,12 @@ export const GenesisManifesto: React.FC = () => {
 
     return (
         <div className="bg-alphabag-black min-h-screen text-white font-sans pt-12 pb-16 px-6">
+        <SEO
+          title="Genesis Manifesto | AlphaBAG Philosophy & Architecture"
+          description="Read the AlphaBAG Genesis Manifesto: Decoupling intelligence from emotion, building multi-chain surveillance tools, and aligning trader incentives."
+          canonicalUrl="/genesis-manifesto"
+          structuredData={buildBreadcrumbs([{ name: 'Home', path: '/' }, { name: 'Manifesto', path: '/genesis-manifesto' }])}
+        />
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-2">

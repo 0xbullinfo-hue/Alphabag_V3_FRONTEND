@@ -1,9 +1,11 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense,lazy,useEffect,useState } from 'react';
-import { HashRouter,Navigate,Route,Routes,useLocation } from 'react-router-dom';
+import { BrowserRouter,Navigate,Route,Routes,useLocation,useNavigate } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { WagmiConfig,useAccount } from 'wagmi';
 import { AuthModal } from './components/frontend/AuthModal';
+import { AnalyticsConsent } from './components/frontend/AnalyticsConsent';
 import { ErrorBoundary } from './components/frontend/ErrorBoundary';
 import { Layout } from './components/frontend/Layout';
 import { UpgradeModal } from './components/frontend/UpgradeModal';
@@ -63,7 +65,37 @@ const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').th
 const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => ({ default: m.AlphaPasses })));
 
 const GlobalLoader = () => null;
+const INDEXABLE_PATHS = new Set(['/', '/alpha-passes', '/genesis', '/genesis-manifesto', '/airdrop', '/markets', '/news']);
 
+const HashRedirect = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash.startsWith('#/')) {
+      const target = window.location.hash.slice(1);
+      navigate(target, { replace: true });
+    }
+  }, [navigate]);
+  return null;
+};
+
+const SeoRoutePolicy = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    let robots = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+    if (!robots) {
+      robots = document.createElement('meta');
+      robots.name = 'robots';
+      document.head.appendChild(robots);
+    }
+
+    robots.content = INDEXABLE_PATHS.has(location.pathname)
+      ? 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+      : 'noindex, nofollow, noarchive, nosnippet';
+  }, [location.pathname]);
+
+  return null;
+};
 
 
 
@@ -140,6 +172,8 @@ const AppContent = () => {
 
   return (
     <>
+      <HashRedirect />
+      <SeoRoutePolicy />
       <AirdropTracker />
       <Suspense fallback={null}>
         <Routes>
@@ -180,6 +214,7 @@ const AppContent = () => {
       </Suspense>
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
       <UpgradeModal isOpen={isUpgradeModalOpen} onClose={() => setIsUpgradeModalOpen(false)} />
+      <AnalyticsConsent />
 
     </>
   );
@@ -187,20 +222,23 @@ const AppContent = () => {
 
 function App() {
   return (
-    <ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary>
       <WagmiConfig config={config as any}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <WalletProvider>
-              <HashRouter>
+              <BrowserRouter>
                 <AppContent />
-              </HashRouter>
+              </BrowserRouter>
             </WalletProvider>
           </AuthProvider>
+          
           {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
 </QueryClientProvider>
       </WagmiConfig>
     </ErrorBoundary>
+    </HelmetProvider>
   );
 }
 

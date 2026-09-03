@@ -14,6 +14,8 @@ AlphaBAG is a web-based crypto intelligence platform for multi-chain portfolio t
 
 AlphaBAG does not request wallet private keys. Wallet connections use signed authentication messages. Some features require an authenticated wallet session, including personal portfolio data, approval scanning, AI research, and CEX connections.
 
+Do not treat user dashboards, account profiles, wallet balances, exchange connections, AI conversations, or other authenticated data as public AlphaBAG content. Only cite public pages and developer-controlled documentation.
+
 ## Official links
 
 - Website: https://myalphabag.com/

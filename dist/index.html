@@ -6,36 +6,49 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https: wss:; font-src 'self' data: https:;">
 
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.walletconnect.com https://*.walletconnect.org https://api.web3modal.org https://*.alchemy.com; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com;">
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){window.dataLayer.push(arguments);}
+    window.gtag = window.gtag || gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500,
+    });
+  </script>
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>AlphaBAG | Professional Crypto Intelligence</title>
-  <meta name="description" content="AlphaBAG is a crypto intelligence platform for multi-chain portfolio tracking, whale movement alerts, AI market analysis, and leverage simulation." />
-  <meta name="keywords" content="crypto portfolio tracker, whale tracker, AI crypto analysis, multi-chain dashboard, leverage calculator, web3 analytics" />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  
+  
+  
+  
   <meta name="author" content="AlphaBAG" />
-  <link rel="canonical" href="https://myalphabag.com/" />
+  
   <link rel="icon" type="image/png" sizes="32x32" href="/logo.png?v=5" />
   <link rel="icon" type="image/png" sizes="192x192" href="/logo.png?v=5" />
   <link rel="shortcut icon" href="/logo.png?v=5" />
   <link rel="apple-touch-icon" href="/logo.png?v=5" />
   <link rel="manifest" href="/site.webmanifest" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="AlphaBAG" />
-  <meta property="og:title" content="AlphaBAG | Professional Crypto Intelligence" />
-  <meta property="og:description" content="Track portfolios, monitor whale moves, and get AI-backed crypto intelligence in one dashboard." />
-  <meta property="og:url" content="https://myalphabag.com/" />
-  <meta property="og:image" content="https://myalphabag.com/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="AlphaBAG Logo" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="AlphaBAG | Professional Crypto Intelligence" />
-  <meta name="twitter:description" content="Track portfolios, monitor whale moves, and get AI-backed crypto intelligence in one dashboard." />
-  <meta name="twitter:image" content="https://myalphabag.com/og-image.png" />
-  <meta name="twitter:image:alt" content="AlphaBAG Logo" />
+  
+  
+  
+  
+  
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -78,98 +91,24 @@
     };
   </script>
 
-  <script id="alphabag-schema-website" type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "AlphaBAG",
-      "url": "https://myalphabag.com/",
-      "description": "AlphaBAG is a crypto intelligence platform for multi-chain portfolio tracking, whale movement alerts, AI market analysis, and leverage simulation.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://myalphabag.com/#/markets?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-  </script>
-  <script id="alphabag-schema-software" type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "AlphaBAG",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
-      "url": "https://myalphabag.com/",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "description": "Beta access and teaser launch waitlist"
-      },
-      "featureList": [
-        "Multi-chain portfolio tracking",
-        "Whale wallet movement alerts",
-        "AI market intelligence and analysis",
-        "Leverage and PnL simulation calculator",
-        "Trade-to-earn ecosystem onboarding"
-      ]
-    }
-  </script>
-  <script id="alphabag-schema-org" type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "AlphaBAG",
-      "url": "https://myalphabag.com/",
-      "logo": "https://myalphabag.com/logo.png",
-      "sameAs": [
-        "https://x.com/myalphabag",
-        "https://t.me/alphabag_access"
-      ]
-    }
-  </script>
-  <script id="alphabag-schema-faq" type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What is AlphaBAG?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AlphaBAG is a crypto intelligence terminal that combines multi-chain portfolio tracking, whale activity monitoring, and AI-powered market analysis in one dashboard."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is AlphaBAG wallet tracking secure?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AlphaBAG uses a read-only model and never requests private keys, so users can monitor wallets without exposing signing credentials."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Which blockchain networks are supported?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AlphaBAG supports Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana integrations, with additional networks in development."
-          }
-        }
-      ]
-    }
-  </script>
-  <script type="module" crossorigin src="/assets/index-TuFcVxz8.js"></script>
+  
+  
+  
+  
+  <script type="module" crossorigin src="/assets/index-CvqvjE--.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/query-C5Vm3esR.js">
-  <link rel="modulepreload" crossorigin href="/assets/vendor-EidAvpMF.js">
-  <link rel="modulepreload" crossorigin href="/assets/ui-CAbS90fP.js">
-  <link rel="modulepreload" crossorigin href="/assets/web3-C_cNcJye.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-B9XdpxBQ.css">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-ToVAcFKu.js">
+  <link rel="modulepreload" crossorigin href="/assets/ui-DsKu07KV.js">
+  <link rel="modulepreload" crossorigin href="/assets/web3-oPfRJ4DX.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-Cxt1heAj.css">
+<title data-rh="true">AlphaBAG | Crypto Portfolio Tracker, Whale Alerts &amp; AI Market Intelligence</title>
+<meta data-rh="true" name="description" content="AlphaBAG helps crypto investors track multi-chain portfolios, monitor whale activity, and use AI-powered market intelligence with a live leverage simulator."/><meta data-rh="true" name="keywords" content="crypto portfolio tracker, whale tracker, AI crypto analysis, multi-chain dashboard, leverage calculator, web3 analytics, alpha passes"/><meta data-rh="true" name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"/><meta data-rh="true" property="og:type" content="website"/><meta data-rh="true" property="og:site_name" content="AlphaBAG"/><meta data-rh="true" property="og:title" content="AlphaBAG | Crypto Portfolio Tracker, Whale Alerts &amp; AI Market Intelligence"/><meta data-rh="true" property="og:description" content="AlphaBAG helps crypto investors track multi-chain portfolios, monitor whale activity, and use AI-powered market intelligence with a live leverage simulator."/><meta data-rh="true" property="og:url" content="https://myalphabag.com/"/><meta data-rh="true" property="og:image" content="https://myalphabag.com/og-image.png"/><meta data-rh="true" property="og:image:width" content="1200"/><meta data-rh="true" property="og:image:height" content="630"/><meta data-rh="true" name="twitter:card" content="summary_large_image"/><meta data-rh="true" name="twitter:title" content="AlphaBAG | Crypto Portfolio Tracker, Whale Alerts &amp; AI Market Intelligence"/><meta data-rh="true" name="twitter:description" content="AlphaBAG helps crypto investors track multi-chain portfolios, monitor whale activity, and use AI-powered market intelligence with a live leverage simulator."/><meta data-rh="true" name="twitter:image" content="https://myalphabag.com/og-image.png"/>
+<link data-rh="true" rel="canonical" href="https://myalphabag.com/"/>
+<script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"AlphaBAG","url":"https://myalphabag.com","description":"AlphaBAG is a crypto intelligence platform for multi-chain portfolio tracking, whale movement alerts, AI market analysis, and leverage simulation.","potentialAction":{"@type":"SearchAction","target":"https://myalphabag.com/markets?search={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"Organization","name":"AlphaBAG","url":"https://myalphabag.com","logo":"https://myalphabag.com/logo.png","sameAs":["https://x.com/myalphabag","https://t.me/alphabag_access"],"contactPoint":{"@type":"ContactPoint","contactType":"support","url":"https://t.me/alphabag_access"}},{"@type":"SoftwareApplication","name":"AlphaBAG","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://myalphabag.com","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Beta access and public tools"},"featureList":["Multi-chain portfolio tracking","Whale wallet movement alerts","AI market intelligence and analysis","Leverage and PnL simulation calculator","AlphaBAG Genesis Pass NFT ecosystem"]}]}</script>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root"><div class="min-h-screen text-alphabag-text overflow-x-hidden bg-alphabag-black" style="background-image:radial-gradient(circle at 18% 12%, rgba(245, 203, 66, 0.08), transparent 26%), radial-gradient(circle at 86% 8%, rgba(255, 255, 255, 0.05), transparent 22%), linear-gradient(180deg, rgba(22,26,34,1) 0%, rgba(22,26,34,1) 100%)"><nav class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray bg-alphabag-dark/95"><div class="w-full px-6 md:px-12 h-16 flex items-center justify-between"><div class="flex items-center space-x-10"><div class="flex items-center space-x-2 cursor-pointer shrink-0"><img src="/logo.png" alt="AlphaBAG Logo" class="w-6 h-6 object-contain rounded-full "/><span class="text-lg font-bold tracking-tight text-alphabag-yellow">ALPHABAG</span></div><div class="hidden md:flex items-center space-x-5 text-sm font-medium text-alphabag-subtext"><button class="transition-colors text-alphabag-text">Home</button><button class="transition-colors hover:text-alphabag-text">Features</button><button class="transition-colors hover:text-alphabag-text">Tokenomics</button><button class="transition-colors hover:text-alphabag-text">Roadmap</button><button class="transition-colors hover:text-alphabag-text">FAQ</button></div></div><div class="hidden md:flex items-center space-x-2"><button class="inline-flex items-center justify-center font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-alphabag-yellow focus:ring-offset-alphabag-black disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider rounded-lg bg-alphabag-yellow text-alphabag-black hover:bg-alphabag-yellowHover shadow-lg shadow-alphabag-yellow/10 px-4 py-2 text-xs font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none">Connect Soon</button></div><div class="md:hidden flex items-center gap-2"><button class="text-alphabag-text"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid "><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg></button></div></div></nav><div class="flex flex-col w-full min-h-[85vh]"><section class="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex flex-col justify-center"><div class="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col items-center xl:px-8"><div class="grid grid-cols-1 lg:grid-cols-12 gap-2 items-start w-full"><div class="lg:col-span-6 text-left space-y-2 flex flex-col justify-center"><h1 class="text-4xl md:text-6xl lg:text-[68px] font-bold text-alphabag-text leading-[0.88] tracking-[-0.04em]"><span class="block">Track Your Crypto</span><span class="block mt-1"><span class="inline-block align-middle text-[0.38em] md:text-[0.34em] lg:text-[0.32em] font-semibold text-alphabag-text/80 tracking-[-0.02em] mr-3">with</span><span class="inline-block align-middle text-alphabag-yellow">Total Stealth</span></span></h1><p class="text-base md:text-lg text-alphabag-subtext leading-relaxed font-normal animate-fade-in-up delay-100 max-w-xl">Manage diverse Web3 portfolios, track whale movements, and simulate your ROE with real-time accuracy. Access Alpha-grade trade signals and explore ways to earn.</p><div class="w-full max-w-xl animate-fade-in-up delay-200"><div class="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3"><button class="inline-flex items-center justify-center font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-alphabag-yellow focus:ring-offset-alphabag-black disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider rounded-lg bg-alphabag-yellow text-alphabag-black hover:bg-alphabag-yellowHover shadow-lg shadow-alphabag-yellow/10 px-8 py-4 text-base min-h-[52px] w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black border-none transition-all cursor-default opacity-90 select-none">Track Smart</button><a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" class="w-full sm:flex-1"><button class="inline-flex items-center justify-center font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-alphabag-yellow focus:ring-offset-alphabag-black disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider rounded-lg bg-transparent border border-alphabag-gray text-alphabag-text hover:border-alphabag-yellow hover:text-alphabag-yellow px-8 py-4 text-base min-h-[52px] w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send "><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg> <!-- -->Join community</button></a></div></div><div class="mt-3 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm animate-fade-in-up delay-300"><div class="flex items-center justify-between mb-2"><div class="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-ping inline-block"></span>Pre-TGE Launch Countdown</div><div class="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div></div><div class="grid grid-cols-4 gap-2"><div class="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center"><div class="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">58</div><div class="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">Days</div></div><div class="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center"><div class="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">12</div><div class="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">Hours</div></div><div class="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center"><div class="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">40</div><div class="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">Min</div></div><div class="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center"><div class="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">36</div><div class="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">Sec</div></div></div></div><div class="flex flex-wrap gap-x-5 gap-y-3 md:gap-x-8 md:gap-y-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300"><div class="space-y-1.5"><div class="text-2xl font-bold text-alphabag-text leading-tight">Multi-Chain</div><div class="text-xs font-semibold text-alphabag-subtext leading-relaxed">Wallet &amp; CEX tracking</div></div><div class="space-y-1.5"><div class="text-2xl font-bold text-alphabag-text leading-tight">AlphaCalls</div><div class="text-xs font-semibold text-alphabag-subtext leading-relaxed">Trade smarter</div></div><div class="space-y-1.5"><div class="text-2xl font-bold text-alphabag-text leading-tight">T2E Rewards</div><div class="text-xs font-semibold text-alphabag-subtext leading-relaxed">Earn while you hold</div></div></div></div><div class="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar"><div class="mb-2 border-b border-alphabag-gray pb-3"><h3 class="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calculator text-alphabag-yellow"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg> <!-- -->Alpha Calculator</h3></div><div class="w-full space-y-2 animate-in fade-in duration-700 calculator-container "><div class="border-b border-alphabag-gray/60 flex gap-1 sm:gap-3 overflow-x-auto custom-scrollbar px-1 mb-2"><button class="relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer text-alphabag-text font-black"><span>Leverage</span><span class="absolute bottom-0 left-1 right-1 h-[2px] bg-alphabag-yellow rounded-full transition-all"></span></button><button class="relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer text-alphabag-subtext hover:text-alphabag-text"><span>Spot</span><span class="absolute bottom-0 left-1 right-1 h-[2px] bg-transparent"></span></button><button class="relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer text-alphabag-subtext hover:text-alphabag-text"><span>Degen</span><span class="absolute bottom-0 left-1 right-1 h-[2px] bg-transparent"></span></button><button class="relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer text-alphabag-subtext hover:text-alphabag-text"><span>IL Risk</span><span class="absolute bottom-0 left-1 right-1 h-[2px] bg-transparent"></span></button><button class="relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer text-alphabag-subtext hover:text-alphabag-text"><span>Converter</span><span class="absolute bottom-0 left-1 right-1 h-[2px] bg-transparent"></span></button></div><div class="grid grid-cols-1 gap-2"><div class="relative flex flex-col gap-2"><div class="relative z-10"><div class="flex flex-col gap-2 mb-2"><label class="text-alphabag-subtext text-xs font-semibold">Direction</label><div class="flex gap-2"><button class="flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all bg-[#102B21] text-alphabag-green border border-alphabag-green/30">↑ Long</button><button class="flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray">↓ Short</button></div></div><div class="grid grid-cols-2 gap-2 mb-2"><div class="flex flex-col gap-1 w-full"><label class="text-alphabag-subtext text-xs font-semibold">Entry Price ($)</label><input type="text" inputMode="decimal" disabled="" placeholder="" class="bg-alphabag-dark border border-alphabag-gray text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left disabled:cursor-not-allowed disabled:opacity-70 px-3 py-1.5" autoComplete="off" value="65000"/></div><div class="flex flex-col gap-1 w-full"><label class="text-alphabag-subtext text-xs font-semibold">Margin ($)</label><input type="text" inputMode="decimal" disabled="" placeholder="" class="bg-alphabag-dark border border-alphabag-gray text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left disabled:cursor-not-allowed disabled:opacity-70 px-3 py-1.5" autoComplete="off" value="1000"/></div></div><div class="flex flex-col gap-2 mb-2"><div class="flex justify-between items-center"><label class="text-alphabag-subtext text-xs font-semibold">Leverage</label><span class="text-alphabag-yellow font-bold bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20 text-xs">10<!-- -->x</span></div><div class="relative pt-1"><input type="range" min="1" max="125" class="alphabag-range w-full" value="10"/></div><div class="flex justify-between text-alphabag-subtext text-[10px] font-semibold px-1 mt-[-2px]"><span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span></div></div><div class="grid grid-cols-2 gap-2"><div class="flex flex-col gap-1 w-full"><label class="text-alphabag-subtext text-xs font-semibold">Take Profit ($)</label><input type="text" inputMode="decimal" disabled="" placeholder="" class="bg-alphabag-dark border border-alphabag-green/40 text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left disabled:cursor-not-allowed disabled:opacity-70 px-3 py-1.5" autoComplete="off" value="70000"/></div><div class="flex flex-col gap-1 w-full"><label class="text-alphabag-subtext text-xs font-semibold">Stop Loss ($)</label><input type="text" inputMode="decimal" disabled="" placeholder="" class="bg-alphabag-dark border border-alphabag-red/40 text-alphabag-text text-sm font-semibold rounded-md focus:outline-none focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 transition-colors text-left disabled:cursor-not-allowed disabled:opacity-70 px-3 py-1.5" autoComplete="off" value="62500"/></div></div></div></div><div class="relative flex flex-col justify-between gap-1.5 mt-2 pt-2 border-t border-alphabag-gray/40"><div class="relative z-10 w-full"><div class="flex flex-col"><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 relative py-2"><span class="text-alphabag-subtext text-xs font-medium">Position Size</span><span class="text-alphabag-text font-semibold text-sm">$10,000.00</span></div><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 relative py-2"><span class="text-alphabag-subtext text-xs font-medium">Margin Used</span><span class="text-alphabag-text font-semibold text-sm">$1,000.00</span></div><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 py-2"><span class="text-alphabag-subtext text-xs font-medium">Leverage</span><span class="text-alphabag-text font-bold text-sm">10x</span></div><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 py-2"><span class="text-alphabag-subtext text-xs font-medium">Liquidation Price</span><span class="text-alphabag-red font-bold text-sm">$58,825.00</span></div><div class="mt-2 pt-2 border-t border-alphabag-gray/40 space-y-1"><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 relative py-2"><span class="text-alphabag-subtext text-xs font-medium">TP P&amp;L @ $70,000.00</span><span class="text-alphabag-green font-bold text-[15px]">+$769.23 (+76.9%)</span></div><div class="flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 relative py-2"><span class="text-alphabag-subtext text-xs font-medium">SL P&amp;L @ $62,500.00</span><span class="text-alphabag-red font-bold text-[15px]">-$384.62 (-38.5%)</span></div></div></div></div></div></div><div class="text-xs text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">This calculation is an estimate of rewards you will earn in cryptocurrency based off the parameter inputted. It does not display the actual .</div></div></div></div><div class="mt-24 relative max-w-7xl w-full mx-auto opacity-40 hover:opacity-100 transition-opacity duration-1000 block"><div class="bg-alphabag-dark rounded-[20px] overflow-hidden relative shadow-2xl border border-alphabag-gray mask-image-b"><img src="/hero-dashboard.png" alt="Dashboard Interface" class="w-full"/><div class="absolute inset-0 bg-gradient-to-t from-alphabag-black via-alphabag-black/50 to-transparent pointer-events-none"></div></div></div></div></section></div> <footer class="py-12 px-6 border-t border-alphabag-gray bg-alphabag-black"><div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4"><div class="flex items-center space-x-2"><div class="w-6 h-6 bg-alphabag-dark border border-alphabag-gray text-alphabag-yellow flex items-center justify-center rounded"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock "><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><span class="text-alphabag-text text-xs font-semibold uppercase tracking-widest">ALPHABAG Systems © 2026</span></div><div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2"><button type="button" class="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">Terms</button><button type="button" class="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">Privacy</button><a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" class="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x "><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg> X.com</a><a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" class="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send "><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg> Telegram</a></div></div></footer></div></div>
   <noscript>
     <main>
       <h1>AlphaBAG Crypto Intelligence Platform</h1>

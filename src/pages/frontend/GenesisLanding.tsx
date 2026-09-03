@@ -1,3 +1,5 @@
+import { SEO } from '../../components/common/SEO';
+import { buildBreadcrumbs } from '../../lib/structuredData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { ArrowRight,Briefcase,Crown,ShieldCheck,Zap } from 'lucide-react';
 import React,{ useState } from 'react';
@@ -21,6 +23,12 @@ export const GenesisLanding: React.FC = () => {
 
     return (
         <div className="bg-alphabag-black min-h-screen text-white font-sans selection:bg-alphabag-yellow selection:text-black overflow-hidden relative">
+        <SEO
+          title="Genesis Access | AlphaBAG Terminal"
+          description="AlphaBAG Genesis launchpad and VIP access portal. Secure your early node allocations and beta terminal access."
+          canonicalUrl="/genesis"
+          structuredData={buildBreadcrumbs([{ name: 'Home', path: '/' }, { name: 'Genesis', path: '/genesis' }])}
+        />
             {/* Background Effects */}
             <div className="absolute top-0 left-0 w-full h-[1000px] bg-gradient-to-b from-alphabag-yellow/5 to-transparent pointer-events-none"></div>
             

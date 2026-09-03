@@ -1,4 +1,14 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /settings
+Disallow: /profile
+Disallow: /portfolio
+Disallow: /history
+Disallow: /cex-bag
+Disallow: /dex-bag
+Disallow: /alpha-ai
+Disallow: /security
 
 Sitemap: https://myalphabag.com/sitemap.xml

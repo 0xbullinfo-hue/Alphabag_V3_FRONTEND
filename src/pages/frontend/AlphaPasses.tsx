@@ -1,3 +1,5 @@
+import { SEO } from '../../components/common/SEO';
+import { buildBreadcrumbs, buildProductSchema } from '../../lib/structuredData';
 // SPDX-License-Identifier: MIT
 // PATCH: AlphaPasses.tsx — Production-ready mint integration
 // Fixes:
@@ -431,6 +433,21 @@ export const AlphaPasses: React.FC = () => {
 
   return (
     <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
+      <SEO
+        title="Alpha Passes | AlphaBAG Genesis Collection"
+        description="Mint your AlphaBAG Genesis Pass. 10,000 limited utility NFTs offering tier discounts, VIP multipliers, and AI crypto intelligence tools."
+        canonicalUrl="/alpha-passes"
+        structuredData={[
+          buildBreadcrumbs([{ name: 'Home', path: '/' }, { name: 'Alpha Passes', path: '/alpha-passes' }]),
+          buildProductSchema({
+            name: 'AlphaBAG Genesis Pass',
+            description: '10,000 Limited Utility Passes for On-Chain Intelligence, VIP Fee Discounts, and VIP Multipliers.',
+            price: 100,
+            currency: 'BAG',
+            url: '/alpha-passes',
+          }),
+        ]}
+      />
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">

@@ -43,6 +43,7 @@ jobs:
         # itself, which only serves static files.
         VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
         VITE_MARKET_PROXY_BASE_URL: ${{ secrets.VITE_MARKET_PROXY_BASE_URL }}
+        VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
 
         # Required for the wallet-connect flow to work at all.
         VITE_WALLETCONNECT_PROJECT_ID: ${{ secrets.VITE_WALLETCONNECT_PROJECT_ID }}
