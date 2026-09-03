@@ -76,7 +76,44 @@
     };
   </script>
 
-  <script type="application/ld+json">
+  <script id="alphabag-schema-website" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AlphaBAG",
+      "url": "https://myalphabag.com/",
+      "description": "AlphaBAG is a crypto intelligence platform for multi-chain portfolio tracking, whale movement alerts, AI market analysis, and leverage simulation.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://myalphabag.com/#/markets?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+  <script id="alphabag-schema-software" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "AlphaBAG",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "url": "https://myalphabag.com/",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Beta access and teaser launch waitlist"
+      },
+      "featureList": [
+        "Multi-chain portfolio tracking",
+        "Whale wallet movement alerts",
+        "AI market intelligence and analysis",
+        "Leverage and PnL simulation calculator",
+        "Trade-to-earn ecosystem onboarding"
+      ]
+    }
+  </script>
+  <script id="alphabag-schema-org" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -89,10 +126,64 @@
       ]
     }
   </script>
+  <script id="alphabag-schema-faq" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is AlphaBAG?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AlphaBAG is a crypto intelligence terminal that combines multi-chain portfolio tracking, whale activity monitoring, and AI-powered market analysis in one dashboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is AlphaBAG wallet tracking secure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AlphaBAG uses a read-only model and never requests private keys, so users can monitor wallets without exposing signing credentials."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which blockchain networks are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AlphaBAG supports Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana integrations, with additional networks in development."
+          }
+        }
+      ]
+    }
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
+  <noscript>
+    <main>
+      <h1>AlphaBAG Crypto Intelligence Platform</h1>
+      <p>AlphaBAG provides multi-chain portfolio tracking, whale wallet monitoring, AI market analysis, token approval scanning, and leverage simulation tools.</p>
+      <section>
+        <h2>Core capabilities</h2>
+        <ul>
+          <li>Track supported wallet networks and read-only exchange balances.</li>
+          <li>Monitor whale wallet activity and review token approvals.</li>
+          <li>Analyze market and portfolio context with Alpha Analyst.</li>
+          <li>Model leverage, spot, impermanent-loss, and conversion scenarios.</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Frequently asked questions</h2>
+        <h3>Does AlphaBAG require private keys?</h3>
+        <p>No. AlphaBAG does not request wallet private keys.</p>
+        <h3>Which networks does AlphaBAG support?</h3>
+        <p>AlphaBAG supports Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana integrations.</p>
+      </section>
+    </main>
+  </noscript>
   <script type="module" src="/src/index.tsx"></script>
 </body>
 

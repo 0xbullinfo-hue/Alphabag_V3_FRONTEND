@@ -1,0 +1,21 @@
+# AlphaBAG
+
+AlphaBAG is a web-based crypto intelligence platform for multi-chain portfolio tracking, whale wallet monitoring, market analysis, and leverage simulation.
+
+## Core capabilities
+
+- Multi-chain portfolio tracking for supported wallet networks.
+- Read-only centralized exchange balance aggregation through verified API connections.
+- Whale wallet activity monitoring and security approval scanning.
+- Alpha Analyst for authenticated market and portfolio research.
+- Alpha Calculator for leverage, spot, impermanent-loss, and conversion scenarios.
+
+## Security and access
+
+AlphaBAG does not request wallet private keys. Wallet connections use signed authentication messages. Some features require an authenticated wallet session, including personal portfolio data, approval scanning, AI research, and CEX connections.
+
+## Official links
+
+- Website: https://myalphabag.com/
+- Community: https://t.me/alphabag_access
+- X: https://x.com/myalphabag

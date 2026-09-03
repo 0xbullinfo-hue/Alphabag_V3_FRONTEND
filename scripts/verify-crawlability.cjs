@@ -21,7 +21,12 @@ if (!fs.existsSync(distIndex)) {
     'AI-backed crypto intelligence',
     'rel="canonical"',
     'robots',
-    'application/ld+json'
+    'application/ld+json',
+    'alphabag-schema-website',
+    'alphabag-schema-software',
+    'alphabag-schema-org',
+    'alphabag-schema-faq',
+    'AlphaBAG Crypto Intelligence Platform'
   ];
 
   for (const snippet of requiredSnippets) {
@@ -30,7 +35,7 @@ if (!fs.existsSync(distIndex)) {
   }
 }
 
-for (const file of ['robots.txt', 'sitemap.xml']) {
+for (const file of ['robots.txt', 'sitemap.xml', 'llms.txt']) {
   const target = path.join(publicDir, file);
   addCheck(`${file} exists`, fs.existsSync(target), fs.existsSync(target) ? 'found' : 'missing');
 }
