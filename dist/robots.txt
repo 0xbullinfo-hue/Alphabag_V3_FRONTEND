@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
@@ -10,5 +10,21 @@ Disallow: /cex-bag
 Disallow: /dex-bag
 Disallow: /alpha-ai
 Disallow: /security
+
+# AI / Answer Engine Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
 
 Sitemap: https://myalphabag.com/sitemap.xml
