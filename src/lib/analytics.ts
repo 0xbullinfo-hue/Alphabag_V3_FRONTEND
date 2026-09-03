@@ -50,12 +50,42 @@ export const loadAnalytics = (): void => {
   initWebVitals();
 };
 
+export const detectAiReferrer = (
+  referrer = typeof document !== 'undefined' ? document.referrer : ''
+): string | null => {
+  if (!referrer) return null;
+  const lower = referrer.toLowerCase();
+  if (lower.includes('chatgpt.com') || lower.includes('chat.openai.com')) return 'chatgpt';
+  if (lower.includes('perplexity.ai')) return 'perplexity';
+  if (lower.includes('claude.ai')) return 'claude';
+  if (lower.includes('gemini.google.com')) return 'gemini';
+  if (lower.includes('copilot.microsoft.com') || lower.includes('edgeservices.bing.com')) return 'copilot';
+  if (lower.includes('poe.com')) return 'poe';
+  if (lower.includes('you.com')) return 'you';
+  return null;
+};
+
 export const trackPageView = (url?: string, title?: string): void => {
   if (!analyticsLoaded || !isAnalyticsEnabled()) return;
+  const pageLocation = url || (typeof window !== 'undefined' ? window.location.href : '');
   window.gtag?.('event', 'page_view', {
-    page_location: url || window.location.href,
-    page_title: title || document.title,
+    page_location: pageLocation,
+    page_title: title || (typeof document !== 'undefined' ? document.title : ''),
   });
+
+  const aiPlatform = detectAiReferrer();
+  if (aiPlatform && typeof window !== 'undefined') {
+    window.gtag?.('event', 'ai_referral', {
+      ai_platform: aiPlatform,
+      landing_page: pageLocation,
+      referrer_url: typeof document !== 'undefined' ? document.referrer : '',
+    });
+    try {
+      window.localStorage.setItem('alphabag_ai_attribution', aiPlatform);
+    } catch {
+      // ignore storage quota / sandbox restrictions
+    }
+  }
 };
 
 export const trackEvent = (event: GAEvent): void => {

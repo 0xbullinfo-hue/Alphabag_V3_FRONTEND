@@ -209,6 +209,14 @@ const AppContent = () => {
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />
           <Route path="/alpha-passes" element={<Layout><AlphaPasses /></Layout>} />
           <Route path="/passes" element={<Navigate to="/alpha-passes" replace />} />
+            <Route path="/pricing" element={<Navigate to="/alpha-passes" replace />} />
+            <Route path="/whitepaper" element={<Navigate to="/genesis-manifesto" replace />} />
+            <Route path="/docs" element={<Navigate to="/genesis-manifesto" replace />} />
+            <Route path="/tokenomics" element={<Navigate to="/genesis-manifesto" replace />} />
+            <Route path="/quests" element={<Navigate to="/airdrop" replace />} />
+            <Route path="/rewards" element={<Navigate to="/airdrop" replace />} />
+            <Route path="/terminal" element={<Navigate to="/" replace />} />
+            <Route path="/app" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
