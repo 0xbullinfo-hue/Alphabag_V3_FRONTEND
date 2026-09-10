@@ -30,3 +30,12 @@ dist-ssr
 
 # NFT collection generation outputs (5.8GB media for IPFS upload)
 public/nft-collection/
+
+# Vite temporary artifacts
+vite.config.ts.timestamp-*
+
+# Demo scripts & mock backend
+mock-backend.cjs
+scripts/record-*
+scripts/fix-mobile-*
+scripts/seed-demo-data.js

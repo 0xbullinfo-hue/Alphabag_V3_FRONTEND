@@ -60,7 +60,7 @@ export const MarketService = {
         }
       }
       if (!Array.isArray(data) || data.length === 0) {
-        data = (await api.get(`/api/market/coins/markets?${params.toString()}`)).data;
+        return [];
       }
       return data;
     }, []);

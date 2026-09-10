@@ -13,6 +13,7 @@ export interface CexConnection {
     balance: number;
     balances: CexAsset[];
     isConnected: boolean;
+    lastSynced?: number;
 }
 
 export interface CexAsset {
@@ -117,6 +118,7 @@ export function useCexConnections() {
             balance: totalUsd,
             balances,
             isConnected: true,
+            lastSynced: Date.now(),
         };
         addConnection(conn);
         return conn;

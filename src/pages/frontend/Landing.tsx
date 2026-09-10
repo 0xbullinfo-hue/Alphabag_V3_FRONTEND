@@ -1,9 +1,35 @@
 import { SEO } from '../../components/common/SEO';
 import { buildWebsiteSchema, buildOrganizationSchema, buildSoftwareAppSchema } from '../../lib/structuredData';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { BarChart3,Bot,Briefcase,Calculator as CalculatorIcon,ChevronRight,LayoutGrid,Lock,PieChart,Rocket,Send,ShieldCheck,TrendingUp,Trophy,Wallet,X,Zap } from 'lucide-react';
+import {
+  BarChart3,
+  Bot,
+  Briefcase,
+  Calculator as CalculatorIcon,
+  ChevronRight,
+  Crown,
+  Diamond,
+  Gem,
+  Image as ImageIcon,
+  Layers,
+  LayoutGrid,
+  Lock,
+  Palette,
+  PieChart,
+  Rocket,
+  Send,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  TrendingUp,
+  Trophy,
+  Users,
+  Wallet,
+  X,
+  Zap
+} from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
@@ -110,7 +136,8 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
   en: {
     nav_home: "Home",
     nav_features: "Features",
-    nav_tokenomics: "Tokenomics",
+    nav_tokenomics: "Alphanomics",
+    nav_alpha_pass: "Alpha Pass",
     nav_buy: "Buy",
     nav_roadmap: "Roadmap",
     nav_faq: "FAQ",
@@ -156,6 +183,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     nav_home: "الرئيسية",
     nav_features: "الميزات",
     nav_tokenomics: "اقتصاديات الرمز",
+    nav_alpha_pass: "ألفا باس",
     nav_buy: "شراء",
     nav_roadmap: "خارطة الطريق",
     nav_faq: "الأسئلة الشائعة",
@@ -246,6 +274,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     nav_home: "Ana Səhifə",
     nav_features: "Özəlliklər",
     nav_tokenomics: "Tokenomika",
+    nav_alpha_pass: "Alpha Keçidi",
     nav_buy: "Satın Al",
     nav_roadmap: "Yol Xəritəsi",
     nav_faq: "FAQ",
@@ -290,7 +319,8 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
   de: {
     nav_home: "Startseite",
     nav_features: "Funktionen",
-    nav_tokenomics: "Tokenomics",
+    nav_tokenomics: "Alphanomics",
+    nav_alpha_pass: "Alpha-Pass",
     nav_buy: "Kaufen",
     nav_roadmap: "Roadmap",
     nav_faq: "FAQ",
@@ -523,12 +553,79 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
   }
 ];
 
+
+const ALPHA_PASS_STATS = [
+  { label: 'Total Supply', value: 'TBA', icon: <Layers size={20} /> },
+  { label: 'Unique Traits', value: '200+', icon: <Palette size={20} /> },
+  { label: 'Blockchain', value: 'BNB Chain', icon: <ShieldCheck size={20} /> },
+  { label: 'Mint Price', value: 'TBA', icon: <Diamond size={20} /> },
+];
+
+const ALPHA_PASS_UTILITIES = [
+  {
+    icon: <Zap size={24} />,
+    title: 'Platform Access',
+    desc: 'Unlock premium features, advanced analytics, and exclusive trading tools within the AlphaBAG ecosystem.',
+  },
+  {
+    icon: <Crown size={24} />,
+    title: 'Tier-Based Perks',
+    desc: 'Rarity determines your tier — higher rarity grants elevated platform privileges and priority access.',
+  },
+  {
+    icon: <Trophy size={24} />,
+    title: 'T2E Boosters',
+    desc: 'NFT holders receive multiplied Trade-to-Earn rewards, stacking with platform engagement.',
+  },
+  {
+    icon: <Users size={24} />,
+    title: 'DAO Governance',
+    desc: 'Vote on platform proposals, feature requests, and ecosystem fund allocations.',
+  },
+  {
+    icon: <Star size={24} />,
+    title: 'Airdrop Priority',
+    desc: 'Holders are first in line for future token airdrops, partner project drops, and exclusive events.',
+  },
+  {
+    icon: <Sparkles size={24} />,
+    title: 'Alpha Signals',
+    desc: 'Access private alpha channels with institutional-grade trade signals and whale movement alerts.',
+  },
+];
+
+const ALPHA_PASS_RARITY_TIERS = [
+  { name: 'Common', pct: '50%', color: '#94a3b8' },
+  { name: 'Rare', pct: '25%', color: '#3b82f6' },
+  { name: 'Epic', pct: '15%', color: '#a855f7' },
+  { name: 'Legendary', pct: '8%', color: '#f59e0b' },
+  { name: 'Mythic', pct: '2%', color: '#ef4444' },
+];
+
+export type LandingTab = 'home' | 'features' | 'tokenomics' | 'alpha-pass' | 'roadmap' | 'faq' | 'calculator' | 'markets';
+
 export const Landing: React.FC = () => {
   useWeb3Modal();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets'>('home');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const validTabs: LandingTab[] = ['home', 'features', 'tokenomics', 'alpha-pass', 'roadmap', 'faq', 'calculator', 'markets'];
+  const rawTab = searchParams.get('tab');
+  const initialTab: LandingTab = (rawTab && validTabs.includes(rawTab as LandingTab))
+    ? (rawTab as LandingTab)
+    : (rawTab === 'alpha-access' || rawTab === 'nft' ? 'alpha-pass' : 'home');
+
+  const [activeTab, setActiveTab] = useState<LandingTab>(initialTab);
+
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
+      setActiveTab('alpha-pass');
+    } else if (tabParam && validTabs.includes(tabParam as LandingTab)) {
+      setActiveTab(tabParam as LandingTab);
+    }
+  }, [searchParams]);
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
   const [openRoadmapItems, setOpenRoadmapItems] = useState<number[]>([0]);
   const [legalModal, setLegalModal] = useState<'terms' | 'privacy' | null>(null);
@@ -709,8 +806,15 @@ export const Landing: React.FC = () => {
 
 
 
-  const handleNavClick = (tab: 'home' | 'features' | 'tokenomics' | 'roadmap' | 'faq' | 'calculator' | 'markets') => {
+  const handleNavClick = (tab: LandingTab) => {
     setActiveTab(tab);
+    if (tab === 'home') {
+      const next = new URLSearchParams(searchParams);
+      next.delete('tab');
+      setSearchParams(next, { replace: true });
+    } else {
+      setSearchParams({ tab }, { replace: true });
+    }
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -749,6 +853,7 @@ export const Landing: React.FC = () => {
               <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_home')}</button>
               <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_features')}</button>
               <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_tokenomics')}</button>
+              <button onClick={() => handleNavClick('alpha-pass')} className={`transition-colors ${activeTab === 'alpha-pass' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_alpha_pass') || 'Alpha Pass'}</button>
               <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_roadmap')}</button>
               <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_faq')}</button>
             </div>
@@ -790,6 +895,7 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
+            <button onClick={() => handleNavClick('alpha-pass')} className={`text-left py-2 text-sm font-medium ${activeTab === 'alpha-pass' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_alpha_pass') || 'Alpha Pass'}</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
@@ -849,7 +955,7 @@ export const Landing: React.FC = () => {
                     <div className="flex items-center justify-between mb-2">
                       <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-ping inline-block"></span>
-                        {teaserCountdown.isLive ? 'Live now' : 'Pre-TGE Launch Countdown'}
+                        {teaserCountdown.isLive ? 'Live now' : 'BETA TESTING COUNT DOWN'}
                       </div>
                       <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
                     </div>
@@ -1064,14 +1170,24 @@ export const Landing: React.FC = () => {
           </section>
         )}
 
-        {/* Tokenomics Section */}
+        {/* Alphanomics Section (formerly Tokenomics) — masked with Coming Soon */}
         {activeTab === 'tokenomics' && (
           <section className="relative py-32 px-6 min-h-[85vh] flex flex-col justify-center">
 
-            
+            {/* ── Coming Soon translucent mask ── */}
+            <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', background: 'rgba(22,26,34,0.72)' }}>
+              <div className="flex flex-col items-center gap-4 select-none">
+                <div className="w-16 h-16 rounded-full border-2 border-alphabag-yellow/60 flex items-center justify-center bg-alphabag-darkgray/80 shadow-lg shadow-yellow-900/20">
+                  <Lock size={28} className="text-alphabag-yellow" />
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-yellow drop-shadow-lg">Coming Soon</h2>
+                <p className="text-alphabag-subtext text-sm md:text-base max-w-md text-center leading-relaxed">Alphanomics details will be revealed closer to launch. Stay tuned.</p>
+              </div>
+            </div>
+
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alphabag <span className="text-alphabag-yellow">Tokenomics</span></h2>
+                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alphabag <span className="text-alphabag-yellow">Alphanomics</span></h2>
                 <p className="text-alphabag-subtext text-sm max-w-4xl mx-auto leading-relaxed">Detailed token distribution and exact tokenomics for Alphabag ecosystem</p>
               </div>
 
@@ -1120,6 +1236,187 @@ export const Landing: React.FC = () => {
                     />
                     <TokenomicsDetailCard title="TOTAL SUPPLY" percentage="100%" subtitle="21,000,000" desc="Strictly hard-capped supply. No mint function exists post-deployment." highlight />
                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        
+        {/* Alpha Pass Section — masked with centralized Coming Soon */}
+        {activeTab === 'alpha-pass' && (
+          <section className="relative py-28 px-6 min-h-[85vh] flex flex-col justify-center">
+
+            {/* ── Centralized Coming Soon translucent mask (fixed to visible viewport under nav) ── */}
+            <div className="fixed inset-x-0 top-16 bottom-0 z-40 flex items-center justify-center pointer-events-auto" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', background: 'rgba(22,26,34,0.78)' }}>
+              <div className="flex flex-col items-center gap-4 select-none px-6 text-center max-w-lg mx-auto">
+                <div className="w-16 h-16 rounded-full border-2 border-alphabag-yellow/60 flex items-center justify-center bg-alphabag-darkgray/80 shadow-lg shadow-yellow-900/30 animate-pulse">
+                  <Lock size={30} className="text-alphabag-yellow" />
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-yellow drop-shadow-lg">Coming Soon</h2>
+                <p className="text-alphabag-subtext text-sm md:text-base leading-relaxed">
+                  The Alpha Pass NFT collection is under development.<br />Exclusive art pieces granting utility access to AlphaBAG.
+                </p>
+                <div className="mt-2 flex items-center gap-2 text-xs text-alphabag-subtext/70 uppercase tracking-widest font-semibold">
+                  <Gem size={13} className="text-alphabag-yellow/70" />
+                  Art &bull; Utility &bull; Access
+                </div>
+              </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto relative z-10 w-full space-y-16">
+              {/* Collection Hero & Mint Card */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div className="space-y-6">
+                  <div>
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 mb-4">
+                      <Sparkles size={14} className="text-alphabag-yellow" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-alphabag-yellow">NFT Collection</span>
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-text leading-[1.1] mb-4">
+                      Alpha<span className="text-alphabag-yellow">BAG</span> Pass
+                    </h2>
+                    <p className="text-alphabag-subtext text-base md:text-lg leading-relaxed max-w-xl">
+                      A curated collection of <span className="text-alphabag-yellow font-semibold">exclusive NFT art pieces</span> designed 
+                      to serve as your key to the AlphaBAG ecosystem. Each piece unlocks platform utility,
+                      governance rights, and enhanced earning potential.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    {ALPHA_PASS_STATS.map((stat) => (
+                      <div key={stat.label} className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 flex items-center gap-3">
+                        <div className="w-10 h-10 shrink-0 rounded-xl bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-alphabag-yellow">
+                          {stat.icon}
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">{stat.label}</div>
+                          <div className="text-lg font-bold text-alphabag-text">{stat.value}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <button disabled className="flex-1 px-8 py-4 rounded-xl bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
+                      <Wallet size={18} /> Mint Coming Soon
+                    </button>
+                    <button disabled className="px-6 py-4 rounded-xl bg-alphabag-darkgray text-alphabag-subtext font-semibold text-base border border-alphabag-gray cursor-not-allowed flex items-center justify-center gap-2">
+                      <ImageIcon size={18} /> View Gallery
+                    </button>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-3xl p-6 md:p-8 shadow-2xl">
+                    <div className="mb-6">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Mint Progress</span>
+                        <span className="text-sm font-mono font-bold text-alphabag-yellow">TBA</span>
+                      </div>
+                      <div className="w-full h-3 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
+                        <div className="h-full rounded-full bg-gradient-to-r from-alphabag-yellow to-yellow-600" style={{ width: '0%' }} />
+                      </div>
+                      <div className="mt-2 flex justify-between text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">
+                        <span>0% Minted</span>
+                        <span>Phase 1</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Price</div>
+                        <div className="text-xl font-black text-alphabag-yellow">TBA</div>
+                      </div>
+                      <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
+                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Max Per Wallet</div>
+                        <div className="text-xl font-black text-alphabag-text">5</div>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <div className="text-xs text-alphabag-subtext font-semibold uppercase tracking-wider mb-2">Quantity</div>
+                      <div className="flex items-center gap-3">
+                        <button disabled className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-gray text-alphabag-subtext font-bold text-lg cursor-not-allowed">-</button>
+                        <div className="flex-1 h-10 rounded-xl bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-lg font-bold text-alphabag-text">1</div>
+                        <button disabled className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-gray text-alphabag-subtext font-bold text-lg cursor-not-allowed">+</button>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-alphabag-gray">
+                      <span className="text-sm font-semibold text-alphabag-subtext">Total</span>
+                      <span className="text-lg font-black text-alphabag-yellow">TBA</span>
+                    </div>
+
+                    <button disabled className="w-full py-4 rounded-xl bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
+                      <Lock size={18} /> Connect Wallet to Mint
+                    </button>
+
+                    <div className="mt-4 text-center">
+                      <span className="inline-flex items-center gap-1.5 text-xs text-alphabag-subtext font-semibold uppercase tracking-wider">
+                        <span className="w-2 h-2 rounded-full bg-yellow-500/60 animate-pulse" />
+                        Minting Not Active
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Utility Grid */}
+              <div>
+                <div className="text-center mb-10">
+                  <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-alphabag-text mb-2">
+                    Pass <span className="text-alphabag-yellow">Utility</span>
+                  </h3>
+                  <p className="text-alphabag-subtext text-sm md:text-base max-w-xl mx-auto">
+                    Every Alpha Pass NFT is more than art — it's your key to the AlphaBAG ecosystem.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {ALPHA_PASS_UTILITIES.map((feat) => (
+                    <div key={feat.title} className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-6 hover:border-alphabag-muted transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-alphabag-yellow mb-4">
+                        {feat.icon}
+                      </div>
+                      <h4 className="text-base font-bold text-alphabag-text mb-2">{feat.title}</h4>
+                      <p className="text-sm text-alphabag-subtext leading-relaxed">{feat.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rarity Tiers */}
+              <div className="max-w-4xl mx-auto">
+                <div className="text-center mb-10">
+                  <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-alphabag-text mb-2">
+                    Rarity <span className="text-alphabag-yellow">Tiers</span>
+                  </h3>
+                  <p className="text-alphabag-subtext text-sm md:text-base max-w-lg mx-auto">
+                    5 rarity levels determine your tier and unlock escalating platform benefits.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  {ALPHA_PASS_RARITY_TIERS.map((tier) => (
+                    <div key={tier.name} className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex items-center justify-between hover:border-alphabag-muted transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center border" style={{ borderColor: tier.color + '60', background: tier.color + '15' }}>
+                          <Gem size={20} style={{ color: tier.color }} />
+                        </div>
+                        <div>
+                          <div className="text-base font-bold text-alphabag-text">{tier.name}</div>
+                          <div className="text-xs text-alphabag-subtext font-medium">{tier.pct} Allocation</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <div className="hidden sm:block w-32 h-2 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
+                          <div className="h-full rounded-full transition-all" style={{ width: tier.pct, background: tier.color }} />
+                        </div>
+                        <div className="text-lg font-black min-w-[50px] text-right" style={{ color: tier.color }}>{tier.pct}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -1255,6 +1552,9 @@ export const Landing: React.FC = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
             <button type="button" onClick={() => setLegalModal('terms')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Terms
+            </button>
+            <button type="button" onClick={() => handleNavClick('alpha-pass')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
+              Alpha Pass
             </button>
             <button type="button" onClick={() => setLegalModal('privacy')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Privacy

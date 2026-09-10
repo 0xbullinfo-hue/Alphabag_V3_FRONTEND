@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
+import { timeSince } from '../../lib/formatters';
 
 const CHART_COLORS = [
     '#FCD535','#F97316','#22D3EE','#A78BFA','#34D399',
@@ -299,8 +300,8 @@ export const CexBag: React.FC = () => {
                                             <div>
                                                 <h3 className="font-semibold text-alphabag-text text-sm">{cex.name}</h3>
                                                 <div className="flex items-center text-[9px] text-alphabag-green font-semibold uppercase tracking-wider mt-0.5">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5 animate-pulse"></div>
-                                                    Live API
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5"></div>
+                                                    API Connected {cex.lastSynced ? `· Synced ${timeSince(cex.lastSynced)}` : ''}
                                                 </div>
                                                 <div className="text-alphabag-subtext text-[9px] font-mono mt-0.5">{cex.apiKey}</div>
                                             </div>

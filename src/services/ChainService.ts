@@ -34,7 +34,7 @@ export const ChainService = {
                 change24h: Number(token.change24h || 0),
             }));
             
-            console.log(`[ChainService] Successfully retrieved ${tokens.length} balances via Covalent`);
+            console.log(`[ChainService] Successfully retrieved ${tokens.length} balances via /public-balances`);
             return tokens;
         } catch (e: any) {
             console.error("[ChainService] Multi-chain balance fetch failed:", e?.message);

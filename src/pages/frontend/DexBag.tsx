@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { api } from '../../services/api';
 import { TokenBalance } from '../../types';
+import { getExplorerTokenUrl } from '../../lib/formatters';
 
 const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   eth: { label: 'ETH', color: 'text-blue-400', bg: 'bg-blue-500/10' },
@@ -13,7 +14,7 @@ const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }>
 };
 
 const fetchDexBalances = async (address: string): Promise<TokenBalance[]> => {
-  const res = await api.get(`/api/portfolio/balances?address=${address}`);
+  const res = await api.get('/api/portfolio/public-balances', { params: { address } });
   const data = res.data?.tokens || res.data || [];
   return Array.isArray(data) ? data : [];
 };
@@ -111,7 +112,7 @@ export const DexBag: React.FC = () => {
         <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
           <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Last Synced</p>
           <p className="text-sm font-black text-alphabag-text">{lastUpdated.toLocaleTimeString()}</p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">Real-time data</p>
+          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">Refreshes every 60s</p>
         </div>
       </div>
 
@@ -183,7 +184,7 @@ export const DexBag: React.FC = () => {
                         <td className="p-4 text-right font-black text-alphabag-text text-xs">${(token.valueUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                         <td className="p-4 text-center">
                           {token.contractAddress && (
-                            <a href={`https://bscscan.com/token/${token.contractAddress}`} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow">
+                            <a href={getExplorerTokenUrl(token.chain || '', token.contractAddress || '')} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow">
                               <ExternalLink size={13} />
                             </a>
                           )}
