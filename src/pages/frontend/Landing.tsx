@@ -555,10 +555,10 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
 
 
 const ALPHA_PASS_STATS = [
-  { label: 'Total Supply', value: 'TBA', icon: <Layers size={20} /> },
+  { label: 'Total Supply', value: '4,000', icon: <Layers size={20} /> },
   { label: 'Unique Traits', value: '200+', icon: <Palette size={20} /> },
   { label: 'Blockchain', value: 'BNB Chain', icon: <ShieldCheck size={20} /> },
-  { label: 'Mint Price', value: 'TBA', icon: <Diamond size={20} /> },
+  { label: 'Mint Price', value: '0.07 BNB', icon: <Diamond size={20} /> },
 ];
 
 const ALPHA_PASS_UTILITIES = [
@@ -1312,7 +1312,7 @@ export const Landing: React.FC = () => {
                     <div className="mb-6">
                       <div className="flex justify-between items-center mb-3">
                         <span className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Mint Progress</span>
-                        <span className="text-sm font-mono font-bold text-alphabag-yellow">TBA</span>
+                        <span className="text-sm font-mono font-bold text-alphabag-yellow">0 / 4,000</span>
                       </div>
                       <div className="w-full h-3 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
                         <div className="h-full rounded-full bg-gradient-to-r from-alphabag-yellow to-yellow-600" style={{ width: '0%' }} />
@@ -1326,7 +1326,7 @@ export const Landing: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Price</div>
-                        <div className="text-xl font-black text-alphabag-yellow">TBA</div>
+                        <div className="text-xl font-black text-alphabag-yellow">0.07 BNB</div>
                       </div>
                       <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
                         <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Max Per Wallet</div>
@@ -1345,7 +1345,7 @@ export const Landing: React.FC = () => {
 
                     <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-alphabag-gray">
                       <span className="text-sm font-semibold text-alphabag-subtext">Total</span>
-                      <span className="text-lg font-black text-alphabag-yellow">TBA</span>
+                      <span className="text-lg font-black text-alphabag-yellow">0.07 BNB</span>
                     </div>
 
                     <button disabled className="w-full py-4 rounded-xl bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
