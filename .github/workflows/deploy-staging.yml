@@ -31,7 +31,7 @@ jobs:
           npm -v
 
       - name: Install Dependencies
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
 
       - name: Typecheck
         run: npm run typecheck
