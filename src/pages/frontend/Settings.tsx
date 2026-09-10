@@ -310,9 +310,9 @@ export const Settings: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch pt-2">
                     {/* Free Tier */}
                     <div className={`bg-alphabag-black border rounded-xl p-5 flex flex-col justify-between relative transition-all ${
-                        premiumTokenBalance < 10000 ? 'border-alphabag-yellow/50 shadow-sm' : 'border-alphabag-gray opacity-80'
+                        premiumTokenBalance < 2000 ? 'border-alphabag-yellow/50 shadow-sm' : 'border-alphabag-gray opacity-80'
                     }`}>
-                        {premiumTokenBalance < 10000 && (
+                        {premiumTokenBalance < 2000 && (
                             <div className="absolute top-4 right-4">
                                 <span className="bg-alphabag-gray text-alphabag-yellow border border-alphabag-yellow/30 px-2 py-0.5 rounded text-[9px] font-semibold uppercase">
                                     Current Tier
@@ -356,17 +356,17 @@ export const Settings: React.FC = () => {
 
                     {/* Premium Tier */}
                     <div className={`bg-alphabag-black border rounded-xl p-5 flex flex-col justify-between relative transition-all ${
-                        premiumTokenBalance >= 10000 ? 'border-alphabag-yellow shadow-md' : 'border-alphabag-gray'
+                        premiumTokenBalance >= 2000 ? 'border-alphabag-yellow shadow-md' : 'border-alphabag-gray'
                     }`}>
                         <div className="absolute top-4 right-4">
                             <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded text-[9px] font-semibold uppercase border border-alphabag-yellow/20">
-                                {premiumTokenBalance >= 10000 ? 'Active Holder' : 'Token Holder'}
+                                {premiumTokenBalance >= 2000 ? 'Active Holder' : 'Token Holder'}
                             </span>
                         </div>
                         <div>
                             <div className="text-[10px] uppercase font-semibold text-alphabag-yellow">Pro Analytics</div>
                             <h3 className="text-lg font-semibold text-alphabag-text mt-0.5">PREMIUM TIER</h3>
-                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">10,000 $BAG</div>
+                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">2,000 $BAG</div>
                             <div className="h-px bg-alphabag-gray my-4" />
                             <div className="space-y-2.5 text-xs text-alphabag-text">
                                 <div className="flex items-center gap-2">
@@ -413,7 +413,7 @@ export const Settings: React.FC = () => {
                                 <Crown size={12} fill="currentColor" /> Apex Level
                             </div>
                             <h3 className="text-lg font-semibold text-alphabag-text mt-0.5">ALPHA VIP</h3>
-                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">10,000 $BAG + 10 NFT</div>
+                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">2,000 $BAG + 10 NFT</div>
                             <div className="h-px bg-alphabag-gray my-4" />
                             <div className="space-y-2.5 text-xs text-alphabag-text font-medium">
                                 <div className="flex items-center gap-2">

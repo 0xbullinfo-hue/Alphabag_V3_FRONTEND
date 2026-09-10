@@ -1079,13 +1079,13 @@ export const AlphaPasses: React.FC = () => {
             <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-5 space-y-4 flex flex-col justify-between">
               <div>
                 <span className="text-xs font-semibold uppercase text-alphabag-subtext">Entry</span>
-                <h3 className="text-xl font-bold text-alphabag-text mt-1">Free Tier</h3>
-                <div className="text-2xl font-bold text-alphabag-text mt-2 font-mono">0 BNB</div>
+                <h3 className="text-xl font-bold text-alphabag-text mt-1">FREE TIER</h3>
+                <div className="text-2xl font-bold text-alphabag-text mt-2 font-mono">0 $BAG</div>
                 <div className="mt-4 space-y-2 text-xs text-alphabag-subtext">
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Public Token Scanner</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Standard Market Overview</div>
-                  <div className="flex items-center gap-2 text-alphabag-subtext/40"><Lock size={14} className="shrink-0" /> No ITEMS Multipliers</div>
-                  <div className="flex items-center gap-2 text-alphabag-subtext/40"><Lock size={14} className="shrink-0" /> Standard Swap Fees</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Standard Dashboard Access</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Alpha Screener & Global Markets</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Alpha Calculator & Mission Control</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Alpha Passes, News & Connections</div>
                 </div>
               </div>
             </div>
@@ -1093,14 +1093,15 @@ export const AlphaPasses: React.FC = () => {
             {/* Premium */}
             <div className="bg-alphabag-black border border-alphabag-yellow/40 rounded-xl p-5 space-y-4 flex flex-col justify-between shadow-[0_0_15px_rgba(252,213,53,0.06)]">
               <div>
-                <span className="text-xs font-semibold uppercase text-alphabag-yellow">Recommended</span>
-                <h3 className="text-xl font-bold text-alphabag-text mt-1">Genesis Pass Holder</h3>
-                <div className="text-2xl font-bold text-alphabag-yellow mt-2 font-mono">0.07 BNB</div>
+                <span className="text-xs font-semibold uppercase text-alphabag-yellow">Pro Analytics</span>
+                <h3 className="text-xl font-bold text-alphabag-text mt-1">PREMIUM TIER</h3>
+                <div className="text-2xl font-bold text-alphabag-yellow mt-2 font-mono">2,000 $BAG</div>
                 <div className="mt-4 space-y-2 text-xs text-alphabag-text">
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> 1.5x ITEMS Point Boost</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Full Whale Tracking & Alerts</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Real-Time Telegram Signals</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> 50% Swap Fee Discount</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> All features of Free Tier</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Real-time BSC Whale Radar</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> <strong>1.25x Multiplier</strong> on ITEMS</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Alpha Feeds & DeFi Tracker</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> 5hr AlphaAI Queries</div>
                 </div>
               </div>
               <button 
@@ -1112,16 +1113,18 @@ export const AlphaPasses: React.FC = () => {
             </div>
 
             {/* Alpha VIP */}
-            <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-5 space-y-4 flex flex-col justify-between">
+            <div className="bg-alphabag-black border-2 border-alphabag-yellow rounded-xl p-5 space-y-4 flex flex-col justify-between shadow-sm">
               <div>
-                <span className="text-xs font-semibold uppercase text-alphabag-subtext">Elite</span>
-                <h3 className="text-xl font-bold text-alphabag-text mt-1">Alpha VIP Suite</h3>
-                <div className="text-2xl font-bold text-alphabag-text mt-2 font-mono">10x Passes</div>
+                <span className="text-xs font-semibold uppercase text-alphabag-yellow flex items-center gap-1"><Crown size={12} fill="currentColor" /> Apex Level</span>
+                <h3 className="text-xl font-bold text-alphabag-text mt-1">ALPHA VIP</h3>
+                <div className="text-2xl font-bold text-alphabag-yellow mt-2 font-mono">2,000 $BAG + 10 NFT</div>
                 <div className="mt-4 space-y-2 text-xs text-alphabag-text">
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> 5.0x Maximum ITEMS Multiplier</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Zero Platform Swap Fees</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Exclusive Private Syndicate Chat</div>
-                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Early Launchpad & Airdrop Allocation</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> All features of Free Tier</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> <strong>100% Platform Unlocks</strong></div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> <strong>Alpha Mission & 1.5x MAXIMUM Multiplier</strong></div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> VIP Telegram Bot Real-time Alerts</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Private Founder, AlphaCall, Alpha Analysts & Alpha Feeds</div>
+                  <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> DeFi Tracker, Security Radar & All Dashboard Features</div>
                 </div>
               </div>
             </div>
