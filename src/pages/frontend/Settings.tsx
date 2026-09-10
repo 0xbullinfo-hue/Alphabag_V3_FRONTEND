@@ -366,7 +366,7 @@ export const Settings: React.FC = () => {
                         <div>
                             <div className="text-[10px] uppercase font-semibold text-alphabag-yellow">Pro Analytics</div>
                             <h3 className="text-lg font-semibold text-alphabag-text mt-0.5">PREMIUM TIER</h3>
-                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">2,000 $BAG</div>
+                            <div className="text-xl font-semibold text-alphabag-yellow mt-2">2,000 $BAG + 1 NFT</div>
                             <div className="h-px bg-alphabag-gray my-4" />
                             <div className="space-y-2.5 text-xs text-alphabag-text">
                                 <div className="flex items-center gap-2">

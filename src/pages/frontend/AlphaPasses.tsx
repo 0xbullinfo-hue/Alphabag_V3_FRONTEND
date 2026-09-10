@@ -1095,7 +1095,7 @@ export const AlphaPasses: React.FC = () => {
               <div>
                 <span className="text-xs font-semibold uppercase text-alphabag-yellow">Pro Analytics</span>
                 <h3 className="text-xl font-bold text-alphabag-text mt-1">PREMIUM TIER</h3>
-                <div className="text-2xl font-bold text-alphabag-yellow mt-2 font-mono">2,000 $BAG</div>
+                <div className="text-2xl font-bold text-alphabag-yellow mt-2 font-mono">2,000 $BAG + 1 NFT</div>
                 <div className="mt-4 space-y-2 text-xs text-alphabag-text">
                   <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> All features of Free Tier</div>
                   <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Real-time BSC Whale Radar</div>
