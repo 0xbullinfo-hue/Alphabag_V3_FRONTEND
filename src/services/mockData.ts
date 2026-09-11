@@ -61,12 +61,15 @@ export const fetchWhaleHoldings = async (address: string, chain: string = 'ETH')
   return fetchHoldingsForAddress(address, chain);
 };
 
-export const fetchDefiPositions = async (): Promise<DefiPosition[]> => {
+export const fetchDefiPositions = async (address?: string): Promise<{ positions: DefiPosition[]; source: 'moralis' | 'defillama-opportunities' | 'none' }> => {
+  if (!address) return { positions: [], source: 'none' };
   try {
-    const res = await api.get('/api/portfolio/defi');
-    return Array.isArray(res.data) ? res.data : (res.data?.positions || []);
+    const res = await api.get('/api/portfolio/defi', { params: { address } });
+    const positions = Array.isArray(res.data) ? res.data : (res.data?.positions || []);
+    const source = res.data?.source === 'moralis' ? 'moralis' : 'defillama-opportunities';
+    return { positions, source };
   } catch (e) {
-    return [];
+    return { positions: [], source: 'none' };
   }
 };
 

@@ -47,7 +47,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     </h2>
                     <p className="text-alphabag-subtext text-xs mt-2">
                         Enter your <strong>Read-Only</strong> API Keys using the form below.
-                        Keys are encrypted locally and never stored on our servers.
+                        Keys are encrypted before storage and are never used for withdrawals or trading.
                     </p>
                 </div>
 

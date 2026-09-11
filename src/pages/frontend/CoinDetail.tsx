@@ -4,7 +4,6 @@ import { Link,useNavigate,useParams } from 'react-router-dom';
 import { Area,AreaChart,CartesianGrid,ResponsiveContainer,Tooltip,XAxis,YAxis } from 'recharts';
 import { Button } from '../../components/ui/Button';
 import { useWallet } from '../../context/WalletContext';
-import { MOCK_COINS } from '../../services/mockData';
 import { Coin,PortfolioItem } from '../../types';
 
 import { MarketService } from '../../services/MarketService';
@@ -15,85 +14,62 @@ export const CoinDetail: React.FC = () => {
     const navigate = useNavigate();
     const { isConnected, portfolioItems } = useWallet();
     const [coin, setCoin] = useState<Coin | null>(null);
+    const [notFound, setNotFound] = useState(false);
     const [holding, setHolding] = useState<PortfolioItem | undefined>(undefined);
     const [timeframe, setTimeframe] = useState('1D');
     const [aiInsight, setAiInsight] = useState<string | null>(null);
     const [isFetchingAi, setIsFetchingAi] = useState(false);
     const [groundingLinks, setGroundingLinks] = useState<any[]>([]);
-    const [audit, setAudit] = useState({ score: 0, label: 'Loading...', color: 'text-alphabag-gray', bgClass: 'from-gray-500 to-gray-400', shadowClass: 'shadow-none' });
+    const [audit, setAudit] = useState<{ score: number; label: string; color: string; bgClass: string; shadowClass: string } | null>(null);
 
     useEffect(() => {
         const loadCoinData = async () => {
             if (!id) return;
+            setNotFound(false);
 
-            // 1. Try fetching real-time data first
             try {
                 const data = await MarketService.getMarketData([id], true); // Fetch with sparkline
                 if (data && data.length > 0) {
                     const realCoin = data[0];
                     setCoin({
                         ...realCoin,
-                        // Map API response to internal Coin type if needed, or rely on flexible typing
-                        // MarketService returns CoinGecko format which matches most of our Coin interface
                         sparkline_in_7d: { price: realCoin.sparkline_in_7d?.price || [] }
                     });
                     fetchAiInsight(realCoin.name, realCoin.symbol);
                     return;
                 }
             } catch (e) {
-                console.warn("Failed to fetch real-time coin details, falling back to mock.");
+                console.warn("Failed to fetch real-time coin details:", e);
             }
 
-            // 2. Fallback to Mock if API fails
-            const found = MOCK_COINS.find(c => c.id === id);
-            if (found) {
-                setCoin(found);
-                fetchAiInsight(found.name, found.symbol);
-            } else {
-                // ... random gen logic ...
-                setCoin({
-                    id: id,
-                    symbol: id.substring(0, 3).toUpperCase(),
-                    name: id.charAt(0).toUpperCase() + id.slice(1),
-                    image: `https://ui-avatars.com/api/?name=${id}&background=2B3139&color=FCD535`,
-                    current_price: 100 + Math.random() * 500,
-                    market_cap: 1000000000 + Math.random() * 500000000,
-                    market_cap_rank: Math.floor(Math.random() * 500),
-                    price_change_percentage_24h: Math.random() * 10 - 5,
-                    total_volume: 50000000 + Math.random() * 100000000,
-                    sparkline_in_7d: { price: Array.from({ length: 10 }, () => Math.random() * 100) }
-                });
-                fetchAiInsight(id, id.substring(0, 3));
-            }
+            // NOTE: this previously fell back to MOCK_COINS (now empty) and
+            // then, if that also missed, fabricated an entire coin —
+            // random price, random market cap, random rank, random 24h
+            // change, random sparkline — all confidently rendered as if
+            // real. A trader could pull up an obscure or mistyped coin ID
+            // and see a completely made-up price with no indication it
+            // wasn't real. This now shows an honest "not found" state
+            // instead of inventing data.
+            setNotFound(true);
         };
         loadCoinData();
     }, [id]);
 
     useEffect(() => {
+        // NOTE: this used to compute a "Smart Audit Score" from the coin's
+        // market-cap rank and the length of its name — a fully fabricated
+        // number with a progress bar and the caption "Audited by Certik",
+        // regardless of whether Certik (or anyone) had ever audited the
+        // asset. That's a false third-party-certification claim, not just
+        // placeholder UI. Until a real audit provider (e.g. GoPlus,
+        // Honeypot.is, TokenSniffer) is wired in, this section now shows
+        // an honest "not available" state instead — see the render below.
+        setAudit(null);
+    }, [coin]);
+
+    useEffect(() => {
         if (coin) {
             setHolding(portfolioItems.find(p => p.coinId === coin.id));
-
-            // Generate deterministic mock audit score
-            const baseScore = Math.max(0, 100 - (coin.market_cap_rank || 500) / 10);
-            const score = Math.min(99, Math.max(15, Math.floor(baseScore + (coin.name.length % 10))));
-            let label = 'High Risk';
-            let color = 'text-alphabag-red';
-            let bgClass = 'from-alphabag-red to-red-400';
-            let shadowClass = '';
-
-            if (score >= 85) {
-                label = 'Professional Grade';
-                color = 'text-alphabag-green';
-                bgClass = 'from-alphabag-green to-emerald-400';
-                shadowClass = '';
-            } else if (score >= 60) {
-                label = 'Moderate Risk';
-                color = 'text-alphabag-yellow';
-                bgClass = 'from-alphabag-yellow to-yellow-400';
-                shadowClass = '';
-            }
-
-            setAudit({ score, label, color, bgClass, shadowClass });
         }
     }, [coin, portfolioItems]);
 
@@ -115,6 +91,14 @@ export const CoinDetail: React.FC = () => {
         }
     };
 
+    if (notFound) return (
+        <div className="flex flex-col items-center justify-center h-96 text-alphabag-subtext text-center px-4">
+            <p className="text-lg font-bold text-white mb-1">Asset data unavailable</p>
+            <p className="text-sm max-w-sm">We couldn't find live market data for this asset. It may be delisted, too new, or not tracked by our data provider.</p>
+            <Link to="/markets" className="mt-4 text-alphabag-yellow text-sm font-bold uppercase tracking-widest">Back to Markets</Link>
+        </div>
+    );
+
     if (!coin) return (
         <div className="flex flex-col items-center justify-center h-96 text-alphabag-subtext">
             <div className="w-10 h-10 border-4 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-2"></div>
@@ -122,10 +106,17 @@ export const CoinDetail: React.FC = () => {
         </div>
     );
 
-    const chartData = Array.from({ length: 100 }, (_, i) => ({
-        time: i,
-        price: coin.current_price * (1 + (Math.random() * 0.05 - 0.025))
-    }));
+    // Use the real 7-day sparkline from the market data API when available.
+    // Previously this ALWAYS discarded any real sparkline data and instead
+    // fabricated a random walk around the current price — meaning the
+    // price chart was fake even on coins where real historical data had
+    // just been fetched. When no sparkline is available, show a flat
+    // reference line rather than inventing volatility.
+    const realSparkline = coin.sparkline_in_7d?.price;
+    const chartData = realSparkline && realSparkline.length > 0
+        ? realSparkline.map((price, i) => ({ time: i, price }))
+        : Array.from({ length: 20 }, (_, i) => ({ time: i, price: coin.current_price }));
+    const hasRealChart = Boolean(realSparkline && realSparkline.length > 0);
 
     const isPositive = coin.price_change_percentage_24h >= 0;
 
@@ -245,8 +236,7 @@ export const CoinDetail: React.FC = () => {
                                 ))}
                             </div>
                             <div className="flex items-center space-x-2 text-[9px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
-                                <span className="flex items-center"><div className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full mr-2"></div> EMA (20)</span>
-                                <span className="flex items-center"><div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div> VWAP</span>
+                                <span>{hasRealChart ? '7-Day Price History' : 'Live sparkline unavailable — showing current price only'}</span>
                             </div>
                         </div>
 
@@ -353,9 +343,9 @@ export const CoinDetail: React.FC = () => {
 
                     <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative">
                         <h3 className="text-xs font-extrabold mb-2 text-alphabag-text uppercase tracking-[0.2em] flex items-center">
-                            <ShieldCheck size={18} className={`mr-3 ${audit.color}`} /> Smart Audit Score
+                            <ShieldCheck size={18} className={`mr-3 ${audit ? audit.color : 'text-alphabag-subtext'}`} /> Smart Audit Score
                         </h3>
-                        {audit.score > 0 ? (
+                        {audit && audit.score > 0 ? (
                             <>
                                 <div className="flex items-end space-x-2 mb-2">
                                     <div className="text-5xl font-extrabold text-white tracking-tighter">{audit.score}<span className="text-lg text-alphabag-subtext ml-1">/100</span></div>
@@ -367,9 +357,9 @@ export const CoinDetail: React.FC = () => {
                                 <p className="text-[9px] text-alphabag-subtext mt-6 font-bold leading-relaxed uppercase tracking-widest opacity-60">Verified Liquidity • Multisig Treasury • Audited by Certik</p>
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-3">
-                                <div className="w-6 h-6 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-3"></div>
-                                <p className="text-[10px] text-alphabag-subtext uppercase font-bold tracking-widest">Scanning Contracts...</p>
+                            <div className="py-3">
+                                <p className="text-sm font-semibold text-white mb-1">Audit data unavailable</p>
+                                <p className="text-[11px] text-alphabag-subtext leading-relaxed">Contract audit and security verification scores are not currently available for this asset.</p>
                             </div>
                         )}
                     </div>

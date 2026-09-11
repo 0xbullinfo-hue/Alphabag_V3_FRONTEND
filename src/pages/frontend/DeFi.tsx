@@ -1,6 +1,7 @@
 import { Activity,AlertTriangle,Download,Layers,ShieldCheck } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { Button } from '../../components/ui/Button';
+import { useWallet } from '../../context/WalletContext';
 import { fetchDefiPositions } from '../../services/mockData';
 import { DefiPosition } from '../../types';
 
@@ -15,29 +16,48 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 export const DeFi: React.FC = () => {
+    const { address } = useWallet();
     const [positions, setPositions] = useState<DefiPosition[]>([]);
+    // NOTE: this page previously always called fetchDefiPositions() with no
+    // wallet address at all — every visitor's request would have 400'd
+    // against the real backend endpoint, silently degrading to an empty
+    // list. It also never distinguished "these are your real positions"
+    // from "these are generic top-yield pools we're showing you because we
+    // couldn't find any of your own" (the backend falls back to DeFiLlama's
+    // public yield-opportunity list when Moralis isn't configured, or the
+    // wallet has no on-chain DeFi positions). Rendering the latter as if it
+    // were the user's own "Supplied/Borrowed" balances would be exactly the
+    // kind of fabricated-looking data this whole page needs to move away
+    // from — so the two cases are now labeled distinctly below.
+    const [source, setSource] = useState<'moralis' | 'defillama-opportunities' | 'none'>('none');
     const [activeTab, setActiveTab] = useState<Tab>('ALL');
 
     useEffect(() => {
-        fetchDefiPositions().then(setPositions);
-    }, []);
+        fetchDefiPositions(address).then(({ positions, source }) => {
+            setPositions(positions);
+            setSource(source);
+        });
+    }, [address]);
 
+    const isOwnPositions = source === 'moralis';
     const safePositions = Array.isArray(positions) ? positions : [];
-    const filtered = safePositions.filter(p => activeTab === 'ALL' || p?.type === activeTab);
+    const filtered = isOwnPositions ? safePositions.filter(p => activeTab === 'ALL' || p?.type === activeTab) : safePositions;
 
-    // Calculations
-    const totalValueLocked = safePositions.reduce((acc, p) => p.balance > 0 ? acc + p.balance : acc, 0);
-    const totalDebt = safePositions.reduce((acc, p) => p.balance < 0 ? acc + Math.abs(p.balance) : acc, 0);
+    // Calculations — only meaningful for the user's own real positions.
+    // Opportunity-list rows have no "balance" (they're not something the
+    // user holds), so these intentionally stay at 0 in that case rather
+    // than summing pool APYs/TVLs as if they were the user's holdings.
+    const totalValueLocked = isOwnPositions ? safePositions.reduce((acc, p) => p.balance > 0 ? acc + p.balance : acc, 0) : 0;
+    const totalDebt = isOwnPositions ? safePositions.reduce((acc, p) => p.balance < 0 ? acc + Math.abs(p.balance) : acc, 0) : 0;
 
-    // Weighted APY Calculation
     let totalWeightedApy = 0;
-    safePositions.forEach(p => {
-        if (p.balance > 0) totalWeightedApy += (p.balance * p.apy);
-    });
+    if (isOwnPositions) {
+        safePositions.forEach(p => {
+            if (p.balance > 0) totalWeightedApy += (p.balance * p.apy);
+        });
+    }
     const netApy = totalValueLocked > 0 ? (totalWeightedApy / totalValueLocked) : 0;
-
-    // Mock Pending Yield
-    const pendingYield = totalValueLocked * 0.0015; 
+    const pendingYield = totalValueLocked * 0.0015;
 
     return (
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 animate-in fade-in duration-700">
@@ -49,8 +69,20 @@ export const DeFi: React.FC = () => {
                             <Layers size={20} />
                         </div>
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DeFi Operations</h1>
-                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
+                        {isOwnPositions ? (
+                            <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
+                        ) : (
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">No Wallet Positions Found</span>
+                        )}
                     </div>
+
+                    {!isOwnPositions && (
+                        <p className="text-[11px] text-alphabag-subtext mb-2 max-w-lg">
+                            {address
+                                ? "We didn't find any tracked DeFi positions for your connected wallet. Showing top yield opportunities across major protocols instead — these are not your holdings."
+                                : "Connect a wallet to see your real lending, staking, and liquidity positions. Showing top yield opportunities across major protocols in the meantime."}
+                        </p>
+                    )}
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-3">
                         <div>
