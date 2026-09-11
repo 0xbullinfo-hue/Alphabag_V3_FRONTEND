@@ -1559,14 +1559,14 @@ export const Landing: React.FC = () => {
             <div className="max-w-5xl mx-auto w-full">
               <div className="text-center mb-12">
                 <h2 className="text-3xl md:text-5xl font-semibold mb-3 tracking-tight text-alphabag-text">
-                  AlphaBAG — <span className="text-alphabag-yellow">Everything you need to know</span>
+                  FAQ - <span className="text-alphabag-yellow">Everything you need to know</span>
                 </h2>
-                <p className="text-sm md:text-base text-alphabag-subtext max-w-2xl mx-auto">
+                <p className="text-xs md:text-sm text-alphabag-subtext max-w-xl mx-auto">
                   Transparent details on data sourcing, zero-latency caching, read-only security, and platform economics.
                 </p>
 
-                {/* Category Pill Filters for Clean Navigation */}
-                <div className="flex flex-wrap items-center justify-center gap-2 mt-8 max-w-4xl mx-auto">
+                {/* Category Pill Filters on 1 Single Line */}
+                <div className="flex flex-nowrap items-center justify-start md:justify-center gap-1.5 md:gap-2 mt-8 max-w-5xl mx-auto overflow-x-auto no-scrollbar scrollbar-none px-2 py-1">
                   {[
                     { id: 'all', label: 'All Topics' },
                     { id: 'start', label: 'Getting Started' },
@@ -1581,7 +1581,7 @@ export const Landing: React.FC = () => {
                       key={cat.id}
                       type="button"
                       onClick={() => setActiveFaqCategory(cat.id)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                      className={`shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
                         activeFaqCategory === cat.id
                           ? 'bg-alphabag-yellow text-black font-semibold shadow-sm'
                           : 'bg-alphabag-dark/60 text-alphabag-subtext border border-alphabag-border hover:text-alphabag-text hover:border-alphabag-border-light'
