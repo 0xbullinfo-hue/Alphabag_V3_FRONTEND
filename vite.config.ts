@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
       drop: ['console', 'debugger'],
     },
     build: {
+      sourcemap: false,
       cssMinify: false,
       chunkSizeWarningLimit: 1500,
       rollupOptions: {

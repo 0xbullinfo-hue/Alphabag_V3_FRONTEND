@@ -64,20 +64,17 @@ jobs:
         VITE_ENABLE_BACKGROUND_SYNC: ${{ secrets.VITE_ENABLE_BACKGROUND_SYNC }}
 
 
-    - name: Validate FTP Secrets
-      run: |
-        [ -n "${{ secrets.FTP_SERVER }}" ] || { echo "Missing FTP_SERVER secret"; exit 1; }
-        [ -n "${{ secrets.FTP_USERNAME }}" ] || { echo "Missing FTP_USERNAME secret"; exit 1; }
-        [ -n "${{ secrets.FTP_PASSWORD }}" ] || { echo "Missing FTP_PASSWORD secret"; exit 1; }
+      # FTP sends credentials and files in plaintext and is non-atomic.
+      # Netlify gives atomic, immutable, CDN-backed deploys for free.
+      - name: Deploy to Netlify (atomic, immutable)
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: ./dist
+          production-deploy: true
+          deploy-message: ${{ github.event.head_commit.message }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
-    - name: Sync Files to Namecheap FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-      with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./dist/
-        # Deploy directly into cPanel web root (public_html)
-        server-dir: ${{ secrets.FTP_SERVER_DIR || '/public_html/' }}
-        protocol: ftp
-        port: 21
+      - name: Post-deploy secret scan
+        run: node scripts/check-no-secrets.mjs
