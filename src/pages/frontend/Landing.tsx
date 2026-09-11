@@ -16,7 +16,6 @@ import {
   Lock,
   Palette,
   PieChart,
-  Rocket,
   Send,
   ShieldCheck,
   Sparkles,
@@ -504,55 +503,59 @@ type RoadmapPhase = {
   title: string;
   status: RoadmapStatus;
   points: string[];
+  note?: string;
+  completed?: boolean;
 };
 
 const ROADMAP_PHASES: RoadmapPhase[] = [
   {
-    phase: 'PHASE_01',
+    phase: 'PHASE 01',
     title: 'FOUNDATION_AND_CORE_SYSTEMS',
-    status: 'VERIFIED',
-    points: [
-      'Core architecture finalized for multi-chain portfolio indexing and real-time market ingestion.',
-      'Initial AlphaAI pipelines shipped for signal extraction, narrative scoring, and watchlist prioritization.',
-      'Security baseline completed with read-only wallet tracking model and hardened auth flows.',
-      'V1 internal stress testing passed for dashboard performance, data consistency, and uptime readiness.'
-    ]
-  },
-  {
-    phase: 'PHASE_02',
-    title: 'BETA_LAUNCH_AND_ECOSYSTEM_ONBOARDING',
     status: 'EXECUTING',
+    completed: true,
     points: [
-      'Genesis cohort onboarding in progress with structured waitlist activation and community migration.',
-      'Public beta rollout for portfolio tracking, whale alerts, and execution-grade market dashboards.',
-      'AlphaAI assistant expanded with context-aware portfolio insights and actionable strategy summaries.',
-      'Feedback loops activated to iterate UX, improve alert quality, and tighten data refresh latency.'
+      'Core dashboard infrastructure built for portfolio tracking and real-time market data',
+      'AlphaAI research engine deployed for signal detection and trend analysis',
+      'Security and privacy framework implemented with read-only wallet connections',
+      'Internal testing completed for performance, stability, and user experience'
     ]
   },
   {
-    phase: 'PHASE_03',
-    title: 'TOKEN_UTILITY_AND_PREMIUM_LAYER',
+    phase: 'PHASE 02',
+    title: 'BETA_LAUNCH_AND_COMMUNITY_ONBOARDING',
     status: 'PENDING',
+    note: 'No requirements. Free for everyone during Beta.',
     points: [
-      'Activate utility architecture for premium feature access and ecosystem participation.',
-      'Launch Pro Terminal tier with advanced analytics, custom intelligence feeds, and deeper wallet diagnostics.',
-      'Expand partner integrations across market data providers, social intelligence channels, and execution venues.',
-      'Release tier-gated workflows for power users requiring higher frequency and deeper signal resolution.'
+      'Public Beta: Free access to portfolio tracking, alerts, and basic market dashboards',
+      'Genesis Cohort: Early users onboarded via waitlist to test features and provide feedback',
+      'AlphaAI Assistant: Context-aware insights and weekly strategy summaries for beta users',
+      'Feedback Loops: Continuous UX improvements based on community input'
     ]
   },
   {
-    phase: 'PHASE_04',
+    phase: 'PHASE 03',
+    title: 'UTILITY_AND_PREMIUM_EXPERIENCE',
+    status: 'PENDING',
+    note: 'Premium features roll out in stages. Early users get first access.',
+    points: [
+      'Ecosystem Activation: Introduce the ALPHABAG Passes to reward early supporters',
+      'Pro Terminal: Advanced analytics, custom intelligence feeds, and priority data access',
+      'Partner Integrations: Expanded data providers and execution tools for power users',
+      'Tiered Access: Unlock higher frequency alerts and deeper insights through participation and loyalty'
+    ]
+  },
+  {
+    phase: 'PHASE 04',
     title: 'GLOBAL_SCALE_AND_INTELLIGENCE_NETWORK',
     status: 'QUEUED',
     points: [
-      'Regional expansion across key markets with localized onboarding and compliance-aware deployment.',
-      'Mobile-first intelligence experience with push alerts, watchlist actions, and real-time portfolio updates.',
-      'Institutional-grade reliability targets for scale, observability, and cross-chain data resilience.',
-      'Progressive AI upgrades toward autonomous research workflows and adaptive strategy guidance.'
+      'Global Expansion: Localized onboarding and multi-language support',
+      'Mobile Intelligence: Native apps with push alerts and real-time portfolio updates',
+      'Institutional Reliability: Upgraded infrastructure for scale, uptime, and data accuracy',
+      'Autonomous AI: Progressive upgrades toward self-learning research and strategy guidance'
     ]
   }
 ];
-
 
 const ALPHA_PASS_STATS = [
   { label: 'Total Supply', value: '4,000', icon: <Layers size={20} /> },
@@ -1076,93 +1079,127 @@ export const Landing: React.FC = () => {
 
         {/* Features Grid */}
         {activeTab === 'features' && (
-          <section id="features" className="py-32 px-6 min-h-[85vh] flex flex-col justify-center">
-            <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-20 max-w-3xl mx-auto">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">{t('features_title')} <span className="text-alphabag-yellow">{t('features_title_alpha')}</span></h2>
-                <p className="text-xl text-alphabag-subtext">{t('features_subtitle')}</p>
+          <section id="features" className="py-28 px-6 min-h-[85vh] flex flex-col justify-center">
+            <div className="max-w-7xl mx-auto w-full">
+              {/* Main Header */}
+              <div className="text-center mb-16 max-w-3xl mx-auto">
+                <div className="inline-block mb-3 px-3 py-1 rounded-full border border-alphabag-yellow/30 bg-alphabag-yellow/10 text-alphabag-yellow text-xs font-mono font-bold tracking-widest uppercase">
+                  Terminal Architecture
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-white font-mono">
+                  ENGINEERED FOR <span className="text-alphabag-yellow">ALPHA</span>
+                </h2>
+                <p className="text-lg md:text-xl text-neutral-400 font-medium">
+                  Stop guessing. Start trading with data.
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              {/* 9-Card Specific Feature Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <FeatureHighlight
-                  icon={<Bot size={32} className="text-alphabag-yellow" />}
-                  title={t('feature_1_title') || "AlphaAi Agent"}
-                  desc={t('feature_1_desc') || "Your personal analyst. Ask about your PnL, request chart generation, or get real-time market sentiment analysis."}
+                  icon={<Bot className="text-alphabag-yellow" />}
+                  title="ALPHA AI AGENT"
+                  tagline="Ask anything about your portfolio — get answers you can verify."
+                  desc="AlphaAI reads your actual positions — wallet tokens, LP, lending, staking, and CEX balances — and answers with sourced, timestamped data. Every number it states traces back to a real source. If it doesn't have the data, it says so. No hallucinated PnL. No vague hype. Just what your positions are actually doing."
                 />
                 <FeatureHighlight
-                  icon={<ShieldCheck size={32} className="text-green-400" />}
-                  title={t('feature_2_title') || "Multi-Network Security"}
-                  desc={t('feature_2_desc') || "Track assets across EVM and Solana networks without exposing your private keys. Read-only permissions by default."}
+                  icon={<Layers className="text-blue-400" />}
+                  title="ALL CHAINS. ONE DASHBOARD."
+                  tagline="Ethereum, Base, Arbitrum, Polygon, BNB Chain, Avalanche — and Solana when it ships."
+                  desc="One wallet. Every chain. Every position. No tab switching, no manual reconciliation. 100% read-only by design — nothing can move without your signature."
                 />
                 <FeatureHighlight
-                  icon={<BarChart3 size={32} className="text-blue-400" />}
-                  title={t('feature_3_title') || "Whale Watch"}
-                  desc={t('feature_3_desc') || "Follow the smart money. Get alerted when high-net-worth wallets enter or exit positions in real-time."}
+                  icon={<BarChart3 className="text-emerald-400" />}
+                  title="WHALE WATCH"
+                  tagline="Know the moment smart money moves."
+                  desc="Configure which wallets matter to you, set your size thresholds, and get alerted seconds after a trade hits the chain — with the size, the direction, and the destination attached. See the trade as it happens. Not a summary the next morning."
                 />
                 <FeatureHighlight
-                  icon={<Wallet size={32} className="text-purple-400" />}
-                  title={t('feature_4_title') || "CEX/DEX HUB"}
-                  desc={t('feature_4_desc') || "Connect your DEX Wallets and exchange APIs for a truly unified overview of your crypto net worth across 20+ major platforms."}
+                  icon={<Wallet className="text-purple-400" />}
+                  title="CEX + DEX UNIFIED"
+                  tagline="One number that finally tells the truth."
+                  desc="Spot, Earn, funding, and futures balances from your exchanges. LP, lending, staking, and wallet holdings on-chain. Borrowed debt subtracted. Spam tokens excluded. This is your real net worth — not a spot-only approximation that misses 30% of your portfolio."
                 />
                 <FeatureHighlight
-                  icon={<Rocket size={32} className="text-[#D8B4FE]" />}
-                  title={t('feature_5_title') || "Alpha Calculator"}
-                  desc={t('feature_5_desc') || "Simulate complex futures and spot trades with real-time accuracy before executing on-chain."}
+                  icon={<CalculatorIcon className="text-pink-400" />}
+                  title="TRADE SIMULATOR"
+                  tagline="Model the trade before you commit the capital."
+                  desc="Test spot and futures strategies against live data. Adjust size, leverage, and timing. See what your edge would have produced. No capital at risk. No trades executed on your behalf — ever."
                 />
                 <FeatureHighlight
-                  icon={<Trophy size={32} className="text-alphabag-yellow" />}
-                  title={t('feature_6_title') || "T2E REWARDS"}
-                  desc={t('feature_6_desc') || "Participate in the ecosystem through missions and social tasks to earn your share of the $BAG allocation."}
+                  icon={<Trophy className="text-amber-400" />}
+                  title="EARN WHILE YOU TRADE"
+                  tagline="Complete missions. Share insights. Climb the leaderboard."
+                  desc="Every action during Beta earns Points. When rewards go live, Points convert — and early users get the biggest multipliers. Pass holders stack on top. The earlier you're in, the more it compounds."
+                />
+                <FeatureHighlight
+                  icon={<Zap className="text-cyan-400" />}
+                  title="SOURCE-TAGGED DATA"
+                  tagline="Every number carries its age."
+                  desc="Prices refresh in under 2 seconds. Balances every 6 seconds. DeFi position decodes run on a longer cycle — because reading a Uniswap V3 LP position takes more than one RPC call. We show you the timestamp so you always know how fresh the number is. No hidden caching. No mystery delays."
+                />
+                <FeatureHighlight
+                  icon={<ShieldCheck className="text-emerald-400" />}
+                  title="READ-ONLY BY DESIGN"
+                  tagline="We never see your keys. Ever."
+                  desc="No private keys. No seed phrases. CEX credentials are encrypted with AES-256-GCM — and we refuse any key with withdrawal or transfer permissions, by design. Admins can't see your secrets. Neither can we."
+                />
+                <FeatureHighlight
+                  icon={<Lock className="text-indigo-400" />}
+                  title="APPROVAL SCANNER"
+                  tagline="See every contract you've ever approved — and revoke in one click."
+                  desc="Most wallets carry dozens of stale token approvals from protocols you've forgotten. Each one is a standing invitation. We scan your entire approval history, flag risky ones, and let you revoke directly from the dashboard."
                 />
               </div>
 
-              {/* Why AlphaBAG Section */}
-              <div className="mt-32 pt-20 border-t border-alphabag-gray relative">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/20 to-transparent"></div>
+              {/* WHY ALPHABAG Section */}
+              <div className="mt-28 pt-20 border-t border-neutral-800 relative">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-alphabag-yellow/40 to-transparent"></div>
                 
-                <div className="text-center mb-16">
-                  <h2 className="text-3xl md:text-4xl font-semibold mb-2 tracking-tight text-alphabag-text">{t('why_title')} <span className="text-alphabag-yellow">{t('why_title_alpha')}</span></h2>
-                  <p className="text-base text-alphabag-subtext max-w-2xl mx-auto">
-                    {t('why_desc')}
+                <div className="text-center mb-16 max-w-3xl mx-auto">
+                  <h2 className="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight text-white font-mono">
+                    WHY <span className="text-alphabag-yellow">ALPHABAG?</span>
+                  </h2>
+                  <p className="text-lg md:text-xl text-neutral-200 font-semibold mb-3">
+                    Built by traders who got tired of numbers without sources.
+                  </p>
+                  <p className="text-sm md:text-base text-neutral-400 leading-relaxed max-w-2xl mx-auto">
+                    Most dashboards show you a figure and hide where it came from. We show you the number, the source, and the timestamp — every time. No hidden staleness. No phantom positions. Just data you can act on.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-w-5xl mx-auto items-center">
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      <div className="w-10 h-10 shrink-0 bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center rounded-xl border border-alphabag-yellow/20">
-                        <Zap size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-alphabag-text tracking-tight mb-2">{t('why_latency_title')}</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_latency_desc')}</p>
-                      </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                  <div className="bg-neutral-900/90 border border-neutral-800 p-6 rounded-2xl">
+                    <div className="w-10 h-10 bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center rounded-xl border border-alphabag-yellow/20 mb-4">
+                      <TrendingUp size={20} />
                     </div>
-                    <div className="flex gap-2">
-                      <div className="w-10 h-10 shrink-0 bg-green-500/10 text-green-500 flex items-center justify-center rounded-xl border border-green-500/20">
-                        <ShieldCheck size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-alphabag-text tracking-tight mb-2">{t('why_privacy_title')}</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_privacy_desc')}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="w-10 h-10 shrink-0 bg-blue-500/10 text-blue-500 flex items-center justify-center rounded-xl border border-blue-500/20">
-                        <Bot size={20} />
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-alphabag-text tracking-tight mb-2">{t('why_ai_title')}</h4>
-                        <p className="text-sm text-alphabag-subtext leading-relaxed">{t('why_ai_desc')}</p>
-                      </div>
-                    </div>
+                    <h4 className="text-base font-bold font-mono text-white mb-1 uppercase">SIGNALS WITH RECEIPTS</h4>
+                    <p className="text-xs font-semibold text-alphabag-yellow mb-2">Stop drawing lines manually.</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">
+                      AlphaAI reads order flow, on-chain activity, and market structure — and surfaces what's worth your attention, with the data behind every call. You decide what to do with it. We never tell you to buy or sell.
+                    </p>
                   </div>
-                  <div className="relative h-full min-h-[300px] rounded-3xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden flex items-center justify-center group shadow-2xl">
-                    <div className="absolute inset-0 bg-gradient-to-tr from-alphabag-yellow/5 to-transparent"></div>
-                    <div className="w-24 h-24 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl flex items-center justify-center  group-hover:scale-110 group-hover: transition-all duration-700 relative z-10">
-                      <Lock size={40} className="text-alphabag-yellow" />
+
+                  <div className="bg-neutral-900/90 border border-neutral-800 p-6 rounded-2xl">
+                    <div className="w-10 h-10 bg-rose-500/10 text-rose-400 flex items-center justify-center rounded-xl border border-rose-500/20 mb-4">
+                      <Zap size={20} />
                     </div>
-                    <div className="absolute w-full h-full inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
+                    <h4 className="text-base font-bold font-mono text-white mb-1 uppercase">POSITION HEALTH ALERTS</h4>
+                    <p className="text-xs font-semibold text-alphabag-yellow mb-2">Get pinged before your health factor gets dangerous.</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">
+                      Set thresholds on your Aave and Compound positions. We watch the health factor in the background and alert you the moment it drifts into risky territory — long before the liquidation engine does.
+                    </p>
+                  </div>
+
+                  <div className="bg-neutral-900/90 border border-neutral-800 p-6 rounded-2xl">
+                    <div className="w-10 h-10 bg-blue-500/10 text-blue-400 flex items-center justify-center rounded-xl border border-blue-500/20 mb-4">
+                      <PieChart size={20} />
+                    </div>
+                    <h4 className="text-base font-bold font-mono text-white mb-1 uppercase">COST BASIS TRACKING</h4>
+                    <p className="text-xs font-semibold text-alphabag-yellow mb-2">Know your real PnL. Not an approximation.</p>
+                    <p className="text-sm text-neutral-300 leading-relaxed">
+                      We match your buys, sells, LP entry/exit, and CEX trades to give you cost basis per asset — FIFO or LIFO. Export when tax season arrives with exact trade provenance.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1425,58 +1462,95 @@ export const Landing: React.FC = () => {
 
         {/* Terminal Roadmap Section */}
         {activeTab === 'roadmap' && (
-          <section id="roadmap" className="py-32 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
-
-
-            <div className="max-w-[1400px] mx-auto relative z-10 xl:px-8">
-              <div className="text-center mb-2">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">Alpha<span className="text-alphabag-yellow">Map</span></h2>
-                <p className="text-alphabag-subtext text-sm">Network Deployment Phases</p>
+          <section id="roadmap" className="py-28 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
+            <div className="max-w-5xl mx-auto relative z-10 w-full">
+              <div className="text-center mb-12">
+                <div className="inline-block mb-3 px-3 py-1 rounded-full border border-alphabag-yellow/30 bg-alphabag-yellow/10 text-alphabag-yellow text-xs font-mono font-bold tracking-widest uppercase">
+                  Execution Plan
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-white font-mono">
+                  Alpha<span className="text-alphabag-yellow">Map</span>
+                </h2>
+                <p className="text-base md:text-lg text-neutral-300 font-medium">Network Deployment Phases</p>
               </div>
 
-              {/* Unified roadmap accordion for all breakpoints */}
-              <div className="mt-8 space-y-2 max-w-5xl mx-auto">
+              {/* High-legibility roadmap cards */}
+              <div className="space-y-5 max-w-4xl mx-auto">
                 {ROADMAP_PHASES.map((phase, index) => {
                   const isOpen = openRoadmapItems.includes(index);
-                  const statusClasses = {
-                    VERIFIED: 'text-green-500 border-green-500/30 bg-green-500/10',
-                    EXECUTING: 'text-alphabag-yellow border-alphabag-yellow/30 bg-alphabag-yellow/10',
-                    PENDING: 'text-[#8BA1C9] border-alphabag-gray bg-alphabag-gray/30',
-                    QUEUED: 'text-alphabag-subtext border-alphabag-border bg-transparent'
+                  const statusStyles = {
+                    VERIFIED: 'text-emerald-400 border-emerald-500/40 bg-emerald-500/15',
+                    EXECUTING: 'text-amber-400 border-amber-400/40 bg-amber-400/15',
+                    PENDING: 'text-sky-300 border-sky-400/30 bg-sky-500/10',
+                    QUEUED: 'text-neutral-400 border-neutral-700 bg-neutral-800/50',
                   } as const;
 
                   return (
-                    <div key={phase.phase} className="rounded-xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+                    <div
+                      key={phase.phase}
+                      className="rounded-2xl border border-neutral-800 bg-neutral-900/95 overflow-hidden shadow-2xl hover:border-neutral-700 transition-all"
+                    >
                       <button
                         type="button"
                         onClick={() => toggleRoadmapItem(index)}
                         aria-expanded={isOpen}
-                        className="w-full p-4 text-left"
+                        className="w-full p-5 md:p-6 text-left flex items-start justify-between gap-4 transition-colors"
                       >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0">
-                            <div className="text-[10px] font-mono text-alphabag-subtext mb-1 tracking-widest">{phase.phase}</div>
-                            <h3 className="text-[13px] leading-snug font-bold font-mono tracking-tight uppercase text-alphabag-text break-words [overflow-wrap:anywhere]">{">"} {phase.title}</h3>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+                            <span className="text-xs font-mono font-bold text-neutral-400 tracking-wider">
+                              {phase.phase}
+                            </span>
+                            <span
+                              className={`px-2.5 py-0.5 text-xs font-mono font-bold uppercase tracking-wider rounded-md border ${statusStyles[phase.status]}`}
+                            >
+                              STATUS: {phase.status}
+                            </span>
                           </div>
-                          <ChevronRight size={14} className={`text-alphabag-subtext transition-transform duration-200 mt-0.5 shrink-0 ${isOpen ? 'rotate-90' : ''}`} />
+                          <h3 className="text-base md:text-lg font-bold font-mono tracking-tight uppercase text-white break-words">
+                            {'>'} {phase.title}
+                          </h3>
                         </div>
-                        <div className="mt-2 flex items-center justify-start">
-                          <span className={`px-2 py-1 text-[9px] font-mono uppercase font-bold tracking-widest rounded border ${statusClasses[phase.status]}`}>
-                            {phase.status}
-                          </span>
+                        <div className="w-8 h-8 rounded-lg bg-neutral-800 flex items-center justify-center text-neutral-300 shrink-0 mt-1">
+                          <ChevronRight
+                            size={16}
+                            className={`transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
+                          />
                         </div>
                       </button>
-                      <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[420px] opacity-100 border-t border-alphabag-border' : 'max-h-0 opacity-0'}`}>
-                        <ul className="p-4 space-y-2 font-mono text-[11px] leading-tight">
-                          {phase.points.map((point, itemIndex) => (
-                            <li key={itemIndex} className="flex items-start gap-2">
-                              <span className={`text-[9px] mt-0.5 shrink-0 ${phase.status === 'VERIFIED' ? 'text-green-500' : 'text-alphabag-subtext'}`}>
-                                {phase.status === 'VERIFIED' ? '[✓]' : '[ ]'}
-                              </span>
-                              <span className={`${phase.status === 'QUEUED' ? 'text-alphabag-subtext/50' : 'text-[#8BA1C9]'}`}>{point}</span>
-                            </li>
-                          ))}
+
+                      <div
+                        className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                          isOpen ? 'max-h-[600px] opacity-100 border-t border-neutral-800/80' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <ul className="p-5 md:p-6 space-y-3 font-sans text-sm md:text-[15px] leading-relaxed">
+                          {phase.points.map((point, itemIndex) => {
+                            const isChecked = phase.completed || phase.status === 'VERIFIED';
+                            return (
+                              <li key={itemIndex} className="flex items-start gap-3">
+                                <span
+                                  className={`font-mono font-bold text-sm shrink-0 mt-0.5 ${
+                                    isChecked ? 'text-emerald-400' : 'text-neutral-500'
+                                  }`}
+                                >
+                                  {isChecked ? '[✓]' : '[ ]'}
+                                </span>
+                                <span className={phase.status === 'QUEUED' ? 'text-neutral-400' : 'text-neutral-200 font-medium'}>
+                                  {point}
+                                </span>
+                              </li>
+                            );
+                          })}
                         </ul>
+
+                        {phase.note && (
+                          <div className="px-5 pb-5 md:px-6 md:pb-6">
+                            <div className="text-xs md:text-sm font-mono text-amber-300 bg-amber-400/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
+                              {phase.note}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
@@ -1488,40 +1562,213 @@ export const Landing: React.FC = () => {
 
         {/* FAQ Section */}
         {activeTab === 'faq' && (
-          <section id="faq" className="py-24 px-6 border-y border-alphabag-border bg-alphabag-black min-h-[85vh] flex flex-col justify-center">
-            <div className="max-w-6xl mx-auto">
+          <section id="faq" className="py-24 px-6 border-y border-neutral-800 bg-alphabag-black min-h-[85vh] flex flex-col justify-center">
+            <div className="max-w-5xl mx-auto w-full">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-semibold mb-2 tracking-tight text-alphabag-text">System <span className="text-alphabag-yellow">FAQ</span></h2>
-                <p className="text-lg text-alphabag-subtext max-w-2xl mx-auto">Everything you need to know about the AlphaBAG hub and ecosystem.</p>
+                <div className="inline-block mb-3 px-3 py-1 rounded-full border border-alphabag-yellow/30 bg-alphabag-yellow/10 text-alphabag-yellow text-xs font-mono font-bold tracking-widest uppercase">
+                  Knowledge Base
+                </div>
+                <h2 className="text-3xl md:text-5xl font-extrabold mb-3 tracking-tight text-white font-mono">
+                  AlphaBAG — <span className="text-alphabag-yellow">Everything you need to know</span>
+                </h2>
+                <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto">
+                  Transparent details on data sourcing, zero-latency caching, read-only security, and platform economics.
+                </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-start">
-                {/* Left Column */}
-                <div className="space-y-2">
-                  <FaqItem
-                    question="What is AlphaBAG?"
-                    answer="AlphaBAG is a crypto intelligence terminal for serious traders and investors. It combines multi-chain portfolio tracking, whale activity monitoring, and AI-powered market analysis in one dashboard."
-                  />
-                  <FaqItem
-                    question="Is my wallet data secure?"
-                    answer="Yes. AlphaBAG runs on a strict read-only model for tracking. We never ask for private keys, and no transaction can be executed from your wallet through the platform."
-                  />
-                  <FaqItem
-                    question="How does Genesis access work?"
-                    answer="During the Genesis phase, access is rolled out in tiers. Eligible community members unlock expanded tools as roadmap milestones are completed and feature gates are opened."
-                  />
+              <div className="space-y-12">
+                {/* Category 1: Getting Started */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-alphabag-yellow tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-alphabag-yellow inline-block"></span>
+                    Getting started
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="What is AlphaBAG?"
+                      answer="AlphaBAG is a trading command center. It combines multi-chain portfolio tracking, CEX + DeFi position monitoring, whale alerts, and AlphaAI market intelligence in one dashboard. Hold an AlphaBAG Pass to unlock boosted rewards and Pro tools as the platform grows."
+                    />
+                    <FaqItem
+                      question="Do I need to buy a Pass to start?"
+                      answer="No. The dashboard, wallet tracking, basic alerts, and the Points system are free. Passes are for users who want faster rewards and earlier access to Pro features."
+                    />
+                    <FaqItem
+                      question="What do I need to get started?"
+                      answer="Just a wallet address. Connect any supported wallet, paste a public address, or read-only import — you never sign a transaction to start tracking. You can add CEX connections later if you want them included in your totals."
+                    />
+                    <FaqItem
+                      question="Do you support non-custodial wallets and hardware wallets?"
+                      answer="Yes. Because we only ever read public on-chain data, hardware wallets and any self-custody address work the same way. Nothing is signed, nothing is moved."
+                    />
+                  </div>
                 </div>
 
-                {/* Right Column */}
-                <div className="space-y-2">
-                  <FaqItem
-                    question="How does AlphaAI work?"
-                    answer="AlphaAI evaluates portfolio context, market structure, and momentum signals to generate concise, actionable insights that help users make faster decisions."
-                  />
-                  <FaqItem
-                    question="Which blockchain networks are supported?"
-                    answer="AlphaBAG supports major EVM networks including Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, and Base, plus Solana. Additional integrations are in active development."
-                  />
+                {/* Category 2: Data & accuracy */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-blue-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
+                    Data & accuracy
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="Where does your price and balance data come from?"
+                      answer="Prices are aggregated from centralized exchange feeds and on-chain oracles. On-chain positions are read directly from public RPC nodes across every supported chain. Every data point carries a source and timestamp."
+                    />
+                    <FaqItem
+                      question="How fresh is the data?"
+                      answer="Live prices update in under ~2 seconds. Wallet balances refresh on a ~6-second cycle. DeFi position decodes (LP, lending, staking) refresh on a longer cycle because they require multiple on-chain reads per position. Every figure in the dashboard shows its age — you'll never see a number without knowing when it was last verified."
+                    />
+                    <FaqItem
+                      question="Why does my portfolio total differ from what I see elsewhere?"
+                      answer={"Three reasons, in order of frequency:\n\n1. Spam tokens: Unsolicited airdrops are hidden by default and excluded from your totals. You can still see and dismiss them in the Spam drawer.\n2. DeFi positions: LP principal, borrowed debt, staked derivatives, and unclaimed rewards are counted separately from plain wallet balances. Most trackers miss one or more of these.\n3. Refresh timing: If you're comparing a 'live' number on our side to a cached number elsewhere, they will differ. Our timestamp tells you exactly how old ours is."}
+                    />
+                    <FaqItem
+                      question="Do you count borrowed debt?"
+                      answer="Yes. Debt is shown as a negative position and subtracted from net worth. Your 'portfolio value' is net of debt, and we show a health factor for lending positions so you can see liquidation risk."
+                    />
+                    <FaqItem
+                      question="Why do some tokens show a dash (—) instead of a price?"
+                      answer="Because we don't have a reliable price for them. We will never show '$0.00' for a token we can't value — a fake zero is worse than an honest blank."
+                    />
+                  </div>
+                </div>
+
+                {/* Category 3: Security & privacy */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-emerald-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span>
+                    Security & privacy
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="Is my wallet data secure?"
+                      answer="Yes. AlphaBAG uses strictly read-only connections. We never ask for private keys or seed phrases. No transaction can be signed or executed through AlphaBAG, ever."
+                    />
+                    <FaqItem
+                      question="What about CEX API keys — are those safe?"
+                      answer="CEX keys are encrypted at rest with AES-256-GCM using envelope encryption, per-key. We only accept read-only keys — if a key you paste has withdrawal or transfer permissions, we refuse to store it and tell you why. Your secret is never displayed again after you paste it, not even to AlphaBAG admins."
+                    />
+                    <FaqItem
+                      question="Can AlphaBAG staff see my API secret?"
+                      answer="No. Admins see the last four characters of a key fingerprint for support purposes, and the permission scopes we detected — nothing else. The secret itself is stored encrypted and is never decrypted for display."
+                    />
+                    <FaqItem
+                      question="Do you sell or share my data?"
+                      answer="No. We don't sell user data, and we don't share wallet-level analytics with third parties without your explicit action."
+                    />
+                    <FaqItem
+                      question="Can I revoke access?"
+                      answer={"Yes, at any time, in two places:\n\n• CEX keys: delete the connection in AlphaBAG, then (recommended) also delete the key on the exchange side.\n• Wallet tracking: disconnect the wallet — we hold no keys for it, so disconnecting removes it completely."}
+                    />
+                  </div>
+                </div>
+
+                {/* Category 4: AI */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-purple-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 inline-block"></span>
+                    AI
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="How does AlphaAI work?"
+                      answer="AlphaAI reads your actual portfolio, market structure, and on-chain activity, then explains what it sees. It answers questions about your positions, surfaces whale movements, and turns noisy data into three things: Portfolio Insights, Whale Alerts, and Trade Ideas."
+                    />
+                    <FaqItem
+                      question="Does AlphaAI make up numbers?"
+                      answer="No — and this is deliberate. Every figure AlphaAI states is pulled from real data with a source and a timestamp. If AlphaAI doesn't have the data to answer a question, it says so instead of guessing. It will never estimate your PnL or health factor from an LLM's math; those are always computed from your positions first."
+                    />
+                    <FaqItem
+                      question="Does AlphaAI give financial advice?"
+                      answer="No. AlphaAI describes what's happening and why it might matter. It does not tell you to buy or sell, and it does not predict prices. Treat it as a research assistant, not a financial advisor."
+                    />
+                    <FaqItem
+                      question="What if my data is out of date?"
+                      answer="If any number AlphaAI uses is older than its freshness window, the response is prefixed with a warning showing how old the data is and which source it came from. Stale data is never presented as live."
+                    />
+                    <FaqItem
+                      question="Can I ask AlphaAI about a token I don't hold?"
+                      answer="Yes — you can ask about any token on a supported chain. AlphaAI will pull price, liquidity, holder count, and risk signals. It will flag tokens with honeypot, spam, or low-liquidity characteristics."
+                    />
+                  </div>
+                </div>
+
+                {/* Category 5: Supported networks & integrations */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-cyan-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+                    Supported networks & integrations
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="Which networks are supported?"
+                      answer="Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana. More chains roll out with each phase."
+                    />
+                    <FaqItem
+                      question="Which DeFi protocols are decoded?"
+                      answer="At launch: Uniswap V3 (LP positions and unclaimed fees), Aave V3 (supply, borrow, health factor), and ERC-4626 vaults including Yearn and Beefy. New protocols ship in batches — the protocol list in the dashboard is always current."
+                    />
+                    <FaqItem
+                      question="Which CEXs can I connect?"
+                      answer="Binance, Coinbase, Kraken, OKX, and Bybit are supported. Each connection includes a guided setup that shows you exactly which permissions to enable, a test step before we save anything, and a health indicator so you can see when a key needs reconnecting."
+                    />
+                    <FaqItem
+                      question="Do you count Earn, Funding, and Margin balances on CEXs?"
+                      answer="Yes. A spot-only view under-reports most users by 10–40%. We pull spot, Earn (flexible and locked), funding wallets, and open margin/futures positions into one number."
+                    />
+                  </div>
+                </div>
+
+                {/* Category 6: Rewards & the Pass */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-amber-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+                    Rewards & the Pass
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="How does the rewards system work?"
+                      answer="During Beta, everyone earns Points for using the dashboard and completing missions. When rewards go live, Points convert and AlphaBAG Pass holders receive multipliers. The more you participate, the more you unlock."
+                    />
+                    <FaqItem
+                      question="What is an AlphaBAG Pass?"
+                      answer="An AlphaBAG Pass is your membership to the ecosystem. There are 4,000 Genesis Passes that unlock boosted T2E rewards, early access to Pro tools, and community privileges. Free users keep full access to the dashboard — Passes accelerate progress rather than gate the basics."
+                    />
+                    <FaqItem
+                      question="When do premium features unlock?"
+                      answer={"Premium features roll out in phases:\n\n• Phase 2 — Beta tools for everyone\n• Phase 3 — Pro Terminal and boosted rewards for Pass holders\n• Phase 4 — Full AI automation and Founders-tier access\n\nSee the AlphaMap for exact timelines and current status."}
+                    />
+                    <FaqItem
+                      question="Can I lose my Pass?"
+                      answer="No. Passes are permanent to the wallet that holds them. If you transfer a Pass, the benefits move with it."
+                    />
+                  </div>
+                </div>
+
+                {/* Category 7: Support & troubleshooting */}
+                <div>
+                  <h3 className="text-lg font-bold font-mono text-rose-400 tracking-wider uppercase mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-400 inline-block"></span>
+                    Support & troubleshooting
+                  </h3>
+                  <div className="space-y-3">
+                    <FaqItem
+                      question="Why is an exchange I connected showing 'Needs reconnect'?"
+                      answer="Exchange keys can expire, get revoked, or hit permission changes. When we detect a failure, the connection card shows the reason and a one-click reconnect flow. Your historical data stays intact."
+                    />
+                    <FaqItem
+                      question="Why did I get a 'key rejected' error when connecting my exchange?"
+                      answer={"The three most common causes:\n\n1. The key has withdrawal or transfer permissions enabled — we refuse those by design.\n2. The key is region-locked (e.g. a .US key on the global endpoint).\n3. The key is IP-restricted and our egress IP isn't on your whitelist — we show you the exact IP to add.\n\nThe wizard walks you through each case."}
+                    />
+                    <FaqItem
+                      question="A token appeared in my wallet that I didn't buy. What is it?"
+                      answer="Almost certainly a spam airdrop. We detect these and hide them from your totals by default, but they remain visible in the Spam drawer so you can see and dismiss them. Never interact with, approve, or sell a token you didn't purchase."
+                    />
+                    <FaqItem
+                      question="Can AlphaBAG place trades for me?"
+                      answer="No. AlphaBAG is read-only by design. We do not execute trades on your behalf, and no permission we request from a CEX or wallet would allow it."
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -1573,21 +1820,28 @@ export const Landing: React.FC = () => {
 };
 
 // Component Helpers
-const FaqItem = ({ question, answer }: { question: string, answer: string }) => {
+const FaqItem = ({ question, answer }: { question: string; answer: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className={`border rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'border-alphabag-yellow/50 bg-alphabag-yellow/5 ' : 'border-alphabag-gray bg-alphabag-darkgray hover:border-alphabag-gray/80 hover:bg-alphabag-gray/40'}`}>
+    <div className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
+      isOpen
+        ? 'border-alphabag-yellow/50 bg-alphabag-yellow/[0.04] shadow-lg'
+        : 'border-neutral-800 bg-neutral-900/60 hover:border-neutral-700 hover:bg-neutral-900/90'
+    }`}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 text-left"
+        className="w-full flex items-center justify-between p-5 text-left transition-colors"
       >
-        <span className="font-bold text-alphabag-text uppercase tracking-wider text-sm">{question}</span>
-        <div className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${isOpen ? 'bg-alphabag-yellow text-black' : 'bg-alphabag-gray/40 text-alphabag-text'}`}>
-          {isOpen ? <X size={14} /> : <span className="text-lg leading-none font-light mb-1">+</span>}
+        <span className="font-semibold text-white tracking-wide text-sm md:text-base leading-snug pr-4">{question}</span>
+        <div className={`w-8 h-8 shrink-0 flex items-center justify-center rounded-xl font-bold transition-colors ${
+          isOpen ? 'bg-alphabag-yellow text-black' : 'bg-neutral-800 text-neutral-400'
+        }`}>
+          {isOpen ? <X size={16} /> : <span className="text-xl leading-none font-light mb-0.5">+</span>}
         </div>
       </button>
-      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="p-4 pt-0 text-[13px] text-alphabag-subtext leading-relaxed border-t border-alphabag-border mt-1 font-medium opacity-60">
+      <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="p-5 pt-1 text-sm md:text-[14px] text-neutral-300 leading-relaxed border-t border-neutral-800/80 font-normal whitespace-pre-line">
           {answer}
         </div>
       </div>
@@ -1596,13 +1850,26 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
 };
 
 // Component Helpers
-const FeatureHighlight = ({ icon, title, desc }: { icon: any, title: string, desc: string }) => (
-  <div className="bg-alphabag-darkgray border border-alphabag-gray p-5 rounded-xl hover:border-alphabag-muted transition-all group cursor-default shadow-lg">
-    <div className="mb-2.5 bg-alphabag-darkgray w-9 h-9 rounded-lg flex items-center justify-center border border-alphabag-gray group-hover:scale-110 transition-all">
-      {React.cloneElement(icon as React.ReactElement, { size: 24 })}
+const FeatureHighlight = ({
+  icon,
+  title,
+  tagline,
+  desc,
+}: {
+  icon: any;
+  title: string;
+  tagline?: string;
+  desc: string;
+}) => (
+  <div className="bg-neutral-900/80 border border-neutral-800 p-6 md:p-7 rounded-2xl hover:border-alphabag-yellow/50 hover:bg-neutral-900 transition-all group shadow-xl flex flex-col justify-between">
+    <div>
+      <div className="mb-4 bg-alphabag-black w-12 h-12 rounded-xl flex items-center justify-center border border-neutral-800 group-hover:scale-105 group-hover:border-alphabag-yellow/40 transition-all shadow-inner">
+        {React.cloneElement(icon as React.ReactElement, { size: 24 })}
+      </div>
+      <h3 className="text-lg font-bold text-white mb-1.5 tracking-tight font-mono uppercase">{title}</h3>
+      {tagline && <p className="text-xs font-semibold text-alphabag-yellow mb-3 leading-snug">{tagline}</p>}
+      <p className="text-sm text-neutral-300 font-normal leading-relaxed">{desc}</p>
     </div>
-    <h3 className="text-lg font-semibold text-alphabag-text mb-1.5 leading-tight">{title}</h3>
-    <p className="text-[13px] text-alphabag-subtext font-medium leading-relaxed">{desc}</p>
   </div>
 );
 const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, value: string, icon: any, isMasked?: boolean }) => (
