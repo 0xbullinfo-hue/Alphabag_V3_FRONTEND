@@ -1,4 +1,4 @@
-import { BarChart3,Bot,Calculator,Crown,Eye,Flame,Gift,Layers,Link as LinkIcon,LogOut,Newspaper,PieChart,Radio,ShieldCheck,UserCircle,Zap } from 'lucide-react';
+import { BarChart3,Bot,Calculator,Eye,Flame,Gift,Layers,Link as LinkIcon,LogOut,Newspaper,PieChart,Radio,ShieldCheck,UserCircle,Zap } from 'lucide-react';
 import React from 'react';
 import { Link,useLocation,useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
