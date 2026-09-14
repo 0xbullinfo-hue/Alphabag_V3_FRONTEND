@@ -94,7 +94,22 @@ export const News: React.FC = () => {
             `}
           >
             <div className="h-56 overflow-hidden relative">
-              <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+              {item.imageUrl ? (
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    const target = e.currentTarget;
+                    target.style.display = 'none';
+                    const fallback = target.parentElement?.querySelector<HTMLElement>('.news-img-fallback');
+                    if (fallback) fallback.classList.remove('hidden');
+                  }}
+                />
+              ) : null}
+              <div className={`news-img-fallback absolute inset-0 bg-gradient-to-br from-alphabag-darkgray via-alphabag-gray/40 to-alphabag-black flex items-center justify-center ${item.imageUrl ? 'hidden' : ''}`}>
+                <Newspaper size={48} className="text-alphabag-subtext/30" />
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black/80 to-transparent"></div>
               {item.isPremium && (
                 <div className="absolute top-4 right-4 bg-alphabag-yellow text-alphabag-black text-[10px] font-extrabold px-3 py-1.5 rounded-xl flex items-center shadow-2xl">

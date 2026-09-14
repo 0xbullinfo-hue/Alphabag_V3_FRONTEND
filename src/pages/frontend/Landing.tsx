@@ -582,8 +582,8 @@ const ALPHA_PASS_UTILITIES = [
   },
   {
     icon: <Users size={24} />,
-    title: 'DAO Governance',
-    desc: 'Vote on platform proposals, feature requests, and ecosystem fund allocations.',
+    title: 'DEX & CEX Wallet Tracking',
+    desc: 'Track and manage your decentralized and centralized exchange wallets with real-time balance monitoring and analytics.',
   },
   {
     icon: <Star size={24} />,
@@ -1276,10 +1276,7 @@ export const Landing: React.FC = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <div className="space-y-6">
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 mb-4">
-                      <Sparkles size={14} className="text-alphabag-yellow" />
-                      <span className="text-xs font-bold uppercase tracking-wider text-alphabag-yellow">NFT Collection</span>
-                    </div>
+
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-text leading-[1.1] mb-4">
                       Alpha<span className="text-alphabag-yellow">BAG</span> Pass
                     </h2>
@@ -1805,9 +1802,7 @@ export const Landing: React.FC = () => {
             <button type="button" onClick={() => setLegalModal('terms')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Terms
             </button>
-            <button type="button" onClick={() => handleNavClick('alpha-pass')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
-              Alpha Pass
-            </button>
+
             <button type="button" onClick={() => setLegalModal('privacy')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Privacy
             </button>

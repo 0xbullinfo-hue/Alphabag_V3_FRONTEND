@@ -46,8 +46,8 @@ const UTILITY_FEATURES = [
   },
   {
     icon: <Users size={24} />,
-    title: 'DAO Governance',
-    desc: 'Vote on platform proposals, feature requests, and ecosystem fund allocations.',
+    title: 'DEX & CEX Wallet Tracking',
+    desc: 'Track and manage your decentralized and centralized exchange wallets with real-time balance monitoring and analytics.',
   },
   {
     icon: <Star size={24} />,

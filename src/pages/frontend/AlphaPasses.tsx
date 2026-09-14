@@ -612,7 +612,7 @@ export const AlphaPasses: React.FC = () => {
       {activeTab === 'MINT' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
           {/* Left Column: HOLDINGS DISPLAY & MINT PREVIEW (Visible in any phase) */}
-          <div className="lg:col-span-6 space-y-3">
+          <div className="lg:col-span-7 space-y-3">
             {/* Allocation & Bundle Preview */}
             <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5">
               <div className="flex justify-between items-center mb-3">
@@ -635,7 +635,7 @@ export const AlphaPasses: React.FC = () => {
                     </button>
                   )}
 
-                  <div className="relative w-28 h-28 rounded-2xl overflow-hidden border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.15)]">
+                  <div className="relative w-48 h-48 rounded-2xl overflow-hidden border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.15)]">
                     <img
                       src={`/nft-collection/images/${((previewCarouselIndex) % 100) + 1}.png`}
                       alt={`Genesis Pass Allocation #${previewCarouselIndex + 1}`}
@@ -705,17 +705,14 @@ export const AlphaPasses: React.FC = () => {
           </div>
 
           {/* Right Column: MINT TRANSACTION CONSOLE (0.07 BNB) */}
-          <div className="lg:col-span-6 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
+          <div className="lg:col-span-5 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-alphabag-gray">
                 <div>
                   <span className="text-xs font-semibold uppercase text-alphabag-subtext">Minting Console</span>
                   <h2 className="text-xl font-semibold text-alphabag-text mt-0.5">Genesis Mint Stage</h2>
                 </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-semibold text-alphabag-subtext uppercase">Total Collection</span>
-                  <div className="text-xs font-mono font-bold text-alphabag-yellow">4,000 TOTAL</div>
-                </div>
+
               </div>
 
               {/* Holdings reminder in the mint console */}
