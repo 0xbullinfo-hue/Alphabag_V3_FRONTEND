@@ -39,6 +39,8 @@ export const TOKEN_GATING_CONFIG = {
 export const NFT_CONFIG = {
   NFT_CONTRACT_ADDRESS_MAINNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_MAINNET || '',
   NFT_CONTRACT_ADDRESS_TESTNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_TESTNET || '',
+  IPFS_BASE_URI: import.meta.env.VITE_NFT_IPFS_BASE_URI || '',
+  IPFS_GATEWAY: import.meta.env.VITE_IPFS_GATEWAY || 'https://ipfs.io/ipfs/',
   MINT_PRICE_BNB: 0.07,
   MINT_PRICE_BAG: 100,
   TOTAL_SUPPLY: 4000,
@@ -48,6 +50,14 @@ export const NFT_CONFIG = {
   PANCAKESWAP_BUY_URL: import.meta.env.VITE_PANCAKESWAP_BUY_URL || 'https://pancakeswap.finance/swap',
   REQUIRED_BAG_FOR_PREMIUM: 10000,
   REQUIRED_NFT_FOR_VIP: 10,
+};
+
+export const resolveIpfsUrl = (url: string): string => {
+  if (!url) return '';
+  if (url.startsWith('ipfs://')) {
+    return url.replace('ipfs://', NFT_CONFIG.IPFS_GATEWAY);
+  }
+  return url;
 };
 
 // Global Demo Mode Toggle
