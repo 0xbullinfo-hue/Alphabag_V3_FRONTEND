@@ -65,21 +65,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full group-hover:scale-105 transition-transform" />
             <span className="text-lg font-bold text-alphabag-yellow tracking-tight">ALPHABAG</span>
           </Link>
-
-          <nav className="hidden md:flex flex-1 items-center justify-between max-w-[440px] ml-16 mr-8 text-sm font-medium text-alphabag-subtext">
-            <Link to="/markets" className="hover:text-alphabag-text transition-colors">
-              Markets
-            </Link>
-            <Link to="/my-alphabag" className="hover:text-alphabag-text transition-colors">
-              Trade
-            </Link>
-            <Link to="/airdrop" className="hover:text-alphabag-text transition-colors">
-              Earn
-            </Link>
-            <Link to="/alphas-feed" className="hover:text-alphabag-text transition-colors">
-              Square
-            </Link>
-          </nav>
         </div>
 
         <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">

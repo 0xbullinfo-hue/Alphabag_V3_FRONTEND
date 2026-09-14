@@ -1273,8 +1273,8 @@ export const Landing: React.FC = () => {
 
             <div className="max-w-7xl mx-auto relative z-10 w-full space-y-16">
               {/* Collection Hero & Mint Card */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <div className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+                <div className="flex flex-col justify-between space-y-6">
                   <div>
 
                     <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-text leading-[1.1] mb-4">

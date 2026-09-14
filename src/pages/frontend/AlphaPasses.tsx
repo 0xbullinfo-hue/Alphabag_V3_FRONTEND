@@ -610,11 +610,11 @@ export const AlphaPasses: React.FC = () => {
 
       {/* TAB 1: MINT PASS & HOLDINGS DASHBOARD */}
       {activeTab === 'MINT' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-          {/* Left Column: HOLDINGS DISPLAY & MINT PREVIEW (Visible in any phase) */}
-          <div className="lg:col-span-7 space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          {/* Left Column: HOLDINGS DISPLAY & MINT PREVIEW */}
+          <div className="space-y-3 flex flex-col">
             {/* Allocation & Bundle Preview */}
-            <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5">
+            <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5 flex-1 flex flex-col">
               <div className="flex justify-between items-center mb-3">
                 <span className="text-xs font-semibold uppercase text-alphabag-subtext">Mint Allocation Preview</span>
                 <span className="text-[10px] font-mono text-alphabag-yellow bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20">
@@ -622,7 +622,7 @@ export const AlphaPasses: React.FC = () => {
                 </span>
               </div>
 
-              <div className="rounded-xl bg-alphabag-black border border-alphabag-gray p-4 text-center flex flex-col items-center justify-center relative">
+              <div className="rounded-xl bg-alphabag-black border border-alphabag-gray p-4 flex-1 flex flex-col items-center justify-center relative">
                 <div className="relative flex items-center justify-center w-full my-1">
                   {quantity > 1 && (
                     <button
@@ -635,7 +635,7 @@ export const AlphaPasses: React.FC = () => {
                     </button>
                   )}
 
-                  <div className="relative w-48 h-48 rounded-2xl overflow-hidden border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.15)]">
+                  <div className="relative w-44 h-44 rounded-2xl overflow-hidden border border-alphabag-yellow/40 shadow-[0_0_20px_rgba(252,213,53,0.15)]">
                     <img
                       src={`/nft-collection/images/${((previewCarouselIndex) % 100) + 1}.png`}
                       alt={`Genesis Pass Allocation #${previewCarouselIndex + 1}`}
@@ -673,23 +673,30 @@ export const AlphaPasses: React.FC = () => {
                   Unit Price: 0.07 BNB • Total: {totalBnbCost} BNB
                 </p>
 
-                {quantity > 1 && (
-                  <div className="w-full mt-3 pt-2 border-t border-alphabag-gray/50">
-                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar justify-center px-1">
-                      {Array.from({ length: quantity }, (_, i) => (
+                {/* NFT Slider — browse minted collection */}
+                <div className="w-full mt-3 pt-3 border-t border-alphabag-gray/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-semibold uppercase text-alphabag-subtext">Browse Collection</span>
+                    <span className="text-[9px] font-mono text-alphabag-subtext">
+                      {previewCarouselIndex + 1} / {Math.max(quantity, 10)}
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <div className="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scrollbar px-1">
+                      {Array.from({ length: Math.max(quantity, 10) }, (_, i) => (
                         <button
                           key={i}
                           type="button"
-                          onClick={() => setPreviewCarouselIndex(i)}
-                          className={`relative w-9 h-9 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
-                            previewCarouselIndex === i
-                              ? 'border-alphabag-yellow scale-105 shadow-[0_0_10px_rgba(252,213,53,0.3)]'
-                              : 'border-alphabag-gray/60 opacity-60 hover:opacity-100'
+                          onClick={() => setPreviewCarouselIndex(i < quantity ? i : i % quantity)}
+                          className={`relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${  
+                            previewCarouselIndex === (i < quantity ? i : -1)
+                              ? 'border-alphabag-yellow scale-110 shadow-[0_0_10px_rgba(252,213,53,0.3)]'
+                              : 'border-alphabag-gray/60 opacity-60 hover:opacity-100 hover:border-alphabag-yellow/40'
                           }`}
                         >
                           <img
                             src={`/nft-collection/images/${(i % 100) + 1}.png`}
-                            alt={`Pass Allocation #${i + 1}`}
+                            alt={`Pass #${i + 1}`}
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] font-mono text-center font-bold text-alphabag-yellow">
@@ -699,13 +706,13 @@ export const AlphaPasses: React.FC = () => {
                       ))}
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Right Column: MINT TRANSACTION CONSOLE (0.07 BNB) */}
-          <div className="lg:col-span-5 rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
+          <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-alphabag-gray">
                 <div>
