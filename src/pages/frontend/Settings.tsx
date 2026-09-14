@@ -170,9 +170,9 @@ export const Settings: React.FC = () => {
                         <Search size={16} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mb-2">
-                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
-                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
-                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
+                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
+                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
+                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
                             <option value="BSC">BSC</option>
                             <option value="ETH">ETH</option>
                             <option value="SOL">SOL</option>
@@ -180,11 +180,11 @@ export const Settings: React.FC = () => {
                             <option value="AVAX">AVAX</option>
                             <option value="ARB">ARB</option>
                         </select>
-                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} disabled={true} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed">
+                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-black/50 border border-white/10 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed">
                             <option value="PORTFOLIO">Portfolio</option>
                             <option value="WHALE">Whale Watch</option>
                         </select>
-                        <Button onClick={handleAdd} disabled={true} className="font-bold h-[42px] text-xs opacity-50 cursor-not-allowed">
+                        <Button onClick={handleAdd} className="font-bold h-[42px] text-xs opacity-50 cursor-not-allowed">
                             <Plus size={14} className="mr-2" /> Add Connection
                         </Button>
                     </div>

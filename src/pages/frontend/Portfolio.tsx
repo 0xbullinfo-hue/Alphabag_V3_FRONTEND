@@ -36,9 +36,7 @@ export const Portfolio: React.FC = () => {
     const totalCost = safePortfolioItems.reduce((acc, item) => acc + ((item?.amount || 0) * (item?.avgBuyPrice || item?.currentPrice || 0)), 0);
     const totalPnLPercent = totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
 
-    // 24h metrics (Mocked based on current price change for UI demonstration)
-    const totalPnL24h = safePortfolioItems.reduce((acc, item) => acc + ((item?.value || 0) * ((item?.priceChange24h || 0) / 100)), 0);
-    const totalPnLPercent24h = totalValue > 0 ? (totalPnL24h / totalValue) * 100 : 0;
+    // True 24h portfolio PnL requires snapshot history (Patch 07)
 
     // Find Best/Worst Performers
     const knownCostBasisItems = safePortfolioItems.filter(item => item?.costBasisKnown);
@@ -104,8 +102,8 @@ export const Portfolio: React.FC = () => {
                         <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
                             <Wallet2 size={20} />
                         </div>
-                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DEX Portfolio</h1>
-                        <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Default</span>
+                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Portfolio</h1>
+                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Unified</span>
                         {hasMockData ? (
                             <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
                         ) : (
@@ -122,14 +120,10 @@ export const Portfolio: React.FC = () => {
                     </div>
                     
                     <div className="flex items-center gap-2 mt-2">
-                        <div className={`flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border ${
-                            totalPnL24h >= 0 ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/20' : 'bg-alphabag-red/10 text-alphabag-red border-alphabag-red/20'
-                        }`}>
-                            {totalPnL24h >= 0 ? <ChevronUp size={13} className="mr-1" /> : <ChevronDown size={13} className="mr-1" />}
-                            {totalPnLPercent24h.toFixed(2)}%
-                            <span className="ml-2 opacity-70">(${Math.abs(totalPnL24h).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
+                        <div className="flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border bg-alphabag-gray/40 text-alphabag-subtext border-alphabag-gray">
+                            <span className="text-xs text-alphabag-subtext">24h PnL unavailable</span>
                         </div>
-                        <span className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">24h Change</span>
+                        <span className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">Requires snapshot history</span>
                     </div>
                 </div>
 

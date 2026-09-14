@@ -65,7 +65,7 @@ export const fetchDefiPositions = async (address?: string): Promise<{ positions:
   if (!address) return { positions: [], source: 'none' };
   try {
     const res = await api.get('/api/portfolio/defi', { params: { address } });
-    const positions = Array.isArray(res.data) ? res.data : (res.data?.positions || []);
+    const positions = Array.isArray(res.data?.positions) ? res.data.positions : [];
     const source = res.data?.source === 'moralis' ? 'moralis' : 'defillama-opportunities';
     return { positions, source };
   } catch (e) {

@@ -1,3 +1,4 @@
+import { addressesFor } from '../protocolRegistry';
 import { Contract, JsonRpcProvider } from 'ethers';
 import type { DecodeContext, Position, ProtocolDecoder } from '../types';
 
@@ -14,14 +15,18 @@ export const aaveV3: ProtocolDecoder = {
   chainIds: [1, 137, 42161, 10, 8453],
 
   async probe(ctx) {
-    const pool = new Contract(POOL, ABI, ctx.multicall as unknown as JsonRpcProvider);
+    const addrs = addressesFor('aaveV3', ctx.chainId);
+    if (!addrs?.pool) return false;
+    const pool = new Contract(addrs.pool, ABI, ctx.multicall as unknown as JsonRpcProvider);
     const d = await pool.getUserAccountData(ctx.wallet);
     return BigInt(d.totalCollateralBase) > 0n || BigInt(d.totalDebtBase) > 0n;
   },
 
   async decode(ctx): Promise<Position[]> {
     const provider = ctx.multicall as unknown as JsonRpcProvider;
-    const pool = new Contract(POOL, ABI, provider);
+    const addrs = addressesFor('aaveV3', ctx.chainId);
+    if (!addrs?.pool) return [];
+    const pool = new Contract(addrs.pool, ABI, provider);
     const acct = await pool.getUserAccountData(ctx.wallet);
 
     const hfRaw = BigInt(acct.healthFactor);

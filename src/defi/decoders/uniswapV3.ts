@@ -1,3 +1,4 @@
+import { addressesFor } from '../protocolRegistry';
 import { AbiCoder, Contract, JsonRpcProvider } from 'ethers';
 import type { DecodeContext, Position, ProtocolDecoder } from '../types';
 
@@ -30,13 +31,22 @@ export const uniswapV3: ProtocolDecoder = {
   chainIds: [1, 137, 42161, 10, 8453],
 
   async probe(ctx) {
-    const c = new Contract(POSITION_MANAGER, ABI, ctx.multicall as never);
-    return false; // replaced below; probe uses balanceOf
+    const addrs = addressesFor('uniswapV3', ctx.chainId);
+    if (!addrs?.positionManager) return false;
+    const npm = new Contract(addrs.positionManager, ABI, ctx.multicall as unknown as JsonRpcProvider);
+    try {
+      const count = await npm.balanceOf(ctx.wallet);
+      return count > 0n;
+    } catch {
+      return false;
+    }
   },
 
   async decode(ctx): Promise<Position[]> {
     const provider = ctx.multicall as unknown as JsonRpcProvider;
-    const npm = new Contract(POSITION_MANAGER, ABI, provider);
+    const addrs = addressesFor('uniswapV3', ctx.chainId);
+    if (!addrs?.positionManager) return [];
+    const npm = new Contract(addrs.positionManager, ABI, provider);
 
     const bal: bigint = await npm.balanceOf(ctx.wallet);
     if (bal === 0n) return [];

@@ -18,6 +18,8 @@ export interface Coin {
   price_change_percentage_24h: number;
   total_volume: number;
   sparkline_in_7d: { price: number[] };
+  current_price_24h_high?: number;
+  current_price_24h_low?: number;
 }
 
 // Strict 2-tier system as per requirements

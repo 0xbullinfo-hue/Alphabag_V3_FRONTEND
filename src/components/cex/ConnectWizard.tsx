@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
+import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { Skeleton } from '../ui/Skeleton';
+import { ServerIpNote } from './ServerIpNote';
+import { AlertCircle } from 'lucide-react';
 
 type Field = 'apiKey' | 'secret' | 'passphrase';
 interface Exchange { id: string; name: string; logo: string; fields: Field[]; keyUrl: string; docsUrl: string; requiresIpWhitelist: boolean; ipWhitelistNote?: string; }
@@ -11,13 +15,20 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   const [step, setStep] = useState(0);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [ex, setEx] = useState<Exchange | null>(null);
-  const [creds, setCreds] = useState<Record<Field, string>>({ apiKey: '', secret: '', passphrase: '' });
+  const [creds, setCreds, clearCreds] = useSessionStorage<Record<Field, string>>('cex_draft_creds', { apiKey: '', secret: '', passphrase: '' });
+  const [exError, setExError] = useState<string | null>(null);
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState<{ message: string; hint?: string } | null>(null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => { api.get<Exchange[]>('/cex/exchanges').then(r => setExchanges(r.data)); }, []);
+  useEffect(() => {
+    let alive = true;
+    api.get<Exchange[]>('/cex/exchanges')
+      .then(r => { if (alive) setExchanges(r.data); })
+      .catch(() => { if (alive) setExError('Could not load exchanges. Check your connection.'); });
+    return () => { alive = false; };
+  }, []);
 
   const canAdvance = () => {
     if (step === 0) return !!ex;
@@ -39,7 +50,9 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
     setSaving(true);
     try {
       await api.post('/cex/connections', { exchangeId: ex!.id, ...creds });
-      setStep(4); onConnected();
+      clearCreds();
+      setStep(4);
+      onConnected();
     } catch (e: any) {
       setError({ message: e?.response?.data?.message ?? 'Save failed.' });
     } finally { setSaving(false); }
@@ -64,7 +77,25 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
         </header>
 
         <div className="px-6 py-5 min-h-[280px]">
-          {step === 0 && (
+          {exError && (
+            <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-800 bg-red-950/30 p-4">
+              <AlertCircle className="h-4 w-4 text-red-400 shrink-0" aria-hidden />
+              <span className="text-sm text-red-200">{exError}</span>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="ml-auto text-xs text-red-300 underline"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {exchanges.length === 0 && !exError && (
+            <Skeleton className="h-48 w-full" />
+          )}
+
+          {step === 0 && exchanges.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {exchanges.map(e => (
                 <button key={e.id} onClick={() => setEx(e)}
@@ -88,6 +119,9 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
                 <li>❌ Leave <strong>Withdraw</strong> and <strong>Transfer</strong> OFF</li>
                 {ex.requiresIpWhitelist && <li>ℹ️ {ex.ipWhitelistNote}</li>}
               </ul>
+              {ex.ipWhitelistNote && (
+                <ServerIpNote ip="203.0.113.10" note={ex.ipWhitelistNote} />
+              )}
             </div>
           )}
 
@@ -101,12 +135,12 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
                   <input
                     type={f === 'apiKey' ? 'text' : 'password'}
                     autoComplete="off" spellCheck={false}
-                    value={creds[f]} onChange={e => setCreds(c => ({ ...c, [f]: e.target.value }))}
+                    value={creds[f]} onChange={e => setCreds({ ...creds, [f]: e.target.value })}
                     className="mt-1 w-full rounded-lg bg-neutral-900 border border-neutral-800 px-3 py-2 font-mono text-sm focus:border-emerald-500 outline-none"
                   />
                 </label>
               ))}
-              <p className="text-xs text-neutral-500">Encrypted with AES-256-GCM. We never display your secret again, not even to admins.</p>
+              <p className="text-xs text-neutral-500">Read-only access only. Credentials are transmitted over HTTPS, encrypted at rest, never stored in browser storage, and never returned to the UI.</p>
             </form>
           )}
 

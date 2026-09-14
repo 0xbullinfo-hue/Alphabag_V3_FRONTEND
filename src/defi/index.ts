@@ -1,3 +1,5 @@
+import { compoundV3 } from './decoders/compoundV3';
+import { lido } from './decoders/lido';
 import { readThrough } from '../cache/tieredCache';
 import { uniswapV3 } from './decoders/uniswapV3';
 import { aaveV3 } from './decoders/aaveV3';

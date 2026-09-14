@@ -78,11 +78,14 @@ export const CoinDetail: React.FC = () => {
         setGroundingLinks([]);
         try {
             const response = await api.post('/api/ai/briefing', {
-                assets: [{ symbol, amount: 0 }],
-                userMessage: `Provide a concise market update for ${coinName} (${symbol}). Focus on recent price action, technical sentiment, and current market narrative.`,
-                tier: 'FREE',
+                marketData: {
+                  assetId: id,
+                  name: coinName,
+                  symbol,
+                },
+                userMessage: `Summarize the current verified market facts for ${coinName} (${symbol}). Do not invent prices or technical indicators.`,
             });
-            setAiInsight(response.data?.briefing || "Market data is currently being calibrated. Technical sentiment remains constructive for top assets.");
+            setAiInsight(response.data?.briefing || response.data?.summary || "Verified AI analysis is unavailable.");
         } catch (e) {
             console.error("AI Insight Error:", e);
             setAiInsight("Unable to fetch live technical analysis at this moment. Asset remains in a consolidation phase.");
@@ -163,11 +166,11 @@ export const CoinDetail: React.FC = () => {
                             <div className="grid grid-cols-2 gap-2 text-right w-full md:w-auto">
                                 <div>
                                     <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h High</p>
-                                    <p className="text-white font-bold text-sm">${(coin.current_price * 1.05).toLocaleString()}</p>
+                                    <p className="text-white font-bold text-sm">{coin.current_price_24h_high != null ? `${coin.current_price_24h_high.toLocaleString()}` : '—'}</p>
                                 </div>
                                 <div>
                                     <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h Low</p>
-                                    <p className="text-white font-bold text-sm">${(coin.current_price * 0.95).toLocaleString()}</p>
+                                    <p className="text-white font-bold text-sm">{coin.current_price_24h_low != null ? `${coin.current_price_24h_low.toLocaleString()}` : '—'}</p>
                                 </div>
                             </div>
                         </div>

@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '../services/api';
 import { SUPPORTED_CEX } from '../services/exchanges';
 
-const STORAGE_KEY = 'alphabag_cex_connections';
 const REFRESH_INTERVAL_MS = 2 * 60 * 1000; // match the DEX 120s auto-refresh cadence
 
 export interface CexConnection {
@@ -42,20 +41,14 @@ const toAsset = (row: { symbol: string; name?: string; balance: string | number;
 });
 
 export function useCexConnections() {
-    const [connections, setConnections] = useState<CexConnection[]>(() => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
+    // Server is the source of truth. Do not persist CEX connection metadata in localStorage.
+    const [connections, setConnections] = useState<CexConnection[]>([]);
     const refreshTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
     const persist = useCallback((updated: CexConnection[]) => {
         setConnections(updated);
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+            
         } catch {
             // localStorage can throw in private-browsing/quota-exceeded
             // cases; the in-memory state is still correct either way.
@@ -143,6 +136,7 @@ export function useCexConnections() {
      */
     const refreshConnections = useCallback(async () => {
         try {
+            localStorage.removeItem('alphabag_cex_connections');
             const [connectionsRes, balancesRes] = await Promise.all([
                 api.get('/api/cex/connections'),
                 api.get('/api/cex/balances'),

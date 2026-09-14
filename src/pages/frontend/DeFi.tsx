@@ -103,7 +103,7 @@ export const DeFi: React.FC = () => {
                     {!isOwnPositions && (
                         <p className="text-[11px] text-alphabag-subtext mb-2 max-w-lg">
                             {address
-                                ? "We didn't find any tracked DeFi positions for your connected wallet. Showing top yield opportunities across major protocols instead — these are not your holdings."
+                                ? "No verified DeFi positions were returned for this wallet. Opportunities are shown separately and are never counted as your holdings."
                                 : "Connect a wallet to see your real lending, staking, and liquidity positions. Showing top yield opportunities across major protocols in the meantime."}
                         </p>
                     )}
