@@ -2,7 +2,16 @@
  * Post-generation validation. The LLM is allowed to NARRATE numbers from
  * FACTS, never to INVENT them. This module enforces that mechanically.
  */
-import type { Fact } from './tools';
+/** Facts returned to the model. Every fact carries source + age. */
+export interface Fact {
+  key: string;
+  value: unknown;
+  source: string;
+  fetchedAt: string;
+  ageMs: number;
+  stale: boolean;
+}
+
 
 const NUM_RE = /-?\$?\d[\d,]*(?:\.\d+)?%?/g;
 

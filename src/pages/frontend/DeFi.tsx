@@ -1,5 +1,5 @@
-import { Activity,AlertTriangle,Download,Layers,ShieldCheck } from 'lucide-react';
-import React,{ useEffect,useState } from 'react';
+import { Activity, AlertTriangle, Download, Layers, RefreshCw, ShieldCheck } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/Button';
 import { useWallet } from '../../context/WalletContext';
 import { fetchDefiPositions } from '../../services/mockData';
@@ -18,19 +18,9 @@ const TABS: { id: Tab; label: string }[] = [
 export const DeFi: React.FC = () => {
     const { address } = useWallet();
     const [positions, setPositions] = useState<DefiPosition[]>([]);
-    // NOTE: this page previously always called fetchDefiPositions() with no
-    // wallet address at all — every visitor's request would have 400'd
-    // against the real backend endpoint, silently degrading to an empty
-    // list. It also never distinguished "these are your real positions"
-    // from "these are generic top-yield pools we're showing you because we
-    // couldn't find any of your own" (the backend falls back to DeFiLlama's
-    // public yield-opportunity list when Moralis isn't configured, or the
-    // wallet has no on-chain DeFi positions). Rendering the latter as if it
-    // were the user's own "Supplied/Borrowed" balances would be exactly the
-    // kind of fabricated-looking data this whole page needs to move away
-    // from — so the two cases are now labeled distinctly below.
     const [source, setSource] = useState<'moralis' | 'defillama-opportunities' | 'none'>('none');
     const [activeTab, setActiveTab] = useState<Tab>('ALL');
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     useEffect(() => {
         fetchDefiPositions(address).then(({ positions, source }) => {
@@ -39,14 +29,25 @@ export const DeFi: React.FC = () => {
         });
     }, [address]);
 
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        try {
+            const { positions, source } = await fetchDefiPositions(address);
+            setPositions(positions);
+            setSource(source);
+        } catch (err) {
+            console.error('Failed to refresh DeFi positions:', err);
+        } finally {
+            setIsRefreshing(false);
+        }
+    };
+
     const isOwnPositions = source === 'moralis';
     const safePositions = Array.isArray(positions) ? positions : [];
     const filtered = isOwnPositions ? safePositions.filter(p => activeTab === 'ALL' || p?.type === activeTab) : safePositions;
 
     // Calculations — only meaningful for the user's own real positions.
-    // Opportunity-list rows have no "balance" (they're not something the
-    // user holds), so these intentionally stay at 0 in that case rather
-    // than summing pool APYs/TVLs as if they were the user's holdings.
+    // Opportunity-list rows have no user balance, so TVL stays at 0 when viewing opportunities.
     const totalValueLocked = isOwnPositions ? safePositions.reduce((acc, p) => p.balance > 0 ? acc + p.balance : acc, 0) : 0;
     const totalDebt = isOwnPositions ? safePositions.reduce((acc, p) => p.balance < 0 ? acc + Math.abs(p.balance) : acc, 0) : 0;
 
@@ -57,7 +58,30 @@ export const DeFi: React.FC = () => {
         });
     }
     const netApy = totalValueLocked > 0 ? (totalWeightedApy / totalValueLocked) : 0;
-    const pendingYield = totalValueLocked * 0.0015;
+    const pendingYield = isOwnPositions
+        ? safePositions.reduce((acc, p) => acc + ((p as any).pendingRewardsUsd ?? 0), 0)
+        : 0;
+
+    const handleExportCsv = () => {
+        if (!filtered.length) return;
+        const headers = ['Protocol', 'Asset', 'Chain', 'Type', 'APY (%)', isOwnPositions ? 'Balance (USD)' : 'Pool Type'];
+        const rows = filtered.map(p => [
+            `"${p.protocol || ''}"`,
+            `"${p.name || ''}"`,
+            `"${p.chain || ''}"`,
+            `"${p.type || ''}"`,
+            p.apy.toFixed(2),
+            isOwnPositions ? (p.balance ?? 0).toFixed(2) : '"Opportunity"'
+        ]);
+        const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `alphabag-defi-${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 animate-in fade-in duration-700">
@@ -87,24 +111,41 @@ export const DeFi: React.FC = () => {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-3">
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Supplied</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums">${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums">
+                                {isOwnPositions ? `$${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '—'}
+                            </h2>
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Borrowed</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-red tabular-nums">${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits:2})}</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-red tabular-nums">
+                                {isOwnPositions ? `$${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '—'}
+                            </h2>
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Net APY</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-green tabular-nums">+{netApy.toFixed(2)}%</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-green tabular-nums">
+                                {isOwnPositions ? `+${netApy.toFixed(2)}%` : '—'}
+                            </h2>
                         </div>
                         <div>
                             <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Pending</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-yellow tabular-nums">${pendingYield.toFixed(2)}</h2>
+                            <h2 className="text-2xl font-semibold text-alphabag-yellow tabular-nums">
+                                {isOwnPositions ? `$${pendingYield.toFixed(2)}` : '—'}
+                            </h2>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={handleRefresh}
+                        disabled={isRefreshing}
+                        className="flex items-center gap-1.5 bg-alphabag-gray text-alphabag-text px-3 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all disabled:opacity-50"
+                        title="Refresh DeFi positions"
+                    >
+                        <RefreshCw size={13} className={isRefreshing ? 'animate-spin' : ''} />
+                        {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                    </button>
                     <div className="bg-alphabag-darkgray border border-alphabag-gray px-3 py-1.5 rounded-md flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></div>
                         <span className="text-[8px] font-semibold uppercase tracking-widest text-alphabag-subtext">Nodes Live</span>
@@ -132,7 +173,13 @@ export const DeFi: React.FC = () => {
                          </button>
                      ))}
                   </div>
-                  <Button variant="secondary" size="sm" className="border-alphabag-gray whitespace-nowrap text-[10px] font-black uppercase tracking-widest h-8 px-3">
+                  <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={handleExportCsv}
+                      disabled={filtered.length === 0}
+                      className="border-alphabag-gray whitespace-nowrap text-[10px] font-black uppercase tracking-widest h-8 px-3"
+                  >
                       <Download size={12} className="mr-1.5" /> Export CSV
                   </Button>
              </div>
@@ -184,11 +231,13 @@ export const DeFi: React.FC = () => {
                                           </td>
                                           <td className="p-3 px-6 text-right tabular-data">
                                               <div className={`font-bold text-sm ${pos.balance >= 0 ? 'text-white' : 'text-alphabag-red'}`}>
-                                                  {pos.balance < 0 ? '-' : ''}${Math.abs(pos.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                                                  {isOwnPositions
+                                                      ? `${pos.balance < 0 ? '-' : ''}$${Math.abs(pos.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}`
+                                                      : '—'}
                                               </div>
                                           </td>
                                           <td className="p-3 px-6 text-center">
-                                              {pos.type === 'Lending' && pos.balance < 0 ? (
+                                              {isOwnPositions && pos.type === 'Lending' && pos.balance < 0 ? (
                                                   <div className="flex items-center justify-center gap-1.5 bg-alphabag-black/30 w-fit mx-auto px-2.5 py-1 rounded-full border border-alphabag-gray/30">
                                                       {pos.healthFactor && pos.healthFactor < 1.5 ? (
                                                           <AlertTriangle size={12} className="text-alphabag-red" />
@@ -200,7 +249,9 @@ export const DeFi: React.FC = () => {
                                                       </span>
                                                   </div>
                                               ) : (
-                                                  <span className="text-alphabag-subtext text-[10px] opacity-30 font-bold tracking-widest uppercase">Idle</span>
+                                                  <span className="text-alphabag-subtext text-[10px] opacity-30 font-bold tracking-widest uppercase">
+                                                      {isOwnPositions ? 'Idle' : '—'}
+                                                  </span>
                                               )}
                                           </td>
                                       </tr>

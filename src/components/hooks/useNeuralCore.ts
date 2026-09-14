@@ -1,5 +1,6 @@
-import { useCallback,useState } from 'react';
+import { useCallback, useState } from 'react';
 import { resolveApiUrl } from '../../services/api';
+import { findUnsupportedNumbers, type Fact } from '../../ai/guardrails';
 
 export interface ChatMessage {
     role: 'user' | 'ai';
@@ -66,12 +67,14 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
             // 4. Decode the stream chunk-by-chunk
             const reader = response.body.getReader();
             const decoder = new TextDecoder('utf-8');
+            let fullAiResponse = '';
 
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
                 const chunk = decoder.decode(value, { stream: true });
+                fullAiResponse += chunk;
 
                 // 5. Smoothly inject the chunk into the empty placeholder
                 setMessages((prev) => {
@@ -85,6 +88,33 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
 
                     return updatedMessages;
                 });
+            }
+
+            // 6. Grounding verification against portfolio facts
+            if (fullAiResponse && portfolioItems.length > 0) {
+                const facts: Fact[] = portfolioItems.flatMap((p: any) => {
+                    const f: Fact[] = [];
+                    if (typeof p.amount === 'number') f.push({ key: `${p.symbol}.amount`, value: p.amount, source: 'portfolio', fetchedAt: '', ageMs: 0, stale: false });
+                    if (typeof p.value === 'number') f.push({ key: `${p.symbol}.value`, value: p.value, source: 'portfolio', fetchedAt: '', ageMs: 0, stale: false });
+                    if (typeof p.currentPrice === 'number') f.push({ key: `${p.symbol}.price`, value: p.currentPrice, source: 'portfolio', fetchedAt: '', ageMs: 0, stale: false });
+                    if (typeof p.priceChange24h === 'number') f.push({ key: `${p.symbol}.change`, value: p.priceChange24h, source: 'portfolio', fetchedAt: '', ageMs: 0, stale: false });
+                    return f;
+                });
+
+                const unverified = findUnsupportedNumbers(fullAiResponse, facts);
+                if (unverified.length > 3) {
+                    setMessages((prev) => {
+                        const updated = [...prev];
+                        const last = updated.length - 1;
+                        if (updated[last] && updated[last].role === 'ai') {
+                            updated[last] = {
+                                ...updated[last],
+                                content: updated[last].content + `\n\n> ⚠️ *Note: Certain figures mentioned (${unverified.slice(0, 3).join(', ')}) could not be cross-verified with on-chain portfolio facts.*`,
+                            };
+                        }
+                        return updated;
+                    });
+                }
             }
         } catch (error) {
             console.error("Neural Core Sync Failed:", error);
@@ -100,7 +130,7 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
         } finally {
             setIsStreaming(false);
         }
-    }, [isStreaming]);
+    }, [isStreaming, portfolioItems, tier]);
 
     const clearChat = () => {
         setMessages([{ role: 'ai', content: 'Context cleared. How can I assist your portfolio today?' }]);

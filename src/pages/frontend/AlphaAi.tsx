@@ -1,6 +1,5 @@
 import { Bot,ChevronRight,Fingerprint,Mic,Send,Trash2,Wallet,Zap } from 'lucide-react';
-import React,{ useEffect,useRef,useState } from 'react';
-import Swal from 'sweetalert2';
+import React,{ useEffect,useState } from 'react';
 import { useNeuralCore } from '../../components/hooks/useNeuralCore';
 import { Button } from '../../components/ui/Button';
 import { ChatFeed } from '../../components/ui/ChatFeed';
@@ -59,52 +58,9 @@ export const AlphaAi: React.FC = () => {
     clearChat
   } = useNeuralCore(unifiedPortfolio, tier);
 
-  const [isLiveMode, setIsLiveMode] = useState(false);
-  const liveSessionRef = useRef<any>(null);
-  const sourcesRef = useRef<Set<AudioBufferSourceNode>>(new Set());
-
   const freeUsageSeconds = user?.alphaAiUsageSeconds || 0;
   const FREE_LIMIT_SECONDS = 24 * 60 * 60; // 24 hours (Unlimited for Beta)
   const hasLimitRemaining = isUltimate || freeUsageSeconds < FREE_LIMIT_SECONDS;
-
-  useEffect(() => {
-    let timer: any;
-    if (isLiveMode && !isUltimate) {
-      timer = setInterval(() => {
-        updateAiUsage(1);
-        if (freeUsageSeconds >= FREE_LIMIT_SECONDS) {
-          stopLiveMode();
-        }
-      }, 1000);
-    }
-    return () => clearInterval(timer);
-  }, [isLiveMode, isUltimate, freeUsageSeconds, updateAiUsage]);
-
-  const stopLiveMode = () => {
-    if (liveSessionRef.current) {
-      try { liveSessionRef.current.close(); } catch (e) { }
-      liveSessionRef.current = null;
-    }
-    sourcesRef.current.forEach(source => { try { source.stop(); } catch (e) { } });
-    sourcesRef.current.clear();
-    setIsLiveMode(false);
-  };
-
-  const startLiveMode = async () => {
-    Swal.fire({
-      title: 'VOICE ASSISTANT',
-      text: 'AI Voice assistant is in final staging. Launching in Phase 2.0.',
-      icon: 'info',
-      confirmButtonText: 'ACKNOWLEDGE',
-      confirmButtonColor: '#fcd535',
-      background: '#181a20',
-      color: '#ffffff',
-      customClass: {
-        popup: 'border border-alphabag-gray rounded-2xl',
-        confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
-      }
-    });
-  };
 
   const handleSendMessage = (userMsg: string) => {
     if (!isAuthenticated) {
@@ -181,10 +137,9 @@ export const AlphaAi: React.FC = () => {
               <div className="absolute right-1.5 top-1.5 bottom-1.5 flex items-center gap-1">
                 <button
                   type="button"
-                  onClick={startLiveMode}
-                  disabled={!isAuthenticated}
-                  className="h-full px-2.5 rounded-md text-zinc-400 hover:text-alphabag-yellow transition-colors hover:bg-white/5"
-                  title="Voice assistant"
+                  disabled
+                  className="h-full px-2.5 rounded-md text-zinc-600 cursor-not-allowed transition-colors"
+                  title="Voice assistant — coming in Phase 2.0"
                 >
                   <Mic size={14} />
                 </button>

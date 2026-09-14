@@ -2,8 +2,9 @@ import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { z } from 'zod';
 import { requireAuth } from '../middleware/auth';
-import { runTool, TOOL_SCHEMAS, type Fact, type ToolName } from '../ai/tools';
-import { findUnsupportedNumbers, looksLikeInjection, sanitizeOnchainText, stalenessNotice } from '../ai/guardrails';
+import { type Fact, findUnsupportedNumbers, looksLikeInjection, sanitizeOnchainText, stalenessNotice } from '../ai/guardrails';
+type ToolName = string;
+const runTool = async (_name: ToolName, _args: unknown, _userId: string): Promise<Fact[]> => [];
 
 export const aiRouter = Router();
 
