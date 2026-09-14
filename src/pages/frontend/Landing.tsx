@@ -1207,16 +1207,6 @@ export const Landing: React.FC = () => {
         {activeTab === 'tokenomics' && (
           <section className="relative py-32 px-6 min-h-[85vh] flex flex-col justify-center">
 
-            {/* ── Coming Soon translucent mask ── */}
-            <div className="absolute inset-0 z-40 flex items-center justify-center" style={{ backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', background: 'rgba(22,26,34,0.72)' }}>
-              <div className="flex flex-col items-center gap-4 select-none">
-                <div className="w-16 h-16 rounded-full border-2 border-alphabag-yellow/60 flex items-center justify-center bg-alphabag-darkgray/80 shadow-lg shadow-yellow-900/20">
-                  <Lock size={28} className="text-alphabag-yellow" />
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-yellow drop-shadow-lg">Coming Soon</h2>
-                <p className="text-alphabag-subtext text-sm md:text-base max-w-md text-center leading-relaxed">Alphanomics details will be revealed closer to launch. Stay tuned.</p>
-              </div>
-            </div>
 
             <div className="max-w-7xl mx-auto relative z-10 w-full">
               <div className="text-center mb-16">
@@ -1280,22 +1270,6 @@ export const Landing: React.FC = () => {
         {activeTab === 'alpha-pass' && (
           <section className="relative py-28 px-6 min-h-[85vh] flex flex-col justify-center">
 
-            {/* ── Centralized Coming Soon translucent mask (fixed to visible viewport under nav) ── */}
-            <div className="fixed inset-x-0 top-16 bottom-0 z-40 flex items-center justify-center pointer-events-auto" style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', background: 'rgba(22,26,34,0.78)' }}>
-              <div className="flex flex-col items-center gap-4 select-none px-6 text-center max-w-lg mx-auto">
-                <div className="w-16 h-16 rounded-full border-2 border-alphabag-yellow/60 flex items-center justify-center bg-alphabag-darkgray/80 shadow-lg shadow-yellow-900/30 animate-pulse">
-                  <Lock size={30} className="text-alphabag-yellow" />
-                </div>
-                <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-yellow drop-shadow-lg">Coming Soon</h2>
-                <p className="text-alphabag-subtext text-sm md:text-base leading-relaxed">
-                  The Alpha Pass NFT collection is under development.<br />Exclusive art pieces granting utility access to AlphaBAG.
-                </p>
-                <div className="mt-2 flex items-center gap-2 text-xs text-alphabag-subtext/70 uppercase tracking-widest font-semibold">
-                  <Gem size={13} className="text-alphabag-yellow/70" />
-                  Art &bull; Utility &bull; Access
-                </div>
-              </div>
-            </div>
 
             <div className="max-w-7xl mx-auto relative z-10 w-full space-y-16">
               {/* Collection Hero & Mint Card */}

@@ -5,7 +5,6 @@ import {
   Flame, 
   ExternalLink, 
   Lock, 
-  Sparkles, 
   Layers, 
   BarChart3, 
   Crown,
@@ -127,14 +126,6 @@ export const AlphaPasses: React.FC = () => {
   const [txHash, setTxHash] = useState<string | null>(null);
   const [localHoldings, setLocalHoldings] = useState<AlphaPassNFT[]>([]);
 
-  // ── LIVE ON-CHAIN CONTRACT READS ─────────────────────────────────────────
-  const { data: mintActiveData } = useContractRead({
-    address: NFT_CONTRACT_ADDRESS,
-    abi: ALPHA_PASS_ABI,
-    functionName: 'mintActive',
-    enabled: NFT_CONTRACT_ADDRESS !== '0x0000000000000000000000000000000000000000',
-    watch: true,
-  });
 
   const { data: totalSupplyData } = useContractRead({
     address: NFT_CONTRACT_ADDRESS,
@@ -160,7 +151,6 @@ export const AlphaPasses: React.FC = () => {
     watch: true,
   });
 
-  const contractMintActive = Boolean(mintActiveData);
   const contractTotalSupply = Number(totalSupplyData || 0);
   const contractMaxSupply = Number(maxSupplyData || NFT_CONFIG.TOTAL_SUPPLY || 4000);
   const walletMinted = Number(walletMintData || 0);
@@ -208,7 +198,6 @@ export const AlphaPasses: React.FC = () => {
     }
   }, [address]);
 
-  const [selectedOwnedIndex, setSelectedOwnedIndex] = useState<number>(0);
   const [previewCarouselIndex, setPreviewCarouselIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -495,15 +484,7 @@ export const AlphaPasses: React.FC = () => {
             Genesis Collection — 4,000 Limited Utility Passes for On-Chain Intelligence & VIP Multipliers.
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <div className={`px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider flex items-center gap-2 border ${contractMintActive || true ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30' : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray'}`}>
-            <div className={`w-2 h-2 rounded-full ${contractMintActive || true ? 'bg-alphabag-green animate-pulse' : 'bg-alphabag-subtext'}`} />
-            {contractMintActive ? 'Mint Live' : '4,000 Total Supply'}
-          </div>
-          <div className="px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider flex items-center gap-2 border bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/30 font-mono">
-            0.07 BNB
-          </div>
-        </div>
+
       </div>
 
       {/* Overview Statistics Cards */}
@@ -632,128 +613,6 @@ export const AlphaPasses: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
           {/* Left Column: HOLDINGS DISPLAY & MINT PREVIEW (Visible in any phase) */}
           <div className="lg:col-span-6 space-y-3">
-            {/* Holdings Showcase Box (Persistent across ALL phases) */}
-            <div className="rounded-2xl border border-alphabag-yellow/40 bg-alphabag-darkgray p-5 relative shadow-[0_0_20px_rgba(252,213,53,0.06)]">
-              <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark font-black">
-                    <ShieldCheck size={16} />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-alphabag-text uppercase font-mono">Your NFT Holdings</div>
-                    <div className="text-[10px] text-alphabag-subtext">Live Wallet Status Across All Mint Phases</div>
-                  </div>
-                </div>
-                <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase flex items-center gap-1 ${userNFTs.length > 0 ? 'bg-alphabag-green/20 text-alphabag-green border border-alphabag-green/40' : 'bg-alphabag-gray text-alphabag-subtext border border-alphabag-gray'}`}>
-                  {userNFTs.length > 0 ? `${userNFTs.length} OWNED` : '0 OWNED'}
-                </span>
-              </div>
-
-              {userNFTs.length > 0 ? (
-                /* User Holds Passes: Interactive Display */
-                <div className="rounded-xl bg-alphabag-black border border-alphabag-gray p-4 text-center flex flex-col items-center justify-center relative">
-                  <div className="relative flex items-center justify-center w-full my-1">
-                    {userNFTs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedOwnedIndex((prev) => (prev > 0 ? prev - 1 : userNFTs.length - 1))}
-                        className="absolute left-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
-                        title="Previous Pass"
-                      >
-                        <ChevronLeft size={16} />
-                      </button>
-                    )}
-
-                    <div className="relative w-28 h-28 rounded-2xl overflow-hidden border-2 border-alphabag-yellow/50 shadow-[0_0_20px_rgba(252,213,53,0.2)]">
-                      <img
-                        src={userNFTs[selectedOwnedIndex]?.image || `/nft-collection/images/${((userNFTs[selectedOwnedIndex]?.tokenId || 1) % 100) || 1}.png`}
-                        alt={userNFTs[selectedOwnedIndex]?.name || 'Genesis Pass'}
-                        className="w-full h-full object-cover"
-                        onError={(e: any) => {
-                          e.currentTarget.src = '/nft-collection/images/1.png';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1">
-                        <span className="text-[9px] font-black font-mono text-alphabag-yellow">
-                          #{userNFTs[selectedOwnedIndex]?.tokenId?.toString().padStart(4, '0') || '0001'}
-                        </span>
-                      </div>
-                    </div>
-
-                    {userNFTs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedOwnedIndex((prev) => (prev < userNFTs.length - 1 ? prev + 1 : 0))}
-                        className="absolute right-0 z-20 w-8 h-8 rounded-full bg-alphabag-darkgray/90 border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-text hover:text-alphabag-yellow flex items-center justify-center transition-all shadow-md active:scale-95"
-                        title="Next Pass"
-                      >
-                        <ChevronRight size={16} />
-                      </button>
-                    )}
-                  </div>
-
-                  <h3 className="text-base font-black text-alphabag-text uppercase tracking-tight mt-2">
-                    {userNFTs[selectedOwnedIndex]?.name || `AlphaBAG Genesis Pass #${userNFTs[0]?.tokenId}`}
-                  </h3>
-                  <p className="text-[10px] text-alphabag-subtext font-mono mt-0.5">
-                    Verified Holder • Pass {selectedOwnedIndex + 1} of {userNFTs.length}
-                  </p>
-
-                  {/* Thumbnail Filmstrip */}
-                  {userNFTs.length > 1 && (
-                    <div className="w-full mt-3 pt-2 border-t border-alphabag-gray/50">
-                      <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar justify-start sm:justify-center px-1">
-                        {userNFTs.map((nft, idx) => (
-                          <button
-                            key={nft.tokenId}
-                            type="button"
-                            onClick={() => setSelectedOwnedIndex(idx)}
-                            className={`relative w-10 h-10 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
-                              selectedOwnedIndex === idx
-                                ? 'border-alphabag-yellow scale-105 shadow-[0_0_10px_rgba(252,213,53,0.3)]'
-                                : 'border-alphabag-gray/60 opacity-60 hover:opacity-100'
-                            }`}
-                          >
-                            <img
-                              src={nft.image}
-                              alt={`Pass #${nft.tokenId}`}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute bottom-0 inset-x-0 bg-black/80 text-[7px] font-mono text-center font-bold text-alphabag-yellow">
-                              #{nft.tokenId}
-                            </div>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded text-[10px] font-semibold border border-alphabag-yellow/20">
-                      1.5x ITEMS Boost
-                    </span>
-                    <span className="bg-alphabag-green/10 text-alphabag-green px-2 py-0.5 rounded text-[10px] font-semibold border border-alphabag-green/20">
-                      Lifetime VIP Access
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                /* User Holds 0 Passes: Informational Box */
-                <div className="rounded-xl bg-alphabag-black border border-alphabag-gray/60 p-4 text-center flex flex-col items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-alphabag-darkgray border border-alphabag-gray flex items-center justify-center text-alphabag-subtext mb-2">
-                    <ShieldCheck size={26} />
-                  </div>
-                  <h4 className="text-sm font-bold text-alphabag-text">No Genesis Passes In Wallet</h4>
-                  <p className="text-xs text-alphabag-subtext max-w-sm mt-1 leading-relaxed">
-                    Minting an AlphaBAG Genesis Pass for <strong className="text-alphabag-yellow">0.07 BNB</strong> activates 1.5x rewards, AI Alpha indicators, and VIP fee tiers.
-                  </p>
-                  <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-[10px] text-alphabag-yellow font-mono">
-                    <Sparkles size={12} /> Eligible for 4,000 Genesis Allocation
-                  </div>
-                </div>
-              )}
-            </div>
-
             {/* Allocation & Bundle Preview */}
             <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5">
               <div className="flex justify-between items-center mb-3">
