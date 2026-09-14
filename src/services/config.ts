@@ -67,7 +67,7 @@ const IS_LOCALHOST_DEV = import.meta.env.DEV && typeof window !== 'undefined' &&
 export const IS_DEMO_MODE = IS_LOCALHOST_DEV && import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
-export const getDisabledPages = (): string[] => [];
+export const getDisabledPages = (): string[] => ['/alpha-passes', '/passes', '/pricing'];
 export const DISABLED_PAGES: string[] = getDisabledPages();
 
 // Launch mode is configured via environment so the same codebase can support

@@ -104,10 +104,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
           <NavGroup title="Personal">
             <NavItem to="/my-alphabag" icon={PieChart} label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
-            <div className="relative">
-              <NavItem to="/alpha-passes" icon={Crown} label="Alpha Passes" active={location.pathname === '/alpha-passes' || location.pathname === '/passes'} />
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-[7px] font-black rounded uppercase pointer-events-none shadow-sm">VIP</div>
-            </div>
+            {/* Alpha Passes hidden until ready for public launch */}
 
             {!disabledPages.includes('/airdrop') && (
               <div className="relative">

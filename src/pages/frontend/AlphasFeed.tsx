@@ -538,7 +538,7 @@ export const AlphasFeed: React.FC = () => {
                 color: '#fff'
             }).then(r => {
                 if (r.isConfirmed) {
-                    window.location.hash = '#/alpha-passes';
+                    window.location.hash = '#/airdrop';
                 }
             });
             return;

@@ -14,7 +14,7 @@ import { WalletProvider } from './context/WalletContext';
 import { usePortfolioStream } from './hooks/usePortfolioStream';
 import { queryClient } from './lib/queryClient';
 import { config } from './lib/wagmi';
-import { IS_TEASER_MODE } from './services/config';
+import { IS_TEASER_MODE, DISABLED_PAGES } from './services/config';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
 // wallet-connect auto-trigger, no other routes, regardless of what URL a
@@ -207,19 +207,19 @@ const AppContent = () => {
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/profile/:id" element={<Layout><Profile /></Layout>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />
-          <Route path="/alpha-passes" element={<Layout><AlphaPasses /></Layout>} />
-          <Route path="/alpha-pass" element={<Navigate to="/?tab=alpha-pass" replace />} />
-          <Route path="/alpha-access" element={<Navigate to="/?tab=alpha-pass" replace />} />
-          <Route path="/passes" element={<Navigate to="/alpha-passes" replace />} />
-          <Route path="/pricing" element={<Navigate to="/alpha-passes" replace />} />
+          <Route path="/alpha-passes" element={DISABLED_PAGES.includes('/alpha-passes') ? <Navigate to="/" replace /> : <Layout><AlphaPasses /></Layout>} />
+          <Route path="/alpha-pass" element={<Navigate to="/" replace />} />
+          <Route path="/alpha-access" element={<Navigate to="/" replace />} />
+          <Route path="/passes" element={<Navigate to="/" replace />} />
+          <Route path="/pricing" element={<Navigate to="/" replace />} />
+          <Route path="/tokenomics" element={<Navigate to="/genesis-manifesto" replace />} />
           <Route path="/whitepaper" element={<Navigate to="/genesis-manifesto" replace />} />
           <Route path="/docs" element={<Navigate to="/genesis-manifesto" replace />} />
-          <Route path="/tokenomics" element={<Navigate to="/genesis-manifesto" replace />} />
           <Route path="/quests" element={<Navigate to="/airdrop" replace />} />
           <Route path="/rewards" element={<Navigate to="/airdrop" replace />} />
           <Route path="/terminal" element={<Navigate to="/" replace />} />
           <Route path="/app" element={<Navigate to="/" replace />} />
-          <Route path="/nft" element={<Navigate to="/?tab=alpha-pass" replace />} />
+          <Route path="/nft" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

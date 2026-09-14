@@ -25,6 +25,7 @@ import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { Chain } from '../../types';
 import { SUPPORTED_CEX } from './CexBag';
+import { DISABLED_PAGES } from '../../services/config';
 
 export const Settings: React.FC = () => {
     const { trackedWallets, addTrackedWallet, premiumTokenBalance, getLimits } = useWallet();
@@ -298,13 +299,15 @@ export const Settings: React.FC = () => {
                             Hold $BAG tokens and Genesis Utility Passes to unlock multi-network intelligence and VIP multipliers.
                         </p>
                     </div>
-                    <button
-                        onClick={() => navigate('/alpha-passes')}
-                        className="bg-alphabag-gray hover:bg-alphabag-gray/80 text-alphabag-text border border-alphabag-gray px-4 py-2 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all w-fit"
-                    >
-                        <Zap size={14} className="text-alphabag-yellow" />
-                        <span>Alpha Passes Hub</span>
-                    </button>
+                    {!DISABLED_PAGES.includes('/alpha-passes') && (
+                        <button
+                            onClick={() => navigate('/alpha-passes')}
+                            className="bg-alphabag-gray hover:bg-alphabag-gray/80 text-alphabag-text border border-alphabag-gray px-4 py-2 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all w-fit"
+                        >
+                            <Zap size={14} className="text-alphabag-yellow" />
+                            <span>Alpha Passes Hub</span>
+                        </button>
+                    )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch pt-2">

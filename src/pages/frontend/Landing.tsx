@@ -605,7 +605,7 @@ const ALPHA_PASS_RARITY_TIERS = [
   { name: 'Mythic', pct: '2%', count: '80', color: '#EC4899', image: '/nft-collection/tiers/mythic.png' },
 ];
 
-export type LandingTab = 'home' | 'features' | 'tokenomics' | 'alpha-pass' | 'roadmap' | 'faq' | 'calculator' | 'markets';
+export type LandingTab = 'home' | 'features' | 'roadmap' | 'faq' | 'calculator' | 'markets';
 
 export const Landing: React.FC = () => {
   useWeb3Modal();
@@ -613,20 +613,20 @@ export const Landing: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const validTabs: LandingTab[] = ['home', 'features', 'tokenomics', 'alpha-pass', 'roadmap', 'faq', 'calculator', 'markets'];
+  const validTabs: LandingTab[] = ['home', 'features', 'roadmap', 'faq', 'calculator', 'markets'];
   const rawTab = searchParams.get('tab');
   const initialTab: LandingTab = (rawTab && validTabs.includes(rawTab as LandingTab))
     ? (rawTab as LandingTab)
-    : (rawTab === 'alpha-access' || rawTab === 'nft' ? 'alpha-pass' : 'home');
+    : 'home';
 
   const [activeTab, setActiveTab] = useState<LandingTab>(initialTab);
 
   useEffect(() => {
     const tabParam = searchParams.get('tab');
-    if (tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
-      setActiveTab('alpha-pass');
-    } else if (tabParam && validTabs.includes(tabParam as LandingTab)) {
+    if (tabParam && validTabs.includes(tabParam as LandingTab)) {
       setActiveTab(tabParam as LandingTab);
+    } else if (tabParam === 'tokenomics' || tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
+      setActiveTab('home');
     }
   }, [searchParams]);
   const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
@@ -856,8 +856,6 @@ export const Landing: React.FC = () => {
             <div className="hidden md:flex items-center space-x-5 text-sm font-medium text-alphabag-subtext">
               <button onClick={() => handleNavClick('home')} className={`transition-colors ${activeTab === 'home' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_home')}</button>
               <button onClick={() => handleNavClick('features')} className={`transition-colors ${activeTab === 'features' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_features')}</button>
-              <button onClick={() => handleNavClick('tokenomics')} className={`transition-colors ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_tokenomics')}</button>
-              <button onClick={() => handleNavClick('alpha-pass')} className={`transition-colors ${activeTab === 'alpha-pass' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_alpha_pass') || 'Alpha Pass'}</button>
               <button onClick={() => handleNavClick('roadmap')} className={`transition-colors ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_roadmap')}</button>
               <button onClick={() => handleNavClick('faq')} className={`transition-colors ${activeTab === 'faq' ? 'text-alphabag-text' : 'hover:text-alphabag-text'}`}>{t('nav_faq')}</button>
             </div>
@@ -898,8 +896,6 @@ export const Landing: React.FC = () => {
           <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in bg-alphabag-dark/95">
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
-            <button onClick={() => handleNavClick('tokenomics')} className={`text-left py-2 text-sm font-medium ${activeTab === 'tokenomics' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_tokenomics')}</button>
-            <button onClick={() => handleNavClick('alpha-pass')} className={`text-left py-2 text-sm font-medium ${activeTab === 'alpha-pass' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_alpha_pass') || 'Alpha Pass'}</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
@@ -1203,8 +1199,8 @@ export const Landing: React.FC = () => {
           </section>
         )}
 
-        {/* Alphanomics Section (formerly Tokenomics) — masked with Coming Soon */}
-        {activeTab === 'tokenomics' && (
+        {/* Alphanomics Section (Hidden until public launch) */}
+        {(activeTab as any) === 'tokenomics' && (
           <section className="relative py-32 px-6 min-h-[85vh] flex flex-col justify-center">
 
 
@@ -1266,8 +1262,8 @@ export const Landing: React.FC = () => {
         )}
 
         
-        {/* Alpha Pass Section — masked with centralized Coming Soon */}
-        {activeTab === 'alpha-pass' && (
+        {/* Alpha Pass Section (Hidden until public launch) */}
+        {(activeTab as any) === 'alpha-pass' && (
           <section className="relative py-28 px-6 min-h-[85vh] flex flex-col justify-center">
 
 
