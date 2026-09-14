@@ -28,8 +28,10 @@ dist-ssr
 
 /generated/prisma
 
-# NFT collection generation outputs (5.8GB media for IPFS upload)
-public/nft-collection/
+# NFT collection generation outputs (bulk media for IPFS upload)
+public/nft-collection/images/
+public/nft-collection/metadata/
+public/nft-collection/_metadata.json
 
 # Vite temporary artifacts
 vite.config.ts.timestamp-*

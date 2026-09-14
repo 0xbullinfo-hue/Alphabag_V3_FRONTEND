@@ -1,0 +1,61 @@
+{
+  "total": 4000,
+  "collectionName": "AlphaBAG Genesis Pass Collection",
+  "traits": {
+    "Common": {
+      "allocation": "50%",
+      "count": 2000,
+      "multiplier": "1.25x",
+      "color": "#F97316",
+      "perks": [
+        "1.25x ITEMS Boost",
+        "Standard Dashboard Access",
+        "Alpha Signals"
+      ]
+    },
+    "Rare": {
+      "allocation": "25%",
+      "count": 1000,
+      "multiplier": "1.5x",
+      "color": "#06B6D4",
+      "perks": [
+        "1.5x ITEMS Boost",
+        "Whale Radar Access",
+        "Priority Feeds"
+      ]
+    },
+    "Epic": {
+      "allocation": "15%",
+      "count": 600,
+      "multiplier": "2.0x",
+      "color": "#A855F7",
+      "perks": [
+        "2.0x ITEMS Boost",
+        "Full Pro Analytics",
+        "AlphaAI Unlimited"
+      ]
+    },
+    "Legendary": {
+      "allocation": "8%",
+      "count": 320,
+      "multiplier": "3.0x",
+      "color": "#FCD535",
+      "perks": [
+        "3.0x ITEMS Boost",
+        "Private Founder Calls",
+        "Telegram VIP Alerts"
+      ]
+    },
+    "Mythic": {
+      "allocation": "2%",
+      "count": 80,
+      "multiplier": "5.0x",
+      "color": "#EC4899",
+      "perks": [
+        "5.0x ITEMS Boost",
+        "100% Platform Unlocks",
+        "Apex VIP Lifetime Access"
+      ]
+    }
+  }
+}

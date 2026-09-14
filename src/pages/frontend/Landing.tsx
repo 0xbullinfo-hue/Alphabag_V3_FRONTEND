@@ -598,11 +598,11 @@ const ALPHA_PASS_UTILITIES = [
 ];
 
 const ALPHA_PASS_RARITY_TIERS = [
-  { name: 'Common', pct: '50%', color: '#94a3b8' },
-  { name: 'Rare', pct: '25%', color: '#3b82f6' },
-  { name: 'Epic', pct: '15%', color: '#a855f7' },
-  { name: 'Legendary', pct: '8%', color: '#f59e0b' },
-  { name: 'Mythic', pct: '2%', color: '#ef4444' },
+  { name: 'Common', pct: '50%', count: '2,000', color: '#F97316', image: '/nft-collection/tiers/common.png' },
+  { name: 'Rare', pct: '25%', count: '1,000', color: '#06B6D4', image: '/nft-collection/tiers/rare.png' },
+  { name: 'Epic', pct: '15%', count: '600', color: '#A855F7', image: '/nft-collection/tiers/epic.png' },
+  { name: 'Legendary', pct: '8%', count: '320', color: '#FCD535', image: '/nft-collection/tiers/legendary.png' },
+  { name: 'Mythic', pct: '2%', count: '80', color: '#EC4899', image: '/nft-collection/tiers/mythic.png' },
 ];
 
 export type LandingTab = 'home' | 'features' | 'tokenomics' | 'alpha-pass' | 'roadmap' | 'faq' | 'calculator' | 'markets';
@@ -1405,11 +1405,24 @@ export const Landing: React.FC = () => {
                   {ALPHA_PASS_RARITY_TIERS.map((tier) => (
                     <div key={tier.name} className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex items-center justify-between hover:border-alphabag-muted transition-all">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center border" style={{ borderColor: tier.color + '60', background: tier.color + '15' }}>
-                          <Gem size={20} style={{ color: tier.color }} />
+                        <div className="w-12 h-12 rounded-xl overflow-hidden border flex items-center justify-center bg-alphabag-black shrink-0" style={{ borderColor: tier.color + '60' }}>
+                          <img
+                            src={tier.image}
+                            alt={tier.name}
+                            className="w-full h-full object-cover"
+                            onError={(e: any) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                          <Gem size={20} className="hidden only:block" style={{ color: tier.color }} />
                         </div>
                         <div>
-                          <div className="text-base font-bold text-alphabag-text">{tier.name}</div>
+                          <div className="text-base font-bold text-alphabag-text flex items-center gap-2">
+                            <span>{tier.name}</span>
+                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border" style={{ borderColor: tier.color + '40', color: tier.color, background: tier.color + '15' }}>
+                              {tier.count} Bags
+                            </span>
+                          </div>
                           <div className="text-xs text-alphabag-subtext font-medium">{tier.pct} Allocation</div>
                         </div>
                       </div>
