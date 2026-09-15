@@ -335,11 +335,19 @@ export const CoinDetail: React.FC = () => {
                             </div>
                             <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">Circ. Supply</span>
-                                <span className="font-extrabold text-white text-sm">1.2M {coin.symbol.toUpperCase()}</span>
+                                <span className="font-extrabold text-white text-sm">
+                                    {(coin as any).circulating_supply
+                                        ? `${((coin as any).circulating_supply as number).toLocaleString(undefined, { maximumFractionDigits: 0 })} ${coin.symbol.toUpperCase()}`
+                                        : 'Unavailable'}
+                                </span>
                             </div>
                             <div className="flex justify-between py-3">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">All Time High</span>
-                                <span className="font-extrabold text-white text-sm">$6,450.00</span>
+                                <span className="font-extrabold text-white text-sm">
+                                    {(coin as any).ath != null
+                                        ? `$${Number((coin as any).ath).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                        : 'Unavailable'}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -357,7 +365,7 @@ export const CoinDetail: React.FC = () => {
                                 <div className="w-full bg-alphabag-black h-2 rounded-full overflow-hidden border border-alphabag-gray">
                                     <div className={`bg-gradient-to-r ${audit.bgClass} w-[${audit.score}%] h-full ${audit.shadowClass}`} style={{ width: `${audit.score}%` }}></div>
                                 </div>
-                                <p className="text-[9px] text-alphabag-subtext mt-6 font-bold leading-relaxed uppercase tracking-widest opacity-60">Verified Liquidity • Multisig Treasury • Audited by Certik</p>
+                                <p className="text-[9px] text-alphabag-subtext mt-6 font-bold leading-relaxed uppercase tracking-widest opacity-60">Score sourced from on-chain contract metrics</p>
                             </>
                         ) : (
                             <div className="py-3">

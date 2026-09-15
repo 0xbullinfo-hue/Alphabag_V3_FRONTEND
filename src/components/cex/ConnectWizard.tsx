@@ -27,7 +27,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   // Fetch dynamic outbound egress IP from backend
   useEffect(() => {
     let alive = true;
-    api.get<{ outboundIp?: string | null }>('/cex/server-info')
+    api.get<{ outboundIp?: string | null }>('/api/cex/server-info')
       .then(r => {
         if (alive && r.data?.outboundIp) setServerIp(r.data.outboundIp);
       })
@@ -42,7 +42,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
 
   useEffect(() => {
     let alive = true;
-    api.get<Exchange[]>('/cex/exchanges')
+    api.get<Exchange[]>('/api/cex/exchanges')
       .then(r => { if (alive) setExchanges(r.data); })
       .catch(() => { if (alive) setExError('Could not load exchanges. Check your connection.'); });
     return () => { alive = false; };
@@ -57,7 +57,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   async function runTest() {
     setTesting(true); setError(null); setResult(null);
     try {
-      const { data } = await api.post<TestResult>('/cex/test', { exchangeId: ex!.id, ...creds });
+      const { data } = await api.post<TestResult>('/api/cex/test', { exchangeId: ex!.id, ...creds });
       setResult(data);
     } catch (e: any) {
       setError({ message: e?.response?.data?.message ?? 'Could not connect.', hint: e?.response?.data?.hint });
@@ -67,7 +67,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   async function save() {
     setSaving(true);
     try {
-      await api.post('/cex/connections', { exchangeId: ex!.id, ...creds });
+      await api.post('/api/cex/connections', { exchangeId: ex!.id, ...creds });
       setCreds({ apiKey: '', secret: '', passphrase: '' });
       setStep(4);
       onConnected();
