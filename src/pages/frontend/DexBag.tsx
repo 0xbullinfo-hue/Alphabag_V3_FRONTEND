@@ -46,8 +46,8 @@ export const DexBag: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
-              <Wallet2 size={20} />
+            <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
+              <img src="/bag-icon.png" alt="DEX Portfolio" className="w-full h-full object-contain" />
             </div>
             <h1 className="text-3xl font-black text-alphabag-text tracking-tight uppercase">DEX Portfolio</h1>
           </div>

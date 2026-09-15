@@ -204,42 +204,53 @@ export const MyAlphabag: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-black text-base border border-blue-500/20">C</div>
+                                <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
+                                    <img src="/bag-icon.png" alt="CEX Portfolio" className="w-full h-full object-contain" />
+                                </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-white uppercase">CEX Portfolio</h3>
                                     <p className="text-[10px] text-alphabag-subtext">
-                                        {cexConnections.length > 0 ? cexConnections.map(c => c.name).join(' · ') : 'Binance · Bybit · Kraken'}
+                                        {cexConnections.length > 0 ? cexConnections.map(c => c.name).join(' · ') : 'No Exchanges Connected'}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/cex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => navigate('/cex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors cursor-pointer">
                                 View Details &rarr;
                             </button>
                         </div>
                         <div>
                             <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                            <div className="text-xs text-alphabag-green font-semibold mt-1 flex items-center gap-1">
-                                <TrendingUp size={12} /> +2.1% Today
-                            </div>
+                            {cexConnections.length > 0 ? (
+                                <div className="text-xs text-alphabag-subtext font-semibold mt-1 flex items-center gap-1">
+                                    {cexConnections.length} Active Link{cexConnections.length !== 1 ? 's' : ''}
+                                </div>
+                            ) : (
+                                <div className="text-xs text-alphabag-subtext font-medium mt-1">
+                                    Read-only API key balance tracking
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <div className="flex gap-2 flex-wrap mb-3">
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" className="w-3.5 h-3.5 rounded-full" alt="BTC" /> BTC 0.45
+                        {cexConnections.length > 0 ? (
+                            <div className="flex gap-2 flex-wrap mb-3">
+                                {cexConnections.slice(0, 3).map((c, i) => (
+                                    <div key={i} className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
+                                        {c.icon && <img src={c.icon} className="w-3.5 h-3.5 rounded-full" alt={c.name} />}
+                                        {c.name}: ${Number(c.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                    </div>
+                                ))}
                             </div>
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" className="w-3.5 h-3.5 rounded-full" alt="ETH" /> ETH 4.20
+                        ) : (
+                            <div className="mb-3 py-2 px-3 rounded-lg bg-alphabag-black/40 border border-alphabag-gray/50 text-[11px] text-alphabag-subtext">
+                                Connect Binance, Bybit, Coinbase & more via read-only keys.
                             </div>
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" className="w-3.5 h-3.5 rounded-full" alt="USDT" /> USDT 3,500
-                            </div>
-                        </div>
+                        )}
 
                         <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
                             <span className="text-[10px] text-alphabag-subtext font-medium">{cexConnections.length} Exchanges Connected</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline">
+                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline cursor-pointer">
                                 Configure API Keys &rarr;
                             </button>
                         </div>
@@ -251,42 +262,53 @@ export const MyAlphabag: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-lg bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center font-black text-base border border-alphabag-yellow/20">D</div>
+                                <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
+                                    <img src="/bag-icon.png" alt="DEX Portfolio" className="w-full h-full object-contain" />
+                                </div>
                                 <div>
                                     <h3 className="text-sm font-bold text-white uppercase">DEX Portfolio</h3>
                                     <p className="text-[10px] text-alphabag-subtext">
-                                        {dexWallets.length || 4} Wallets · {dexChains.length || 6} Chains
+                                        {dexWallets.length > 0 ? `${dexWallets.length} Wallets · ${dexChains.length} Chains` : 'No Wallets Connected'}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/dex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors">
+                            <button onClick={() => navigate('/dex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors cursor-pointer">
                                 View Details &rarr;
                             </button>
                         </div>
                         <div>
                             <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                            <div className="text-xs text-alphabag-green font-semibold mt-1 flex items-center gap-1">
-                                <TrendingUp size={12} /> +5.4% Today
-                            </div>
+                            {portfolioItems && portfolioItems.length > 0 ? (
+                                <div className="text-xs text-alphabag-subtext font-semibold mt-1 flex items-center gap-1">
+                                    {portfolioItems.length} Token{portfolioItems.length !== 1 ? 's' : ''} Detected
+                                </div>
+                            ) : (
+                                <div className="text-xs text-alphabag-subtext font-medium mt-1">
+                                    On-chain multi-chain holdings
+                                </div>
+                            )}
                         </div>
                     </div>
 
                     <div className="mt-4">
-                        <div className="flex gap-2 flex-wrap mb-3">
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://cryptologos.cc/logos/solana-sol-logo.png" className="w-3.5 h-3.5 rounded-full" alt="SOL" /> SOL 42.0
+                        {portfolioItems && portfolioItems.length > 0 ? (
+                            <div className="flex gap-2 flex-wrap mb-3">
+                                {portfolioItems.slice(0, 3).map((item, i) => (
+                                    <div key={i} className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
+                                        {item.image && <img src={item.image} className="w-3.5 h-3.5 rounded-full" alt={item.symbol} />}
+                                        {item.symbol} {Number(item.amount || 0).toLocaleString(undefined, { maximumFractionDigits: 4 })}
+                                    </div>
+                                ))}
                             </div>
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" className="w-3.5 h-3.5 rounded-full" alt="ETH" /> ETH 1.84
+                        ) : (
+                            <div className="mb-3 py-2 px-3 rounded-lg bg-alphabag-black/40 border border-alphabag-gray/50 text-[11px] text-alphabag-subtext">
+                                Connect your Web3 wallet to aggregate Ethereum, BSC, and Solana holdings.
                             </div>
-                            <div className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
-                                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png" className="w-3.5 h-3.5 rounded-full" alt="PEPE" /> PEPE 180M
-                            </div>
-                        </div>
+                        )}
 
                         <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
                             <span className="text-[10px] text-alphabag-subtext font-medium">{dexWallets.length} Wallets Tracked</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline">
+                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline cursor-pointer">
                                 Configure Wallets &rarr;
                             </button>
                         </div>
