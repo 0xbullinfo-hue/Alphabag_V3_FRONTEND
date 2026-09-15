@@ -31,7 +31,7 @@ if (-not $ipAddress) {
   $ipAddress = '127.0.0.1'
 }
 
-$networkFrontendUrl = "http://$ipAddress:3005"
+$networkFrontendUrl = "http://$($ipAddress):3005"
 
 Write-Host "Starting backend on :3003 ..." -ForegroundColor Yellow
 $backendCmd = 'cd /d "{0}" && set NODE_ENV=development && set VITE_ENVIRONMENT=testnet && set FRONTEND_URL={1} && set JWT_SECRET=local_dev_jwt_secret_abcdefghijklmnopqrstuvwxyz_123456 && set PORT=3003 && npm start' -f $backendDir, $networkFrontendUrl
@@ -57,4 +57,4 @@ Write-Host "`nSERVERS RUNNING" -ForegroundColor Green
 Write-Host "Frontend: $networkFrontendUrl" -ForegroundColor Cyan
 Write-Host "Local    : http://localhost:3005" -ForegroundColor Cyan
 Write-Host "Backend : http://localhost:3003" -ForegroundColor Cyan
-Write-Host "Admin   : $networkFrontendUrl/#/admin`n" -ForegroundColor Cyan
+Write-Host "Admin   : $($networkFrontendUrl)/#/admin`n" -ForegroundColor Cyan
