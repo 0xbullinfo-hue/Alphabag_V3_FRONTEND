@@ -1,15 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <!-- Left Plug Base -->
-  <path d="M40 256 L120 256" stroke="#374151" stroke-width="26" stroke-linecap="round"/>
-  <rect x="120" y="180" width="100" height="152" rx="28" fill="#F5A663" stroke="#374151" stroke-width="22" stroke-linejoin="round"/>
-  <rect x="220" y="206" width="44" height="28" rx="8" fill="#FFD200" stroke="#374151" stroke-width="16"/>
-  <rect x="220" y="278" width="44" height="28" rx="8" fill="#FFD200" stroke="#374151" stroke-width="16"/>
-  <!-- Right Socket Base -->
-  <path d="M472 256 L392 256" stroke="#374151" stroke-width="26" stroke-linecap="round"/>
-  <rect x="292" y="180" width="100" height="152" rx="28" fill="#FFD200" stroke="#374151" stroke-width="22" stroke-linejoin="round"/>
-  <!-- Connecting Spark / Lightning in between -->
-  <polygon points="256,120 236,256 276,256 256,392 276,240 240,240" fill="#FFD200" stroke="#374151" stroke-width="14" stroke-linejoin="round"/>
-  <!-- Spark Rays -->
-  <circle cx="256" cy="110" r="12" fill="#FFD200" stroke="#374151" stroke-width="8"/>
-  <circle cx="256" cy="402" r="12" fill="#FFD200" stroke="#374151" stroke-width="8"/>
+  <!-- Left Cable -->
+  <path d="M40 256 L110 256" stroke="#374151" stroke-width="32" stroke-linecap="round"/>
+  <!-- Left Plug Head -->
+  <rect x="110" y="146" width="116" height="220" rx="36" fill="#F5A663" stroke="#374151" stroke-width="24" stroke-linejoin="round"/>
+  <!-- Left Plug Prongs -->
+  <rect x="226" y="180" width="56" height="42" rx="12" fill="#FFD200" stroke="#374151" stroke-width="18"/>
+  <rect x="226" y="290" width="56" height="42" rx="12" fill="#FFD200" stroke="#374151" stroke-width="18"/>
+  <!-- Right Socket Head -->
+  <rect x="296" y="146" width="116" height="220" rx="36" fill="#FFD200" stroke="#374151" stroke-width="24" stroke-linejoin="round"/>
+  <!-- Right Cable -->
+  <path d="M472 256 L412 256" stroke="#374151" stroke-width="32" stroke-linecap="round"/>
+  <!-- Center Electric Spark Bolt -->
+  <polygon points="256,70 230,220 274,220 248,370 286,200 244,200" fill="#FFD200" stroke="#374151" stroke-width="18" stroke-linejoin="round"/>
+  <!-- Spark Embers -->
+  <circle cx="210" cy="90" r="14" fill="#FFD200" stroke="#374151" stroke-width="8"/>
+  <circle cx="302" cy="390" r="14" fill="#FFD200" stroke="#374151" stroke-width="8"/>
 </svg>

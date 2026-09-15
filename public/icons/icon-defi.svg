@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <!-- Bottom Staking Tier -->
-  <rect x="76" y="330" width="360" height="90" rx="28" fill="#F5A663" stroke="#374151" stroke-width="22" stroke-linejoin="round"/>
-  <circle cx="140" cy="375" r="16" fill="#FFD200" stroke="#374151" stroke-width="10"/>
-  <circle cx="256" cy="375" r="16" fill="#FFD200" stroke="#374151" stroke-width="10"/>
-  <circle cx="372" cy="375" r="16" fill="#FFD200" stroke="#374151" stroke-width="10"/>
-  <!-- Middle Staking Tier -->
-  <rect x="116" y="210" width="280" height="90" rx="28" fill="#FFD200" stroke="#374151" stroke-width="22" stroke-linejoin="round"/>
-  <line x1="160" y1="255" x2="352" y2="255" stroke="#374151" stroke-width="12" stroke-linecap="round" stroke-dasharray="24 16"/>
-  <!-- Top Yield Vault Crown / Block -->
-  <rect x="166" y="90" width="180" height="90" rx="28" fill="#F5A663" stroke="#374151" stroke-width="22" stroke-linejoin="round"/>
+  <!-- Bottom Staking Vault Base -->
+  <rect x="56" y="316" width="400" height="116" rx="36" fill="#F5A663" stroke="#374151" stroke-width="24" stroke-linejoin="round"/>
+  <circle cx="130" cy="374" r="18" fill="#FFD200" stroke="#374151" stroke-width="12"/>
+  <circle cx="256" cy="374" r="18" fill="#FFD200" stroke="#374151" stroke-width="12"/>
+  <circle cx="382" cy="374" r="18" fill="#FFD200" stroke="#374151" stroke-width="12"/>
+  <!-- Middle Tier Layer -->
+  <rect x="96" y="196" width="320" height="106" rx="34" fill="#FFD200" stroke="#374151" stroke-width="24" stroke-linejoin="round"/>
+  <line x1="146" y1="249" x2="366" y2="249" stroke="#374151" stroke-width="14" stroke-linecap="round" stroke-dasharray="28 18"/>
+  <!-- Top Yield Vault Cap -->
+  <rect x="156" y="76" width="200" height="106" rx="32" fill="#F5A663" stroke="#374151" stroke-width="24" stroke-linejoin="round"/>
   <!-- Glowing Coin in top center -->
-  <circle cx="256" cy="135" r="26" fill="#FFD200" stroke="#374151" stroke-width="16"/>
+  <circle cx="256" cy="129" r="30" fill="#FFD200" stroke="#374151" stroke-width="18"/>
 </svg>
