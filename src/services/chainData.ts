@@ -50,8 +50,8 @@ export const chainData = {
                 chain: chainId === 56 ? 'BSC' : chainId === 1399811149 ? 'SOL' : 'ETH'
             }));
         } catch (e) {
-            console.error("Transaction Fetch Error - Using Mock Data", e);
-            return this._getMockTransactions().map(tx => ({ ...tx, isMockData: true }));
+            console.error("Transaction Fetch Error", e);
+            return [];
         }
     },
 
@@ -63,8 +63,8 @@ export const chainData = {
             const items = response.data?.items || response.data?.tokens || response.data?.data?.items || [];
             return Array.isArray(items) ? items : [];
         } catch (e) {
-            console.warn(`Balance Fetch Error (${chainId}) - Using Mock Data`, e);
-            return this._getMockBalances(chainId).map(item => ({ ...item, _is_mock: true }));
+            console.warn(`Balance Fetch Error (${chainId})`, e);
+            return [];
         }
     },
 
@@ -158,73 +158,6 @@ export const chainData = {
                 healthFactor: type === 'Lending' ? 1.65 : undefined
             };
         });
-    },
-
-    _getMockTransactions(): Transaction[] {
-        const now = new Date();
-        return [
-            {
-                id: '0x123...abc',
-                type: 'SWAP',
-                coin: 'ETH',
-                price: 3200,
-                amount: 0.5,
-                date: new Date(now.getTime() - 1000 * 60 * 5).toISOString(),
-                value: 1600,
-                hash: '0x712...982',
-                from: '0xUserWallet...123',
-                to: '0xUniswap...Router',
-                fee: 12.50,
-                status: 'CONFIRMED',
-                chain: 'ETH'
-            },
-            {
-                id: '0x456...def',
-                type: 'BUY',
-                coin: 'ETH',
-                price: 3200,
-                amount: 0.1,
-                date: new Date(now.getTime() - 1000 * 60 * 60 * 2).toISOString(),
-                value: 320,
-                hash: '0x891...231',
-                from: '0xUserWallet...123',
-                to: '0xOpenSea...Market',
-                fee: 8.20,
-                status: 'CONFIRMED',
-                chain: 'ETH'
-            },
-            {
-                id: '0x789...ghi',
-                type: 'TRANSFER',
-                coin: 'USDC',
-                price: 1,
-                amount: 5000,
-                date: new Date(now.getTime() - 1000 * 60 * 60 * 24).toISOString(),
-                value: 5000,
-                hash: '0x555...111',
-                from: '0xCoinbase...Hot',
-                to: '0xUserWallet...123',
-                fee: 0,
-                status: 'CONFIRMED',
-                chain: 'ETH'
-            }
-        ];
-    },
-
-    _getMockBalances(chainId: number): any[] {
-        if (chainId === 1) {
-            return [
-                { contract_ticker_symbol: 'ETH', contract_name: 'Ethereum', contract_decimals: 18, balance: '1250000000000000000', quote: 4000, logo_url: 'https://logos.covalenthq.com/tokens/1/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png' },
-                { contract_ticker_symbol: 'USDC', contract_name: 'USD Coin', contract_decimals: 6, balance: '5000000000', quote: 5000, logo_url: 'https://logos.covalenthq.com/tokens/1/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png' },
-                { contract_ticker_symbol: 'PEPE', contract_name: 'Pepe', contract_decimals: 18, balance: '5000000000000000000000000', quote: 850, logo_url: 'https://logos.covalenthq.com/tokens/1/0x6982508145454ce325ddbe47a25d4ec3d2311933.png' }
-            ];
-        }
-        if (chainId === 1399811149) {
-            return [
-                { contract_ticker_symbol: 'SOL', contract_name: 'Solana', contract_decimals: 9, balance: '15500000000', quote: 2200, logo_url: 'https://logos.covalenthq.com/tokens/1399811149/0x11111111111111111111111111111111.png' },
-                { contract_ticker_symbol: 'JUP', contract_name: 'Jupiter', contract_decimals: 6, balance: '5000000000', quote: 600, logo_url: 'https://logos.covalenthq.com/tokens/1399811149/JUPyiwrYJFskUPiHa7hkeR8VUtkCwH93orp1bnwi3Q5.png' }
-            ];
-        }
-        return [];
     }
 };
+

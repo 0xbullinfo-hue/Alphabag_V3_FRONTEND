@@ -140,8 +140,8 @@ export const SecurityScanner: React.FC = () => {
             }
         } catch (err: any) {
             console.error("[SecurityScanner] Approvals fetch failed:", err);
-            addToast("Failed to retrieve approvals. Falling back to demo data.", "ERROR");
-            setApprovals(getMockApprovals());
+            addToast("Unable to load token approvals for this network. Please try again.", "ERROR");
+            setApprovals([]);
         } finally {
             setLoading(false);
         }
@@ -415,78 +415,6 @@ export const SecurityScanner: React.FC = () => {
             </div>
         </div>
     );
-};
-
-// Mock dataset helper for Demo / Sandbox mode
-const getMockApprovals = (): ApprovalItem[] => {
-    return [
-        {
-            tokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
-            tokenSymbol: 'USDT',
-            tokenName: 'Tether USD',
-            tokenLogo: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
-            tokenBalance: 4500,
-            tokenPriceUsd: 1.0,
-            spenders: [
-                {
-                    spenderAddress: '0x1111111254fb6c44bac0bed2854e76f90643097d',
-                    spenderLabel: '1inch v5 Aggregator Router',
-                    allowanceValue: 'Infinite',
-                    allowanceUsd: Infinity,
-                    valueAtRiskUsd: 4500,
-                    riskLevel: 'MEDIUM',
-                    txHash: '0xabc123...'
-                },
-                {
-                    spenderAddress: '0x6b758b29c9ffb8858e3e4a905a5a2e5d95b54a20',
-                    spenderLabel: 'Unknown Unverified Contract',
-                    allowanceValue: 'Infinite',
-                    allowanceUsd: Infinity,
-                    valueAtRiskUsd: 4500,
-                    riskLevel: 'HIGH',
-                    txHash: '0xdef456...'
-                }
-            ]
-        },
-        {
-            tokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-            tokenSymbol: 'USDC',
-            tokenName: 'USD Coin',
-            tokenLogo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
-            tokenBalance: 1250,
-            tokenPriceUsd: 1.0,
-            spenders: [
-                {
-                    spenderAddress: '0xe592427a0aece92de3edee1f18e0157c05861564',
-                    spenderLabel: 'Uniswap V3 Swap Router',
-                    allowanceValue: '100.00',
-                    allowanceUsd: 100.00,
-                    valueAtRiskUsd: 100.00,
-                    riskLevel: 'LOW',
-                    txHash: '0x789ghi...'
-                }
-            ]
-        },
-        {
-            tokenAddress: '0x6982508145454ce325ddbe47a25d4ec3d2311933',
-            tokenSymbol: 'PEPE',
-            tokenName: 'Pepe',
-            tokenLogo: 'https://logos.covalenthq.com/tokens/1/0x6982508145454ce325ddbe47a25d4ec3d2311933.png',
-            tokenBalance: 240000000,
-            tokenPriceUsd: 0.000008,
-            spenders: [
-                {
-                    spenderAddress: '0xf87d4466b020a59a2f2672522c0f05a5e3c8ef78',
-                    spenderLabel: 'Phishing Token Contract Spender',
-                    allowanceValue: 'Infinite',
-                    allowanceUsd: Infinity,
-                    valueAtRiskUsd: 1920,
-                    riskLevel: 'HIGH',
-                    txHash: '0xpepe123...'
-                }
-            ]
-        }
-    ];
 };
 
 // Spender Address Labeling Utility Helper

@@ -19,14 +19,6 @@ const fetchDexBalances = async (address: string): Promise<TokenBalance[]> => {
   return Array.isArray(data) ? data : [];
 };
 
-const DEMO_DEX_BALANCES: TokenBalance[] = [
-  { symbol: 'ETH', name: 'Ethereum', balance: '3.45', priceUSD: 3450.25, valueUSD: 11903.36, change24h: 3.42, chain: 'eth', contractAddress: '0x2170ed0880ac9a755fd29b2688956bd959f933f8' },
-  { symbol: 'USDT', name: 'Tether USD', balance: '8500', priceUSD: 1.00, valueUSD: 8500.00, change24h: 0.02, chain: 'bsc', contractAddress: '0x55d398326f99059ff775485246999027b3197955' },
-  { symbol: 'BNB', name: 'BNB Token', balance: '12.8', priceUSD: 585.50, valueUSD: 7494.40, change24h: -1.25, chain: 'bsc', contractAddress: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c' },
-  { symbol: 'SOL', name: 'Solana', balance: '45.0', priceUSD: 148.80, valueUSD: 6696.00, change24h: 5.84, chain: 'sol', contractAddress: 'So11111111111111111111111111111111111111112' },
-  { symbol: 'BAG', name: 'AlphaBAG Genesis', balance: '25000', priceUSD: 0.24, valueUSD: 6000.00, change24h: 18.50, chain: 'bsc', contractAddress: '0xbag123456789abcdef123456789abcdef123456' }
-];
-
 export const DexBag: React.FC = () => {
   const { address, isConnected } = useAccount();
   const [filterChain, setFilterChain] = useState('ALL');
@@ -44,26 +36,13 @@ export const DexBag: React.FC = () => {
     staleTime: 60_000,
   });
 
-  const isDemo = !isConnected || (Array.isArray(rawBalances) && rawBalances.length === 0);
-  const activeBalances = Array.isArray(rawBalances) && rawBalances.length > 0 ? rawBalances : DEMO_DEX_BALANCES;
-  const safeBalances = Array.isArray(activeBalances) ? activeBalances : [];
+  const safeBalances = isConnected && Array.isArray(rawBalances) ? rawBalances : [];
   const totalUSD = safeBalances.reduce((sum, t) => sum + (t?.valueUSD != null ? t.valueUSD : 0), 0);
   const filtered = filterChain === 'ALL' ? safeBalances : safeBalances.filter((t) => t?.chain === filterChain);
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt) : new Date();
 
   return (
     <div className="space-y-2 animate-in fade-in duration-700 pb-20">
-      {isDemo && (
-        <div className="rounded-xl border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-4 py-2.5 flex items-center justify-between">
-          <span className="text-xs text-alphabag-yellow font-bold uppercase tracking-wide">
-            Demo Mode Active — Showing Sample Multi-Chain DEX Holdings
-          </span>
-          <Link to="/settings" className="text-[11px] font-black text-black bg-alphabag-yellow px-3 py-1 rounded-md uppercase hover:bg-yellow-400 transition-all">
-            Connect Real Wallet
-          </Link>
-        </div>
-      )}
-
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -87,8 +66,8 @@ export const DexBag: React.FC = () => {
           </select>
           <button
             onClick={() => refetch()}
-            disabled={isLoading}
-            className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-lg px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-bold uppercase"
+            disabled={isLoading || !isConnected}
+            className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-lg px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-bold uppercase cursor-pointer"
           >
             <RefreshCw size={13} className={isLoading ? 'animate-spin' : ''} />
             Refresh
@@ -102,19 +81,54 @@ export const DexBag: React.FC = () => {
           <p className="text-2xl font-black text-alphabag-text">
             ${totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-mono">{address ? `${address.slice(0, 6)}···${address.slice(-4)}` : 'Demo Wallet (0x71C...49b2)'}</p>
+          <p className="text-alphabag-subtext text-[10px] mt-1 font-mono">
+            {isConnected && address ? `${address.slice(0, 6)}···${address.slice(-4)}` : 'No wallet connected'}
+          </p>
         </div>
         <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
           <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Token Count</p>
           <p className="text-2xl font-black text-alphabag-text">{filtered.length}</p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">Assets detected</p>
+          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">
+            {isConnected ? 'Assets detected' : 'Connect wallet to view'}
+          </p>
         </div>
         <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
           <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Last Synced</p>
-          <p className="text-sm font-black text-alphabag-text">{lastUpdated.toLocaleTimeString()}</p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">Refreshes every 60s</p>
+          <p className="text-sm font-black text-alphabag-text">{isConnected && dataUpdatedAt ? lastUpdated.toLocaleTimeString() : '—'}</p>
+          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">
+            {isConnected ? 'Refreshes every 60s' : 'Waiting for connection'}
+          </p>
         </div>
       </div>
+
+      {!isConnected && (
+        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-12 text-center">
+          <Wallet2 size={48} className="mx-auto mb-4 text-alphabag-yellow opacity-40" />
+          <h3 className="text-lg font-black text-alphabag-text uppercase tracking-tight mb-1">No Wallet Connected</h3>
+          <p className="text-alphabag-subtext text-xs max-w-md mx-auto mb-6">
+            Connect your Web3 wallet to inspect your real-time on-chain token balances, prices, and valuations across Ethereum, BSC, and Solana.
+          </p>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-login-modal'))}
+            className="bg-alphabag-yellow text-alphabag-black font-black text-xs uppercase px-6 py-3 rounded-lg hover:bg-yellow-400 transition-all inline-flex items-center gap-2 cursor-pointer shadow-lg shadow-alphabag-yellow/10"
+          >
+            <Wallet2 size={16} /> Connect Wallet
+          </button>
+        </div>
+      )}
+
+      {isConnected && error && (
+        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-8 text-center">
+          <p className="text-sm font-black text-red-400 uppercase tracking-wide">Failed to load DEX holdings</p>
+          <p className="text-alphabag-subtext text-xs mt-1">Unable to connect to on-chain balance provider. Please check your network and try again.</p>
+          <button
+            onClick={() => refetch()}
+            className="mt-4 bg-alphabag-gray hover:bg-alphabag-muted text-alphabag-text font-bold text-xs uppercase px-4 py-2 rounded-lg transition-all cursor-pointer"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {isConnected && !error && (
         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
