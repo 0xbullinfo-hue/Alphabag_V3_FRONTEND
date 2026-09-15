@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../services/api';
-import { useSessionStorage } from '../../hooks/useSessionStorage';
 import { Skeleton } from '../ui/Skeleton';
 import { ServerIpNote } from './ServerIpNote';
 import { AlertCircle } from 'lucide-react';
@@ -15,7 +14,26 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   const [step, setStep] = useState(0);
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [ex, setEx] = useState<Exchange | null>(null);
-  const [creds, setCreds, clearCreds] = useSessionStorage<Record<Field, string>>('cex_draft_creds', { apiKey: '', secret: '', passphrase: '' });
+  const [creds, setCreds] = useState<Record<Field, string>>({ apiKey: '', secret: '', passphrase: '' });
+  const [serverIp, setServerIp] = useState<string | null>(null);
+
+  // Clear sensitive credentials from memory on unmount
+  useEffect(() => {
+    return () => {
+      setCreds({ apiKey: '', secret: '', passphrase: '' });
+    };
+  }, []);
+
+  // Fetch dynamic outbound egress IP from backend
+  useEffect(() => {
+    let alive = true;
+    api.get<{ outboundIp?: string | null }>('/cex/server-info')
+      .then(r => {
+        if (alive && r.data?.outboundIp) setServerIp(r.data.outboundIp);
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
   const [exError, setExError] = useState<string | null>(null);
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
@@ -50,7 +68,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
     setSaving(true);
     try {
       await api.post('/cex/connections', { exchangeId: ex!.id, ...creds });
-      clearCreds();
+      setCreds({ apiKey: '', secret: '', passphrase: '' });
       setStep(4);
       onConnected();
     } catch (e: any) {
@@ -120,7 +138,7 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
                 {ex.requiresIpWhitelist && <li>ℹ️ {ex.ipWhitelistNote}</li>}
               </ul>
               {ex.ipWhitelistNote && (
-                <ServerIpNote ip="203.0.113.10" note={ex.ipWhitelistNote} />
+                <ServerIpNote ip={serverIp || "DYNAMIC_SERVER_EGRESS"} note={ex.ipWhitelistNote} />
               )}
             </div>
           )}

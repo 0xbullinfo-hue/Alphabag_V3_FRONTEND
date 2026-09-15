@@ -124,7 +124,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [wagmiAddress, wagmiIsConnected, checkTokenBalance]);
 
   const addToast = useCallback((message: string, type: 'SUCCESS' | 'ERROR' | 'INFO' = 'SUCCESS') => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = crypto.randomUUID();
     setToasts(prev => [...prev, { id, message, type }]);
     setTimeout(() => removeToast(id), 4000);
   }, []);
@@ -138,7 +138,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const addManualTransaction = useCallback((data: any) => {
-    setManualTransactions(prev => [...prev, { ...data, id: Math.random().toString(36).substring(2, 9) }]);
+    setManualTransactions(prev => [...prev, { ...data, id: crypto.randomUUID() }]);
     addToast("Manual transaction added.", "SUCCESS");
   }, [addToast]);
 
@@ -366,7 +366,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    setTrackedWallets(prev => [...prev, { id: Math.random().toString(36).substr(2, 9), address, label, chain, type }]);
+    setTrackedWallets(prev => [...prev, { id: crypto.randomUUID(), address, label, chain, type }]);
     addToast("New wallet registered", "SUCCESS");
 
     // Automatic refresh after adding

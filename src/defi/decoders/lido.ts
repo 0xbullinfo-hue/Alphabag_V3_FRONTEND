@@ -40,7 +40,8 @@ export const lido: ProtocolDecoder = {
             protocol: 'lido',
             kind: 'stake',
             assets: [{ address: token, symbol, decimals: 18, amount: bal.toString() }],
-            usd: 0,
+            usd: null,
+            valuationStatus: 'UNAVAILABLE',
             meta: { symbol },
           });
         }

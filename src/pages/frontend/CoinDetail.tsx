@@ -327,11 +327,11 @@ export const CoinDetail: React.FC = () => {
                         <div className="space-y-2">
                             <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">Market Cap</span>
-                                <span className="font-extrabold text-white text-sm">${(coin.market_cap / 1e9).toFixed(2)}B</span>
+                                <span className="font-extrabold text-white text-sm">{coin.market_cap ? `${(coin.market_cap / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
                             </div>
                             <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">Volume (24h)</span>
-                                <span className="font-extrabold text-white text-sm">${(coin.total_volume / 1e9).toFixed(2)}B</span>
+                                <span className="font-extrabold text-white text-sm">{coin.total_volume ? `${(coin.total_volume / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
                             </div>
                             <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
                                 <span className="text-alphabag-subtext text-xs font-bold uppercase">Circ. Supply</span>

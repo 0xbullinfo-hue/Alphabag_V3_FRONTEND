@@ -27,7 +27,8 @@ export interface Position {
   /** Unclaimed, in raw units. */
   claimable?: Array<{ address: string; symbol: string; amount: string }>;
   /** USD is filled in by the valuation pass, never by the decoder. */
-  usd?: number;
+  usd?: number | null;
+  valuationStatus?: 'VALUED' | 'STALE' | 'UNAVAILABLE';
   meta: Record<string, unknown>;
 }
 

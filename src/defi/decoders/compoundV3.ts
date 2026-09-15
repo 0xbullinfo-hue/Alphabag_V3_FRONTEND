@@ -43,7 +43,8 @@ export const compoundV3: ProtocolDecoder = {
           protocol: 'compound-v3',
           kind: 'lending_supply',
           assets: [{ address: baseToken, symbol: 'COMET-BASE', decimals: 18, amount: supply.toString() }],
-          usd: 0,
+          usd: null,
+          valuationStatus: 'UNAVAILABLE',
           meta: { comet: addrs.comet, baseToken },
         });
       }
@@ -54,7 +55,8 @@ export const compoundV3: ProtocolDecoder = {
           protocol: 'compound-v3',
           kind: 'lending_borrow',
           assets: [{ address: baseToken, symbol: 'COMET-BASE', decimals: 18, amount: borrow.toString() }],
-          usd: 0,
+          usd: null,
+          valuationStatus: 'UNAVAILABLE',
           meta: { comet: addrs.comet, baseToken },
         });
       }
