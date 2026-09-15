@@ -2,6 +2,7 @@ import { AlertTriangle,CheckCircle,Key,RefreshCw,ShieldAlert,ShieldCheck } from 
 import React,{ useEffect,useState } from 'react';
 import { useAccount,useWalletClient } from 'wagmi';
 import { Button } from '../../components/ui/Button';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 import { api } from '../../services/api';
@@ -207,9 +208,7 @@ export const SecurityScanner: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
-                            <ShieldCheck size={20} />
-                        </div>
+                        <PageIcon name="security" size={40} />
                         <h1 className="text-3xl font-black text-white tracking-tight uppercase">
                             Security <span className="text-alphabag-yellow">Radar</span>
                         </h1>

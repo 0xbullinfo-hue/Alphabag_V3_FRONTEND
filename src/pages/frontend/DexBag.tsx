@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { api } from '../../services/api';
 import { TokenBalance } from '../../types';
 import { getExplorerTokenUrl } from '../../lib/formatters';
+import { PageIcon } from '../../components/ui/PageIcon';
 
 const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   eth: { label: 'ETH', color: 'text-blue-400', bg: 'bg-blue-500/10' },
@@ -46,9 +47,7 @@ export const DexBag: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
-              <img src="/bag-icon.png" alt="DEX Portfolio" className="w-full h-full object-contain" />
-            </div>
+            <PageIcon name="dex" size={40} />
             <h1 className="text-3xl font-black text-alphabag-text tracking-tight uppercase">DEX Portfolio</h1>
           </div>
           <p className="text-alphabag-subtext text-xs font-medium mt-0.5 uppercase tracking-widest">On-chain token holdings — read only</p>

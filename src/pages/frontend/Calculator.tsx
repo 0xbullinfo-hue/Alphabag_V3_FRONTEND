@@ -1,5 +1,6 @@
-import { Activity,AlertTriangle,ArrowRightLeft,Calculator as CalculatorIcon,Percent,Rocket,Skull } from 'lucide-react';
+import { Activity,AlertTriangle,ArrowRightLeft,Percent,Rocket,Skull } from 'lucide-react';
 import React,{ useState } from 'react';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { api } from '../../services/api';
 
 type CalcMode = 'LEVERAGE' | 'SPOT' | 'DEGEN' | 'IL' | 'CONVERTER';
@@ -628,9 +629,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                 <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                                <CalculatorIcon size={20} />
-                            </div>
+                            <PageIcon name="calculator" size={40} />
                             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Calculator</h1>
                         </div>
                         <p className="text-alphabag-subtext text-sm font-medium">Futures, spot, degen, impermanent loss and conversion tools</p>

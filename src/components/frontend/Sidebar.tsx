@@ -1,19 +1,21 @@
-import { BarChart3,Bot,Calculator,Eye,Flame,Gift,Layers,Link as LinkIcon,LogOut,Newspaper,PieChart,Radio,ShieldCheck,UserCircle,Zap } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import React from 'react';
-import { Link,useLocation,useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../context/AuthContext';
 import { useFeatures } from '../../hooks/useFeatures';
 import { DISABLED_PAGES } from '../../services/config';
+import { PageIcon, PageIconName } from '../ui/PageIcon';
 
 interface NavItemProps {
   to: string;
   icon?: any;
+  customIcon?: PageIconName;
   label: string;
   active: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
+const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, active }) => {
   const { data: features } = useFeatures();
   const disabledPages = features?.disabledPages || DISABLED_PAGES;
   const isDisabled = disabledPages.includes(to);
@@ -41,19 +43,32 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, active }) => {
     <Link
       to={isDisabled ? '#' : to}
       onClick={handleClick}
-      className={`flex items-center justify-between px-4 py-2.5 rounded-md transition-all duration-300 mb-1 mx-2 relative group ${
+      className={`flex items-center justify-between px-3.5 py-2 rounded-lg transition-all duration-200 mb-1 mx-2 relative group ${
         isDisabled ? 'opacity-50 cursor-not-allowed' : ''
       } ${active
-        ? 'bg-alphabag-gray text-alphabag-text border-l-2 border-alphabag-yellow'
-        : 'text-alphabag-subtext hover:bg-alphabag-gray hover:text-alphabag-text border-l-2 border-transparent'
+        ? 'bg-alphabag-gray/90 text-alphabag-text border-l-2 border-alphabag-yellow shadow-inner shadow-alphabag-yellow/5'
+        : 'text-alphabag-subtext hover:bg-alphabag-gray/50 hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
-      <div className="flex items-center space-x-2 relative z-10">
-        {Icon && <Icon size={18} className={active ? 'text-alphabag-yellow' : 'group-hover:text-alphabag-text'} />}
-        <span className="font-medium text-sm">{label}</span>
+      <div className="flex items-center space-x-2.5 relative z-10 min-w-0">
+        {customIcon ? (
+          <PageIcon
+            name={customIcon}
+            size={18}
+            framed={false}
+            className={`transition-all duration-200 shrink-0 ${
+              active
+                ? 'scale-105 filter drop-shadow-[0_0_6px_rgba(255,210,0,0.45)]'
+                : 'opacity-75 group-hover:opacity-100 group-hover:scale-105'
+            }`}
+          />
+        ) : Icon ? (
+          <Icon size={18} className={`shrink-0 ${active ? 'text-alphabag-yellow' : 'group-hover:text-alphabag-text'}`} />
+        ) : null}
+        <span className="font-medium text-sm truncate">{label}</span>
       </div>
       {isDisabled && (
-        <span className="text-[7px] font-black bg-alphabag-yellow/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-alphabag-yellow/20 shrink-0">SOON</span>
+        <span className="text-[7px] font-black bg-alphabag-yellow/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-alphabag-yellow/20 shrink-0 ml-1">SOON</span>
       )}
     </Link>
   );
@@ -102,32 +117,32 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       `}>
         <div className="py-2">
           <NavGroup title="Personal">
-            <NavItem to="/my-alphabag" icon={PieChart} label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
+            <NavItem to="/my-alphabag" customIcon="bag" label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
             {/* Alpha Passes hidden until ready for public launch */}
 
             {!disabledPages.includes('/airdrop') && (
               <div className="relative">
-                <NavItem to="/airdrop" icon={Gift} label="Alpha Missions" active={location.pathname === '/airdrop'} />
+                <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">LIVE</div>
               </div>
             )}
-            <NavItem to="/alphas-feed" icon={Zap} label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
-            <NavItem to="/alpha-ai" icon={Bot} label="Alpha Analyst" active={location.pathname === '/alpha-ai'} />
-            <NavItem to="/calculator" icon={Calculator} label="Alpha Calculator" active={location.pathname === '/calculator'} />
-            <NavItem to="/settings" icon={LinkIcon} label="Setup Connections" active={location.pathname === '/settings'} />
-            <NavItem to="/integrations" icon={Zap} label="Integrations" active={location.pathname === '/integrations'} />
+            <NavItem to="/alphas-feed" customIcon="feed" label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
+            <NavItem to="/alpha-ai" customIcon="ai" label="Alpha Analyst" active={location.pathname === '/alpha-ai'} />
+            <NavItem to="/calculator" customIcon="calculator" label="Alpha Calculator" active={location.pathname === '/calculator'} />
+            <NavItem to="/settings" customIcon="settings" label="Setup Connections" active={location.pathname === '/settings'} />
+            <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
             
-            <NavItem to="/whales" icon={Eye} label="Alpha Radar" active={location.pathname.startsWith('/whales')} />
-            <NavItem to="/security" icon={ShieldCheck} label="Security Radar" active={location.pathname === '/security'} />
-            <NavItem to="/alpha-calls" icon={Radio} label="AlphaCalls" active={location.pathname === '/alpha-calls'} />
+            <NavItem to="/whales" customIcon="whales" label="Alpha Radar" active={location.pathname.startsWith('/whales')} />
+            <NavItem to="/security" customIcon="security" label="Security Radar" active={location.pathname === '/security'} />
+            <NavItem to="/alpha-calls" customIcon="calls" label="AlphaCalls" active={location.pathname === '/alpha-calls'} />
           </NavGroup>
 
           <NavGroup title="Market Analytics">
-            <NavItem to="/alpha-screener" icon={Flame} label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
-            <NavItem to="/markets" icon={BarChart3} label="Global Markets" active={location.pathname === '/markets'} />
-            <NavItem to="/defi" icon={Layers} label="DeFi Tracker" active={location.pathname === '/defi'} />
-            <NavItem to="/news" icon={Newspaper} label="News" active={location.pathname === '/news'} />
+            <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
+            <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
+            <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />
+            <NavItem to="/news" customIcon="news" label="News" active={location.pathname === '/news'} />
           </NavGroup>
 
 
@@ -135,7 +150,7 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
 
         <div className="px-4">
           <div className="border-t border-alphabag-gray pt-6 mb-2 space-y-1">
-            <NavItem to="/profile" icon={UserCircle} label="My Profile" active={location.pathname === '/profile'} />
+            <NavItem to="/profile" customIcon="profile" label="My Profile" active={location.pathname === '/profile'} />
             <button onClick={handleLogout} className="w-full flex items-center space-x-2 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-alphabag-red/10 hover:text-alphabag-red mx-2">
               <LogOut size={18} />
               <span className="font-medium text-xs uppercase">Logout</span>

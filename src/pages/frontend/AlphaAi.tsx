@@ -3,6 +3,7 @@ import React,{ useEffect,useState } from 'react';
 import { useNeuralCore } from '../../components/hooks/useNeuralCore';
 import { Button } from '../../components/ui/Button';
 import { ChatFeed } from '../../components/ui/ChatFeed';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 
@@ -89,9 +90,7 @@ export const AlphaAi: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-              <Bot size={20} />
-            </div>
+            <PageIcon name="ai" size={40} />
             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
             <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>

@@ -1,9 +1,10 @@
-import { Briefcase,ChevronDown,ChevronUp,Download,Eye,Layers,PieChart as PieChartIcon,Plus,TrendingUp,Wallet2 } from 'lucide-react';
+import { Briefcase,ChevronDown,ChevronUp,Download,Eye,Layers,PieChart as PieChartIcon,Plus,TrendingUp } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Area,AreaChart,CartesianGrid,Cell,Pie,PieChart as RePieChart,Tooltip as ReTooltip,ResponsiveContainer,XAxis,YAxis } from 'recharts';
 import { Button } from '../../components/ui/Button';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
 import { fetchPortfolioHistory } from '../../services/mockData';
 import { PortfolioHistoryPoint } from '../../types';
@@ -99,9 +100,7 @@ export const Portfolio: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <Wallet2 size={20} />
-                        </div>
+                        <PageIcon name="portfolio" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Portfolio</h1>
                         <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Unified</span>
                         {hasMockData ? (

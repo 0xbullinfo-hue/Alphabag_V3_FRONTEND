@@ -1,7 +1,8 @@
-import { ArrowUpRight,ExternalLink,Flame,Globe,RefreshCw,Search } from 'lucide-react';
+import { ArrowUpRight,ExternalLink,Globe,RefreshCw,Search } from 'lucide-react';
 import React,{ useCallback,useEffect,useMemo,useState } from 'react';
 import { useDebounce } from '../../components/hooks/useDebounce';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { api } from '../../services/api';
 
 interface DexPair {
@@ -210,8 +211,9 @@ export const AlphaScreener: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
+                        <PageIcon name="screener" size={40} />
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
-                            <Flame size={22} className="text-alphabag-yellow" /> Alpha Screener
+                            Alpha Screener
                         </h1>
                         <span className="bg-alphabag-yellow/15 text-alphabag-yellow text-[10px] font-medium px-2 py-0.5 rounded border border-alphabag-yellow/25 flex items-center gap-1.5 shrink-0">
                             <span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full"></span>

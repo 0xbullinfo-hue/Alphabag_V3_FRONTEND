@@ -15,6 +15,7 @@ import React,{ useEffect,useRef,useState } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Button } from '../../components/ui/Button';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 import { api } from '../../services/api';
@@ -258,8 +259,8 @@ export const Profile: React.FC = () => {
         return (
             <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center px-4">
                 <div className="w-full max-w-md border border-alphabag-gray bg-alphabag-darkgray rounded-lg p-6 text-center">
-                    <div className="w-11 h-11 mx-auto mb-4 rounded-md bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow flex items-center justify-center">
-                        <ShieldCheck size={22} />
+                    <div className="flex justify-center mb-4">
+                        <PageIcon name="profile" size={48} />
                     </div>
                     <h1 className="text-lg font-black text-alphabag-text uppercase">Profile unavailable</h1>
                     <p className="mt-2 text-sm text-alphabag-subtext leading-relaxed">

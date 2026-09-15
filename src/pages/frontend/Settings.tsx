@@ -8,7 +8,6 @@ Database,
 ExternalLink,
 Eye,
 Key,
-Link as LinkIcon,
 Lock,
 Plus,
 Search,
@@ -21,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { Button } from '../../components/ui/Button';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { Chain } from '../../types';
@@ -91,9 +91,7 @@ export const Settings: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <LinkIcon size={20} />
-                        </div>
+                        <PageIcon name="settings" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Membership & Connections</h1>
                     </div>
                     <p className="text-alphabag-subtext text-sm">Configure professional data feeds and membership status.</p>

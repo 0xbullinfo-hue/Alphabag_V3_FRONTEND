@@ -1,6 +1,7 @@
-import { Activity, AlertTriangle, Download, Layers, RefreshCw, ShieldCheck } from 'lucide-react';
+import { Activity, AlertTriangle, Download, RefreshCw, ShieldCheck } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/Button';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
 import { fetchDefiPositions } from '../../services/mockData';
 import { DefiPosition } from '../../types';
@@ -89,9 +90,7 @@ export const DeFi: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <Layers size={20} />
-                        </div>
+                        <PageIcon name="defi" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DeFi Operations</h1>
                         {isOwnPositions ? (
                             <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>

@@ -1,6 +1,7 @@
 import { ArrowUpRight,ExternalLink,History,RefreshCw } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { useWallet } from '../../context/WalletContext';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { chainData } from '../../services/chainData';
 import { Transaction } from '../../types';
 
@@ -56,9 +57,7 @@ export const HistoryPage: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
-                            <History size={20} />
-                        </div>
+                        <PageIcon name="history" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Transaction History</h1>
                     </div>
                     <p className="text-alphabag-subtext text-xs font-medium mt-0.5">Immutable ledger of all portfolio activity</p>

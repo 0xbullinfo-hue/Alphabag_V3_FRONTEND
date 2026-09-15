@@ -7,6 +7,7 @@ import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { timeSince } from '../../lib/formatters';
 import { SUPPORTED_CEX } from '../../services/exchanges';
+import { PageIcon } from '../../components/ui/PageIcon';
 
 const CHART_COLORS = [
     '#FCD535','#F97316','#22D3EE','#A78BFA','#34D399',
@@ -112,9 +113,7 @@ export const CexBag: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
-                            <img src="/bag-icon.png" alt="CEX Portfolio" className="w-full h-full object-contain" />
-                        </div>
+                        <PageIcon name="cex" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">CEX Portfolio</h1>
                     </div>
                     <p className="text-alphabag-subtext text-sm font-medium leading-relaxed">

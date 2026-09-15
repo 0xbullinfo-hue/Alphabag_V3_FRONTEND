@@ -19,6 +19,7 @@ import React,{ useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
 import { Button } from '../../components/ui/Button';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { AirdropStatsResponse,ReferralEntry } from '../../types';
@@ -405,9 +406,7 @@ export const Airdrop: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-lg bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <Gift size={20} />
-                        </div>
+                        <PageIcon name="airdrop" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
                             Mission Control
                         </h1>

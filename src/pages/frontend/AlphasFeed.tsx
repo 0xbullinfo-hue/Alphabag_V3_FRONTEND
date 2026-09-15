@@ -23,6 +23,7 @@ Zap
 } from 'lucide-react';
 import React,{ useEffect,useMemo,useState } from 'react';
 import Swal from 'sweetalert2';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { FounderListingForm } from '../../components/frontend/FounderListingForm';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
@@ -563,9 +564,7 @@ export const AlphasFeed: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <MessageSquare size={20} />
-                        </div>
+                        <PageIcon name="feed" size={40} />
                         <div>
                             <h1 className="text-2xl md:text-3xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
                                 Community Discussion Hub

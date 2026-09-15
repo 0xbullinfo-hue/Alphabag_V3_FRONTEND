@@ -3,6 +3,7 @@ import { ArrowRight,Bookmark,Clock,Facebook,Instagram,Newspaper,Search,Send,Twit
 import React,{ useEffect,useState } from 'react';
 import { api } from '../../services/api';
 import { NewsItem } from '../../types';
+import { PageIcon } from '../../components/ui/PageIcon';
 
 export const News: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -51,9 +52,7 @@ export const News: React.FC = () => {
         </div>
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-black">
-              <Newspaper size={20} />
-            </div>
+            <PageIcon name="news" size={40} />
             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">Market Pulse</h1>
           </div>
           <p className="text-alphabag-subtext mt-1 text-[13px] font-medium max-w-md opacity-60">Expert narratives and real-time intelligence for BAG holders.</p>

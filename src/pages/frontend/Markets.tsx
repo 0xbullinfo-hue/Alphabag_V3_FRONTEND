@@ -1,7 +1,8 @@
-import { BarChart3,RefreshCw,Search,Star } from 'lucide-react';
+import { RefreshCw,Search,Star } from 'lucide-react';
 import React,{ useCallback,useEffect,useMemo,useRef,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { MarketService } from '../../services/MarketService';
 
 interface CoinData {
@@ -102,9 +103,7 @@ export const Markets: React.FC = () => {
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-              <BarChart3 size={20} />
-            </div>
+            <PageIcon name="markets" size={40} />
             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">
               Global Market
             </h1>

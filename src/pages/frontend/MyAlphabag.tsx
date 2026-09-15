@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Cell,Pie,PieChart as RePieChart,ResponsiveContainer } from 'recharts';
 import Swal from 'sweetalert2';
 import { useWallet } from '../../context/WalletContext';
+import { PageIcon } from '../../components/ui/PageIcon';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
@@ -121,9 +122,7 @@ export const MyAlphabag: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
                     <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-lg bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <PieChartIcon size={20} />
-                        </div>
+                        <PageIcon name="bag" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">My AlphaBAG</h1>
                         <span className="text-[10px] bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
                     </div>
@@ -204,9 +203,7 @@ export const MyAlphabag: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
-                                    <img src="/bag-icon.png" alt="CEX Portfolio" className="w-full h-full object-contain" />
-                                </div>
+                                <PageIcon name="cex" size={40} />
                                 <div>
                                     <h3 className="text-sm font-bold text-white uppercase">CEX Portfolio</h3>
                                     <p className="text-[10px] text-alphabag-subtext">
@@ -262,9 +259,7 @@ export const MyAlphabag: React.FC = () => {
                     <div>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-2">
-                                <div className="w-10 h-10 rounded-xl bg-alphabag-black border border-alphabag-yellow/30 flex items-center justify-center p-1.5 shrink-0 shadow-sm">
-                                    <img src="/bag-icon.png" alt="DEX Portfolio" className="w-full h-full object-contain" />
-                                </div>
+                                <PageIcon name="dex" size={40} />
                                 <div>
                                     <h3 className="text-sm font-bold text-white uppercase">DEX Portfolio</h3>
                                     <p className="text-[10px] text-alphabag-subtext">

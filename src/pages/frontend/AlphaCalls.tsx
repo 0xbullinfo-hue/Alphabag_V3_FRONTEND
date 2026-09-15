@@ -5,7 +5,6 @@ ExternalLink,
 Gift,
 Layers,
 MessageSquare,
-Radio,
 Rocket,
 ShieldAlert,
 Target
@@ -13,6 +12,7 @@ Target
 import React,{ useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../context/AuthContext';
+import { PageIcon } from '../../components/ui/PageIcon';
 import { api } from '../../services/api';
 import { TradeSignal } from '../../types';
 
@@ -67,9 +67,7 @@ export const AlphaCalls: React.FC = () => {
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
-                        <div className="w-10 h-10 rounded-md bg-alphabag-yellow flex items-center justify-center text-alphabag-dark">
-                            <Radio className="animate-pulse" size={20} />
-                        </div>
+                        <PageIcon name="calls" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
                     </div>
                     <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
