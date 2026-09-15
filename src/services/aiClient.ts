@@ -18,7 +18,7 @@ export async function chatWithGroundedAi(
   message: string,
   history: Array<{ role: string; content: string }> = []
 ): Promise<GroundedAiResponse> {
-  const response = await api.post<GroundedAiResponse>('/ai/chat', {
+  const response = await api.post<GroundedAiResponse>('/api/ai/chat', {
     message,
     history,
   });

@@ -23,15 +23,15 @@ export const ChainService = {
                 decimals: token.decimals,
                 balance: String(token.balance || '0'),
                 guiBalance: Number(token.balance || 0),
-                price: Number(token.priceUSD || 0),
-                value: Number(token.valueUSD || 0),
+                price: token.priceUSD != null ? Number(token.priceUSD) : undefined,
+                value: token.valueUSD != null ? Number(token.valueUSD) : undefined,
                 tokenAddress: token.contractAddress,
                 contractAddress: token.contractAddress,
                 logo: token.logo,
                 chain: token.chain,
-                priceUSD: Number(token.priceUSD || 0),
-                valueUSD: Number(token.valueUSD || 0),
-                change24h: Number(token.change24h || 0),
+                priceUSD: token.priceUSD != null ? Number(token.priceUSD) : undefined,
+                valueUSD: token.valueUSD != null ? Number(token.valueUSD) : undefined,
+                change24h: token.change24h != null ? Number(token.change24h) : undefined,
             }));
             
             console.log(`[ChainService] Successfully retrieved ${tokens.length} balances via /public-balances`);

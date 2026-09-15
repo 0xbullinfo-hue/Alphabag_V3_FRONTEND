@@ -47,7 +47,7 @@ export const DexBag: React.FC = () => {
   const isDemo = !isConnected || (Array.isArray(rawBalances) && rawBalances.length === 0);
   const activeBalances = Array.isArray(rawBalances) && rawBalances.length > 0 ? rawBalances : DEMO_DEX_BALANCES;
   const safeBalances = Array.isArray(activeBalances) ? activeBalances : [];
-  const totalUSD = safeBalances.reduce((sum, t) => sum + (t?.valueUSD || 0), 0);
+  const totalUSD = safeBalances.reduce((sum, t) => sum + (t?.valueUSD != null ? t.valueUSD : 0), 0);
   const filtered = filterChain === 'ALL' ? safeBalances : safeBalances.filter((t) => t?.chain === filterChain);
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt) : new Date();
 
@@ -174,14 +174,14 @@ export const DexBag: React.FC = () => {
                           <span className={`text-[10px] font-black px-2 py-0.5 rounded ${chain.bg} ${chain.color} uppercase`}>{chain.label}</span>
                         </td>
                         <td className="p-4 text-right font-mono text-alphabag-text text-xs font-bold">{parseFloat(token.balance || '0').toLocaleString()}</td>
-                        <td className="p-4 text-right text-alphabag-subtext text-xs font-mono">${(token.priceUSD || 0).toFixed(4)}</td>
+                        <td className="p-4 text-right text-alphabag-subtext text-xs font-mono">{token.priceUSD != null ? `$${token.priceUSD.toFixed(4)}` : '—'}</td>
                         <td className="p-4 text-right">
                           <span className={`text-xs font-black flex items-center justify-end gap-0.5 ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
                             {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
                             {isPositive ? '+' : ''}{(token.change24h || 0).toFixed(2)}%
                           </span>
                         </td>
-                        <td className="p-4 text-right font-black text-alphabag-text text-xs">${(token.valueUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td className="p-4 text-right font-black text-alphabag-text text-xs">{token.valueUSD != null ? `$${token.valueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}</td>
                         <td className="p-4 text-center">
                           {token.contractAddress && (
                             <a href={getExplorerTokenUrl(token.chain || '', token.contractAddress || '')} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow">

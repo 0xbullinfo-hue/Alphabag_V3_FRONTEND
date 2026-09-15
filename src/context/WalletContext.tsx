@@ -205,10 +205,10 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           if (priceData) {
             distinctSymbols.forEach(sym => {
               const id = CHAIN_SYMBOL_TO_COINGECKO_ID[sym];
-              if (id && priceData[id]) {
+              if (id && priceData[id] && priceData[id].usd != null) {
                 livePriceBySymbol[sym] = {
-                  price: Number(priceData[id].usd || 0),
-                  change24h: Number(priceData[id].usd_24h_change || 0),
+                  price: Number(priceData[id].usd),
+                  change24h: Number(priceData[id].usd_24h_change ?? 0),
                 };
               }
             });

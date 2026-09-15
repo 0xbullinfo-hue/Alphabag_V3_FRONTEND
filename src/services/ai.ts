@@ -16,6 +16,6 @@ export interface AssistantReply {
  *   3. rate limiting + injection defence run server-side.
  */
 export async function ask(message: string, history: Array<{ role: string; content: string }> = []): Promise<AssistantReply> {
-  const { data } = await api.post<AssistantReply>('/ai/chat', { message, history });
+  const { data } = await api.post<AssistantReply>('/api/ai/chat', { message, history });
   return data;
 }
