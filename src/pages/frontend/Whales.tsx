@@ -94,18 +94,11 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     );
 };
 
-const DEFAULT_SMART_WHALES: TrackedWallet[] = [
-    { id: 'whale_vitalik', address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', label: 'Vitalik Buterin (ETH Pioneer)', chain: 'ETH', type: 'WHALE', createdAt: new Date().toISOString() },
-    { id: 'whale_binance_cold', address: '0xF977814e90dA44bFA03b6295A0616a897441aceC', label: 'Binance Smart Money Cold 8', chain: 'BSC', type: 'WHALE', createdAt: new Date().toISOString() },
-    { id: 'whale_wintermute', address: '0xdbF5E9c5206d0dB70a90108bf936DA60221dC080', label: 'Wintermute Algorithmic Trading', chain: 'ETH', type: 'WHALE', createdAt: new Date().toISOString() },
-    { id: 'whale_dwf_labs', address: '0xD4B6A66A2A69A5A43D2c2BCE3b246a4805A128b7', label: 'DWF Labs Alpha Syndicate', chain: 'BSC', type: 'WHALE', createdAt: new Date().toISOString() }
-];
-
 export const Whales: React.FC = () => {
     const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, whaleAlerts } = useWallet();
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const whaleWallets = safeTrackedWallets.filter(w => w?.type === 'WHALE');
-    const activeWhales = whaleWallets.length > 0 ? whaleWallets : DEFAULT_SMART_WHALES;
+    const activeWhales = whaleWallets;
     const limits = getLimits();
 
     const [isAddOpen, setIsAddOpen] = React.useState(false);
@@ -168,24 +161,42 @@ export const Whales: React.FC = () => {
                 <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {activeWhales.map(whale => (
-                    <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
-                ))}
-
-                {activeWhales.length < limits.maxWhales && (
-                    <button 
+            {activeWhales.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-alphabag-gray bg-alphabag-darkgray p-8 text-center">
+                    <div className="w-14 h-14 rounded-full bg-alphabag-black border border-alphabag-gray mx-auto flex items-center justify-center mb-4">
+                        <Eye size={24} className="text-alphabag-yellow" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-alphabag-text mb-2">No whale wallets tracked yet</h2>
+                    <p className="text-sm text-alphabag-subtext max-w-md mx-auto mb-5">
+                        Add a wallet address to monitor whale activity, large flows, and alerts for real portfolio movement.
+                    </p>
+                    <button
                         onClick={() => setIsAddOpen(true)}
-                        className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group"
+                        className="inline-flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
                     >
-                        <div className="w-9 h-9 bg-alphabag-gray rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-alphabag-yellow group-hover:text-alphabag-dark transition-all">
-                            <Plus size={18} />
-                        </div>
-                        <span className="text-sm font-semibold text-alphabag-text">Add Whale Slot</span>
-                        <span className="text-xs text-alphabag-subtext mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
+                        <Plus size={15} /> Add Whale Wallet
                     </button>
-                )}
-            </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {activeWhales.map(whale => (
+                        <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
+                    ))}
+
+                    {activeWhales.length < limits.maxWhales && (
+                        <button 
+                            onClick={() => setIsAddOpen(true)}
+                            className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group"
+                        >
+                            <div className="w-9 h-9 bg-alphabag-gray rounded-md flex items-center justify-center text-alphabag-subtext mb-3 group-hover:bg-alphabag-yellow group-hover:text-alphabag-dark transition-all">
+                                <Plus size={18} />
+                            </div>
+                            <span className="text-sm font-semibold text-alphabag-text">Add Whale Slot</span>
+                            <span className="text-xs text-alphabag-subtext mt-1">{whaleWallets.length} of {limits.maxWhales} used</span>
+                        </button>
+                    )}
+                </div>
+            )}
 
             {/* Inline Add Modal */}
             {isAddOpen && (
