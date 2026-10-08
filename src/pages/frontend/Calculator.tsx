@@ -38,14 +38,32 @@ const ResultTextRow = ({ label, value, valueColor = 'text-alphabag-text font-sem
     </div>
 );
 
-const InputField = ({ label, value, onChange, placeholder = '', borderClass = 'border-alphabag-gray', labelSub = '', minimal = false }: any) => (
+const InputField = ({
+    label,
+    value,
+    onChange,
+    placeholder = '',
+    borderClass = 'border-alphabag-gray',
+    labelSub = '',
+    minimal = false,
+    disabled = false
+}: {
+    label: string;
+    value: string;
+    onChange: (val: string) => void;
+    placeholder?: string;
+    borderClass?: string;
+    labelSub?: string;
+    minimal?: boolean;
+    disabled?: boolean;
+}) => (
     <div className="flex flex-col gap-1 w-full">
         <label className="text-alphabag-subtext text-xs font-semibold">{label}</label>
         <input
             type="text"
             inputMode="decimal"
             value={value}
-            disabled={minimal}
+            disabled={disabled}
             onChange={e => {
                 const v = e.target.value;
                 if (v === '' || /^\d*\.?\d*$/.test(v)) {
@@ -209,7 +227,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
             // Binance logic approx for liquidations
             if (direction === 'LONG') {
-                liqPrice = entry * (1 - 1 / levSlider + 0.005);
+                liqPrice = Math.max(0, entry * (1 - 1 / levSlider + 0.005));
                 if (tp > entry) {
                     tpPnL = positionSize * ((tp - entry) / entry);
                     tpROE = (tpPnL / margin) * 100;
@@ -242,18 +260,18 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         <div className="flex flex-col gap-2 mb-2">
                             <label className="text-alphabag-subtext text-xs font-semibold">Direction</label>
                             <div className="flex gap-2">
-                                <button onClick={() => setDirection('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all ${direction === 'LONG' ? 'bg-[#102B21] text-alphabag-green border border-alphabag-green/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
+                                <button type="button" onClick={() => setDirection('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'LONG' ? 'bg-[#102B21] text-alphabag-green border border-alphabag-green/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
                                     ↑ Long
                                 </button>
-                                <button onClick={() => setDirection('SHORT')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all ${direction === 'SHORT' ? 'bg-[#2A1519] text-alphabag-red border border-alphabag-red/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
+                                <button type="button" onClick={() => setDirection('SHORT')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'SHORT' ? 'bg-[#2A1519] text-alphabag-red border border-alphabag-red/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
                                     ↓ Short
                                 </button>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-2 mb-2">
-                            <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="" minimal={minimal} />
-                            <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="" minimal={minimal} />
+                            <InputField label="Entry Price ($)" value={levEntry} onChange={setLevEntry} placeholder="65000" minimal={minimal} />
+                            <InputField label="Margin ($)" value={levMargin} onChange={setLevMargin} placeholder="1000" minimal={minimal} />
                         </div>
 
                         <div className="flex flex-col gap-2 mb-2">
@@ -265,13 +283,21 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="alphabag-range w-full" />
                             </div>
                             <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold px-1 mt-[-2px]">
-                                <span>1x</span><span>25x</span><span>50x</span><span>100x</span><span>125x</span>
+                                {[1, 25, 50, 100, 125].map(v => (
+                                    <span
+                                        key={v}
+                                        className="cursor-pointer hover:text-alphabag-yellow transition-colors"
+                                        onClick={() => setLevSlider(v)}
+                                    >
+                                        {v}x
+                                    </span>
+                                ))}
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">
-                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="" borderClass={levTP ? 'border-alphabag-green/40' : 'border-alphabag-gray'} minimal={minimal} />
-                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="" borderClass={levSL ? 'border-alphabag-red/40' : 'border-alphabag-gray'} minimal={minimal} />
+                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="70000" borderClass={levTP ? 'border-alphabag-green/40' : 'border-alphabag-gray'} minimal={minimal} />
+                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="62500" borderClass={levSL ? 'border-alphabag-red/40' : 'border-alphabag-gray'} minimal={minimal} />
                         </div>
                     </div>
                 </div>
@@ -304,7 +330,11 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     {isSlBelowLiq && (
                         <div className="mt-4 bg-[#2A1519]/90 border border-[#4A252A] rounded-lg p-3 flex items-center gap-2">
                             <AlertTriangle size={14} className="text-alphabag-red shrink-0" />
-                            <span className="text-alphabag-red text-xs font-semibold">SL is below liquidation price — you'd be liquidated first!</span>
+                            <span className="text-alphabag-red text-xs font-semibold">
+                                {direction === 'LONG'
+                                    ? "SL is below liquidation price — you'd be liquidated first!"
+                                    : "SL is above liquidation price — you'd be liquidated first!"}
+                            </span>
                         </div>
                     )}
                 </div>
@@ -349,15 +379,14 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             <div className={mainGridClass}>
                 {/* Inputs */}
                 <div className={inputCardClass}>
-                    
                     <div className="relative z-10">
                         <div className="grid grid-cols-2 gap-2 mb-2">
-                            <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="" minimal={minimal} />
-                            <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="" minimal={minimal} />
+                            <InputField label="Buy Price ($)" value={spotBuy} onChange={setSpotBuy} placeholder="3200" minimal={minimal} />
+                            <InputField label="Sell Price ($)" value={spotSell} onChange={setSpotSell} placeholder="3600" minimal={minimal} />
                         </div>
                         <div className="grid grid-cols-2 gap-2 mb-2">
-                            <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="" minimal={minimal} />
-                            <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="" minimal={minimal} />
+                            <InputField label="Amount (coins)" value={spotAmount} onChange={setSpotAmount} placeholder="2.5" minimal={minimal} />
+                            <InputField label="Trading Fee (%)" value={spotFee} onChange={setSpotFee} placeholder="0.1" minimal={minimal} />
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="text-alphabag-subtext text-xs font-semibold pl-1">Fee Presets</label>
@@ -368,8 +397,9 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                     return (
                                         <button
                                             key={preset}
-                                            onClick={() => { if (val) setSpotFee(val); }}
-                                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all ${isActive ? 'bg-alphabag-yellow text-black shadow-md' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}
+                                            type="button"
+                                            onClick={() => { if (val) setSpotFee(val); else setSpotFee(''); }}
+                                            className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${isActive ? 'bg-alphabag-yellow text-black shadow-md' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}
                                         >
                                             {preset}
                                         </button>
@@ -390,19 +420,19 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <ResultTextRow label="Total Fees" value={hasCalc ? `$${formatNum(totalFees)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
                             <ResultRow label="Gross P&L" resultObj={gross !== 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} minimal={minimal} />
                             <div className="mt-2 pt-2 border-t border-alphabag-gray/40">
-                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (+${formatNum(netROEPercent)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (${net > 0 ? '+' : ''}${formatNum(netROEPercent, 1)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
                                 <ResultRow label="Break-even Price" resultObj={formatCurrency(breakEven)} minimal={minimal} />
                             </div>
                         </div>
                     </div>
 
-                    {net > 0 && hasCalc && (
-                        <div className={`bg-[#102B21] border border-[#1E3A2F] rounded-lg shadow-inner ${minimal ? 'p-3 mt-4' : 'p-4 mt-8'}`}>
-                            <div className={`font-bold text-alphabag-green mb-1 ${minimal ? 'text-xl' : 'text-[28px]'}`}>
-                                +${formatNum(net)}
+                    {net !== 0 && sell > 0 && hasCalc && (
+                        <div className={`border rounded-lg shadow-inner ${net > 0 ? 'bg-[#102B21] border-[#1E3A2F]' : 'bg-[#2A1519] border-[#4A252A]'} ${minimal ? 'p-3 mt-4' : 'p-4 mt-8'}`}>
+                            <div className={`font-bold mb-1 ${net > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} ${minimal ? 'text-xl' : 'text-[28px]'}`}>
+                                {net > 0 ? '+' : '-'}${formatNum(Math.abs(net))}
                             </div>
-                            <div className="text-alphabag-green opacity-70 text-xs font-semibold">
-                                +{formatNum(netROEPercent)}% net return
+                            <div className={`${net > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} opacity-70 text-xs font-semibold`}>
+                                {net > 0 ? '+' : '-'}{formatNum(Math.abs(netROEPercent), 1)}% net return
                             </div>
                         </div>
                     )}
@@ -431,8 +461,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <h2 className="text-alphabag-text font-bold text-sm">IL Risk Assessment</h2>
                         </div>
                         <div className="space-y-2">
-                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" minimal={minimal} />
-                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" minimal={minimal} />
+                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" minimal={minimal} disabled={minimal} />
+                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" minimal={minimal} disabled={minimal} />
                         </div>
                     </div>
                 </div>
@@ -464,7 +494,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         </div>
                         <div className="space-y-2">
                             <div className="grid grid-cols-[1fr_80px] gap-2">
-                                <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} />
+                                <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} disabled={minimal} />
                                 <div className="flex flex-col gap-1">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Token</label>
                                     <select value={convFrom} disabled={minimal} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-70">
@@ -538,10 +568,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="" minimal={minimal} />
+                                <InputField label="Investment ($)" value={degenInv} onChange={setDegenInv} placeholder="1000" minimal={minimal} />
                                 <div className="grid grid-cols-2 gap-2">
-                                    <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="" labelSub={formatCompactMCcap(degenEntryMC)} minimal={minimal} />
-                                    <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="" labelSub={formatCompactMCcap(degenTargetMC)} minimal={minimal} />
+                                    <InputField label="Entry Market Cap ($)" value={degenEntryMC} onChange={setDegenEntryMC} placeholder="250000" labelSub={formatCompactMCcap(degenEntryMC)} minimal={minimal} />
+                                    <InputField label="Target Market Cap ($)" value={degenTargetMC} onChange={setDegenTargetMC} placeholder="1000000" labelSub={formatCompactMCcap(degenTargetMC)} minimal={minimal} />
                                 </div>
 
                                 <div className="flex flex-col gap-2 mt-1">
@@ -549,7 +579,13 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                         <label className="text-alphabag-subtext text-xs font-semibold flex items-center gap-2">
                                             <Skull size={14} className="text-alphabag-red" /> Rug / Loss Probability
                                         </label>
-                                        <span className="font-bold text-alphabag-green bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-0.5 rounded text-xs">
+                                        <span className={`font-bold border px-2 py-0.5 rounded text-xs transition-colors ${
+                                            degenRugProb > 50
+                                                ? 'text-alphabag-red bg-alphabag-red/10 border-alphabag-red/20'
+                                                : degenRugProb > 25
+                                                    ? 'text-alphabag-yellow bg-alphabag-yellow/10 border-alphabag-yellow/20'
+                                                    : 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20'
+                                        }`}>
                                             {degenRugProb}%
                                         </span>
                                     </div>
@@ -557,8 +593,9 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                         <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="alphabag-range w-full" />
                                     </div>
                                     <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold mt-1 px-1">
-                                        <span>Safe (0%)</span>
-                                        <span>High Risk (100%)</span>
+                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(0)}>Safe (0%)</span>
+                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(50)}>Medium (50%)</span>
+                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(100)}>High Risk (100%)</span>
                                     </div>
                                 </div>
                             </div>
@@ -585,7 +622,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                         </div>
                                     </div>
                                     <div className={`font-bold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                        {ev !== 0 && hasCalc ? (ev > 0 ? '+' : '') + formatCurrency(ev, false).value : '—'}
+                                        {ev !== 0 && hasCalc ? `${ev > 0 ? '+' : '-'}$${formatNum(Math.abs(ev))}` : '—'}
                                     </div>
                                     <p className="text-[10px] text-alphabag-subtext/70 mt-1 font-medium">Average outcome including risk.</p>
                                 </div>
@@ -678,7 +715,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
             {/* Disclaimer */}
             <div className="text-xs text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">
-                This calculation is an estimate of rewards you will earn in cryptocurrency based off the parameter inputted. It does not display the actual .
+                This calculation is an estimate based on the parameters inputted and is for informational purposes only. It does not constitute financial or trading advice.
             </div>
         </div>
     );

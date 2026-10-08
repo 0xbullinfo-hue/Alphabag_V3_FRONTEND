@@ -10,7 +10,7 @@ import { useWallet } from '../../context/WalletContext';
 
 
 import { X } from 'lucide-react';
-import { Chain,TrackedWallet } from '../../types';
+import { Chain } from '../../types';
 
 // Sub-component to handle individual whale data fetching
 const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) => void, hasAlerts: boolean }> = ({ whale, removeTrackedWallet, hasAlerts }) => {
