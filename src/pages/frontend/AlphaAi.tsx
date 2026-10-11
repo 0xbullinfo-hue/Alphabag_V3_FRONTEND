@@ -16,7 +16,7 @@ const SUGGESTIONS = [
 
 
 
-export const AlphaAi: React.FC = () => {
+export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const { portfolioItems } = useWallet();
   const { user, isAuthenticated, updateAiUsage } = useAuth();
   const tier = user?.tier || 'FREE';
@@ -85,21 +85,23 @@ export const AlphaAi: React.FC = () => {
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-100px)] animate-in fade-in duration-700 w-full text-alphabag-text">
-      {/* Header */}
-      <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <PageIcon name="ai" size={40} />
-            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
-            <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
-              <span className="text-[9px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
+    <div className={`flex flex-col animate-in fade-in duration-500 w-full text-alphabag-text ${embedded ? 'min-h-[640px]' : 'min-h-[calc(100vh-100px)]'}`}>
+      {/* Header (hidden in embedded Alpha Desk mode) */}
+      {!embedded && (
+        <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <PageIcon name="ai" size={40} />
+              <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
+              <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
+                <span className="text-[9px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
+              </div>
             </div>
+            <p className="text-alphabag-subtext text-sm">Ask about market structure, portfolio risk, and on-chain activity.</p>
           </div>
-          <p className="text-alphabag-subtext text-sm">Ask about market structure, portfolio risk, and on-chain activity.</p>
         </div>
-      </div>
+      )}
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-2">
 

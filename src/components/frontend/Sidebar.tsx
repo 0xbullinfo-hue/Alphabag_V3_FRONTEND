@@ -111,8 +111,8 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed left-2 bottom-2 top-[84px] w-60 bg-alphabag-dark border border-alphabag-gray rounded-2xl z-40 transition-transform duration-300 ease-in-out
-        md:translate-x-0 pt-6 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
+        fixed left-2 bottom-2 top-[72px] w-60 bg-[#0a0e16]/95 backdrop-blur-xl border border-white/10 rounded-2xl z-40 transition-transform duration-300 ease-in-out shadow-2xl
+        md:translate-x-0 pt-4 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="py-2">
@@ -128,17 +128,18 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
               </div>
             )}
             <NavItem to="/alphas-feed" customIcon="feed" label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
-            <NavItem to="/alpha-ai" customIcon="ai" label="Alpha Analyst" active={location.pathname === '/alpha-ai'} />
             <NavItem to="/calculator" customIcon="calculator" label="Alpha Calculator" active={location.pathname === '/calculator'} />
             <NavItem to="/settings" customIcon="settings" label="Setup Connections" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
             
             <NavItem to="/whales" customIcon="whales" label="Alpha Radar" active={location.pathname.startsWith('/whales')} />
-            <NavItem to="/security" customIcon="security" label="Security Radar" active={location.pathname === '/security'} />
-            <NavItem to="/alpha-calls" customIcon="calls" label="AlphaCalls" active={location.pathname === '/alpha-calls'} />
           </NavGroup>
 
           <NavGroup title="Market Analytics">
+            <div className="relative">
+              <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
+              <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">PRO</div>
+            </div>
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />

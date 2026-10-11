@@ -52,31 +52,34 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-16 bg-alphabag-darkgray border-b border-alphabag-gray z-[60] px-2 flex items-center justify-between transition-all">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-[#0a0e16]/90 backdrop-blur-xl border-b border-white/5 z-[60] px-4 flex items-center justify-between transition-all shadow-lg">
         <div className="flex items-center flex-1">
           <button
             onClick={toggleSidebar}
-            className="mr-4 p-2 rounded-md text-alphabag-subtext hover:text-alphabag-text hover:bg-alphabag-gray md:hidden transition-all duration-200"
+            className="mr-3 p-2 rounded-lg text-alphabag-subtext hover:text-white hover:bg-white/5 md:hidden transition-all duration-200"
           >
-            {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+            {isSidebarOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          <Link to="/" className="flex items-center space-x-2 group">
-            <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full group-hover:scale-105 transition-transform" />
-            <span className="text-lg font-bold text-alphabag-yellow tracking-tight">ALPHABAG</span>
+          <Link to="/" className="flex items-center space-x-2.5 group">
+            <img src="/logo.png" alt="AlphaBAG Logo" className="w-7 h-7 object-contain rounded-full group-hover:scale-105 transition-transform shadow-md" />
+            <div className="flex items-center gap-1.5">
+              <span className="text-base font-black text-alphabag-yellow tracking-wider">ALPHABAG</span>
+              <span className="hidden sm:inline-block text-[9px] font-bold text-alphabag-subtext bg-white/5 px-1.5 py-0.5 rounded border border-white/10 uppercase">v3.0</span>
+            </div>
           </Link>
         </div>
 
-        <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-8 relative">
+        <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-6 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={18} className="text-alphabag-subtext" />
+            <Search size={15} className="text-alphabag-subtext" />
           </div>
           <input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Search coin, pair, or contract..."
-            className="w-full bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text text-sm rounded-md focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow block pl-10 p-2 outline-none transition-all duration-200"
+            className="w-full bg-[#080b11] border border-white/10 text-alphabag-text text-xs rounded-xl focus:border-alphabag-yellow/50 focus:ring-1 focus:ring-alphabag-yellow/30 block pl-9 pr-3 py-2 outline-none transition-all duration-200 placeholder:text-alphabag-subtext/50"
           />
         </form>
 

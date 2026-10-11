@@ -19,7 +19,7 @@ import { TradeSignal } from '../../types';
 const DEMO_SIGNALS: TradeSignal[] = [];
 const CATEGORIES = ['ALL', 'DEGEN', 'SHORT', 'LONGTERM', 'AIRDROPS'];
 
-export const AlphaCalls: React.FC = () => {
+export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
     const { token } = useAuth();
     const [signals, setSignals] = useState<TradeSignal[]>([]);
     const [loading, setLoading] = useState(true);
@@ -61,22 +61,24 @@ export const AlphaCalls: React.FC = () => {
     const filteredSignals = safeSignals.filter(s => activeCategory === 'ALL' || s?.category === activeCategory);
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full animate-in fade-in duration-700">
+        <div className={`relative flex flex-col w-full animate-in fade-in duration-500 ${embedded ? '' : 'min-h-[calc(100vh-12rem)] pb-20'}`}>
             
-            {/* Header */}
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
-                <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <PageIcon name="calls" size={40} />
-                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
+            {/* Header (hidden in embedded Alpha Desk mode) */}
+            {!embedded && (
+                <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <PageIcon name="calls" size={40} />
+                            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
+                        </div>
+                        <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
                     </div>
-                    <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
+                    <div className="bg-alphabag-gray border border-alphabag-yellow/20 px-3 py-1.5 rounded-md flex items-center gap-2">
+                        <ShieldAlert size={12} className="text-alphabag-yellow" />
+                        <span className="text-[9px] text-alphabag-yellow font-semibold uppercase tracking-wider">E2E Encryption Active</span>
+                    </div>
                 </div>
-                <div className="bg-alphabag-gray border border-alphabag-yellow/20 px-3 py-1.5 rounded-md flex items-center gap-2">
-                    <ShieldAlert size={12} className="text-alphabag-yellow" />
-                    <span className="text-[9px] text-alphabag-yellow font-semibold uppercase tracking-wider">E2E Encryption Active</span>
-                </div>
-            </div>
+            )}
 
             {/* Category Filter Tabs */}
             <div className="flex overflow-x-auto custom-scrollbar pb-3 mb-2 gap-2">

@@ -19,7 +19,8 @@ export type PageIconName =
   | 'history'
   | 'settings'
   | 'integrations'
-  | 'profile';
+  | 'profile'
+  | 'desk';
 
 export const PAGE_ICONS: Record<PageIconName, { src: string; alt: string }> = {
   bag: { src: '/icons/icon-bag.png', alt: 'My AlphaBAG' },
@@ -41,6 +42,7 @@ export const PAGE_ICONS: Record<PageIconName, { src: string; alt: string }> = {
   settings: { src: '/icons/icon-settings.svg', alt: 'Setup Connections' },
   integrations: { src: '/icons/icon-integrations.svg', alt: 'Integrations' },
   profile: { src: '/icons/icon-profile.svg', alt: 'My Profile' },
+  desk: { src: '/icons/icon-screener.svg', alt: 'Alpha Desk' },
 };
 
 interface PageIconProps {

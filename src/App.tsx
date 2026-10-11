@@ -63,6 +63,7 @@ const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ d
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
 const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
 const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => ({ default: m.AlphaPasses })));
+const AlphaDesk = lazy(() => import('./pages/frontend/AlphaDesk').then(m => ({ default: m.AlphaDesk })));
 
 const GlobalLoader = () => null;
 const INDEXABLE_PATHS = new Set(['/', '/alpha-passes', '/genesis', '/genesis-manifesto', '/airdrop', '/markets', '/news']);
@@ -179,8 +180,9 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={
             isLoading && !IS_LOCALHOST_DEV ? <GlobalLoader /> :
-            isAuthenticated ? <Layout><MyAlphabag /></Layout> : <Landing />
+            (isAuthenticated || IS_LOCALHOST_DEV) ? <Layout><MyAlphabag /></Layout> : <Landing />
           } />
+          <Route path="/dashboard" element={<Layout><MyAlphabag /></Layout>} />
           <Route path="/genesis" element={<GenesisLanding />} />
           <Route path="/genesis-manifesto" element={<Layout><GenesisManifesto /></Layout>} />
           <Route path="/cex-bag" element={<Layout><CexBag /></Layout>} />
@@ -189,6 +191,7 @@ const AppContent = () => {
           <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
           <Route path="/history" element={<Layout><History /></Layout>} />
           <Route path="/alpha-screener" element={<Layout><AlphaScreener /></Layout>} />
+          <Route path="/alpha-desk" element={<Layout><AlphaDesk /></Layout>} />
           <Route path="/my-alphabag" element={<Layout><MyAlphabag /></Layout>} />
 
           <Route path="/markets" element={<Layout><Markets /></Layout>} />

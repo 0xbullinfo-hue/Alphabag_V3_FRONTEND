@@ -59,7 +59,7 @@ interface ApprovalItem {
     spenders: SpenderAllowance[];
 }
 
-export const SecurityScanner: React.FC = () => {
+export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
     const { address: connectedAddress, isConnected } = useAccount();
     const { data: walletClient } = useWalletClient();
     const { addToast } = useWallet();
@@ -203,21 +203,23 @@ export const SecurityScanner: React.FC = () => {
     }, 0);
 
     return (
-        <div className="w-full space-y-2 pb-2 animate-fade-in">
-            {/* Header */}
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <PageIcon name="security" size={40} />
-                        <h1 className="text-3xl font-black text-white tracking-tight uppercase">
-                            Security <span className="text-alphabag-yellow">Radar</span>
-                        </h1>
+        <div className="w-full space-y-3 pb-2 animate-fade-in">
+            {/* Header (hidden in embedded Alpha Desk mode) */}
+            {!embedded && (
+                <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <PageIcon name="security" size={40} />
+                            <h1 className="text-3xl font-black text-white tracking-tight uppercase">
+                                Security <span className="text-alphabag-yellow">Radar</span>
+                            </h1>
+                        </div>
+                        <p className="text-alphabag-subtext text-xs font-medium mt-1">
+                            Review token allowances before they can be used by connected contracts.
+                        </p>
                     </div>
-                    <p className="text-alphabag-subtext text-xs font-medium mt-1">
-                        Review token allowances before they can be used by connected contracts.
-                    </p>
                 </div>
-            </div>
+            )}
 
             {/* Quick Scan Input */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">

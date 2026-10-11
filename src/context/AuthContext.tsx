@@ -10,6 +10,25 @@ import { User } from '../types';
 // NEVER commit .env files with this enabled.
 // Tier is 100% verified server-side via JWT and database lookup.
 
+// Local development fallback user (Ultimate tier with complete permissions)
+const DEV_USER: User = {
+  id: 'dev-user-001',
+  email: 'trader@alphabag.app',
+  tier: 'ULTIMATE',
+  verifiedWallet: '0x1111111111111111111111111111111111111111',
+  walletAddress: '0x1111111111111111111111111111111111111111',
+  alphaAiUsageSeconds: 0,
+  lastAlphaAiReset: new Date().toISOString(),
+  isAdmin: true,
+  isPro: true,
+  onboardingComplete: true,
+  accountType: 'TRADER',
+  bagTokens: 1000000,
+  referralCode: 'ALPHADEV',
+  referralCount: 12,
+  completedTasks: [],
+};
+
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -46,12 +65,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // ── SECURE SESSION RESTORATION ───────────────────────────────────────────
   // Validates stored token with backend before restoring session.
-  // Prevents UI leak from manually edited sessionStorage.
+  // In local dev, falls back to DEV_USER so developers can test dashboards & tools immediately.
   useEffect(() => {
     const validateStoredSession = async () => {
       const savedToken = sessionStorage.getItem('alphabag_token');
 
       if (!savedToken) {
+        if (import.meta.env.DEV) {
+          const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
+          if (!isExplicitLoggedOut) {
+            setUser(DEV_USER);
+            sessionStorage.setItem('alphabag_user', JSON.stringify(DEV_USER));
+          }
+        }
         setIsLoading(false);
         return;
       }
@@ -73,9 +99,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (err: any) {
         console.error('[AUTH] Session validation failed:', err?.response?.data?.error || err.message);
-        sessionStorage.removeItem('alphabag_token');
-        sessionStorage.removeItem('alphabag_user');
-        delete api.defaults.headers.common['Authorization'];
+        if (import.meta.env.DEV) {
+          const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
+          if (!isExplicitLoggedOut) {
+            setUser(DEV_USER);
+            sessionStorage.setItem('alphabag_user', JSON.stringify(DEV_USER));
+          } else {
+            sessionStorage.removeItem('alphabag_token');
+            sessionStorage.removeItem('alphabag_user');
+            delete api.defaults.headers.common['Authorization'];
+          }
+        } else {
+          sessionStorage.removeItem('alphabag_token');
+          sessionStorage.removeItem('alphabag_user');
+          delete api.defaults.headers.common['Authorization'];
+        }
       } finally {
         setIsLoading(false);
       }
@@ -117,6 +155,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
         sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
+        sessionStorage.removeItem('alphabag_dev_logged_out');
         api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
         setIsLoading(false);
         return true;
@@ -145,6 +184,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setToken(res.data.token);
         sessionStorage.setItem('alphabag_token', res.data.token);
         sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
+        sessionStorage.removeItem('alphabag_dev_logged_out');
         api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
         setIsLoading(false);
         return true;
@@ -161,6 +201,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     sessionStorage.removeItem('alphabag_token');
     sessionStorage.removeItem('alphabag_user');
+    sessionStorage.setItem('alphabag_dev_logged_out', 'true');
     delete api.defaults.headers.common['Authorization'];
     disconnect();
   };

@@ -94,7 +94,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
     );
 };
 
-export const Whales: React.FC = () => {
+export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
     const { trackedWallets, removeTrackedWallet, addTrackedWallet, getLimits, whaleAlerts } = useWallet();
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const whaleWallets = safeTrackedWallets.filter(w => w?.type === 'WHALE');
@@ -132,34 +132,50 @@ export const Whales: React.FC = () => {
     };
 
     return (
-        <div className="space-y-2 animate-in fade-in duration-700 pb-20">
+        <div className={`space-y-4 animate-in fade-in duration-500 ${embedded ? '' : 'pb-20'}`}>
 
             {/* Page Header */}
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <PageIcon name="whales" size={40} />
-                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
-                        <DataSourceBadge />
+            {!embedded ? (
+                <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                    <div>
+                        <div className="flex items-center gap-2 mb-2">
+                            <PageIcon name="whales" size={40} />
+                            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Whale Watch</h1>
+                            <DataSourceBadge />
+                        </div>
+                        <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{activeWhales.length}</span> addresses.</p>
                     </div>
-                    <p className="text-alphabag-subtext text-sm font-medium">Monitor high-conviction wallet movements. Currently watching <span className="text-alphabag-text font-semibold">{activeWhales.length}</span> addresses.</p>
+                    <div className="flex items-center gap-2">
+                        <UpgradeCmd />
+                        <button 
+                            onClick={() => setIsAddOpen(true)}
+                            className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                        >
+                            <Plus size={15} /> Add Whale
+                        </button>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <UpgradeCmd />
+            ) : (
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-alphabag-dark/60 border border-white/5 rounded-xl px-4 py-3 backdrop-blur-sm">
+                    <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-alphabag-green animate-pulse" />
+                        <p className="text-xs text-alphabag-subtext">Live multi-chain wallet radar · Watching <span className="text-alphabag-yellow font-bold">{activeWhales.length}</span> addresses</p>
+                    </div>
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                        className="flex items-center gap-1.5 bg-alphabag-yellow text-alphabag-dark px-3.5 py-1.5 rounded-lg text-xs font-bold hover:bg-[#e0bd2e] transition-all shadow-md shrink-0"
                     >
-                        <Plus size={15} /> Add Whale
+                        <Plus size={14} /> Add Whale Wallet
                     </button>
                 </div>
-            </div>
+            )}
 
-            {/* Info Banner */}
-            <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-2">
-                <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={17} />
-                <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
-            </div>
+            {!embedded && (
+                <div className="p-4 bg-blue-500/5 border border-blue-500/15 rounded-lg flex items-start gap-2">
+                    <ShieldAlert className="text-blue-400 shrink-0 mt-0.5" size={17} />
+                    <p className="text-sm text-alphabag-subtext">Whale Watch tracks major wallet addresses. Our AI engine alerts you when these addresses make significant trades.</p>
+                </div>
+            )}
 
             {activeWhales.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-alphabag-gray bg-alphabag-darkgray p-8 text-center">
