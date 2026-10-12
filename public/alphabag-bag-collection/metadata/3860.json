@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #3860",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: Forest Green, undefined, Yellow Plastic, Double Stripe, Metallic, None, White Tag Gold Text.",
+  "image": "/alphabag-bag-collection/images/3860.svg",
+  "dna": "alphabag-bag-3860-Epic-Forest Green-undefined-Yellow Plastic-Double Stripe-Metallic-None-White Tag Gold Text",
+  "edition": 3860,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Metallic"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Gold Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

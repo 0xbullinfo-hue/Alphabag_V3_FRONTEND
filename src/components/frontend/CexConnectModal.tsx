@@ -29,8 +29,8 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/80 backdrop-blur-sm animate-fade-in">
-            <div className="bg-alphabag-dark border border-white/10 rounded-2xl w-full max-w-md p-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/85 animate-fade-in">
+            <div className="bg-alphabag-dark border border-white/10 rounded-lg w-full max-w-md p-6 shadow-2xl relative">
                 <button
                     onClick={onClose}
                     className="absolute top-4 right-4 text-alphabag-subtext hover:text-white transition-colors"
@@ -38,11 +38,11 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     <X size={20} />
                 </button>
 
-                <div className="text-center mb-2">
-                    <div className="w-12 h-12 bg-alphabag-yellow/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="text-center mb-4">
+                    <div className="w-12 h-12 bg-alphabag-yellow/10 rounded-md flex items-center justify-center mx-auto mb-3">
                         <Shield className="text-alphabag-yellow" size={24} />
                     </div>
-                    <h2 className="text-xl font-black text-white uppercase tracking-tighter">
+                    <h2 className="text-xl font-bold text-white uppercase tracking-tight">
                         Connect {exchangeName}
                     </h2>
                     <p className="text-alphabag-subtext text-xs mt-2">
@@ -51,9 +51,9 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-2">
+                <form onSubmit={handleSubmit} className="space-y-3">
                     <div>
-                        <label className="block text-xs font-bold text-alphabag-subtext uppercase tracking-widest mb-1">
+                        <label className="block text-xs font-semibold text-alphabag-subtext uppercase tracking-wider mb-1">
                             API Key
                         </label>
                         <div className="relative">
@@ -62,7 +62,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                                 type="text"
                                 value={apiKey}
                                 onChange={(e) => setApiKey(e.target.value)}
-                                className="w-full bg-alphabag-black/50 border border-white/10 rounded-lg py-2 pl-10 pr-4 text-white text-sm focus:border-alphabag-yellow focus:outline-none transition-colors"
+                                className="w-full bg-alphabag-black/50 border border-white/10 rounded-md py-2 pl-10 pr-4 text-white text-sm focus:border-alphabag-yellow focus:outline-none transition-colors"
                                 placeholder="Enter public key..."
                                 required
                             />
@@ -70,7 +70,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-alphabag-subtext uppercase tracking-widest mb-1">
+                        <label className="block text-xs font-semibold text-alphabag-subtext uppercase tracking-wider mb-1">
                             API Secret
                         </label>
                         <div className="relative">
@@ -79,7 +79,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                                 type={showSecret ? "text" : "password"}
                                 value={secret}
                                 onChange={(e) => setSecret(e.target.value)}
-                                className="w-full bg-alphabag-black/50 border border-white/10 rounded-lg py-2 pl-10 pr-10 text-white text-sm focus:border-alphabag-yellow focus:outline-none transition-colors"
+                                className="w-full bg-alphabag-black/50 border border-white/10 rounded-md py-2 pl-10 pr-10 text-white text-sm focus:border-alphabag-yellow focus:outline-none transition-colors"
                                 placeholder="Enter secret key..."
                                 required
                             />
@@ -93,15 +93,15 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                         </div>
                     </div>
 
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
-                        <p className="text-[10px] text-blue-400">
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-md p-3">
+                        <p className="text-[11px] text-blue-400">
                             <strong>Security Tip:</strong> Verify that "Enable Withdrawals" is DISABLED in your exchange API settings.
                         </p>
                     </div>
 
                     <Button
                         type="submit"
-                        className="w-full font-bold uppercase tracking-widest py-3"
+                        className="w-full font-bold uppercase tracking-wider py-3"
                         disabled={isConnecting || !apiKey || !secret}
                     >
                         {isConnecting ? (
@@ -109,7 +109,7 @@ export const CexConnectModal: React.FC<CexConnectModalProps> = ({
                                 <Loader2 className="animate-spin mr-2" size={16} /> Verifying Keys...
                             </span>
                         ) : (
-                            'Secure Connection'
+                            'Authorize Connection'
                         )}
                     </Button>
                 </form>

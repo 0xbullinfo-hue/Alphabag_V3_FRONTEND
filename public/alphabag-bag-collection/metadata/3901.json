@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #3901",
+  "description": "A collectible AlphaBAG duffel NFT with Private OG rarity and layered traits: Arctic White, Orange, undefined, White Solid Diagonal, Holographic, Private OG, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3901.svg",
+  "dna": "alphabag-bag-3901-Private OG-Arctic White-Orange-undefined-White Solid Diagonal-Holographic-Private OG-White Tag Black Text",
+  "edition": 3901,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Private OG"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "Private OG"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

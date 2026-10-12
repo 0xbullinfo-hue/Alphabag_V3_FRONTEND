@@ -59,7 +59,7 @@ export const NFT_TRAITS: Record<RarityTierName, TraitDefinition> = {
     multiplier: '1.25x',
     color: '#F97316',
     badgeBg: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
-    borderGlow: 'border-orange-500/40 shadow-[0_0_20px_rgba(249,115,22,0.15)]',
+    borderGlow: 'border-orange-500/40',
     image: '/nft-collection/tiers/common.png',
     material: 'Vibrant Athletic Cordura',
     description: 'Vibrant Athletic Cordura duffle bag with navy tactical straps and standard ITEMS boost.',
@@ -73,7 +73,7 @@ export const NFT_TRAITS: Record<RarityTierName, TraitDefinition> = {
     multiplier: '1.5x',
     color: '#06B6D4',
     badgeBg: 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
-    borderGlow: 'border-cyan-500/40 shadow-[0_0_20px_rgba(6,182,212,0.2)]',
+    borderGlow: 'border-cyan-500/40',
     image: '/nft-collection/tiers/rare.png',
     material: 'Electric Cyan Hydro-Fabric',
     description: 'Electric Cyan Hydro-Fabric duffle bag with cyber blue accents and whale radar signals.',
@@ -87,7 +87,7 @@ export const NFT_TRAITS: Record<RarityTierName, TraitDefinition> = {
     multiplier: '2.0x',
     color: '#A855F7',
     badgeBg: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-    borderGlow: 'border-purple-500/40 shadow-[0_0_25px_rgba(168,85,247,0.25)]',
+    borderGlow: 'border-purple-500/40',
     image: '/nft-collection/tiers/epic.png',
     material: 'Cyber Violet Carbon-Weave',
     description: 'Cyber Violet Carbon-Weave duffle bag with luminous neon piping and unlimited AlphaAI queries.',
@@ -101,7 +101,7 @@ export const NFT_TRAITS: Record<RarityTierName, TraitDefinition> = {
     multiplier: '3.0x',
     color: '#FCD535',
     badgeBg: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
-    borderGlow: 'border-yellow-500/50 shadow-[0_0_30px_rgba(252,213,53,0.3)]',
+    borderGlow: 'border-yellow-500/50',
     image: '/nft-collection/tiers/legendary.png',
     material: '24K Solid Gold & Obsidian Satin',
     description: '24K Solid Gold and Obsidian luxury duffle bag with private founder calls and VIP bot alerts.',
@@ -115,7 +115,7 @@ export const NFT_TRAITS: Record<RarityTierName, TraitDefinition> = {
     multiplier: '5.0x',
     color: '#EC4899',
     badgeBg: 'bg-pink-500/10 text-pink-400 border-pink-500/30',
-    borderGlow: 'border-pink-500/60 shadow-[0_0_35px_rgba(236,72,153,0.35)]',
+    borderGlow: 'border-pink-500/60',
     image: '/nft-collection/tiers/mythic.png',
     material: 'Prismatic Crystal & Iridescent Diamond',
     description: 'Prismatic Crystal & Iridescent Diamond apex duffle bag granting maximum 5.0x multipliers.',
@@ -657,12 +657,12 @@ export const AlphaPasses: React.FC = () => {
               </span>
             )}
             {currentTier === 'ALPHA_VIP' && (
-              <span className="bg-alphabag-yellow text-alphabag-dark font-black px-3 py-1 rounded-md text-xs uppercase flex items-center gap-1.5 shadow-sm">
+              <span className="bg-alphabag-yellow text-alphabag-dark font-bold px-3 py-1 rounded-md text-xs uppercase flex items-center gap-1.5 shadow-sm">
                 <Crown size={13} fill="currentColor" /> Alpha VIP Member
               </span>
             )}
           </div>
-          <div className="text-[10px] text-alphabag-subtext font-medium mt-1">
+          <div className="text-[11px] text-alphabag-subtext font-medium mt-1">
             {currentTier === 'ALPHA_VIP' 
               ? '10+ Genesis Passes Active — Full VIP Suite & 1.5x Max Multiplier' 
               : currentTier === 'PREMIUM' 
@@ -680,20 +680,20 @@ export const AlphaPasses: React.FC = () => {
         </div>
 
         {/* Card 2: User Holdings Status */}
-        <div className="rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray p-4 flex flex-col h-full relative shadow-[0_0_15px_rgba(252,213,53,0.05)]">
+        <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-darkgray p-4 flex flex-col h-full relative">
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-semibold uppercase text-alphabag-yellow flex items-center gap-1">
               <ShieldCheck size={14} /> Your NFT Holdings
             </span>
-            <span className="text-[10px] bg-alphabag-yellow/20 text-alphabag-yellow px-2 py-0.5 rounded font-mono font-bold">
+            <span className="text-[11px] bg-alphabag-yellow/20 text-alphabag-yellow px-2 py-0.5 rounded font-mono font-bold">
               {userNFTs.length} OWNED
             </span>
           </div>
           <div className="text-2xl font-bold text-alphabag-text tracking-tight flex items-baseline gap-2">
-            <span>{userNFTs.length}</span>
+            <span className="num">{userNFTs.length}</span>
             <span className="text-xs font-normal text-alphabag-subtext">/ {NFT_CONFIG.MAX_MINT_PER_WALLET} Max Allowed</span>
           </div>
-          <div className="text-[10px] text-alphabag-subtext font-medium mt-1">
+          <div className="text-[11px] text-alphabag-subtext font-medium mt-1">
             {userNFTs.length > 0 
               ? `Active Multiplier: ${(1 + (userNFTs.length * 0.5)).toFixed(1)}x ITEMS Earn Rate`
               : 'Mint 1 Pass for 0.07 BNB to start earning multipliers'}
@@ -706,7 +706,7 @@ export const AlphaPasses: React.FC = () => {
               View My Passes ({userNFTs.length}) <ArrowRight size={13} />
             </button>
             {userNFTs.length > 0 && (
-              <span className="text-[10px] text-alphabag-green font-mono font-semibold flex items-center gap-1">
+              <span className="text-[11px] text-alphabag-green font-mono font-semibold flex items-center gap-1">
                 <CheckCircle2 size={12} /> Active
               </span>
             )}
@@ -714,13 +714,13 @@ export const AlphaPasses: React.FC = () => {
         </div>
 
         {/* Card 3: Total Collection Supply */}
-        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
+        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col h-full relative">
           <div className="flex justify-between items-start mb-2">
             <span className="text-xs font-semibold uppercase text-alphabag-subtext">Total Supply & Mint Status</span>
             <Flame size={18} className="text-alphabag-yellow" />
           </div>
           <div className="text-2xl font-bold text-alphabag-text tracking-tight flex items-baseline gap-2">
-            <span>{totalMinted.toLocaleString()}</span>
+            <span className="num">{totalMinted.toLocaleString()}</span>
             <span className="text-xs font-normal text-alphabag-subtext">/ 4,000 Minted</span>
           </div>
           <div className="w-full bg-alphabag-black h-2 rounded-full overflow-hidden border border-alphabag-gray my-2">
@@ -729,7 +729,7 @@ export const AlphaPasses: React.FC = () => {
               style={{ width: `${Math.max(Number(mintProgress), 2)}%` }} 
             />
           </div>
-          <div className="mt-auto flex justify-between items-center text-[10px] font-mono text-alphabag-subtext">
+          <div className="mt-auto flex justify-between items-center text-[11px] font-mono text-alphabag-subtext">
             <span>Progress: {mintProgress}%</span>
             <span className="text-alphabag-yellow font-semibold">{4000 - totalMinted} Remaining</span>
           </div>
@@ -763,13 +763,13 @@ export const AlphaPasses: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
           {/* Left Column: HOLDINGS DISPLAY & MINT PREVIEW */}
           <div className="space-y-3 flex flex-col">
-            <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-5 flex-1 flex flex-col justify-between">
+            <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-5 flex-1 flex flex-col justify-between">
               <div className="flex justify-between items-center mb-3">
                 <span className="text-xs font-semibold uppercase text-alphabag-subtext flex items-center gap-1.5">
                   <Sparkles size={14} className="text-alphabag-yellow" />
                   Allocation Preview
                 </span>
-                <span className="text-[10px] font-mono text-alphabag-yellow bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20">
+                <span className="text-[11px] font-mono text-alphabag-yellow bg-alphabag-yellow/10 px-2 py-0.5 rounded border border-alphabag-yellow/20">
                   {quantity}x Pass{quantity > 1 ? 'es' : ''} Selected
                 </span>
               </div>
@@ -819,11 +819,11 @@ export const AlphaPasses: React.FC = () => {
                           e.currentTarget.src = '/nft-collection/tiers/common.png';
                         }}
                       />
-                      <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-black/85 border border-white/10 text-[8px] font-mono font-bold" style={{ color: activePreviewTrait.color }}>
+                      <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded bg-black/85 border border-white/10 text-[11px] font-mono font-bold" style={{ color: activePreviewTrait.color }}>
                         {activePreviewTrait.allocation} ALLOC
                       </div>
                       <div className="absolute bottom-1.5 inset-x-0 flex justify-center">
-                        <span className="bg-black/85 px-2.5 py-0.5 rounded text-[8px] font-mono font-semibold text-white border border-white/10 shadow-sm">
+                        <span className="bg-black/85 px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold text-white border border-white/10 shadow-sm">
                           Pass #{activePreviewPassTokenId}
                         </span>
                       </div>
@@ -847,10 +847,10 @@ export const AlphaPasses: React.FC = () => {
                   {/* Pass Meta */}
                   <div className="text-center mt-2 space-y-1">
                     <div className="flex items-center justify-center gap-2">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${activePreviewTrait.badgeBg}`}>
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border ${activePreviewTrait.badgeBg}`}>
                         {activePreviewTrait.name} Tier
                       </span>
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 font-mono">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 font-mono">
                         {activePreviewTrait.multiplier} Boost
                       </span>
                     </div>
@@ -862,7 +862,7 @@ export const AlphaPasses: React.FC = () => {
                     </p>
                   </div>
 
-                  <span className="text-[9px] text-alphabag-subtext/80 mt-2 font-mono group-hover:text-alphabag-yellow transition-colors flex items-center gap-1">
+                  <span className="text-[11px] text-alphabag-subtext/80 mt-2 font-mono group-hover:text-alphabag-yellow transition-colors flex items-center gap-1">
                     <Sparkles size={11} /> Click card to inspect full traits & perks
                   </span>
                 </div>
@@ -871,10 +871,10 @@ export const AlphaPasses: React.FC = () => {
               {/* Browse 4,000 Collection Slider */}
               <div className="w-full mt-3 pt-3 border-t border-alphabag-gray/50">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-semibold uppercase text-alphabag-subtext flex items-center gap-1">
+                  <span className="text-[11px] font-semibold uppercase text-alphabag-subtext flex items-center gap-1">
                     <SlidersHorizontal size={11} /> Sample Collection Passes
                   </span>
-                  <span className="text-[9px] font-mono text-alphabag-subtext">
+                  <span className="text-[11px] font-mono text-alphabag-subtext">
                     5 Archetypes • 4,000 Supply
                   </span>
                 </div>
@@ -892,24 +892,24 @@ export const AlphaPasses: React.FC = () => {
                         multiplier: trait.multiplier,
                         perks: trait.perks
                       })}
-                      className="group/thumb relative rounded-xl overflow-hidden border border-alphabag-gray hover:border-alphabag-yellow/80 bg-alphabag-black p-1 transition-all hover:scale-105"
+                      className="group/thumb relative rounded-md overflow-hidden border border-alphabag-gray hover:border-alphabag-yellow/80 bg-alphabag-black p-1 transition-all hover:scale-105"
                       title={`${trait.name} (${trait.allocation})`}
                     >
-                      <div className="w-full aspect-square rounded-lg overflow-hidden bg-alphabag-darkgray/80 relative">
+                      <div className="w-full aspect-square rounded-md overflow-hidden bg-alphabag-darkgray/80 relative">
                         <img
                           src={trait.image}
                           alt={trait.name}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute top-0.5 right-0.5 px-1 py-0.2 rounded bg-black/80 text-[7px] font-bold font-mono" style={{ color: trait.color }}>
+                        <div className="absolute top-0.5 right-0.5 px-1 py-0.2 rounded bg-black/80 text-[11px] font-bold font-mono" style={{ color: trait.color }}>
                           {trait.allocation}
                         </div>
                       </div>
                       <div className="mt-1 text-center">
-                        <div className="text-[9px] font-bold truncate" style={{ color: trait.color }}>
+                        <div className="text-[11px] font-bold truncate" style={{ color: trait.color }}>
                           {trait.name}
                         </div>
-                        <div className="text-[8px] font-mono text-alphabag-subtext">
+                        <div className="text-[11px] font-mono text-alphabag-subtext">
                           {trait.multiplier}
                         </div>
                       </div>
@@ -921,7 +921,7 @@ export const AlphaPasses: React.FC = () => {
           </div>
 
           {/* Right Column: MINT TRANSACTION CONSOLE (0.07 BNB) */}
-          <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
+          <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 flex flex-col justify-between">
             <div>
               <div className="flex justify-between items-center pb-4 border-b border-alphabag-gray">
                 <div>
@@ -929,7 +929,7 @@ export const AlphaPasses: React.FC = () => {
                   <h2 className="text-xl font-semibold text-alphabag-text mt-0.5">Genesis Mint Stage</h2>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] font-mono text-green-400 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 inline-flex items-center gap-1">
+                  <span className="text-[11px] font-mono text-green-400 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 inline-flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                     LIVE ON BSC
                   </span>
@@ -937,7 +937,7 @@ export const AlphaPasses: React.FC = () => {
               </div>
 
               {/* Holdings reminder */}
-              <div className="mt-4 p-3 rounded-xl bg-alphabag-black/60 border border-alphabag-gray/80 flex items-center justify-between">
+              <div className="mt-4 p-3 rounded-md bg-alphabag-black/60 border border-alphabag-gray/80 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <ShieldCheck size={16} className="text-alphabag-yellow" />
                   <span className="text-xs text-alphabag-text font-medium">Your Current Holdings:</span>
@@ -948,7 +948,7 @@ export const AlphaPasses: React.FC = () => {
               </div>
 
               {/* Price Display with USD estimation */}
-              <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-4 mt-4 flex items-center justify-between">
+              <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-4 mt-4 flex items-center justify-between">
                 <div>
                   <span className="text-xs text-alphabag-subtext font-semibold uppercase">Unit Mint Price</span>
                   <div className="text-2xl font-semibold text-alphabag-yellow tabular-nums mt-0.5 flex items-baseline gap-2">
@@ -959,7 +959,7 @@ export const AlphaPasses: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="bg-alphabag-gray px-3 py-1 rounded-md text-[10px] font-semibold text-alphabag-subtext uppercase inline-flex items-center gap-1">
+                  <div className="bg-alphabag-gray px-3 py-1 rounded-md text-[11px] font-semibold text-alphabag-subtext uppercase inline-flex items-center gap-1">
                     <Info size={12} />
                     <span>BSC Network</span>
                   </div>
@@ -1017,7 +1017,7 @@ export const AlphaPasses: React.FC = () => {
               </div>
 
               {/* Total Cost Breakdown */}
-              <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-3.5 mt-4 space-y-1.5">
+              <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-3.5 mt-4 space-y-1.5">
                 <div className="flex items-center justify-between text-xs text-alphabag-subtext">
                   <span>Pass Cost ({quantity}x 0.07 BNB)</span>
                   <span className="font-mono text-alphabag-text font-semibold">{totalBnbCost} BNB</span>
@@ -1030,7 +1030,7 @@ export const AlphaPasses: React.FC = () => {
                   <span className="text-xs font-semibold uppercase text-alphabag-text">Total Payable</span>
                   <div className="text-right">
                     <span className="text-xl font-semibold text-alphabag-yellow tabular-nums">{totalBnbCost} BNB</span>
-                    <span className="text-[10px] text-alphabag-subtext block font-mono">≈ ${totalUsdCost} USD</span>
+                    <span className="text-[11px] text-alphabag-subtext block font-mono">≈ ${totalUsdCost} USD</span>
                   </div>
                 </div>
               </div>
@@ -1057,7 +1057,7 @@ export const AlphaPasses: React.FC = () => {
                 <button 
                   onClick={handleMintPass} 
                   disabled={isMintingTx || mintPhase === 'MINTING'} 
-                  className="w-full bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] active:scale-[0.98] py-3.5 rounded-md text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-alphabag-yellow/10"
+                  className="w-full bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] active:scale-[0.98] py-3.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-sm"
                 >
                   {isMintingTx || mintPhase === 'MINTING' ? (
                     <>
@@ -1073,7 +1073,7 @@ export const AlphaPasses: React.FC = () => {
                   )}
                 </button>
               )}
-              <div className="text-[10px] text-center text-alphabag-subtext font-mono">
+              <div className="text-[11px] text-center text-alphabag-subtext font-mono">
                 Direct native BNB transaction • Instant on-chain utility and VIP boost
               </div>
             </div>
@@ -1083,7 +1083,7 @@ export const AlphaPasses: React.FC = () => {
 
       {/* TAB 2: MY COLLECTION */}
       {activeTab === 'COLLECTION' && (
-        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 space-y-4">
+        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 space-y-4">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-alphabag-gray">
             <div>
               <span className="text-xs font-semibold uppercase text-alphabag-subtext">Inventory</span>
@@ -1102,7 +1102,7 @@ export const AlphaPasses: React.FC = () => {
           </div>
 
           {/* Collection Filter & Search Toolbar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-alphabag-black/50 p-3 rounded-xl border border-alphabag-gray">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-alphabag-black/50 p-3 rounded-md border border-alphabag-gray">
             <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
               <button
                 type="button"
@@ -1129,7 +1129,7 @@ export const AlphaPasses: React.FC = () => {
                     }`}
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: NFT_TRAITS[tier].color }} />
-                    {tier} {count > 0 && <span className="font-mono text-[10px]">({count})</span>}
+                    {tier} {count > 0 && <span className="font-mono text-[11px]">({count})</span>}
                   </button>
                 );
               })}
@@ -1154,20 +1154,20 @@ export const AlphaPasses: React.FC = () => {
                 return (
                   <div 
                     key={nft.tokenId} 
-                    className={`bg-alphabag-black border rounded-xl p-4 space-y-3 transition-all hover:border-alphabag-yellow/50 group cursor-pointer ${trait.borderGlow}`}
+                    className={`bg-alphabag-black border rounded-md p-4 space-y-3 transition-all hover:border-alphabag-yellow/50 group cursor-pointer ${trait.borderGlow}`}
                     onClick={() => setSelectedInspectPass(nft)}
                   >
                     <div className="flex justify-between items-center">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${trait.badgeBg}`}>
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${trait.badgeBg}`}>
                         {nft.rarity}
                       </span>
-                      <span className="bg-alphabag-green/10 text-alphabag-green px-2 py-0.5 rounded text-[10px] font-bold border border-alphabag-green/20">
+                      <span className="bg-alphabag-green/10 text-alphabag-green px-2 py-0.5 rounded text-[11px] font-bold border border-alphabag-green/20">
                         {nft.multiplier}
                       </span>
                     </div>
 
                     <div className="text-center py-2">
-                      <div className="w-32 h-32 mx-auto rounded-xl overflow-hidden border border-alphabag-gray/60 mb-2 shadow-sm group-hover:scale-105 transition-transform">
+                      <div className="w-32 h-32 mx-auto rounded-md overflow-hidden border border-alphabag-gray/60 mb-2 shadow-sm group-hover:scale-105 transition-transform">
                         <img
                           src={nft.image}
                           alt={nft.name}
@@ -1178,10 +1178,10 @@ export const AlphaPasses: React.FC = () => {
                         />
                       </div>
                       <h4 className="text-sm font-bold text-alphabag-text">{nft.name}</h4>
-                      <span className="text-[10px] text-alphabag-subtext font-mono">Token ID #{nft.tokenId}</span>
+                      <span className="text-[11px] text-alphabag-subtext font-mono">Token ID #{nft.tokenId}</span>
                     </div>
 
-                    <div className="space-y-1 pt-2 border-t border-alphabag-gray text-[10px] text-alphabag-subtext">
+                    <div className="space-y-1 pt-2 border-t border-alphabag-gray text-[11px] text-alphabag-subtext">
                       <div className="flex items-center justify-between">
                         <span>Material:</span>
                         <span className="font-semibold text-alphabag-text truncate max-w-[150px]">{trait.material}</span>
@@ -1264,12 +1264,12 @@ export const AlphaPasses: React.FC = () => {
               {Object.values(NFT_TRAITS).map((trait) => (
                 <div 
                   key={trait.name} 
-                  className={`bg-alphabag-black border rounded-2xl p-4 flex flex-col justify-between space-y-3 transition-all hover:scale-102 ${trait.borderGlow}`}
+                  className={`bg-alphabag-black border rounded-lg p-4 flex flex-col justify-between space-y-3 transition-all hover:scale-102 ${trait.borderGlow}`}
                 >
                   <div>
                     {/* Header */}
                     <div className="flex justify-between items-center mb-2">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${trait.badgeBg}`}>
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${trait.badgeBg}`}>
                         {trait.name}
                       </span>
                       <span className="text-xs font-mono font-bold" style={{ color: trait.color }}>
@@ -1278,7 +1278,7 @@ export const AlphaPasses: React.FC = () => {
                     </div>
 
                     {/* Image Preview */}
-                    <div className="w-full aspect-square rounded-xl overflow-hidden border border-alphabag-gray/80 bg-alphabag-darkgray my-2">
+                    <div className="w-full aspect-square rounded-md overflow-hidden border border-alphabag-gray/80 bg-alphabag-darkgray my-2">
                       <img
                         src={trait.image}
                         alt={trait.name}
@@ -1294,7 +1294,7 @@ export const AlphaPasses: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-alphabag-gray space-y-1 text-[10px]">
+                  <div className="pt-2 border-t border-alphabag-gray space-y-1 text-[11px]">
                     {trait.perks.map((p, i) => (
                       <div key={i} className="flex items-center gap-1.5 text-alphabag-text">
                         <CheckCircle2 size={11} className="text-green-400 shrink-0" />
@@ -1308,7 +1308,7 @@ export const AlphaPasses: React.FC = () => {
           </div>
 
           {/* Section 2: Account Membership Tiers */}
-          <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-6 space-y-6">
+          <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-6 space-y-6">
             <div>
               <span className="text-xs font-semibold uppercase text-alphabag-subtext">Account Membership</span>
               <h2 className="text-2xl font-semibold text-alphabag-text mt-0.5">Platform Access Tiers</h2>
@@ -1317,12 +1317,12 @@ export const AlphaPasses: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Free */}
-              <div className={`bg-alphabag-black border rounded-xl p-5 space-y-4 flex flex-col justify-between ${currentTier === 'FREE' ? 'border-alphabag-yellow/50 shadow-[0_0_15px_rgba(252,213,53,0.1)]' : 'border-alphabag-gray'}`}>
+              <div className={`bg-alphabag-black border rounded-md p-5 space-y-4 flex flex-col justify-between ${currentTier === 'FREE' ? 'border-alphabag-yellow/50' : 'border-alphabag-gray'}`}>
                 <div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext">Entry</span>
                     {currentTier === 'FREE' && (
-                      <span className="text-[9px] font-bold uppercase bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded border border-alphabag-yellow/20">
+                      <span className="text-[11px] font-bold uppercase bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded border border-alphabag-yellow/20">
                         Current Tier
                       </span>
                     )}
@@ -1339,12 +1339,12 @@ export const AlphaPasses: React.FC = () => {
               </div>
 
               {/* Premium */}
-              <div className={`bg-alphabag-black border rounded-xl p-5 space-y-4 flex flex-col justify-between shadow-[0_0_15px_rgba(252,213,53,0.06)] ${currentTier === 'PREMIUM' ? 'border-alphabag-yellow ring-2 ring-alphabag-yellow/30' : 'border-alphabag-yellow/40'}`}>
+              <div className={`bg-alphabag-black border rounded-md p-5 space-y-4 flex flex-col justify-between ${currentTier === 'PREMIUM' ? 'border-alphabag-yellow ring-2 ring-alphabag-yellow/30' : 'border-alphabag-yellow/40'}`}>
                 <div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-semibold uppercase text-alphabag-yellow">Pro Analytics</span>
                     {currentTier === 'PREMIUM' && (
-                      <span className="text-[9px] font-bold uppercase bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded font-black">
+                      <span className="text-[11px] font-bold uppercase bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded">
                         Active Tier
                       </span>
                     )}
@@ -1368,12 +1368,12 @@ export const AlphaPasses: React.FC = () => {
               </div>
 
               {/* Alpha VIP */}
-              <div className={`bg-alphabag-black border-2 rounded-xl p-5 space-y-4 flex flex-col justify-between shadow-sm ${currentTier === 'ALPHA_VIP' ? 'border-alphabag-yellow ring-2 ring-alphabag-yellow' : 'border-alphabag-yellow'}`}>
+              <div className={`bg-alphabag-black border-2 rounded-md p-5 space-y-4 flex flex-col justify-between shadow-sm ${currentTier === 'ALPHA_VIP' ? 'border-alphabag-yellow ring-2 ring-alphabag-yellow' : 'border-alphabag-yellow'}`}>
                 <div>
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-semibold uppercase text-alphabag-yellow flex items-center gap-1"><Crown size={12} fill="currentColor" /> Apex Level</span>
                     {currentTier === 'ALPHA_VIP' && (
-                      <span className="text-[9px] font-bold uppercase bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded font-black">
+                      <span className="text-[11px] font-bold uppercase bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded">
                         VIP Active
                       </span>
                     )}
@@ -1397,8 +1397,8 @@ export const AlphaPasses: React.FC = () => {
 
       {/* ── PASS INSPECTION MODAL ─────────────────────────────────────────── */}
       {selectedInspectPass && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl rounded-3xl bg-alphabag-darkgray border border-alphabag-gray/90 p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl rounded-lg bg-alphabag-darkgray border border-alphabag-gray p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden">
             {/* Close button */}
             <button
               type="button"
@@ -1411,14 +1411,14 @@ export const AlphaPasses: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
               {/* Image Preview */}
               <div className="space-y-2">
-                <div className={`w-full aspect-square rounded-2xl overflow-hidden border bg-alphabag-black ${NFT_TRAITS[selectedInspectPass.rarity as RarityTierName]?.borderGlow || 'border-alphabag-yellow/40'}`}>
+                <div className={`w-full aspect-square rounded-md overflow-hidden border bg-alphabag-black ${NFT_TRAITS[selectedInspectPass.rarity as RarityTierName]?.borderGlow || 'border-alphabag-yellow/40'}`}>
                   <img
                     src={selectedInspectPass.image}
                     alt={selectedInspectPass.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex justify-between items-center text-[10px] font-mono text-alphabag-subtext px-1">
+                <div className="flex justify-between items-center text-[11px] font-mono text-alphabag-subtext px-1">
                   <span>Standard 1:1 Vector Cel-Shading</span>
                   <span>4,000 Genesis Pass</span>
                 </div>
@@ -1428,10 +1428,10 @@ export const AlphaPasses: React.FC = () => {
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase border ${NFT_TRAITS[selectedInspectPass.rarity as RarityTierName]?.badgeBg}`}>
+                    <span className={`px-2.5 py-0.5 rounded text-[11px] font-bold uppercase border ${NFT_TRAITS[selectedInspectPass.rarity as RarityTierName]?.badgeBg}`}>
                       {selectedInspectPass.rarity}
                     </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold text-green-400 bg-green-500/10 border border-green-500/20">
+                    <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold text-green-400 bg-green-500/10 border border-green-500/20">
                       {selectedInspectPass.multiplier} Boost
                     </span>
                   </div>
@@ -1442,7 +1442,7 @@ export const AlphaPasses: React.FC = () => {
                 </div>
 
                 {/* Attributes Table */}
-                <div className="bg-alphabag-black rounded-xl p-3.5 border border-alphabag-gray/80 space-y-2 text-xs">
+                <div className="bg-alphabag-black rounded-md p-3.5 border border-alphabag-gray space-y-2 text-xs">
                   <div className="flex justify-between py-1 border-b border-alphabag-gray/50">
                     <span className="text-alphabag-subtext">Rarity Allocation:</span>
                     <span className="font-mono font-bold" style={{ color: NFT_TRAITS[selectedInspectPass.rarity as RarityTierName]?.color }}>

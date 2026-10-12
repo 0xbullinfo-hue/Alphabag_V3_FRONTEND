@@ -1,5 +1,4 @@
-
-import { Crown,Shield } from 'lucide-react';
+import { Crown, Shield } from 'lucide-react';
 import React from 'react';
 import { UserTier } from '../../types';
 
@@ -11,19 +10,24 @@ interface TierConfig {
 
 const getConfigs = (size: 'sm' | 'md' | 'lg'): Record<string, TierConfig> => ({
   FREE: {
-    label: 'Beta Tester',
-    icon: <Shield size={size === 'sm' ? 10 : 14} />,
-    styles: 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/30'
+    label: 'Standard',
+    icon: <Shield size={size === 'sm' ? 10 : 12} />,
+    styles: 'bg-white/5 text-alphabag-subtext border-white/10'
   },
   BASIC: {
-    label: 'Free',
-    icon: <Shield size={size === 'sm' ? 10 : 14} />,
-    styles: 'bg-alphabag-gray/50 text-alphabag-subtext border-alphabag-gray/30'
+    label: 'Standard',
+    icon: <Shield size={size === 'sm' ? 10 : 12} />,
+    styles: 'bg-white/5 text-alphabag-subtext border-white/10'
+  },
+  PREMIUM: {
+    label: 'Pro',
+    icon: <Shield size={size === 'sm' ? 10 : 12} />,
+    styles: 'bg-blue-500/10 text-blue-400 border-blue-500/20'
   },
   ULTIMATE: {
-    label: 'Ultimate',
-    icon: <Crown size={size === 'sm' ? 10 : 14} className="fill-current" />,
-    styles: 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/30 '
+    label: 'VIP / Ultimate',
+    icon: <Crown size={size === 'sm' ? 10 : 12} className="fill-current" />,
+    styles: 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/20'
   }
 });
 
@@ -34,22 +38,20 @@ interface TierBadgeProps {
 }
 
 export const TierBadge: React.FC<TierBadgeProps> = ({ tier, size = 'md', className = '' }) => {
-  // Explicitly cast to the union type to resolve type narrowing issues in some React/TS environments
   const currentSize = size as 'sm' | 'md' | 'lg';
   const configs = getConfigs(currentSize);
 
-  // Robust lookup with multiple fallbacks to ensure config is never undefined
   const activeTier = (tier || 'FREE').toString().toUpperCase();
   const config = configs[activeTier] || configs.FREE;
 
   const sizeStyles = {
-    sm: 'px-1.5 py-0.5 text-[8px]',
-    md: 'px-2.5 py-1 text-[10px]',
-    lg: 'px-4 py-2 text-xs'
+    sm: 'px-1.5 py-0.5 text-[11px]',
+    md: 'px-2 py-0.5 text-xs',
+    lg: 'px-2.5 py-1 text-xs'
   };
 
   return (
-    <div className={`inline-flex items-center gap-1.5 font-extrabold uppercase tracking-widest border rounded-full ${config.styles} ${sizeStyles[currentSize]} ${className}`}>
+    <div className={`inline-flex items-center gap-1.5 font-semibold uppercase tracking-wider border rounded-[2px] ${config.styles} ${sizeStyles[currentSize]} ${className}`}>
       {config.icon}
       <span>{config.label}</span>
     </div>

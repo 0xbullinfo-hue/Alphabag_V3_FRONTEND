@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #899",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: undefined, Orange, Silver Metal, undefined, Matte, None, undefined.",
+  "image": "/alphabag-bag-collection/images/899.svg",
+  "dna": "alphabag-bag-899-Common-undefined-Orange-Silver Metal-undefined-Matte-None-undefined",
+  "edition": 899,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

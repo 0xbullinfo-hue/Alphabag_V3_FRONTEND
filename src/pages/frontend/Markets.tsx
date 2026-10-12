@@ -124,7 +124,7 @@ export const Markets: React.FC = () => {
               <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
               {isRefreshing ? 'Syncing...' : 'Refresh'}
             </button>
-            <span className="text-[10px] text-alphabag-subtext font-mono">{lastUpdated.toLocaleTimeString()}</span>
+            <span className="text-[11px] text-alphabag-subtext num">{lastUpdated.toLocaleTimeString()}</span>
           </div>
         </div>
 
@@ -201,22 +201,22 @@ export const Markets: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="py-3 px-3 text-right font-semibold text-alphabag-text tabular-data text-[14px]">
+                      <td className="py-2.5 px-3 text-right font-semibold text-alphabag-text num text-xs">
                         ${coin.current_price.toLocaleString(undefined, { maximumFractionDigits: coin.current_price < 1 ? 4 : 2 })}
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch1h)}`}>
-                        <span className="text-[8px] mr-0.5">{getPchIcon(pch1h)}</span>{Math.abs(pch1h).toFixed(1)}%
+                      <td className={`py-2.5 px-3 text-right font-medium num text-xs ${getPchColor(pch1h)}`}>
+                        <span className="text-[11px] mr-0.5">{getPchIcon(pch1h)}</span>{Math.abs(pch1h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch24h)}`}>
-                        <span className="text-[8px] mr-0.5">{getPchIcon(pch24h)}</span>{Math.abs(pch24h).toFixed(1)}%
+                      <td className={`py-2.5 px-3 text-right font-medium num text-xs ${getPchColor(pch24h)}`}>
+                        <span className="text-[11px] mr-0.5">{getPchIcon(pch24h)}</span>{Math.abs(pch24h).toFixed(1)}%
                       </td>
-                      <td className={`py-3 px-3 text-right font-medium tabular-data text-[14px] ${getPchColor(pch7d)}`}>
-                        <span className="text-[8px] mr-0.5">{getPchIcon(pch7d)}</span>{Math.abs(pch7d).toFixed(1)}%
+                      <td className={`py-2.5 px-3 text-right font-medium num text-xs ${getPchColor(pch7d)}`}>
+                        <span className="text-[11px] mr-0.5">{getPchIcon(pch7d)}</span>{Math.abs(pch7d).toFixed(1)}%
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
+                      <td className="py-2.5 px-3 text-right font-medium text-alphabag-subtext num text-xs">
                         {fmt(coin.total_volume)}
                       </td>
-                      <td className="py-3 px-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
+                      <td className="py-2.5 px-3 text-right font-medium text-alphabag-subtext num text-xs">
                         {fmt(coin.market_cap)}
                       </td>
                       <td className="py-3 px-4 hidden xl:table-cell">

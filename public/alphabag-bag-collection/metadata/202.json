@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #202",
+  "description": "A collectible AlphaBAG duffel NFT with Beta Tester rarity and layered traits: Navy Blue, undefined, Neon Glow, No Stripe, Glossy, None, Black Tag Orange Text.",
+  "image": "/alphabag-bag-collection/images/202.svg",
+  "dna": "alphabag-bag-202-Beta Tester-Navy Blue-undefined-Neon Glow-No Stripe-Glossy-None-Black Tag Orange Text",
+  "edition": 202,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Beta Tester"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Neon Glow"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "No Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "Black Tag Orange Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

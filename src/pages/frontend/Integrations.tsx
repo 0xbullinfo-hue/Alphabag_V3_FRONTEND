@@ -76,7 +76,7 @@ export const Integrations: React.FC = () => {
                     <div className="flex items-center gap-2 mb-2">
                         <PageIcon name="integrations" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Connections Hub</h1>
-                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Live</span>
+                        <span className="bg-alphabag-green/10 text-alphabag-green text-[11px] font-medium uppercase px-2 py-0.5 rounded tracking-wider">Live</span>
                     </div>
                     <p className="text-alphabag-subtext text-sm">Unified dashboard for all live API keys and Web3 wallets streaming into AlphaBAG.</p>
                 </div>
@@ -92,21 +92,21 @@ export const Integrations: React.FC = () => {
 
       {/* Connection Prompts - Since Hub is Read-Only, direct users to the Bags to connect */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl p-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3 flex items-center justify-between hover:bg-alphabag-gray/30 transition-colors">
               <div>
-                  <h3 className="text-xs font-bold text-white mb-0.5">Need to add an Exchange?</h3>
-                  <p className="text-[10px] text-alphabag-subtext opacity-60">Manage active API Keys in the CEX Portfolio.</p>
+                  <h3 className="text-xs font-semibold text-white mb-0.5">Need to add an Exchange?</h3>
+                  <p className="text-[11px] text-alphabag-subtext">Manage active API Keys in the CEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-[10px] h-8 font-black uppercase tracking-widest border-white/10 px-3">
+              <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-xs h-8 font-semibold uppercase tracking-wider px-3">
                  Add CEX <ExternalLink size={10} className="ml-1" />
               </Button>
           </div>
-          <div className="bg-white/5 border border-white/10 border-dashed rounded-xl p-3 flex items-center justify-between hover:bg-white/[0.08] transition-colors">
+          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3 flex items-center justify-between hover:bg-alphabag-gray/30 transition-colors">
               <div>
-                  <h3 className="text-xs font-bold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
-                  <p className="text-[10px] text-alphabag-subtext opacity-60">Connect on-chain wallets in the DEX Portfolio.</p>
+                  <h3 className="text-xs font-semibold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
+                  <p className="text-[11px] text-alphabag-subtext">Connect on-chain wallets in the DEX Portfolio.</p>
               </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-[10px] h-8 font-black uppercase tracking-widest border-white/10 px-3">
+              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-xs h-8 font-semibold uppercase tracking-wider px-3">
                  Set BAG <ExternalLink size={10} className="ml-1" />
               </Button>
           </div>
@@ -147,8 +147,8 @@ export const Integrations: React.FC = () => {
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <h3 className="font-bold text-white text-base">{item.name}</h3>
-                                    <span className={`text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded uppercase ${item.category === 'CEX' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}`}>
+                                    <h3 className="font-semibold text-white text-base">{item.name}</h3>
+                                    <span className={`text-[11px] font-semibold tracking-wider px-1.5 py-0.5 rounded uppercase ${item.category === 'CEX' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-purple-500/10 text-purple-400 border border-purple-500/20'}`}>
                                        {item.category}
                                     </span>
                                 </div>
@@ -161,8 +161,8 @@ export const Integrations: React.FC = () => {
                         {/* Status Widget */}
                         <div className="flex items-center gap-2 w-full md:w-auto justify-end pt-3 md:pt-0">
                             <div className="flex items-center gap-1.5 bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md">
-                                <Activity size={12} className="text-alphabag-green animate-pulse" />
-                                <span className="text-[10px] font-black text-alphabag-green uppercase tracking-widest">Live</span>
+                                <Activity size={12} className="text-alphabag-green" />
+                                <span className="text-[11px] font-semibold text-alphabag-green uppercase tracking-wider">Live</span>
                             </div>
                         </div>
                         

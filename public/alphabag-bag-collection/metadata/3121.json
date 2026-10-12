@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3121",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: Arctic White, Black, undefined, Glow Orange, Matte, None, undefined.",
+  "image": "/alphabag-bag-collection/images/3121.svg",
+  "dna": "alphabag-bag-3121-Uncommon-Arctic White-Black-undefined-Glow Orange-Matte-None-undefined",
+  "edition": 3121,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

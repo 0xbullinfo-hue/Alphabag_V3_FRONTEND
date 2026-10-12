@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #2646",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Forest Green, Navy Blue, Silver Metal, undefined, undefined, None, undefined.",
+  "image": "/alphabag-bag-collection/images/2646.svg",
+  "dna": "alphabag-bag-2646-Common-Forest Green-Navy Blue-Silver Metal-undefined-undefined-None-undefined",
+  "edition": 2646,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

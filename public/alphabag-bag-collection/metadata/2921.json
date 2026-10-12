@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #2921",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: Midnight Black, Navy Blue, undefined, Glow Orange, Glossy, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/2921.svg",
+  "dna": "alphabag-bag-2921-Uncommon-Midnight Black-Navy Blue-undefined-Glow Orange-Glossy-None-White Tag Black Text",
+  "edition": 2921,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Midnight Black"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

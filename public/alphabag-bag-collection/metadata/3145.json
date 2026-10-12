@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3145",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: undefined, Black, Silver Metal, undefined, Holographic, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3145.svg",
+  "dna": "alphabag-bag-3145-Uncommon-undefined-Black-Silver Metal-undefined-Holographic-None-White Tag Black Text",
+  "edition": 3145,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

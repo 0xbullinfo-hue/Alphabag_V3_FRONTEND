@@ -1,26 +1,27 @@
 import {
-ArrowLeft,
-Calendar,
-Camera,
-CheckCircle2,Globe,
-MapPin,
-MessageSquare,
-Rocket,
-Share2,
-ShieldCheck,
-Users,
-Zap
+    ArrowLeft,
+    Calendar,
+    Camera,
+    CheckCircle2,
+    Globe,
+    MapPin,
+    MessageSquare,
+    Rocket,
+    Share2,
+    ShieldCheck,
+    Users,
+    Zap
 } from 'lucide-react';
-import React,{ useEffect,useRef,useState } from 'react';
-import { useNavigate,useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 import { api } from '../../services/api';
-import { extractSyncData,injectSyncData } from '../../services/syncService';
-import { Post,Project } from '../../types';
+import { extractSyncData, injectSyncData } from '../../services/syncService';
+import { Post, Project } from '../../types';
 
 const getProfileName = (userObj: any) => {
     if (userObj?.email) {
@@ -226,9 +227,9 @@ export const Profile: React.FC = () => {
                     title: 'PROFILE UPDATED',
                     text: 'Your identity has been synchronized with the core.',
                     icon: 'success',
-                    background: '#0a0a0a',
+                    background: '#181A20',
                     color: '#fff',
-                    confirmButtonColor: '#fcd535'
+                    confirmButtonColor: '#F0B90B'
                 });
                 setProfileUser(res.data.user);
                 await refreshUser();
@@ -239,7 +240,7 @@ export const Profile: React.FC = () => {
                 title: 'SYNC FAILED',
                 text: err.response?.data?.error || 'Failed to update profile data.',
                 icon: 'error',
-                background: '#0a0a0a',
+                background: '#181A20',
                 color: '#fff'
             });
         } finally {
@@ -258,16 +259,16 @@ export const Profile: React.FC = () => {
     if (!profileUser) {
         return (
             <div className="min-h-[calc(100vh-12rem)] flex items-center justify-center px-4">
-                <div className="w-full max-w-md border border-alphabag-gray bg-alphabag-darkgray rounded-lg p-6 text-center">
+                <div className="w-full max-w-md border border-alphabag-border bg-alphabag-card rounded-lg p-6 text-center">
                     <div className="flex justify-center mb-4">
                         <PageIcon name="profile" size={48} />
                     </div>
-                    <h1 className="text-lg font-black text-alphabag-text uppercase">Profile unavailable</h1>
+                    <h1 className="text-lg font-bold text-alphabag-text uppercase">Profile unavailable</h1>
                     <p className="mt-2 text-sm text-alphabag-subtext leading-relaxed">
                         Connect and sign in with your wallet to view and manage your AlphaBAG profile.
                     </p>
                     <Button
-                        className="mt-5 w-full"
+                        className="mt-5 w-full font-semibold"
                         onClick={() => window.dispatchEvent(new Event('open-login-modal'))}
                     >
                         Connect wallet
@@ -282,36 +283,35 @@ export const Profile: React.FC = () => {
     return (
         <div className="bg-alphabag-black min-h-screen text-white pb-20">
             {/* Header / Banner */}
-            <div className="h-32 border-b border-white/5 relative bg-cover bg-center bg-no-repeat" style={{ backgroundImage: profileUser?.bannerUrl ? `url(${profileUser.bannerUrl})` : undefined }}>
-                {!profileUser?.bannerUrl && <div className="absolute inset-0 bg-gradient-to-r from-alphabag-dark to-alphabag-black"></div>}
+            <div className="h-32 border-b border-alphabag-border relative bg-cover bg-center bg-no-repeat bg-alphabag-card" style={{ backgroundImage: profileUser?.bannerUrl ? `url(${profileUser.bannerUrl})` : undefined }}>
+                {!profileUser?.bannerUrl && <div className="absolute inset-0 bg-alphabag-card"></div>}
                 <button 
                     onClick={() => navigate(-1)}
-                    className="absolute top-3 left-3 p-1.5 bg-black/40 backdrop-blur-md rounded-full hover:bg-black/60 transition-colors z-10"
+                    className="absolute top-3 left-3 p-1.5 bg-black/60 rounded-full hover:bg-black/80 transition-colors z-10"
                 >
                     <ArrowLeft size={16} />
                 </button>
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             </div>
 
             <div className="w-full">
                 {/* Profile Info Card */}
-                <div className="relative -mt-12 mb-2 px-4 py-5 bg-alphabag-darkgray/40 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
+                <div className="relative -mt-12 mb-3 px-4 py-5 bg-alphabag-card border border-alphabag-border rounded-lg shadow-sm">
                     <div className="flex justify-between items-start">
                         <div className="relative">
                             <div
-                                className={`w-24 h-24 rounded-2xl bg-gradient-to-tr from-alphabag-yellow to-orange-500 p-1  ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
+                                className={`w-24 h-24 rounded-lg bg-alphabag-panel border-2 border-alphabag-border p-1 ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
                                 onClick={() => isEditing && isOwnProfile && avatarInputRef.current?.click()}
                             >
-                                <div className="w-full h-full bg-alphabag-black rounded-xl flex items-center justify-center overflow-hidden relative">
+                                <div className="w-full h-full bg-alphabag-black rounded-md flex items-center justify-center overflow-hidden relative">
                                     {(editData.logoUrl || profileUser?.logoUrl) ? (
                                         <img src={editData.logoUrl || profileUser?.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                     ) : (
-                                        <span className="text-4xl font-black text-alphabag-yellow uppercase">{getProfileInitial(profileUser)}</span>
+                                        <span className="text-4xl font-bold text-alphabag-yellow uppercase">{getProfileInitial(profileUser)}</span>
                                     )}
                                     {isEditing && isOwnProfile && (
-                                        <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+                                        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md">
                                             <Camera size={20} className="text-white mb-1" />
-                                            <span className="text-white text-[8px] font-black uppercase tracking-widest">Change</span>
+                                            <span className="text-white text-[11px] font-semibold uppercase tracking-wider">Change</span>
                                         </div>
                                     )}
                                 </div>
@@ -324,7 +324,7 @@ export const Profile: React.FC = () => {
                                 onChange={handleAvatarChange}
                             />
                             {isFounder && (
-                                <div className="absolute -bottom-1.5 -right-1.5 bg-alphabag-yellow text-black p-1 rounded-lg shadow-lg border-2 border-alphabag-black">
+                                <div className="absolute -bottom-1 -right-1 bg-alphabag-yellow text-black p-1 rounded-md shadow border border-alphabag-black">
                                     <ShieldCheck size={14} fill="currentColor" />
                                 </div>
                             )}
@@ -338,7 +338,7 @@ export const Profile: React.FC = () => {
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setIsEditing(false)}
-                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
+                                            className="rounded-md border-alphabag-border text-white hover:bg-alphabag-hover font-semibold uppercase tracking-wider text-[11px] px-3.5 py-1.5"
                                         >
                                             Cancel
                                         </Button>
@@ -346,7 +346,7 @@ export const Profile: React.FC = () => {
                                             size="sm"
                                             onClick={handleSave}
                                             disabled={isSaving}
-                                            className="rounded-full bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[9px] px-4 py-1.5 "
+                                            className="rounded-md bg-alphabag-yellow text-black font-semibold uppercase tracking-wider text-[11px] px-3.5 py-1.5"
                                         >
                                             {isSaving ? 'Saving...' : 'Save'}
                                         </Button>
@@ -358,7 +358,7 @@ export const Profile: React.FC = () => {
                                                 variant="outline"
                                                 size="sm"
                                                 onClick={() => navigate('/genesis-manifesto')}
-                                                className="rounded-full border-alphabag-yellow/30 text-alphabag-yellow hover:bg-alphabag-yellow/10 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
+                                                className="rounded-md border-alphabag-yellow/30 text-alphabag-yellow hover:bg-alphabag-yellow/10 font-semibold uppercase tracking-wider text-[11px] px-3.5 py-1.5"
                                             >
                                                 {project ? 'Edit Manifesto' : 'Post Manifesto'}
                                             </Button>
@@ -367,7 +367,7 @@ export const Profile: React.FC = () => {
                                             variant="outline"
                                             size="sm"
                                             onClick={() => setIsEditing(true)}
-                                            className="rounded-full border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[9px] px-4 py-1.5"
+                                            className="rounded-md border-alphabag-border text-white hover:bg-alphabag-hover font-semibold uppercase tracking-wider text-[11px] px-3.5 py-1.5"
                                         >
                                             Edit
                                         </Button>
@@ -380,23 +380,23 @@ export const Profile: React.FC = () => {
                     <div className="mt-4 space-y-2">
                         <div>
                             <div className="flex items-center gap-2">
-                                <h2 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase">
+                                <h2 className="text-2xl font-bold text-white tracking-tight uppercase">
                                     {getProfileName(profileUser)}
                                 </h2>
                                 {isFounder && <CheckCircle2 size={16} className="text-alphabag-yellow" fill="currentColor" />}
-                                <div className={`px-2 py-0.5 rounded text-[7px] font-black uppercase tracking-widest ml-1 ${isFounder ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/30' : 'bg-blue-500/20 text-blue-400 border border-blue-500/30'}`}>
+                                <div className={`px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider ml-1 ${isFounder ? 'bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}`}>
                                     {isFounder ? 'FOUNDER' : 'ELITE'}
                                 </div>
                             </div>
-                            <p className="text-alphabag-muted text-[13px] font-medium opacity-60">@{getProfileHandle(profileUser)}_member</p>
+                            <p className="text-alphabag-muted text-[13px] font-medium">@{getProfileHandle(profileUser)}_member</p>
                         </div>
 
                         {isEditing ? (
                             <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
                                 <div className="space-y-1">
-                                    <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Bio</label>
+                                    <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Bio</label>
                                     <textarea 
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none h-24 resize-none transition-all"
+                                        className="w-full bg-alphabag-panel border border-alphabag-border rounded-md p-3 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none h-24 resize-none transition-all"
                                         value={editData.bio}
                                         onChange={e => setEditData({ ...editData, bio: e.target.value })}
                                         placeholder="Tell the community about your alpha discovery strategy..."
@@ -404,12 +404,12 @@ export const Profile: React.FC = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="space-y-1">
-                                        <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Location</label>
+                                        <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Location</label>
                                         <div className="relative">
-                                            <MapPin size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
+                                            <MapPin size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
                                             <input 
                                                 type="text"
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-alphabag-panel border border-alphabag-border rounded-md pl-9 pr-3 py-2.5 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
                                                 value={editData.location}
                                                 onChange={e => setEditData({ ...editData, location: e.target.value })}
                                                 placeholder="Global / Remote"
@@ -417,12 +417,12 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Website</label>
+                                        <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Website</label>
                                         <div className="relative">
-                                            <Globe size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
+                                            <Globe size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
                                             <input 
                                                 type="text"
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-alphabag-panel border border-alphabag-border rounded-md pl-9 pr-3 py-2.5 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
                                                 value={editData.website}
                                                 onChange={e => setEditData({ ...editData, website: e.target.value })}
                                                 placeholder="alphabag.com"
@@ -430,12 +430,12 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Banner URL</label>
+                                        <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Banner URL</label>
                                         <div className="relative">
-                                            <Globe size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
+                                            <Globe size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
                                             <input 
                                                 type="url"
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-alphabag-panel border border-alphabag-border rounded-md pl-9 pr-3 py-2.5 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
                                                 value={editData.bannerUrl}
                                                 onChange={e => setEditData({ ...editData, bannerUrl: e.target.value })}
                                                 placeholder="https://..."
@@ -443,12 +443,12 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.2em] ml-1">Logo URL</label>
+                                        <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Logo URL</label>
                                         <div className="relative">
-                                            <Globe size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
+                                            <Globe size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-yellow" />
                                             <input 
                                                 type="url"
-                                                className="w-full bg-black/40 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
+                                                className="w-full bg-alphabag-panel border border-alphabag-border rounded-md pl-9 pr-3 py-2.5 text-sm text-zinc-200 focus:border-alphabag-yellow/50 outline-none transition-all"
                                                 value={editData.logoUrl}
                                                 onChange={e => setEditData({ ...editData, logoUrl: e.target.value })}
                                                 placeholder="https://..."
@@ -463,7 +463,7 @@ export const Profile: React.FC = () => {
                                     {profileUser?.bio || "AlphaBAG community member. Early adopter of the intelligence-first platform."}
                                 </p>
 
-                                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-alphabag-muted font-bold uppercase tracking-widest">
+                                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-alphabag-muted font-semibold uppercase tracking-wider">
                                     <div className="flex items-center gap-1.5"><MapPin size={14} className="text-alphabag-yellow" /> {profileUser?.location || "Web3 Native"}</div>
                                     <div className="flex items-center gap-1.5"><Globe size={14} className="text-alphabag-yellow" /> {profileUser?.website || "alphabag.com"}</div>
                                     <div className="flex items-center gap-1.5"><Calendar size={14} className="text-alphabag-yellow" /> Joined March 2026</div>
@@ -471,37 +471,37 @@ export const Profile: React.FC = () => {
                             </>
                         )}
 
-                        <div className="flex gap-2 pt-2 border-t border-white/5">
+                        <div className="flex gap-4 pt-2 border-t border-alphabag-border">
                             <div className="flex items-center gap-1.5">
-                                <span className="text-white font-black text-sm">4.2K</span>
-                                <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Following</span>
+                                <span className="text-white font-bold text-sm num">4.2K</span>
+                                <span className="text-alphabag-muted text-[11px] font-semibold uppercase tracking-wider">Following</span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <span className="text-white font-black text-sm">12.8K</span>
-                                <span className="text-alphabag-muted text-[10px] font-black uppercase tracking-widest">Followers</span>
+                                <span className="text-white font-bold text-sm num">12.8K</span>
+                                <span className="text-alphabag-muted text-[11px] font-semibold uppercase tracking-wider">Followers</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Stats Dashboard */}
-                    <div className="mt-4 grid grid-cols-3 gap-2 pt-4 border-t border-white/5">
-                        <div className="text-center p-2 bg-alphabag-yellow/5 rounded-xl border border-alphabag-yellow/10">
-                            <div className="text-[9px] font-black text-alphabag-yellow uppercase tracking-widest mb-0.5">Rep</div>
-                            <div className="text-base font-black text-white leading-tight">98%</div>
-                            <div className="text-[7px] font-bold text-alphabag-yellow/60 uppercase">Diamond</div>
+                    <div className="mt-4 grid grid-cols-3 gap-2.5 pt-4 border-t border-alphabag-border">
+                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
+                            <div className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider mb-0.5">Rep</div>
+                            <div className="text-base font-bold text-white leading-tight num">98%</div>
+                            <div className="text-[11px] font-semibold text-alphabag-yellow/70 uppercase">Diamond</div>
                         </div>
-                        <div className="text-center p-2 bg-white/5 rounded-xl border border-white/10">
-                            <div className="text-[9px] font-black text-alphabag-muted uppercase tracking-widest mb-0.5">Tokens</div>
+                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
+                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider mb-0.5">Tokens</div>
                             <div className="flex items-center justify-center gap-1">
                                 <Zap size={12} className="text-alphabag-yellow" fill="currentColor" />
-                                <span className="text-base font-black text-white leading-tight">{profileUser?.bagTokens || 100}</span>
+                                <span className="text-base font-bold text-white leading-tight num">{profileUser?.bagTokens || 100}</span>
                             </div>
-                            <div className="text-[7px] font-bold text-alphabag-muted uppercase">Top 1%</div>
+                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase">Top 1%</div>
                         </div>
-                        <div className="text-center p-2 bg-white/5 rounded-xl border border-white/10">
-                            <div className="text-[9px] font-black text-alphabag-muted uppercase tracking-widest mb-0.5">Vetting</div>
-                            <div className="text-base font-black text-alphabag-green leading-tight">LVL 1</div>
-                            <div className="text-[7px] font-bold text-alphabag-muted uppercase">Verified</div>
+                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
+                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider mb-0.5">Vetting</div>
+                            <div className="text-base font-bold text-alphabag-green leading-tight">LVL 1</div>
+                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase">Verified</div>
                         </div>
                     </div>
 
@@ -510,34 +510,34 @@ export const Profile: React.FC = () => {
                         const refCode = profileUser?.referralCode || profileUser?.id?.slice(0, 8) || 'ALPHABAG';
                         const refUrl = `${window.location.origin}/#/?ref=${refCode}`;
                         return (
-                            <div className="mt-4 pt-4 border-t border-white/5">
+                            <div className="mt-4 pt-4 border-t border-alphabag-border">
                                 <div className="flex items-center gap-2 mb-2">
                                     <Users size={13} className="text-alphabag-yellow" />
-                                    <span className="text-[10px] font-black text-alphabag-yellow uppercase tracking-widest">Referral Link</span>
+                                    <span className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider">Referral Link</span>
                                     {profileUser?.referralCount > 0 && (
-                                        <span className="ml-auto text-[9px] font-bold text-alphabag-muted uppercase">
+                                        <span className="ml-auto text-[11px] font-semibold text-alphabag-muted uppercase num">
                                             {profileUser.referralCount} referral{profileUser.referralCount !== 1 ? 's' : ''} · Bonus ITEMS earned
                                         </span>
                                     )}
                                 </div>
-                                <div className="flex items-center gap-2 bg-black/40 border border-white/10 rounded-xl px-3 py-2.5">
+                                <div className="flex items-center gap-2 bg-alphabag-panel border border-alphabag-border rounded-md px-3 py-2">
                                     <span className="flex-1 font-mono text-[11px] text-zinc-400 truncate">{refUrl}</span>
                                     <button
                                         onClick={() => handleCopyRef(refUrl)}
-                                        className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
+                                        className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                                             copied
                                                 ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                                                 : 'bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 hover:bg-alphabag-yellow hover:text-black'
                                         }`}
                                     >
                                         {copied ? (
-                                            <><CheckCircle2 size={11} /> Copied!</>
+                                            <><CheckCircle2 size={12} /> Copied!</>
                                         ) : (
-                                            <><Share2 size={11} /> Copy</>
+                                            <><Share2 size={12} /> Copy</>
                                         )}
                                     </button>
                                 </div>
-                                <p className="text-[9px] text-alphabag-muted mt-1.5 font-medium">
+                                <p className="text-[11px] text-alphabag-muted mt-1.5 font-medium">
                                     Share this link — each signup earns you bonus ITEMS in the active campaign.
                                 </p>
                             </div>
@@ -546,76 +546,75 @@ export const Profile: React.FC = () => {
                 </div>
 
                 {/* Timeline Tabs */}
-                <div className="flex border-b border-white/5 mb-2">
+                <div className="flex border-b border-alphabag-border mb-3">
                     {['Alphas', isFounder ? 'Manifesto' : 'Replies', 'Media'].map((tab) => (
                         <button 
                             key={tab}
-                            className={`px-8 py-4 text-[11px] font-black uppercase tracking-[0.2em] relative transition-colors ${tab === 'Alphas' ? 'text-alphabag-yellow' : 'text-alphabag-muted hover:text-white'}`}
+                            className={`px-6 py-3 text-[11px] font-semibold uppercase tracking-wider relative transition-colors ${tab === 'Alphas' ? 'text-alphabag-yellow' : 'text-alphabag-muted hover:text-white'}`}
                         >
                             {tab}
-                            {tab === 'Alphas' && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-alphabag-yellow rounded-full" />}
+                            {tab === 'Alphas' && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-alphabag-yellow rounded-full" />}
                         </button>
                     ))}
                 </div>
 
                 {/* Timeline Content */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     {isFounder && project && (
                         <div className="group relative">
-                            <div className="flex items-center gap-2 mb-2 ml-4">
+                            <div className="flex items-center gap-2 mb-2 ml-2">
                                 <Zap size={12} className="text-alphabag-yellow" fill="currentColor" />
-                                <span className="text-[10px] font-black text-alphabag-yellow uppercase tracking-widest">Pinned Manifesto</span>
+                                <span className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider">Pinned Manifesto</span>
                             </div>
 
-                            <div className="glass-panel p-0 border-2 border-alphabag-yellow/30 bg-alphabag-black  relative overflow-hidden rounded-3xl">
-                                <div className="h-32 w-full relative overflow-hidden bg-alphabag-darkgray/30 border-b border-white/5">
+                            <div className="p-0 border border-alphabag-border bg-alphabag-card relative overflow-hidden rounded-lg">
+                                <div className="h-32 w-full relative overflow-hidden bg-alphabag-panel border-b border-alphabag-border">
                                     {project.bannerUrl ? (
                                         <img src={project.bannerUrl} alt="Banner" className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-alphabag-yellow/20 to-transparent flex items-center justify-center">
-                                            <Rocket size={32} className="text-alphabag-yellow/20" />
+                                        <div className="w-full h-full bg-alphabag-panel flex items-center justify-center">
+                                            <Rocket size={32} className="text-alphabag-muted opacity-30" />
                                         </div>
                                     )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black to-transparent"></div>
                                 </div>
 
                                 <div className="p-4 pt-4">
-                                    <div className="flex items-center gap-2 mb-2 relative -mt-12">
-                                        <div className="w-16 h-16 bg-alphabag-black border-2 border-alphabag-yellow rounded-2xl flex items-center justify-center font-black text-2xl text-alphabag-yellow shadow-2xl overflow-hidden">
+                                    <div className="flex items-center gap-3 mb-3 relative -mt-10">
+                                        <div className="w-14 h-14 bg-alphabag-card border-2 border-alphabag-yellow rounded-lg flex items-center justify-center font-bold text-xl text-alphabag-yellow shadow overflow-hidden">
                                             {project.logoUrl ? (
                                                 <img src={project.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                             ) : (
-                                                <span className="text-2xl font-black">{project.symbol[0]}</span>
+                                                <span className="text-xl font-bold">{project.symbol[0]}</span>
                                             )}
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
+                                            <h3 className="text-lg font-bold uppercase tracking-tight flex items-center gap-2">
                                                 {project.name} <span className="text-alphabag-yellow">({project.symbol})</span>
                                             </h3>
                                         </div>
                                     </div>
 
-                                    <p className="text-zinc-200 text-lg font-bold leading-snug mb-2 italic border-l-4 border-alphabag-yellow pl-4">
+                                    <p className="text-zinc-200 text-base font-semibold leading-snug mb-2 italic border-l-2 border-alphabag-yellow pl-3">
                                         "{project.theHook}"
                                     </p>
 
-                                    <p className="text-zinc-400 text-sm leading-relaxed mb-2 line-clamp-3">
+                                    <p className="text-zinc-400 text-xs leading-relaxed mb-3 line-clamp-3">
                                         {project.description}
                                     </p>
 
                                     <div className="flex flex-wrap gap-2">
                                         <Button 
                                             onClick={() => window.open(project.buyLink, '_blank', 'noopener,noreferrer')}
-                                            className="bg-alphabag-yellow text-black font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3  shadow-lg hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all"
+                                            className="bg-alphabag-yellow text-black font-semibold uppercase tracking-wider text-xs rounded-md px-6 py-2 transition-all"
                                         >
                                             Buy $ {project.symbol}
                                         </Button>
                                         <Button 
                                             variant="outline"
                                             onClick={() => window.open(project.websiteUrl, '_blank', 'noopener,noreferrer')}
-                                            className="border-white/10 text-white hover:bg-white/5 font-black uppercase tracking-widest text-[11px] rounded-full px-8 py-3"
+                                            className="border-alphabag-border text-white hover:bg-alphabag-hover font-semibold uppercase tracking-wider text-xs rounded-md px-6 py-2"
                                         >
-                                            <Globe size={16} className="mr-2" /> Website
+                                            <Globe size={14} className="mr-1.5" /> Website
                                         </Button>
                                     </div>
                                 </div>
@@ -625,18 +624,18 @@ export const Profile: React.FC = () => {
 
                     {posts.length > 0 ? (
                         posts.map(post => (
-                            <div key={post.id} className="p-4 border-b border-white/5 hover:bg-white/[0.02] transition-colors rounded-2xl">
-                                <div className="flex gap-2">
-                                    <div className="w-10 h-10 flex-shrink-0 bg-alphabag-black border border-white/10 rounded-full flex items-center justify-center font-black text-alphabag-yellow uppercase">
+                            <div key={post.id} className="p-4 border border-alphabag-border bg-alphabag-card hover:bg-alphabag-hover transition-colors rounded-lg">
+                                <div className="flex gap-3">
+                                    <div className="w-9 h-9 flex-shrink-0 bg-alphabag-panel border border-alphabag-border rounded-full flex items-center justify-center font-bold text-alphabag-yellow uppercase text-xs">
                                         {getProfileInitial(profileUser)}
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <span className="font-bold text-white text-[15px]">{getProfileName(profileUser)}</span>
+                                            <span className="font-semibold text-white text-sm">{getProfileName(profileUser)}</span>
                                             {isFounder && <CheckCircle2 size={14} className="text-alphabag-yellow" fill="currentColor" />}
-                                            <span className="text-alphabag-muted text-[14px]">@{getProfileHandle(profileUser)}_member</span>
+                                            <span className="text-alphabag-muted text-xs">@{getProfileHandle(profileUser)}_member</span>
                                         </div>
-                                        <p className="text-zinc-200 text-[15px] leading-relaxed mb-2">
+                                        <p className="text-zinc-200 text-sm leading-relaxed">
                                             {post.content}
                                         </p>
                                     </div>
@@ -644,10 +643,10 @@ export const Profile: React.FC = () => {
                             </div>
                         ))
                     ) : (
-                        <div className="p-20 text-center">
-                            <MessageSquare size={48} className="text-alphabag-muted mx-auto mb-2 opacity-20" />
-                            <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">No Alphas Yet</h3>
-                            <p className="text-sm text-alphabag-muted">This node hasn't broadcasted any intelligence yet.</p>
+                        <div className="p-16 text-center border border-dashed border-alphabag-border rounded-lg">
+                            <MessageSquare size={36} className="text-alphabag-muted mx-auto mb-2 opacity-30" />
+                            <h3 className="text-sm font-bold text-white uppercase tracking-tight mb-1">No Alphas Yet</h3>
+                            <p className="text-xs text-alphabag-muted">This node hasn't broadcasted any intelligence yet.</p>
                         </div>
                     )}
                 </div>

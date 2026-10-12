@@ -71,7 +71,7 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
           theme: 'dark',
           style: '1',
           locale: 'en',
-          toolbar_bg: '#0b1220',
+          toolbar_bg: '#181A20',
           enable_publishing: false,
           hide_side_toolbar: false,
           allow_symbol_change: true,
@@ -85,30 +85,30 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
   }, [symbol, interval, widgetId]);
 
   return (
-    <div className={`w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0b0f17] shadow-2xl transition-all ${isFullscreen ? 'fixed inset-4 z-50 rounded-2xl shadow-2xl' : 'relative'}`}>
+    <div className={`w-full overflow-hidden rounded-[6px] border border-[#2B313A] bg-[#181A20] ${isFullscreen ? 'fixed inset-3 z-50 rounded-[6px]' : 'relative'}`}>
       {/* Chart Control Bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-[#0e141f] border-b border-white/5">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow">
-            <BarChart3 size={14} />
+      <div className="flex items-center justify-between px-3 py-2 bg-[#14171D] border-b border-[#2B313A]">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
+            <BarChart3 size={13} />
           </div>
-          <div>
-            <span className="text-xs font-bold text-white tracking-wide font-mono">{symbol}</span>
-            <span className="text-[10px] text-alphabag-subtext ml-2">Candlestick & Indicator Suite</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-alphabag-text tracking-wide num">{symbol}</span>
+            <span className="text-[11px] text-alphabag-subtext hidden sm:inline">Advanced Market Chart</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {/* Timeframe selector */}
-          <div className="flex bg-[#0b0f17] border border-white/10 rounded-lg p-0.5">
+          <div className="flex bg-[#0B0E11] border border-[#2B313A] rounded p-0.5 gap-0.5">
             {TIMEFRAMES.map((tf) => (
               <button
                 key={tf.value}
                 onClick={() => setInterval(tf.value)}
-                className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase transition-all ${
+                className={`px-2 py-0.5 rounded text-[11px] font-semibold transition-colors ${
                   interval === tf.value
-                    ? 'bg-alphabag-yellow text-alphabag-black shadow-sm'
-                    : 'text-alphabag-subtext hover:text-white'
+                    ? 'bg-[#202630] text-alphabag-text'
+                    : 'text-alphabag-subtext hover:text-alphabag-text'
                 }`}
               >
                 {tf.label}
@@ -118,7 +118,7 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
 
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-alphabag-subtext hover:text-white border border-white/10 text-xs transition-all"
+            className="p-1 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-subtext hover:text-alphabag-text border border-[#2B313A] transition-colors"
             title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
           >
             {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
@@ -128,8 +128,8 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
 
       <div
         ref={containerRef}
-        className="w-full bg-[#0b0f17]"
-        style={{ height: isFullscreen ? 'calc(100% - 45px)' : height }}
+        className="w-full bg-[#181A20]"
+        style={{ height: isFullscreen ? 'calc(100% - 41px)' : height }}
       />
     </div>
   );

@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #2548",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: undefined, Navy Blue, undefined, Glow Orange, Glossy, None, undefined.",
+  "image": "/alphabag-bag-collection/images/2548.svg",
+  "dna": "alphabag-bag-2548-Common-undefined-Navy Blue-undefined-Glow Orange-Glossy-None-undefined",
+  "edition": 2548,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

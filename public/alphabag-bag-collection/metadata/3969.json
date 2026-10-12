@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #3969",
+  "description": "A collectible AlphaBAG duffel NFT with Private OG rarity and layered traits: undefined, undefined, undefined, White Solid Diagonal, Glossy, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3969.svg",
+  "dna": "alphabag-bag-3969-Private OG-undefined-undefined-undefined-White Solid Diagonal-Glossy-None-White Tag Black Text",
+  "edition": 3969,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Private OG"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

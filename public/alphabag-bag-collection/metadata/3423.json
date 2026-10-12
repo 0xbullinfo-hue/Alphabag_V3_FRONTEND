@@ -1,0 +1,42 @@
+{
+  "name": "AlphaBAG Duffel #3423",
+  "description": "A collectible AlphaBAG duffel NFT with Rare rarity and layered traits: Sunset Orange, Black, Gold Metal, Double Stripe, Matte, None, White Tag Gold Text.",
+  "image": "/alphabag-bag-collection/images/3423.svg",
+  "dna": "alphabag-bag-3423-Rare-Sunset Orange-Black-Gold Metal-Double Stripe-Matte-None-White Tag Gold Text",
+  "edition": 3423,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Gold Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Gold Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

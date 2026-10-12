@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #3976",
+  "description": "A collectible AlphaBAG duffel NFT with Private OG rarity and layered traits: Sunset Orange, undefined, undefined, Glow Orange, Glossy, None, undefined.",
+  "image": "/alphabag-bag-collection/images/3976.svg",
+  "dna": "alphabag-bag-3976-Private OG-Sunset Orange-undefined-undefined-Glow Orange-Glossy-None-undefined",
+  "edition": 3976,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Private OG"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

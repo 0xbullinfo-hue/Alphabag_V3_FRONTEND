@@ -1,0 +1,38 @@
+{
+  "name": "AlphaBAG Duffel #1304",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Midnight Black, Black, undefined, undefined, undefined, None, undefined.",
+  "image": "/alphabag-bag-collection/images/1304.svg",
+  "dna": "alphabag-bag-1304-Common-Midnight Black-Black-undefined-undefined-undefined-None-undefined",
+  "edition": 1304,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Midnight Black"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

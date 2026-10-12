@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3555",
+  "description": "A collectible AlphaBAG duffel NFT with Rare rarity and layered traits: Midnight Black, Orange, Silver Metal, Glow Orange, Holographic, undefined, undefined.",
+  "image": "/alphabag-bag-collection/images/3555.svg",
+  "dna": "alphabag-bag-3555-Rare-Midnight Black-Orange-Silver Metal-Glow Orange-Holographic-undefined-undefined",
+  "edition": 3555,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Midnight Black"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

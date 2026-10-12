@@ -160,14 +160,6 @@ export const AlphaScreener: React.FC = () => {
         return `${prefix}${val.toFixed(2)}%`;
     };
 
-    const getChainColor = (chain: string) => {
-        const c = chain.toLowerCase();
-        if (c === 'solana') return 'from-[#9945FF] to-[#14F195] text-black';
-        if (c === 'bsc') return 'from-[#F3BA2F] to-[#D89F0E] text-black';
-        if (c === 'base') return 'from-[#0052FF] to-[#003DC6] text-white';
-        if (c === 'ethereum') return 'from-[#627EEA] to-[#3B4E99] text-white';
-        return 'from-alphabag-subtext to-alphabag-muted text-white';
-    };
 
     // Filter and Sort pairs
     const getFilteredAndSorted = useCallback(() => {
@@ -215,13 +207,13 @@ export const AlphaScreener: React.FC = () => {
                         <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
                             Alpha Screener
                         </h1>
-                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow text-[10px] font-medium px-2 py-0.5 rounded border border-alphabag-yellow/25 flex items-center gap-1.5 shrink-0">
+                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow text-[11px] font-semibold px-2 py-0.5 rounded-[2px] border border-alphabag-yellow/25 flex items-center gap-1.5 shrink-0">
                             <span className="w-1.5 h-1.5 bg-alphabag-yellow rounded-full"></span>
                             DEX Gainers
                         </span>
                         <DataSourceBadge />
                         {lastUpdated && (
-                            <span className="text-[10px] text-alphabag-subtext font-medium hidden sm:inline">
+                            <span className="text-[11px] text-alphabag-subtext font-medium hidden sm:inline num">
                                 Last synced: {lastUpdated}
                             </span>
                         )}
@@ -295,56 +287,56 @@ export const AlphaScreener: React.FC = () => {
 
             {/* ── Highlighted Specific CA Lookup Result ── */}
             {searchingCa && (
-                <div className="bg-alphabag-darkgray border border-dashed border-alphabag-yellow/30 rounded-lg p-4 text-center">
+                <div className="bg-[#181A20] border border-dashed border-alphabag-yellow/30 rounded-[6px] p-4 text-center">
                     <div className="w-5 h-5 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                    <p className="text-[10px] text-alphabag-subtext font-black uppercase tracking-wider">Querying blockchain for contract address details...</p>
+                    <p className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">Querying blockchain for contract address details...</p>
                 </div>
             )}
             
             {!searchingCa && searchedPair && (
-                <div className="bg-alphabag-yellow/5 border-2 border-alphabag-yellow/30 rounded-lg p-4 animate-in slide-in-from-top-2 duration-300">
-                    <div className="text-[9px] text-alphabag-yellow font-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
-                        <Globe size={11} />
-                        FOUND VIA DIRECT BLOCKCHAIN CA LOOKUP
+                <div className="bg-[#181A20] border border-alphabag-yellow/30 rounded-[6px] p-4">
+                    <div className="text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                        <Globe size={12} />
+                        DIRECT ON-CHAIN CONTRACT LOOKUP
                     </div>
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div className="flex items-center space-x-2">
-                            <div className="w-10 h-10 bg-alphabag-yellow text-black rounded flex items-center justify-center font-black text-sm">
+                            <div className="w-8 h-8 bg-alphabag-yellow text-[#0B0E11] rounded flex items-center justify-center font-bold text-xs">
                                 {searchedPair.baseToken.symbol?.[0] || 'T'}
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
-                                    <span className="font-bold text-white text-base">{searchedPair.baseToken.name}</span>
-                                    <span className={`text-[9px] font-black px-2 py-0.5 rounded bg-gradient-to-r ${getChainColor(searchedPair.chainId)}`}>
+                                    <span className="font-semibold text-alphabag-text text-sm">{searchedPair.baseToken.name}</span>
+                                    <span className="text-[11px] font-semibold px-1.5 py-0.2 rounded-[2px] bg-white/5 text-alphabag-subtext border border-white/10 uppercase">
                                         {searchedPair.chainId.toUpperCase()}
                                     </span>
-                                    <span className="text-[9px] text-alphabag-muted bg-alphabag-gray px-1.5 py-0.5 rounded font-semibold uppercase">{searchedPair.dexId}</span>
+                                    <span className="text-[11px] text-alphabag-subtext bg-[#202630] px-1.5 py-0.2 rounded-[2px] font-medium uppercase">{searchedPair.dexId}</span>
                                 </div>
-                                <div className="text-xs text-alphabag-muted font-mono mt-0.5">{searchedPair.baseToken.address}</div>
+                                <div className="text-xs text-alphabag-subtext num mt-0.5">{searchedPair.baseToken.address}</div>
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-2 text-sm">
+                        <div className="flex flex-wrap items-center gap-3 text-xs">
                             <div>
-                                <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">Price</div>
-                                <div className="font-mono font-bold text-white mt-0.5">${Number(searchedPair.priceUsd) < 0.01 ? Number(searchedPair.priceUsd).toFixed(8) : Number(searchedPair.priceUsd).toFixed(4)}</div>
+                                <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">Price</div>
+                                <div className="num font-semibold text-alphabag-text mt-0.5">${Number(searchedPair.priceUsd) < 0.01 ? Number(searchedPair.priceUsd).toFixed(8) : Number(searchedPair.priceUsd).toFixed(4)}</div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase()} Change</div>
-                                <div className={`font-mono font-bold mt-0.5 ${Number(searchedPair.priceChange?.[timeframe] || 0) >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase()} Change</div>
+                                <div className={`num font-semibold mt-0.5 ${Number(searchedPair.priceChange?.[timeframe] || 0) >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                     {formatPriceChange(searchedPair.priceChange?.[timeframe])}
                                 </div>
                             </div>
                             <div>
-                                <div className="text-[10px] text-alphabag-muted font-bold uppercase tracking-wider">Liquidity</div>
-                                <div className="font-mono font-bold text-white mt-0.5">{formatUsd(searchedPair.liquidity?.usd)}</div>
+                                <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">Liquidity</div>
+                                <div className="num font-semibold text-alphabag-text mt-0.5">{formatUsd(searchedPair.liquidity?.usd)}</div>
                             </div>
                             <button
                                 onClick={() => window.open(searchedPair.url, '_blank', 'noopener,noreferrer')}
-                                className="bg-alphabag-yellow text-black hover:bg-[#e0bd2e] h-9 px-4 rounded font-black text-xs uppercase tracking-widest transition-all self-center flex items-center gap-1.5 shadow-md shadow-alphabag-yellow/10 active:scale-[0.98]"
+                                className="bg-alphabag-yellow text-[#0B0E11] hover:bg-[#FCD535] h-8 px-3 rounded font-semibold text-xs uppercase tracking-wider transition-colors self-center flex items-center gap-1.5"
                             >
                                 <ExternalLink size={12} />
-                                Trade Token
+                                DexScreener
                             </button>
                         </div>
                     </div>
@@ -352,82 +344,82 @@ export const AlphaScreener: React.FC = () => {
             )}
 
             {/* ── Main Gainers Table ── */}
-            <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+            <div className="rounded-[6px] border border-[#2B313A] bg-[#181A20] overflow-hidden">
                 <div className="overflow-x-auto custom-scrollbar">
                     <table className="w-full text-left min-w-[900px]">
                         <thead>
-                            <tr className="border-b border-alphabag-gray bg-alphabag-dark">
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-14 text-center"># Rank</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-64 text-left">Token</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">Price (USD)</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase() === 'H24' ? '24h' : timeframe === 'h1' ? '1h' : '6h'} Change</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">24h Volume</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">Liquidity</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext text-right">FDV</th>
-                                <th className="px-4 py-3 text-xs font-semibold text-alphabag-subtext w-24"></th>
+                            <tr className="border-b border-[#2B313A] bg-[#14171D]">
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext w-12 text-center uppercase tracking-wider">#</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext w-64 text-left uppercase tracking-wider">Token</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext text-right uppercase tracking-wider">Price (USD)</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext text-right uppercase tracking-wider">{timeframe === 'm5' ? '5m' : timeframe.toUpperCase() === 'H24' ? '24h' : timeframe === 'h1' ? '1h' : '6h'} Change</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext text-right uppercase tracking-wider">24h Volume</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext text-right uppercase tracking-wider">Liquidity</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext text-right uppercase tracking-wider">FDV</th>
+                                <th className="px-3.5 py-2.5 text-[11px] font-semibold text-alphabag-subtext w-16"></th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-alphabag-gray text-[14px]">
+                        <tbody className="divide-y divide-[#2B313A]/50 text-xs">
                             {loading ? (
                                 <tr>
-                                    <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
-                                        <div className="w-8 h-8 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-                                        <p className="text-xs text-alphabag-subtext font-medium animate-pulse">Synchronizing DexScreener Live Feeds...</p>
+                                    <td colSpan={8} className="px-4 py-16 text-center text-alphabag-subtext">
+                                        <div className="w-6 h-6 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                                        <p className="text-xs text-alphabag-subtext font-medium">Synchronizing DexScreener Live Feeds...</p>
                                     </td>
                                 </tr>
                             ) : displayedPairs.length === 0 ? (
                                 <tr>
-                                    <td colSpan={8} className="px-4 py-20 text-center text-alphabag-subtext">
+                                    <td colSpan={8} className="px-4 py-16 text-center text-alphabag-subtext">
                                         <p className="text-xs text-alphabag-subtext font-medium">No trading pairs matched filters</p>
                                     </td>
                                 </tr>
                             ) : (
                                 displayedPairs.map((pair, index) => (
-                                    <tr key={pair.pairAddress} className="hover:bg-alphabag-gray/40 transition-colors group">
-                                        <td className="px-4 py-3 font-medium text-alphabag-subtext text-center text-xs">
+                                    <tr key={pair.pairAddress} className="hover:bg-[#202630] transition-colors group">
+                                        <td className="px-3.5 py-2.5 font-medium text-alphabag-subtext text-center text-xs num">
                                             {index + 1}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-3.5 py-2.5">
                                             <div className="flex items-center space-x-2">
-                                                <div className="w-8 h-8 bg-alphabag-black border border-white/5 rounded flex items-center justify-center font-semibold text-alphabag-yellow relative overflow-hidden text-xs shrink-0">
+                                                <div className="w-7 h-7 bg-[#202630] border border-[#2B313A] rounded flex items-center justify-center font-semibold text-alphabag-yellow text-xs shrink-0">
                                                     {pair.baseToken?.symbol?.[0] || '?'}
                                                 </div>
                                                 <div className="min-w-0">
                                                     <div className="flex items-center gap-1.5 flex-wrap">
-                                                        <span className="font-semibold text-white text-[14px] uppercase tracking-tight truncate max-w-[120px]">{pair.baseToken?.symbol}</span>
-                                                        <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded leading-none bg-gradient-to-r ${getChainColor(pair.chainId)}`}>
-                                                            {pair.chainId === 'bsc' ? 'BSC' : pair.chainId?.charAt(0).toUpperCase() + pair.chainId?.slice(1)}
+                                                        <span className="font-semibold text-alphabag-text text-xs uppercase tracking-tight truncate max-w-[120px]">{pair.baseToken?.symbol}</span>
+                                                        <span className="text-[11px] font-semibold px-1.5 py-0.2 rounded-[2px] bg-white/5 text-alphabag-subtext border border-white/10 uppercase">
+                                                            {pair.chainId === 'bsc' ? 'BSC' : pair.chainId?.toUpperCase()}
                                                         </span>
-                                                        <span className="text-[9px] text-alphabag-subtext bg-alphabag-gray px-1.5 rounded leading-none py-0.5 font-medium">{pair.dexId}</span>
+                                                        <span className="text-[11px] text-alphabag-subtext bg-[#202630] px-1.5 py-0.2 rounded-[2px] font-medium uppercase">{pair.dexId}</span>
                                                     </div>
-                                                    <div className="text-[12px] text-alphabag-subtext truncate max-w-[180px] mt-0.5">{pair.baseToken?.name}</div>
+                                                    <div className="text-[11px] text-alphabag-subtext truncate max-w-[180px] mt-0.5">{pair.baseToken?.name}</div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-4 py-3 text-right font-semibold text-white tabular-data text-[14px]">
+                                        <td className="px-3.5 py-2.5 text-right font-semibold text-alphabag-text num">
                                             ${Number(pair.priceUsd) < 0.01 ? Number(pair.priceUsd).toFixed(8) : Number(pair.priceUsd).toFixed(4)}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-semibold tabular-data text-[14px]">
+                                        <td className="px-3.5 py-2.5 text-right font-semibold num">
                                             <span className={Number(pair.priceChange?.[timeframe] || 0) >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}>
                                                 {formatPriceChange(pair.priceChange?.[timeframe])}
                                             </span>
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
+                                        <td className="px-3.5 py-2.5 text-right font-medium text-alphabag-subtext num">
                                             {formatUsd(pair.volume?.h24)}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
+                                        <td className="px-3.5 py-2.5 text-right font-medium text-alphabag-subtext num">
                                             {formatUsd(pair.liquidity?.usd)}
                                         </td>
-                                        <td className="px-4 py-3 text-right font-medium text-alphabag-subtext tabular-data text-[14px]">
+                                        <td className="px-3.5 py-2.5 text-right font-medium text-alphabag-subtext num">
                                             {formatUsd(pair.fdv)}
                                         </td>
-                                        <td className="px-4 py-3 text-right">
+                                        <td className="px-3.5 py-2.5 text-right">
                                             <button 
                                                 onClick={() => window.open(pair.url, '_blank', 'noopener,noreferrer')}
-                                                className="p-1.5 text-alphabag-yellow hover:text-black hover:bg-alphabag-yellow transition-all border border-alphabag-yellow/30 hover:border-alphabag-yellow rounded opacity-0 group-hover:opacity-100 flex items-center justify-center inline-block"
+                                                className="p-1.5 text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630] transition-colors rounded opacity-0 group-hover:opacity-100 flex items-center justify-center ml-auto"
                                                 title="View on DexScreener"
                                             >
-                                                <ArrowUpRight size={13} strokeWidth={2.5} />
+                                                <ArrowUpRight size={13} strokeWidth={2} />
                                             </button>
                                         </td>
                                     </tr>

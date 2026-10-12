@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #440",
+  "description": "A collectible AlphaBAG duffel NFT with Beta Tester rarity and layered traits: Beta Black, Navy Blue, Neon Glow, Glitch Digital, undefined, Beta Tester, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/440.svg",
+  "dna": "alphabag-bag-440-Beta Tester-Beta Black-Navy Blue-Neon Glow-Glitch Digital-undefined-Beta Tester-White Tag Black Text",
+  "edition": 440,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Beta Tester"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Beta Black"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Neon Glow"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glitch Digital"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "Beta Tester"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

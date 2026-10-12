@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #1926",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Arctic White, Orange, undefined, Double Stripe, Matte, None, undefined.",
+  "image": "/alphabag-bag-collection/images/1926.svg",
+  "dna": "alphabag-bag-1926-Common-Arctic White-Orange-undefined-Double Stripe-Matte-None-undefined",
+  "edition": 1926,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

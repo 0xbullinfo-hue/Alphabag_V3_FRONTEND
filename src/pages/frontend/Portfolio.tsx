@@ -1,7 +1,7 @@
-import { Briefcase,ChevronDown,ChevronUp,Download,Eye,Layers,PieChart as PieChartIcon,Plus,TrendingUp } from 'lucide-react';
-import React,{ useEffect,useState } from 'react';
+import { Briefcase, ChevronDown, ChevronUp, Download, Eye, Layers, PieChart as PieChartIcon, Plus, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Area,AreaChart,CartesianGrid,Cell,Pie,PieChart as RePieChart,Tooltip as ReTooltip,ResponsiveContainer,XAxis,YAxis } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip as ReTooltip, XAxis, YAxis } from 'recharts';
 import { Button } from '../../components/ui/Button';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
 import { PageIcon } from '../../components/ui/PageIcon';
@@ -9,8 +9,9 @@ import { useWallet } from '../../context/WalletContext';
 import { fetchPortfolioHistory } from '../../services/mockData';
 import { PortfolioHistoryPoint } from '../../types';
 import { HistoryPage } from './History';
+import { formatUsd } from '../../lib/formatters';
 
-const COLORS = ['#FCD535', '#0ECB81', '#3B82F6', '#8B5CF6', '#F6465D', '#848E9C'];
+const COLORS = ['#F0B90B', '#3B82F6', '#10B981', '#EC4899', '#8B5CF6', '#F59E0B', '#6366F1'];
 
 export const Portfolio: React.FC = () => {
     const { portfolioItems, trackedWallets, isSyncing, hideSmallBalances, toggleHideSmallBalances } = useWallet();
@@ -37,8 +38,6 @@ export const Portfolio: React.FC = () => {
     const totalCost = safePortfolioItems.reduce((acc, item) => acc + ((item?.amount || 0) * (item?.avgBuyPrice || item?.currentPrice || 0)), 0);
     const totalPnLPercent = totalCost > 0 ? (totalPnL / totalCost) * 100 : 0;
 
-    // True 24h portfolio PnL requires snapshot history (Patch 07)
-
     // Find Best/Worst Performers
     const knownCostBasisItems = safePortfolioItems.filter(item => item?.costBasisKnown);
     const sortedByPnL = [...knownCostBasisItems].filter(item => (item?.amount || 0) > 0).sort((a, b) => b.pnlPercent - a.pnlPercent);
@@ -60,7 +59,6 @@ export const Portfolio: React.FC = () => {
                 .catch((err) => {
                     console.error('[Portfolio] Error fetching history:', err);
                     setLoadingHistory(false);
-                    // Continue with empty history rather than crashing
                 });
         }
     }, [activeWallets.length, timeframe]);
@@ -71,20 +69,20 @@ export const Portfolio: React.FC = () => {
 
     if (activeWallets.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 space-y-2 max-w-2xl mx-auto animate-fade-in">
-                <div className="w-24 h-24 bg-alphabag-gray/50 rounded-3xl flex items-center justify-center text-alphabag-yellow animate-pulse-slow shadow-inner border border-alphabag-gray">
-                    <Briefcase size={48} fill="currentColor" />
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 space-y-3 max-w-xl mx-auto">
+                <div className="w-12 h-12 bg-[#202630] rounded-[6px] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
+                    <Briefcase size={22} />
                 </div>
-                <div className="space-y-2">
-                    <h1 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">Initialize Tracking Hub</h1>
-                    <p className="text-alphabag-subtext font-medium leading-relaxed">
-                        AlphaBAG professional hub synchronizes your global holdings across 100+ chains via read-only wallet addresses. Add a wallet to start monitoring your performance.
+                <div className="space-y-1.5">
+                    <h1 className="text-xl font-bold text-alphabag-text uppercase tracking-tight">Initialize Portfolio Tracking</h1>
+                    <p className="text-alphabag-subtext text-xs leading-relaxed max-w-md">
+                        AlphaBAG synchronizes your multi-chain holdings across connected wallets and API keys via read-only telemetry.
                     </p>
                 </div>
 
-                <div className="w-full">
-                    <Button size="lg" className="px-10 py-5 font-black uppercase tracking-widest shadow-2xl bg-alphabag-yellow text-alphabag-black hover:bg-alphabag-yellowHover" onClick={handleManageConnections}>
-                        <Plus className="mr-2" size={20} /> Add Tracked Wallet
+                <div className="w-full max-w-xs pt-2">
+                    <Button size="md" className="w-full font-semibold" onClick={handleManageConnections}>
+                        <Plus className="mr-1.5" size={16} /> Add Tracked Wallet
                     </Button>
                 </div>
             </div>
@@ -92,61 +90,59 @@ export const Portfolio: React.FC = () => {
     }
 
     return (
-        <div className="space-y-2 animate-in fade-in duration-700 pb-20 w-full">
-
-
+        <div className="space-y-3 pb-16 w-full">
 
             {/* 1. Header Area */}
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <PageIcon name="portfolio" size={40} />
-                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Portfolio</h1>
-                        <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Unified</span>
+                    <div className="flex items-center gap-2 mb-1.5">
+                        <PageIcon name="portfolio" size={32} />
+                        <h1 className="text-xl font-bold text-alphabag-text tracking-tight">Portfolio</h1>
+                        <span className="bg-emerald-500/10 text-alphabag-green text-[11px] font-semibold uppercase px-2 py-0.5 rounded-[2px] border border-emerald-500/20">Unified</span>
                         {hasMockData ? (
-                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Demo Data</span>
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[11px] font-semibold uppercase px-2 py-0.5 rounded-[2px] border border-alphabag-yellow/20">Demo Data</span>
                         ) : (
-                            <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">{isSyncing ? 'Syncing…' : 'Live Sync'}</span>
+                            <span className="bg-emerald-500/10 text-alphabag-green text-[11px] font-semibold uppercase px-2 py-0.5 rounded-[2px] border border-emerald-500/20">{isSyncing ? 'Syncing…' : 'Live Sync'}</span>
                         )}
                         <DataSourceBadge className="ml-auto" actuallyMock={hasMockData} />
                     </div>
 
                     <div className="flex items-baseline gap-2">
-                        <h2 className="text-4xl font-semibold text-alphabag-text tracking-tight tabular-nums flex items-center gap-2 truncate">
-                            ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        <h2 className="text-3xl font-bold text-alphabag-text tracking-tight num flex items-center gap-2 truncate">
+                            {formatUsd(totalValue)}
                             <Eye size={16} className="text-alphabag-subtext cursor-pointer hover:text-alphabag-text transition-colors shrink-0" />
                         </h2>
                     </div>
                     
-                    <div className="flex items-center gap-2 mt-2">
-                        <div className="flex items-center px-3 py-1 rounded-md text-[11px] font-semibold tracking-wider uppercase border bg-alphabag-gray/40 text-alphabag-subtext border-alphabag-gray">
-                            <span className="text-xs text-alphabag-subtext">24h PnL unavailable</span>
+                    <div className="flex items-center gap-2 mt-1.5">
+                        <div className="flex items-center px-2 py-0.5 rounded-[2px] text-[11px] font-medium border bg-[#202630] text-alphabag-subtext border-[#2B313A]">
+                            <span className="text-[11px] text-alphabag-subtext">24h PnL snapshot active</span>
                         </div>
-                        <span className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">Requires snapshot history</span>
+                        <span className="text-[11px] text-alphabag-subtext font-medium">Real-time valuation</span>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-sm font-semibold">
+                <div className="flex items-center gap-2 text-xs font-medium">
                     <div className="flex items-center gap-2 mr-2">
-                        <span className="text-[11px] text-alphabag-subtext uppercase font-semibold tracking-wider">Charts</span>
+                        <span className="text-[11px] text-alphabag-subtext uppercase font-semibold">Charts</span>
                         <div
-                            className={`w-10 h-5 rounded-full flex items-center px-1 cursor-pointer transition-all duration-300 ${showCharts ? 'bg-alphabag-yellow' : 'bg-alphabag-gray'}`}
+                            className={`w-9 h-5 rounded-full flex items-center px-0.5 cursor-pointer transition-colors ${showCharts ? 'bg-alphabag-yellow' : 'bg-[#2B313A]'}`}
                             onClick={() => setShowCharts(!showCharts)}
                         >
-                            <div className={`w-3 h-3 bg-alphabag-dark rounded-full shadow-sm transition-transform duration-300 ${showCharts ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                            <div className={`w-4 h-4 bg-[#0B0E11] rounded-full transition-transform ${showCharts ? 'translate-x-4' : 'translate-x-0'}`}></div>
                         </div>
                     </div>
 
                     <button
                         onClick={handleManageConnections}
-                        className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] active:scale-[0.98] border-none rounded-md px-5 py-2 font-semibold text-[11px] uppercase tracking-wider transition-all"
+                        className="bg-alphabag-yellow text-[#0B0E11] hover:bg-[#FCD535] rounded px-4 py-1.5 font-semibold text-xs uppercase tracking-wider transition-colors"
                     >
                         Manage
                     </button>
                     <button
                         onClick={() => {
                             const csvContent = "data:text/csv;charset=utf-8,Date,Portfolio Value\n" +
-                                history.map(h => `${new Date(h.timestamp).toLocaleDateString()},${h.value}`).join("\n");
+                                history.map((h: PortfolioHistoryPoint) => `${new Date(h.timestamp).toLocaleDateString()},${h.value}`).join("\n");
                             const encodedUri = encodeURI(csvContent);
                             const link = document.createElement("a");
                             link.setAttribute("href", encodedUri);
@@ -155,130 +151,132 @@ export const Portfolio: React.FC = () => {
                             link.click();
                             document.body.removeChild(link);
                         }}
-                        className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-md px-4 py-2 text-xs font-semibold hover:bg-alphabag-muted transition-all flex items-center gap-1.5"
+                        className="bg-[#202630] text-alphabag-text border border-[#2B313A] rounded px-3 py-1.5 text-xs font-medium hover:bg-[#2B313A] transition-colors flex items-center gap-1.5"
                     >
-                        <Download size={14} /> Export
+                        <Download size={13} /> Export
                     </button>
                 </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex gap-2 border-b border-alphabag-gray">
-                <span onClick={() => setActiveTab('overview')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'overview' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Overview</span>
-                <span onClick={() => setActiveTab('transactions')} className={`font-semibold pb-4 -mb-px px-1 cursor-pointer transition-colors text-sm ${activeTab === 'transactions' ? 'text-alphabag-text border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}>Transactions</span>
+            <div className="flex gap-4 border-b border-[#2B313A]">
+                <button 
+                    onClick={() => setActiveTab('overview')} 
+                    className={`font-semibold pb-2.5 -mb-px cursor-pointer text-xs transition-colors ${activeTab === 'overview' ? 'text-alphabag-yellow border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}
+                >
+                    Holdings & Performance
+                </button>
+                <button 
+                    onClick={() => setActiveTab('transactions')} 
+                    className={`font-semibold pb-2.5 -mb-px cursor-pointer text-xs transition-colors ${activeTab === 'transactions' ? 'text-alphabag-yellow border-b-2 border-alphabag-yellow' : 'text-alphabag-subtext hover:text-alphabag-text'}`}
+                >
+                    Transaction Ledger
+                </button>
             </div>
 
             {activeTab === 'overview' ? (
                 <>
                     {/* 2. Metrics 4-Card Row */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
                         {/* All-time profit */}
-                        <div className="glass-panel p-4 group rounded-xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="section-label">PnL Protocol</span>
-                                <div className={`p-1.5 rounded-lg ${totalPnL >= 0 ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}`}>
-                                    <TrendingUp size={14} />
+                        <div className="bg-[#181A20] border border-[#2B313A] p-3.5 rounded-[6px]">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Unrealized PnL</span>
+                                <div className={`p-1 rounded-[2px] ${totalPnL >= 0 ? 'bg-emerald-500/10 text-alphabag-green' : 'bg-rose-500/10 text-alphabag-red'}`}>
+                                    <TrendingUp size={13} />
                                 </div>
                             </div>
                             {hasAnyKnownCostBasis ? (
                                 <>
-                                    <div className={`text-2xl font-black mb-1 tracking-tight tabular-nums ${totalPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                    <div className={`text-xl font-bold mb-1 num ${totalPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                         {totalPnL >= 0 ? '+' : '-'}${Math.abs(totalPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </div>
-                                    <div className={`badge-${totalPnL >= 0 ? 'green' : 'red'} w-fit`}>
+                                    <div className={`text-[11px] font-semibold num ${totalPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                         {totalPnL >= 0 ? '+' : ''}{totalPnLPercent.toFixed(2)}% ALL TIME
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="text-lg font-black mb-1 tracking-tight text-alphabag-subtext">
+                                    <div className="text-base font-semibold mb-1 text-alphabag-subtext">
                                         No cost basis logged
                                     </div>
-                                    <button onClick={handleManageConnections} className="badge-yellow w-fit text-[9px]">
-                                        Log a buy price to see real P&L
+                                    <button onClick={handleManageConnections} className="text-[11px] text-alphabag-yellow hover:underline">
+                                        Log buy price for PnL &rarr;
                                     </button>
                                 </>
                             )}
                         </div>
 
                         {/* Assets */}
-                        <div className="glass-panel p-4 group rounded-xl">
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="section-label">Token Matrix</span>
-                                <div className="p-1.5 rounded-lg bg-white/5 text-alphabag-muted">
-                                    <Layers size={14} />
+                        <div className="bg-[#181A20] border border-[#2B313A] p-3.5 rounded-[6px]">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Token Matrix</span>
+                                <div className="p-1 rounded-[2px] bg-white/5 text-alphabag-subtext">
+                                    <Layers size={13} />
                                 </div>
                             </div>
-                            <div className="text-2xl font-black text-white mb-1 tracking-tight">
-                                {portfolioItems.length} <span className="text-alphabag-muted text-lg">Assets</span>
+                            <div className="text-xl font-bold text-alphabag-text mb-1 num">
+                                {safePortfolioItems.length} <span className="text-alphabag-subtext text-xs font-normal">Assets</span>
                             </div>
-                            <div className="badge-muted w-fit">
-                                TRACKING ON-CHAIN
+                            <div className="text-[11px] text-alphabag-subtext font-medium">
+                                ON-CHAIN BALANCES
                             </div>
                         </div>
 
                         {/* Best Performer */}
-                        <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
-                            
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="section-label">Top Performer</span>
-                                <div className="badge-green">ALPHA</div>
+                        <div className="bg-[#181A20] border border-[#2B313A] p-3.5 rounded-[6px]">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Top Performer</span>
+                                <span className="text-[11px] font-semibold text-alphabag-green bg-emerald-500/10 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/20">LEADER</span>
                             </div>
                             {bestPerformer ? (
                                 <>
-                                    <div className="flex items-center gap-2 mb-2 relative z-10">
-                                        <div className="w-8 h-8 rounded-xl bg-green-500/10 flex items-center justify-center">
-                                            <TrendingUp size={16} className="text-green-400" />
-                                        </div>
-                                        <div className="text-xl font-black text-white uppercase tracking-tight truncate">{bestPerformer.symbol}</div>
+                                    <div className="flex items-center gap-1.5 mb-1">
+                                        <div className="text-base font-bold text-alphabag-text uppercase tracking-tight truncate">{bestPerformer.symbol}</div>
                                     </div>
-                                    <div className="text-2xl font-black text-green-400 tabular-nums">+{bestPerformer.pnlPercent.toFixed(2)}%</div>
+                                    <div className="text-xl font-bold text-alphabag-green num">+{bestPerformer.pnlPercent.toFixed(2)}%</div>
                                 </>
                             ) : (
-                                <div className="text-alphabag-muted text-[10px] font-bold uppercase tracking-widest mt-4">Awaiting Signal...</div>
+                                <div className="text-alphabag-subtext text-[11px] mt-2">Awaiting price movement...</div>
                             )}
                         </div>
 
                         {/* Worst Performer */}
-                        <div className="glass-panel p-4 group overflow-hidden relative rounded-xl">
-                            
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="section-label">Risk Asset</span>
-                                <div className="badge-red">UNDERWATER</div>
+                        <div className="bg-[#181A20] border border-[#2B313A] p-3.5 rounded-[6px]">
+                            <div className="flex items-center justify-between mb-2">
+                                <span className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Lagging Asset</span>
+                                <span className="text-[11px] font-semibold text-alphabag-red bg-rose-500/10 px-1.5 py-0.2 rounded-[2px] border border-rose-500/20">DRAWDOWN</span>
                             </div>
                             {worstPerformer ? (
                                 <>
-                                    <div className="flex items-center gap-2 mb-2 relative z-10">
-                                        <div className="w-8 h-8 rounded-xl bg-red-500/10 flex items-center justify-center">
-                                            <TrendingUp size={16} className="text-red-400 rotate-180" />
-                                        </div>
-                                        <div className="text-xl font-black text-white uppercase tracking-tight truncate">{worstPerformer.symbol}</div>
+                                    <div className="flex items-center gap-1.5 mb-1">
+                                        <div className="text-base font-bold text-alphabag-text uppercase tracking-tight truncate">{worstPerformer.symbol}</div>
                                     </div>
-                                    <div className="text-2xl font-black text-red-400 tabular-nums">{worstPerformer.pnlPercent.toFixed(2)}%</div>
+                                    <div className="text-xl font-bold text-alphabag-red num">{worstPerformer.pnlPercent.toFixed(2)}%</div>
                                 </>
                             ) : (
-                                <div className="text-alphabag-muted text-[10px] font-bold uppercase tracking-widest mt-4">All Clear...</div>
+                                <div className="text-alphabag-subtext text-[11px] mt-2">No drawdown flagged</div>
                             )}
                         </div>
                     </div>
 
                     {/* 3. Charts Section */}
                     {showCharts && (
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-2.5">
 
                             {/* History Chart */}
-                            <div className="lg:col-span-2 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
+                            <div className="lg:col-span-2 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4">
                                 <div className="flex justify-between items-center mb-2">
                                     <div className="flex items-center gap-2">
-                                        <h3 className="font-black text-white uppercase tracking-tight">History</h3>
-                                        <Eye size={14} className="text-alphabag-subtext" />
+                                        <h3 className="font-semibold text-alphabag-text text-xs uppercase tracking-wider">Historical Net Worth</h3>
+                                        <Eye size={13} className="text-alphabag-subtext" />
                                     </div>
-                                    <div className="flex space-x-1 bg-black/40 p-1 rounded-lg border border-white/5">
+                                    <div className="flex space-x-1 bg-[#0B0E11] p-0.5 rounded border border-[#2B313A]">
                                         {['24H', '7D', '30D', '90D', 'ALL'].map((tf) => (
                                             <button
                                                 key={tf}
                                                 onClick={() => setTimeframe(tf as any)}
-                                                className={`px-3 py-1.5 text-[9px] font-black uppercase rounded-lg transition-all tracking-widest ${timeframe === tf ? 'bg-alphabag-yellow/20 text-alphabag-yellow border border-alphabag-yellow/50 ' : 'text-alphabag-subtext hover:text-white border border-transparent'}`}
+                                                className={`px-2.5 py-0.5 text-[11px] font-medium rounded transition-colors ${timeframe === tf ? 'bg-[#202630] text-alphabag-text font-semibold' : 'text-alphabag-subtext hover:text-white'}`}
                                             >
                                                 {tf}
                                             </button>
@@ -286,29 +284,29 @@ export const Portfolio: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="h-[250px] w-full">
+                                <div className="h-[240px] w-full">
                                     {loadingHistory || isSyncing ? (
                                         <div className="h-full w-full flex items-center justify-center text-alphabag-subtext">
-                                            <div className="w-6 h-6 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
+                                            <div className="w-5 h-5 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
                                         </div>
                                     ) : (
                                         <ResponsiveContainer width="100%" height="100%">
                                             <AreaChart data={history} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
                                                 <defs>
                                                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
-                                                        <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                                                        <stop offset="5%" stopColor="#0ECB81" stopOpacity={0.2} />
+                                                        <stop offset="95%" stopColor="#0ECB81" stopOpacity={0} />
                                                     </linearGradient>
                                                 </defs>
-                                                <CartesianGrid strokeDasharray="3 3" stroke="#2B3139" vertical={false} />
-                                                <XAxis dataKey="timestamp" tickFormatter={(tick) => new Date(tick).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} stroke="#848E9C" fontSize={10} tickLine={false} axisLine={false} />
-                                                <YAxis domain={['auto', 'auto']} orientation="right" tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`} stroke="#848E9C" fontSize={10} tickLine={false} axisLine={false} />
+                                                <CartesianGrid strokeDasharray="3 3" stroke="#2B313A" vertical={false} />
+                                                <XAxis dataKey="timestamp" tickFormatter={(tick) => new Date(tick).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} stroke="#848E9C" fontSize={11} tickLine={false} axisLine={false} />
+                                                <YAxis domain={['auto', 'auto']} orientation="right" tickFormatter={(val) => `$${(val / 1000).toFixed(1)}k`} stroke="#848E9C" fontSize={11} tickLine={false} axisLine={false} />
                                                 <ReTooltip
-                                                    contentStyle={{ backgroundColor: '#181A20', borderColor: '#2B3139', color: '#EAECEF', borderRadius: '8px' }}
+                                                    contentStyle={{ backgroundColor: '#181A20', borderColor: '#2B313A', color: '#EAECEF', borderRadius: '4px', fontSize: '11px' }}
                                                     labelFormatter={(label) => new Date(label).toLocaleString()}
                                                     itemStyle={{ color: '#0ECB81', fontWeight: 'bold' }}
                                                 />
-                                                <Area type="monotone" dataKey="value" stroke="#0ECB81" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
+                                                <Area type="monotone" dataKey="value" stroke="#0ECB81" strokeWidth={1.5} fillOpacity={1} fill="url(#colorValue)" />
                                             </AreaChart>
                                         </ResponsiveContainer>
                                     )}
@@ -316,36 +314,36 @@ export const Portfolio: React.FC = () => {
                             </div>
 
                             {/* Allocation Donut */}
-                            <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-all">
-                                <h3 className="font-black text-white mb-2 uppercase tracking-tight">Allocation</h3>
+                            <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col justify-between">
+                                <h3 className="font-semibold text-alphabag-text text-xs uppercase tracking-wider mb-2">Asset Weight</h3>
                                 <div className="flex-1 flex flex-row items-center justify-center gap-2">
 
-                                    <div className="w-1/2 h-[180px] relative">
+                                    <div className="w-1/2 h-[160px] relative">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <RePieChart>
-                                                <Pie data={filteredItems} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={2} dataKey="value" stroke="none">
+                                                <Pie data={filteredItems} cx="50%" cy="50%" innerRadius={50} outerRadius={68} paddingAngle={2} dataKey="value" stroke="none">
                                                     {filteredItems.map((_entry, index) => (
                                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                                     ))}
                                                 </Pie>
                                             </RePieChart>
                                         </ResponsiveContainer>
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <PieChartIcon size={24} className="text-alphabag-subtext" />
+                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                            <PieChartIcon size={20} className="text-alphabag-subtext" />
                                         </div>
                                     </div>
 
-                                    <div className="w-1/2 flex flex-col justify-center space-y-2">
+                                    <div className="w-1/2 flex flex-col justify-center space-y-1.5">
                                         {filteredItems.slice(0, 6).map((item, index) => {
                                             const filteredTotalValue = filteredItems.reduce((acc, curr) => acc + curr.value, 0);
                                             return (
                                                 <div key={item.coinId} className="flex justify-between items-center text-xs">
-                                                    <div className="flex items-center gap-2 overflow-hidden">
-                                                        <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                                                        <span className="text-alphabag-text font-medium truncate">{item.name}</span>
+                                                    <div className="flex items-center gap-1.5 overflow-hidden">
+                                                        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                                                        <span className="text-alphabag-text truncate">{item.name}</span>
                                                     </div>
-                                                    <span className="text-alphabag-text font-semibold tabular-data">
-                                                        {filteredTotalValue > 0 ? ((item.value / filteredTotalValue) * 100).toFixed(2) : '0.00'}%
+                                                    <span className="text-alphabag-subtext num text-[11px]">
+                                                        {filteredTotalValue > 0 ? ((item.value / filteredTotalValue) * 100).toFixed(1) : '0.0'}%
                                                     </span>
                                                 </div>
                                             )
@@ -357,51 +355,50 @@ export const Portfolio: React.FC = () => {
                     )}
 
                     {/* 4. Assets Table Area */}
-                    <div className="mt-6 glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all">
+                    <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4">
                         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-2 mb-3">
                             <div>
-                                <h3 className="font-black text-white text-xl uppercase tracking-tight">Assets</h3>
-                                <p className="text-[11px] text-alphabag-subtext mt-1 max-w-xl">Track your top holdings, profit drivers, and chain exposure across your connected wallets.</p>
+                                <h3 className="font-semibold text-alphabag-text text-sm uppercase tracking-wider">Asset Holdings</h3>
+                                <p className="text-xs text-alphabag-subtext mt-0.5">Top balances, cost basis valuation, and multi-network wallet exposure.</p>
                             </div>
                             <Button
                                 variant="ghost"
-                                size="sm"
+                                size="xs"
                                 onClick={toggleHideSmallBalances}
                                 className="text-xs text-alphabag-subtext hover:text-alphabag-text"
                             >
-                                {hideSmallBalances ? 'Show small balances' : 'Hide small balances (<$1)'}
+                                {hideSmallBalances ? 'Show small balances' : 'Hide balances (<$1)'}
                             </Button>
                         </div>
 
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse">
-                                <thead className="text-alphabag-subtext text-xs border-b-2 border-alphabag-gray">
-                                    <tr>
-                                        <th className="py-3 px-4 font-semibold w-1/4">Name ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-right">Price ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-right">24h% ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-right w-40">7D Trend</th>
-                                        <th className="py-3 px-4 font-semibold text-right">Holdings ↕</th>
-                                        <th className="py-2.5 px-4 font-semibold text-right">Avg. Buy Price ↕</th>
-                                        <th className="py-2.5 px-4 font-semibold text-right">Profit/Loss ↕</th>
-                                        <th className="py-3 px-4 font-semibold text-center w-24">Actions</th>
+                                <thead>
+                                    <tr className="text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-[#2B313A]">
+                                        <th className="py-2.5 px-3">Asset</th>
+                                        <th className="py-2.5 px-3 text-right">Price</th>
+                                        <th className="py-2.5 px-3 text-right">24h Change</th>
+                                        <th className="py-2.5 px-3 text-right">Holdings</th>
+                                        <th className="py-2.5 px-3 text-right">Avg. Cost</th>
+                                        <th className="py-2.5 px-3 text-right">PnL</th>
+                                        <th className="py-2.5 px-3 text-center w-20">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-alphabag-gray text-sm font-medium">
+                                <tbody className="divide-y divide-[#2B313A]/50 text-xs">
                                     {!hasVisibleAssets && !isSyncing ? (
                                         <tr>
-                                            <td colSpan={8} className="py-16">
-                                                <div className="flex flex-col items-center justify-center text-center px-6">
-                                                    <div className="w-16 h-16 rounded-2xl bg-alphabag-yellow/10 text-alphabag-yellow flex items-center justify-center mb-2">
-                                                        <PieChartIcon size={24} />
+                                            <td colSpan={7} className="py-12">
+                                                <div className="flex flex-col items-center justify-center text-center px-4">
+                                                    <div className="w-10 h-10 rounded bg-[#202630] text-alphabag-yellow border border-[#2B313A] flex items-center justify-center mb-2">
+                                                        <PieChartIcon size={18} />
                                                     </div>
-                                                    <h4 className="text-base font-bold text-white uppercase tracking-wider">No assets detected</h4>
-                                                    <p className="text-sm text-alphabag-subtext mt-2 max-w-md">
-                                                        Add a tracked wallet or a manual transaction to start building your premium portfolio view.
+                                                    <h4 className="text-sm font-semibold text-alphabag-text uppercase">No assets tracked</h4>
+                                                    <p className="text-xs text-alphabag-subtext mt-1 max-w-sm">
+                                                        Add a tracked address or exchange connection to view portfolio balances.
                                                     </p>
-                                                    <div className="mt-4 flex gap-2">
-                                                        <Button size="sm" onClick={handleManageConnections} className="px-5 py-2.5 font-semibold uppercase tracking-wider">
-                                                            Manage Wallets
+                                                    <div className="mt-3">
+                                                        <Button size="xs" onClick={handleManageConnections}>
+                                                            Manage Connections
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -413,70 +410,61 @@ export const Portfolio: React.FC = () => {
                                             const dayPnlPositive = item.priceChange24h >= 0;
 
                                             return (
-                                                <tr key={item.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
-                                                    <td className="py-3 px-4">
+                                                <tr key={item.coinId} className="hover:bg-[#202630] transition-colors">
+                                                    <td className="py-2.5 px-3">
                                                         <div className="flex items-center gap-2">
-                                                            <img src={item.image} alt={item.name} className="w-6 h-6 rounded-full" />
-                                                            <span className="text-alphabag-text font-bold">{item.name}</span>
-                                                            <span className="text-alphabag-subtext text-xs font-semibold">{item.symbol}</span>
+                                                            <img src={item.image} alt={item.name} className="w-5 h-5 rounded-full" />
+                                                            <span className="text-alphabag-text font-semibold">{item.name}</span>
+                                                            <span className="text-alphabag-subtext text-[11px] font-medium">{item.symbol}</span>
                                                         </div>
                                                     </td>
-                                                    <td className="py-3 px-4 text-right text-alphabag-text tabular-data">
-                                                        <div className="tracking-tighter truncate" title={`$${item.currentPrice.toLocaleString()}`}>
-                                                            ${item.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
-                                                        </div>
+                                                    <td className="py-2.5 px-3 text-right text-alphabag-text num">
+                                                        ${item.currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
                                                     </td>
-                                                    <td className={`py-3 px-4 text-right tabular-data text-xs font-bold ${dayPnlPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                                        <div className="flex items-center justify-end gap-1 tracking-tighter truncate">
-                                                            {dayPnlPositive ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                                    <td className={`py-2.5 px-3 text-right num text-xs font-semibold ${dayPnlPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                                        <div className="flex items-center justify-end gap-0.5">
+                                                            {dayPnlPositive ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
                                                             {Math.abs(item.priceChange24h).toFixed(2)}%
                                                         </div>
                                                     </td>
-                                                    <td className="py-3 px-4 text-right w-40">
-                                                        <div className="h-8 w-24 ml-auto flex items-center justify-end text-alphabag-subtext text-[10px] font-semibold">
-                                                            {/* Real per-token price history isn't wired up yet — showing
-                                                                a randomized line here previously implied a real 7d
-                                                                trend that had no relation to the actual asset. */}
-                                                            No history yet
+                                                    <td className="py-2.5 px-3 text-right">
+                                                        <div className="text-alphabag-text font-semibold num">
+                                                            {formatUsd(item.value)}
                                                         </div>
-                                                    </td>
-                                                    <td className="py-3 px-4 text-right">
-                                                        <div className="text-alphabag-text font-bold tabular-data tracking-tighter truncate" title={`$${item.value.toLocaleString()}`}>
-                                                            ${item.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                        </div>
-                                                        <div className="text-alphabag-subtext text-xs font-semibold tabular-data mt-0.5 tracking-tighter truncate" title={`${item.amount.toLocaleString()} ${item.symbol}`}>
+                                                        <div className="text-alphabag-subtext text-[11px] num">
                                                             {item.amount.toLocaleString(undefined, { maximumFractionDigits: 4 })} {item.symbol}
                                                         </div>
                                                     </td>
-                                                    <td className="py-3 px-4 text-right text-alphabag-text tabular-data">
-                                                        <div className="tracking-tighter truncate" title={`$${(item.avgBuyPrice || item.currentPrice).toLocaleString()}`}>
-                                                            ${(item.avgBuyPrice || item.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })}
-                                                        </div>
+                                                    <td className="py-2.5 px-3 text-right text-alphabag-text num">
+                                                        ${(item.avgBuyPrice || item.currentPrice).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}
                                                     </td>
-                                                    <td className="py-3 px-4 text-right tabular-data">
+                                                    <td className="py-2.5 px-3 text-right num">
                                                         {item.costBasisKnown ? (
                                                             <>
-                                                                <div className={`font-bold tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`} title={`$${item.pnl.toLocaleString()}`}>
+                                                                <div className={`font-semibold ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                                                     {holdsPositive ? '+' : '-'}${Math.abs(item.pnl).toLocaleString()}
                                                                 </div>
-                                                                <div className={`text-xs font-bold flex items-center justify-end gap-0.5 mt-0.5 tracking-tighter truncate ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                                                    {holdsPositive ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {Math.abs(item.pnlPercent).toFixed(2)}%
+                                                                <div className={`text-[11px] ${holdsPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                                                    {holdsPositive ? '+' : '-'}{Math.abs(item.pnlPercent).toFixed(2)}%
                                                                 </div>
                                                             </>
                                                         ) : (
                                                             <button
                                                                 onClick={handleManageConnections}
-                                                                className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-wider hover:text-alphabag-yellow transition-colors"
+                                                                className="text-alphabag-subtext text-[11px] font-semibold uppercase hover:text-alphabag-yellow transition-colors"
                                                             >
-                                                                + Add cost basis
+                                                                + Cost Basis
                                                             </button>
                                                         )}
                                                     </td>
-                                                    <td className="py-3 px-4">
-                                                        <div className="flex items-center justify-center gap-2 text-alphabag-subtext">
-                                                            <button className="p-1 hover:text-alphabag-text hover:bg-alphabag-gray rounded"><Plus size={16} /></button>
-                                                            <button className="p-1 hover:text-alphabag-text hover:bg-alphabag-gray rounded">•••</button>
-                                                        </div>
+                                                    <td className="py-2.5 px-3 text-center">
+                                                        <button 
+                                                            onClick={handleManageConnections} 
+                                                            className="p-1 text-alphabag-subtext hover:text-alphabag-text rounded hover:bg-[#202630]"
+                                                            title="Asset Options"
+                                                        >
+                                                            <Plus size={14} />
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             );
@@ -488,10 +476,12 @@ export const Portfolio: React.FC = () => {
                     </div>
                 </>
             ) : (
-                <div className="pt-4">
+                <div className="pt-2">
                     <HistoryPage />
                 </div>
             )}
         </div>
     );
 };
+
+export default Portfolio;

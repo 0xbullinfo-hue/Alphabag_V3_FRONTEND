@@ -95,7 +95,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
               <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
               <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
-                <span className="text-[9px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
+                <span className="text-[11px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
               </div>
             </div>
             <p className="text-alphabag-subtext text-sm">Ask about market structure, portfolio risk, and on-chain activity.</p>
@@ -110,12 +110,12 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
           
           
            <div className="flex justify-between items-center px-4 py-3 border-b border-alphabag-gray bg-alphabag-black/30">
-              <span className="text-[9px] text-alphabag-subtext uppercase font-black tracking-widest flex items-center gap-2">
+              <span className="text-[11px] text-alphabag-subtext uppercase font-bold tracking-widest flex items-center gap-2">
                 <Bot size={13} className="text-alphabag-yellow" /> Research Session
               </span>
               <button 
                   onClick={clearChat}
-                  className="flex items-center gap-1 text-[8px] uppercase font-bold tracking-widest text-zinc-500 hover:text-red-400 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded-lg border border-transparent hover:border-red-500/20"
+                  className="flex items-center gap-1 text-[11px] uppercase font-semibold tracking-wider text-zinc-500 hover:text-red-400 transition-colors bg-white/5 hover:bg-white/10 px-2 py-1 rounded-md border border-transparent hover:border-red-500/20"
               >
                   <Trash2 size={11} /> Clear chat
               </button>
@@ -162,7 +162,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
 
           {/* Quick Actions (2-Column Dense Grid) */}
           <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext mb-3 flex items-center gap-2">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-alphabag-subtext mb-3 flex items-center gap-2">
                 <Zap size={12} className="text-alphabag-yellow"/> Neural Prompts
             </h3>
             <div className="space-y-1.5">
@@ -184,43 +184,43 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
           <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
             
             <div className="flex items-center justify-between mb-2 relative z-10">
-                <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
+                <h3 className="text-[11px] font-bold uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
                     <Wallet size={12} className="text-alphabag-green"/> Aggregate Assets
                 </h3>
             </div>
 
             <div className="mb-2">
-                <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mb-1">Total Net Worth</p>
+                <p className="text-[11px] text-zinc-500 font-semibold uppercase tracking-wider mb-1">Total Net Worth</p>
                 <div className="flex items-end gap-2">
-                    <span className="text-xl font-black text-white tracking-tighter tabular-nums leading-none">
+                    <span className="text-xl font-bold text-white tracking-tight num leading-none">
                         ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
-                    <div className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1 mb-1 ${totalPnL24h >= 0 ? 'text-alphabag-green' : 'text-red-500'}`}>
+                    <div className={`text-[11px] font-bold uppercase tracking-wider flex items-center gap-1 mb-1 num ${totalPnL24h >= 0 ? 'text-alphabag-green' : 'text-red-500'}`}>
                         {totalPnLPercent24h >= 0 ? '+' : ''}{totalPnLPercent24h.toFixed(2)}% (24H)
                     </div>
                 </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2 relative z-10">
-                <div className="bg-black/40 border border-white/5 p-3 rounded-xl flex flex-col">
-                    <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Active Connections</span>
-                    <span className="text-lg font-bold text-white tabular-nums leading-none">{numAssets}</span>
+                <div className="bg-black/40 border border-white/5 p-3 rounded-md flex flex-col">
+                    <span className="text-[11px] text-alphabag-muted font-semibold uppercase tracking-wider mb-1">Active Connections</span>
+                    <span className="text-lg font-bold text-white num leading-none">{numAssets}</span>
                 </div>
-                <div className="bg-black/40 border border-white/5 p-3 rounded-xl flex flex-col">
-                    <span className="text-[8px] text-alphabag-muted font-black uppercase tracking-widest mb-1">Risk Bias</span>
-                    <span className="text-[10px] font-black text-alphabag-yellow uppercase tracking-widest mt-1">Moderate</span>
+                <div className="bg-black/40 border border-white/5 p-3 rounded-md flex flex-col">
+                    <span className="text-[11px] text-alphabag-muted font-semibold uppercase tracking-wider mb-1">Risk Bias</span>
+                    <span className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider mt-1">Moderate</span>
                 </div>
             </div>
           </div>
 
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-3">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-alphabag-subtext flex items-center gap-2 mb-3">
               <Fingerprint size={12} className="text-alphabag-yellow"/> Session Context
             </h3>
             <dl className="space-y-3 text-xs">
-              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Portfolio assets</dt><dd className="font-semibold text-alphabag-text">{numAssets}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Portfolio assets</dt><dd className="font-semibold text-alphabag-text num">{numAssets}</dd></div>
               <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Data scope</dt><dd className="font-semibold text-alphabag-text">Current session</dd></div>
-              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Messages</dt><dd className="font-semibold text-alphabag-text">{messages.length}</dd></div>
+              <div className="flex justify-between gap-3"><dt className="text-alphabag-subtext">Messages</dt><dd className="font-semibold text-alphabag-text num">{messages.length}</dd></div>
             </dl>
           </div>
 

@@ -140,23 +140,23 @@ export const CexBag: React.FC = () => {
                     <div className="text-3xl font-semibold text-alphabag-text tracking-tight tabular-nums mb-2">
                         ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
-                    <div className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">Consolidated Assets</div>
+                    <div className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded text-[11px] font-medium uppercase w-fit">Consolidated Assets</div>
                 </div>
                 <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Consolidated PnL</span>
                     {hasCexPnLData ? (
                         <div className={`flex items-center gap-2 mb-2`}>
-                            <div className={`text-3xl font-semibold tracking-tight tabular-nums ${mockPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                            <div className={`text-3xl font-semibold tracking-tight tabular-nums num ${mockPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                 {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
-                            <div className={`px-2 py-1 rounded-md text-[10px] font-semibold ${mockPnL >= 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
+                            <div className={`px-2 py-0.5 rounded text-[11px] font-semibold num ${mockPnL >= 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
                                 {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
                             </div>
                         </div>
                     ) : (
                         <div className="text-lg font-semibold text-alphabag-subtext mb-2">Not available yet</div>
                     )}
-                    <div className="bg-alphabag-gray text-alphabag-subtext px-2 py-1 rounded-md text-[10px] font-semibold uppercase w-fit">24H Metrics</div>
+                    <div className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] font-medium uppercase w-fit">24H Metrics</div>
                 </div>
             </div>
 
@@ -223,7 +223,7 @@ export const CexBag: React.FC = () => {
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left border-collapse min-w-[560px]">
-                                <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
+                                <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                                     <tr>
                                         <th className="p-4 px-6">Asset</th>
                                         <th className="p-4 px-6 text-right">Balance</th>
@@ -243,19 +243,19 @@ export const CexBag: React.FC = () => {
                                                         <img src={asset.img || `https://cryptologos.cc/logos/${asset.symbol?.toLowerCase()}-${asset.symbol?.toLowerCase()}-logo.png`} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                                                         <div>
                                                             <div className="text-alphabag-text font-semibold">{asset.symbol}</div>
-                                                            <div className="text-alphabag-subtext text-[10px] mt-0.5">{asset.coin || asset.name}</div>
+                                                            <div className="text-alphabag-subtext text-[11px] mt-0.5">{asset.coin || asset.name}</div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td className="py-4 px-6 text-right tabular-nums">
-                                                    <div className="font-semibold text-alphabag-text">{Number(asset.balance).toLocaleString()}</div>
+                                                    <div className="font-semibold text-alphabag-text num">{Number(asset.balance).toLocaleString()}</div>
                                                 </td>
                                                 <td className="py-4 px-6 text-right tabular-nums">
-                                                    <div className="font-semibold text-alphabag-text">${Number(asset.value).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                                                    <div className="text-[10px] text-alphabag-subtext mt-1">@ ${Number(asset.price).toLocaleString()}</div>
+                                                    <div className="font-semibold text-alphabag-text num">${Number(asset.value).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                                                    <div className="text-[11px] text-alphabag-subtext mt-1 num">@ ${Number(asset.price).toLocaleString()}</div>
                                                 </td>
                                                 <td className="p-4 px-6 text-right">
-                                                    <span className="text-[10px] font-semibold uppercase text-alphabag-subtext bg-alphabag-gray px-2 py-0.5 rounded-md border border-alphabag-muted">{asset.exchange}</span>
+                                                    <span className="text-[11px] font-medium uppercase text-alphabag-subtext bg-alphabag-gray px-2 py-0.5 rounded border border-alphabag-muted">{asset.exchange}</span>
                                                 </td>
                                             </tr>
                                         ))
@@ -279,11 +279,11 @@ export const CexBag: React.FC = () => {
                                             <img src={cex.icon} alt={cex.name} className="w-8 h-8 rounded-full bg-white p-0.5" />
                                             <div>
                                                 <h3 className="font-semibold text-alphabag-text text-sm">{cex.name}</h3>
-                                                <div className="flex items-center text-[9px] text-alphabag-green font-semibold uppercase tracking-wider mt-0.5">
+                                                <div className="flex items-center text-[11px] text-alphabag-green font-medium uppercase tracking-wider mt-0.5">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5"></div>
                                                     API Connected {cex.lastSynced ? `· Synced ${timeSince(cex.lastSynced)}` : ''}
                                                 </div>
-                                                <div className="text-alphabag-subtext text-[9px] font-mono mt-0.5">{cex.apiKey}</div>
+                                                <div className="text-alphabag-subtext text-[11px] font-mono mt-0.5">{cex.apiKey}</div>
                                             </div>
                                         </div>
                                         <button onClick={() => removeConnection(cex.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-2">
@@ -300,7 +300,7 @@ export const CexBag: React.FC = () => {
                     </div>
 
                     <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
-                        <h4 className="text-[10px] font-semibold uppercase tracking-wider text-alphabag-subtext mb-2 pb-4 border-b border-alphabag-gray">
+                        <h4 className="text-[11px] font-medium uppercase tracking-wider text-alphabag-subtext mb-2 pb-4 border-b border-alphabag-gray">
                             Available ({availableExchanges.length} remaining)
                         </h4>
                         <div className="grid grid-cols-5 gap-2">

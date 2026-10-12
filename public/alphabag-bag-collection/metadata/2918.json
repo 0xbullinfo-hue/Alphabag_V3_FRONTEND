@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #2918",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: Sunset Orange, Black, Yellow Plastic, No Stripe, Holographic, undefined, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/2918.svg",
+  "dna": "alphabag-bag-2918-Uncommon-Sunset Orange-Black-Yellow Plastic-No Stripe-Holographic-undefined-White Tag Black Text",
+  "edition": 2918,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "No Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

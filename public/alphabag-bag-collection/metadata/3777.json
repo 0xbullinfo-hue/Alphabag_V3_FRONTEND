@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3777",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: undefined, Navy Blue, Neon Glow, White Solid Diagonal, Metallic, undefined, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3777.svg",
+  "dna": "alphabag-bag-3777-Epic-undefined-Navy Blue-Neon Glow-White Solid Diagonal-Metallic-undefined-White Tag Black Text",
+  "edition": 3777,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Neon Glow"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Metallic"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

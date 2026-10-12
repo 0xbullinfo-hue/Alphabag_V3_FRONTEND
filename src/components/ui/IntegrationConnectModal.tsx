@@ -46,11 +46,11 @@ export const IntegrationConnectModal: React.FC<IntegrationConnectModalProps> = (
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-4">
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/75 transition-opacity"
         onClick={onClose}
       />
       
-      <div className="relative w-full max-w-md bg-alphabag-dark border border-alphabag-gray rounded-2xl shadow-2xl overflow-hidden animate-scale-up">
+      <div className="relative w-full max-w-md bg-alphabag-dark border border-alphabag-gray rounded-lg shadow-2xl overflow-hidden animate-scale-up">
         <div className="flex justify-between items-center p-4 border-b border-alphabag-gray/50">
           <div className="flex items-center gap-2">
              <img src={integration.icon} alt={integration.name} className="w-8 h-8 rounded-full bg-white p-0.5" />

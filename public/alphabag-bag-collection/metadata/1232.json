@@ -1,0 +1,38 @@
+{
+  "name": "AlphaBAG Duffel #1232",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: undefined, undefined, Silver Metal, undefined, Holographic, None, undefined.",
+  "image": "/alphabag-bag-collection/images/1232.svg",
+  "dna": "alphabag-bag-1232-Common-undefined-undefined-Silver Metal-undefined-Holographic-None-undefined",
+  "edition": 1232,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

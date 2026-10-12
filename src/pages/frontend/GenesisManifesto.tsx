@@ -156,8 +156,8 @@ export const GenesisManifesto: React.FC = () => {
                             <Rocket size={20} fill="currentColor" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-black uppercase tracking-tight leading-none">Genesis <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600">BAG Manifesto</span></h1>
-                            <p className="text-alphabag-muted text-[9px] font-black uppercase tracking-[0.3em] mt-1 opacity-60">Founders Phase 1.0 Onboarding</p>
+                            <h1 className="text-xl font-bold uppercase tracking-tight leading-none">Genesis <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600">BAG Manifesto</span></h1>
+                            <p className="text-alphabag-muted text-[11px] font-bold uppercase tracking-[0.3em] mt-1 opacity-60">Founders Phase 1.0 Onboarding</p>
                         </div>
                     </div>
                     <p className="text-alphabag-subtext text-[13px] leading-relaxed opacity-60">
@@ -170,7 +170,7 @@ export const GenesisManifesto: React.FC = () => {
                     <Section title="00. IDENTITY" subtitle="Project name and ticker symbol.">
                         <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Project Name</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Project Name</label>
                                     <input 
                                         type="text"
                                         value={formData.name}
@@ -181,7 +181,7 @@ export const GenesisManifesto: React.FC = () => {
                                     />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Ticker</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Ticker</label>
                                 <input 
                                     type="text"
                                     value={formData.symbol}
@@ -196,7 +196,7 @@ export const GenesisManifesto: React.FC = () => {
                         {/* Media Assets */}
                         <div className="grid md:grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/5">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Logo URL (64x64)</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Logo URL (64x64)</label>
                                 <input 
                                     type="url"
                                     value={formData.logoUrl}
@@ -206,7 +206,7 @@ export const GenesisManifesto: React.FC = () => {
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Banner URL (1200x400)</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Banner URL (1200x400)</label>
                                 <input 
                                     type="url"
                                     value={formData.bannerUrl}
@@ -220,7 +220,7 @@ export const GenesisManifesto: React.FC = () => {
                         {/* Media Preview */}
                         {(formData.logoUrl || formData.bannerUrl || formData.name) && (
                             <div className="mt-4 p-3 bg-black/40 rounded-xl border border-white/5 overflow-hidden">
-                                <p className="text-[9px] font-black text-alphabag-yellow uppercase mb-2.5 tracking-widest px-1.5 opacity-60">Briefing Preview</p>
+                                <p className="text-[11px] font-bold text-alphabag-yellow uppercase mb-2.5 tracking-widest px-1.5 opacity-60">Briefing Preview</p>
                                 <div className="relative rounded-xl overflow-hidden aspect-[3/1] bg-alphabag-darkgray/50 border border-white/10 group">
                                     {formData.bannerUrl ? (
                                         <img src={formData.bannerUrl} alt="Banner Preview" className="w-full h-full object-cover" />
@@ -235,13 +235,13 @@ export const GenesisManifesto: React.FC = () => {
                                                 {formData.logoUrl ? (
                                                     <img src={formData.logoUrl} alt="Logo" className="w-full h-full object-cover" />
                                                 ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-white/10 text-[8px]">LOGO</div>
+                                                    <div className="w-full h-full flex items-center justify-center text-white/10 text-[11px]">LOGO</div>
                                                 )}
                                             </div>
                                         </div>
                                         <div className="mb-0.5">
-                                            <div className="text-base font-black uppercase tracking-tighter text-white drop-shadow-lg leading-tight">{formData.name || 'PROJECT NAME'}</div>
-                                            <div className="bg-alphabag-yellow text-black text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest inline-block leading-none">MANIFESTO PINNED</div>
+                                            <div className="text-base font-bold uppercase tracking-tighter text-white drop-shadow-lg leading-tight">{formData.name || 'PROJECT NAME'}</div>
+                                            <div className="bg-alphabag-yellow text-black text-[11px] font-bold px-1.5 py-0.5 rounded uppercase tracking-widest inline-block leading-none">MANIFESTO PINNED</div>
                                         </div>
                                     </div>
                                 </div>
@@ -252,7 +252,7 @@ export const GenesisManifesto: React.FC = () => {
                     <Section title="01. ON-CHAIN DATA" subtitle="Contract Address and Supply details.">
                         <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Contract Address (CA)</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Contract Address (CA)</label>
                                 <input 
                                     type="text"
                                     value={formData.contractAddress}
@@ -263,7 +263,7 @@ export const GenesisManifesto: React.FC = () => {
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Total Supply</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Total Supply</label>
                                 <input 
                                     type="text"
                                     value={formData.totalSupply}
@@ -279,7 +279,7 @@ export const GenesisManifesto: React.FC = () => {
                     <Section title="02. LINKS" subtitle="Where can users find you and buy?">
                         <div className="grid md:grid-cols-2 gap-2">
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Website URL</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Website URL</label>
                                 <input 
                                     type="url"
                                     value={formData.websiteUrl}
@@ -290,7 +290,7 @@ export const GenesisManifesto: React.FC = () => {
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[9px] font-black uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Buy Link (DEX/Router)</label>
+                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Buy Link (DEX/Router)</label>
                                 <input 
                                     type="url"
                                     value={formData.buyLink}
@@ -313,7 +313,7 @@ export const GenesisManifesto: React.FC = () => {
                             onChange={(e) => setFormData(prev => ({ ...prev, hook: e.target.value }))}
                             required
                         />
-                        <div className="text-[9px] text-right mt-1 font-black text-alphabag-muted uppercase tracking-widest opacity-60">
+                        <div className="text-[11px] text-right mt-1 font-bold text-alphabag-muted uppercase tracking-widest opacity-60">
                             {formData.hook.length} / 150
                         </div>
                     </Section>
@@ -361,7 +361,7 @@ export const GenesisManifesto: React.FC = () => {
                             <button 
                                 type="button" 
                                 onClick={() => handleAddField('utility')}
-                                className="flex items-center space-x-1.5 text-alphabag-yellow text-[10px] font-black uppercase tracking-widest hover:opacity-80 transition-opacity"
+                                className="flex items-center space-x-1.5 text-alphabag-yellow text-[11px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity"
                             >
                                 <Plus size={14} /> <span>Add Utility Point</span>
                             </button>
@@ -397,7 +397,7 @@ export const GenesisManifesto: React.FC = () => {
                         <div className="space-y-2">
                             {formData.roadmap.map((item, index) => (
                                 <div key={index} className="relative">
-                                    <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-alphabag-yellow text-black flex items-center justify-center rounded-full text-[9px] font-black italic">
+                                    <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-alphabag-yellow text-black flex items-center justify-center rounded-full text-[11px] font-bold italic">
                                         M{index + 1}
                                     </div>
                                     <input 
@@ -416,11 +416,11 @@ export const GenesisManifesto: React.FC = () => {
                     <div className="pt-6 border-t border-white/5 flex items-center justify-between">
                         <div className="flex items-center space-x-2 text-alphabag-muted opacity-60">
                             <Lock size={14} />
-                            <span className="text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Gatekeeper Fee Bypassed</span>
+                            <span className="text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Gatekeeper Fee Bypassed</span>
                         </div>
                         <Button 
                             type="submit"
-                            className="bg-alphabag-yellow text-black font-black uppercase tracking-widest shadow-lg shadow-alphabag-yellow/20 hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all text-[11px] h-11 px-6 rounded-xl"
+                            className="bg-alphabag-yellow text-black font-bold uppercase tracking-widest shadow-lg shadow-alphabag-yellow/20 hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all text-[11px] h-11 px-6 rounded-xl"
                         >
                             Drop Manifesto
                         </Button>
@@ -432,10 +432,10 @@ export const GenesisManifesto: React.FC = () => {
 };
 
 const Section = ({ title, subtitle, children }: { title: string, subtitle: string, children: React.ReactNode }) => (
-    <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 md:p-4 backdrop-blur-sm">
+    <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 md:p-4 ">
         <div className="mb-2">
-            <h2 className="text-base font-black text-white uppercase tracking-tight mb-0.5">{title}</h2>
-            <p className="text-alphabag-muted text-[9px] font-black uppercase tracking-widest opacity-60">{subtitle}</p>
+            <h2 className="text-base font-bold text-white uppercase tracking-tight mb-0.5">{title}</h2>
+            <p className="text-alphabag-muted text-[11px] font-bold uppercase tracking-widest opacity-60">{subtitle}</p>
         </div>
         {children}
     </div>
@@ -443,7 +443,7 @@ const Section = ({ title, subtitle, children }: { title: string, subtitle: strin
 
 const LinkInput = ({ label, placeholder, value, onChange }: { label: string, placeholder: string, value: string, onChange: (val: string) => void }) => (
     <div className="space-y-1.5">
-        <label className="text-[9px] font-black text-alphabag-muted uppercase tracking-[0.1em] opacity-60 ml-1">{label}</label>
+        <label className="text-[11px] font-bold text-alphabag-muted uppercase tracking-[0.1em] opacity-60 ml-1">{label}</label>
         <div className="relative">
             <LinkIcon size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-muted opacity-40" />
             <input 

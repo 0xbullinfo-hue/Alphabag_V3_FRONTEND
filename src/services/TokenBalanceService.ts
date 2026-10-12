@@ -114,7 +114,7 @@ export class TokenBalanceService {
     const needed = Math.max(0, minimumRequired - balance);
     
     if (needed === 0) {
-      return `🎉 Premium unlocked! You have ${balance.toFixed(2)} BAG`;
+      return `Premium tier active. Balance: ${balance.toFixed(2)} BAG`;
     }
 
     return `Hold ${minimumRequired} BAG for premium. You need ${needed.toFixed(2)} more.`;

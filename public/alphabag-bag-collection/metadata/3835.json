@@ -1,0 +1,42 @@
+{
+  "name": "AlphaBAG Duffel #3835",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: Forest Green, Gold, Neon Glow, White Solid Diagonal, Matte, None, White Tag Gold Text.",
+  "image": "/alphabag-bag-collection/images/3835.svg",
+  "dna": "alphabag-bag-3835-Epic-Forest Green-Gold-Neon Glow-White Solid Diagonal-Matte-None-White Tag Gold Text",
+  "edition": 3835,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Gold"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Neon Glow"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Gold Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

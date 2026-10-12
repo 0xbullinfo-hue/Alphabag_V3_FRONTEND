@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3611",
+  "description": "A collectible AlphaBAG duffel NFT with Rare rarity and layered traits: undefined, undefined, Gold Metal, Double Stripe, Glossy, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3611.svg",
+  "dna": "alphabag-bag-3611-Rare-undefined-undefined-Gold Metal-Double Stripe-Glossy-None-White Tag Black Text",
+  "edition": 3611,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Gold Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

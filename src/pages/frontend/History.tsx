@@ -82,7 +82,7 @@ export const HistoryPage: React.FC = () => {
             <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase tracking-wider font-semibold border-b border-alphabag-gray">
+                        <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase tracking-wider font-semibold border-b border-alphabag-gray">
                             <tr>
                                 <th className="p-3 pl-6">Type</th>
                                 <th className="p-3">Hash</th>
@@ -112,7 +112,7 @@ export const HistoryPage: React.FC = () => {
                                                         <div className={`p-1.5 rounded-md ${tx.type === 'TRANSFER' ? 'bg-blue-500/10 text-blue-400' : 'bg-alphabag-gray/20 text-alphabag-subtext'}`}>
                                                             {tx.type === 'TRANSFER' ? <ArrowUpRight size={14} /> : <History size={14} />}
                                                         </div>
-                                                        <span className="font-bold text-white uppercase tracking-wider text-[11px]">{tx.type}</span>
+                                                        <span className="font-semibold text-white uppercase tracking-wider text-[11px]">{tx.type}</span>
                                                     </div>
                                                 </td>
                                                 <td className="p-3">
@@ -121,24 +121,24 @@ export const HistoryPage: React.FC = () => {
                                                         <a href={getExplorerLink(tx.chain, tx.hash)} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-yellow"><ExternalLink size={10} /></a>
                                                     </div>
                                                 </td>
-                                                <td className="p-3 text-right font-black text-white">
+                                                <td className="p-3 text-right font-semibold text-white num">
                                                     ${tx.value.toFixed(2)}
                                                 </td>
                                                 <td className="p-3 text-right text-alphabag-subtext text-[11px] font-mono">
                                                     ${tx.fee.toFixed(4)}
                                                 </td>
-                                                <td className="p-3 text-right text-alphabag-subtext text-[11px] font-bold uppercase tracking-wide">
+                                                <td className="p-3 text-right text-alphabag-subtext text-[11px] font-medium uppercase tracking-wide">
                                                     {new Date(tx.date).toLocaleDateString()}
                                                 </td>
                                                 <td className="p-3 text-center">
                                                     <div className="flex items-center justify-center gap-1.5">
-                                                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${tx.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                                        <span className={`px-2 py-0.5 rounded text-[11px] font-medium uppercase tracking-wider border ${tx.status === 'CONFIRMED' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
                                                             'bg-red-500/10 text-red-500 border-red-500/20'
                                                             }`}>
                                                             {tx.status}
                                                         </span>
                                                         {tx.isMockData && (
-                                                            <span className="px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20">
+                                                            <span className="px-1.5 py-0.5 rounded text-[11px] font-medium uppercase tracking-wider bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20">
                                                                 Demo
                                                             </span>
                                                         )}

@@ -52,10 +52,10 @@ export function PositionsTable({ positions, provenance }: { positions: Position[
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-neutral-500">{KIND_LABEL[p.kind]}</span>
                         {p.kind === 'lp' && inRange === false && (
-                          <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[10px] text-amber-400">Out of range</span>
+                          <span className="rounded bg-amber-500/10 px-1.5 py-0.5 text-[11px] text-amber-400">Out of range</span>
                         )}
                         {p.kind === 'lending_borrow' && p.health && (
-                          <span className={`text-[10px] ${healthColor(p.health.healthFactor)}`}>
+                          <span className={`text-[11px] ${healthColor(p.health.healthFactor)}`}>
                             HF {isFinite(p.health.healthFactor) ? p.health.healthFactor.toFixed(2) : '∞'}
                           </span>
                         )}

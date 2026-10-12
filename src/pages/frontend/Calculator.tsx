@@ -282,7 +282,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <div className="relative pt-1">
                                 <input type="range" min="1" max="125" value={levSlider} onChange={e => setLevSlider(Number(e.target.value))} className="alphabag-range w-full" />
                             </div>
-                            <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold px-1 mt-[-2px]">
+                            <div className="flex justify-between text-alphabag-subtext text-[11px] font-medium px-1 mt-[-2px]">
                                 {[1, 25, 50, 100, 125].map(v => (
                                     <span
                                         key={v}
@@ -472,7 +472,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         <div className={`font-bold tracking-tight ${minimal ? 'text-4xl' : 'text-5xl'} ${ilPercent > 5 ? 'text-alphabag-red' : 'text-alphabag-yellow'}`}>
                             {ilPercent.toFixed(2)}%
                         </div>
-                        <p className="text-[10px] text-alphabag-subtext mt-2 max-w-[200px] font-semibold uppercase tracking-wider">Estimated Loss</p>
+                        <p className="text-[11px] text-alphabag-subtext mt-2 max-w-[200px] font-medium uppercase tracking-wider">Estimated Loss</p>
                     </div>
                 </div>
             </div>
@@ -525,7 +525,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         <div className={`font-bold text-alphabag-yellow tracking-tight ${minimal ? 'text-lg' : 'text-3xl'}`}>
                             1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
                         </div>
-                        <p className="text-[10px] text-alphabag-subtext mt-2 font-semibold uppercase tracking-wider">Quick Conversion Rate</p>
+                        <p className="text-[11px] text-alphabag-subtext mt-2 font-medium uppercase tracking-wider">Quick Conversion Rate</p>
                     </div>
                 </div>
             </div>
@@ -592,7 +592,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                     <div className="relative pt-1">
                                         <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="alphabag-range w-full" />
                                     </div>
-                                    <div className="flex justify-between text-alphabag-subtext text-[10px] font-semibold mt-1 px-1">
+                                    <div className="flex justify-between text-alphabag-subtext text-[11px] font-medium mt-1 px-1">
                                         <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(0)}>Safe (0%)</span>
                                         <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(50)}>Medium (50%)</span>
                                         <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(100)}>High Risk (100%)</span>
@@ -616,15 +616,15 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="text-alphabag-subtext text-xs font-semibold">Expected Value (EV)</span>
                                         <div className="flex items-center gap-2">
-                                            <div className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${ev > 0 ? 'bg-alphabag-green/15 text-alphabag-green' : 'bg-alphabag-red/15 text-alphabag-red'}`}>
+                                            <div className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${ev > 0 ? 'bg-alphabag-green/15 text-alphabag-green' : 'bg-alphabag-red/15 text-alphabag-red'}`}>
                                                 {ev > 0 ? 'Positive EV' : 'Negative EV'}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className={`font-bold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                    <div className={`font-semibold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} num`}>
                                         {ev !== 0 && hasCalc ? `${ev > 0 ? '+' : '-'}$${formatNum(Math.abs(ev))}` : '—'}
                                     </div>
-                                    <p className="text-[10px] text-alphabag-subtext/70 mt-1 font-medium">Average outcome including risk.</p>
+                                    <p className="text-[11px] text-alphabag-subtext/70 mt-1 font-medium">Average outcome including risk.</p>
                                 </div>
                             </div>
                         </div>
@@ -633,10 +633,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
                 {/* Moonbag Scenarios */}
                 {!minimal && (
-                    <div className="glass-panel bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10 hover:border-alphabag-yellow/30 transition-all group relative overflow-hidden rounded-xl p-4 shadow-2xl">
-                        <div className="flex items-center gap-2 mb-2">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray transition-all rounded-lg p-4">
+                        <div className="flex items-center gap-2 mb-3">
                             <Activity size={18} className="text-alphabag-yellow" />
-                            <h2 className="text-white font-black text-[14px] uppercase tracking-tighter">Moonbag Scenarios <span className="text-alphabag-muted font-medium ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
+                            <h2 className="text-white font-semibold text-sm uppercase tracking-wider">Moonbag Scenarios <span className="text-alphabag-subtext font-normal ml-1"> — based on ${formatNum(inv || 1000, 0)} entry</span></h2>
                         </div>
 
                         <div className="flex flex-wrap gap-2">
@@ -645,10 +645,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 const scenarioTarget = baseInv * mult;
                                 const scenarioProfit = scenarioTarget - baseInv;
                                 return (
-                                    <div key={mult} className="bg-black/30 border border-white/10 rounded-xl p-5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/40 transition-all shadow-inner">
-                                        <div className="text-alphabag-yellow font-black text-[18px] mb-2">{mult}x</div>
-                                        <div className="text-white font-black text-[15px] mb-1">{formatKMBValue(scenarioTarget)}</div>
-                                        <div className="text-alphabag-green text-[10px] font-black uppercase tracking-widest">+{formatKMBValue(scenarioProfit)}</div>
+                                    <div key={mult} className="bg-alphabag-black border border-alphabag-gray rounded-md p-3.5 flex-1 min-w-[140px] flex flex-col items-center justify-center text-center hover:border-alphabag-muted transition-all">
+                                        <div className="text-alphabag-yellow font-semibold text-base mb-1 num">{mult}x</div>
+                                        <div className="text-white font-semibold text-sm mb-1 num">{formatKMBValue(scenarioTarget)}</div>
+                                        <div className="text-alphabag-green text-[11px] font-semibold uppercase tracking-wider num">+{formatKMBValue(scenarioProfit)}</div>
                                     </div>
                                 );
                             })}
@@ -691,7 +691,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         onClick={() => setMode(t.id)}
                         className={`relative py-2.5 px-3 text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap bg-transparent cursor-pointer ${
                             mode === t.id
-                                ? 'text-alphabag-text font-black'
+                                ? 'text-alphabag-text font-bold'
                                 : 'text-alphabag-subtext hover:text-alphabag-text'
                         }`}
                     >

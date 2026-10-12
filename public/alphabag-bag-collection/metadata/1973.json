@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #1973",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Midnight Black, undefined, Yellow Plastic, Double Stripe, Glossy, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/1973.svg",
+  "dna": "alphabag-bag-1973-Common-Midnight Black-undefined-Yellow Plastic-Double Stripe-Glossy-None-White Tag Black Text",
+  "edition": 1973,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Midnight Black"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

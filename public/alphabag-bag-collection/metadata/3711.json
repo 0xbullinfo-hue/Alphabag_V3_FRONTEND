@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #3711",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: undefined, undefined, Yellow Plastic, Glitch Digital, undefined, Alpha Pass, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3711.svg",
+  "dna": "alphabag-bag-3711-Epic-undefined-undefined-Yellow Plastic-Glitch Digital-undefined-Alpha Pass-White Tag Black Text",
+  "edition": 3711,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glitch Digital"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "Alpha Pass"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

@@ -1,4 +1,3 @@
-
 import { Calendar,Search,TrendingUp,X } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { MOCK_COINS } from '../../services/mockData';
@@ -24,11 +23,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   const isCustomAsset = coin === 'Custom Asset (MANUAL)';
   const isSubmitDisabled = !amount || !price || (isCustomAsset && (!customAssetName.trim() || !customAssetSymbol.trim()));
 
-  // Pre-fill a starting price from the local coin list as a convenience —
-  // this is NOT a live feed (MOCK_COINS is static demo data), so we label
-  // it "Suggested" rather than "Live" and always leave it editable. Wire
-  // this to MarketService.getPrice(...) if/when a real quote is needed
-  // before submission.
   useEffect(() => {
     if (isCustomAsset) {
       setPrice('');
@@ -42,7 +36,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
     
     if (mock) {
         setPrice(mock.current_price.toString());
-        setIsPriceLive(false); // suggested value only, not a live quote
+        setIsPriceLive(false);
     } else {
         setIsPriceLive(false);
     }
@@ -74,11 +68,6 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
         date
       });
     } else {
-      // BUG FIX: previously `symbol` was never included for a non-custom
-      // coin selection, so WalletContext fell back to 'UNKNOWN' for every
-      // one of these and silently merged unrelated coins (a logged BTC buy
-      // and a logged ETH buy both landed in the same fake "UNKNOWN" row).
-      // Extract both the display name and the ticker from "Name (TICKER)".
       const match = coin.match(/^(.*)\s\(([^)]+)\)$/);
       const name = match ? match[1].trim() : coin;
       const symbol = match ? match[2].trim().toUpperCase() : coin.toUpperCase();
@@ -90,15 +79,15 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/70 backdrop-blur-sm">
-      <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl w-full max-w-md max-h-[90vh] shadow-2xl animate-fade-in overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-alphabag-black/85">
+      <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg w-full max-w-md max-h-[90vh] shadow-2xl animate-fade-in overflow-hidden">
         <div className="flex justify-between items-center p-4 sm:p-4 border-b border-alphabag-gray">
             <h3 className="text-xl font-bold text-white">Add Transaction</h3>
             <button onClick={onClose} className="text-alphabag-subtext hover:text-white"><X size={20} /></button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-4 sm:p-4 space-y-2 overflow-y-auto max-h-[calc(90vh-78px)] custom-scrollbar">
-            <div className="flex bg-alphabag-black rounded-lg p-1 border border-alphabag-gray">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-4 space-y-3 overflow-y-auto max-h-[calc(90vh-78px)] custom-scrollbar">
+            <div className="flex bg-alphabag-black rounded-md p-1 border border-alphabag-gray">
                 {['BUY', 'SELL', 'TRANSFER'].map(t => (
                     <button
                         key={t}
@@ -116,13 +105,13 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             </div>
 
             <div>
-                <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Search Asset</label>
+                <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Search Asset</label>
                 <div className="relative">
                     <Search size={14} className="absolute left-3 top-3 text-alphabag-subtext" />
                     <select 
                         value={coin}
                         onChange={(e) => setCoin(e.target.value)}
-                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg pl-9 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none appearance-none"
+                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none appearance-none"
                     >
                         {MOCK_COINS.map(c => (
                             <option key={c.id} value={`${c.name} (${c.symbol.toUpperCase()})`}>
@@ -137,23 +126,23 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
             {isCustomAsset && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Asset Name</label>
+                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Asset Name</label>
                   <input
                     type="text"
                     value={customAssetName}
                     onChange={(e) => setCustomAssetName(e.target.value)}
                     placeholder="e.g. Alpha Token"
-                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Ticker</label>
+                  <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Ticker</label>
                   <input
                     type="text"
                     value={customAssetSymbol}
                     onChange={(e) => setCustomAssetSymbol(e.target.value.toUpperCase())}
                     placeholder="e.g. ALPHA"
-                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
                   />
                 </div>
               </div>
@@ -161,7 +150,7 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                    <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Buy Price (USD)</label>
+                    <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Buy Price (USD)</label>
                     <div className="relative">
                         <span className="absolute left-3 top-2 text-alphabag-subtext">$</span>
                         <input 
@@ -170,53 +159,53 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             placeholder="0.00"
-                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg pl-6 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md pl-6 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num"
                         />
                         {!isCustomAsset && (
-                             <div className="absolute right-3 top-2.5 flex items-center text-[8px] bg-alphabag-yellow/10 text-alphabag-yellow px-1 rounded font-bold uppercase">
-                                <TrendingUp size={8} className="mr-0.5" /> Suggested
+                             <div className="absolute right-3 top-2.5 flex items-center text-[11px] bg-alphabag-yellow/10 text-alphabag-yellow px-1 rounded font-bold uppercase">
+                                <TrendingUp size={10} className="mr-0.5" /> Suggested
                              </div>
                         )}
                     </div>
                 </div>
                 <div>
-                    <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Amount</label>
+                    <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Amount</label>
                     <input 
                         type="number" 
                         step="any"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         placeholder="0.00"
-                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none"
+                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num"
                     />
                 </div>
             </div>
 
-            <div className="bg-alphabag-black/50 p-3 rounded-lg border border-alphabag-gray/50 text-[10px] text-alphabag-subtext leading-relaxed">
+            <div className="bg-alphabag-black/50 p-3 rounded-md border border-alphabag-gray/50 text-[11px] text-alphabag-subtext leading-relaxed">
                 This entry sets your cost basis for this asset. Enter the price you actually paid — Alphabag will compare it against the live market price to calculate real gain/loss.
             </div>
 
             <div>
-                <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-widest font-bold">Date</label>
+                <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Date</label>
                 <div className="relative">
                     <Calendar size={16} className="absolute left-3 top-2.5 text-alphabag-subtext" />
                     <input 
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg pl-9 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none" 
+                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none" 
                     />
                 </div>
             </div>
 
             {submitMessage && (
-              <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-3 py-2 text-xs text-alphabag-yellow">
+              <div className="rounded-md border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-3 py-2 text-xs text-alphabag-yellow">
                 {submitMessage}
               </div>
             )}
 
             <div className="pt-4">
-                <Button type="submit" disabled={isSubmitDisabled} className="w-full py-3 font-bold uppercase tracking-[0.1em] disabled:opacity-50 disabled:cursor-not-allowed">Save Transaction</Button>
+                <Button type="submit" disabled={isSubmitDisabled} className="w-full py-3 font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed">Save Transaction</Button>
             </div>
         </form>
       </div>

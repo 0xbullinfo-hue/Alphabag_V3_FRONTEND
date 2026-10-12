@@ -592,7 +592,7 @@ export const AlphasFeed: React.FC = () => {
 
                     <button
                         onClick={() => setIsComposerOpen(true)}
-                        className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-4 py-2 rounded-md text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition-all active:scale-[0.98]"
+                        className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition-all active:scale-[0.98]"
                     >
                         <Plus size={15} />
                         <span>Start Discussion</span>
@@ -600,7 +600,7 @@ export const AlphasFeed: React.FC = () => {
                 </div>
             </div>
 
-            {/* ── 🎙️ LIVE AUDIO PODCAST / SPACE CARD (Rendered only when active) ── */}
+            {/* ──  LIVE AUDIO PODCAST / SPACE CARD (Rendered only when active) ── */}
             {podcast && podcast.isLive && (
                 <div className="rounded-2xl border border-alphabag-yellow/40 bg-gradient-to-r from-alphabag-darkgray via-[#141414] to-alphabag-darkgray p-4 md:p-5 relative overflow-hidden shadow-lg">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-alphabag-yellow/5 rounded-full blur-3xl pointer-events-none" />
@@ -608,14 +608,14 @@ export const AlphasFeed: React.FC = () => {
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 relative z-10">
                         <div className="space-y-2 flex-1">
                             <div className="flex items-center gap-2">
-                                <span className="bg-red-500/20 text-red-400 border border-red-500/40 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+                                <span className="bg-red-500/20 text-red-400 border border-red-500/40 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
                                     <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
                                     LIVE AUDIO PODCAST
                                 </span>
                                 <span className="text-[11px] text-alphabag-subtext font-medium flex items-center gap-1">
                                     <strong className="text-alphabag-text tabular-nums">{podcast.listenersCount}</strong> Listening
                                 </span>
-                                <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[10px] uppercase font-semibold">
+                                <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] uppercase font-semibold">
                                     All Users Welcome
                                 </span>
                             </div>
@@ -628,11 +628,11 @@ export const AlphasFeed: React.FC = () => {
                             </p>
 
                             <div className="flex flex-wrap items-center gap-2 pt-1">
-                                <span className="text-[10px] uppercase font-semibold text-alphabag-subtext">Stage Speakers:</span>
+                                <span className="text-[11px] uppercase font-semibold text-alphabag-subtext">Stage Speakers:</span>
                                 {podcast.stageSpeakers.map((spk, i) => (
                                     <div 
                                         key={i} 
-                                        className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-semibold border ${
+                                        className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-[11px] font-semibold border ${
                                             spk.isSpeaking 
                                                 ? 'bg-alphabag-yellow/10 text-alphabag-yellow border-alphabag-yellow/40 animate-pulse'
                                                 : 'bg-alphabag-black text-alphabag-subtext border-alphabag-gray'
@@ -640,7 +640,7 @@ export const AlphasFeed: React.FC = () => {
                                     >
                                         <Mic size={11} className={spk.isSpeaking ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
                                         <span>{spk.name}</span>
-                                        {spk.isHost && <span className="bg-alphabag-yellow text-alphabag-dark text-[8px] font-bold px-1 rounded">HOST</span>}
+                                        {spk.isHost && <span className="bg-alphabag-yellow text-alphabag-dark text-[11px] font-bold px-1 rounded">HOST</span>}
                                     </div>
                                 ))}
                             </div>
@@ -654,7 +654,7 @@ export const AlphasFeed: React.FC = () => {
                                     <div className="w-1 bg-alphabag-yellow h-3 animate-bounce rounded-full" style={{ animationDelay: '0.2s' }} />
                                     <div className="w-1 bg-alphabag-yellow h-7 animate-bounce rounded-full" style={{ animationDelay: '0.4s' }} />
                                     <div className="w-1 bg-alphabag-yellow h-5 animate-bounce rounded-full" style={{ animationDelay: '0.25s' }} />
-                                    <span className="text-[10px] text-alphabag-yellow font-bold uppercase ml-1.5 font-mono">ON-AIR</span>
+                                    <span className="text-[11px] text-alphabag-yellow font-bold uppercase ml-1.5 font-mono">ON-AIR</span>
                                 </div>
                             )}
 
@@ -702,7 +702,7 @@ export const AlphasFeed: React.FC = () => {
                                     <MessageCircle size={13} className="text-alphabag-yellow" />
                                     Live Broadcast Chat & Q&A
                                 </span>
-                                <span className="text-[10px] text-alphabag-subtext font-mono">
+                                <span className="text-[11px] text-alphabag-subtext font-mono">
                                     Posting as: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong>
                                 </span>
                             </div>
@@ -711,16 +711,16 @@ export const AlphasFeed: React.FC = () => {
                                 {podcast.liveChat.length > 0 ? (
                                     podcast.liveChat.map((msg) => (
                                         <div key={msg.id} className="bg-alphabag-black/60 border border-alphabag-gray/50 rounded p-2 flex items-start gap-2">
-                                            <span className={`px-1.5 py-0.2 rounded text-[9px] font-bold uppercase shrink-0 ${
+                                            <span className={`px-1.5 py-0.2 rounded text-[11px] font-bold uppercase shrink-0 ${
                                                 msg.isVip ? 'bg-alphabag-yellow/20 text-alphabag-yellow' : 'bg-alphabag-gray text-alphabag-subtext'
                                             }`}>
                                                 {msg.tier}
                                             </span>
                                             <div className="flex-1 min-w-0">
-                                                <span className="font-mono text-[10px] text-alphabag-subtext mr-1.5">{msg.authorWallet}:</span>
+                                                <span className="font-mono text-[11px] text-alphabag-subtext mr-1.5">{msg.authorWallet}:</span>
                                                 <span className="text-alphabag-text leading-relaxed">{msg.message}</span>
                                             </div>
-                                            <span className="text-[9px] text-alphabag-subtext shrink-0">{msg.timestamp}</span>
+                                            <span className="text-[11px] text-alphabag-subtext shrink-0">{msg.timestamp}</span>
                                         </div>
                                     ))
                                 ) : (
@@ -768,7 +768,7 @@ export const AlphasFeed: React.FC = () => {
                                 onClick={() => setSelectedCategory(ch.id as DiscussionCategory)}
                                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap flex items-center gap-1.5 border transition-all ${
                                     active
-                                        ? 'bg-alphabag-yellow text-alphabag-dark font-black border-alphabag-yellow shadow-sm'
+                                        ? 'bg-alphabag-yellow text-alphabag-dark font-bold border-alphabag-yellow shadow-sm'
                                         : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text hover:border-alphabag-subtext/40'
                                 }`}
                             >
@@ -796,10 +796,10 @@ export const AlphasFeed: React.FC = () => {
                         onChange={(e) => setSortBy(e.target.value as any)}
                         className="bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-alphabag-yellow"
                     >
-                        <option value="HOT">🔥 Hot Debates</option>
-                        <option value="TOP">🚀 Top Voted</option>
-                        <option value="DEBATED">💬 Most Discussed</option>
-                        <option value="LATEST">⏱️ Latest</option>
+                        <option value="HOT"> Hot Debates</option>
+                        <option value="TOP"> Top Voted</option>
+                        <option value="DEBATED"> Most Discussed</option>
+                        <option value="LATEST">⏱ Latest</option>
                     </select>
                 </div>
             </div>
@@ -819,7 +819,7 @@ export const AlphasFeed: React.FC = () => {
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow px-2 py-0.2 rounded text-[9px] font-black uppercase tracking-wider border border-alphabag-yellow/20">
+                                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow px-2 py-0.2 rounded text-[11px] font-bold uppercase tracking-wider border border-alphabag-yellow/20">
                                             SPONSORED
                                         </span>
                                         <h4 className="text-xs font-bold text-alphabag-text">{sponsoredAd.partnerName}</h4>
@@ -864,30 +864,30 @@ export const AlphasFeed: React.FC = () => {
                                     <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-alphabag-gray/50 text-xs">
                                         <div className="flex items-center gap-2 flex-wrap">
                                             {post.isPinned && (
-                                                <span className="bg-alphabag-yellow text-alphabag-dark text-[9px] font-black uppercase px-2 py-0.5 rounded">
+                                                <span className="bg-alphabag-yellow text-alphabag-dark text-[11px] font-bold uppercase px-2 py-0.5 rounded">
                                                     PINNED
                                                 </span>
                                             )}
                                             <span className="bg-alphabag-black border border-alphabag-gray text-alphabag-yellow font-bold font-mono px-2 py-0.5 rounded text-[11px]">
                                                 {post.ticker}
                                             </span>
-                                            <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[10px] font-semibold uppercase">
+                                            <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] font-semibold uppercase">
                                                 {post.category.replace('_', ' ')}
                                             </span>
-                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
+                                            <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${
                                                 post.sentiment === 'BULLISH'
                                                     ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30'
                                                     : post.sentiment === 'BEARISH'
                                                     ? 'bg-red-500/10 text-red-400 border-red-500/30'
                                                     : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray'
                                             }`}>
-                                                {post.sentiment === 'BULLISH' ? '🐂 BULLISH' : post.sentiment === 'BEARISH' ? '🐻 BEARISH' : '⚖️ NEUTRAL'}
+                                                {post.sentiment === 'BULLISH' ? ' BULLISH' : post.sentiment === 'BEARISH' ? ' BEARISH' : ' NEUTRAL'}
                                             </span>
                                         </div>
 
                                         <div className="flex items-center gap-1.5 text-[11px] text-alphabag-subtext font-mono">
                                             <span>by <strong className="text-alphabag-text">{post.authorWallet}</strong></span>
-                                            <span className="bg-alphabag-gray px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase text-alphabag-subtext">
+                                            <span className="bg-alphabag-gray px-1.5 py-0.2 rounded text-[11px] font-semibold uppercase text-alphabag-subtext">
                                                 {post.authorTier}
                                             </span>
                                         </div>
@@ -905,25 +905,25 @@ export const AlphasFeed: React.FC = () => {
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-alphabag-black/70 border border-alphabag-gray rounded-xl p-3 text-center">
                                             {post.tokenMetrics.marketCap && (
                                                 <div>
-                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Market Cap</div>
+                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Market Cap</div>
                                                     <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.marketCap}</div>
                                                 </div>
                                             )}
                                             {post.tokenMetrics.fdv && (
                                                 <div>
-                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Target FDV</div>
+                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Target FDV</div>
                                                     <div className="text-xs font-semibold text-alphabag-yellow font-mono mt-0.5">{post.tokenMetrics.fdv}</div>
                                                 </div>
                                             )}
                                             {post.tokenMetrics.circulatingSupply && (
                                                 <div>
-                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Circulating %</div>
+                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Circulating %</div>
                                                     <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.circulatingSupply}</div>
                                                 </div>
                                             )}
                                             {post.tokenMetrics.unlockDate && (
                                                 <div>
-                                                    <div className="text-[9px] uppercase font-semibold text-alphabag-subtext">Unlock Schedule</div>
+                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Unlock Schedule</div>
                                                     <div className="text-xs font-semibold text-alphabag-green font-mono mt-0.5">{post.tokenMetrics.unlockDate}</div>
                                                 </div>
                                             )}
@@ -937,7 +937,7 @@ export const AlphasFeed: React.FC = () => {
                                                     onClick={() => handleUpvoteDiscussion(post.id, 'UP')}
                                                     className={`px-2.5 py-1 rounded text-xs font-semibold flex items-center gap-1 transition-all ${
                                                         post.userVoted === 'UP'
-                                                            ? 'bg-alphabag-yellow text-alphabag-dark font-black'
+                                                            ? 'bg-alphabag-yellow text-alphabag-dark font-bold'
                                                             : 'text-alphabag-subtext hover:text-alphabag-text'
                                                     }`}
                                                     title="Upvote Analysis"
@@ -974,7 +974,7 @@ export const AlphasFeed: React.FC = () => {
                                             </button>
                                         </div>
 
-                                        <div className="flex items-center gap-2 text-[10px] text-alphabag-subtext">
+                                        <div className="flex items-center gap-2 text-[11px] text-alphabag-subtext">
                                             <span>Community Discussion</span>
                                         </div>
                                     </div>
@@ -990,7 +990,7 @@ export const AlphasFeed: React.FC = () => {
                                                     {targetReplyId && (
                                                         <button 
                                                             onClick={() => setReplyingTo(p => ({ ...p, [post.id]: null }))}
-                                                            className="text-alphabag-yellow hover:underline text-[10px]"
+                                                            className="text-alphabag-yellow hover:underline text-[11px]"
                                                         >
                                                             Cancel Reply
                                                         </button>
@@ -1012,13 +1012,13 @@ export const AlphasFeed: React.FC = () => {
                                                                 key={st}
                                                                 type="button"
                                                                 onClick={() => setCommentSentiments(p => ({ ...p, [post.id]: st }))}
-                                                                className={`px-2 py-0.5 rounded text-[10px] font-semibold border transition-all ${
+                                                                className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition-all ${
                                                                     sentimentDraft === st
-                                                                        ? 'bg-alphabag-yellow text-alphabag-dark font-black border-alphabag-yellow'
+                                                                        ? 'bg-alphabag-yellow text-alphabag-dark font-bold border-alphabag-yellow'
                                                                         : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray'
                                                                 }`}
                                                             >
-                                                                {st === 'BULLISH' ? '🐂' : st === 'BEARISH' ? '🐻' : '⚖️'} {st}
+                                                                {st === 'BULLISH' ? '' : st === 'BEARISH' ? '' : ''} {st}
                                                             </button>
                                                         ))}
                                                     </div>
@@ -1042,16 +1042,16 @@ export const AlphasFeed: React.FC = () => {
                                                             <div className="flex justify-between items-center">
                                                                 <div className="flex items-center gap-2">
                                                                     <span className="font-mono text-alphabag-text font-semibold">{comm.authorWallet}</span>
-                                                                    <span className="bg-alphabag-gray text-alphabag-subtext px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase">
+                                                                    <span className="bg-alphabag-gray text-alphabag-subtext px-1.5 py-0.2 rounded text-[11px] font-semibold uppercase">
                                                                         {comm.authorTier}
                                                                     </span>
                                                                     {comm.sentiment && (
-                                                                        <span className="text-[10px] text-alphabag-yellow font-bold">
-                                                                            {comm.sentiment === 'BULLISH' ? '🐂 Bullish' : comm.sentiment === 'BEARISH' ? '🐻 Bearish' : '⚖️ Neutral'}
+                                                                        <span className="text-[11px] text-alphabag-yellow font-bold">
+                                                                            {comm.sentiment === 'BULLISH' ? ' Bullish' : comm.sentiment === 'BEARISH' ? ' Bearish' : ' Neutral'}
                                                                         </span>
                                                                     )}
                                                                 </div>
-                                                                <span className="text-[10px] text-alphabag-subtext">
+                                                                <span className="text-[11px] text-alphabag-subtext">
                                                                     {new Date(comm.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                 </span>
                                                             </div>
@@ -1060,7 +1060,7 @@ export const AlphasFeed: React.FC = () => {
                                                                 {comm.content}
                                                             </p>
 
-                                                            <div className="flex items-center gap-3 pt-1 text-[10px] text-alphabag-subtext">
+                                                            <div className="flex items-center gap-3 pt-1 text-[11px] text-alphabag-subtext">
                                                                 <button 
                                                                     onClick={() => setReplyingTo(p => ({ ...p, [post.id]: comm.id }))}
                                                                     className="text-alphabag-yellow hover:underline font-semibold"
@@ -1077,7 +1077,7 @@ export const AlphasFeed: React.FC = () => {
                                                                         <div key={rep.id} className="bg-alphabag-darkgray/60 rounded p-2 text-xs space-y-1">
                                                                             <div className="flex items-center gap-2">
                                                                                 <span className="font-mono text-alphabag-text font-semibold text-[11px]">{rep.authorWallet}</span>
-                                                                                <span className="bg-alphabag-gray text-alphabag-subtext px-1 py-0.2 rounded text-[8px] uppercase">{rep.authorTier}</span>
+                                                                                <span className="bg-alphabag-gray text-alphabag-subtext px-1 py-0.2 rounded text-[11px] uppercase">{rep.authorTier}</span>
                                                                             </div>
                                                                             <p className="text-alphabag-subtext text-[11px] leading-relaxed">{rep.content}</p>
                                                                         </div>
@@ -1123,10 +1123,10 @@ export const AlphasFeed: React.FC = () => {
                     {sponsoredAd && (
                         <div className="rounded-2xl border-2 border-alphabag-yellow/40 bg-gradient-to-b from-alphabag-darkgray to-alphabag-black p-4 space-y-3 shadow-md relative overflow-hidden">
                             <div className="flex justify-between items-center">
-                                <span className="bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider">
+                                <span className="bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">
                                     {sponsoredAd.badge}
                                 </span>
-                                <span className="text-[10px] text-alphabag-subtext font-semibold uppercase">SPONSOR</span>
+                                <span className="text-[11px] text-alphabag-subtext font-semibold uppercase">SPONSOR</span>
                             </div>
 
                             <div className="space-y-1.5">
@@ -1146,7 +1146,7 @@ export const AlphasFeed: React.FC = () => {
                                 <ArrowUpRight size={13} />
                             </a>
 
-                            <div className="pt-2 border-t border-alphabag-gray/50 flex justify-between items-center text-[10px] text-alphabag-subtext">
+                            <div className="pt-2 border-t border-alphabag-gray/50 flex justify-between items-center text-[11px] text-alphabag-subtext">
                                 <span>Verified Web3 Ecosystem Ad</span>
                                 <button
                                     onClick={() => setIsFounderFormOpen(true)}
@@ -1158,7 +1158,7 @@ export const AlphasFeed: React.FC = () => {
                         </div>
                     )}
 
-                    {/* 🔥 TRENDING TOKENS IN COMMUNITY */}
+                    {/*  TRENDING TOKENS IN COMMUNITY */}
                     {trendingTopics.length > 0 && (
                         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
                             <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
@@ -1166,7 +1166,7 @@ export const AlphasFeed: React.FC = () => {
                                     <Flame size={14} className="text-alphabag-yellow" />
                                     Trending Topics
                                 </span>
-                                <span className="text-[10px] font-semibold uppercase text-alphabag-yellow">24H Active</span>
+                                <span className="text-[11px] font-semibold uppercase text-alphabag-yellow">24H Active</span>
                             </div>
 
                             <div className="space-y-2">
@@ -1181,7 +1181,7 @@ export const AlphasFeed: React.FC = () => {
                                                 <span className="text-xs font-bold font-mono text-alphabag-yellow group-hover:underline">
                                                     {tr.ticker}
                                                 </span>
-                                                <span className="text-[10px] text-alphabag-green font-semibold">
+                                                <span className="text-[11px] text-alphabag-green font-semibold">
                                                     {tr.sentiment}
                                                 </span>
                                             </div>
@@ -1189,7 +1189,7 @@ export const AlphasFeed: React.FC = () => {
                                                 {tr.topic}
                                             </div>
                                         </div>
-                                        <span className="text-[10px] text-alphabag-subtext font-mono shrink-0 pl-2">
+                                        <span className="text-[11px] text-alphabag-subtext font-mono shrink-0 pl-2">
                                             {tr.posts} posts
                                         </span>
                                     </button>
@@ -1198,7 +1198,7 @@ export const AlphasFeed: React.FC = () => {
                         </div>
                     )}
 
-                    {/* 🏆 TOP COMMUNITY ANALYSTS LEADERBOARD */}
+                    {/*  TOP COMMUNITY ANALYSTS LEADERBOARD */}
                     {topAnalysts.length > 0 && (
                         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
                             <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
@@ -1206,24 +1206,24 @@ export const AlphasFeed: React.FC = () => {
                                     <Award size={14} className="text-alphabag-yellow" />
                                     Top Analysts
                                 </span>
-                                <span className="text-[10px] text-alphabag-subtext font-mono">By Upvotes</span>
+                                <span className="text-[11px] text-alphabag-subtext font-mono">By Upvotes</span>
                             </div>
 
                             <div className="space-y-2">
                                 {topAnalysts.map((an, i) => (
                                     <div key={i} className="flex items-center justify-between bg-alphabag-black/50 border border-alphabag-gray rounded-xl p-2.5 text-xs">
                                         <div className="flex items-center gap-2">
-                                            <span className="w-5 h-5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-alphabag-yellow text-[10px] font-black flex items-center justify-center">
+                                            <span className="w-5 h-5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-bold flex items-center justify-center">
                                                 {an.rank}
                                             </span>
                                             <div>
                                                 <div className="font-mono font-semibold text-alphabag-text text-[11px]">{an.wallet}</div>
-                                                <div className="text-[10px] text-alphabag-subtext">{an.focus}</div>
+                                                <div className="text-[11px] text-alphabag-subtext">{an.focus}</div>
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-[10px] font-mono text-alphabag-yellow font-semibold">{an.score}</span>
-                                            <div className="text-[9px] text-alphabag-subtext uppercase">{an.tier}</div>
+                                            <span className="text-[11px] font-mono text-alphabag-yellow font-semibold">{an.score}</span>
+                                            <div className="text-[11px] text-alphabag-subtext uppercase">{an.tier}</div>
                                         </div>
                                     </div>
                                 ))}
@@ -1231,7 +1231,7 @@ export const AlphasFeed: React.FC = () => {
                         </div>
                     )}
 
-                    {/* 🛡️ PRIVACY & DYOR COMMUNITY MANIFESTO */}
+                    {/*  PRIVACY & DYOR COMMUNITY MANIFESTO */}
                     <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-2 text-xs">
                         <div className="flex items-center gap-1.5 text-alphabag-yellow font-bold uppercase text-[11px]">
                             <Shield size={14} />
@@ -1247,7 +1247,7 @@ export const AlphasFeed: React.FC = () => {
 
             {/* ── START DISCUSSION COMPOSER MODAL ── */}
             {isComposerOpen && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl max-w-2xl w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center pb-3 border-b border-alphabag-gray">
                             <div>
@@ -1296,11 +1296,11 @@ export const AlphasFeed: React.FC = () => {
                                         onChange={(e) => setNewCategory(e.target.value as any)}
                                         className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text focus:outline-none focus:border-alphabag-yellow font-semibold"
                                     >
-                                        <option value="TOKENOMICS">📊 Tokenomics & Vesting</option>
+                                        <option value="TOKENOMICS"> Tokenomics & Vesting</option>
                                         <option value="UTILITY">⚡ Utility & Yield</option>
-                                        <option value="PROJECT_REVIEW">🏗️ Project Review & Fundamentals</option>
-                                        <option value="ALPHA_CALL">🎯 Alpha Call & Due Diligence</option>
-                                        <option value="AUDIT_SECURITY">🛡️ Security & Audits</option>
+                                        <option value="PROJECT_REVIEW"> Project Review & Fundamentals</option>
+                                        <option value="ALPHA_CALL"> Alpha Call & Due Diligence</option>
+                                        <option value="AUDIT_SECURITY"> Security & Audits</option>
                                     </select>
                                 </div>
 
@@ -1314,11 +1314,11 @@ export const AlphasFeed: React.FC = () => {
                                                 onClick={() => setNewSentiment(st)}
                                                 className={`py-2 rounded-lg text-xs font-bold uppercase border transition-all ${
                                                     newSentiment === st
-                                                        ? 'bg-alphabag-yellow text-alphabag-dark border-alphabag-yellow shadow-sm font-black'
+                                                        ? 'bg-alphabag-yellow text-alphabag-dark border-alphabag-yellow shadow-sm font-bold'
                                                         : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
                                                 }`}
                                             >
-                                                {st === 'BULLISH' ? '🐂 Bull' : st === 'BEARISH' ? '🐻 Bear' : '⚖️ Neutral'}
+                                                {st === 'BULLISH' ? ' Bull' : st === 'BEARISH' ? ' Bear' : ' Neutral'}
                                             </button>
                                         ))}
                                     </div>
@@ -1375,8 +1375,8 @@ export const AlphasFeed: React.FC = () => {
                                 <span className="text-alphabag-subtext font-mono">
                                     Posting as: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong> ({userTier})
                                 </span>
-                                <span className="text-[10px] text-alphabag-green font-semibold">
-                                    🔒 Privacy Shield Protected
+                                <span className="text-[11px] text-alphabag-green font-semibold">
+                                     Privacy Shield Protected
                                 </span>
                             </div>
 
@@ -1390,7 +1390,7 @@ export const AlphasFeed: React.FC = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] rounded-lg text-xs font-black uppercase tracking-wider shadow-sm"
+                                    className="px-6 py-2 bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm"
                                 >
                                     Publish Discussion
                                 </button>

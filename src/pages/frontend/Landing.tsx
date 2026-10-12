@@ -842,7 +842,7 @@ export const Landing: React.FC = () => {
       />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-alphabag-gray bg-alphabag-dark/95">
+      <nav className="fixed top-0 w-full z-50  border-b border-alphabag-gray bg-alphabag-dark/95">
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
           
           {/* Left Side: Logo + Nav Links (Binance layout) */}
@@ -893,7 +893,7 @@ export const Landing: React.FC = () => {
 
         {/* Mobile Nav Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full backdrop-blur-xl border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in bg-alphabag-dark/95">
+          <div className="md:hidden absolute top-20 left-0 w-full  border-b border-alphabag-gray p-4 flex flex-col space-y-2 animate-slide-in bg-alphabag-dark/95">
             <button onClick={() => handleNavClick('home')} className={`text-left py-2 text-sm font-medium ${activeTab === 'home' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_home')}</button>
             <button onClick={() => handleNavClick('features')} className={`text-left py-2 text-sm font-medium ${activeTab === 'features' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_features')}</button>
             <button onClick={() => handleNavClick('roadmap')} className={`text-left py-2 text-sm font-medium ${activeTab === 'roadmap' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_roadmap')}</button>
@@ -943,7 +943,7 @@ export const Landing: React.FC = () => {
                         Track Smart
                       </Button>
                       <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
-                        <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 backdrop-blur-md text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40  text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
                           <Send size={16} /> {t('btn_join_community')}
                         </Button>
                       </a>
@@ -951,18 +951,18 @@ export const Landing: React.FC = () => {
                   </div>
 
                   {/* Pre-TGE Countdown Timer */}
-                  <div className="mt-3 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl backdrop-blur-sm animate-fade-in-up delay-300">
+                  <div className="mt-3 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl  animate-fade-in-up delay-300">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="text-[10px] font-black uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5">
+                      <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-ping inline-block"></span>
                         {teaserCountdown.isLive ? 'Live now' : 'BETA TESTING COUNT DOWN'}
                       </div>
-                      <div className="text-[10px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
+                      <div className="text-[11px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
                     </div>
 
                     {teaserCountdown.isLive ? (
                       <div className="rounded-lg border border-alphabag-yellow/40 bg-alphabag-black/60 px-4 py-3 text-center">
-                        <div className="text-xl md:text-2xl font-black text-alphabag-yellow">LIVE NOW</div>
+                        <div className="text-xl md:text-2xl font-bold text-alphabag-yellow">LIVE NOW</div>
                       </div>
                     ) : (
                       <div className="grid grid-cols-4 gap-2">
@@ -973,8 +973,8 @@ export const Landing: React.FC = () => {
                           { label: 'Sec', value: teaserCountdown.seconds }
                         ].map((item) => (
                           <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
-                            <div className="text-lg md:text-xl font-black text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
-                            <div className="text-[8px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
+                            <div className="text-lg md:text-xl font-bold text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                            <div className="text-[11px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
                           </div>
                         ))}
                       </div>
@@ -1032,7 +1032,7 @@ export const Landing: React.FC = () => {
             <button
               type="button"
               aria-label="Close legal information"
-              className="absolute inset-0 bg-black/75 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/75 "
               onClick={() => setLegalModal(null)}
             />
 
@@ -1273,7 +1273,7 @@ export const Landing: React.FC = () => {
                 <div className="flex flex-col justify-between space-y-6">
                   <div>
 
-                    <h2 className="text-4xl md:text-6xl font-black tracking-tight text-alphabag-text leading-[1.1] mb-4">
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-alphabag-text leading-[1.1] mb-4">
                       Alpha<span className="text-alphabag-yellow">BAG</span> Pass
                     </h2>
                     <p className="text-alphabag-subtext text-base md:text-lg leading-relaxed max-w-xl">
@@ -1290,7 +1290,7 @@ export const Landing: React.FC = () => {
                           {stat.icon}
                         </div>
                         <div>
-                          <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">{stat.label}</div>
+                          <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">{stat.label}</div>
                           <div className="text-lg font-bold text-alphabag-text">{stat.value}</div>
                         </div>
                       </div>
@@ -1317,7 +1317,7 @@ export const Landing: React.FC = () => {
                       <div className="w-full h-3 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
                         <div className="h-full rounded-full bg-gradient-to-r from-alphabag-yellow to-yellow-600" style={{ width: '0%' }} />
                       </div>
-                      <div className="mt-2 flex justify-between text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider">
+                      <div className="mt-2 flex justify-between text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">
                         <span>0% Minted</span>
                         <span>Phase 1</span>
                       </div>
@@ -1325,12 +1325,12 @@ export const Landing: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-3 mb-6">
                       <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
-                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Price</div>
-                        <div className="text-xl font-black text-alphabag-yellow">0.07 BNB</div>
+                        <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Price</div>
+                        <div className="text-xl font-bold text-alphabag-yellow">0.07 BNB</div>
                       </div>
                       <div className="bg-alphabag-black rounded-xl p-4 border border-alphabag-gray text-center">
-                        <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Max Per Wallet</div>
-                        <div className="text-xl font-black text-alphabag-text">5</div>
+                        <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Max Per Wallet</div>
+                        <div className="text-xl font-bold text-alphabag-text">5</div>
                       </div>
                     </div>
 
@@ -1345,7 +1345,7 @@ export const Landing: React.FC = () => {
 
                     <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-alphabag-gray">
                       <span className="text-sm font-semibold text-alphabag-subtext">Total</span>
-                      <span className="text-lg font-black text-alphabag-yellow">0.07 BNB</span>
+                      <span className="text-lg font-bold text-alphabag-yellow">0.07 BNB</span>
                     </div>
 
                     <button disabled className="w-full py-4 rounded-xl bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
@@ -1415,7 +1415,7 @@ export const Landing: React.FC = () => {
                         <div>
                           <div className="text-base font-bold text-alphabag-text flex items-center gap-2">
                             <span>{tier.name}</span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded border" style={{ borderColor: tier.color + '40', color: tier.color, background: tier.color + '15' }}>
+                            <span className="text-[11px] font-mono px-1.5 py-0.2 rounded border" style={{ borderColor: tier.color + '40', color: tier.color, background: tier.color + '15' }}>
                               {tier.count} Bags
                             </span>
                           </div>
@@ -1426,7 +1426,7 @@ export const Landing: React.FC = () => {
                         <div className="hidden sm:block w-32 h-2 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
                           <div className="h-full rounded-full transition-all" style={{ width: tier.pct, background: tier.color }} />
                         </div>
-                        <div className="text-lg font-black min-w-[50px] text-right" style={{ color: tier.color }}>{tier.pct}</div>
+                        <div className="text-lg font-bold min-w-[50px] text-right" style={{ color: tier.color }}>{tier.pct}</div>
                       </div>
                     </div>
                   ))}
@@ -1808,17 +1808,17 @@ export const Landing: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <button type="button" onClick={() => setLegalModal('terms')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
+            <button type="button" onClick={() => setLegalModal('terms')} className="text-[11px] font-bold text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Terms
             </button>
 
-            <button type="button" onClick={() => setLegalModal('privacy')} className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
+            <button type="button" onClick={() => setLegalModal('privacy')} className="text-[11px] font-bold text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all">
               Privacy
             </button>
-            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+            <a href="https://x.com/myalphabag" target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <X size={14} /> X.com
             </a>
-            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
+            <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-alphabag-muted hover:text-alphabag-text uppercase tracking-[0.2em] transition-all flex items-center gap-2">
               <Send size={14} /> Telegram
             </a>
           </div>
@@ -1887,7 +1887,7 @@ const TokenMetricCard = ({ label, value, icon, isMasked }: { label: string, valu
       {React.cloneElement(icon as React.ReactElement, { size: 24 })}
     </div>
     <div>
-      <div className="text-[10px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">{label}</div>
+      <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">{label}</div>
       <div className={`text-lg md:text-xl font-bold text-alphabag-text tracking-tight leading-none ${isMasked ? 'text-transparent blur-[6px] select-none bg-clip-text bg-alphabag-text' : ''}`}>
         {value}
       </div>

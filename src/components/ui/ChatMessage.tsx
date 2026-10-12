@@ -41,7 +41,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                                 p: ({ node, ...props }) => <p className="text-zinc-50 leading-relaxed my-2" {...props} />,
                                 span: ({ node, ...props }) => <span className="text-zinc-50 leading-relaxed" {...props} />,
                                 strong: ({ node, ...props }) => <strong className="text-alphabag-yellow font-semibold" {...props} />,
-                                table: ({ node, ...props }) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse overflow-hidden rounded-xl border border-alphabag-border text-sm" {...props} /></div>,
+                                table: ({ node, ...props }) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse overflow-hidden rounded-md border border-alphabag-border text-sm" {...props} /></div>,
                                 th: ({ node, ...props }) => <th className="bg-alphabag-darkgray text-zinc-400 font-medium py-3 px-4 text-left border-b border-alphabag-border" {...props} />,
                                 td: ({ node, ...props }) => <td className="py-3 px-4 border-b border-alphabag-border/50 text-zinc-100 tabular-nums" {...props} />,
                                 ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-5 space-y-2 text-zinc-300 my-3" {...props} />,
@@ -50,7 +50,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                                 code: ({ node, inline, ...props }: any) => inline ?
                                     <code className="bg-alphabag-darkgray text-alphabag-yellow px-1.5 py-0.5 rounded text-xs font-mono border border-alphabag-border" {...props} /> :
                                     <code {...props} />,
-                                pre: ({ node, ...props }) => <pre className="bg-black border border-alphabag-border rounded-xl p-4 my-4 overflow-x-auto text-sm font-mono text-emerald-400" {...props} />,
+                                pre: ({ node, ...props }) => <pre className="bg-black border border-alphabag-border rounded-md p-4 my-4 overflow-x-auto text-sm font-mono text-emerald-400" {...props} />,
                                 a: ({ node, ...props }) => <a className="text-alphabag-yellow hover:text-white underline underline-offset-4 transition-colors" target="_blank" rel="noopener noreferrer" {...props} />
                             }}
                         >
@@ -66,21 +66,21 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
             if (type === 'pie' && data.length > 0) {
                 parts.push(
-                    <div key={`chart-${match.index}`} className="my-4 glass-panel p-4 h-64 w-full max-w-md">
+                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-md p-4 h-64 w-full max-w-md">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
                                     {data.map((_entry: any, index: number) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />)}
                                 </Pie>
-                                <RechartsTooltip contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '8px', color: '#FFFFFF' }} itemStyle={{ color: '#FFFFFF' }} />
-                                <Legend verticalAlign="bottom" height={36} iconSize={8} formatter={(val) => <span className="text-[10px] uppercase text-alphabag-muted ml-1">{val}</span>} />
+                                <RechartsTooltip contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '6px', color: '#FFFFFF' }} itemStyle={{ color: '#FFFFFF' }} />
+                                <Legend verticalAlign="bottom" height={36} iconSize={8} formatter={(val) => <span className="text-[11px] uppercase text-alphabag-muted ml-1">{val}</span>} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 );
             } else if (type === 'area' && data.length > 0) {
                 parts.push(
-                    <div key={`chart-${match.index}`} className="my-4 glass-panel p-4 h-64 w-full max-w-md">
+                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-md p-4 h-64 w-full max-w-md">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={data}>
                                 <defs>
@@ -89,9 +89,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                                         <stop offset="95%" stopColor="#FCD535" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
-                                <XAxis dataKey="name" stroke="#A1A1AA" fontSize={10} tickLine={false} axisLine={false} />
-                                <YAxis orientation="right" stroke="#A1A1AA" fontSize={10} tickLine={false} axisLine={false} />
-                                <RechartsTooltip contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.05)', color: '#FFFFFF', borderRadius: '12px' }} itemStyle={{ color: '#FFFFFF' }} />
+                                <XAxis dataKey="name" stroke="#A1A1AA" fontSize={11} tickLine={false} axisLine={false} />
+                                <YAxis orientation="right" stroke="#A1A1AA" fontSize={11} tickLine={false} axisLine={false} />
+                                <RechartsTooltip contentStyle={{ backgroundColor: '#18181B', borderColor: 'rgba(255,255,255,0.05)', color: '#FFFFFF', borderRadius: '6px' }} itemStyle={{ color: '#FFFFFF' }} />
                                 <Area type="monotone" dataKey="value" stroke="#FCD535" strokeWidth={2} fillOpacity={1} fill={`url(#colorValue-${match.index})`} />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -109,7 +109,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                             p: ({ node, ...props }) => <p className="text-zinc-50 leading-relaxed my-2" {...props} />,
                             span: ({ node, ...props }) => <span className="text-zinc-50 leading-relaxed" {...props} />,
                             strong: ({ node, ...props }) => <strong className="text-alphabag-yellow font-semibold" {...props} />,
-                            table: ({ node, ...props }) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse overflow-hidden rounded-xl border border-alphabag-border text-sm" {...props} /></div>,
+                            table: ({ node, ...props }) => <div className="overflow-x-auto my-4"><table className="w-full border-collapse overflow-hidden rounded-md border border-alphabag-border text-sm" {...props} /></div>,
                             th: ({ node, ...props }) => <th className="bg-alphabag-darkgray text-zinc-400 font-medium py-3 px-4 text-left border-b border-alphabag-border" {...props} />,
                             td: ({ node, ...props }) => <td className="py-3 px-4 border-b border-alphabag-border/50 text-zinc-100 tabular-nums" {...props} />,
                             ul: ({ node, ...props }) => <ul className="list-disc list-outside ml-5 space-y-2 text-zinc-300 my-3" {...props} />,
@@ -118,7 +118,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
                             code: ({ node, inline, ...props }: any) => inline ?
                                 <code className="bg-alphabag-darkgray text-alphabag-yellow px-1.5 py-0.5 rounded text-xs font-mono border border-alphabag-border" {...props} /> :
                                 <code {...props} />,
-                            pre: ({ node, ...props }) => <pre className="bg-black border border-alphabag-border rounded-xl p-4 my-4 overflow-x-auto text-sm font-mono text-emerald-400" {...props} />,
+                            pre: ({ node, ...props }) => <pre className="bg-black border border-alphabag-border rounded-md p-4 my-4 overflow-x-auto text-sm font-mono text-emerald-400" {...props} />,
                             a: ({ node, ...props }) => <a className="text-alphabag-yellow hover:text-white underline underline-offset-4 transition-colors" target="_blank" rel="noopener noreferrer" {...props} />
                         }}
                     >
@@ -161,10 +161,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
                     {message.groundingMetadata && message.groundingMetadata.length > 0 && (
                         <div className="mt-4 pt-4 border-t border-alphabag-border/50">
-                            <p className="text-[10px] text-alphabag-muted uppercase font-black mb-2 tracking-widest opacity-60">Verified Sources:</p>
+                            <p className="text-[11px] text-alphabag-muted uppercase font-semibold mb-2 tracking-wider opacity-60">Verified Sources:</p>
                             <div className="flex flex-wrap gap-2">
                                 {message.groundingMetadata.map((chunk, idx) => chunk.web && (
-                                    <a key={idx} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-alphabag-yellow hover:underline bg-alphabag-yellow/10 px-3 py-1 rounded-lg flex items-center font-bold border border-alphabag-yellow/20">
+                                    <a key={idx} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[11px] text-alphabag-yellow hover:underline bg-alphabag-yellow/10 px-3 py-1 rounded-md flex items-center font-semibold border border-alphabag-yellow/20">
                                         {chunk.web.title || 'Market Intel'} <ExternalLink size={10} className="ml-1.5 opacity-60" />
                                     </a>
                                 ))}

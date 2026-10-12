@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3571",
+  "description": "A collectible AlphaBAG duffel NFT with Rare rarity and layered traits: Arctic White, Navy Blue, Yellow Plastic, White Solid Diagonal, undefined, undefined, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3571.svg",
+  "dna": "alphabag-bag-3571-Rare-Arctic White-Navy Blue-Yellow Plastic-White Solid Diagonal-undefined-undefined-White Tag Black Text",
+  "edition": 3571,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

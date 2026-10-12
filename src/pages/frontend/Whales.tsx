@@ -52,7 +52,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                         <Eye size={18} className="text-alphabag-yellow" />
                     </div>
                     {hasAlerts && (
-                        <div className="bg-alphabag-green/10 text-alphabag-green px-2 py-1 rounded-md text-[9px] font-semibold uppercase flex items-center gap-1">
+                        <div className="bg-alphabag-green/10 text-alphabag-green px-2 py-0.5 rounded text-[11px] font-medium uppercase flex items-center gap-1">
                             <Bell size={10} /> Alert
                         </div>
                     )}
@@ -64,22 +64,22 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
 
             <div className="mb-2">
                 <h3 className="text-sm font-semibold text-alphabag-text mb-1">{whale.label}</h3>
-                <p className="text-[10px] font-mono text-alphabag-subtext bg-alphabag-black px-2 py-0.5 rounded-md inline-block border border-alphabag-gray">
+                <p className="text-[11px] font-mono text-alphabag-subtext bg-alphabag-black px-2 py-0.5 rounded inline-block border border-alphabag-gray">
                     {whale.address.substring(0, 10)}...{whale.address.substring(whale.address.length - 8)}
                 </p>
             </div>
 
             <div className="grid grid-cols-2 gap-2 mb-2">
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
-                    <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Status</div>
+                    <div className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider mb-1">Status</div>
                     <div className="flex items-center text-alphabag-green text-xs font-semibold">
-                        <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-1.5 animate-pulse"></div>
+                        <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full mr-1.5"></div>
                         Live
                     </div>
                 </div>
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
-                    <div className="text-[9px] text-alphabag-subtext uppercase font-semibold tracking-wider mb-1">Value</div>
-                    <div className="text-alphabag-text text-xs font-semibold tabular-nums">
+                    <div className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider mb-1">Value</div>
+                    <div className="text-alphabag-text text-xs font-semibold tabular-nums num">
                         {loading ? <span className="text-alphabag-subtext animate-pulse">Scanning...</span> : `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                     </div>
                 </div>
@@ -156,14 +156,14 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-alphabag-dark/60 border border-white/5 rounded-xl px-4 py-3 backdrop-blur-sm">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-3">
                     <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-alphabag-green animate-pulse" />
-                        <p className="text-xs text-alphabag-subtext">Live multi-chain wallet radar · Watching <span className="text-alphabag-yellow font-bold">{activeWhales.length}</span> addresses</p>
+                        <span className="w-2 h-2 rounded-full bg-alphabag-green" />
+                        <p className="text-xs text-alphabag-subtext">Live multi-chain wallet radar · Watching <span className="text-alphabag-yellow font-semibold">{activeWhales.length}</span> addresses</p>
                     </div>
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="flex items-center gap-1.5 bg-alphabag-yellow text-alphabag-dark px-3.5 py-1.5 rounded-lg text-xs font-bold hover:bg-[#e0bd2e] transition-all shadow-md shrink-0"
+                        className="flex items-center gap-1.5 bg-alphabag-yellow text-alphabag-dark px-3.5 py-1.5 rounded text-xs font-semibold hover:bg-[#e0bd2e] transition-all shrink-0"
                     >
                         <Plus size={14} /> Add Whale Wallet
                     </button>
@@ -178,7 +178,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
             )}
 
             {activeWhales.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-alphabag-gray bg-alphabag-darkgray p-8 text-center">
+                <div className="rounded-lg border border-dashed border-alphabag-gray bg-alphabag-darkgray p-8 text-center">
                     <div className="w-14 h-14 rounded-full bg-alphabag-black border border-alphabag-gray mx-auto flex items-center justify-center mb-4">
                         <Eye size={24} className="text-alphabag-yellow" />
                     </div>
@@ -216,10 +216,10 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
 
             {/* Inline Add Modal */}
             {isAddOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-                    <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-2xl p-4 shadow-2xl relative">
-                        <div className="flex justify-between items-center mb-2">
-                            <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
+                    <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-lg p-5 relative">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-base font-semibold text-white uppercase tracking-wider flex items-center gap-2">
                                 <Eye size={18} className="text-alphabag-yellow" /> Add Whale Wallet
                             </h3>
                             <button 
@@ -231,42 +231,42 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                         </div>
 
                         {errorMsg && (
-                            <div className="mb-2 p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-semibold">
+                            <div className="mb-3 p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-400 text-xs font-semibold">
                                 {errorMsg}
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="space-y-2">
+                        <form onSubmit={handleSubmit} className="space-y-3">
                             <div>
-                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Wallet Address</label>
+                                <label className="block text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-1">Wallet Address</label>
                                 <input 
                                     type="text" 
                                     value={newAddress}
                                     onChange={(e) => setNewAddress(e.target.value)}
                                     placeholder="0x... or Solana address" 
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-md p-2.5 outline-none focus:border-alphabag-yellow transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Custom Label</label>
+                                <label className="block text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-1">Custom Label</label>
                                 <input 
                                     type="text" 
                                     value={newLabel}
                                     onChange={(e) => setNewLabel(e.target.value)}
                                     placeholder="e.g. Vitalik, Binance Hot Wallet" 
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-md p-2.5 outline-none focus:border-alphabag-yellow transition-all"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-1">Primary Chain</label>
+                                <label className="block text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-1">Primary Chain</label>
                                 <select 
                                     value={newChain}
                                     onChange={(e) => setNewChain(e.target.value as Chain)}
-                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-xl p-3 outline-none focus:border-alphabag-yellow transition-all"
+                                    className="w-full bg-alphabag-darkgray border border-alphabag-gray text-white text-xs rounded-md p-2.5 outline-none focus:border-alphabag-yellow transition-all"
                                 >
                                     <option value="BSC">Binance Smart Chain (BSC)</option>
                                     <option value="ETH">Ethereum (ETH)</option>
@@ -280,7 +280,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                             <Button 
                                 type="submit" 
                                 isLoading={isSubmitting} 
-                                className="w-full py-3 mt-4 text-xs font-black tracking-widest uppercase bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]"
+                                className="w-full py-2.5 mt-4 text-xs font-semibold tracking-wider uppercase bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]"
                             >
                                 Track Wallet
                             </Button>

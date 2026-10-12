@@ -1,4 +1,3 @@
-
 import { AlertCircle,ArrowDownLeft,ArrowUpRight,ExternalLink,RefreshCw } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { chainData } from '../../services/chainData';
@@ -37,9 +36,9 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
     if (!address) return <div className="text-alphabag-subtext text-xs">No address monitored.</div>;
 
     return (
-        <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg overflow-hidden shadow-xl">
             <div className="p-4 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black/20">
-                <h3 className="text-xs font-black text-white uppercase tracking-widest flex items-center">
+                <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center">
                     {transactions.some(tx => tx.isMockData) ? (
                         <>
                             <span className="w-2 h-2 rounded-full bg-alphabag-yellow mr-2"></span>
@@ -71,7 +70,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                 ) : transactions.length === 0 ? (
                     <div className="p-4 text-center text-alphabag-subtext text-xs">No recent transactions found.</div>
                 ) : (
-                    <table className="w-full text-left text-[10px] md:text-xs">
+                    <table className="w-full text-left text-[11px] md:text-xs">
                         <thead className="bg-alphabag-black/40 text-alphabag-subtext font-bold uppercase tracking-wider sticky top-0">
                             <tr>
                                 <th className="p-3">Type</th>
@@ -83,7 +82,6 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                         </thead>
                         <tbody className="divide-y divide-alphabag-gray/10">
                             {transactions.map((tx) => {
-                                // Safety check for malformed transaction objects
                                 if (!tx || !tx.from) return null;
 
                                 const fromAddr = tx.from || '';
@@ -101,7 +99,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                                                 <span className="font-bold">{isOut ? 'SEND' : 'RECV'}</span>
                                             </div>
                                         </td>
-                                        <td className="p-3 text-alphabag-subtext text-[10px]">
+                                        <td className="p-3 text-alphabag-subtext text-[11px]">
                                             <a
                                                 href={`https://etherscan.io/tx/${tx.hash}`}
                                                 target="_blank"
@@ -109,7 +107,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                                                 className="hover:text-white flex items-center gap-1"
                                             >
                                                 {(tx.hash || '').substring(0, 6)}...
-                                                <ExternalLink size={8} />
+                                                <ExternalLink size={10} />
                                             </a>
                                         </td>
                                         <td className="p-3">
@@ -122,10 +120,10 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                                                 <span className="text-alphabag-subtext">{otherAddr.substring(0, 6)}...{otherAddr.substring(otherAddr.length - 4)}</span>
                                             )}
                                         </td>
-                                        <td className="p-3 text-right text-white">
+                                        <td className="p-3 text-right text-white num">
                                             ${tx.value?.toFixed(2) || '0.00'}
                                         </td>
-                                        <td className="p-3 text-right text-alphabag-subtext">
+                                        <td className="p-3 text-right text-alphabag-subtext num">
                                             {new Date(tx.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                         </td>
                                     </tr>
@@ -137,7 +135,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
             </div>
 
             <div className="p-2 bg-alphabag-yellow/5 border-t border-alphabag-yellow/10 text-center">
-                <p className="text-[9px] text-alphabag-yellow font-bold uppercase tracking-widest">
+                <p className="text-[11px] text-alphabag-yellow font-bold uppercase tracking-wider">
                     {transactions.some(tx => tx.isMockData)
                         ? 'Demo Data — Live Sync Unavailable'
                         : 'Powered by GoldRush® API'}

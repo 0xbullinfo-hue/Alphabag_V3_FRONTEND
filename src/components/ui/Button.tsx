@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,21 +18,21 @@ export const Button: React.FC<ButtonProps> = ({
   className = '', 
   ...props 
 }) => {
-  const baseStyles = "inline-flex items-center justify-center font-bold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-alphabag-yellow focus:ring-offset-alphabag-black disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider rounded-lg";
+  const baseStyles = "inline-flex items-center justify-center font-medium rounded transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-alphabag-yellow disabled:opacity-50 disabled:cursor-not-allowed select-none";
   
   const variants = {
-    primary: "bg-alphabag-yellow text-alphabag-black hover:bg-alphabag-yellowHover shadow-lg shadow-alphabag-yellow/10",
-    secondary: "bg-alphabag-gray text-alphabag-text hover:bg-gray-700",
-    danger: "bg-alphabag-red/10 text-alphabag-red border border-alphabag-red/20 hover:bg-alphabag-red hover:text-white",
-    ghost: "bg-transparent text-alphabag-subtext hover:text-alphabag-yellow hover:bg-alphabag-gray/30",
-    outline: "bg-transparent border border-alphabag-gray text-alphabag-text hover:border-alphabag-yellow hover:text-alphabag-yellow"
+    primary: "bg-alphabag-yellow text-[#0B0E11] font-semibold hover:bg-[#FCD535] active:bg-[#D9A30A]",
+    secondary: "bg-[#202630] border border-[#2B313A] text-alphabag-text hover:bg-[#2B313A] hover:border-[#3E4552]",
+    danger: "bg-rose-500/10 border border-rose-500/20 text-alphabag-red hover:bg-rose-500 hover:text-white",
+    ghost: "bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]",
+    outline: "bg-transparent border border-[#2B313A] text-alphabag-text hover:border-alphabag-yellow hover:text-alphabag-yellow"
   };
 
   const sizes = {
-    xs: "px-2.5 py-1.5 text-[9px]",
-    sm: "px-4 py-2 text-xs",
-    md: "px-6 py-3 text-sm min-h-[44px]", // WCAG compliance for touch targets
-    lg: "px-8 py-4 text-base min-h-[52px]"
+    xs: "h-7 px-2.5 text-xs gap-1.5",
+    sm: "h-8 px-3 text-xs gap-1.5",
+    md: "h-9 px-4 text-xs font-medium gap-2",
+    lg: "h-10 px-5 text-sm font-medium gap-2"
   };
 
   return (
@@ -50,9 +49,9 @@ export const Button: React.FC<ButtonProps> = ({
         </svg>
       ) : (
         <>
-          {leftIcon && <span className="mr-2 flex items-center">{leftIcon}</span>}
+          {leftIcon && <span className="flex items-center shrink-0">{leftIcon}</span>}
           {children}
-          {rightIcon && <span className="ml-2 flex items-center">{rightIcon}</span>}
+          {rightIcon && <span className="flex items-center shrink-0">{rightIcon}</span>}
         </>
       )}
     </button>

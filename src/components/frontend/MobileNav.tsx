@@ -15,7 +15,7 @@ export const MobileNav: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-alphabag-dark/95 backdrop-blur-md border-t border-alphabag-gray z-[50] safe-pb">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-alphabag-dark border-t border-alphabag-gray z-[50] safe-pb">
       <div className="flex justify-around items-center h-16">
         {navItems.map((item) => {
           const isActive = location.pathname === item.to;

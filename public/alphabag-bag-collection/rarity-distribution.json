@@ -1,0 +1,71 @@
+{
+  "totalSupply": 4000,
+  "traits": {
+    "Tier": {
+      "Beta Tester": 500,
+      "Common": 2400,
+      "Uncommon": 400,
+      "Rare": 400,
+      "Epic": 160,
+      "Legendary": 40,
+      "Private OG": 100
+    },
+    "Base Color": {
+      "Crimson Red": 265,
+      "Beta Black": 192,
+      "Forest Green": 187,
+      "Arctic White": 515,
+      "Sunset Orange": 811,
+      "Midnight Black": 565,
+      "Navy Blue": 160,
+      "undefined": 1287,
+      "Metallic Gold": 18
+    },
+    "Strap Color": {
+      "Orange": 547,
+      "undefined": 1200,
+      "Navy Blue": 883,
+      "White": 400,
+      "Black": 900,
+      "Gold": 70
+    },
+    "Zipper Pull": {
+      "Silver Metal": 800,
+      "Yellow Plastic": 1602,
+      "Neon Glow": 157,
+      "undefined": 1234,
+      "Gold Metal": 207
+    },
+    "Stripe Type": {
+      "Double Stripe": 528,
+      "Glitch Digital": 137,
+      "No Stripe": 613,
+      "Glow Orange": 400,
+      "White Solid Diagonal": 1106,
+      "undefined": 1207,
+      "Gold Luxury": 9
+    },
+    "Finish / Material": {
+      "Carbon Fiber": 368,
+      "Matte": 1568,
+      "undefined": 1054,
+      "Holographic": 300,
+      "Glossy": 684,
+      "Metallic": 26
+    },
+    "Badge / Patch": {
+      "Beta Tester": 73,
+      "None": 3400,
+      "undefined": 507,
+      "Alpha Pass": 8,
+      "Private OG": 12
+    },
+    "BAG Tag": {
+      "White Tag Black Text": 3060,
+      "Black Tag Orange Text": 112,
+      "undefined": 728,
+      "White Tag Gold Text": 88,
+      "Black Tag Gold Text": 12
+    }
+  }
+}

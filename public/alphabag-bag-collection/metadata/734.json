@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #734",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Sunset Orange, White, undefined, No Stripe, Carbon Fiber, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/734.svg",
+  "dna": "alphabag-bag-734-Common-Sunset Orange-White-undefined-No Stripe-Carbon Fiber-None-White Tag Black Text",
+  "edition": 734,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "White"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "No Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Carbon Fiber"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "AlphaBAG Duffel #2851",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: undefined, White, Silver Metal, White Solid Diagonal, undefined, undefined, undefined.",
+  "image": "/alphabag-bag-collection/images/2851.svg",
+  "dna": "alphabag-bag-2851-Common-undefined-White-Silver Metal-White Solid Diagonal-undefined-undefined-undefined",
+  "edition": 2851,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "White"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

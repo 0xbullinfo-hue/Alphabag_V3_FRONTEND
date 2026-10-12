@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #1791",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: undefined, Orange, Yellow Plastic, Double Stripe, Glossy, undefined, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/1791.svg",
+  "dna": "alphabag-bag-1791-Common-undefined-Orange-Yellow Plastic-Double Stripe-Glossy-undefined-White Tag Black Text",
+  "edition": 1791,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

@@ -81,20 +81,20 @@ export const WhaleDetail: React.FC = () => {
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-96">
             <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-2"></div>
-            <span className="text-alphabag-subtext font-semibold uppercase tracking-widest text-[10px]">Scanning whale wallet...</span>
+            <span className="text-alphabag-subtext font-medium uppercase tracking-wider text-[11px]">Scanning whale wallet...</span>
         </div>
     );
 
     return (
         <div className="space-y-2 animate-in fade-in duration-700 relative">
             {showToast && (
-                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-alphabag-yellow/30 px-4 py-3 rounded-lg shadow-2xl flex items-center space-x-2">
+                <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-alphabag-yellow/30 px-4 py-3 rounded-md shadow-2xl flex items-center space-x-2">
                     <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-alphabag-green/20 text-alphabag-green' : 'bg-alphabag-red/20 text-alphabag-red'}`}>
                         {alertsEnabled ? <Bell size={16} /> : <BellOff size={16} />}
                     </div>
                     <div>
                         <div className="text-sm font-semibold text-alphabag-text">Alerts {alertsEnabled ? 'Enabled' : 'Disabled'}</div>
-                        <div className="text-[10px] text-alphabag-subtext uppercase tracking-widest">For {whaleInfo?.label || 'this whale'}</div>
+                        <div className="text-[11px] text-alphabag-subtext uppercase tracking-wider">For {whaleInfo?.label || 'this whale'}</div>
                     </div>
                 </div>
             )}
@@ -107,7 +107,7 @@ export const WhaleDetail: React.FC = () => {
                     <div>
                         <div className="flex items-center space-x-2">
                             <h1 className="text-2xl font-semibold text-alphabag-text tracking-tight">{whaleInfo?.label || 'Unknown Whale'}</h1>
-                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider border border-alphabag-yellow/20">Verified Whale</span>
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[11px] font-medium px-2 py-0.5 rounded uppercase tracking-wider border border-alphabag-yellow/20">Verified Whale</span>
                         </div>
                         <div className="text-[11px] font-mono text-alphabag-subtext mt-0.5">{address}</div>
                     </div>
@@ -120,22 +120,19 @@ export const WhaleDetail: React.FC = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 <div className="lg:col-span-2 space-y-2">
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-5">
-                            <TrendingUp size={100} />
-                        </div>
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 relative overflow-hidden">
                         <div className="relative z-10">
-                            <p className="text-alphabag-subtext text-[11px] font-medium mb-1 uppercase tracking-widest">Total estimated balance</p>
-                            <h2 className="text-4xl font-bold text-white mb-3 tracking-tighter leading-none">
+                            <p className="text-alphabag-subtext text-[11px] font-medium mb-1 uppercase tracking-wider">Total estimated balance</p>
+                            <h2 className="text-3xl font-semibold text-white mb-3 tracking-tight leading-none num">
                                 ${totalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </h2>
-                            <div className="flex items-center space-x-5 text-[12px]">
-                                <div className="flex items-center text-alphabag-green font-bold uppercase tracking-wider">
+                            <div className="flex items-center space-x-5 text-xs">
+                                <div className="flex items-center text-alphabag-green font-semibold uppercase tracking-wider">
                                     <TrendingUp size={14} className="mr-1" />
                                     <span>+4.2%</span>
                                 </div>
                                 <div className="text-alphabag-subtext font-medium">
-                                    Cost basis: <span className="text-white">$15.4M</span>
+                                    Cost basis: <span className="text-white num">$15.4M</span>
                                 </div>
                                 <div className="text-alphabag-subtext font-medium">
                                     Network: <span className="text-white">Multi-Chain</span>
@@ -144,29 +141,29 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl overflow-hidden">
-                        <div className="p-4 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden">
+                        <div className="p-3 border-b border-alphabag-gray flex justify-between items-center bg-alphabag-black">
                             <div className="flex items-center gap-2">
                                 <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-[11px]">Holdings Distribution</h3>
                                 <Button
                                     variant="secondary"
                                     size="sm"
                                     onClick={toggleHideSmallBalances}
-                                    className={`text-[9px] h-6 font-bold uppercase tracking-widest px-2 py-0 border ${hideSmallBalances ? 'bg-alphabag-yellow/10 border-alphabag-yellow text-alphabag-yellow' : 'bg-transparent border-alphabag-gray text-alphabag-subtext'}`}
+                                    className={`text-[11px] h-6 font-semibold uppercase tracking-wider px-2 py-0 border ${hideSmallBalances ? 'bg-alphabag-yellow/10 border-alphabag-yellow text-alphabag-yellow' : 'bg-transparent border-alphabag-gray text-alphabag-subtext'}`}
                                 >
                                     {hideSmallBalances ? 'Dust' : 'Dust (<$1)'}
                                 </Button>
                             </div>
-                            <div className="text-[10px] text-alphabag-subtext font-black uppercase tracking-widest opacity-60">{filteredHoldings.length} Assets</div>
+                            <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider opacity-60">{filteredHoldings.length} Assets</div>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
+                                <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                                     <tr>
-                                        <th className="p-4 pl-8">Asset</th>
-                                        <th className="p-4 text-right">Price</th>
-                                        <th className="p-4 text-right">Balance</th>
-                                        <th className="p-4 text-right pr-8">Value (USD)</th>
+                                        <th className="p-3 pl-6">Asset</th>
+                                        <th className="p-3 text-right">Price</th>
+                                        <th className="p-3 text-right">Balance</th>
+                                        <th className="p-3 text-right pr-6">Value (USD)</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-alphabag-gray text-[13px]">
@@ -174,20 +171,20 @@ export const WhaleDetail: React.FC = () => {
                                         <tr key={h.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                             <td className="p-3 pl-6">
                                                 <div className="flex items-center space-x-2.5">
-                                                    <img src={h.image} className="w-7 h-7 rounded-full shadow-inner" />
+                                                    <img src={h.image} className="w-7 h-7 rounded-full" />
                                                     <div>
-                                                        <div className="font-bold text-white leading-none">{h.symbol}</div>
-                                                        <div className="text-[10px] text-alphabag-muted font-medium mt-1 uppercase tracking-tighter">{h.name}</div>
+                                                        <div className="font-semibold text-white leading-none">{h.symbol}</div>
+                                                        <div className="text-[11px] text-alphabag-muted font-medium mt-1 uppercase tracking-wider">{h.name}</div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="p-3 text-right text-white font-medium">
+                                            <td className="p-3 text-right text-white font-medium num">
                                                 ${h.currentPrice.toLocaleString()}
                                             </td>
-                                            <td className="p-3 text-right text-alphabag-subtext font-medium">
+                                            <td className="p-3 text-right text-alphabag-subtext font-medium num">
                                                 {h.amount.toLocaleString()} <span className="opacity-50">{h.symbol}</span>
                                             </td>
-                                            <td className="p-3 text-right font-black text-white pr-6">
+                                            <td className="p-3 text-right font-semibold text-white pr-6 num">
                                                 ${h.value.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                                             </td>
                                         </tr>
@@ -199,8 +196,8 @@ export const WhaleDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 h-[400px] flex flex-col">
-                        <h3 className="font-bold text-white mb-2 flex items-center uppercase tracking-widest text-xs">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 h-[400px] flex flex-col">
+                        <h3 className="font-semibold text-white mb-2 flex items-center uppercase tracking-wider text-xs">
                             <ShieldCheck className="mr-2 text-alphabag-yellow" size={18} />
                             Asset allocation
                         </h3>
@@ -211,10 +208,10 @@ export const WhaleDetail: React.FC = () => {
                                     <div key={item.coinId} className="flex justify-between items-center group">
                                         <div className="flex items-center gap-2">
                                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                                            <span className="text-xs font-bold text-white uppercase tracking-wider">{item.symbol}</span>
+                                            <span className="text-xs font-semibold text-white uppercase tracking-wider">{item.symbol}</span>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-xs font-mono text-alphabag-subtext group-hover:text-white transition-colors">
+                                            <span className="text-xs font-mono text-alphabag-subtext group-hover:text-white transition-colors num">
                                                 {totalValue > 0 ? ((item.value / totalValue) * 100).toFixed(1) : '0.0'}%
                                             </span>
                                         </div>
@@ -224,10 +221,10 @@ export const WhaleDetail: React.FC = () => {
                                     <div className="flex justify-between items-center opacity-60">
                                         <div className="flex items-center gap-2">
                                             <div className="w-3 h-3 rounded-full bg-alphabag-gray"></div>
-                                            <span className="text-xs font-bold text-white uppercase tracking-wider">Others</span>
+                                            <span className="text-xs font-semibold text-white uppercase tracking-wider">Others</span>
                                         </div>
                                         <div className="text-right">
-                                            <span className="text-xs font-mono text-alphabag-subtext">
+                                            <span className="text-xs font-mono text-alphabag-subtext num">
                                                 {totalValue > 0 ? ((filteredHoldings.slice(5).reduce((acc, i) => acc + i.value, 0) / totalValue) * 100).toFixed(1) : '0.0'}%
                                             </span>
                                         </div>
@@ -236,7 +233,7 @@ export const WhaleDetail: React.FC = () => {
                             </div>
 
                             {/* Bullet Chart Track */}
-                            <div className="h-6 w-full bg-alphabag-black/50 rounded-full overflow-hidden flex relative border border-alphabag-border shadow-inner">
+                            <div className="h-4 w-full bg-alphabag-black/50 rounded overflow-hidden flex relative border border-alphabag-gray">
                                 {filteredHoldings.map((item, index) => (
                                     <div
                                         key={item.coinId}
@@ -247,35 +244,35 @@ export const WhaleDetail: React.FC = () => {
                                         }}
                                         title={`${item.name}: ${(item.value / totalValue * 100).toFixed(1)}%`}
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </div>
                                 ))}
                             </div>
 
                             <div className="mt-4 text-center">
-                                <span className="text-[10px] text-alphabag-subtext uppercase font-black tracking-[0.2em] opacity-50">Asset Weight Distribution</span>
+                                <span className="text-[11px] text-alphabag-subtext uppercase font-semibold tracking-wider opacity-60">Asset Weight Distribution</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4">
-                        <h3 className="font-bold text-white mb-2 uppercase tracking-widest text-xs">Whale insights</h3>
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+                        <h3 className="font-semibold text-white mb-2 uppercase tracking-wider text-xs">Whale insights</h3>
                         <div className="space-y-2">
-                            <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
+                            <div className="p-3 bg-alphabag-black border border-alphabag-gray rounded-md">
                                 <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Accumulation strategy</div>
                                 <div className="text-sm text-white font-medium">Buying ETH consistently below $3,500 over the last 30 days.</div>
                             </div>
-                            <div className="p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
-                                <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-bold">Risk profile</div>
+                            <div className="p-3 bg-alphabag-black border border-alphabag-gray rounded-md">
+                                <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Risk profile</div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm text-white font-medium">Conservative / Large Cap</span>
-                                    <span className="text-xs bg-alphabag-green/20 text-alphabag-green px-2 py-0.5 rounded font-bold uppercase">Low Risk</span>
+                                    <span className="text-xs bg-alphabag-green/20 text-alphabag-green px-2 py-0.5 rounded font-semibold uppercase">Low Risk</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className={`p-4 rounded-2xl border transition-all duration-500 ${
+                    <div className={`p-4 rounded-lg border transition-all duration-300 ${
                         alertsEnabled
                             ? 'bg-alphabag-green/10 border-alphabag-green/30'
                             : 'bg-alphabag-yellow/10 border-alphabag-yellow/30'
@@ -290,8 +287,8 @@ export const WhaleDetail: React.FC = () => {
                         </div>
                         <p className="text-xs font-medium leading-tight opacity-80 mb-2 text-alphabag-subtext">
                             {alertsEnabled
-                                ? "You'll receive push notifications for significant transactions from this wallet."
-                                : "Get push notifications when this whale moves more than $100k USD in assets."}
+                                ? "You'll receive notifications for significant transactions from this wallet."
+                                : "Get notifications when this whale moves more than $100k USD in assets."}
                         </p>
                         <button
                             onClick={handleToggle}
@@ -306,19 +303,19 @@ export const WhaleDetail: React.FC = () => {
                     </div>
 
                     {/* Recent Transactions Section */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl overflow-hidden mt-4">
-                        <div className="p-4 border-b border-alphabag-gray">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden mt-4">
+                        <div className="p-3 border-b border-alphabag-gray">
                             <h3 className="font-semibold text-alphabag-text uppercase tracking-wider text-xs">Recent Movements</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
-                                <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
+                                <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                                     <tr>
-                                        <th className="p-4 pl-6">Hash</th>
-                                        <th className="p-4">Type</th>
-                                        <th className="p-4">Entity</th>
-                                        <th className="p-4">Time</th>
-                                        <th className="p-4 text-right">Value</th>
+                                        <th className="p-3 pl-6">Hash</th>
+                                        <th className="p-3">Type</th>
+                                        <th className="p-3">Entity</th>
+                                        <th className="p-3">Time</th>
+                                        <th className="p-3 text-right">Value</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-alphabag-gray text-xs">
@@ -334,30 +331,30 @@ export const WhaleDetail: React.FC = () => {
 
                                             return (
                                                 <tr key={tx.hash} className="hover:bg-alphabag-gray/30 transition-colors">
-                                                    <td className="p-4 pl-6 font-mono text-alphabag-yellow cursor-pointer" title={tx.hash}>
+                                                    <td className="p-3 pl-6 font-mono text-alphabag-yellow cursor-pointer" title={tx.hash}>
                                                         <a href={`https://etherscan.io/tx/${tx.hash}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
                                                             {tx.hash.substring(0, 8)}...
                                                         </a>
                                                     </td>
-                                                    <td className="p-4">
-                                                        <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded ${isOut ? 'bg-alphabag-red/20 text-alphabag-red' : 'bg-alphabag-green/20 text-alphabag-green'}`}>
+                                                    <td className="p-3">
+                                                        <span className={`text-[11px] font-semibold uppercase px-2 py-0.5 rounded ${isOut ? 'bg-alphabag-red/20 text-alphabag-red' : 'bg-alphabag-green/20 text-alphabag-green'}`}>
                                                             {isOut ? 'Send' : 'Receive'}
                                                         </span>
                                                     </td>
-                                                    <td className="p-4">
+                                                    <td className="p-3">
                                                         {label ? (
                                                             <div className="flex items-center gap-2">
                                                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: label.color }}></div>
-                                                                <span className="font-bold" style={{ color: label.color }}>{label.name}</span>
+                                                                <span className="font-semibold" style={{ color: label.color }}>{label.name}</span>
                                                             </div>
                                                         ) : (
-                                                            <span className="text-alphabag-subtext font-mono">{otherAddr.substring(0, 6)}...{otherAddr.substring(otherAddr.length - 4)}</span>
+                                                            <span className="text-alphabag-subtext font-mono text-[11px]">{otherAddr.substring(0, 6)}...{otherAddr.substring(otherAddr.length - 4)}</span>
                                                         )}
                                                     </td>
-                                                    <td className="p-4 text-alphabag-subtext">
+                                                    <td className="p-3 text-alphabag-subtext text-[11px]">
                                                         {new Date(parseInt(tx.timeStamp) * 1000).toLocaleDateString()}
                                                     </td>
-                                                    <td className="p-4 text-right text-white font-bold">
+                                                    <td className="p-3 text-right text-white font-semibold num">
                                                         {tx.value.length > 10 ? 'High Value' : parseFloat(tx.value).toFixed(2)} {tx.tokenSymbol || 'ETH'}
                                                     </td>
                                                 </tr>

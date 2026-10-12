@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #1748",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Forest Green, undefined, undefined, Glow Orange, Matte, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/1748.svg",
+  "dna": "alphabag-bag-1748-Common-Forest Green-undefined-undefined-Glow Orange-Matte-None-White Tag Black Text",
+  "edition": 1748,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glow Orange"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

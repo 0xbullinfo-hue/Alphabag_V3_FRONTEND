@@ -1,0 +1,38 @@
+{
+  "name": "AlphaBAG Duffel #1871",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Crimson Red, undefined, undefined, undefined, undefined, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/1871.svg",
+  "dna": "alphabag-bag-1871-Common-Crimson Red-undefined-undefined-undefined-undefined-None-White Tag Black Text",
+  "edition": 1871,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Crimson Red"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "AlphaBAG Duffel #2906",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: undefined, White, undefined, undefined, Carbon Fiber, None, undefined.",
+  "image": "/alphabag-bag-collection/images/2906.svg",
+  "dna": "alphabag-bag-2906-Uncommon-undefined-White-undefined-undefined-Carbon Fiber-None-undefined",
+  "edition": 2906,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "White"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Carbon Fiber"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

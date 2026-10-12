@@ -1,0 +1,40 @@
+{
+  "name": "AlphaBAG Duffel #3736",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: Sunset Orange, undefined, Yellow Plastic, Double Stripe, Matte, undefined, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3736.svg",
+  "dna": "alphabag-bag-3736-Epic-Sunset Orange-undefined-Yellow Plastic-Double Stripe-Matte-undefined-White Tag Black Text",
+  "edition": 3736,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

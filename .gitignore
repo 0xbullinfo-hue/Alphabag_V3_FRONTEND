@@ -41,3 +41,6 @@ mock-backend.cjs
 scripts/record-*
 scripts/fix-mobile-*
 scripts/seed-demo-data.js
+recordings/
+recordings-test/
+

@@ -75,7 +75,7 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                     </div>
                     <div className="bg-alphabag-gray border border-alphabag-yellow/20 px-3 py-1.5 rounded-md flex items-center gap-2">
                         <ShieldAlert size={12} className="text-alphabag-yellow" />
-                        <span className="text-[9px] text-alphabag-yellow font-semibold uppercase tracking-wider">E2E Encryption Active</span>
+                        <span className="text-[11px] text-alphabag-yellow font-medium uppercase tracking-wider">E2E Encryption Active</span>
                     </div>
                 </div>
             )}
@@ -133,17 +133,17 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                         </div>
                                         <div>
                                             <div className="flex items-center gap-2 mb-0.5">
-                                                <h3 className="text-base font-black text-white tracking-tight leading-none">{signal.pair}</h3>
+                                                <h3 className="text-base font-semibold text-white tracking-tight leading-none">{signal.pair}</h3>
                                                 {signal.status === 'HIT' && (
-                                                    <span className="text-[7px] px-1 py-0.5 rounded border border-green-500 text-green-500 font-bold uppercase tracking-widest">Target Hit</span>
+                                                    <span className="text-[11px] px-1.5 py-0.5 rounded border border-green-500 text-green-400 font-medium uppercase tracking-wider">Target Hit</span>
                                                 )}
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className={`text-[7px] px-1 py-0.5 rounded font-black uppercase tracking-[0.2em] bg-${theme.bg} text-${theme.color}`}>
+                                                <span className={`text-[11px] px-1.5 py-0.5 rounded font-medium uppercase tracking-wider bg-${theme.bg} text-${theme.color}`}>
                                                     {signal.category}
                                                 </span>
-                                                <span className="text-[8px] text-alphabag-muted font-bold uppercase tracking-widest flex items-center">
-                                                    <Clock size={8} className="mr-1 opacity-70" /> {signal.timestamp}
+                                                <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider flex items-center">
+                                                    <Clock size={10} className="mr-1 opacity-70" /> {signal.timestamp}
                                                 </span>
                                             </div>
                                         </div>
@@ -165,21 +165,21 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
 
                                 {/* Metrics Matrix */}
                                 <div className="grid grid-cols-3 gap-2 mb-2 relative z-10">
-                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
-                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">Entry</span>
-                                        <span className={`font-mono text-[11px] font-bold text-white truncate`}>{signal.entry}</span>
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-md flex flex-col justify-center">
+                                        <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-0.5">Entry</span>
+                                        <span className={`font-mono text-[11px] font-semibold text-white truncate num`}>{signal.entry}</span>
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
-                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">Target</span>
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-md flex flex-col justify-center">
+                                        <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-0.5">Target</span>
                                         <div className="flex flex-wrap gap-1">
                                             {signal.targets?.map((t, i) => (
-                                                <span key={i} className={`font-mono text-[11px] font-bold text-${theme.color}`}>{t}</span>
+                                                <span key={i} className={`font-mono text-[11px] font-semibold text-${theme.color} num`}>{t}</span>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="bg-black/40 border border-white/5 p-1.5 rounded-lg flex flex-col justify-center">
-                                        <span className="text-[7px] text-alphabag-muted font-black uppercase tracking-widest mb-0.5">SL</span>
-                                        <span className={`font-mono text-[11px] font-bold text-red-500 truncate`}>{signal.stopLoss}</span>
+                                    <div className="bg-black/40 border border-white/5 p-2 rounded-md flex flex-col justify-center">
+                                        <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider mb-0.5">SL</span>
+                                        <span className={`font-mono text-[11px] font-semibold text-red-500 truncate num`}>{signal.stopLoss}</span>
                                     </div>
                                 </div>
 
@@ -188,8 +188,8 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                     <div className="flex items-center justify-between pt-3 border-t border-white/5 relative z-10">
                                         {signal.contractAddress && (
                                             <div className="flex gap-2 items-center flex-1 max-w-[70%]">
-                                                <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500">CA:</span>
-                                                <code className={`text-[9px] font-mono truncate px-1.5 py-0.5 rounded bg-[#111] border border-white/10 text-white`}>
+                                                <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-500">CA:</span>
+                                                <code className={`text-[11px] font-mono truncate px-1.5 py-0.5 rounded bg-[#111] border border-white/10 text-white`}>
                                                     {signal.contractAddress}
                                                 </code>
                                             </div>

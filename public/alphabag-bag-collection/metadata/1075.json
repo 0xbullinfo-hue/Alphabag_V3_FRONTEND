@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #1075",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Crimson Red, undefined, Yellow Plastic, No Stripe, undefined, None, undefined.",
+  "image": "/alphabag-bag-collection/images/1075.svg",
+  "dna": "alphabag-bag-1075-Common-Crimson Red-undefined-Yellow Plastic-No Stripe-undefined-None-undefined",
+  "edition": 1075,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Crimson Red"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "No Stripe"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

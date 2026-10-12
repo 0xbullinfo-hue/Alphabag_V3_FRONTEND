@@ -1,0 +1,37 @@
+{
+  "name": "AlphaBAG Duffel #3130",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: Navy Blue, undefined, undefined, White Solid Diagonal, undefined, undefined, undefined.",
+  "image": "/alphabag-bag-collection/images/3130.svg",
+  "dna": "alphabag-bag-3130-Uncommon-Navy Blue-undefined-undefined-White Solid Diagonal-undefined-undefined-undefined",
+  "edition": 3130,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Navy Blue"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

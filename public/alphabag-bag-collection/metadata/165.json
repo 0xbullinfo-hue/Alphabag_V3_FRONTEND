@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #165",
+  "description": "A collectible AlphaBAG duffel NFT with Beta Tester rarity and layered traits: Arctic White, undefined, Silver Metal, White Solid Diagonal, Carbon Fiber, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/165.svg",
+  "dna": "alphabag-bag-165-Beta Tester-Arctic White-undefined-Silver Metal-White Solid Diagonal-Carbon Fiber-None-White Tag Black Text",
+  "edition": 165,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Beta Tester"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Carbon Fiber"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

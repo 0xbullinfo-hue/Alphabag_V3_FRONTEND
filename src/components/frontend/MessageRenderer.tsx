@@ -1,4 +1,3 @@
-
 import { Bot,Check,Copy,ExternalLink,User } from 'lucide-react';
 import React,{ useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -50,7 +49,7 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
 
             if (type === 'pie' && data.length > 0) {
                 parts.push(
-                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-xl p-4 h-64 w-full max-w-md">
+                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-md p-4 h-64 w-full max-w-md">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={5} dataKey="value">
@@ -58,15 +57,15 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
                                     ))}
                                 </Pie>
-                                <Tooltip contentStyle={{ backgroundColor: '#1E2329', borderColor: '#2B3139', borderRadius: '8px', color: '#FFFFFF' }} itemStyle={{ color: '#FFFFFF' }} />
-                                <Legend verticalAlign="bottom" height={36} iconSize={8} formatter={(val) => <span className="text-[10px] uppercase text-alphabag-subtext ml-1">{val}</span>} />
+                                <Tooltip contentStyle={{ backgroundColor: '#1E2329', borderColor: '#2B3139', borderRadius: '6px', color: '#FFFFFF' }} itemStyle={{ color: '#FFFFFF' }} />
+                                <Legend verticalAlign="bottom" height={36} iconSize={8} formatter={(val) => <span className="text-[11px] uppercase text-alphabag-subtext ml-1">{val}</span>} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 );
             } else if (type === 'area' && data.length > 0) {
                 parts.push(
-                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-xl p-4 h-64 w-full max-w-md">
+                    <div key={`chart-${match.index}`} className="my-4 bg-alphabag-black/50 border border-alphabag-gray rounded-md p-4 h-64 w-full max-w-md">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={data}>
                                 <defs>
@@ -75,9 +74,9 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
                                         <stop offset="95%" stopColor="#FCD535" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
-                                <XAxis dataKey="name" stroke="#848E9C" fontSize={10} tickLine={false} axisLine={false} />
-                                <YAxis orientation="right" stroke="#848E9C" fontSize={10} tickLine={false} axisLine={false} />
-                                <Tooltip contentStyle={{ backgroundColor: '#1E2329', borderColor: '#2B3139', color: '#FFFFFF', borderRadius: '12px' }} itemStyle={{ color: '#FFFFFF' }} />
+                                <XAxis dataKey="name" stroke="#848E9C" fontSize={11} tickLine={false} axisLine={false} />
+                                <YAxis orientation="right" stroke="#848E9C" fontSize={11} tickLine={false} axisLine={false} />
+                                <Tooltip contentStyle={{ backgroundColor: '#1E2329', borderColor: '#2B3139', color: '#FFFFFF', borderRadius: '6px' }} itemStyle={{ color: '#FFFFFF' }} />
                                 <Area type="monotone" dataKey="value" stroke="#FCD535" strokeWidth={2} fillOpacity={1} fill="url(#colorValue)" />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -103,14 +102,14 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
     return (
         <div className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in group`}>
             <div className={`flex max-w-[85%] space-x-2 ${message.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-lg ${message.role === 'ai' ? 'bg-alphabag-yellow text-black' : 'bg-alphabag-gray text-white'}`}>
-                    {message.role === 'ai' ? <Bot size={20} /> : <User size={20} />}
+                <div className={`w-8 h-8 rounded-md flex items-center justify-center shrink-0 shadow-lg ${message.role === 'ai' ? 'bg-alphabag-yellow text-black' : 'bg-alphabag-gray text-white'}`}>
+                    {message.role === 'ai' ? <Bot size={18} /> : <User size={18} />}
                 </div>
-                <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-lg relative ${message.role === 'ai' ? 'bg-alphabag-black border border-alphabag-gray text-alphabag-text w-full max-w-[calc(100vw-8rem)] sm:max-w-2xl overflow-x-auto custom-scrollbar' : 'bg-alphabag-yellow text-alphabag-black font-medium'}`}>
+                <div className={`p-4 rounded-md text-sm leading-relaxed shadow-lg relative ${message.role === 'ai' ? 'bg-alphabag-black border border-alphabag-gray text-alphabag-text w-full max-w-[calc(100vw-8rem)] sm:max-w-2xl overflow-x-auto custom-scrollbar' : 'bg-alphabag-yellow text-alphabag-black font-medium'}`}>
                     {message.role === 'ai' && (
                         <button
                             onClick={handleCopy}
-                            className="absolute top-3 right-3 p-1.5 rounded-lg bg-alphabag-dark/80 text-alphabag-subtext hover:text-white border border-transparent hover:border-alphabag-gray hover:bg-alphabag-gray/50 transition-all opacity-0 group-hover:opacity-100 z-10"
+                            className="absolute top-3 right-3 p-1.5 rounded-md bg-alphabag-dark/80 text-alphabag-subtext hover:text-white border border-transparent hover:border-alphabag-gray hover:bg-alphabag-gray/50 transition-all opacity-0 group-hover:opacity-100 z-10"
                             title="Copy output"
                         >
                             {copied ? <Check size={14} className="text-alphabag-yellow" /> : <Copy size={14} />}
@@ -119,10 +118,10 @@ export const MessageRenderer: React.FC<MessageRendererProps> = ({ message }) => 
                     {parts}
                     {message.groundingMetadata && message.groundingMetadata.length > 0 && (
                         <div className="mt-4 pt-4 border-t border-alphabag-gray/30">
-                            <p className="text-[10px] text-alphabag-subtext uppercase font-black mb-2 tracking-widest opacity-60">Verified Sources:</p>
+                            <p className="text-[11px] text-alphabag-subtext uppercase font-semibold mb-2 tracking-wider opacity-60">Verified Sources:</p>
                             <div className="flex flex-wrap gap-2">
                                 {message.groundingMetadata.map((chunk, idx) => chunk.web && (
-                                    <a key={idx} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[9px] text-alphabag-yellow hover:underline bg-alphabag-yellow/10 px-3 py-1 rounded-lg flex items-center font-bold border border-alphabag-yellow/20">
+                                    <a key={idx} href={chunk.web.uri} target="_blank" rel="noopener noreferrer" className="text-[11px] text-alphabag-yellow hover:underline bg-alphabag-yellow/10 px-3 py-1 rounded-md flex items-center font-semibold border border-alphabag-yellow/20">
                                         {chunk.web.title || 'Market Intel'} <ExternalLink size={10} className="ml-1.5 opacity-60" />
                                     </a>
                                 ))}

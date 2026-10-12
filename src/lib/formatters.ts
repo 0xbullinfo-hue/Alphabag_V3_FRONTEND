@@ -1,5 +1,6 @@
 /**
  * Shared formatting and URL resolution utilities for AlphaBAG V3
+ * Institutional Terminal Standards (Binance Pro / Bybit)
  */
 
 /**
@@ -33,7 +34,6 @@ export function getExplorerTokenUrl(chain: string = '', contractAddress: string 
     case 'avalanche':
       return `https://snowtrace.io/token/${contractAddress}`;
     default:
-      // Fallback based on address format: Solana addresses are base58, EVM is 0x...
       if (contractAddress.startsWith('0x')) {
         return `https://bscscan.com/token/${contractAddress}`;
       }
@@ -59,4 +59,111 @@ export function timeSince(timestamp: number | Date | null | undefined): string {
   if (diffHours < 24) return `${diffHours}h ago`;
   const diffDays = Math.floor(diffHours / 24);
   return `${diffDays}d ago`;
+}
+
+/**
+ * Format USD values with fixed precision (e.g. $1,245.50)
+ */
+export function formatUsd(val: number | null | undefined, minDecimals = 2, maxDecimals = 2): string {
+  if (val === null || val === undefined || isNaN(val)) return '$0.00';
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: minDecimals,
+    maximumFractionDigits: maxDecimals,
+  }).format(val);
+}
+
+/**
+ * Format cryptocurrency prices adaptively:
+ * - >= $1,000 -> 2 decimals
+ * - >= $1 -> 2-4 decimals
+ * - < $1 -> up to 6-8 decimals
+ */
+export function formatPrice(val: number | null | undefined): string {
+  if (val === null || val === undefined || isNaN(val)) return '$0.00';
+  const abs = Math.abs(val);
+  if (abs === 0) return '$0.00';
+  if (abs >= 1000) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(val);
+  }
+  if (abs >= 1) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4,
+    }).format(val);
+  }
+  if (abs >= 0.0001) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 4,
+      maximumFractionDigits: 6,
+    }).format(val);
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 6,
+    maximumFractionDigits: 8,
+  }).format(val);
+}
+
+/**
+ * Format percentages (e.g. +14.25% or -3.10%)
+ */
+export function formatPct(val: number | null | undefined, includeSign = true, decimals = 2): string {
+  if (val === null || val === undefined || isNaN(val)) return '0.00%';
+  const prefix = includeSign && val > 0 ? '+' : '';
+  return `${prefix}${val.toFixed(decimals)}%`;
+}
+
+/**
+ * Formats a PnL structure with delta icon, text, and flags
+ */
+export function formatPnl(usdValue: number, pctValue?: number): {
+  text: string;
+  isPositive: boolean;
+  isNegative: boolean;
+  symbol: string;
+} {
+  const isPositive = usdValue > 0;
+  const isNegative = usdValue < 0;
+  const symbol = isPositive ? '▲' : isNegative ? '▼' : '–';
+  const usdFormatted = formatUsd(usdValue);
+  const pctFormatted = pctValue !== undefined ? ` (${formatPct(pctValue, true)})` : '';
+
+  return {
+    text: `${usdFormatted}${pctFormatted}`,
+    isPositive,
+    isNegative,
+    symbol,
+  };
+}
+
+/**
+ * Format large numbers compactly: e.g. 1.2M, 450K, 12.5B
+ */
+export function formatCompact(val: number | null | undefined, prefix = '$'): string {
+  if (val === null || val === undefined || isNaN(val)) return `${prefix}0`;
+  const abs = Math.abs(val);
+  const sign = val < 0 ? '-' : '';
+
+  if (abs >= 1e9) {
+    return `${sign}${prefix}${(abs / 1e9).toFixed(2)}B`;
+  }
+  if (abs >= 1e6) {
+    return `${sign}${prefix}${(abs / 1e6).toFixed(2)}M`;
+  }
+  if (abs >= 1e3) {
+    return `${sign}${prefix}${(abs / 1e3).toFixed(1)}K`;
+  }
+  return `${sign}${prefix}${abs.toFixed(2)}`;
 }

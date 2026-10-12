@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #204",
+  "description": "A collectible AlphaBAG duffel NFT with Beta Tester rarity and layered traits: Forest Green, undefined, Silver Metal, Glitch Digital, Glossy, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/204.svg",
+  "dna": "alphabag-bag-204-Beta Tester-Forest Green-undefined-Silver Metal-Glitch Digital-Glossy-None-White Tag Black Text",
+  "edition": 204,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Beta Tester"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Glitch Digital"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Glossy"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

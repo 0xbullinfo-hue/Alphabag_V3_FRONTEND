@@ -1,4 +1,4 @@
-import { ArrowLeft,BarChart,Share2,ShieldCheck,Star,Wallet,Zap } from 'lucide-react';
+import { ArrowLeft, Share2, ShieldCheck, Star, Wallet, Zap } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { Area,AreaChart,CartesianGrid,ResponsiveContainer,Tooltip,XAxis,YAxis } from 'recharts';
@@ -127,79 +127,72 @@ export const CoinDetail: React.FC = () => {
         <div className="space-y-2 animate-fade-in">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div className="flex items-center space-x-2">
-                    <Link to="/markets" className="p-1.5 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-lg transition-all shadow-md">
+                    <Link to="/markets" className="p-1.5 bg-alphabag-dark border border-alphabag-gray hover:text-white rounded-md transition-colors">
                         <ArrowLeft size={18} />
                     </Link>
                     <div className="flex items-center space-x-2">
-                        <img src={coin.image} className="w-10 h-10 rounded-full shadow-lg p-1 bg-alphabag-gray" alt={coin.name} />
+                        <img src={coin.image} className="w-10 h-10 rounded-full p-1 bg-alphabag-gray" alt={coin.name} />
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">{coin.name} <span className="text-alphabag-subtext text-lg md:text-xl font-medium">({coin.symbol.toUpperCase()})</span></h1>
+                            <h1 className="text-2xl md:text-3xl font-semibold text-white tracking-tight leading-tight">{coin.name} <span className="text-alphabag-subtext text-lg md:text-xl font-normal">({coin.symbol.toUpperCase()})</span></h1>
                             <div className="flex items-center space-x-2 mt-0.5">
-                                <span className="bg-alphabag-black text-[9px] px-2 py-0.5 rounded text-alphabag-yellow border border-alphabag-gray font-bold uppercase tracking-widest">Rank #{coin.market_cap_rank}</span>
-                                <span className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-tighter">Market Intelligence Feed</span>
+                                <span className="bg-alphabag-black text-[11px] px-2 py-0.5 rounded text-alphabag-yellow border border-alphabag-gray font-medium uppercase tracking-wider">Rank #{coin.market_cap_rank}</span>
+                                <span className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider">Market Intelligence Feed</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Star size={18} className="mr-2" /> Watchlist</Button>
-                    <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Share2 size={18} /></Button>
+                    <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Star size={16} className="mr-2" /> Watchlist</Button>
+                    <Button variant="ghost" className="bg-alphabag-dark border border-alphabag-gray"><Share2 size={16} /></Button>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 <div className="lg:col-span-2 space-y-2">
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12">
-                            <BarChart size={120} />
-                        </div>
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 relative overflow-hidden">
                         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-2">
                             <div>
-                                <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Current Value</p>
+                                <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Current Value</p>
                                 <div className="flex items-baseline space-x-2">
-                                    <span className="text-4xl font-extrabold text-white tracking-tighter">${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                                    <span className={`text-lg font-bold px-2 py-0.5 rounded-lg ${isPositive ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
+                                    <span className="text-3xl font-semibold text-white tracking-tight num">${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span className={`text-base font-semibold px-2 py-0.5 rounded num ${isPositive ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
                                         {isPositive ? '+' : ''}{coin.price_change_percentage_24h.toFixed(2)}%
                                     </span>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-2 text-right w-full md:w-auto">
                                 <div>
-                                    <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h High</p>
-                                    <p className="text-white font-bold text-sm">{coin.current_price_24h_high != null ? `${coin.current_price_24h_high.toLocaleString()}` : '—'}</p>
+                                    <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider">24h High</p>
+                                    <p className="text-white font-semibold text-sm num">{coin.current_price_24h_high != null ? `${coin.current_price_24h_high.toLocaleString()}` : '—'}</p>
                                 </div>
                                 <div>
-                                    <p className="text-alphabag-subtext text-[9px] font-bold uppercase tracking-widest">24h Low</p>
-                                    <p className="text-white font-bold text-sm">{coin.current_price_24h_low != null ? `${coin.current_price_24h_low.toLocaleString()}` : '—'}</p>
+                                    <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider">24h Low</p>
+                                    <p className="text-white font-semibold text-sm num">{coin.current_price_24h_low != null ? `${coin.current_price_24h_low.toLocaleString()}` : '—'}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-alphabag-dark to-alphabag-black border border-alphabag-yellow/30 rounded-xl p-5 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-alphabag-yellow/5 animate-pulse"></div>
-                        <div className="flex items-start space-x-2 relative z-10">
-                            <div className="w-10 h-10 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-105 transition-transform">
-                                <Zap size={20} className="text-alphabag-yellow fill-current" />
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 relative overflow-hidden group">
+                        <div className="flex items-start space-x-3 relative z-10">
+                            <div className="w-9 h-9 bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded-md flex items-center justify-center shrink-0">
+                                <Zap size={18} className="text-alphabag-yellow fill-current" />
                             </div>
                             <div>
                                 <div className="flex items-center space-x-2 mb-1.5">
-                                    <h3 className="text-alphabag-yellow font-extrabold uppercase text-[10px] tracking-[0.2em]">Expert Narrative Agent</h3>
+                                    <h3 className="text-alphabag-yellow font-semibold uppercase text-[11px] tracking-wider">Market Intelligence Summary</h3>
                                 </div>
-                                <div className="text-[13px] text-alphabag-text leading-relaxed font-medium">
+                                <div className="text-[13px] text-alphabag-text leading-relaxed font-normal">
                                     {isFetchingAi ? (
                                         <div className="flex items-center space-x-2">
-                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce"></div>
-                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                                            <div className="w-1 h-1 bg-alphabag-yellow rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                                            <span className="ml-2 italic text-alphabag-subtext">Aggregating global sentiment...</span>
+                                            <span className="italic text-alphabag-subtext text-xs">Aggregating market sentiment...</span>
                                         </div>
                                     ) : (
                                         <div>
                                             <p>{aiInsight}</p>
                                             {groundingLinks.length > 0 && (
-                                                <div className="mt-3 pt-3 border-t border-alphabag-yellow/20">
-                                                    <p className="text-[9px] text-alphabag-subtext uppercase font-bold mb-2">Sources:</p>
+                                                <div className="mt-3 pt-3 border-t border-alphabag-gray">
+                                                    <p className="text-[11px] text-alphabag-subtext uppercase font-semibold mb-2">Sources:</p>
                                                     <div className="flex flex-wrap gap-1.5">
                                                         {groundingLinks.map((link, idx) => link.web && (
                                                             <a
@@ -207,7 +200,7 @@ export const CoinDetail: React.FC = () => {
                                                                 href={link.web.uri}
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
-                                                                className="text-[9px] text-alphabag-yellow hover:underline bg-alphabag-yellow/5 px-2 py-1 rounded"
+                                                                className="text-[11px] text-alphabag-yellow hover:underline bg-alphabag-yellow/5 px-2 py-0.5 rounded"
                                                             >
                                                                 {link.web.title || 'Source'}
                                                             </a>
@@ -222,15 +215,15 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-xl p-5 h-[500px] flex flex-col shadow-2xl">
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 h-[500px] flex flex-col">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2 pb-4 border-b border-alphabag-gray/30">
-                            <div className="flex space-x-2 bg-alphabag-black p-1 rounded-lg border border-alphabag-gray">
+                            <div className="flex space-x-1.5 bg-alphabag-black p-1 rounded-md border border-alphabag-gray">
                                 {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
                                     <button
                                         key={tf}
                                         onClick={() => setTimeframe(tf)}
-                                        className={`px-3 py-1 rounded text-[10px] font-bold transition-all uppercase tracking-tighter ${timeframe === tf
-                                            ? 'bg-alphabag-yellow text-alphabag-black shadow-lg'
+                                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all uppercase tracking-wider ${timeframe === tf
+                                            ? 'bg-alphabag-yellow text-alphabag-black'
                                             : 'text-alphabag-subtext hover:text-white hover:bg-alphabag-gray'
                                             }`}
                                     >
@@ -238,7 +231,7 @@ export const CoinDetail: React.FC = () => {
                                     </button>
                                 ))}
                             </div>
-                            <div className="flex items-center space-x-2 text-[9px] font-extrabold text-alphabag-subtext uppercase tracking-widest">
+                            <div className="flex items-center space-x-2 text-[11px] font-medium text-alphabag-subtext uppercase tracking-wider">
                                 <span>{hasRealChart ? '7-Day Price History' : 'Live sparkline unavailable — showing current price only'}</span>
                             </div>
                         </div>
@@ -257,14 +250,14 @@ export const CoinDetail: React.FC = () => {
                                     <YAxis
                                         domain={['auto', 'auto']}
                                         orientation="right"
-                                        tick={{ fill: '#848E9C', fontSize: 10, fontWeight: 'bold' }}
+                                        tick={{ fill: '#848E9C', fontSize: 11, fontWeight: '500' }}
                                         axisLine={false}
                                         tickLine={false}
                                         tickFormatter={(val) => `$${val.toLocaleString()}`}
                                     />
                                     <Tooltip
-                                        contentStyle={{ backgroundColor: '#0B0E11', border: '1px solid #2B3139', color: '#EAECEF', borderRadius: '12px', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }}
-                                        itemStyle={{ color: '#EAECEF', fontWeight: 'bold' }}
+                                        contentStyle={{ backgroundColor: '#0B0E11', border: '1px solid #2B3139', color: '#EAECEF', borderRadius: '4px' }}
+                                        itemStyle={{ color: '#EAECEF', fontWeight: '500' }}
                                         cursor={{ stroke: '#848E9C', strokeWidth: 1, strokeDasharray: '4 4' }}
                                         formatter={(value: number) => [`$${value.toFixed(2)}`, 'Market Price']}
                                     />
@@ -274,8 +267,8 @@ export const CoinDetail: React.FC = () => {
                                         stroke={isPositive ? '#0ECB81' : '#F6465D'}
                                         fillOpacity={1}
                                         fill="url(#colorPrice)"
-                                        strokeWidth={4}
-                                        animationDuration={2000}
+                                        strokeWidth={2}
+                                        animationDuration={1000}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -284,66 +277,63 @@ export const CoinDetail: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 relative overflow-hidden shadow-2xl">
-                        <div className="absolute top-0 right-0 p-4 opacity-10">
-                            <Wallet size={100} className="text-alphabag-yellow" />
-                        </div>
-                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text flex items-center uppercase tracking-[0.2em]">
-                            <Wallet size={18} className="mr-3 text-alphabag-yellow" /> Wallet Position
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 relative overflow-hidden">
+                        <h3 className="text-xs font-semibold mb-2 text-alphabag-text flex items-center uppercase tracking-wider">
+                            <Wallet size={16} className="mr-2 text-alphabag-yellow" /> Wallet Position
                         </h3>
 
                         {isConnected && holding ? (
                             <div className="space-y-2 relative z-10">
                                 <div>
-                                    <p className="text-alphabag-subtext text-[10px] font-extrabold uppercase tracking-[0.15em] mb-1">Position Value</p>
-                                    <div className="text-4xl font-extrabold text-white tracking-tighter">${holding.value.toLocaleString()}</div>
+                                    <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Position Value</p>
+                                    <div className="text-3xl font-semibold text-white tracking-tight num">${holding.value.toLocaleString()}</div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-2 pt-6 border-t border-alphabag-gray/50">
+                                <div className="grid grid-cols-2 gap-2 pt-4 border-t border-alphabag-gray/50">
                                     <div>
-                                        <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Balance</p>
-                                        <p className="font-extrabold text-white text-lg">{holding.amount.toLocaleString()} {coin.symbol.toUpperCase()}</p>
+                                        <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Balance</p>
+                                        <p className="font-semibold text-white text-base num">{holding.amount.toLocaleString()} {coin.symbol.toUpperCase()}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-alphabag-subtext text-[10px] font-bold uppercase tracking-widest mb-1">Total P&L</p>
-                                        <p className={`font-extrabold text-lg ${holding.pnl >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                        <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Total P&L</p>
+                                        <p className={`font-semibold text-base num ${holding.pnl >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                             {holding.pnl >= 0 ? '+' : ''}{holding.pnlPercent.toFixed(2)}%
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <Button variant="danger" className="w-full py-3 font-extrabold" onClick={() => navigate('/settings')} title="Remove Connection Tracking">Remove Tracking</Button>
+                                <div className="flex gap-2 mt-2">
+                                    <Button variant="danger" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/settings')} title="Remove Connection Tracking">Remove Tracking</Button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-center py-10 relative z-10">
-                                <p className="text-alphabag-subtext text-sm mb-2 leading-relaxed">Connect your wallet to track your <b>{coin.name}</b> holdings and analyze entry performance.</p>
-                                <Button variant="primary" className="w-full font-bold shadow-lg" onClick={() => navigate('/settings')}>Connect & Track</Button>
+                            <div className="text-center py-8 relative z-10">
+                                <p className="text-alphabag-subtext text-xs mb-3 leading-relaxed">Connect your wallet to track your <b>{coin.name}</b> holdings and analyze entry performance.</p>
+                                <Button variant="primary" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/settings')}>Connect & Track</Button>
                             </div>
                         )}
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 shadow-2xl">
-                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text uppercase tracking-[0.2em]">Asset Intelligence</h3>
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4">
+                        <h3 className="text-xs font-semibold mb-2 text-alphabag-text uppercase tracking-wider">Asset Intelligence</h3>
                         <div className="space-y-2">
-                            <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
-                                <span className="text-alphabag-subtext text-xs font-bold uppercase">Market Cap</span>
-                                <span className="font-extrabold text-white text-sm">{coin.market_cap ? `${(coin.market_cap / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
+                            <div className="flex justify-between py-2 border-b border-alphabag-gray/30">
+                                <span className="text-alphabag-subtext text-xs font-medium uppercase">Market Cap</span>
+                                <span className="font-semibold text-white text-sm num">{coin.market_cap ? `${(coin.market_cap / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
                             </div>
-                            <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
-                                <span className="text-alphabag-subtext text-xs font-bold uppercase">Volume (24h)</span>
-                                <span className="font-extrabold text-white text-sm">{coin.total_volume ? `${(coin.total_volume / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
+                            <div className="flex justify-between py-2 border-b border-alphabag-gray/30">
+                                <span className="text-alphabag-subtext text-xs font-medium uppercase">Volume (24h)</span>
+                                <span className="font-semibold text-white text-sm num">{coin.total_volume ? `${(coin.total_volume / 1e9).toFixed(2)}B` : 'Unavailable'}</span>
                             </div>
-                            <div className="flex justify-between py-3 border-b border-alphabag-gray/30">
-                                <span className="text-alphabag-subtext text-xs font-bold uppercase">Circ. Supply</span>
-                                <span className="font-extrabold text-white text-sm">
+                            <div className="flex justify-between py-2 border-b border-alphabag-gray/30">
+                                <span className="text-alphabag-subtext text-xs font-medium uppercase">Circ. Supply</span>
+                                <span className="font-semibold text-white text-sm num">
                                     {(coin as any).circulating_supply
                                         ? `${((coin as any).circulating_supply as number).toLocaleString(undefined, { maximumFractionDigits: 0 })} ${coin.symbol.toUpperCase()}`
                                         : 'Unavailable'}
                                 </span>
                             </div>
-                            <div className="flex justify-between py-3">
-                                <span className="text-alphabag-subtext text-xs font-bold uppercase">All Time High</span>
-                                <span className="font-extrabold text-white text-sm">
+                            <div className="flex justify-between py-2">
+                                <span className="text-alphabag-subtext text-xs font-medium uppercase">All Time High</span>
+                                <span className="font-semibold text-white text-sm num">
                                     {(coin as any).ath != null
                                         ? `$${Number((coin as any).ath).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                                         : 'Unavailable'}
@@ -352,24 +342,24 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative">
-                        <h3 className="text-xs font-extrabold mb-2 text-alphabag-text uppercase tracking-[0.2em] flex items-center">
-                            <ShieldCheck size={18} className={`mr-3 ${audit ? audit.color : 'text-alphabag-subtext'}`} /> Smart Audit Score
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 relative">
+                        <h3 className="text-xs font-semibold mb-2 text-alphabag-text uppercase tracking-wider flex items-center">
+                            <ShieldCheck size={16} className={`mr-2 ${audit ? audit.color : 'text-alphabag-subtext'}`} /> Smart Audit Score
                         </h3>
                         {audit && audit.score > 0 ? (
                             <>
                                 <div className="flex items-end space-x-2 mb-2">
-                                    <div className="text-5xl font-extrabold text-white tracking-tighter">{audit.score}<span className="text-lg text-alphabag-subtext ml-1">/100</span></div>
-                                    <div className={`text-[10px] ${audit.color} font-extrabold uppercase tracking-widest pb-2`}>{audit.label}</div>
+                                    <div className="text-4xl font-semibold text-white tracking-tight num">{audit.score}<span className="text-base text-alphabag-subtext ml-1">/100</span></div>
+                                    <div className={`text-[11px] ${audit.color} font-semibold uppercase tracking-wider pb-1`}>{audit.label}</div>
                                 </div>
-                                <div className="w-full bg-alphabag-black h-2 rounded-full overflow-hidden border border-alphabag-gray">
-                                    <div className={`bg-gradient-to-r ${audit.bgClass} w-[${audit.score}%] h-full ${audit.shadowClass}`} style={{ width: `${audit.score}%` }}></div>
+                                <div className="w-full bg-alphabag-black h-2 rounded overflow-hidden border border-alphabag-gray">
+                                    <div className={`bg-gradient-to-r ${audit.bgClass} h-full`} style={{ width: `${audit.score}%` }}></div>
                                 </div>
-                                <p className="text-[9px] text-alphabag-subtext mt-6 font-bold leading-relaxed uppercase tracking-widest opacity-60">Score sourced from on-chain contract metrics</p>
+                                <p className="text-[11px] text-alphabag-subtext mt-3 font-medium uppercase tracking-wider opacity-60">Score sourced from on-chain contract metrics</p>
                             </>
                         ) : (
-                            <div className="py-3">
-                                <p className="text-sm font-semibold text-white mb-1">Audit data unavailable</p>
+                            <div className="py-2">
+                                <p className="text-xs font-semibold text-white mb-1">Audit data unavailable</p>
                                 <p className="text-[11px] text-alphabag-subtext leading-relaxed">Contract audit and security verification scores are not currently available for this asset.</p>
                             </div>
                         )}

@@ -10,66 +10,67 @@ export default {
         extend: {
             colors: {
                 alphabag: {
-                    black:      "var(--bg-color)",
-                    dark:       "var(--panel-color)",
-                    darkgray:   "var(--card-color)",
-                    'dark-card':"var(--card-color)",
-                    gray:       "var(--border-color)",
-                    border:     "var(--border-color)",
+                    black:       "var(--bg-color)",
+                    dark:        "var(--panel-color)",
+                    darkgray:    "var(--card-color)",
+                    'dark-card': "var(--card-color)",
+                    gray:        "var(--border-color)",
+                    border:      "var(--border-color)",
                     'border-light': "var(--border-light)",
-                    yellow:     "var(--yellow)",
-                    yellowHover:"var(--yellow-hover)",
-                    green:      "var(--green)",
-                    red:        "var(--red)",
-                    blue:       "var(--blue)",
-                    text:       "var(--text-color)",
-                    subtext:    "var(--subtext-color)",
-                    muted:      "var(--muted-color)",
+                    yellow:      "var(--yellow)",
+                    yellowHover: "var(--yellow-hover)",
+                    green:       "var(--green)",
+                    red:         "var(--red)",
+                    blue:        "var(--blue)",
+                    text:        "var(--text-color)",
+                    subtext:     "var(--subtext-color)",
+                    muted:       "var(--muted-color)",
                     'ultra-muted': "#3F3F46",
                 }
             },
             fontFamily: {
-                sans: ['IBM Plex Sans', 'system-ui', '-apple-system', 'sans-serif'],
+                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
                 mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
             },
             borderRadius: {
-                DEFAULT: '0.5rem',   // 8px
-                sm: '0.25rem',       // 4px
-                md: '0.375rem',      // 6px
-                lg: '0.5rem',        // 8px
-                xl: '0.75rem',       // 12px
-                '2xl': '1rem',       // 16px
-                '3xl': '1.25rem',    // 20px
-                '4xl': '1.5rem',     // 24px
+                none: '0px',
+                sm: '2px',
+                DEFAULT: '4px',
+                md: '4px',
+                lg: '6px',
+                xl: '8px',
+                '2xl': '8px',
+                '3xl': '8px',
+                '4xl': '8px',
+                full: '9999px',
             },
             boxShadow: {
-                'glass':       '0 8px 32px 0 rgba(0,0,0,0.6)',
-                'glass-deep':  '0 20px 40px -10px rgba(0,0,0,0.8), 0 0 20px 0 rgba(0,0,0,0.4) inset, 0 1px 1px 0 rgba(255,255,255,0.05) inset',
-                'glass-premium': '0 30px 60px -15px rgba(0,0,0,0.9), 0 0 30px 0 rgba(0,0,0,0.5) inset, 0 1px 2px 0 rgba(255,255,255,0.1) inset',
-                'panel':       '0 4px 24px rgba(0,0,0,0.4)',
+                none: 'none',
+                sm: 'none',
+                DEFAULT: 'none',
+                md: 'none',
+                lg: 'none',
+                xl: 'none',
+                '2xl': 'none',
+                'glass': 'none',
+                'glass-deep': 'none',
+                'glass-premium': 'none',
+                'panel': 'none',
+                'modal': '0 8px 24px rgba(0,0,0,0.5)',
             },
-            backgroundImage: {
-                'glass-gradient': 'linear-gradient(135deg, rgba(20,20,23,0.8) 0%, rgba(0,0,0,0.95) 100%)',
-                'yellow-gradient': 'linear-gradient(135deg, #FCD535 0%, #E6BF1A 100%)',
-                'mesh-alphabag': 'radial-gradient(circle at 15% 50%, rgba(252,213,53,0.03), transparent 25%), radial-gradient(circle at 85% 30%, rgba(16,185,129,0.03), transparent 25%)',
-            },
+            backgroundImage: {},
             animation: {
-                'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
-                'slide-in': 'slideIn 0.3s ease-out',
-                'float': 'float 6s ease-in-out infinite',
+                'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
+                'slide-in': 'slideIn 0.2s ease-out',
             },
             keyframes: {
                 fadeInUp: {
-                    '0%': { opacity: '0', transform: 'translateY(20px)' },
+                    '0%': { opacity: '0', transform: 'translateY(8px)' },
                     '100%': { opacity: '1', transform: 'translateY(0)' },
                 },
                 slideIn: {
-                    '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                    '0%': { opacity: '0', transform: 'translateY(-6px)' },
                     '100%': { opacity: '1', transform: 'translateY(0)' },
-                },
-                float: {
-                    '0%, 100%': { transform: 'translateY(0)' },
-                    '50%': { transform: 'translateY(-10px)' },
                 },
             },
         },

@@ -53,7 +53,7 @@ export const News: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
             <PageIcon name="news" size={40} />
-            <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter uppercase leading-tight">Market Pulse</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold text-white tracking-tight leading-tight">Market Pulse</h1>
           </div>
           <p className="text-alphabag-subtext mt-1 text-[13px] font-medium max-w-md opacity-60">Expert narratives and real-time intelligence for BAG holders.</p>
         </div>
@@ -67,11 +67,11 @@ export const News: React.FC = () => {
                     placeholder="Search historical posts..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="bg-alphabag-black border border-alphabag-gray rounded-lg pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-64 transition-colors shadow-inner"
+                    className="bg-alphabag-black border border-alphabag-gray rounded-md pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-alphabag-yellow w-full md:w-64 transition-colors"
                  />
              </div>
-             <div className="flex items-center space-x-2 mt-3 text-[9px] text-alphabag-green font-bold uppercase tracking-widest text-right">
-                <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></div>
+             <div className="flex items-center space-x-2 mt-3 text-[11px] text-alphabag-green font-semibold uppercase tracking-wider text-right">
+                <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green"></div>
                 Live Hub Archive
              </div>
         </div>
@@ -81,15 +81,15 @@ export const News: React.FC = () => {
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                 <Search size={48} className="text-alphabag-gray mb-2" />
-                <h3 className="text-xl font-bold text-white mb-2">No transmissions found</h3>
+                <h3 className="text-xl font-semibold text-white mb-2">No transmissions found</h3>
                 <p className="text-sm text-alphabag-subtext">Adjust your search parameters to comb through the archive.</p>
             </div>
         ) : filteredNews.map((item) => (
           <article
             key={item.id}
             className={`
-                group flex flex-col bg-alphabag-dark border rounded-xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]
-                ${item.isPremium ? 'border-alphabag-yellow/40 hover:border-alphabag-yellow' : 'border-alphabag-gray hover:border-alphabag-subtext'}
+                group flex flex-col bg-alphabag-dark border rounded-lg overflow-hidden transition-all
+                ${item.isPremium ? 'border-alphabag-yellow/40 hover:border-alphabag-yellow' : 'border-alphabag-gray hover:border-alphabag-muted'}
             `}
           >
             <div className="h-56 overflow-hidden relative">
@@ -97,7 +97,7 @@ export const News: React.FC = () => {
                 <img
                   src={item.imageUrl}
                   alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                     const target = e.currentTarget;
                     target.style.display = 'none';
@@ -106,26 +106,26 @@ export const News: React.FC = () => {
                   }}
                 />
               ) : null}
-              <div className={`news-img-fallback absolute inset-0 bg-gradient-to-br from-alphabag-darkgray via-alphabag-gray/40 to-alphabag-black flex items-center justify-center ${item.imageUrl ? 'hidden' : ''}`}>
+              <div className={`news-img-fallback absolute inset-0 bg-alphabag-darkgray flex items-center justify-center ${item.imageUrl ? 'hidden' : ''}`}>
                 <Newspaper size={48} className="text-alphabag-subtext/30" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black/80 to-transparent"></div>
               {item.isPremium && (
-                <div className="absolute top-4 right-4 bg-alphabag-yellow text-alphabag-black text-[10px] font-extrabold px-3 py-1.5 rounded-xl flex items-center shadow-2xl">
-                  <Zap size={14} className="mr-1.5 fill-current" /> ULTIMATE
+                <div className="absolute top-4 right-4 bg-alphabag-yellow text-alphabag-black text-[11px] font-semibold px-2 py-0.5 rounded flex items-center">
+                  <Zap size={13} className="mr-1 fill-current" /> ULTIMATE
                 </div>
               )}
               <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
-                <span className="bg-alphabag-gray/80 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] uppercase font-extrabold text-white tracking-widest">{item.source}</span>
+                <span className="bg-alphabag-gray px-2 py-0.5 rounded text-[11px] uppercase font-semibold text-white tracking-wider">{item.source}</span>
                 {item.isAiCurated && (
-                  <span className="bg-purple-600/80 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] uppercase font-extrabold text-white tracking-widest flex items-center border border-purple-400/30">
+                  <span className="bg-purple-900/60 px-2 py-0.5 rounded text-[11px] uppercase font-semibold text-purple-300 tracking-wider flex items-center border border-purple-500/30">
                     <Zap size={10} className="mr-1" /> AI Curated
                   </span>
                 )}
                 {item.sentiment && (
-                  <span className={`px-3 py-1 rounded-lg text-[10px] uppercase font-extrabold text-white tracking-widest border backdrop-blur-md ${item.sentiment === 'POSITIVE' ? 'bg-green-600/80 border-green-400/30' :
-                    item.sentiment === 'NEGATIVE' ? 'bg-red-600/80 border-red-400/30' :
-                      'bg-gray-600/80 border-gray-400/30'
+                  <span className={`px-2 py-0.5 rounded text-[11px] uppercase font-semibold text-white tracking-wider border ${item.sentiment === 'POSITIVE' ? 'bg-green-900/60 border-green-500/30 text-green-300' :
+                    item.sentiment === 'NEGATIVE' ? 'bg-red-900/60 border-red-500/30 text-red-300' :
+                      'bg-gray-800/80 border-gray-600/30 text-gray-300'
                     }`}>
                     {item.sentiment}
                   </span>
@@ -133,16 +133,16 @@ export const News: React.FC = () => {
               </div>
             </div>
             <div className="p-4 flex flex-col flex-1">
-              <div className="flex items-center text-[9px] text-alphabag-subtext font-bold uppercase mb-3">
-                <Clock size={10} className="mr-1.5" /> {item.date}
+              <div className="flex items-center text-[11px] text-alphabag-subtext font-medium uppercase mb-2">
+                <Clock size={11} className="mr-1.5" /> {item.date}
               </div>
-              <h3 className="text-lg font-extrabold text-white mb-3 leading-tight group-hover:text-alphabag-yellow transition-colors">{item.title}</h3>
+              <h3 className="text-base font-semibold text-white mb-2 leading-snug group-hover:text-alphabag-yellow transition-colors">{item.title}</h3>
               <p className="text-alphabag-subtext text-[13px] mb-2 line-clamp-2 flex-1 font-medium leading-relaxed opacity-80">{item.summary}</p>
 
               <div className="pt-4 border-t border-alphabag-gray/50">
                 <button
                   onClick={() => setSelectedArticle(item)}
-                  className="w-full bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-yellow text-[10px] font-bold uppercase tracking-[0.1em] py-2 rounded-lg flex items-center justify-center transition-all group/btn"
+                  className="w-full bg-alphabag-black border border-alphabag-gray hover:border-alphabag-yellow text-alphabag-yellow text-xs font-semibold uppercase tracking-wider py-2 rounded-md flex items-center justify-center transition-all group/btn"
                 >
                   READ REPORT <ArrowRight size={12} className="ml-1.5 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
@@ -156,45 +156,45 @@ export const News: React.FC = () => {
       {selectedArticle && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-4 animate-fade-in">
           <div
-            className="absolute inset-0 bg-alphabag-black/90 backdrop-blur-xl"
+            className="absolute inset-0 bg-alphabag-black/80"
             onClick={() => setSelectedArticle(null)}
           ></div>
-          <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-4xl h-[85vh] rounded-3xl shadow-2xl relative overflow-hidden flex flex-col animate-slide-up">
+          <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-4xl h-[85vh] rounded-lg shadow-2xl relative overflow-hidden flex flex-col animate-slide-up">
             <button
               onClick={() => setSelectedArticle(null)}
-              className="absolute top-6 right-6 z-20 w-10 h-10 bg-alphabag-black/40 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-alphabag-red transition-colors"
+              className="absolute top-4 right-4 z-20 w-8 h-8 bg-alphabag-black/60 text-white rounded-md flex items-center justify-center hover:bg-alphabag-red transition-colors"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
             <div className="flex-1 overflow-y-auto custom-scrollbar">
-              <div className="h-80 md:h-[450px] relative">
+              <div className="h-72 md:h-[380px] relative">
                 <img src={selectedArticle.imageUrl} className="w-full h-full object-cover" alt="" />
                 <div className="absolute inset-0 bg-gradient-to-t from-alphabag-dark via-alphabag-dark/40 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 right-8">
+                <div className="absolute bottom-6 left-6 right-6">
                   <div className="flex items-center space-x-2 mb-2">
-                    <span className="bg-alphabag-yellow text-black text-[10px] font-extrabold px-3 py-1 rounded-lg uppercase tracking-widest">{selectedArticle.source}</span>
-                    <span className="text-[10px] text-white/70 font-bold uppercase tracking-widest flex items-center">
+                    <span className="bg-alphabag-yellow text-black text-[11px] font-semibold px-2 py-0.5 rounded uppercase tracking-wider">{selectedArticle.source}</span>
+                    <span className="text-[11px] text-white/70 font-medium uppercase tracking-wider flex items-center">
                       <Clock size={12} className="mr-1.5" /> {selectedArticle.date}
                     </span>
                   </div>
-                  <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tighter leading-tight drop-shadow-2xl">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-white tracking-tight leading-tight">
                     {selectedArticle.title}
                   </h2>
                 </div>
               </div>
 
-              <div className="p-4 md:p-12">
-                <div className="flex items-center justify-between mb-2 pb-2 border-b border-alphabag-gray/30">
+              <div className="p-4 md:p-8">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b border-alphabag-gray/30">
                   <div className="flex items-center space-x-2 text-alphabag-subtext">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50 mr-2">Share Intel:</span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50 mr-2">Share Intel:</span>
                     <a 
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}&url=${encodeURIComponent(window.location.href)}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="hover:text-[#1DA1F2] transition-colors"
                     >
-                      <Twitter size={18} />
+                      <Twitter size={16} />
                     </a>
                     <a 
                       href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}`} 
@@ -202,7 +202,7 @@ export const News: React.FC = () => {
                       rel="noopener noreferrer" 
                       className="hover:text-[#229ED9] transition-colors"
                     >
-                      <Send size={18} />
+                      <Send size={16} />
                     </a>
                     <a 
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} 
@@ -210,7 +210,7 @@ export const News: React.FC = () => {
                       rel="noopener noreferrer" 
                       className="hover:text-[#1877F2] transition-colors"
                     >
-                      <Facebook size={18} />
+                      <Facebook size={16} />
                     </a>
                     <a 
                       href="https://instagram.com" 
@@ -219,28 +219,28 @@ export const News: React.FC = () => {
                       className="hover:text-[#E4405F] transition-colors"
                       onClick={() => alert("Link copied for Instagram! \n" + window.location.href + "\nshared from @myalphabag")}
                     >
-                      <Instagram size={18} />
+                      <Instagram size={16} />
                     </a>
 
-                    <span className="w-px h-6 bg-alphabag-gray mx-2"></span>
+                    <span className="w-px h-5 bg-alphabag-gray mx-2"></span>
                     
-                    <button className="flex items-center hover:text-alphabag-yellow transition-colors font-bold uppercase text-[10px] tracking-widest ml-2 border border-alphabag-gray/50 px-3 py-1.5 rounded-lg bg-alphabag-black/30">
-                      <Bookmark size={14} className="mr-2" /> Save
+                    <button className="flex items-center hover:text-alphabag-yellow transition-colors font-semibold uppercase text-[11px] tracking-wider ml-2 border border-alphabag-gray/50 px-2.5 py-1 rounded bg-alphabag-black/30">
+                      <Bookmark size={13} className="mr-1.5" /> Save
                     </button>
                   </div>
                   {selectedArticle.isPremium && (
-                    <div className="flex items-center bg-alphabag-yellow/10 text-alphabag-yellow px-4 py-2 rounded-xl border border-alphabag-yellow/20">
-                      <Zap size={16} className="mr-2 fill-current" />
-                      <span className="text-xs font-extrabold uppercase tracking-widest">Ultimate Verified</span>
+                    <div className="flex items-center bg-alphabag-yellow/10 text-alphabag-yellow px-3 py-1 rounded border border-alphabag-yellow/20">
+                      <Zap size={14} className="mr-1.5 fill-current" />
+                      <span className="text-xs font-semibold uppercase tracking-wider">Ultimate Verified</span>
                     </div>
                   )}
                 </div>
 
                 <div className="prose prose-invert max-w-none">
-                  <p className="text-xl text-alphabag-yellow font-bold leading-relaxed mb-2 border-l-4 border-alphabag-yellow pl-6">
+                  <p className="text-base text-alphabag-yellow font-medium leading-relaxed mb-4 border-l-2 border-alphabag-yellow pl-4">
                     {selectedArticle.summary}
                   </p>
-                  <div className="text-alphabag-text text-lg leading-loose space-y-2 font-medium opacity-90">
+                  <div className="text-alphabag-text text-sm leading-relaxed space-y-3 font-normal opacity-90">
                     {selectedArticle.content ? (
                       selectedArticle.content.split('\n').map((para, i) => (
                         <p key={i}>{para}</p>
@@ -251,9 +251,9 @@ export const News: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="mt-12 p-4 bg-alphabag-black/50 border border-alphabag-gray rounded-2xl">
-                  <h4 className="text-white font-bold mb-2 uppercase text-xs tracking-widest">Alpha Intelligence Disclaimer</h4>
-                  <p className="text-xs text-alphabag-subtext leading-relaxed font-bold uppercase">
+                <div className="mt-8 p-4 bg-alphabag-black/50 border border-alphabag-gray rounded-lg">
+                  <h4 className="text-white font-semibold mb-1 uppercase text-xs tracking-wider">Alpha Intelligence Disclaimer</h4>
+                  <p className="text-xs text-alphabag-subtext leading-relaxed">
                     This report is generated by AlphaBAG proprietary intelligence hubs. Narratives are for research purposes only and do not constitute financial advice. Standard risk management suggested.
                   </p>
                 </div>

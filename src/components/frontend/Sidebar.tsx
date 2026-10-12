@@ -25,15 +25,15 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
       e.preventDefault();
       Swal.fire({
         title: 'COMING SOON',
-        text: `${label} feature is in final testing. Launching in Phase 2.0.`,
+        text: `${label} feature is in final testing.`,
         icon: 'info',
         confirmButtonText: 'ACKNOWLEDGE',
-        confirmButtonColor: '#fcd535',
-        background: 'var(--panel-color)',
-        color: 'var(--text-color)',
+        confirmButtonColor: '#F0B90B',
+        background: '#181A20',
+        color: '#EAECEF',
         customClass: {
-          popup: 'border border-alphabag-gray rounded-2xl',
-          confirmButton: 'text-black font-bold uppercase tracking-wider px-6 py-2.5 rounded-lg text-xs'
+          popup: 'border border-[#2B313A] rounded-[6px]',
+          confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
         }
       });
     }
@@ -43,51 +43,45 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
     <Link
       to={isDisabled ? '#' : to}
       onClick={handleClick}
-      className={`flex items-center justify-between px-3.5 py-2 rounded-lg transition-all duration-200 mb-1 mx-2 relative group ${
-        isDisabled ? 'opacity-50 cursor-not-allowed' : ''
+      className={`flex items-center justify-between px-3 py-2 rounded transition-colors duration-150 mb-0.5 mx-2 relative select-none ${
+        isDisabled ? 'opacity-40 cursor-not-allowed' : ''
       } ${active
-        ? 'bg-alphabag-gray/90 text-alphabag-text border-l-2 border-alphabag-yellow shadow-inner shadow-alphabag-yellow/5'
-        : 'text-alphabag-subtext hover:bg-alphabag-gray/50 hover:text-alphabag-text border-l-2 border-transparent'
+        ? 'bg-[#202630] text-alphabag-text font-medium border-l-2 border-alphabag-yellow'
+        : 'text-alphabag-subtext hover:bg-[#202630]/60 hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
-      <div className="flex items-center space-x-2.5 relative z-10 min-w-0">
+      <div className="flex items-center space-x-2.5 min-w-0">
         {customIcon ? (
           <PageIcon
             name={customIcon}
-            size={18}
+            size={16}
             framed={false}
-            className={`transition-all duration-200 shrink-0 ${
-              active
-                ? 'scale-105 filter drop-shadow-[0_0_6px_rgba(255,210,0,0.45)]'
-                : 'opacity-75 group-hover:opacity-100 group-hover:scale-105'
-            }`}
+            className={`transition-opacity duration-150 shrink-0 ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
           />
         ) : Icon ? (
-          <Icon size={18} className={`shrink-0 ${active ? 'text-alphabag-yellow' : 'group-hover:text-alphabag-text'}`} />
+          <Icon size={16} className={`shrink-0 ${active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`} />
         ) : null}
-        <span className="font-medium text-sm truncate">{label}</span>
+        <span className="text-xs truncate">{label}</span>
       </div>
       {isDisabled && (
-        <span className="text-[7px] font-black bg-alphabag-yellow/10 text-alphabag-yellow px-1.5 py-0.5 rounded border border-alphabag-yellow/20 shrink-0 ml-1">SOON</span>
+        <span className="text-[11px] font-semibold bg-white/5 text-alphabag-subtext px-1.5 py-0.2 rounded-[2px] border border-white/10 shrink-0 ml-1">SOON</span>
       )}
     </Link>
   );
 };
 
-
-
-const NavGroup: React.FC<{ title: string, children: React.ReactNode }> = ({ title, children }) => (
-  <div className="mb-2">
-    <div className="px-6 mb-1.5 text-[10px] font-semibold text-alphabag-muted uppercase tracking-wider">
+const NavGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <div className="mb-3">
+    <div className="px-5 mb-1.5 text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider select-none">
       {title}
     </div>
-    <div className="space-y-1">
+    <div className="space-y-0.5">
       {children}
     </div>
   </div>
 );
 
-export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ isOpen, onClose }) => {
+export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -106,55 +100,53 @@ export const Sidebar: React.FC<{ isOpen: boolean, onClose: () => void }> = ({ is
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden animate-fade-in"
+          className="fixed inset-0 bg-black/60 z-30 md:hidden"
         />
       )}
 
       <aside className={`
-        fixed left-2 bottom-2 top-[72px] w-60 bg-[#0a0e16]/95 backdrop-blur-xl border border-white/10 rounded-2xl z-40 transition-transform duration-300 ease-in-out shadow-2xl
-        md:translate-x-0 pt-4 pb-2 flex flex-col justify-between overflow-y-auto custom-scrollbar
+        fixed left-0 top-14 bottom-0 w-56 bg-[#181A20] border-r border-[#2B313A] z-40 transition-transform duration-200 ease-in-out
+        md:translate-x-0 pt-3 pb-3 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
-        <div className="py-2">
-          <NavGroup title="Personal">
-            <NavItem to="/my-alphabag" customIcon="bag" label="My AlphaBAG" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
-
-            {/* Alpha Passes hidden until ready for public launch */}
+        <div className="py-1">
+          <NavGroup title="Portfolio & Analytics">
+            <NavItem to="/my-alphabag" customIcon="bag" label="Portfolio" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
             {!disabledPages.includes('/airdrop') && (
               <div className="relative">
                 <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">LIVE</div>
+                <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1 py-0.2 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-semibold rounded-[2px] pointer-events-none">LIVE</div>
               </div>
             )}
-            <NavItem to="/alphas-feed" customIcon="feed" label="Alphas Feed" active={location.pathname === '/alphas-feed'} />
-            <NavItem to="/calculator" customIcon="calculator" label="Alpha Calculator" active={location.pathname === '/calculator'} />
+            <NavItem to="/alphas-feed" customIcon="feed" label="Trade Signals" active={location.pathname === '/alphas-feed'} />
+            <NavItem to="/calculator" customIcon="calculator" label="Position Calculator" active={location.pathname === '/calculator'} />
+            <NavItem to="/whales" customIcon="whales" label="Wallet Flow" active={location.pathname.startsWith('/whales')} />
             <NavItem to="/settings" customIcon="settings" label="Setup Connections" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
-            
-            <NavItem to="/whales" customIcon="whales" label="Alpha Radar" active={location.pathname.startsWith('/whales')} />
           </NavGroup>
 
-          <NavGroup title="Market Analytics">
+          <NavGroup title="Market Intelligence">
             <div className="relative">
               <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
-              <div className="absolute right-6 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow text-black text-[7px] font-black rounded uppercase pointer-events-none">PRO</div>
+              <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1 py-0.2 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-semibold rounded-[2px] pointer-events-none">PRO</div>
             </div>
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />
-            <NavItem to="/news" customIcon="news" label="News" active={location.pathname === '/news'} />
+            <NavItem to="/news" customIcon="news" label="Market News" active={location.pathname === '/news'} />
           </NavGroup>
-
-
         </div>
 
-        <div className="px-4">
-          <div className="border-t border-alphabag-gray pt-6 mb-2 space-y-1">
-            <NavItem to="/profile" customIcon="profile" label="My Profile" active={location.pathname === '/profile'} />
-            <button onClick={handleLogout} className="w-full flex items-center space-x-2 px-4 py-2.5 rounded-md transition-all duration-200 text-alphabag-subtext hover:bg-alphabag-red/10 hover:text-alphabag-red mx-2">
-              <LogOut size={18} />
-              <span className="font-medium text-xs uppercase">Logout</span>
+        <div className="px-3">
+          <div className="border-t border-[#2B313A] pt-3 space-y-0.5">
+            <NavItem to="/profile" customIcon="profile" label="Account Profile" active={location.pathname === '/profile'} />
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded transition-colors text-alphabag-subtext hover:bg-rose-500/10 hover:text-alphabag-red mx-2"
+            >
+              <LogOut size={16} />
+              <span className="font-medium text-xs">Disconnect</span>
             </button>
           </div>
         </div>

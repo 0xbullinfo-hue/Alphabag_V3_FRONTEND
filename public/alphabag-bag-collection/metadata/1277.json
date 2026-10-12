@@ -1,0 +1,42 @@
+{
+  "name": "AlphaBAG Duffel #1277",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Arctic White, Black, Silver Metal, White Solid Diagonal, Carbon Fiber, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/1277.svg",
+  "dna": "alphabag-bag-1277-Common-Arctic White-Black-Silver Metal-White Solid Diagonal-Carbon Fiber-None-White Tag Black Text",
+  "edition": 1277,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "White Solid Diagonal"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Carbon Fiber"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

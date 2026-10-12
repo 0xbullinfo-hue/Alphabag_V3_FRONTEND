@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from './Button';
 
@@ -15,26 +14,34 @@ interface EmptyStateProps {
     label: string;
     onClick: () => void;
   };
+  className?: string;
 }
 
-export const EmptyState: React.FC<EmptyStateProps> = ({ icon, title, description, action, secondaryAction }) => {
+export const EmptyState: React.FC<EmptyStateProps> = ({ 
+  icon, 
+  title, 
+  description, 
+  action, 
+  secondaryAction,
+  className = '' 
+}) => {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center bg-alphabag-dark/30 border border-dashed border-alphabag-gray rounded-3xl animate-fade-in">
-      <div className="w-20 h-20 bg-alphabag-gray/30 rounded-full flex items-center justify-center text-alphabag-yellow mb-2 shadow-inner">
+    <div className={`flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-[#181A20] border border-dashed border-[#2B313A] rounded-[6px] ${className}`}>
+      <div className="w-10 h-10 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-subtext mb-3">
         {icon}
       </div>
-      <h3 className="text-2xl font-bold text-white mb-2 tracking-tight">{title}</h3>
-      <p className="text-alphabag-subtext max-w-sm mb-2 font-medium leading-relaxed">
+      <h3 className="text-sm md:text-base font-semibold text-alphabag-text mb-1 tracking-tight">{title}</h3>
+      <p className="text-xs text-alphabag-subtext max-w-sm mb-4 leading-relaxed">
         {description}
       </p>
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {action && (
-          <Button onClick={action.onClick} leftIcon={action.icon} variant="primary">
+          <Button onClick={action.onClick} leftIcon={action.icon} variant="primary" size="sm">
             {action.label}
           </Button>
         )}
         {secondaryAction && (
-          <Button onClick={secondaryAction.onClick} variant="ghost">
+          <Button onClick={secondaryAction.onClick} variant="secondary" size="sm">
             {secondaryAction.label}
           </Button>
         )}

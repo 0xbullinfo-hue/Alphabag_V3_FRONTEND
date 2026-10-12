@@ -12,12 +12,12 @@ export const WalletConnectButton: React.FC = () => {
     return (
       <div className="flex items-center space-x-2">
         {isPremium && (
-          <div className="hidden lg:flex items-center bg-gradient-to-r from-alphabag-yellow to-orange-400 text-alphabag-black text-[10px] font-black px-2.5 py-1 rounded-lg shadow-lg">
+          <div className="hidden lg:flex items-center bg-alphabag-yellow text-alphabag-dark text-[11px] font-bold px-2.5 py-1 rounded-md">
             <Crown size={12} className="mr-1.5" fill="currentColor" /> NODE ELITE
           </div>
         )}
 
-        <div className="hidden sm:flex items-center bg-alphabag-black/50 text-alphabag-subtext text-[10px] font-bold px-3 py-1.5 rounded-lg border border-alphabag-gray">
+        <div className="hidden sm:flex items-center bg-alphabag-black/50 text-alphabag-subtext text-[11px] font-semibold px-3 py-1.5 rounded-md border border-alphabag-gray">
           {connectionType === 'MANUAL' ? (
             <><Eye size={12} className="mr-1.5" /> Observer</>
           ) : (
@@ -25,13 +25,13 @@ export const WalletConnectButton: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center bg-alphabag-gray/30 rounded-xl overflow-hidden border border-alphabag-gray group">
+        <div className="flex items-center bg-alphabag-gray/30 rounded-md overflow-hidden border border-alphabag-gray group">
           <div className="px-3 py-2 text-xs font-mono text-alphabag-text border-r border-alphabag-gray/50 flex items-center group-hover:bg-alphabag-yellow/5 transition-all">
             {address.substring(0, 6)}...{address.substring(address.length - 4)}
           </div>
           <button
             onClick={disconnectWallet}
-            title="Terminate Neural Link"
+            title="Disconnect Wallet"
             className="px-2.5 py-2 hover:bg-alphabag-red/20 text-alphabag-subtext hover:text-alphabag-red transition-all"
           >
             <LogOut size={16} />
@@ -47,10 +47,10 @@ export const WalletConnectButton: React.FC = () => {
       size="sm"
       onClick={connectWallet}
       isLoading={isConnecting}
-      className=" font-black"
+      className="font-bold"
     >
       <Wallet className="w-4 h-4 mr-2" />
-      Sync Node
+      Connect Wallet
     </Button>
   );
 };

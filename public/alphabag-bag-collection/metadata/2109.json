@@ -1,0 +1,41 @@
+{
+  "name": "AlphaBAG Duffel #2109",
+  "description": "A collectible AlphaBAG duffel NFT with Common rarity and layered traits: Sunset Orange, Black, Silver Metal, Double Stripe, Holographic, None, undefined.",
+  "image": "/alphabag-bag-collection/images/2109.svg",
+  "dna": "alphabag-bag-2109-Common-Sunset Orange-Black-Silver Metal-Double Stripe-Holographic-None-undefined",
+  "edition": 2109,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Sunset Orange"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Black"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Silver Metal"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Holographic"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

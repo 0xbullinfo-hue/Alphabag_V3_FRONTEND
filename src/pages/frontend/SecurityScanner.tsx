@@ -210,7 +210,7 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <PageIcon name="security" size={40} />
-                            <h1 className="text-3xl font-black text-white tracking-tight uppercase">
+                            <h1 className="text-3xl font-semibold text-white tracking-tight">
                                 Security <span className="text-alphabag-yellow">Radar</span>
                             </h1>
                         </div>
@@ -226,14 +226,14 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                 
                 <form onSubmit={handleQuickScan} className="space-y-4">
                     <div>
-                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-2">Network</label>
+                        <label className="block text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-2">Network</label>
                         <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
                             {SUPPORTED_CHAINS.map(chain => (
                                 <button
                                     key={chain.id}
                                     type="button"
                                     onClick={() => setSelectedChain(chain)}
-                                    className={`shrink-0 h-9 px-3 rounded-md border flex items-center justify-center gap-2 text-[10px] font-bold transition-colors ${selectedChain.id === chain.id ? 'bg-alphabag-yellow text-alphabag-black border-alphabag-yellow' : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-muted'}`}
+                                    className={`shrink-0 h-9 px-3 rounded-md border flex items-center justify-center gap-2 text-[11px] font-semibold transition-colors ${selectedChain.id === chain.id ? 'bg-alphabag-yellow text-alphabag-black border-alphabag-yellow' : 'bg-alphabag-black border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-muted'}`}
                                 >
                                     <img src={chain.logo} className="w-4 h-4 object-contain" alt="" />
                                     <span>{chain.name}</span>
@@ -244,7 +244,7 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
 
                     <div className="flex flex-col lg:flex-row lg:items-end gap-3">
                     <div className="w-full lg:flex-1">
-                        <label className="block text-[10px] text-alphabag-subtext font-bold uppercase tracking-wider mb-2">Wallet Address</label>
+                        <label className="block text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-2">Wallet Address</label>
                         <input
                             type="text"
                             value={scanAddress}
@@ -259,7 +259,7 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                         <Button
                             type="submit"
                             isLoading={loading}
-                            className="w-full lg:w-auto h-11 px-6 text-xs font-black tracking-widest uppercase bg-alphabag-yellow text-alphabag-black"
+                            className="w-full lg:w-auto h-11 px-6 text-xs font-semibold tracking-wider uppercase bg-alphabag-yellow text-alphabag-black"
                             leftIcon={<RefreshCw size={14} className={loading ? 'animate-spin' : ''} />}
                         >
                             {loading ? 'Scanning Approvals...' : isAuthenticated ? 'Scan Approvals' : 'Connect to Scan'}
@@ -277,35 +277,35 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
             {/* Metrics Dashboard */}
             {approvals.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    <div className="bg-black/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 flex items-center justify-between">
                         <div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext">At Risk Contracts</span>
-                            <h3 className="text-2xl font-black text-white mt-1">{totalRiskyApprovals}</h3>
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext">At Risk Contracts</span>
+                            <h3 className="text-2xl font-semibold text-white mt-1 num">{totalRiskyApprovals}</h3>
                         </div>
-                        <div className="w-12 h-12 bg-red-500/10 rounded-xl flex items-center justify-center text-red-500 border border-red-500/20">
-                            <ShieldAlert size={22} />
+                        <div className="w-10 h-10 bg-red-500/10 rounded-md flex items-center justify-center text-red-500 border border-red-500/20">
+                            <ShieldAlert size={20} />
                         </div>
                     </div>
 
-                    <div className="bg-black/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 flex items-center justify-between">
                         <div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext">Total Value at Risk</span>
-                            <h3 className="text-2xl font-black text-white mt-1">${totalAtRiskUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext">Total Value at Risk</span>
+                            <h3 className="text-2xl font-semibold text-white mt-1 num">${totalAtRiskUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
                         </div>
-                        <div className="w-12 h-12 bg-alphabag-yellow/10 rounded-xl flex items-center justify-center text-alphabag-yellow border border-alphabag-yellow/20">
-                            <AlertTriangle size={22} />
+                        <div className="w-10 h-10 bg-alphabag-yellow/10 rounded-md flex items-center justify-center text-alphabag-yellow border border-alphabag-yellow/20">
+                            <AlertTriangle size={20} />
                         </div>
                     </div>
 
-                    <div className="bg-black/30 border border-white/5 rounded-2xl p-5 flex items-center justify-between">
+                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4 flex items-center justify-between">
                         <div>
-                            <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext">Scan Status</span>
-                            <h3 className="text-sm font-black text-green-400 mt-1 uppercase flex items-center gap-1.5">
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext">Scan Status</span>
+                            <h3 className="text-sm font-semibold text-green-400 mt-1 uppercase flex items-center gap-1.5">
                                 <CheckCircle size={15} /> Integrity Normal
                             </h3>
                         </div>
-                        <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center text-green-500 border border-green-500/20">
-                            <ShieldCheck size={22} />
+                        <div className="w-10 h-10 bg-green-500/10 rounded-md flex items-center justify-center text-green-500 border border-green-500/20">
+                            <ShieldCheck size={20} />
                         </div>
                     </div>
                 </div>
@@ -314,11 +314,11 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
             {/* Main Scanner Results */}
             <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg overflow-hidden">
                 <div className="flex justify-between items-center px-4 py-3 border-b border-alphabag-gray">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-alphabag-subtext flex items-center gap-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext flex items-center gap-2">
                         <Key size={14} className="text-alphabag-yellow" /> Active Approvals Result
                     </span>
                     {approvals.length > 0 && (
-                        <span className="text-[9px] font-black bg-white/5 border border-white/10 text-white px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                        <span className="text-[11px] font-semibold bg-white/5 border border-white/10 text-white px-2 py-0.5 rounded uppercase tracking-wider">
                             {approvals.length} Tokens Scanned
                         </span>
                     )}
@@ -327,36 +327,36 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                 {loading ? (
                     <div className="py-16 text-center space-y-2">
                         <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mx-auto"></div>
-                        <p className="text-[9px] font-black uppercase tracking-widest text-alphabag-yellow animate-pulse">Running smart contract allowance check...</p>
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-yellow animate-pulse">Running smart contract allowance check...</p>
                     </div>
                 ) : approvals.length === 0 ? (
                     <div className="py-16 text-center max-w-md mx-auto space-y-3 px-6">
                         <div className="w-11 h-11 bg-alphabag-black border border-alphabag-gray text-alphabag-yellow flex items-center justify-center rounded-md mx-auto">
                             <ShieldCheck size={26} />
                         </div>
-                        <h3 className="text-sm font-black text-white uppercase tracking-wider">Ready to Scan</h3>
+                        <h3 className="text-sm font-semibold text-white uppercase tracking-wider">Ready to Scan</h3>
                         <p className="text-xs text-alphabag-subtext font-medium leading-relaxed">
                             Select a network and enter an EVM wallet address to review active token approvals.
                         </p>
                     </div>
                 ) : (
-                    <div className="space-y-2">
+                    <div className="space-y-2 p-3">
                         {approvals.map(token => (
-                            <div key={token.tokenAddress} className="border border-white/5 bg-black/40 rounded-2xl overflow-hidden hover:border-white/10 transition-all p-5">
+                            <div key={token.tokenAddress} className="border border-alphabag-gray bg-alphabag-black rounded-lg overflow-hidden p-4">
                                 {/* Token Info header */}
-                                <div className="flex justify-between items-center border-b border-white/5 pb-4 mb-2">
+                                <div className="flex justify-between items-center border-b border-alphabag-gray pb-3 mb-2">
                                     <div className="flex items-center gap-2">
-                                        <img src={token.tokenLogo} className="w-8 h-8 rounded-full border border-white/10 bg-black" alt={token.tokenSymbol} />
+                                        <img src={token.tokenLogo} className="w-8 h-8 rounded-full border border-alphabag-gray bg-black" alt={token.tokenSymbol} />
                                         <div>
-                                            <h4 className="text-xs font-black text-white uppercase">{token.tokenName}</h4>
-                                            <span className="text-[9px] text-alphabag-subtext font-bold uppercase">{token.tokenSymbol} • {token.tokenAddress.substring(0, 8)}...</span>
+                                            <h4 className="text-xs font-semibold text-white uppercase">{token.tokenName}</h4>
+                                            <span className="text-[11px] text-alphabag-subtext font-medium uppercase">{token.tokenSymbol} • {token.tokenAddress.substring(0, 8)}...</span>
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-xs font-black text-white tabular-nums">
+                                        <div className="text-xs font-semibold text-white tabular-nums num">
                                             {token.tokenBalance.toLocaleString(undefined, { maximumFractionDigits: 4 })} {token.tokenSymbol}
                                         </div>
-                                        <div className="text-[9px] text-alphabag-subtext font-bold uppercase tracking-wider">
+                                        <div className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider num">
                                             Balance Value: ${(token.tokenBalance * token.tokenPriceUsd).toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                         </div>
                                     </div>
@@ -365,11 +365,11 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                                 {/* Spenders allowances table */}
                                 <div className="space-y-2">
                                     {token.spenders.map(spender => (
-                                        <div key={spender.spenderAddress} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3.5 bg-white/5 border border-white/5 rounded-xl hover:border-white/10 transition-all gap-2">
+                                        <div key={spender.spenderAddress} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-alphabag-darkgray border border-alphabag-gray rounded-md gap-2">
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2">
-                                                    <span className="text-xs font-black text-white uppercase tracking-tight">{spender.spenderLabel}</span>
-                                                    <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${
+                                                    <span className="text-xs font-semibold text-white uppercase tracking-tight">{spender.spenderLabel}</span>
+                                                    <span className={`text-[11px] font-semibold uppercase px-1.5 py-0.5 rounded ${
                                                         spender.riskLevel === 'HIGH' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
                                                         spender.riskLevel === 'MEDIUM' ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20' :
                                                         'bg-green-500/10 text-green-400 border border-green-500/20'
@@ -377,22 +377,22 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                                                         {spender.riskLevel} RISK
                                                     </span>
                                                 </div>
-                                                <span className="text-[9px] text-alphabag-subtext font-mono font-medium tracking-wide mt-1 block">
+                                                <span className="text-[11px] text-alphabag-subtext font-mono font-medium tracking-wide mt-1 block">
                                                     Spender: {spender.spenderAddress}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0 border-white/5">
+                                            <div className="flex items-center justify-between sm:justify-end gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-2 sm:pt-0 border-alphabag-gray">
                                                 <div className="text-left sm:text-right">
-                                                    <div className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-widest mb-0.5">Approved Allowance</div>
-                                                    <div className="text-xs font-black text-white flex items-center gap-1.5 uppercase">
+                                                    <div className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider mb-0.5">Approved Allowance</div>
+                                                    <div className="text-xs font-semibold text-white flex items-center gap-1.5 uppercase num">
                                                         {spender.allowanceValue}
                                                     </div>
                                                 </div>
 
                                                 <div className="text-left sm:text-right">
-                                                    <div className="text-[9px] text-alphabag-subtext uppercase font-bold tracking-widest mb-0.5">Value at Risk</div>
-                                                    <div className="text-xs font-black text-alphabag-red tabular-nums">
+                                                    <div className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider mb-0.5">Value at Risk</div>
+                                                    <div className="text-xs font-semibold text-alphabag-red tabular-nums num">
                                                         ${spender.valueAtRiskUsd.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                                                     </div>
                                                 </div>
@@ -401,7 +401,7 @@ export const SecurityScanner: React.FC<{ embedded?: boolean }> = ({ embedded = f
                                                     size="xs"
                                                     onClick={() => handleRevoke(token.tokenAddress, spender.spenderAddress)}
                                                     isLoading={revokingSpender === spender.spenderAddress}
-                                                    className="px-4 py-2 border border-alphabag-red/20 text-alphabag-red hover:bg-alphabag-red hover:text-white bg-alphabag-red/5 font-black tracking-widest text-[9px] uppercase hover:scale-[1.02] active:scale-[0.98]"
+                                                    className="px-3 py-1.5 border border-alphabag-red/20 text-alphabag-red hover:bg-alphabag-red hover:text-white bg-alphabag-red/5 font-semibold tracking-wider text-xs uppercase"
                                                 >
                                                     {revokingSpender === spender.spenderAddress ? 'Revoking...' : 'Revoke'}
                                                 </Button>

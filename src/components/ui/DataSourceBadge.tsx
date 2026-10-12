@@ -20,7 +20,7 @@ export const DataSourceBadge: React.FC<DataSourceBadgeProps> = ({ source, classN
   const activeSource = actuallyMock ? 'MOCK' : (source || (DATA_SOURCE_CONFIG.MODE === 'AUTO' ? 'MOCK' : DATA_SOURCE_CONFIG.MODE));
   const label = activeSource === 'LIVE' ? 'Live API' : activeSource === 'CACHED' ? 'Cached (30s)' : 'Demo Sandbox';
 
-  const base = 'text-[9px] font-semibold uppercase px-2.5 py-1 rounded-md tracking-wider inline-flex items-center gap-1.5 border';
+  const base = 'text-[11px] font-semibold uppercase px-2.5 py-1 rounded-md tracking-wider inline-flex items-center gap-1.5 border';
 
   if (activeSource === 'LIVE') {
     return (

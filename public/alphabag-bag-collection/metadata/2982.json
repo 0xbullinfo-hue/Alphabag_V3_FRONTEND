@@ -1,0 +1,39 @@
+{
+  "name": "AlphaBAG Duffel #2982",
+  "description": "A collectible AlphaBAG duffel NFT with Uncommon rarity and layered traits: Forest Green, White, Yellow Plastic, Double Stripe, undefined, undefined, undefined.",
+  "image": "/alphabag-bag-collection/images/2982.svg",
+  "dna": "alphabag-bag-2982-Uncommon-Forest Green-White-Yellow Plastic-Double Stripe-undefined-undefined-undefined",
+  "edition": 2982,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Uncommon"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Forest Green"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "White"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "Double Stripe"
+    },
+    {
+      "trait_type": "Finish / Material"
+    },
+    {
+      "trait_type": "Badge / Patch"
+    },
+    {
+      "trait_type": "BAG Tag"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

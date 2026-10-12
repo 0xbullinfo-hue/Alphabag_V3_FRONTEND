@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "predeploy": "node scripts/check-no-secrets.mjs",
+    "check:design-slop": "node scripts/check-design-slop.mjs",
     "build": "tsc && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "verify:crawlability": "node scripts/verify-crawlability.cjs",

@@ -1,10 +1,11 @@
-import { AlertTriangle,Briefcase,PieChart as PieChartIcon,Radio,Search,ShieldCheck,TrendingUp } from 'lucide-react';
-import React,{ useEffect,useMemo,useState } from 'react';
+import { AlertTriangle, Briefcase, Radio, Search, ShieldCheck, TrendingUp } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Cell,Pie,PieChart as RePieChart,ResponsiveContainer } from 'recharts';
+import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer } from 'recharts';
 import Swal from 'sweetalert2';
 import { useWallet } from '../../context/WalletContext';
 import { PageIcon } from '../../components/ui/PageIcon';
+import { formatUsd } from '../../lib/formatters';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
@@ -49,11 +50,11 @@ export const MyAlphabag: React.FC = () => {
         let baseLeakage = 12;
 
         let txs = [
-            { id: 't1', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> PEPE', net: 'Ethereum', fee: 34.20, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
-            { id: 't2', asset: 'USDT', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png', action: 'Bridge USDT -> Base', net: 'Base Network', fee: 12.50, status: 'Average Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-            { id: 't3', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> JUP', net: 'Solana', fee: 0.003, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
-            { id: 't4', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.15, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
-            { id: 't5', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Mint NFT', net: 'Ethereum', fee: 52.80, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
+            { id: 't1', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> PEPE', net: 'Ethereum', fee: 34.20, status: 'High Gas', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
+            { id: 't2', asset: 'USDT', logo: 'https://cryptologos.cc/logos/tether-usdt-logo.png', action: 'Bridge USDT -> Base', net: 'Base Network', fee: 12.50, status: 'Standard Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+            { id: 't3', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> JUP', net: 'Solana', fee: 0.003, status: 'Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
+            { id: 't4', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.15, status: 'Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
+            { id: 't5', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Mint NFT', net: 'Ethereum', fee: 52.80, status: 'High Gas', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
         ];
 
         if (selectedWallet === 'custom' && auditingWallet) {
@@ -68,9 +69,9 @@ export const MyAlphabag: React.FC = () => {
             baseLeakage = 15;
 
             txs = [
-                { id: 'c1', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> PYTH', net: 'Solana', fee: 0.004, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
-                { id: 'c2', asset: 'USDC', logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png', action: 'Bridge USDC -> Solana', net: 'Solana', fee: 8.50, status: 'Average Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
-                { id: 'c3', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> UNI', net: 'Ethereum', fee: (seed * 0.8) + 15.0, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
+                { id: 'c1', asset: 'SOL', logo: 'https://cryptologos.cc/logos/solana-sol-logo.png', action: 'Swap SOL -> PYTH', net: 'Solana', fee: 0.004, status: 'Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
+                { id: 'c2', asset: 'USDC', logo: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png', action: 'Bridge USDC -> Solana', net: 'Solana', fee: 8.50, status: 'Standard Toll', color: 'text-blue-400 bg-blue-500/10 border-blue-500/20' },
+                { id: 'c3', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Swap ETH -> UNI', net: 'Ethereum', fee: (seed * 0.8) + 15.0, status: 'High Gas', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
             ];
         } else if (selectedWallet !== 'all') {
             const idx = dexWallets.indexOf(selectedWallet);
@@ -84,8 +85,8 @@ export const MyAlphabag: React.FC = () => {
             baseLeakage = 20;
 
             txs = [
-                { id: 'w1', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.18, status: 'Highly Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
-                { id: 'w2', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Bridge ETH -> Arbitrum', net: 'Arbitrum Network', fee: 18.20, status: 'High Gas Warning', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
+                { id: 'w1', asset: 'BNB', logo: 'https://cryptologos.cc/logos/binance-coin-bnb-logo.png', action: 'Swap BNB -> CAKE', net: 'BSC Network', fee: 0.18, status: 'Efficient', color: 'text-alphabag-green bg-alphabag-green/10 border-alphabag-green/20' },
+                { id: 'w2', asset: 'ETH', logo: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', action: 'Bridge ETH -> Arbitrum', net: 'Arbitrum Network', fee: 18.20, status: 'High Gas', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' }
             ];
         }
 
@@ -104,10 +105,9 @@ export const MyAlphabag: React.FC = () => {
         };
     }, [selectedWallet, auditingWallet, dexWallets]);
 
-
     const allocationData = useMemo(() => {
         const dataMap: Record<string, { name: string, value: number, color: string }> = {
-            'BTC': { name: 'BTC', value: 29032.18, color: '#FCD535' },
+            'BTC': { name: 'BTC', value: 29032.18, color: '#F0B90B' },
             'ETH': { name: 'ETH', value: 14490.84 + 6347.16, color: '#3B82F6' },
             'SOL': { name: 'SOL', value: 7492.80, color: '#8B5CF6' },
             'USDT': { name: 'USDT', value: 3500.00, color: '#0ECB81' },
@@ -117,41 +117,40 @@ export const MyAlphabag: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full space-y-3 pb-2 animate-in fade-in duration-700">
+        <div className="w-full space-y-3 pb-3">
             {/* Header section */}
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <PageIcon name="bag" size={40} />
-                        <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">My AlphaBAG</h1>
-                        <span className="text-[10px] bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded font-black uppercase tracking-widest animate-pulse">Live overview</span>
+                    <div className="flex items-center gap-2.5 mb-1">
+                        <PageIcon name="bag" size={32} />
+                        <h1 className="text-xl font-bold text-alphabag-text tracking-tight">Portfolio Overview</h1>
+                        <span className="text-[11px] bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded-[2px] font-semibold uppercase tracking-wider">LIVE FEED</span>
                     </div>
-                    <p className="text-alphabag-subtext text-sm">Consolidated portfolio overview of your centralized and decentralized assets.</p>
+                    <p className="text-alphabag-subtext text-xs">Consolidated portfolio telemetry across connected centralized exchanges and Web3 on-chain wallets.</p>
                 </div>
             </div>
 
-            {/* FIX: Net Worth & Allocation Row - improved alignment and consistent internal layout */}
+            {/* Net Worth & Allocation Row */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 items-stretch">
 
                 {/* Combined Net Worth Hero Card */}
-                <div className="lg:col-span-3 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden flex flex-col justify-between">
-
-                    <div className="space-y-2 z-10">
-                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-alphabag-subtext">Combined Net Worth</p>
-                        <h2 className="text-4xl font-extrabold text-alphabag-text tracking-tight tabular-data">
-                            ${combinedTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <div className="lg:col-span-3 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col justify-between">
+                    <div className="space-y-1.5">
+                        <p className="text-[11px] uppercase font-semibold tracking-wider text-alphabag-subtext">Combined Net Worth</p>
+                        <h2 className="text-3xl font-bold text-alphabag-text tracking-tight num">
+                            {formatUsd(combinedTotal)}
                         </h2>
                         <p className="text-xs text-alphabag-subtext font-medium leading-relaxed">
-                            <span className="font-bold text-alphabag-text">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> CEX Bag &nbsp;·&nbsp; <span className="font-bold text-alphabag-text">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span> DEX Bag
+                            <span className="font-semibold text-alphabag-text num">{formatUsd(cexTotal)}</span> CEX Holdings &nbsp;·&nbsp; <span className="font-semibold text-alphabag-text num">{formatUsd(dexTotal)}</span> DEX Holdings
                         </p>
                     </div>
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 text-alphabag-green font-bold text-xs shrink-0 self-start mt-4 border border-green-500/20">
-                        <TrendingUp size={14} /> +3.9% Today
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] bg-emerald-500/10 text-alphabag-green font-semibold text-xs shrink-0 self-start mt-4 border border-emerald-500/20 num">
+                        <TrendingUp size={13} /> +3.9% 24h
                     </div>
                 </div>
 
                 {/* Total Allocation Donut Chart */}
-                <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-row items-center gap-4">
+                <div className="lg:col-span-2 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-row items-center gap-4">
                     <div className="w-1/2 h-[120px] relative shrink-0">
                         <ResponsiveContainer width="100%" height="100%">
                             <RePieChart>
@@ -159,71 +158,65 @@ export const MyAlphabag: React.FC = () => {
                                     data={allocationData} 
                                     cx="50%" 
                                     cy="50%" 
-                                    innerRadius={38} 
-                                    outerRadius={50} 
-                                    paddingAngle={2} 
-                                    dataKey="value" 
-                                    stroke="none"
+                                    innerRadius={36} 
+                                    outerRadius={52} 
+                                    paddingAngle={3} 
+                                    dataKey="value"
                                 >
                                     {allocationData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                        <Cell key={`cell-${index}`} fill={entry.color} stroke="#181A20" strokeWidth={2} />
                                     ))}
                                 </Pie>
                             </RePieChart>
                         </ResponsiveContainer>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <PieChartIcon size={18} className="text-alphabag-subtext" />
-                        </div>
                     </div>
-
-                    <div className="flex-1 flex flex-col justify-center space-y-1.5 min-w-0">
-                        <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-alphabag-subtext mb-1">Portfolio Allocation</p>
-                        {allocationData.slice(0, 4).map((item) => {
-                            const pct = ((item.value / combinedTotal) * 100).toFixed(1);
-                            return (
-                                <div key={item.name} className="flex justify-between items-center text-xs">
-                                    <div className="flex items-center gap-2 min-w-0">
-                                        <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }}></div>
-                                        <span className="text-alphabag-text font-medium truncate">{item.name}</span>
-                                    </div>
-                                    <span className="text-alphabag-subtext font-semibold tabular-data">{pct}%</span>
+                    <div className="w-1/2 space-y-1.5 overflow-hidden">
+                        <p className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Asset Weight</p>
+                        <div className="space-y-1 text-xs">
+                            {allocationData.slice(0, 4).map((a) => (
+                                <div key={a.name} className="flex items-center justify-between gap-2">
+                                    <span className="flex items-center gap-1.5 truncate text-alphabag-text">
+                                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: a.color }}></span>
+                                        {a.name}
+                                    </span>
+                                    <span className="text-alphabag-subtext num text-[11px]">{((a.value / combinedTotal) * 100 || 0).toFixed(1)}%</span>
                                 </div>
-                            );
-                        })}
+                            ))}
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            {/* FIX: Split Bags Grid - removed fixed h-[280px], added items-stretch */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-stretch">
+            {/* CEX / DEX Overview Modules */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                 {/* CEX Card */}
-                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-alphabag-muted transition-all relative flex flex-col justify-between">
+                <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col justify-between hover:border-[#3E4552] transition-colors">
                     <div>
-                        <div className="flex justify-between items-start mb-3">
+                        <div className="flex justify-between items-start mb-2.5">
                             <div className="flex items-center gap-2">
-                                <PageIcon name="cex" size={40} />
+                                <PageIcon name="cex" size={32} />
                                 <div>
-                                    <h3 className="text-sm font-bold text-white uppercase">CEX Portfolio</h3>
-                                    <p className="text-[10px] text-alphabag-subtext">
+                                    <h3 className="text-xs font-semibold text-alphabag-text uppercase">CEX Portfolio</h3>
+                                    <p className="text-[11px] text-alphabag-subtext">
                                         {cexConnections.length > 0 ? cexConnections.map(c => c.name).join(' · ') : 'No Exchanges Connected'}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/cex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors cursor-pointer">
+                            <button onClick={() => navigate('/cex-bag')} className="text-xs font-semibold text-alphabag-subtext hover:text-white border border-[#2B313A] rounded px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>
                         <div>
-                            <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${cexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                            <div className="text-2xl font-bold text-alphabag-text num">{formatUsd(cexTotal)}</div>
                             {cexConnections.length > 0 ? (
-                                <div className="text-xs text-alphabag-subtext font-semibold mt-1 flex items-center gap-1">
-                                    {cexConnections.length} Active Link{cexConnections.length !== 1 ? 's' : ''}
+                                <div className="text-xs text-alphabag-subtext font-medium mt-1 flex items-center gap-1">
+                                    {cexConnections.length} Active Exchange Connection{cexConnections.length !== 1 ? 's' : ''}
                                 </div>
                             ) : (
                                 <div className="text-xs text-alphabag-subtext font-medium mt-1">
-                                    Read-only API key balance tracking
+                                    Read-only API key balance telemetry
                                 </div>
                             )}
                         </div>
@@ -233,21 +226,21 @@ export const MyAlphabag: React.FC = () => {
                         {cexConnections.length > 0 ? (
                             <div className="flex gap-2 flex-wrap mb-3">
                                 {cexConnections.slice(0, 3).map((c, i) => (
-                                    <div key={i} className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
+                                    <div key={i} className="flex items-center gap-1.5 bg-[#202630] border border-[#2B313A] rounded px-2.5 py-1 text-xs text-alphabag-subtext">
                                         {c.icon && <img src={c.icon} className="w-3.5 h-3.5 rounded-full" alt={c.name} />}
-                                        {c.name}: ${Number(c.balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        {c.name}: <span className="num text-alphabag-text">{formatUsd(Number(c.balance || 0))}</span>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="mb-3 py-2 px-3 rounded-lg bg-alphabag-black/40 border border-alphabag-gray/50 text-[11px] text-alphabag-subtext">
-                                Connect Binance, Bybit, Coinbase & more via read-only keys.
+                            <div className="mb-3 py-2 px-3 rounded bg-[#0B0E11] border border-[#2B313A] text-xs text-alphabag-subtext">
+                                Connect Binance, Bybit, Coinbase or OKX via read-only API credentials.
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
-                            <span className="text-[10px] text-alphabag-subtext font-medium">{cexConnections.length} Exchanges Connected</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline cursor-pointer">
+                        <div className="flex justify-between items-center border-t border-[#2B313A] pt-3">
+                            <span className="text-[11px] text-alphabag-subtext font-medium">{cexConnections.length} Connected</span>
+                            <button onClick={() => navigate('/settings')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
                                 Configure API Keys &rarr;
                             </button>
                         </div>
@@ -255,31 +248,31 @@ export const MyAlphabag: React.FC = () => {
                 </div>
 
                 {/* DEX Card */}
-                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 hover:border-alphabag-muted transition-all relative flex flex-col justify-between">
+                <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col justify-between hover:border-[#3E4552] transition-colors">
                     <div>
-                        <div className="flex justify-between items-start mb-3">
+                        <div className="flex justify-between items-start mb-2.5">
                             <div className="flex items-center gap-2">
-                                <PageIcon name="dex" size={40} />
+                                <PageIcon name="dex" size={32} />
                                 <div>
-                                    <h3 className="text-sm font-bold text-white uppercase">DEX Portfolio</h3>
-                                    <p className="text-[10px] text-alphabag-subtext">
-                                        {dexWallets.length > 0 ? `${dexWallets.length} Wallets · ${dexChains.length} Chains` : 'No Wallets Connected'}
+                                    <h3 className="text-xs font-semibold text-alphabag-text uppercase">DEX Portfolio</h3>
+                                    <p className="text-[11px] text-alphabag-subtext">
+                                        {dexWallets.length > 0 ? `${dexWallets.length} Wallets · ${dexChains.length} Networks` : 'No Wallets Connected'}
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => navigate('/dex-bag')} className="text-[11px] font-bold text-alphabag-subtext hover:text-white border border-alphabag-gray rounded-lg px-2.5 py-1 transition-colors cursor-pointer">
+                            <button onClick={() => navigate('/dex-bag')} className="text-xs font-semibold text-alphabag-subtext hover:text-white border border-[#2B313A] rounded px-2.5 py-1 transition-colors">
                                 View Details &rarr;
                             </button>
                         </div>
                         <div>
-                            <div className="text-2xl font-extrabold text-alphabag-text tabular-data">${dexTotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                            <div className="text-2xl font-bold text-alphabag-text num">{formatUsd(dexTotal)}</div>
                             {portfolioItems && portfolioItems.length > 0 ? (
-                                <div className="text-xs text-alphabag-subtext font-semibold mt-1 flex items-center gap-1">
-                                    {portfolioItems.length} Token{portfolioItems.length !== 1 ? 's' : ''} Detected
+                                <div className="text-xs text-alphabag-subtext font-medium mt-1 flex items-center gap-1">
+                                    {portfolioItems.length} On-chain asset{portfolioItems.length !== 1 ? 's' : ''} detected
                                 </div>
                             ) : (
                                 <div className="text-xs text-alphabag-subtext font-medium mt-1">
-                                    On-chain multi-chain holdings
+                                    Multi-chain Web3 wallet holdings
                                 </div>
                             )}
                         </div>
@@ -289,21 +282,21 @@ export const MyAlphabag: React.FC = () => {
                         {portfolioItems && portfolioItems.length > 0 ? (
                             <div className="flex gap-2 flex-wrap mb-3">
                                 {portfolioItems.slice(0, 3).map((item, i) => (
-                                    <div key={i} className="flex items-center gap-1.5 bg-alphabag-dark/40 border border-alphabag-gray rounded-lg px-2.5 py-1 text-xs text-alphabag-subtext">
+                                    <div key={i} className="flex items-center gap-1.5 bg-[#202630] border border-[#2B313A] rounded px-2.5 py-1 text-xs text-alphabag-subtext">
                                         {item.image && <img src={item.image} className="w-3.5 h-3.5 rounded-full" alt={item.symbol} />}
-                                        {item.symbol} {Number(item.amount || 0).toLocaleString(undefined, { maximumFractionDigits: 4 })}
+                                        {item.symbol} <span className="num text-alphabag-text">{Number(item.amount || 0).toFixed(2)}</span>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="mb-3 py-2 px-3 rounded-lg bg-alphabag-black/40 border border-alphabag-gray/50 text-[11px] text-alphabag-subtext">
-                                Connect your Web3 wallet to aggregate Ethereum, BSC, and Solana holdings.
+                            <div className="mb-3 py-2 px-3 rounded bg-[#0B0E11] border border-[#2B313A] text-xs text-alphabag-subtext">
+                                Connect EVM or Solana wallets to aggregate on-chain token balances.
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center border-t border-alphabag-gray/40 pt-3">
-                            <span className="text-[10px] text-alphabag-subtext font-medium">{dexWallets.length} Wallets Tracked</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-bold text-alphabag-yellow hover:underline cursor-pointer">
+                        <div className="flex justify-between items-center border-t border-[#2B313A] pt-3">
+                            <span className="text-[11px] text-alphabag-subtext font-medium">{dexWallets.length} Tracked</span>
+                            <button onClick={() => navigate('/settings')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
                                 Configure Wallets &rarr;
                             </button>
                         </div>
@@ -313,138 +306,137 @@ export const MyAlphabag: React.FC = () => {
             </div>
 
             {/* Tabs Navigation Card */}
-            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-3 flex gap-4">
+            <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-1.5 flex gap-1">
                 <button
                     onClick={() => setActiveSection('overview')}
-                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'overview' ? 'bg-alphabag-yellow text-alphabag-dark' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
+                    className={`px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors ${activeSection === 'overview' ? 'bg-[#202630] text-alphabag-text border border-[#2B313A]' : 'text-alphabag-subtext hover:text-white'}`}
                 >
-                    Overview
+                    Holdings Breakdown
                 </button>
                 <button
                     onClick={() => setActiveSection('fee-auditor')}
-                    className={`px-4 py-2 text-xs font-black uppercase tracking-[0.15em] rounded-lg transition-all ${activeSection === 'fee-auditor' ? 'bg-alphabag-yellow text-alphabag-dark' : 'text-alphabag-subtext hover:text-white hover:bg-white/5'}`}
+                    className={`px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors ${activeSection === 'fee-auditor' ? 'bg-[#202630] text-alphabag-text border border-[#2B313A]' : 'text-alphabag-subtext hover:text-white'}`}
                 >
-                    Fee Auditor
+                    On-Chain Fee Auditor
                 </button>
             </div>
 
             {activeSection === 'overview' ? (
-                /* FIX: Bottom Section - added items-stretch for equal height columns */
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 items-stretch">
 
-                    {/* Recent Activity Table (2/3 width) */}
-                    <div className="lg:col-span-2 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col">
-                        <div className="flex justify-between items-center mb-5 pb-3 border-b border-alphabag-gray">
-                            <h3 className="text-sm font-bold text-white uppercase flex items-center gap-2">
-                                <Briefcase size={16} className="text-blue-400" /> Recent Holdings
+                    {/* Holdings Table (2/3 width) */}
+                    <div className="lg:col-span-2 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col">
+                        <div className="flex justify-between items-center mb-3 pb-2.5 border-b border-[#2B313A]">
+                            <h3 className="text-xs font-semibold text-alphabag-text uppercase flex items-center gap-2">
+                                <Briefcase size={14} className="text-blue-400" /> Tracked Assets
                             </h3>
-                            <span className="text-[10px] font-bold text-alphabag-subtext uppercase">Combined Assets</span>
+                            <span className="text-[11px] font-semibold text-alphabag-subtext uppercase">Consolidated</span>
                         </div>
 
                         <div className="overflow-x-auto flex-1">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="text-alphabag-subtext text-[10px] uppercase font-bold tracking-wider border-b border-alphabag-gray/50">
-                                        <th className="pb-3 px-2">Asset</th>
-                                        <th className="pb-3 px-2">Source</th>
-                                        <th className="pb-3 px-2 text-right">24h Change</th>
-                                        <th className="pb-3 px-2 text-right">Value</th>
+                                    <tr className="text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-[#2B313A]">
+                                        <th className="pb-2.5 px-2">Asset</th>
+                                        <th className="pb-2.5 px-2">Source</th>
+                                        <th className="pb-2.5 px-2 text-right">24h Change</th>
+                                        <th className="pb-2.5 px-2 text-right">Value (USD)</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-alphabag-gray/20 text-xs">
-                                    <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="py-3 px-2">
-                                            <div className="flex items-center gap-2.5">
-                                                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" className="w-5 h-5 rounded-full" alt="BTC" />
-                                                <span className="font-semibold text-white">BTC</span>
+                                <tbody className="divide-y divide-[#2B313A]/50 text-xs">
+                                    <tr className="hover:bg-[#202630] transition-colors">
+                                        <td className="py-2.5 px-2">
+                                            <div className="flex items-center gap-2">
+                                                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" className="w-4 h-4 rounded-full" alt="BTC" />
+                                                <span className="font-semibold text-alphabag-text">BTC</span>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">CEX</span>
+                                        <td className="py-2.5 px-2">
+                                            <span className="text-[11px] font-semibold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.2 rounded-[2px]">CEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+2.5%</td>
-                                        <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$29,032.18</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+2.5%</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$29,032.18</td>
                                     </tr>
-                                    <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="py-3 px-2">
-                                            <div className="flex items-center gap-2.5">
-                                                <img src="https://cryptologos.cc/logos/solana-sol-logo.png" className="w-5 h-5 rounded-full" alt="SOL" />
-                                                <span className="font-semibold text-white">SOL</span>
+                                    <tr className="hover:bg-[#202630] transition-colors">
+                                        <td className="py-2.5 px-2">
+                                            <div className="flex items-center gap-2">
+                                                <img src="https://cryptologos.cc/logos/solana-sol-logo.png" className="w-4 h-4 rounded-full" alt="SOL" />
+                                                <span className="font-semibold text-alphabag-text">SOL</span>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded">DEX</span>
+                                        <td className="py-2.5 px-2">
+                                            <span className="text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-1.5 py-0.2 rounded-[2px]">DEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+5.6%</td>
-                                        <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$7,492.80</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+5.6%</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$7,492.80</td>
                                     </tr>
-                                    <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="py-3 px-2">
-                                            <div className="flex items-center gap-2.5">
-                                                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" className="w-5 h-5 rounded-full" alt="ETH" />
-                                                <span className="font-semibold text-white">ETH</span>
+                                    <tr className="hover:bg-[#202630] transition-colors">
+                                        <td className="py-2.5 px-2">
+                                            <div className="flex items-center gap-2">
+                                                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" className="w-4 h-4 rounded-full" alt="ETH" />
+                                                <span className="font-semibold text-alphabag-text">ETH</span>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2 py-0.5 rounded">CEX</span>
+                                        <td className="py-2.5 px-2">
+                                            <span className="text-[11px] font-semibold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.2 rounded-[2px]">CEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-alphabag-green font-bold tabular-data">+2.1%</td>
-                                        <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$14,490.84</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+2.1%</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$14,490.84</td>
                                     </tr>
-                                    <tr className="hover:bg-white/5 transition-colors">
-                                        <td className="py-3 px-2">
-                                            <div className="flex items-center gap-2.5">
-                                                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png" className="w-5 h-5 rounded-full" alt="PEPE" />
-                                                <span className="font-semibold text-white">PEPE</span>
+                                    <tr className="hover:bg-[#202630] transition-colors">
+                                        <td className="py-2.5 px-2">
+                                            <div className="flex items-center gap-2">
+                                                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png" className="w-4 h-4 rounded-full" alt="PEPE" />
+                                                <span className="font-semibold text-alphabag-text">PEPE</span>
                                             </div>
                                         </td>
-                                        <td className="py-3 px-2">
-                                            <span className="text-[9px] font-black uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded">DEX</span>
+                                        <td className="py-2.5 px-2">
+                                            <span className="text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-1.5 py-0.2 rounded-[2px]">DEX</span>
                                         </td>
-                                        <td className="py-3 px-2 text-right text-alphabag-red font-bold tabular-data">-4.2%</td>
-                                        <td className="py-3 px-2 text-right text-white font-semibold tabular-data">$1,638.00</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-red font-semibold num">-4.2%</td>
+                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$1,638.00</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    {/* Alpha Radar Feed (1/3 width) */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col">
-                        <div className="flex justify-between items-center mb-5 pb-3 border-b border-alphabag-gray">
-                            <h3 className="text-sm font-bold text-white uppercase flex items-center gap-2">
-                                <Radio size={16} className="text-alphabag-yellow animate-pulse" /> Alpha Radar
+                    {/* Flow Radar Feed (1/3 width) */}
+                    <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col">
+                        <div className="flex justify-between items-center mb-3 pb-2.5 border-b border-[#2B313A]">
+                            <h3 className="text-xs font-semibold text-alphabag-text uppercase flex items-center gap-2">
+                                <Radio size={14} className="text-alphabag-yellow" /> Flow Telemetry
                             </h3>
                         </div>
 
                         <div className="space-y-3 flex-1">
-                            <div className="flex gap-3 items-start border-b border-alphabag-gray/40 pb-3">
-                                <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0 text-xs font-black">W</div>
+                            <div className="flex gap-2.5 items-start border-b border-[#2B313A]/50 pb-2.5">
+                                <div className="w-6 h-6 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0 text-xs font-semibold">W</div>
                                 <div className="space-y-0.5 min-w-0">
                                     <p className="text-xs text-alphabag-text leading-relaxed">
-                                        <span className="font-bold">Whale 0x7a2...f31</span> moved <span className="font-bold">1,200 ETH</span> to Binance.
+                                        <span className="font-semibold">0x7a2...f31</span> transferred <span className="font-semibold num">1,200 ETH</span> to exchange custody.
                                     </p>
-                                    <span className="text-[9px] text-alphabag-subtext block font-mono">2 min ago</span>
+                                    <span className="text-[11px] text-alphabag-subtext block num">2m ago</span>
                                 </div>
                             </div>
 
-                            <div className="flex gap-3 items-start border-b border-alphabag-gray/40 pb-3">
-                                <div className="w-8 h-8 rounded-lg bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 flex items-center justify-center shrink-0 text-xs font-black">A</div>
+                            <div className="flex gap-2.5 items-start border-b border-[#2B313A]/50 pb-2.5">
+                                <div className="w-6 h-6 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 flex items-center justify-center shrink-0 text-xs font-semibold">S</div>
                                 <div className="space-y-0.5 min-w-0">
                                     <p className="text-xs text-alphabag-text leading-relaxed">
-                                        <span className="font-bold">Alpha call</span> flagged <span className="font-bold text-alphabag-yellow">$JUP</span> &mdash; 3 analysts bullish.
+                                        <span className="font-semibold">Trade signal</span> registered for <span className="font-semibold text-alphabag-yellow">$JUP</span>.
                                     </p>
-                                    <span className="text-[9px] text-alphabag-subtext block font-mono">18 min ago</span>
+                                    <span className="text-[11px] text-alphabag-subtext block num">18m ago</span>
                                 </div>
                             </div>
 
-                            <div className="flex gap-3 items-start">
-                                <div className="w-8 h-8 rounded-lg bg-green-500/10 text-alphabag-green border border-green-500/20 flex items-center justify-center shrink-0 text-xs font-black">S</div>
+                            <div className="flex gap-2.5 items-start">
+                                <div className="w-6 h-6 rounded bg-emerald-500/10 text-alphabag-green border border-emerald-500/20 flex items-center justify-center shrink-0 text-xs font-semibold">M</div>
                                 <div className="space-y-0.5 min-w-0">
                                     <p className="text-xs text-alphabag-text leading-relaxed">
-                                        New airdrop mission is live for <span className="font-bold">Genesis</span> members.
+                                        Ecosystem reward cycle is live for verified members.
                                     </p>
-                                    <span className="text-[9px] text-alphabag-subtext block font-mono">1 hour ago</span>
+                                    <span className="text-[11px] text-alphabag-subtext block num">1h ago</span>
                                 </div>
                             </div>
                         </div>
@@ -453,22 +445,21 @@ export const MyAlphabag: React.FC = () => {
                 </div>
             ) : (
                 /* Fee Auditor Tab Content */
-                <div className="space-y-3 animate-in fade-in duration-300">
-
-                    <div className="bg-alphabag-yellow/10 border border-alphabag-yellow/30 rounded-xl p-3 flex items-center gap-2">
-                        <AlertTriangle size={16} className="text-alphabag-yellow shrink-0" />
-                        <p className="text-xs text-alphabag-yellow font-semibold">
-                            Preview data — figures below are illustrative and not yet calculated from real on-chain transaction history.
+                <div className="space-y-3">
+                    <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-3 flex items-center gap-2">
+                        <AlertTriangle size={15} className="text-alphabag-yellow shrink-0" />
+                        <p className="text-xs text-alphabag-text">
+                            Illustrative figures. Connect full RPC node integration to compute verified block-level gas consumption.
                         </p>
                     </div>
 
                     {/* Wallet input controller banner */}
-                    <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div className="space-y-1">
-                            <h4 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                                <ShieldCheck size={16} className="text-alphabag-yellow" /> Select Audit Target
+                            <h4 className="text-xs font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
+                                <ShieldCheck size={14} className="text-alphabag-yellow" /> Audit Scope
                             </h4>
-                            <p className="text-xs text-alphabag-subtext">Choose a connected portfolio address or paste a custom wallet target.</p>
+                            <p className="text-xs text-alphabag-subtext">Select portfolio address or input external target wallet.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                             <select
@@ -484,7 +475,7 @@ export const MyAlphabag: React.FC = () => {
                                         setAuditingWallet(val);
                                     }
                                 }}
-                                className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-alphabag-yellow min-w-[200px]"
+                                className="bg-[#0B0E11] border border-[#2B313A] rounded px-3 py-1.5 text-xs text-alphabag-text outline-none focus:border-alphabag-yellow min-w-[200px]"
                             >
                                 <option value="all">Consolidated (All Connected)</option>
                                 {dexWallets.map((w, i) => (
@@ -497,10 +488,10 @@ export const MyAlphabag: React.FC = () => {
                                 <div className="flex items-center gap-2 flex-1 md:flex-initial">
                                     <input
                                         type="text"
-                                        placeholder="Paste EVM / Solana Address (0x... or 3M4...)"
+                                        placeholder="Paste EVM / Solana Address..."
                                         value={customWalletInput}
                                         onChange={(e) => setCustomWalletInput(e.target.value)}
-                                        className="bg-alphabag-dark border border-alphabag-gray rounded-lg px-4 py-2.5 text-xs text-white outline-none focus:border-alphabag-yellow flex-1 md:w-[280px]"
+                                        className="bg-[#0B0E11] border border-[#2B313A] rounded px-3 py-1.5 text-xs text-alphabag-text outline-none focus:border-alphabag-yellow flex-1 md:w-[260px] num"
                                     />
                                     <button
                                         onClick={() => {
@@ -511,15 +502,15 @@ export const MyAlphabag: React.FC = () => {
                                                 title: 'AUDITING WALLET',
                                                 text: 'Parsing transaction logs on BSC, Ethereum and Solana nodes...',
                                                 icon: 'success',
-                                                timer: 2000,
+                                                timer: 1500,
                                                 showConfirmButton: false,
-                                                background: '#1E2329',
-                                                color: '#FFF'
+                                                background: '#181A20',
+                                                color: '#EAECEF'
                                             });
                                         }}
-                                        className="bg-alphabag-yellow hover:bg-yellow-400 text-black text-xs font-bold px-4 py-2.5 rounded-lg transition-colors shrink-0"
+                                        className="bg-alphabag-yellow hover:bg-[#FCD535] text-[#0B0E11] text-xs font-semibold px-3.5 py-1.5 rounded transition-colors shrink-0"
                                     >
-                                        Audit Address
+                                        Audit
                                     </button>
                                 </div>
                             )}
@@ -527,108 +518,108 @@ export const MyAlphabag: React.FC = () => {
                     </div>
 
                     {selectedWallet === 'custom' && !isAuditingCustom ? (
-                        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-12 text-center flex flex-col items-center justify-center space-y-2 min-h-[300px]">
-                            <div className="p-4 bg-alphabag-yellow/10 rounded-full text-alphabag-yellow animate-bounce">
-                                <Search size={32} />
+                        <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-8 text-center flex flex-col items-center justify-center space-y-2 min-h-[220px]">
+                            <div className="p-3 bg-[#202630] rounded border border-[#2B313A] text-alphabag-yellow">
+                                <Search size={24} />
                             </div>
                             <div>
-                                <h4 className="text-lg font-bold text-white uppercase">Waiting for Audit Target</h4>
-                                <p className="text-xs text-alphabag-subtext mt-1 max-w-sm mx-auto">Please enter a valid wallet address in the field above and click "Audit Address" to query on-chain fee logs.</p>
+                                <h4 className="text-sm font-semibold text-alphabag-text uppercase">Awaiting Target Wallet</h4>
+                                <p className="text-xs text-alphabag-subtext mt-1 max-w-sm mx-auto">Enter an on-chain address above to scan gas expenditure and execution leakage.</p>
                             </div>
                         </div>
                     ) : (
                         <>
-                            {/* FIX: Summary Auditor cards grid - added items-stretch */}
+                            {/* Summary Auditor cards grid */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch">
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden flex flex-col">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <span className="text-[10px] text-orange-400 font-bold uppercase tracking-wider">Cumulative Bleed</span>
-                                        <div className="px-2 py-0.5 rounded text-[8px] font-black bg-orange-500/10 text-orange-400 border border-orange-500/20">Gas Fees</div>
+                                <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 relative overflow-hidden flex flex-col">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-[11px] text-orange-400 font-semibold uppercase tracking-wider">Gas Expenditure</span>
+                                        <div className="px-1.5 py-0.2 rounded-[2px] text-[11px] font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/20">Gas</div>
                                     </div>
-                                    <div className="text-3xl font-extrabold text-alphabag-text tabular-data">${feeAuditData.gasSpent.toFixed(2)}</div>
-                                    <p className="text-[10px] text-alphabag-muted mt-2 font-medium flex-1">Estimated execution gas cost lost to consensus validators.</p>
+                                    <div className="text-2xl font-bold text-alphabag-text num">${feeAuditData.gasSpent.toFixed(2)}</div>
+                                    <p className="text-[11px] text-alphabag-subtext mt-1.5 flex-1">Estimated gas consumed on consensus verification.</p>
                                 </div>
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden flex flex-col">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <span className="text-[10px] text-alphabag-red font-bold uppercase tracking-wider">Slippage Leakage</span>
-                                        <div className="px-2 py-0.5 rounded text-[8px] font-black bg-red-500/10 text-alphabag-red border border-red-500/20">MEV Loss</div>
+                                <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 relative overflow-hidden flex flex-col">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-[11px] text-alphabag-red font-semibold uppercase tracking-wider">Slippage Leakage</span>
+                                        <div className="px-1.5 py-0.2 rounded-[2px] text-[11px] font-semibold bg-rose-500/10 text-alphabag-red border border-rose-500/20">MEV</div>
                                     </div>
-                                    <div className="text-3xl font-extrabold text-alphabag-text tabular-data">${feeAuditData.slippageLoss.toFixed(2)}</div>
-                                    <p className="text-[10px] text-alphabag-muted mt-2 font-medium flex-1">Slippage loss due to frontrunning or sub-optimal trade routes.</p>
+                                    <div className="text-2xl font-bold text-alphabag-text num">${feeAuditData.slippageLoss.toFixed(2)}</div>
+                                    <p className="text-[11px] text-alphabag-subtext mt-1.5 flex-1">Loss incurred from sub-optimal routing and frontrunning.</p>
                                 </div>
-                                <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 relative overflow-hidden flex flex-col">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Bridge Friction</span>
-                                        <div className="px-2 py-0.5 rounded text-[8px] font-black bg-blue-500/10 text-blue-400 border border-blue-500/20">Network Tolls</div>
+                                <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 relative overflow-hidden flex flex-col">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-[11px] text-blue-400 font-semibold uppercase tracking-wider">Bridge Tolls</span>
+                                        <div className="px-1.5 py-0.2 rounded-[2px] text-[11px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">Cross-Chain</div>
                                     </div>
-                                    <div className="text-3xl font-extrabold text-alphabag-text tabular-data">${feeAuditData.bridgeFriction.toFixed(2)}</div>
-                                    <p className="text-[10px] text-alphabag-muted mt-2 font-medium flex-1">Friction charges incurred during cross-chain asset bridging.</p>
+                                    <div className="text-2xl font-bold text-alphabag-text num">${feeAuditData.bridgeFriction.toFixed(2)}</div>
+                                    <p className="text-[11px] text-alphabag-subtext mt-1.5 flex-1">Protocol charges paid during cross-chain asset bridging.</p>
                                 </div>
                             </div>
 
-                            {/* FIX: Middle section grid - changed items-start to items-stretch */}
+                            {/* Middle section grid */}
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
 
-                                {/* Network Leakage Chart Breakdown (5 cols) */}
-                                <div className="lg:col-span-5 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col">
-                                    <h3 className="text-xs font-black uppercase text-white tracking-widest mb-4">Network Leakage Share</h3>
-                                    <div className="space-y-3 flex-1">
+                                {/* Network Leakage Share (5 cols) */}
+                                <div className="lg:col-span-5 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col">
+                                    <h3 className="text-xs font-semibold uppercase text-alphabag-text tracking-wider mb-3">Network Gas Share</h3>
+                                    <div className="space-y-2.5 flex-1">
                                         <div>
-                                            <div className="flex justify-between text-xs font-semibold mb-1">
-                                                <span className="text-white">Ethereum</span>
-                                                <span className="text-alphabag-muted">{feeAuditData.ethLeakage}%</span>
+                                            <div className="flex justify-between text-xs font-medium mb-1">
+                                                <span className="text-alphabag-text">Ethereum</span>
+                                                <span className="text-alphabag-subtext num">{feeAuditData.ethLeakage}%</span>
                                             </div>
-                                            <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-[#3B82F6] h-full rounded-full" style={{ width: `${feeAuditData.ethLeakage}%` }}></div>
+                                            <div className="w-full bg-[#0B0E11] h-2 rounded overflow-hidden">
+                                                <div className="bg-[#3B82F6] h-full" style={{ width: `${feeAuditData.ethLeakage}%` }}></div>
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="flex justify-between text-xs font-semibold mb-1">
-                                                <span className="text-white">BSC Network</span>
-                                                <span className="text-alphabag-muted">{feeAuditData.bscLeakage}%</span>
+                                            <div className="flex justify-between text-xs font-medium mb-1">
+                                                <span className="text-alphabag-text">BNB Chain</span>
+                                                <span className="text-alphabag-subtext num">{feeAuditData.bscLeakage}%</span>
                                             </div>
-                                            <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-alphabag-yellow h-full rounded-full" style={{ width: `${feeAuditData.bscLeakage}%` }}></div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div className="flex justify-between text-xs font-semibold mb-1">
-                                                <span className="text-white">Base Network</span>
-                                                <span className="text-alphabag-muted">{feeAuditData.baseLeakage}%</span>
-                                            </div>
-                                            <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-purple-500 h-full rounded-full" style={{ width: `${feeAuditData.baseLeakage}%` }}></div>
+                                            <div className="w-full bg-[#0B0E11] h-2 rounded overflow-hidden">
+                                                <div className="bg-alphabag-yellow h-full" style={{ width: `${feeAuditData.bscLeakage}%` }}></div>
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="flex justify-between text-xs font-semibold mb-1">
-                                                <span className="text-white">Solana</span>
-                                                <span className="text-alphabag-muted">{feeAuditData.solLeakage}%</span>
+                                            <div className="flex justify-between text-xs font-medium mb-1">
+                                                <span className="text-alphabag-text">Base</span>
+                                                <span className="text-alphabag-subtext num">{feeAuditData.baseLeakage}%</span>
                                             </div>
-                                            <div className="w-full bg-alphabag-dark h-2.5 rounded-full overflow-hidden">
-                                                <div className="bg-alphabag-green h-full rounded-full" style={{ width: `${feeAuditData.solLeakage}%` }}></div>
+                                            <div className="w-full bg-[#0B0E11] h-2 rounded overflow-hidden">
+                                                <div className="bg-purple-500 h-full" style={{ width: `${feeAuditData.baseLeakage}%` }}></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="flex justify-between text-xs font-medium mb-1">
+                                                <span className="text-alphabag-text">Solana</span>
+                                                <span className="text-alphabag-subtext num">{feeAuditData.solLeakage}%</span>
+                                            </div>
+                                            <div className="w-full bg-[#0B0E11] h-2 rounded overflow-hidden">
+                                                <div className="bg-emerald-500 h-full" style={{ width: `${feeAuditData.solLeakage}%` }}></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Optimization Recommendations (7 cols) */}
-                                <div className="lg:col-span-7 bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 flex flex-col">
-                                    <h3 className="text-xs font-black uppercase text-white tracking-widest border-b border-alphabag-gray pb-3 flex items-center gap-2">
-                                        <TrendingUp size={14} className="text-alphabag-yellow" /> AI Fee Optimizer Reports
+                                <div className="lg:col-span-7 bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4 flex flex-col">
+                                    <h3 className="text-xs font-semibold uppercase text-alphabag-text tracking-wider border-b border-[#2B313A] pb-2.5 flex items-center gap-2">
+                                        <TrendingUp size={14} className="text-alphabag-yellow" /> Optimization Diagnostics
                                     </h3>
-                                    <div className="space-y-3 text-xs text-alphabag-subtext leading-relaxed flex-1 pt-2">
-                                        <div className="flex items-start gap-2.5">
-                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
-                                            <p>Your **Ethereum** network fee share is **{feeAuditData.ethLeakage}%** of your total cumulative bleed. Recommend routing token trades through L2 aggregators like **Arbitrum** or **Optimism** to cut swap gas by 85%.</p>
+                                    <div className="space-y-2 text-xs text-alphabag-subtext leading-relaxed flex-1 pt-2">
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">•</span>
+                                            <p><strong className="text-alphabag-text">Ethereum Layer-1</strong> accounts for <strong className="num text-alphabag-text">{feeAuditData.ethLeakage}%</strong> of total gas bleed. Route high-frequency trades via Arbitrum or Base to reduce transaction overhead by ~85%.</p>
                                         </div>
-                                        <div className="flex items-start gap-2.5">
-                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
-                                            <p>Estimated slippage leakage is **${feeAuditData.slippageLoss.toFixed(2)}**. This is likely due to direct swap interactions with standard DEX router pools. Consider switching to private RPC endpoints (e.g. **Flashbots Protect**) in your Web3 wallet extension to mitigate MEV sandwiching.</p>
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">•</span>
+                                            <p>Estimated slippage friction is <strong className="num text-alphabag-text">${feeAuditData.slippageLoss.toFixed(2)}</strong>. Configure private mempool endpoints (e.g. Flashbots Protect RPC) to prevent MEV sandwich attacks on public mempools.</p>
                                         </div>
-                                        <div className="flex items-start gap-2.5">
-                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">▪</span>
-                                            <p>Cross-chain bridges accounted for **${feeAuditData.bridgeFriction.toFixed(2)}** in friction toll fees. Recommend using cheaper messaging bridges like **Stargate** or **Across** rather than high-margin direct layer-1 portals.</p>
+                                        <div className="flex items-start gap-2">
+                                            <span className="text-alphabag-yellow shrink-0 mt-0.5">•</span>
+                                            <p>Cross-chain bridge friction totaled <strong className="num text-alphabag-text">${feeAuditData.bridgeFriction.toFixed(2)}</strong>. Utilize intent-based messaging bridges (Stargate / Across) over high-fee native lock-and-mint mechanisms.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -636,30 +627,30 @@ export const MyAlphabag: React.FC = () => {
                             </div>
 
                             {/* Audit table logs list */}
-                            <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
-                                <h3 className="text-xs font-black uppercase text-white tracking-widest mb-2 pb-3 border-b border-alphabag-gray">Audited Fee Log</h3>
+                            <div className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-4">
+                                <h3 className="text-xs font-semibold uppercase text-alphabag-text tracking-wider mb-2 pb-2.5 border-b border-[#2B313A]">Audited Fee Log</h3>
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left">
                                         <thead>
-                                            <tr className="text-alphabag-subtext text-[10px] uppercase font-bold tracking-wider border-b border-alphabag-gray/50">
-                                                <th className="pb-3 px-2">Asset</th>
-                                                <th className="pb-3 px-2">Action</th>
-                                                <th className="pb-3 px-2">Network</th>
-                                                <th className="pb-3 px-2 text-right">Fee (USD)</th>
-                                                <th className="pb-3 px-2 text-right">Audit Assessment</th>
+                                            <tr className="text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-[#2B313A]">
+                                                <th className="pb-2.5 px-2">Asset</th>
+                                                <th className="pb-2.5 px-2">Action</th>
+                                                <th className="pb-2.5 px-2">Network</th>
+                                                <th className="pb-2.5 px-2 text-right">Fee (USD)</th>
+                                                <th className="pb-2.5 px-2 text-right">Status</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-alphabag-gray/20 text-xs">
+                                        <tbody className="divide-y divide-[#2B313A]/50 text-xs">
                                             {feeAuditData.txs.map((tx) => (
-                                                <tr key={tx.id} className="hover:bg-white/5 transition-colors">
-                                                    <td className="py-3 px-2 font-bold text-white flex items-center gap-2">
+                                                <tr key={tx.id} className="hover:bg-[#202630] transition-colors">
+                                                    <td className="py-2.5 px-2 font-semibold text-alphabag-text flex items-center gap-2">
                                                         <img src={tx.logo} className="w-4 h-4 rounded-full" alt={tx.asset} /> {tx.asset}
                                                     </td>
-                                                    <td className="py-3 px-2 text-alphabag-subtext">{tx.action}</td>
-                                                    <td className="py-3 px-2 text-alphabag-muted font-medium">{tx.net}</td>
-                                                    <td className="py-3 px-2 text-right text-white font-mono font-semibold">${tx.fee.toFixed(2)}</td>
-                                                    <td className="py-3 px-2 text-right">
-                                                        <span className={`text-[8px] font-black uppercase border px-2 py-0.5 rounded ${tx.color}`}>
+                                                    <td className="py-2.5 px-2 text-alphabag-subtext">{tx.action}</td>
+                                                    <td className="py-2.5 px-2 text-alphabag-subtext">{tx.net}</td>
+                                                    <td className="py-2.5 px-2 text-right text-alphabag-text num font-semibold">${tx.fee.toFixed(2)}</td>
+                                                    <td className="py-2.5 px-2 text-right">
+                                                        <span className={`text-[11px] font-semibold uppercase border px-1.5 py-0.2 rounded-[2px] ${tx.color}`}>
                                                             {tx.status}
                                                         </span>
                                                     </td>
@@ -677,3 +668,5 @@ export const MyAlphabag: React.FC = () => {
         </div>
     );
 };
+
+export default MyAlphabag;

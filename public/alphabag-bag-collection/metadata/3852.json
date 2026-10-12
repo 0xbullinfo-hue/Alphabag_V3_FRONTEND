@@ -1,0 +1,42 @@
+{
+  "name": "AlphaBAG Duffel #3852",
+  "description": "A collectible AlphaBAG duffel NFT with Epic rarity and layered traits: Arctic White, Orange, Yellow Plastic, No Stripe, Matte, None, White Tag Black Text.",
+  "image": "/alphabag-bag-collection/images/3852.svg",
+  "dna": "alphabag-bag-3852-Epic-Arctic White-Orange-Yellow Plastic-No Stripe-Matte-None-White Tag Black Text",
+  "edition": 3852,
+  "attributes": [
+    {
+      "trait_type": "Tier",
+      "value": "Epic"
+    },
+    {
+      "trait_type": "Base Color",
+      "value": "Arctic White"
+    },
+    {
+      "trait_type": "Strap Color",
+      "value": "Orange"
+    },
+    {
+      "trait_type": "Zipper Pull",
+      "value": "Yellow Plastic"
+    },
+    {
+      "trait_type": "Stripe Type",
+      "value": "No Stripe"
+    },
+    {
+      "trait_type": "Finish / Material",
+      "value": "Matte"
+    },
+    {
+      "trait_type": "Badge / Patch",
+      "value": "None"
+    },
+    {
+      "trait_type": "BAG Tag",
+      "value": "White Tag Black Text"
+    }
+  ],
+  "compiler": "AlphaBAG Bag Collection Generator"
+}

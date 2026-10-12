@@ -93,14 +93,14 @@ export const DeFi: React.FC = () => {
                         <PageIcon name="defi" size={40} />
                         <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DeFi Operations</h1>
                         {isOwnPositions ? (
-                            <span className="bg-alphabag-green/10 text-alphabag-green text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">Active</span>
+                            <span className="bg-alphabag-green/10 text-alphabag-green text-[11px] font-medium uppercase px-2 py-0.5 rounded tracking-wider">Active</span>
                         ) : (
-                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[9px] font-semibold uppercase px-2 py-1 rounded-md tracking-wider">No Wallet Positions Found</span>
+                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow text-[11px] font-medium uppercase px-2 py-0.5 rounded tracking-wider">No Wallet Positions Found</span>
                         )}
                     </div>
 
                     {!isOwnPositions && (
-                        <p className="text-[11px] text-alphabag-subtext mb-2 max-w-lg">
+                        <p className="text-[11px] text-alphabag-subtext mb-2 max-w-lg font-normal">
                             {address
                                 ? "No verified DeFi positions were returned for this wallet. Opportunities are shown separately and are never counted as your holdings."
                                 : "Connect a wallet to see your real lending, staking, and liquidity positions. Showing top yield opportunities across major protocols in the meantime."}
@@ -109,26 +109,26 @@ export const DeFi: React.FC = () => {
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mt-3">
                         <div>
-                            <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Supplied</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums">
+                            <span className="text-[11px] uppercase font-medium tracking-wider text-alphabag-subtext mb-1 block">Supplied</span>
+                            <h2 className="text-2xl font-semibold text-alphabag-text tabular-nums num">
                                 {isOwnPositions ? `$${totalValueLocked.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '—'}
                             </h2>
                         </div>
                         <div>
-                            <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Borrowed</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-red tabular-nums">
+                            <span className="text-[11px] uppercase font-medium tracking-wider text-alphabag-subtext mb-1 block">Borrowed</span>
+                            <h2 className="text-2xl font-semibold text-alphabag-red tabular-nums num">
                                 {isOwnPositions ? `$${totalDebt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '—'}
                             </h2>
                         </div>
                         <div>
-                            <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Net APY</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-green tabular-nums">
+                            <span className="text-[11px] uppercase font-medium tracking-wider text-alphabag-subtext mb-1 block">Net APY</span>
+                            <h2 className="text-2xl font-semibold text-alphabag-green tabular-nums num">
                                 {isOwnPositions ? `+${netApy.toFixed(2)}%` : '—'}
                             </h2>
                         </div>
                         <div>
-                            <span className="text-[9px] uppercase font-semibold tracking-widest text-alphabag-subtext mb-1 block">Pending</span>
-                            <h2 className="text-2xl font-semibold text-alphabag-yellow tabular-nums">
+                            <span className="text-[11px] uppercase font-medium tracking-wider text-alphabag-subtext mb-1 block">Pending</span>
+                            <h2 className="text-2xl font-semibold text-alphabag-yellow tabular-nums num">
                                 {isOwnPositions ? `$${pendingYield.toFixed(2)}` : '—'}
                             </h2>
                         </div>
@@ -146,8 +146,8 @@ export const DeFi: React.FC = () => {
                         {isRefreshing ? 'Refreshing...' : 'Refresh'}
                     </button>
                     <div className="bg-alphabag-darkgray border border-alphabag-gray px-3 py-1.5 rounded-md flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></div>
-                        <span className="text-[8px] font-semibold uppercase tracking-widest text-alphabag-subtext">Nodes Live</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green"></div>
+                        <span className="text-[11px] font-medium uppercase tracking-wider text-alphabag-subtext">Nodes Live</span>
                     </div>
                     <button className="flex items-center gap-1.5 bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all">
                         <Activity size={13} /> Protocol Audit
@@ -162,10 +162,10 @@ export const DeFi: React.FC = () => {
                          <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex-shrink-0 px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                            className={`flex-shrink-0 px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${
                                 activeTab === tab.id 
-                                ? 'bg-alphabag-yellow text-alphabag-black shadow-md' 
-                                : 'bg-transparent border border-alphabag-gray text-alphabag-subtext hover:text-white hover:border-alphabag-gray'
+                                ? 'bg-alphabag-yellow text-alphabag-black' 
+                                : 'bg-alphabag-darkgray border border-alphabag-gray text-alphabag-subtext hover:text-white hover:border-alphabag-muted'
                             }`}
                          >
                              {tab.label}
@@ -177,7 +177,7 @@ export const DeFi: React.FC = () => {
                       size="sm"
                       onClick={handleExportCsv}
                       disabled={filtered.length === 0}
-                      className="border-alphabag-gray whitespace-nowrap text-[10px] font-black uppercase tracking-widest h-8 px-3"
+                      className="border-alphabag-gray whitespace-nowrap text-xs font-semibold uppercase tracking-wider h-8 px-3"
                   >
                       <Download size={12} className="mr-1.5" /> Export CSV
                   </Button>
@@ -187,7 +187,7 @@ export const DeFi: React.FC = () => {
              <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden w-full">
                   <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse min-w-[800px]">
-                          <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
+                          <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase font-semibold tracking-wider border-b border-alphabag-gray">
                               <tr>
                                   <th className="p-3 px-6">Protocol / Asset</th>
                                   <th className="p-3 px-6 text-center">Type</th>
@@ -210,26 +210,26 @@ export const DeFi: React.FC = () => {
                                                      <img src={pos.icon} alt={pos.protocol} className="w-full h-full object-contain rounded-full" />
                                                   </div>
                                                   <div>
-                                                      <div className="text-white font-bold text-sm flex items-center gap-1.5">
+                                                      <div className="text-white font-semibold text-sm flex items-center gap-1.5">
                                                           {pos.name}
-                                                          <span className="text-[8px] bg-alphabag-black border border-alphabag-gray px-1 py-0.5 rounded uppercase tracking-wider text-alphabag-muted">{pos.chain}</span>
+                                                          <span className="text-[11px] bg-alphabag-black border border-alphabag-gray px-1.5 py-0.5 rounded uppercase tracking-wider text-alphabag-muted">{pos.chain}</span>
                                                       </div>
                                                       <div className="text-alphabag-muted text-[11px] mt-0.5 opacity-60">{pos.protocol}</div>
                                                   </div>
                                               </div>
                                           </td>
                                           <td className="p-3 px-6 text-center">
-                                              <span className="text-[9px] font-black uppercase tracking-widest text-alphabag-subtext bg-alphabag-gray/30 px-2 py-0.5 rounded">
+                                              <span className="text-[11px] font-medium uppercase tracking-wider text-alphabag-subtext bg-alphabag-gray/30 px-2 py-0.5 rounded">
                                                   {pos.type}
                                               </span>
                                           </td>
                                           <td className="p-3 px-6 text-right">
-                                              <span className={`font-bold ${pos.apy >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                              <span className={`font-semibold num ${pos.apy >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
                                                   {pos.apy >= 0 ? '+' : ''}{pos.apy.toFixed(2)}%
                                               </span>
                                           </td>
                                           <td className="p-3 px-6 text-right tabular-data">
-                                              <div className={`font-bold text-sm ${pos.balance >= 0 ? 'text-white' : 'text-alphabag-red'}`}>
+                                              <div className={`font-semibold text-sm num ${pos.balance >= 0 ? 'text-white' : 'text-alphabag-red'}`}>
                                                   {isOwnPositions
                                                       ? `${pos.balance < 0 ? '-' : ''}$${Math.abs(pos.balance).toLocaleString(undefined, {minimumFractionDigits: 2})}`
                                                       : '—'}
@@ -243,12 +243,12 @@ export const DeFi: React.FC = () => {
                                                       ) : (
                                                           <ShieldCheck size={12} className="text-alphabag-green" />
                                                       )}
-                                                      <span className={`font-black text-[10px] tabular-data ${pos.healthFactor && pos.healthFactor < 1.5 ? 'text-alphabag-red' : 'text-alphabag-green'}`}>
+                                                      <span className={`font-semibold text-[11px] tabular-data num ${pos.healthFactor && pos.healthFactor < 1.5 ? 'text-alphabag-red' : 'text-alphabag-green'}`}>
                                                           {pos.healthFactor ? pos.healthFactor.toFixed(2) : 'N/A'}
                                                       </span>
                                                   </div>
                                               ) : (
-                                                  <span className="text-alphabag-subtext text-[10px] opacity-30 font-bold tracking-widest uppercase">
+                                                  <span className="text-alphabag-subtext text-[11px] opacity-40 font-medium tracking-wider uppercase">
                                                       {isOwnPositions ? 'Idle' : '—'}
                                                   </span>
                                               )}

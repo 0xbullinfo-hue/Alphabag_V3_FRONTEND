@@ -48,15 +48,15 @@ export const DexBag: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 mb-2">
             <PageIcon name="dex" size={40} />
-            <h1 className="text-3xl font-black text-alphabag-text tracking-tight uppercase">DEX Portfolio</h1>
+            <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DEX Portfolio</h1>
           </div>
-          <p className="text-alphabag-subtext text-xs font-medium mt-0.5 uppercase tracking-widest">On-chain token holdings — read only</p>
+          <p className="text-alphabag-subtext text-xs font-medium mt-0.5">On-chain token holdings — read only</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             value={filterChain}
             onChange={(e) => setFilterChain(e.target.value)}
-            className="bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-1.5 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none font-semibold uppercase"
+            className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-1.5 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none font-semibold uppercase"
           >
             <option value="ALL">All Chains</option>
             <option value="eth">Ethereum</option>
@@ -66,7 +66,7 @@ export const DexBag: React.FC = () => {
           <button
             onClick={() => refetch()}
             disabled={isLoading || !isConnected}
-            className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-lg px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-bold uppercase cursor-pointer"
+            className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-md px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-semibold uppercase cursor-pointer"
           >
             <RefreshCw size={13} className={isLoading ? 'animate-spin' : ''} />
             Refresh
@@ -75,41 +75,41 @@ export const DexBag: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
-          <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Total DEX Value</p>
-          <p className="text-2xl font-black text-alphabag-text">
+        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+          <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Total DEX Value</p>
+          <p className="text-2xl font-semibold text-alphabag-text num">
             ${totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-mono">
+          <p className="text-alphabag-subtext text-[11px] mt-1 font-mono">
             {isConnected && address ? `${address.slice(0, 6)}···${address.slice(-4)}` : 'No wallet connected'}
           </p>
         </div>
-        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
-          <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Token Count</p>
-          <p className="text-2xl font-black text-alphabag-text">{filtered.length}</p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">
+        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+          <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Token Count</p>
+          <p className="text-2xl font-semibold text-alphabag-text num">{filtered.length}</p>
+          <p className="text-alphabag-subtext text-[11px] mt-1 font-medium uppercase">
             {isConnected ? 'Assets detected' : 'Connect wallet to view'}
           </p>
         </div>
-        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5">
-          <p className="text-alphabag-subtext text-[10px] font-black uppercase tracking-widest mb-1">Last Synced</p>
-          <p className="text-sm font-black text-alphabag-text">{isConnected && dataUpdatedAt ? lastUpdated.toLocaleTimeString() : '—'}</p>
-          <p className="text-alphabag-subtext text-[10px] mt-1 font-medium uppercase">
+        <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
+          <p className="text-alphabag-subtext text-[11px] font-medium uppercase tracking-wider mb-1">Last Synced</p>
+          <p className="text-sm font-semibold text-alphabag-text num">{isConnected && dataUpdatedAt ? lastUpdated.toLocaleTimeString() : '—'}</p>
+          <p className="text-alphabag-subtext text-[11px] mt-1 font-medium uppercase">
             {isConnected ? 'Refreshes every 60s' : 'Waiting for connection'}
           </p>
         </div>
       </div>
 
       {!isConnected && (
-        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-12 text-center">
+        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-12 text-center">
           <Wallet2 size={48} className="mx-auto mb-4 text-alphabag-yellow opacity-40" />
-          <h3 className="text-lg font-black text-alphabag-text uppercase tracking-tight mb-1">No Wallet Connected</h3>
+          <h3 className="text-lg font-semibold text-alphabag-text tracking-tight mb-1">No Wallet Connected</h3>
           <p className="text-alphabag-subtext text-xs max-w-md mx-auto mb-6">
             Connect your Web3 wallet to inspect your real-time on-chain token balances, prices, and valuations across Ethereum, BSC, and Solana.
           </p>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('open-login-modal'))}
-            className="bg-alphabag-yellow text-alphabag-black font-black text-xs uppercase px-6 py-3 rounded-lg hover:bg-yellow-400 transition-all inline-flex items-center gap-2 cursor-pointer shadow-lg shadow-alphabag-yellow/10"
+            className="bg-alphabag-yellow text-alphabag-black font-semibold text-xs uppercase px-6 py-2.5 rounded-md hover:bg-yellow-400 transition-all inline-flex items-center gap-2 cursor-pointer"
           >
             <Wallet2 size={16} /> Connect Wallet
           </button>
@@ -117,12 +117,12 @@ export const DexBag: React.FC = () => {
       )}
 
       {isConnected && error && (
-        <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-8 text-center">
-          <p className="text-sm font-black text-red-400 uppercase tracking-wide">Failed to load DEX holdings</p>
+        <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-6 text-center">
+          <p className="text-sm font-semibold text-red-400 uppercase tracking-wide">Failed to load DEX holdings</p>
           <p className="text-alphabag-subtext text-xs mt-1">Unable to connect to on-chain balance provider. Please check your network and try again.</p>
           <button
             onClick={() => refetch()}
-            className="mt-4 bg-alphabag-gray hover:bg-alphabag-muted text-alphabag-text font-bold text-xs uppercase px-4 py-2 rounded-lg transition-all cursor-pointer"
+            className="mt-4 bg-alphabag-gray hover:bg-alphabag-muted text-alphabag-text font-semibold text-xs uppercase px-4 py-2 rounded-md transition-all cursor-pointer"
           >
             Retry
           </button>
@@ -130,36 +130,36 @@ export const DexBag: React.FC = () => {
       )}
 
       {isConnected && !error && (
-        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
-          <div className="px-6 py-4 border-b border-alphabag-gray flex items-center gap-2">
+        <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray overflow-hidden">
+          <div className="px-6 py-3 border-b border-alphabag-gray flex items-center gap-2">
             <Layers size={16} className="text-alphabag-yellow" />
-            <span className="text-xs font-black uppercase tracking-widest text-alphabag-text">On-Chain Holdings</span>
-            <span className="ml-auto text-[10px] text-alphabag-subtext font-mono uppercase tracking-widest">Read-Only View</span>
+            <span className="text-xs font-semibold uppercase tracking-wider text-alphabag-text">On-Chain Holdings</span>
+            <span className="ml-auto text-[11px] text-alphabag-subtext font-mono uppercase tracking-wider">Read-Only View</span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead className="bg-alphabag-black text-alphabag-subtext text-[10px] uppercase tracking-wider font-black border-b border-alphabag-gray">
+              <thead className="bg-alphabag-black text-alphabag-subtext text-[11px] uppercase tracking-wider font-semibold border-b border-alphabag-gray">
                 <tr>
-                  <th className="p-4 pl-6">Asset</th>
-                  <th className="p-4">Chain</th>
-                  <th className="p-4 text-right">Balance</th>
-                  <th className="p-4 text-right">Price</th>
-                  <th className="p-4 text-right">24h</th>
-                  <th className="p-4 text-right">Value</th>
-                  <th className="p-4 text-center">Explorer</th>
+                  <th className="p-3 pl-6">Asset</th>
+                  <th className="p-3">Chain</th>
+                  <th className="p-3 text-right">Balance</th>
+                  <th className="p-3 text-right">Price</th>
+                  <th className="p-3 text-right">24h</th>
+                  <th className="p-3 text-right">Value</th>
+                  <th className="p-3 text-center">Explorer</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-alphabag-gray text-sm">
                 {isLoading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i} className="animate-pulse">
-                      <td className="p-4 pl-6"><div className="h-4 w-24 bg-alphabag-gray rounded" /></td>
-                      <td className="p-4"><div className="h-4 w-10 bg-alphabag-gray rounded" /></td>
-                      <td className="p-4 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
-                      <td className="p-4 text-right"><div className="h-4 w-14 bg-alphabag-gray rounded ml-auto" /></td>
-                      <td className="p-4 text-right"><div className="h-4 w-10 bg-alphabag-gray rounded ml-auto" /></td>
-                      <td className="p-4 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
-                      <td className="p-4"><div className="h-4 w-8 bg-alphabag-gray rounded mx-auto" /></td>
+                      <td className="p-3 pl-6"><div className="h-4 w-24 bg-alphabag-gray rounded" /></td>
+                      <td className="p-3"><div className="h-4 w-10 bg-alphabag-gray rounded" /></td>
+                      <td className="p-3 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
+                      <td className="p-3 text-right"><div className="h-4 w-14 bg-alphabag-gray rounded ml-auto" /></td>
+                      <td className="p-3 text-right"><div className="h-4 w-10 bg-alphabag-gray rounded ml-auto" /></td>
+                      <td className="p-3 text-right"><div className="h-4 w-16 bg-alphabag-gray rounded ml-auto" /></td>
+                      <td className="p-3"><div className="h-4 w-8 bg-alphabag-gray rounded mx-auto" /></td>
                     </tr>
                   ))
                 ) : filtered.length > 0 ? (
@@ -168,34 +168,34 @@ export const DexBag: React.FC = () => {
                     const isPositive = (token.change24h || 0) >= 0;
                     return (
                       <tr key={`${token.contractAddress}-${i}`} className="hover:bg-alphabag-gray/40 transition-colors group">
-                        <td className="p-4 pl-6">
+                        <td className="p-3 pl-6">
                           <div className="flex items-center gap-2">
                             {token.logo ? (
                               <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-alphabag-gray" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                             ) : (
                               <div className="w-8 h-8 rounded-full bg-alphabag-yellow/10 flex items-center justify-center">
-                                <span className="text-alphabag-yellow font-black text-[10px]">{token.symbol?.slice(0, 2)}</span>
+                                <span className="text-alphabag-yellow font-semibold text-[11px]">{token.symbol?.slice(0, 2)}</span>
                               </div>
                             )}
                             <div>
-                              <div className="font-black text-alphabag-text text-xs uppercase">{token.symbol}</div>
-                              <div className="text-alphabag-subtext text-[10px] font-medium truncate max-w-[120px]">{token.name}</div>
+                              <div className="font-semibold text-alphabag-text text-xs uppercase">{token.symbol}</div>
+                              <div className="text-alphabag-subtext text-[11px] font-medium truncate max-w-[120px]">{token.name}</div>
                             </div>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <span className={`text-[10px] font-black px-2 py-0.5 rounded ${chain.bg} ${chain.color} uppercase`}>{chain.label}</span>
+                        <td className="p-3">
+                          <span className={`text-[11px] font-semibold px-2 py-0.5 rounded ${chain.bg} ${chain.color} uppercase`}>{chain.label}</span>
                         </td>
-                        <td className="p-4 text-right font-mono text-alphabag-text text-xs font-bold">{parseFloat(token.balance || '0').toLocaleString()}</td>
-                        <td className="p-4 text-right text-alphabag-subtext text-xs font-mono">{token.priceUSD != null ? `$${token.priceUSD.toFixed(4)}` : '—'}</td>
-                        <td className="p-4 text-right">
-                          <span className={`text-xs font-black flex items-center justify-end gap-0.5 ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                        <td className="p-3 text-right font-mono text-alphabag-text text-xs font-semibold num">{parseFloat(token.balance || '0').toLocaleString()}</td>
+                        <td className="p-3 text-right text-alphabag-subtext text-xs font-mono num">{token.priceUSD != null ? `$${token.priceUSD.toFixed(4)}` : '—'}</td>
+                        <td className="p-3 text-right">
+                          <span className={`text-xs font-semibold flex items-center justify-end gap-0.5 num ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
                             {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
                             {isPositive ? '+' : ''}{(token.change24h || 0).toFixed(2)}%
                           </span>
                         </td>
-                        <td className="p-4 text-right font-black text-alphabag-text text-xs">{token.valueUSD != null ? `$${token.valueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}</td>
-                        <td className="p-4 text-center">
+                        <td className="p-3 text-right font-semibold text-alphabag-text text-xs num">{token.valueUSD != null ? `$${token.valueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}</td>
+                        <td className="p-3 text-center">
                           {token.contractAddress && (
                             <a href={getExplorerTokenUrl(token.chain || '', token.contractAddress || '')} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow">
                               <ExternalLink size={13} />
@@ -209,8 +209,8 @@ export const DexBag: React.FC = () => {
                   <tr>
                     <td colSpan={7} className="p-12 text-center">
                       <Wallet2 size={40} className="mx-auto mb-3 text-alphabag-subtext opacity-20" />
-                      <p className="text-alphabag-subtext font-black uppercase tracking-widest text-xs">No DEX tokens found for this wallet.</p>
-                      <p className="text-alphabag-subtext text-[10px] mt-1">Try switching chain filter or refreshing.</p>
+                      <p className="text-alphabag-subtext font-semibold uppercase tracking-wider text-xs">No DEX tokens found for this wallet.</p>
+                      <p className="text-alphabag-subtext text-[11px] mt-1">Try switching chain filter or refreshing.</p>
                     </td>
                   </tr>
                 )}
@@ -219,8 +219,8 @@ export const DexBag: React.FC = () => {
           </div>
           {filtered.length > 0 && (
             <div className="px-6 py-3 border-t border-alphabag-gray flex justify-between items-center">
-              <span className="text-[10px] text-alphabag-subtext font-medium uppercase tracking-wider">{filtered.length} token{filtered.length !== 1 ? 's' : ''} · Read-only · Prices via Alchemy</span>
-              <Link to="/portfolio" className="text-[10px] text-alphabag-yellow font-black uppercase tracking-widest hover:underline flex items-center gap-1">Full Portfolio View <ChevronRight size={11} /></Link>
+              <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider">{filtered.length} token{filtered.length !== 1 ? 's' : ''} · Read-only · Prices via Alchemy</span>
+              <Link to="/portfolio" className="text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider hover:underline flex items-center gap-1">Full Portfolio View <ChevronRight size={11} /></Link>
             </div>
           )}
         </div>

@@ -1,0 +1,567 @@
+diff --git a/src/types/intelligence.ts b/src/types/intelligence.ts
+new file mode 100644
+--- /dev/null
++++ b/src/types/intelligence.ts
+@@ -0,0 +1,30 @@
++export type ChainId =
++  | 'eth'
++  | 'bsc'
++  | 'base'
++  | 'arbitrum'
++  | 'solana'
++  | 'polygon';
++
++export interface TrendingWord {
++  word: string;
++  score: number;
++}
++
++export interface SocialVolumePoint {
++  datetime: string;
++  value: number;
++}
++
++export interface SocialMetrics {
++  trendingWords: TrendingWord[];
++  socialVolume: SocialVolumePoint[];
++  sentimentBalance: number | null;
++}
++
++export interface TokenContext {
++  chain: ChainId;
++  address: string;
++  assetSlug: string;
++  tvSymbol: string;
++  label: string;
++}
+
+diff --git a/src/services/bubblemaps.ts b/src/services/bubblemaps.ts
+new file mode 100644
+--- /dev/null
++++ b/src/services/bubblemaps.ts
+@@ -0,0 +1,36 @@
++const BUBBLEMAPS_API_BASE = 'https://api.bubblemaps.io/v0';
++
++function getPartnerId(): string {
++  return import.meta.env.VITE_BUBBLEMAPS_PARTNER_ID ?? 'demo';
++}
++
++/**
++ * Build the URL for the Bubblemaps iframe embed.
++ * Docs: https://docs.bubblemaps.io
++ */
++export function buildBubblemapsIframeUrl(
++  chain: string,
++  address: string,
++  partnerId: string = getPartnerId(),
++): string {
++  const params = new URLSearchParams({
++    chain,
++    address,
++    partnerId,
++  });
++  return `https://iframe.bubblemaps.io/map?${params.toString()}`;
++}
++
++/**
++ * Optional: fetch raw map metadata from the Bubblemaps Data API.
++ * Requires VITE_BUBBLEMAPS_API_KEY.
++ */
++export async function fetchBubblemapsMetadata(
++  chain: string,
++  address: string,
++): Promise<unknown | null> {
++  const apiKey = import.meta.env.VITE_BUBBLEMAPS_API_KEY;
++  if (!apiKey) return null;
++
++  const url = `${BUBBLEMAPS_API_BASE}/tokens/${chain}/${address}/metadata`;
++  const res = await fetch(url, { headers: { 'X-ApiKey': apiKey } });
++  if (!res.ok) throw new Error(`Bubblemaps ${res.status}: ${res.statusText}`);
++  return res.json();
++}
+
+diff --git a/src/services/santiment.ts b/src/services/santiment.ts
+new file mode 100644
+--- /dev/null
++++ b/src/services/santiment.ts
+@@ -0,0 +1,104 @@
++import type {
++  SocialMetrics,
++  SocialVolumePoint,
++  TrendingWord,
++} from '../types/intelligence';
++
++const SANTIMENT_ENDPOINT = 'https://api.santiment.net/graphql';
++
++function getApiKey(): string {
++  const key = import.meta.env.VITE_SANTIMENT_API_KEY;
++  if (!key) {
++    console.warn(
++      '[Santiment] VITE_SANTIMENT_API_KEY is not set. Requests may be rate-limited.',
++    );
++  }
++  return key ?? '';
++}
++
++async function gql<T>(
++  query: string,
++  variables: Record<string, unknown>,
++): Promise<T> {
++  const apiKey = getApiKey();
++  const res = await fetch(SANTIMENT_ENDPOINT, {
++    method: 'POST',
++    headers: {
++      'Content-Type': 'application/json',
++      ...(apiKey ? { Authorization: `Apikey ${apiKey}` } : {}),
++    },
++    body: JSON.stringify({ query, variables }),
++  });
++
++  if (!res.ok) {
++    throw new Error(`Santiment ${res.status}: ${res.statusText}`);
++  }
++
++  const json = (await res.json()) as {
++    data?: T;
++    errors?: Array<{ message: string }>;
++  };
++
++  if (json.errors?.length) {
++    throw new Error(`Santiment GraphQL: ${json.errors[0].message}`);
++  }
++  if (!json.data) {
++    throw new Error('Santiment returned no data');
++  }
++  return json.data;
++}
++
++export async function fetchTrendingWords(
++  fromISO: string,
++  toISO: string,
++  size = 8,
++): Promise<TrendingWord[]> {
++  const query = `
++    query TrendingWords($from: DateTime!, $to: DateTime!, $size: Int!) {
++      getTrendingWords(from: $from, to: $to, size: $size, interval: "1h") {
++        topWords {
++          word
++          score
++        }
++      }
++    }
++  `;
++  const data = await gql<{
++    getTrendingWords: Array<{ topWords: TrendingWord[] }>;
++  }>(query, { from: fromISO, to: toISO, size });
++
++  const latest = data.getTrendingWords?.[0];
++  return latest?.topWords ?? [];
++}
++
++export async function fetchSocialVolume(
++  assetSlug: string,
++  fromISO: string,
++  toISO: string,
++): Promise<SocialVolumePoint[]> {
++  const query = `
++    query SocialVolume($slug: String!, $from: DateTime!, $to: DateTime!) {
++      getMetric(metric: "social_volume_total") {
++        timeseriesData(slug: $slug, from: $from, to: $to, interval: "1h") {
++          datetime
++          value
++        }
++      }
++    }
++  `;
++  const data = await gql<{
++    getMetric: { timeseriesData: SocialVolumePoint[] };
++  }>(query, { slug: assetSlug, from: fromISO, to: toISO });
++
++  return data.getMetric?.timeseriesData ?? [];
++}
++
++export async function fetchSentimentBalance(
++  assetSlug: string,
++  fromISO: string,
++  toISO: string,
++): Promise<number | null> {
++  const query = `
++    query SentimentBalance($slug: String!, $from: DateTime!, $to: DateTime!) {
++      getMetric(metric: "sentiment_balance_total") {
++        timeseriesData(slug: $slug, from: $from, to: $to, interval: "1h") {
++          datetime
++          value
++        }
++      }
++    }
++  `;
++  const data = await gql<{
++    getMetric: { timeseriesData: SocialVolumePoint[] };
++  }>(query, { slug: assetSlug, from: fromISO, to: toISO });
++
++  const series = data.getMetric?.timeseriesData ?? [];
++  return series.length ? series[series.length - 1].value : null;
++}
++
++export async function fetchSocialMetrics(
++  assetSlug: string,
++  fromISO: string,
++  toISO: string,
++): Promise<SocialMetrics> {
++  const [trendingWords, socialVolume, sentimentBalance] = await Promise.all([
++    fetchTrendingWords(fromISO, toISO, 8).catch(() => [] as TrendingWord[]),
++    fetchSocialVolume(assetSlug, fromISO, toISO).catch(
++      () => [] as SocialVolumePoint[],
++    ),
++    fetchSentimentBalance(assetSlug, fromISO, toISO).catch(() => null),
++  ]);
++
++  return { trendingWords, socialVolume, sentimentBalance };
++}
+
+diff --git a/src/components/intelligence/BubblemapsEmbed.tsx b/src/components/intelligence/BubblemapsEmbed.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/components/intelligence/BubblemapsEmbed.tsx
+@@ -0,0 +1,42 @@
++import { useMemo, useState } from 'react';
++import { buildBubblemapsIframeUrl } from '../../services/bubblemaps';
++
++interface BubblemapsEmbedProps {
++  chain: string;
++  address: string;
++  height?: number;
++}
++
++export function BubblemapsEmbed({
++  chain,
++  address,
++  height = 640,
++}: BubblemapsEmbedProps) {
++  const [loading, setLoading] = useState(true);
++  const src = useMemo(
++    () => buildBubblemapsIframeUrl(chain, address),
++    [chain, address],
++  );
++
++  return (
++    <div className="relative w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900/40">
++      {loading && (
++        <div className="absolute inset-0 z-10 flex items-center justify-center text-sm text-slate-400">
++          Loading bubble map…
++        </div>
++      )}
++      <iframe
++        key={src}
++        src={src}
++        title={`Bubble map for ${address}`}
++        allow="clipboard-write"
++        loading="lazy"
++        onLoad={() => setLoading(false)}
++        style={{ width: '100%', height, border: 'none' }}
++      />
++    </div>
++  );
++}
++
++export default BubblemapsEmbed;
+
+diff --git a/src/components/intelligence/TradingViewChart.tsx b/src/components/intelligence/TradingViewChart.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/components/intelligence/TradingViewChart.tsx
+@@ -0,0 +1,87 @@
++import { useEffect, useRef } from 'react';
++
++declare global {
++  interface Window {
++    TradingView?: {
++      widget: new (config: Record<string, unknown>) => unknown;
++    };
++  }
++}
++
++interface TradingViewChartProps {
++  symbol: string;
++  height?: number;
++  interval?: string;
++}
++
++const TV_SCRIPT_ID = 'tradingview-tv-js';
++const TV_SCRIPT_SRC = 'https://s3.tradingview.com/tv.js';
++
++function loadTradingViewScript(): Promise<void> {
++  return new Promise((resolve, reject) => {
++    if (window.TradingView) {
++      resolve();
++      return;
++    }
++
++    const existing = document.getElementById(
++      TV_SCRIPT_ID,
++    ) as HTMLScriptElement | null;
++
++    if (existing) {
++      existing.addEventListener('load', () => resolve());
++      existing.addEventListener('error', () =>
++        reject(new Error('Failed to load TradingView script')),
++      );
++      return;
++    }
++
++    const script = document.createElement('script');
++    script.id = TV_SCRIPT_ID;
++    script.src = TV_SCRIPT_SRC;
++    script.async = true;
++    script.onload = () => resolve();
++    script.onerror = () =>
++      reject(new Error('Failed to load TradingView script'));
++    document.head.appendChild(script);
++  });
++}
++
++export function TradingViewChart({
++  symbol,
++  height = 640,
++  interval = '60',
++}: TradingViewChartProps) {
++  const containerRef = useRef<HTMLDivElement>(null);
++  const widgetIdRef = useRef(
++    `tv_${Math.random().toString(36).slice(2, 10)}`,
++  );
++
++  useEffect(() => {
++    let cancelled = false;
++
++    loadTradingViewScript()
++      .then(() => {
++        if (cancelled || !containerRef.current || !window.TradingView) return;
++
++        containerRef.current.innerHTML = `<div id="${widgetIdRef.current}" style="height:100%"></div>`;
++
++        new window.TradingView.widget({
++          container_id: widgetIdRef.current,
++          autosize: true,
++          symbol,
++          interval,
++          timezone: 'Etc/UTC',
++          theme: 'dark',
++          style: '1',
++          locale: 'en',
++          toolbar_bg: '#0b1220',
++          enable_publishing: false,
++          hide_side_toolbar: false,
++          allow_symbol_change: true,
++          details: false,
++          withdateranges: true,
++        });
++      })
++      .catch((err: Error) => {
++        console.error('[TradingView]', err);
++      });
++
++    return () => {
++      cancelled = true;
++    };
++  }, [symbol, interval]);
++
++  return (
++    <div
++      ref={containerRef}
++      className="w-full overflow-hidden rounded-xl border border-white/10 bg-slate-900/40"
++      style={{ height }}
++    />
++  );
++}
++
++export default TradingViewChart;
+
+diff --git a/src/components/intelligence/SantimentMetrics.tsx b/src/components/intelligence/SantimentMetrics.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/components/intelligence/SantimentMetrics.tsx
+@@ -0,0 +1,79 @@
++import { useEffect, useState } from 'react';
++import { fetchSocialMetrics } from '../../services/santiment';
++import type { SocialMetrics } from '../../types/intelligence';
++
++interface SantimentMetricsProps {
++  assetSlug: string;
++}
++
++export function SantimentMetrics({ assetSlug }: SantimentMetricsProps) {
++  const [data, setData] = useState<SocialMetrics | null>(null);
++  const [loading, setLoading] = useState(true);
++  const [error, setError] = useState<string | null>(null);
++
++  useEffect(() => {
++    let cancelled = false;
++    setLoading(true);
++    setError(null);
++
++    const to = new Date();
++    const from = new Date(to.getTime() - 24 * 60 * 60 * 1000);
++
++    fetchSocialMetrics(assetSlug, from.toISOString(), to.toISOString())
++      .then((metrics) => {
++        if (!cancelled) setData(metrics);
++      })
++      .catch((err: Error) => {
++        if (!cancelled) setError(err.message);
++      })
++      .finally(() => {
++        if (!cancelled) setLoading(false);
++      });
++
++    return () => {
++      cancelled = true;
++    };
++  }, [assetSlug]);
++
++  if (loading) {
++    return (
++      <div className="text-sm text-slate-400">Loading social metrics…</div>
++    );
++  }
++  if (error) {
++    return (
++      <div className="text-sm text-red-400">Social metrics error: {error}</div>
++    );
++  }
++  if (!data) return null;
++
++  return (
++    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
++      <div className="rounded-xl border border-white/10 bg-slate-900/40 p-4">
++        <div className="text-xs uppercase tracking-wide text-slate-400">
++          Sentiment Balance
++        </div>
++        <div className="mt-2 text-2xl font-semibold text-white">
++          {data.sentimentBalance === null
++            ? '—'
++            : data.sentimentBalance.toFixed(2)}
++        </div>
++      </div>
++
++      <div className="rounded-xl border border-white/10 bg-slate-900/40 p-4 md:col-span-2">
++        <div className="text-xs uppercase tracking-wide text-slate-400">
++          Trending Words (24h)
++        </div>
++        <div className="mt-2 flex flex-wrap gap-2">
++          {data.trendingWords.length === 0 && (
++            <span className="text-sm text-slate-500">No data</span>
++          )}
++          {data.trendingWords.map((w) => (
++            <span
++              key={w.word}
++              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200"
++            >
++              {w.word}{' '}
++              <span className="text-slate-400">· {w.score.toFixed(2)}</span>
++            </span>
++          ))}
++        </div>
++      </div>
++    </div>
++  );
++}
++
++export default SantimentMetrics;
+
+diff --git a/src/pages/IntelligenceTerminal.tsx b/src/pages/IntelligenceTerminal.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/pages/IntelligenceTerminal.tsx
+@@ -0,0 +1,103 @@
++import { useState } from 'react';
++import { BubblemapsEmbed } from '../components/intelligence/BubblemapsEmbed';
++import { TradingViewChart } from '../components/intelligence/TradingViewChart';
++import { SantimentMetrics } from '../components/intelligence/SantimentMetrics';
++import type { TokenContext } from '../types/intelligence';
++
++const PRESETS: TokenContext[] = [
++  {
++    label: 'BTC / USDT',
++    tvSymbol: 'BINANCE:BTCUSDT',
++    chain: 'eth',
++    address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
++    assetSlug: 'bitcoin',
++  },
++  {
++    label: 'ETH / USDT',
++    tvSymbol: 'BINANCE:ETHUSDT',
++    chain: 'eth',
++    address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
++    assetSlug: 'ethereum',
++  },
++  {
++    label: 'SOL / USDT',
++    tvSymbol: 'BINANCE:SOLUSDT',
++    chain: 'solana',
++    address: 'So11111111111111111111111111111111111111112',
++    assetSlug: 'solana',
++  },
++];
++
++export default function IntelligenceTerminal() {
++  const [preset, setPreset] = useState<TokenContext>(PRESETS[0]);
++  const [addressInput, setAddressInput] = useState(PRESETS[0].address);
++
++  const handlePresetChange = (label: string) => {
++    const next = PRESETS.find((p) => p.label === label) ?? PRESETS[0];
++    setPreset(next);
++    setAddressInput(next.address);
++  };
++
++  return (
++    <div className="mx-auto w-full max-w-[1600px] px-4 py-6">
++      <header className="mb-6">
++        <h1 className="text-2xl font-semibold text-white">
++          Intelligence Terminal
++        </h1>
++        <p className="mt-1 text-sm text-slate-400">
++          Price action, on-chain distribution, and social sentiment — in one
++          view.
++        </p>
++      </header>
++
++      <div className="mb-4 flex flex-wrap items-center gap-3">
++        <select
++          value={preset.label}
++          onChange={(e) => handlePresetChange(e.target.value)}
++          className="rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-white"
++        >
++          {PRESETS.map((p) => (
++            <option key={p.label} value={p.label}>
++              {p.label}
++            </option>
++          ))}
++        </select>
++
++        <input
++          value={addressInput}
++          onChange={(e) => setAddressInput(e.target.value)}
++          placeholder="Token contract address"
++          className="min-w-[320px] flex-1 rounded-lg border border-white/10 bg-slate-900/60 px-3 py-2 text-sm text-white placeholder:text-slate-500"
++        />
++      </div>
++
++      <div className="grid grid-cols-1 gap-4 xl:grid-cols-5">
++        <div className="xl:col-span-3">
++          <TradingViewChart symbol={preset.tvSymbol} height={640} />
++        </div>
++        <div className="xl:col-span-2">
++          <BubblemapsEmbed
++            chain={preset.chain}
++            address={addressInput}
++            height={640}
++          />
++        </div>
++      </div>
++
++      <div className="mt-4">
++        <SantimentMetrics assetSlug={preset.assetSlug} />
++      </div>
++    </div>
++  );
++}
