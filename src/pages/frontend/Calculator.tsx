@@ -252,7 +252,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         }
 
         return (
-            <div className={mainGridClass}>
+            <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
                 {/* Inputs */}
                 <div className={inputCardClass}>
                     
@@ -312,18 +312,20 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <ResultTextRow label="Leverage" value={hasCalc ? `${levSlider}x` : '—'} valueColor={hasCalc ? "text-alphabag-text font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
                             <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice, 2)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
 
-                            <div className="mt-2 pt-2 border-t border-alphabag-gray/40 space-y-1">
-                                <ResultRow
-                                    label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
-                                    resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
-                                    minimal={minimal}
-                                />
-                                <ResultRow
-                                    label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
-                                    resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
-                                    minimal={minimal}
-                                />
-                            </div>
+                            {!minimal && (
+                                <div className="mt-2 pt-2 border-t border-alphabag-gray/40 space-y-1">
+                                    <ResultRow
+                                        label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
+                                        resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
+                                        minimal={minimal}
+                                    />
+                                    <ResultRow
+                                        label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
+                                        resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
+                                        minimal={minimal}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -376,7 +378,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         }
 
         return (
-            <div className={mainGridClass}>
+            <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
                 {/* Inputs */}
                 <div className={inputCardClass}>
                     <div className="relative z-10">
@@ -452,7 +454,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         const ilPercent = Math.abs(il * 100);
 
         return (
-            <div className={mainGridClass}>
+            <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
                 <div className={inputCardClass}>
                     
                     <div className="relative z-10">
@@ -484,7 +486,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         const result = (amount * (rates[convFrom] || 0)) / (rates[convTo] || 1);
 
         return (
-            <div className={mainGridClass}>
+            <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
                 <div className={inputCardClass}>
                     
                     <div className="relative z-10">
@@ -556,8 +558,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
         }
 
         return (
-            <div className="flex flex-col gap-2">
-                <div className={mainGridClass}>
+            <div className={`flex flex-col gap-2 ${minimal ? 'flex-1 justify-between' : ''}`}>
+                <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
                     {/* Inputs */}
                     <div className={inputCardClass}>
                         
@@ -660,7 +662,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     return (
-        <div className={`w-full space-y-2 animate-in fade-in duration-700 calculator-container ${minimal ? '' : 'pb-2'}`}>
+        <div className={`w-full animate-in fade-in duration-700 calculator-container ${minimal ? 'flex-1 flex flex-col justify-between' : 'space-y-2 pb-2'}`}>
             {/* Page Header */}
             {!minimal && (
                 <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
@@ -714,9 +716,11 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             {mode === 'CONVERTER' && renderConverterPanel()}
 
             {/* Disclaimer */}
-            <div className="text-xs text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">
-                This calculation is an estimate based on the parameters inputted and is for informational purposes only. It does not constitute financial or trading advice.
-            </div>
+            {!minimal && (
+                <div className="text-xs text-alphabag-subtext leading-relaxed font-medium mt-4 p-3 bg-black/20 border border-alphabag-gray/50 rounded-lg">
+                    This calculation is an estimate based on the parameters inputted and is for informational purposes only. It does not constitute financial or trading advice.
+                </div>
+            )}
         </div>
     );
 };

@@ -66,7 +66,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full" />
             <div className="flex items-center gap-1.5">
               <span className="text-sm font-bold text-alphabag-yellow tracking-wider">ALPHABAG</span>
-              <span className="hidden sm:inline-block text-[11px] font-semibold text-alphabag-subtext bg-[#202630] px-1.5 py-0.2 rounded-[2px] border border-[#2B313A] uppercase">PRO</span>
             </div>
           </Link>
         </div>

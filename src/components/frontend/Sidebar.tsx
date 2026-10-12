@@ -43,28 +43,28 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
     <Link
       to={isDisabled ? '#' : to}
       onClick={handleClick}
-      className={`flex items-center justify-between px-3 py-2 rounded transition-colors duration-150 mb-0.5 mx-2 relative select-none ${
+      className={`flex items-center justify-between px-3 py-2.5 rounded transition-colors duration-150 mb-0.5 mx-2 relative select-none ${
         isDisabled ? 'opacity-40 cursor-not-allowed' : ''
       } ${active
         ? 'bg-[#202630] text-alphabag-text font-medium border-l-2 border-alphabag-yellow'
         : 'text-alphabag-subtext hover:bg-[#202630]/60 hover:text-alphabag-text border-l-2 border-transparent'
       }`}
     >
-      <div className="flex items-center space-x-2.5 min-w-0">
+      <div className="flex items-center space-x-3 min-w-0">
         {customIcon ? (
           <PageIcon
             name={customIcon}
-            size={16}
+            size={20}
             framed={false}
             className={`transition-opacity duration-150 shrink-0 ${active ? 'opacity-100' : 'opacity-70 group-hover:opacity-100'}`}
           />
         ) : Icon ? (
-          <Icon size={16} className={`shrink-0 ${active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`} />
+          <Icon size={20} className={`shrink-0 ${active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'}`} />
         ) : null}
-        <span className="text-xs truncate">{label}</span>
+        <span className="text-[17px] font-medium truncate tracking-tight">{label}</span>
       </div>
       {isDisabled && (
-        <span className="text-[11px] font-semibold bg-white/5 text-alphabag-subtext px-1.5 py-0.2 rounded-[2px] border border-white/10 shrink-0 ml-1">SOON</span>
+        <span className="text-xs font-semibold bg-white/5 text-alphabag-subtext px-2 py-0.5 rounded-[2px] border border-white/10 shrink-0 ml-1">SOON</span>
       )}
     </Link>
   );
@@ -72,7 +72,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
 
 const NavGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-3">
-    <div className="px-5 mb-1.5 text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider select-none">
+    <div className="px-5 mb-2 text-xs font-bold text-alphabag-subtext uppercase tracking-wider select-none">
       {title}
     </div>
     <div className="space-y-0.5">
@@ -105,7 +105,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
       )}
 
       <aside className={`
-        fixed left-0 top-14 bottom-0 w-56 bg-[#181A20] border-r border-[#2B313A] z-40 transition-transform duration-200 ease-in-out
+        fixed left-0 top-14 bottom-0 w-64 bg-[#181A20] border-r border-[#2B313A] z-40 transition-transform duration-200 ease-in-out
         md:translate-x-0 pt-3 pb-3 flex flex-col justify-between overflow-y-auto custom-scrollbar
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
@@ -116,7 +116,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             {!disabledPages.includes('/airdrop') && (
               <div className="relative">
                 <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />
-                <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1 py-0.2 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-semibold rounded-[2px] pointer-events-none">LIVE</div>
+                <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-xs font-semibold rounded-[2px] pointer-events-none">LIVE</div>
               </div>
             )}
             <NavItem to="/alphas-feed" customIcon="feed" label="Trade Signals" active={location.pathname === '/alphas-feed'} />
@@ -129,7 +129,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
           <NavGroup title="Market Intelligence">
             <div className="relative">
               <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
-              <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1 py-0.2 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-semibold rounded-[2px] pointer-events-none">PRO</div>
+              <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-xs font-semibold rounded-[2px] pointer-events-none">PRO</div>
             </div>
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
@@ -143,10 +143,10 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             <NavItem to="/profile" customIcon="profile" label="Account Profile" active={location.pathname === '/profile'} />
             <button
               onClick={handleLogout}
-              className="w-full flex items-center space-x-2.5 px-3 py-2 rounded transition-colors text-alphabag-subtext hover:bg-rose-500/10 hover:text-alphabag-red mx-2"
+              className="w-full flex items-center space-x-3 px-3 py-2.5 rounded transition-colors text-alphabag-subtext hover:bg-rose-500/10 hover:text-alphabag-red mx-2"
             >
-              <LogOut size={16} />
-              <span className="font-medium text-xs">Disconnect</span>
+              <LogOut size={20} />
+              <span className="font-medium text-[17px]">Disconnect</span>
             </button>
           </div>
         </div>

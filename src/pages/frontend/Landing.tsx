@@ -32,6 +32,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
+import { ProblemSection, SolutionSection, OnboardingPipeline } from '../../components/frontend/LandingSections';
 import { Markets } from './Markets';
 
 
@@ -918,46 +919,45 @@ export const Landing: React.FC = () => {
             <div className="max-w-[1400px] mx-auto w-full relative z-10 flex flex-col items-center xl:px-8">
               
               {/* Split Layout: Hero Text & Calculator side-by-side */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 items-start w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start w-full">
                 
                 {/* Left Column: Copy & Stats */}
-                <div className="lg:col-span-6 text-left space-y-2 flex flex-col justify-center">
-                  <h1 className="text-4xl md:text-6xl lg:text-[68px] font-bold text-alphabag-text leading-[0.88] tracking-[-0.04em]">
-                    <span className="block">{t('hero_title_1')}</span>
-                    <span className="block mt-1">
-                      <span className="inline-block align-middle text-[0.38em] md:text-[0.34em] lg:text-[0.32em] font-semibold text-alphabag-text/80 tracking-[-0.02em] mr-3">with</span>
-                      <span className="inline-block align-middle text-alphabag-yellow">{t('hero_title_2')}</span>
+                <div className="lg:col-span-6 text-left space-y-4 flex flex-col justify-center">
+                  <h1 className="text-4xl sm:text-5xl lg:text-[54px] xl:text-[58px] font-bold text-alphabag-text leading-[1.08] tracking-[-0.03em]">
+                    <span className="block whitespace-nowrap">{t('hero_title_1')}</span>
+                    <span className="flex items-baseline gap-2.5 mt-1.5 whitespace-nowrap">
+                      <span className="text-xl sm:text-2xl lg:text-[26px] font-semibold text-alphabag-subtext tracking-normal">with</span>
+                      <span className="text-alphabag-yellow">{t('hero_title_2')}</span>
                     </span>
                   </h1>
 
-                  <p className="text-base md:text-lg text-alphabag-subtext leading-relaxed font-normal animate-fade-in-up delay-100 max-w-xl">
+                  <p className="text-base text-alphabag-subtext leading-relaxed font-normal max-w-xl">
                     {t('hero_desc')}
                   </p>
 
-                  <div className="w-full max-w-xl animate-fade-in-up delay-200">
-                    <div className="flex flex-col sm:flex-row items-stretch gap-2 sm:gap-3">
+                  <div className="w-full max-w-xl pt-1">
+                    <div className="flex flex-col sm:flex-row items-stretch gap-3">
                       <Button
                         size="lg"
-                        className="w-full sm:flex-1 px-8 py-4 text-base font-semibold bg-alphabag-yellow text-black border-none transition-all cursor-default opacity-90 select-none"
+                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black border-none rounded-lg transition-all cursor-default select-none shadow-sm"
                       >
                         Track Smart
                       </Button>
                       <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
-                        <Button variant="outline" size="lg" className="w-full px-8 py-4 text-base border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40  text-alphabag-text font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
-                          <Send size={16} /> {t('btn_join_community')}
+                        <Button variant="outline" size="lg" className="w-full px-8 py-3.5 text-sm font-bold uppercase tracking-wider border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 text-alphabag-text rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                          <Send size={15} /> {t('btn_join_community')}
                         </Button>
                       </a>
                     </div>
                   </div>
 
                   {/* Pre-TGE Countdown Timer */}
-                  <div className="mt-3 rounded-2xl border border-alphabag-yellow/30 bg-alphabag-darkgray/70 p-3 max-w-xl  animate-fade-in-up delay-300">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-alphabag-yellow flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-alphabag-yellow animate-ping inline-block"></span>
+                  <div className="mt-2 rounded-2xl border border-alphabag-gray/70 bg-[#14171D]/80 p-4 sm:p-5 max-w-xl">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <div className="text-xs font-bold uppercase tracking-[0.18em] text-alphabag-yellow">
                         {teaserCountdown.isLive ? 'Live now' : 'BETA TESTING COUNT DOWN'}
                       </div>
-                      <div className="text-[11px] text-alphabag-subtext font-semibold uppercase">Early Access</div>
+                      <div className="text-xs text-alphabag-subtext font-semibold uppercase tracking-wider">Early Access</div>
                     </div>
 
                     {teaserCountdown.isLive ? (
@@ -965,15 +965,15 @@ export const Landing: React.FC = () => {
                         <div className="text-xl md:text-2xl font-bold text-alphabag-yellow">LIVE NOW</div>
                       </div>
                     ) : (
-                      <div className="grid grid-cols-4 gap-2">
+                      <div className="grid grid-cols-4 divide-x divide-alphabag-gray/40 py-1">
                         {[
-                          { label: 'Days', value: teaserCountdown.days },
-                          { label: 'Hours', value: teaserCountdown.hours },
-                          { label: 'Min', value: teaserCountdown.minutes },
-                          { label: 'Sec', value: teaserCountdown.seconds }
+                          { label: 'DAYS', value: teaserCountdown.days },
+                          { label: 'HOURS', value: teaserCountdown.hours },
+                          { label: 'MIN', value: teaserCountdown.minutes },
+                          { label: 'SEC', value: teaserCountdown.seconds }
                         ].map((item) => (
-                          <div key={item.label} className="rounded-lg border border-alphabag-gray bg-alphabag-black/60 py-1.5 text-center">
-                            <div className="text-lg md:text-xl font-bold text-alphabag-yellow tabular-nums leading-tight">{item.value}</div>
+                          <div key={item.label} className="text-center px-2">
+                            <div className="text-2xl md:text-3xl font-bold text-alphabag-text tabular-nums leading-tight">{item.value}</div>
                             <div className="text-[11px] uppercase font-semibold tracking-widest text-alphabag-subtext mt-1">{item.label}</div>
                           </div>
                         ))}
@@ -982,17 +982,17 @@ export const Landing: React.FC = () => {
                   </div>
 
                   {/* Stats Section */}
-                  <div className="flex flex-wrap gap-x-5 gap-y-3 md:gap-x-8 md:gap-y-3 pt-6 border-t border-alphabag-gray mt-6 animate-fade-in-up delay-300">
-                    <div className="space-y-1.5">
-                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_assets')}</div>
+                  <div className="flex flex-wrap gap-x-8 gap-y-3 md:gap-x-12 pt-4 mt-2">
+                    <div className="space-y-1">
+                      <div className="text-xl md:text-2xl font-bold text-alphabag-text leading-tight">{t('stat_assets')}</div>
                       <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_assets_lbl')}</div>
                     </div>
-                    <div className="space-y-1.5">
-                      <div className="text-2xl font-bold text-alphabag-text leading-tight">AlphaCalls</div>
+                    <div className="space-y-1">
+                      <div className="text-xl md:text-2xl font-bold text-alphabag-text leading-tight">AlphaCalls</div>
                       <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">Trade smarter</div>
                     </div>
-                    <div className="space-y-1.5">
-                      <div className="text-2xl font-bold text-alphabag-text leading-tight">{t('stat_crypto')}</div>
+                    <div className="space-y-1">
+                      <div className="text-xl md:text-2xl font-bold text-alphabag-text leading-tight">{t('stat_crypto')}</div>
                       <div className="text-xs font-semibold text-alphabag-subtext leading-relaxed">{t('stat_crypto_lbl')}</div>
                     </div>
                   </div>
@@ -1000,31 +1000,39 @@ export const Landing: React.FC = () => {
                 </div>
 
                 {/* Right Column: Calculator Card */}
-                <div className="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-4 shadow-2xl relative overflow-hidden lg:h-[630px] lg:overflow-y-auto custom-scrollbar">
-                  
-                  <div className="mb-2 border-b border-alphabag-gray pb-3">
-                    <h3 className="text-sm font-semibold text-alphabag-text uppercase tracking-wider flex items-center gap-2">
-                      <CalculatorIcon size={16} className="text-alphabag-yellow" /> {t('calculator_title')}
+                <div className="lg:col-span-6 w-full bg-alphabag-darkgray border border-alphabag-gray rounded-2xl p-5 sm:p-6 shadow-2xl relative min-h-[710px] lg:h-[710px] flex flex-col">
+                  <div className="mb-3">
+                    <h3 className="text-xs font-bold text-alphabag-yellow uppercase tracking-wider flex items-center gap-2">
+                      <CalculatorIcon size={15} className="text-alphabag-yellow" /> ALPHA CALCULATOR
                     </h3>
                   </div>
-                  <Calculator minimal={true} />
+                  <div className="flex-1 flex flex-col">
+                    <Calculator minimal={true} />
+                  </div>
                 </div>
 
               </div>
 
-              {/* 3D Dashboard Preview */}
-              <div className="mt-24 relative max-w-7xl w-full mx-auto opacity-40 hover:opacity-100 transition-opacity duration-1000 block">
-                <div className="bg-alphabag-dark rounded-[20px] overflow-hidden relative shadow-2xl border border-alphabag-gray mask-image-b">
+              {/* Dashboard Preview - Aligned on both ends */}
+              <div className="mt-16 lg:mt-20 relative w-full block">
+                <div className="bg-[#181A20] rounded-2xl overflow-hidden shadow-2xl border border-alphabag-gray">
                   <img
                     src="/hero-dashboard.png"
-                    alt="Dashboard Interface"
-                    className="w-full"
+                    alt="Portfolio Overview Dashboard"
+                    className="w-full h-auto block"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black via-alphabag-black/50 to-transparent pointer-events-none"></div>
                 </div>
               </div>
             </div>
           </section>
+        )}
+
+        {activeTab === 'home' && (
+          <>
+            <ProblemSection />
+            <SolutionSection />
+            <OnboardingPipeline />
+          </>
         )}
 
         {legalModal && (
