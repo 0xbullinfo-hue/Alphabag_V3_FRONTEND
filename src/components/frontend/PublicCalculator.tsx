@@ -139,10 +139,14 @@ export const PublicCalculator: React.FC = () => {
                             <div className="relative group">
                                 <DollarSign size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext group-focus-within:text-alphabag-yellow transition-colors" />
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="decimal"
                                     value={investment}
-                                    onChange={(e) => setInvestment(e.target.value)}
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num"
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        if (v === '' || /^\d*\.?\d*$/.test(v)) setInvestment(v);
+                                    }}
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num tabular-nums"
                                 />
                             </div>
                         </div>
@@ -151,10 +155,14 @@ export const PublicCalculator: React.FC = () => {
                             <div className="relative group">
                                 <Percent size={11} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext group-focus-within:text-alphabag-yellow transition-colors" />
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="decimal"
                                     value={fees}
-                                    onChange={(e) => setFees(e.target.value)}
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num"
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        if (v === '' || /^\d*\.?\d*$/.test(v)) setFees(v);
+                                    }}
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num tabular-nums"
                                 />
                             </div>
                         </div>
@@ -163,11 +171,14 @@ export const PublicCalculator: React.FC = () => {
                             <div className="relative group">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext group-focus-within:text-alphabag-yellow font-bold text-[11px]">@</span>
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="decimal"
                                     value={entryPrice}
-                                    onChange={(e) => setEntryPrice(e.target.value)}
-                                    step="any"
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num"
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        if (v === '' || /^\d*\.?\d*$/.test(v)) setEntryPrice(v);
+                                    }}
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num tabular-nums"
                                 />
                             </div>
                         </div>
@@ -176,11 +187,14 @@ export const PublicCalculator: React.FC = () => {
                             <div className="relative group">
                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext group-focus-within:text-alphabag-yellow font-bold text-[11px]">@</span>
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="decimal"
                                     value={exitPrice}
-                                    onChange={(e) => setExitPrice(e.target.value)}
-                                    step="any"
-                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num"
+                                    onChange={(e) => {
+                                        const v = e.target.value;
+                                        if (v === '' || /^\d*\.?\d*$/.test(v)) setExitPrice(v);
+                                    }}
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-md py-2 pl-8 pr-3 text-white font-mono font-bold focus:border-alphabag-yellow outline-none transition-colors text-xs num tabular-nums"
                                 />
                             </div>
                         </div>

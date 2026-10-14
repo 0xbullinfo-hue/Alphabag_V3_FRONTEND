@@ -28,7 +28,7 @@
     "@types/dompurify": "^3.0.5",
     "@vitest/runner": "^4.1.11",
     "@web3modal/wagmi": "^3.5.7",
-    "axios": "1.6.7",
+    "axios": "^1.7.9",
     "dompurify": "^3.4.14",
     "framer-motion": "^12.35.2",
     "lucide-react": "0.344.0",

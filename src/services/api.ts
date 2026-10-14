@@ -42,7 +42,9 @@ api.interceptors.response.use(
     const config = error.config as RetryConfig | undefined;
     if (!config) return Promise.reject(error);
 
-    const isRetryable = !error.response || [502, 503, 504].includes(error.response.status);
+    const method = (config.method || 'get').toLowerCase();
+    const isIdempotent = ['get', 'head', 'options', 'put', 'delete'].includes(method) || Boolean((config as any).idempotent);
+    const isRetryable = (!error.response || [502, 503, 504].includes(error.response.status)) && isIdempotent;
     config.retryCount = config.retryCount || 0;
 
     if (isRetryable && config.retryCount < MAX_RETRIES) {
@@ -58,9 +60,6 @@ api.interceptors.response.use(
       sessionStorage.removeItem('alphabag_token');
       sessionStorage.removeItem('alphabag_user');
       window.dispatchEvent(new CustomEvent('auth:expired'));
-      if (window.location.hash !== '#/' && window.location.hash !== '#/airdrop') {
-        window.location.hash = '#/';
-      }
     }
 
     const structuredError = {

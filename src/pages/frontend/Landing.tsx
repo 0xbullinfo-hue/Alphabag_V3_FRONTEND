@@ -641,9 +641,9 @@ export const Landing: React.FC = () => {
 
 
   useEffect(() => {
-    // Only redirect to app if NOT in teaser mode and user is authenticated
-    if (!IS_TEASER_MODE && isAuthenticated) {
-      navigate('/airdrop');
+    // Only redirect to app if NOT in teaser mode, user is authenticated, and not explicitly viewing /landing
+    if (!IS_TEASER_MODE && isAuthenticated && window.location.pathname !== '/landing') {
+      navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 

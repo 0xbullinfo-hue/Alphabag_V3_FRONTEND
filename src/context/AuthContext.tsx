@@ -19,7 +19,7 @@ const DEV_USER: User = {
   walletAddress: '0x1111111111111111111111111111111111111111',
   alphaAiUsageSeconds: 0,
   lastAlphaAiReset: new Date().toISOString(),
-  isAdmin: true,
+  isAdmin: false,
   isPro: true,
   onboardingComplete: true,
   accountType: 'TRADER',
@@ -28,6 +28,8 @@ const DEV_USER: User = {
   referralCount: 12,
   completedTasks: [],
 };
+
+const isLocalhostDev = Boolean(import.meta.env.DEV) && typeof window !== 'undefined' && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
 
 interface AuthContextType {
   user: User | null;
@@ -71,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const savedToken = sessionStorage.getItem('alphabag_token');
 
       if (!savedToken) {
-        if (import.meta.env.DEV) {
+        if (isLocalhostDev) {
           const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
           if (!isExplicitLoggedOut) {
             setUser(DEV_USER);
@@ -99,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (err: any) {
         console.error('[AUTH] Session validation failed:', err?.response?.data?.error || err.message);
-        if (import.meta.env.DEV) {
+        if (isLocalhostDev) {
           const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
           if (!isExplicitLoggedOut) {
             setUser(DEV_USER);

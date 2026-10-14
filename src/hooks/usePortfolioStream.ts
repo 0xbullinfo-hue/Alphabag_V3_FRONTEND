@@ -1,79 +1,136 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { resolveApiUrl } from '../services/api';
 
+export interface PortfolioStreamState {
+  isLive: boolean;
+  isReconnecting: boolean;
+  lastUpdated: Date | null;
+}
+
 /**
- * Live portfolio SSE stream (fixed).
- * Changes vs. previous version:
- *  1. Passes the wallet address to the stream (?address=...) so the server can
- *     actually compute the DEX side of the portfolio.
- *  2. Handles the real payload shape the server now emits:
- *     { type:'portfolio', tokens, balances:{tokens,totalUSD}, cexBalances, totalUSD, timestamp }
+ * Live portfolio SSE stream with auto-reconnection, exponential backoff, jitter,
+ * and live telemetry indicator state (UX-02).
  */
-export const usePortfolioStream = (token: string | null, address?: string) => {
+export const usePortfolioStream = (token: string | null, address?: string): PortfolioStreamState => {
   const queryClient = useQueryClient();
   const abortControllerRef = useRef<AbortController | null>(null);
+  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const retryCountRef = useRef(0);
+  const isMountedRef = useRef(true);
+
+  const [isLive, setIsLive] = useState(false);
+  const [isReconnecting, setIsReconnecting] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   useEffect(() => {
-    if (!token || !address) return;
+    isMountedRef.current = true;
+    if (!token || !address) {
+      setIsLive(false);
+      setIsReconnecting(false);
+      return;
+    }
 
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
+    const connect = () => {
+      if (!isMountedRef.current) return;
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
 
-    const url = `${resolveApiUrl('/api/stream/portfolio')}?address=${encodeURIComponent(address)}`;
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
-    fetch(url, {
-      headers: { Authorization: `Bearer ${token}`, Accept: 'text/event-stream' },
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok || !response.body) {
-          throw new Error(`Stream connection failed (${response.status})`);
-        }
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
+      const url = `${resolveApiUrl('/api/stream/portfolio')}?address=${encodeURIComponent(address)}`;
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+      fetch(url, {
+        headers: { Authorization: `Bearer ${token}`, Accept: 'text/event-stream' },
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok || !response.body) {
+            throw new Error(`Stream connection failed (${response.status})`);
+          }
+          if (!isMountedRef.current) return;
+          setIsLive(true);
+          setIsReconnecting(false);
+          retryCountRef.current = 0;
 
-          for (const line of lines) {
-            if (!line.startsWith('data:')) continue;
-            try {
-              const rawData = line.slice(5).trim();
-              if (!rawData) continue;
-              const update = JSON.parse(rawData);
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
 
-              if (update.type === 'portfolio') {
-                if (update.tokens) {
-                  queryClient.setQueryData(['portfolio', 'dex', address], update.tokens);
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+              if (!line.startsWith('data:')) continue;
+              try {
+                const rawData = line.slice(5).trim();
+                if (!rawData) continue;
+                const update = JSON.parse(rawData);
+
+                if (update.type === 'portfolio') {
+                  if (isMountedRef.current) {
+                    setLastUpdated(new Date());
+                  }
+                  if (update.tokens) {
+                    queryClient.setQueryData(['portfolio', 'dex', address], update.tokens);
+                  }
+                  if (update.cexBalances) {
+                    queryClient.setQueryData(['portfolio', 'cex'], update.cexBalances);
+                  }
+                  if (typeof update.totalUSD === 'number') {
+                    queryClient.setQueryData(['portfolio', 'net-worth'], update.totalUSD);
+                  }
                 }
-                if (update.cexBalances) {
-                  queryClient.setQueryData(['portfolio', 'cex'], update.cexBalances);
-                }
-                if (typeof update.totalUSD === 'number') {
-                  queryClient.setQueryData(['portfolio', 'net-worth'], update.totalUSD);
-                }
+              } catch (err) {
+                console.error('[SSE] Parse error:', err);
               }
-            } catch (err) {
-              console.error('[SSE] Parse error:', err);
             }
           }
+          scheduleReconnect();
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.warn('[SSE] Stream closed or unavailable, reconnecting with backoff:', err.message);
+            scheduleReconnect();
+          }
+        });
+    };
+
+    const scheduleReconnect = () => {
+      if (!isMountedRef.current) return;
+      setIsLive(false);
+      setIsReconnecting(true);
+      const retry = Math.min(retryCountRef.current + 1, 5);
+      retryCountRef.current = retry;
+      const baseDelay = Math.min(1000 * Math.pow(2, retry), 20000);
+      const jitter = Math.random() * 1000;
+      const delay = baseDelay + jitter;
+
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+      reconnectTimerRef.current = setTimeout(() => {
+        if (isMountedRef.current) {
+          connect();
         }
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') {
-          console.warn('[SSE] Stream closed or unavailable, polling fallback active:', err.message);
-        }
-      });
+      }, delay);
+    };
+
+    connect();
 
     return () => {
-      controller.abort();
-      abortControllerRef.current = null;
+      isMountedRef.current = false;
+      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
     };
   }, [token, address, queryClient]);
+
+  return { isLive, isReconnecting, lastUpdated };
 };

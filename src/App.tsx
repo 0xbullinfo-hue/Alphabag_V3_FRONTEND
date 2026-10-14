@@ -15,6 +15,7 @@ import { usePortfolioStream } from './hooks/usePortfolioStream';
 import { queryClient } from './lib/queryClient';
 import { config } from './lib/wagmi';
 import { IS_TEASER_MODE, DISABLED_PAGES } from './services/config';
+import Swal from 'sweetalert2';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
 // wallet-connect auto-trigger, no other routes, regardless of what URL a
@@ -141,9 +142,24 @@ const AppContent = () => {
   useEffect(() => {
     const handleOpenAuth = () => setIsAuthModalOpen(true);
     const handleOpenUpgrade = () => setIsUpgradeModalOpen(true);
+    const handleAuthExpired = () => {
+      setIsAuthModalOpen(true);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Session Expired',
+        text: 'Please reconnect your wallet to continue.',
+        showConfirmButton: false,
+        timer: 4000,
+        background: '#181A20',
+        color: '#EAECEF',
+      });
+    };
 
     window.addEventListener('open-login-modal', handleOpenAuth);
     window.addEventListener('open-upgrade-modal', handleOpenUpgrade);
+    window.addEventListener('auth:expired', handleAuthExpired);
 
     // Capture Referral Code
     const params = new URLSearchParams(window.location.search);
@@ -156,6 +172,7 @@ const AppContent = () => {
     return () => {
       window.removeEventListener('open-login-modal', handleOpenAuth);
       window.removeEventListener('open-upgrade-modal', handleOpenUpgrade);
+      window.removeEventListener('auth:expired', handleAuthExpired);
     };
   }, []);
 
@@ -183,6 +200,7 @@ const AppContent = () => {
             (isAuthenticated || IS_LOCALHOST_DEV) ? <Layout><MyAlphabag /></Layout> : <Landing />
           } />
           <Route path="/dashboard" element={<Layout><MyAlphabag /></Layout>} />
+          <Route path="/landing" element={<Landing />} />
           <Route path="/genesis" element={<GenesisLanding />} />
           <Route path="/genesis-manifesto" element={<Layout><GenesisManifesto /></Layout>} />
           <Route path="/cex-bag" element={<Layout><CexBag /></Layout>} />

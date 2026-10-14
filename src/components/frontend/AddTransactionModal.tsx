@@ -154,12 +154,15 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                     <div className="relative">
                         <span className="absolute left-3 top-2 text-alphabag-subtext">$</span>
                         <input 
-                            type="number" 
-                            step="any"
+                            type="text" 
+                            inputMode="decimal"
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={(e) => {
+                                const v = e.target.value;
+                                if (v === '' || /^\d*\.?\d*$/.test(v)) setPrice(v);
+                            }}
                             placeholder="0.00"
-                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md pl-6 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num"
+                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-md pl-6 pr-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num tabular-nums"
                         />
                         {!isCustomAsset && (
                              <div className="absolute right-3 top-2.5 flex items-center text-[11px] bg-alphabag-yellow/10 text-alphabag-yellow px-1 rounded font-bold uppercase">
@@ -171,12 +174,15 @@ export const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen
                 <div>
                     <label className="block text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Amount</label>
                     <input 
-                        type="number" 
-                        step="any"
+                        type="text" 
+                        inputMode="decimal"
                         value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => {
+                            const v = e.target.value;
+                            if (v === '' || /^\d*\.?\d*$/.test(v)) setAmount(v);
+                        }}
                         placeholder="0.00"
-                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num"
+                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-white text-sm focus:border-alphabag-yellow focus:outline-none num tabular-nums"
                     />
                 </div>
             </div>
