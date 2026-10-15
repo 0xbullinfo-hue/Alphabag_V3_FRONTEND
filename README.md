@@ -14,10 +14,10 @@ AlphaBAG is an institutional-grade Web3 portfolio tracking, on-chain intelligenc
 
 - **Multi-Chain Portfolio Dashboard**: Unified tracking across Ethereum, Arbitrum, Optimism, Base, Polygon, BSC, and Solana with real-time valuation and PnL breakdown.
 - **DeFi Operations**: Real on-chain balance and position surveillance across major lending markets (Aave V3), concentrated liquidity pools (Uniswap V3), and ERC-4626 vaults.
-- **CEX Portfolio Hardening**: Zero-knowledge credential encryption using client-side AES-GCM (PBKDF2 100,000 rounds) for Binance, Coinbase, Kraken, OKX, and Bybit connections. Read-only API key enforcement with local secret redaction.
+- **CEX Portfolio Hardening**: High-security server-side AES-256-GCM encryption with per-connection IV and authentication tags for Binance, Coinbase, Kraken, OKX, and Bybit connections. Strict read-only API key enforcement with local credential redaction.
 - **AlphaAI Grounded Assistant**: Streaming neural market intelligence equipped with anti-hallucination guardrails (`findUnsupportedNumbers`), prompt injection defense, and on-chain fact verification.
 - **Alpha Passes (Genesis Collection)**: 4,000 limited-supply utility memberships on BNB Smart Chain unlocking fee rebates, VIP volume multipliers, and tiered access.
-- **Security & Privacy First**: Read-only architecture. Private keys are never requested, stored, or exposed.
+- **Security & Privacy First**: Read-only architecture. Private keys are never requested, stored, or exposed. EIP-4361 Sign-In with Ethereum (SIWE) authentication.
 
 ---
 
@@ -26,8 +26,8 @@ AlphaBAG is an institutional-grade Web3 portfolio tracking, on-chain intelligenc
 - **Framework**: React 18 + TypeScript + Vite
 - **State & Caching**: TanStack React Query + Tiered L1 Memory Cache with TTL and Stale-While-Revalidate semantics
 - **Styling**: Tailwind CSS + Custom Dark Theme Tokens + Lucide Icons + Framer Motion
-- **On-Chain & Web3**: Ethers.js v6, Wagmi, Moralis API, DeFiLlama Yield SDK
-- **Testing**: Vitest with unit test suites covering caching, crypto decoders, grounding guardrails, and token balance services
+- **On-Chain & Web3**: Viem, Wagmi, Ethers.js v6, Moralis API, DeFiLlama Yield SDK
+- **Testing**: Vitest with unit test suites covering caching, crypto decoders, grounding guardrails, token balance services, SIWE, DecimalInput, and wallet errors
 
 ---
 
@@ -35,8 +35,8 @@ AlphaBAG is an institutional-grade Web3 portfolio tracking, on-chain intelligenc
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+- Node.js >= 22.0.0
+- npm >= 10.0.0
 
 ### Installation
 
@@ -54,7 +54,7 @@ npm install
 Create a `.env` or `.env.local` file in the root directory:
 
 ```env
-VITE_API_URL=http://localhost:3003
+VITE_API_BASE_URL=http://localhost:3003
 VITE_ENABLE_ANALYTICS=true
 ```
 

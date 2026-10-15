@@ -18,6 +18,8 @@ import { useAccount,useNetwork,useSignMessage } from 'wagmi';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 import { Button } from '../ui/Button';
+import { createSiweMessage } from '../../utils/siwe';
+import { parseWalletError } from '../../utils/walletErrors';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -111,16 +113,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
       const issuedAt = new Date().toISOString();
       const domain = window.location.host;
-      const message = `${domain} wants you to sign in with your Ethereum account:
-    ${address}
-
-    Sign in to AlphaBAG Protocol Hub.
-
-    URI: ${window.location.origin}
-    Version: 1
-    Chain ID: ${chain?.id || 1}
-    Nonce: ${nonce}
-    Issued At: ${issuedAt}`;
+      const message = createSiweMessage({
+        domain,
+        address,
+        statement: 'Sign in to AlphaBAG Protocol Hub.',
+        uri: window.location.origin,
+        version: '1',
+        chainId: chain?.id || 1,
+        nonce,
+        issuedAt
+      });
       
       const signature = await signMessageAsync({ message });
 
@@ -132,7 +134,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         setError('Verification Failed');
       }
     } catch (e: any) {
-      const errorMsg = e.response?.data?.error || e.message || 'Signature rejected';
+      const parsed = parseWalletError(e);
+      const errorMsg = e.response?.data?.error || parsed.message;
       setError(errorMsg);
       console.error("[SIWE Error]", errorMsg);
     } finally {
