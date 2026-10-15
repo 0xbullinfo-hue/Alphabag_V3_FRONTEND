@@ -11,7 +11,9 @@ import {
   X,
 } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
-import { buildBubblemapsIframeUrl } from '../../services/bubblemaps';
+import { buildBubblemapsIframeUrl, fetchTokenBubbleMap } from '../../services/bubblemaps';
+import { BubblemapsForensics } from './BubblemapsForensics';
+import type { BubblemapsMapResponse } from '../../types/bubblemaps';
 
 export interface ChainOption {
   id: string;
@@ -67,6 +69,27 @@ export function BubblemapsEmbed({
   const [copied, setCopied] = useState(false);
   const [key, setKey] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [forensicsData, setForensicsData] = useState<BubblemapsMapResponse | null>(null);
+  const [forensicsLoading, setForensicsLoading] = useState(false);
+
+  // Load raw B2B API Forensics Data
+  useEffect(() => {
+    let isMounted = true;
+    setForensicsLoading(true);
+    fetchTokenBubbleMap(selectedChain, activeAddress)
+      .then((data) => {
+        if (isMounted) setForensicsData(data);
+      })
+      .catch((err) => {
+        console.warn('[Bubblemaps Forensics] Load error:', err);
+      })
+      .finally(() => {
+        if (isMounted) setForensicsLoading(false);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedChain, activeAddress]);
 
   // Sync if parent updates initial props
   useEffect(() => {
@@ -259,6 +282,9 @@ export function BubblemapsEmbed({
             </div>
           </div>
         </div>
+
+        {/* ── Bubblemaps B2B API Forensics HUD ── */}
+        <BubblemapsForensics data={forensicsData} loading={forensicsLoading} />
 
         {/* ── Frame Container ── */}
         <div className="relative w-full bg-[#0B0E11]" style={{ height }}>
