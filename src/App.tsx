@@ -25,7 +25,6 @@ import Swal from 'sweetalert2';
 // and the wallet-connect effect below would still pop the SIWE auth
 // modal and try to hit a backend that isn't deployed yet during a
 // pre-launch campaign.
-const IS_LOCALHOST_DEV = import.meta.env.DEV && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
 // NOTE: Solana wallet-adapter support previously lived here, wrapping the
 // entire app unconditionally. Nothing in the codebase calls
 // useWallet()/useConnection() from those packages, yet every page load
@@ -196,8 +195,8 @@ const AppContent = () => {
       <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={
-            isLoading && !IS_LOCALHOST_DEV ? <GlobalLoader /> :
-            (isAuthenticated || IS_LOCALHOST_DEV) ? <Layout><MyAlphabag /></Layout> : <Landing />
+            isLoading ? <GlobalLoader /> :
+            isAuthenticated ? <Layout><MyAlphabag /></Layout> : <Landing />
           } />
           <Route path="/dashboard" element={<Layout><MyAlphabag /></Layout>} />
           <Route path="/landing" element={<Landing />} />

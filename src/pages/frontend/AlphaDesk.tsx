@@ -7,7 +7,6 @@ import {
   Eye,
   Lock,
   LucideIcon,
-  Radio,
   Share2,
   ShieldCheck,
   Target,
@@ -161,17 +160,10 @@ export const AlphaDesk: React.FC = () => {
 
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-bold text-alphabag-text tracking-wide uppercase">Alpha Desk</h1>
-              <span className="text-[11px] font-semibold bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow px-1.5 py-0.2 rounded-[2px] uppercase">
+              <h1 className="text-base font-bold text-alphabag-text tracking-wide uppercase">Alpha Desk</h1>
+              <span className="text-[11px] font-semibold bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow px-1.5 py-0.5 rounded-[2px] uppercase">
                 PRO TERMINAL
               </span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-alphabag-subtext">
-              <span className="flex items-center gap-1 text-alphabag-green font-medium">
-                <Radio size={10} /> LIVE FEED
-              </span>
-              <span>·</span>
-              <span>7 Institutional Engines</span>
             </div>
           </div>
         </div>
@@ -186,7 +178,7 @@ export const AlphaDesk: React.FC = () => {
                 <button
                   key={p.label}
                   onClick={() => handlePresetSelect(p)}
-                  className={`flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition-colors ${
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors ${
                     active
                       ? 'bg-[#202630] text-alphabag-text font-semibold'
                       : 'text-alphabag-subtext hover:text-alphabag-text'
@@ -222,28 +214,21 @@ export const AlphaDesk: React.FC = () => {
       </div>
 
       {/* ── Sleek Segmented Terminal Tabs ───────────────────────────────────── */}
-      <div className="flex items-center px-3.5 py-1.5 bg-[#14171D]/60 border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-1">
-        {TABS.map(({ id, label, badge, Icon }) => {
+      <div className="flex items-center px-4 py-2 bg-[#14171D]/90 border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-1.5">
+        {TABS.map(({ id, label, Icon }) => {
           const active = activeTab === id;
           return (
             <button
               key={id}
               onClick={() => handleTabChange(id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors shrink-0 ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all shrink-0 ${
                 active
-                  ? 'bg-[#202630] text-alphabag-yellow font-semibold border border-[#2B313A]'
-                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/40 border border-transparent'
+                  ? 'bg-[#202630] text-alphabag-yellow border border-[#2B313A] shadow-sm'
+                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50 border border-transparent'
               }`}
             >
-              <Icon size={13} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
+              <Icon size={16} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
               <span>{label}</span>
-              <span
-                className={`text-[11px] num px-1.5 py-0.2 rounded-[2px] ${
-                  active ? 'bg-alphabag-yellow/15 text-alphabag-yellow' : 'bg-white/5 text-alphabag-subtext'
-                }`}
-              >
-                {badge}
-              </span>
             </button>
           );
         })}

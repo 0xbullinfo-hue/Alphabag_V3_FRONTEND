@@ -119,9 +119,8 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
                 <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-xs font-semibold rounded-[2px] pointer-events-none">LIVE</div>
               </div>
             )}
-            <NavItem to="/alphas-feed" customIcon="feed" label="Trade Signals" active={location.pathname === '/alphas-feed'} />
+            <NavItem to="/alphas-feed" customIcon="feed" label="Alpha Feed" active={location.pathname === '/alphas-feed'} />
             <NavItem to="/calculator" customIcon="calculator" label="Position Calculator" active={location.pathname === '/calculator'} />
-            <NavItem to="/whales" customIcon="whales" label="Wallet Flow" active={location.pathname.startsWith('/whales')} />
             <NavItem to="/settings" customIcon="settings" label="Setup Connections" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
           </NavGroup>

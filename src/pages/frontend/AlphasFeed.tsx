@@ -567,10 +567,10 @@ export const AlphasFeed: React.FC = () => {
                         <PageIcon name="feed" size={40} />
                         <div>
                             <h1 className="text-2xl md:text-3xl font-semibold text-alphabag-text tracking-tight flex items-center gap-2">
-                                Community Discussion Hub
+                                Alpha Feed
                             </h1>
                             <div className="flex items-center gap-2 text-[11px] text-alphabag-subtext">
-                                <span>Collaborative Web3 Project Due Diligence, Tokenomics & Live AMAs</span>
+                                <span>Live Trade Signals, Collaborative Web3 Due Diligence & Market Intelligence</span>
                             </div>
                         </div>
                     </div>
