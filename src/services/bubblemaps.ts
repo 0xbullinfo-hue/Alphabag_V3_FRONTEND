@@ -2,14 +2,17 @@ import type {
   BubblemapsAddressMetadata,
   BubblemapsBatchAddressQuery,
   BubblemapsBatchTokenQuery,
+  BubblemapsContextTokenKey,
   BubblemapsMapResponse,
   BubblemapsScreenshotResponse,
+  BubblemapsSubgraphRequest,
   BubblemapsSubgraphResponse,
   BubblemapsSupportedChain,
   BubblemapsTokenMetadata,
   BubblemapsTokenMetricsResponse,
   BubblemapsTokenSearchResult,
   BubblemapsTopHoldersResponse,
+  BubblemapsValidationError,
 } from '../types/bubblemaps';
 
 const BUBBLEMAPS_API_BASE = 'https://api.bubblemaps.io/v0';
@@ -313,18 +316,60 @@ export async function getBatchAddressesMetadata(
 
 // ─── 11. POST Get Addresses Subgraph ─────────────────────────────────────────
 export async function getAddressesSubgraph(
-  chain: string,
-  addresses: string[]
+  request: BubblemapsSubgraphRequest
+): Promise<BubblemapsSubgraphResponse | null>;
+export async function getAddressesSubgraph(
+  addresses: string[],
+  contextToken?: BubblemapsContextTokenKey
+): Promise<BubblemapsSubgraphResponse | null>;
+export async function getAddressesSubgraph(
+  arg1: string[] | BubblemapsSubgraphRequest,
+  arg2?: BubblemapsContextTokenKey
 ): Promise<BubblemapsSubgraphResponse | null> {
-  const cleanChain = normalizeBubblemapsChain(chain);
   const url = `${BUBBLEMAPS_API_BASE}/relationships/subgraph`;
+
+  let payload: BubblemapsSubgraphRequest;
+  if (Array.isArray(arg1)) {
+    payload = {
+      addresses: arg1.map((a) => a.trim()),
+      ...(arg2
+        ? {
+            context_token_key: {
+              chain: normalizeBubblemapsChain(arg2.chain),
+              address: arg2.address.trim(),
+            },
+          }
+        : {}),
+    };
+  } else {
+    payload = {
+      addresses: arg1.addresses.map((a) => a.trim()),
+      ...(arg1.context_token_key
+        ? {
+            context_token_key: {
+              chain: normalizeBubblemapsChain(arg1.context_token_key.chain),
+              address: arg1.context_token_key.address.trim(),
+            },
+          }
+        : {}),
+    };
+  }
+
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chain: cleanChain, addresses }),
+      body: JSON.stringify(payload),
     });
-    if (res.ok) return await res.json();
+
+    if (res.ok) {
+      return (await res.json()) as BubblemapsSubgraphResponse;
+    }
+
+    if (res.status === 422) {
+      const errorJson = (await res.json().catch(() => null)) as BubblemapsValidationError | null;
+      console.warn('[Bubblemaps 422 Validation Error - Subgraph]', errorJson?.detail);
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getAddressesSubgraph error:', e);
   }

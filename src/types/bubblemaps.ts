@@ -174,12 +174,26 @@ export interface BubblemapsBatchAddressQuery {
 }
 
 // 11. POST /relationships/subgraph
-export interface BubblemapsSubgraphRequest {
+export interface BubblemapsContextTokenKey {
   chain: string;
-  addresses: string[];
+  address: string;
 }
 
-export interface BubblemapsSubgraphResponse {
-  nodes: BubblemapsAddressDetails[];
-  relationships: BubblemapsRelationship[];
+export interface BubblemapsSubgraphRequest {
+  addresses: string[];
+  context_token_key?: BubblemapsContextTokenKey;
 }
+
+export type BubblemapsSubgraphResponse = BubblemapsRelationship[];
+
+// FastAPI / Pydantic 422 Validation Error Schema
+export interface BubblemapsValidationErrorItem {
+  loc: (string | number)[];
+  msg: string;
+  type: string;
+}
+
+export interface BubblemapsValidationError {
+  detail: BubblemapsValidationErrorItem[];
+}
+
