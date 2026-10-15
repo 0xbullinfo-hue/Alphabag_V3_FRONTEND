@@ -875,9 +875,9 @@ export const Landing: React.FC = () => {
             ) : (
               <Button
                 size="sm"
-                className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none"
+                className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none uppercase tracking-wider"
               >
-                Connect Soon
+                CONNECT SOON
               </Button>
             )}
           </div>
@@ -899,9 +899,9 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              className="w-full font-semibold bg-alphabag-yellow text-black cursor-default opacity-90 select-none"
+              className="w-full font-semibold bg-alphabag-yellow text-black cursor-default opacity-90 select-none uppercase tracking-wider"
             >
-              Connect Soon
+              CONNECT SOON
             </Button>
           </div>
         )}
