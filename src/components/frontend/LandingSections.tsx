@@ -277,9 +277,6 @@ export const SolutionSection: React.FC = () => (
                 Track your portfolio growth over time with clean charts and historical telemetry.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#0ECB81]">
-              Historical Data
-            </div>
           </div>
         </div>
 
@@ -293,24 +290,18 @@ export const SolutionSection: React.FC = () => (
                 Visual breakdown showing exactly where your capital is deployed across holdings.
               </p>
             </div>
-            <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#0ECB81]">
-              Cross-Chain Split
-            </div>
           </div>
         </div>
 
-        {/* Card 3: Multi-Coin Tracking */}
+        {/* Card 3: Multi-wallet Tracking */}
         <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl overflow-hidden flex flex-col justify-between">
           <MultiCoinTrackingWidget />
           <div className="p-6 flex-1 flex flex-col justify-between">
             <div>
-              <h3 className="text-xl font-bold text-[#EAECEF] tracking-tight">Multi-Coin Tracking</h3>
+              <h3 className="text-xl font-bold text-[#EAECEF] tracking-tight">Multi-wallet Tracking</h3>
               <p className="mt-2.5 text-sm text-[#848E9C] leading-relaxed">
                 Track Bitcoin, Ethereum, Solana, and 100+ cryptocurrencies in one unified dashboard.
               </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#0ECB81]">
-              100+ Assets
             </div>
           </div>
         </div>
@@ -326,7 +317,7 @@ export const SolutionSection: React.FC = () => (
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#0ECB81]">
-              Automated Sync
+              and more tools
             </div>
           </div>
         </div>

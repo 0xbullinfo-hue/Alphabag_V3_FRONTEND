@@ -1034,6 +1034,21 @@ export const Landing: React.FC = () => {
             <ProblemSection />
             <SolutionSection />
             <OnboardingPipeline />
+            <section className="bg-gradient-to-b from-[#0B0E11] to-[#14171D] py-20 px-6 border-t border-[#2B313A]">
+              <div className="max-w-4xl mx-auto text-center space-y-6">
+                <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-[#EAECEF]">
+                  Take Full Control of Your Web3 Portfolio
+                </h2>
+                <div className="flex items-center justify-center pt-2">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none shadow-sm"
+                  >
+                    Connect
+                  </Button>
+                </div>
+              </div>
+            </section>
           </>
         )}
 
