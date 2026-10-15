@@ -344,28 +344,24 @@ const STEPS = [
     n: '01',
     title: 'Create Wallet',
     body: 'Create a fresh custodial wallet on the Binance Smart Chain in seconds.',
-    action: '< 15s Setup',
     Icon: KeyRound
   },
   {
     n: '02',
     title: 'Connect Wallet',
-    body: 'Connect your wallet securely and access your crypto portfolio instantly.',
-    action: 'Read-Only Security',
+    body: 'Connect your new wallet securely and access our dashboard instantly.',
     Icon: Link2
   },
   {
     n: '03',
     title: 'Track & Analyze',
-    body: 'Track your portfolio and gain insights to make smarter crypto decisions.',
-    action: 'Live RPC Telemetry',
+    body: 'Add all wallets to track your portfolio and gain insights to make smarter crypto decisions.',
     Icon: Activity
   },
   {
     n: '04',
     title: 'Grow Your Crypto',
-    body: 'Grow your crypto faster with smart insights, analytics, and earning tools.',
-    action: 'Smart Analytics',
+    body: 'Grow your crypto faster with smart insights, analytics, and profit simulator tools.',
     Icon: Target
   },
 ];
@@ -386,7 +382,7 @@ export const OnboardingPipeline: React.FC = () => (
       </div>
 
       <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 list-none p-0 m-0">
-        {STEPS.map(({ n, title, body, action, Icon }, i) => (
+        {STEPS.map(({ n, title, body, Icon }, i) => (
           <li key={n} className="relative">
             <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl p-7 flex flex-col justify-between">
               <div>
@@ -405,10 +401,6 @@ export const OnboardingPipeline: React.FC = () => (
                 <p className="mt-2.5 text-sm md:text-base text-[#848E9C] leading-relaxed">
                   {body}
                 </p>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#F0B90B]">
-                {action}
               </div>
             </div>
 
