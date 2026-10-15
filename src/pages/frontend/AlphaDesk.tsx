@@ -31,6 +31,8 @@ const PRESETS: (TokenContext & { iconSymbol: string })[] = [
   { label: 'SOL',  iconSymbol: '◎', tvSymbol: 'BINANCE:SOLUSDT',  chain: 'solana', address: 'So11111111111111111111111111111111111111112',              assetSlug: 'solana' },
   { label: 'BNB',  iconSymbol: '⬡', tvSymbol: 'BINANCE:BNBUSDT',  chain: 'bsc',    address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', assetSlug: 'binancecoin' },
   { label: 'XRP',  iconSymbol: '✕', tvSymbol: 'BINANCE:XRPUSDT',  chain: 'eth',    address: '0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe', assetSlug: 'ripple' },
+  { label: 'DOGE', iconSymbol: 'Ð', tvSymbol: 'BINANCE:DOGEUSDT', chain: 'bsc',    address: '0xba2ae424d960c26247dd6c32edc70b295c744c43', assetSlug: 'dogecoin' },
+  { label: 'PEPE', iconSymbol: '🐸', tvSymbol: 'BINANCE:PEPEUSDT', chain: 'eth',    address: '0x6982508145454ce325ddbe47a25d4ec3d2311933', assetSlug: 'pepe' },
 ];
 
 // ─── Tab definitions ──────────────────────────────────────────────────────────
