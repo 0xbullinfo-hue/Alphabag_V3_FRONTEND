@@ -534,37 +534,49 @@ export const AlphaPasses: React.FC = () => {
       return;
     }
 
-    // Local dev / simulated minting
-    if (NFT_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000') {
-      setMintPhase('MINTING');
-      setTimeout(() => {
-        const mockTx = '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join('');
-        setTxHash(mockTx);
-        saveLocalMintedPasses(quantity);
-        setMintPhase('SUCCESS');
-        Swal.fire({
-          title: 'GENESIS PASSES MINTED!',
-          html: DOMPurify.sanitize(
-            `<div class="text-left py-2">
-              <p class="text-sm text-gray-300 mb-2">You successfully minted ${quantity} Genesis Pass${quantity > 1 ? 'es' : ''} for ${totalBnbCost} BNB.</p>
-              <div class="p-3 bg-alphabag-black rounded-xl border border-alphabag-yellow/30 text-xs text-alphabag-yellow font-mono space-y-1">
-                <div><strong>Quantity:</strong> ${quantity}</div>
-                <div><strong>Price:</strong> ${totalBnbCost} BNB (~$${totalUsdCost})</div>
-                <div><strong>Holdings:</strong> ${userNFTs.length + quantity} Genesis Passes Active</div>
-                <div><strong>Boost:</strong> Multipliers Activated on Account</div>
-              </div>
-            </div>`,
-            { ADD_ATTR: ['class'] }
-          ),
-          icon: 'success',
-          confirmButtonColor: '#fcd535',
-          confirmButtonText: 'VIEW HOLDINGS',
-          background: '#0a0a0a',
-          color: '#fff'
-        }).then(() => {
-          setMintPhase('IDLE');
-        });
-      }, 1200);
+    // Local dev / simulated minting (strictly gated to development mode)
+    if (NFT_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000' || !NFT_CONTRACT_ADDRESS) {
+      if (import.meta.env.DEV) {
+        setMintPhase('MINTING');
+        setTimeout(() => {
+          const mockTx = '0x' + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join('');
+          setTxHash(mockTx);
+          saveLocalMintedPasses(quantity);
+          setMintPhase('SUCCESS');
+          Swal.fire({
+            title: 'GENESIS PASSES MINTED!',
+            html: DOMPurify.sanitize(
+              `<div class="text-left py-2">
+                <p class="text-sm text-gray-300 mb-2">You successfully minted ${quantity} Genesis Pass${quantity > 1 ? 'es' : ''} for ${totalBnbCost} BNB.</p>
+                <div class="p-3 bg-alphabag-black rounded-xl border border-alphabag-yellow/30 text-xs text-alphabag-yellow font-mono space-y-1">
+                  <div><strong>Quantity:</strong> ${quantity}</div>
+                  <div><strong>Price:</strong> ${totalBnbCost} BNB (~$${totalUsdCost})</div>
+                  <div><strong>Holdings:</strong> ${userNFTs.length + quantity} Genesis Passes Active</div>
+                  <div><strong>Boost:</strong> Multipliers Activated on Account</div>
+                </div>
+              </div>`,
+              { ADD_ATTR: ['class'] }
+            ),
+            icon: 'success',
+            confirmButtonColor: '#fcd535',
+            confirmButtonText: 'VIEW HOLDINGS',
+            background: '#0a0a0a',
+            color: '#fff'
+          }).then(() => {
+            setMintPhase('IDLE');
+          });
+        }, 1200);
+        return;
+      }
+
+      Swal.fire({
+        title: 'Minting Not Live',
+        text: 'Genesis Pass minting is not live on this network yet.',
+        icon: 'info',
+        confirmButtonColor: '#fcd535',
+        background: '#0a0a0a',
+        color: '#fff'
+      });
       return;
     }
 
@@ -1044,6 +1056,14 @@ export const AlphaPasses: React.FC = () => {
                   className="w-full bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] active:scale-[0.98] py-3.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 >
                   <Wallet size={16} /> Connect Wallet to Mint
+                </button>
+              ) : (!import.meta.env.DEV && (!NFT_CONTRACT_ADDRESS || NFT_CONTRACT_ADDRESS === '0x0000000000000000000000000000000000000000')) ? (
+                <button 
+                  disabled 
+                  className="w-full bg-alphabag-gray text-alphabag-subtext border border-alphabag-gray py-3.5 rounded-md text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed opacity-60"
+                >
+                  <Lock size={15} />
+                  <span>MINTING IS NOT LIVE YET</span>
                 </button>
               ) : maxQuantityAllowed <= 0 ? (
                 <button 

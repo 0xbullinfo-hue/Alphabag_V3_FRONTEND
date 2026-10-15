@@ -114,10 +114,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             <NavItem to="/my-alphabag" customIcon="bag" label="Portfolio" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
 
             {!disabledPages.includes('/airdrop') && (
-              <div className="relative">
-                <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />
-                <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-xs font-semibold rounded-[2px] pointer-events-none">LIVE</div>
-              </div>
+              <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />
             )}
             <NavItem to="/alphas-feed" customIcon="feed" label="Alpha Feed" active={location.pathname === '/alphas-feed' || location.pathname === '/alpha-feed'} />
             <NavItem to="/calculator" customIcon="calculator" label="Position Calculator" active={location.pathname === '/calculator'} />
@@ -126,10 +123,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
           </NavGroup>
 
           <NavGroup title="Market Intelligence">
-            <div className="relative">
-              <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
-              <div className="absolute right-5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 bg-alphabag-yellow/15 border border-alphabag-yellow/30 text-alphabag-yellow text-xs font-semibold rounded-[2px] pointer-events-none">PRO</div>
-            </div>
+            <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />

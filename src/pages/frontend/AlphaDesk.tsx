@@ -158,9 +158,6 @@ export const AlphaDesk: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-base font-bold text-alphabag-text tracking-wide uppercase">Alpha Desk</h1>
-              <span className="text-[11px] font-semibold bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow px-1.5 py-0.5 rounded-[2px] uppercase">
-                PRO TERMINAL
-              </span>
             </div>
           </div>
         </div>
