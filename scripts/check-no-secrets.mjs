@@ -1,5 +1,5 @@
 /** CI gate: fail the build if a key-like string ends up in dist/. */
-import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const PATTERNS = [
@@ -10,6 +10,7 @@ const PATTERNS = [
 
 let failed = false;
 function walk(dir) {
+  if (!existsSync(dir)) return;
   for (const f of readdirSync(dir)) {
     const p = join(dir, f);
     if (statSync(p).isDirectory()) { walk(p); continue; }
