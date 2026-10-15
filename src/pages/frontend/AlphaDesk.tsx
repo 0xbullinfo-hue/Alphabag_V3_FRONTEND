@@ -246,7 +246,12 @@ export const AlphaDesk: React.FC = () => {
         <div className={activeTab === 'bubblemaps' ? 'block' : 'hidden'}>
           {mountedTabs.has('bubblemaps') && (
             <div className="space-y-3">
-              <BubblemapsEmbed chain={preset.chain} address={customAddress} height={660} />
+              <BubblemapsEmbed
+                chain={preset.chain}
+                address={customAddress}
+                height={660}
+                onAddressChange={(_chain, addr) => setCustomAddress(addr)}
+              />
             </div>
           )}
         </div>

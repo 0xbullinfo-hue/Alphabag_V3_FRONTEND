@@ -1,20 +1,32 @@
 const BUBBLEMAPS_API_BASE = 'https://api.bubblemaps.io/v0';
 
-function getPartnerId(): string {
-  return import.meta.env.VITE_BUBBLEMAPS_PARTNER_ID ?? 'demo';
+export function getPartnerId(): string {
+  const envId = import.meta.env.VITE_BUBBLEMAPS_PARTNER_ID;
+  if (typeof envId === 'string' && envId.trim().length > 0) {
+    return envId.trim();
+  }
+  return 'demo';
 }
 
 /**
  * Build the iframe embed URL for Bubblemaps.
- * Partner ID is safe to expose (it's just branding, not auth).
+ * Always guarantees partnerId is present (default 'demo') to prevent 400 Bad Request.
  * Docs: https://docs.bubblemaps.io
  */
 export function buildBubblemapsIframeUrl(
-  chain: string,
+  chain: string = 'eth',
   address: string,
-  partnerId: string = getPartnerId(),
+  partnerId?: string,
 ): string {
-  const params = new URLSearchParams({ chain, address, partnerId });
+  const pId = partnerId && partnerId.trim().length > 0 ? partnerId.trim() : getPartnerId();
+  const cleanChain = (chain || 'eth').toLowerCase().trim();
+  const cleanAddress = (address || '').trim();
+
+  const params = new URLSearchParams();
+  params.set('chain', cleanChain);
+  params.set('address', cleanAddress);
+  params.set('partnerId', pId);
+
   return `https://iframe.bubblemaps.io/map?${params.toString()}`;
 }
 
