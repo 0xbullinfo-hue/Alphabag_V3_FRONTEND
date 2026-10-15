@@ -872,16 +872,12 @@ export const Landing: React.FC = () => {
               <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
                 JOIN US
               </Button>
-            ) : !isAuthenticated ? (
+            ) : (
               <Button
                 size="sm"
                 className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none"
               >
                 Connect Soon
-              </Button>
-            ) : (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
-                Open App
               </Button>
             )}
           </div>
@@ -1044,7 +1040,7 @@ export const Landing: React.FC = () => {
                     size="lg"
                     className="w-full sm:w-auto px-10 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none shadow-sm"
                   >
-                    Connect
+                    Connect Soon
                   </Button>
                 </div>
               </div>
