@@ -222,6 +222,9 @@ const AppContent = () => {
           <Route path="/alpha-ai" element={<Layout><AlphaAi /></Layout>} />
           <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
           <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
+          <Route path="/alpha-feed" element={<Layout><AlphasFeed /></Layout>} />
+          <Route path="/trade-signals" element={<Navigate to="/alphas-feed" replace />} />
+          <Route path="/signals" element={<Navigate to="/alphas-feed" replace />} />
 
           <Route path="/settings" element={<Layout><Settings /></Layout>} />
           <Route path="/profile" element={<Layout><Profile /></Layout>} />

@@ -89,20 +89,17 @@ function AlphaDeskGate() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 w-full max-w-5xl">
-        {GATE_TOOLS.map(({ Icon, label, badge, desc }) => (
+        {GATE_TOOLS.map(({ Icon, label, desc }) => (
           <div
             key={label}
             className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-3.5 flex flex-col gap-2 transition-colors hover:border-[#3E4552]"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
-                  <Icon size={14} />
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
+                  <Icon size={15} />
                 </div>
-                <div>
-                  <span className="text-xs font-semibold text-alphabag-text block">{label}</span>
-                  <span className="text-[11px] font-semibold text-alphabag-subtext uppercase">{badge}</span>
-                </div>
+                <span className="text-sm font-semibold text-alphabag-text block">{label}</span>
               </div>
               <Lock size={12} className="text-alphabag-subtext/60" />
             </div>
@@ -214,20 +211,20 @@ export const AlphaDesk: React.FC = () => {
       </div>
 
       {/* ── Sleek Segmented Terminal Tabs ───────────────────────────────────── */}
-      <div className="flex items-center px-4 py-2 bg-[#14171D]/90 border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-1.5">
+      <div className="flex items-center px-4 py-2.5 bg-[#14171D] border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-2">
         {TABS.map(({ id, label, Icon }) => {
           const active = activeTab === id;
           return (
             <button
               key={id}
               onClick={() => handleTabChange(id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all shrink-0 ${
+              className={`flex items-center gap-2.5 px-5 py-3 rounded-lg text-sm md:text-base font-bold transition-all shrink-0 ${
                 active
-                  ? 'bg-[#202630] text-alphabag-yellow border border-[#2B313A] shadow-sm'
-                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50 border border-transparent'
+                  ? 'bg-[#202630] text-alphabag-yellow border border-[#2B313A] shadow-md ring-1 ring-alphabag-yellow/20'
+                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/60 border border-transparent'
               }`}
             >
-              <Icon size={16} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
+              <Icon size={18} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
               <span>{label}</span>
             </button>
           );
