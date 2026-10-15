@@ -1,5 +1,5 @@
 // Official Bubblemaps B2B API Response & Request Types
-// Comprehensive coverage across all 11 Bubblemaps API endpoints
+// Comprehensive coverage across all Bubblemaps API endpoints
 
 export interface BubblemapsAddressDetails {
   degree: number;
@@ -34,20 +34,27 @@ export interface BubblemapsMagicNode {
   is_shown_on_map: boolean;
 }
 
+export interface BubblemapsRelationshipData {
+  total_value: number;
+  total_transfers: number;
+  first_date: number;
+  last_date: number;
+  token_key: {
+    chain: string;
+    address: string;
+  };
+}
+
 export interface BubblemapsRelationship {
   from_address: string;
   to_address: string;
-  data: {
-    total_value: number;
-    total_transfers: number;
-    first_date: number;
-    last_date: number;
-    token_key: {
-      chain: string;
-      address: string;
-    };
-  };
-  rel_type: string;
+  data: BubblemapsRelationshipData;
+  rel_type: string; // e.g. "GROUPED_TRANSFER"
+}
+
+export interface BubblemapsTimeNode {
+  address: string;
+  relationships: BubblemapsRelationship[];
 }
 
 export interface BubblemapsCluster {
@@ -80,6 +87,12 @@ export interface BubblemapsMetrics {
   scores: BubblemapsScores;
 }
 
+export interface BubblemapsNodes {
+  top_holders: BubblemapsTopHolder[];
+  magic_nodes: BubblemapsMagicNode[];
+  time_nodes?: BubblemapsTimeNode[];
+}
+
 // 1. GET /tokens/map/{chain}/{address}
 export interface BubblemapsMapResponse {
   metadata: {
@@ -87,29 +100,35 @@ export interface BubblemapsMapResponse {
     ts_update: number;
   };
   metrics: BubblemapsMetrics;
-  nodes: {
-    top_holders: BubblemapsTopHolder[];
-    magic_nodes: BubblemapsMagicNode[];
-    time_nodes?: Array<{
-      address: string;
-      relationships: BubblemapsRelationship[];
-    }>;
-  };
+  nodes: BubblemapsNodes;
   relationships: BubblemapsRelationship[];
   clusters: BubblemapsCluster[];
 }
 
-// 2. GET /chains/supported
+// 2. GET /chains
+export interface BubblemapsChainInfo {
+  id: string; // e.g. "eth"
+  name: string;
+  dexscreener_id?: string;
+  coingecko_id?: string;
+}
+
+// Legacy alias for supported chains
 export interface BubblemapsSupportedChain {
   chain: string;
   name: string;
   is_active: boolean;
   native_symbol?: string;
   explorer_url?: string;
+  id?: string;
+  dexscreener_id?: string;
+  coingecko_id?: string;
 }
 
 // 3. GET /tokens/screenshot/{chain}/{address}
 export interface BubblemapsScreenshotResponse {
+  image_url: string;
+  updated_at: string;
   screenshot_url?: string;
   image_base64?: string;
   dt_update?: string;
@@ -117,59 +136,96 @@ export interface BubblemapsScreenshotResponse {
 
 // 4. GET /tokens/metrics/{chain}/{address}
 export interface BubblemapsTokenMetricsResponse {
-  metadata: {
+  supply_stats: BubblemapsSupplyStats;
+  scores: BubblemapsScores;
+  metadata?: {
     dt_update: string;
     ts_update: number;
   };
-  metrics: BubblemapsMetrics;
+  metrics?: BubblemapsMetrics;
 }
 
-// 5. GET /tokens/top-holders/{chain}/{address}
+// 5. GET /tokens/holders/{chain}/{address}
+export type BubblemapsHoldersResponse = BubblemapsTopHolder[];
+
+// Compatibility interface
 export interface BubblemapsTopHoldersResponse {
-  chain: string;
-  token_address: string;
+  chain?: string;
+  token_address?: string;
   top_holders: BubblemapsTopHolder[];
 }
 
-// 6. GET /tokens/search?q={query}&chain={chain}
-export interface BubblemapsTokenSearchResult {
+// 6. GET /tokens/search
+export interface BubblemapsTokenKey {
   chain: string;
   address: string;
+}
+
+export interface BubblemapsTokenSearchMetadata {
   name: string;
   symbol: string;
-  decimals: number;
+  is_indexed: boolean;
+  img_url?: string;
+}
+
+export interface BubblemapsTokenSearchResult {
+  token_key: BubblemapsTokenKey;
+  metadata: BubblemapsTokenSearchMetadata;
+  // Flattened accessors for UI convenience
+  chain?: string;
+  address?: string;
+  name?: string;
+  symbol?: string;
+  decimals?: number;
   logo_url?: string;
-  has_map: boolean;
+  has_map?: boolean;
 }
 
 // 7. GET /tokens/metadata/{chain}/{address}
+export interface BubblemapsTokenStats {
+  transfers_count: number;
+  min_date: string;
+  max_date: string;
+}
+
 export interface BubblemapsTokenMetadata {
-  chain: string;
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
+  token_key: BubblemapsTokenKey;
+  metadata: BubblemapsTokenSearchMetadata;
+  stats: BubblemapsTokenStats;
+  // Flattened compatibility properties
+  chain?: string;
+  address?: string;
+  name?: string;
+  symbol?: string;
+  decimals?: number;
   total_supply?: string;
   holder_count?: number;
   verified?: boolean;
 }
 
-// 8. POST /tokens/metadata-batch
+// 8. POST /tokens/metadata (Batch)
 export interface BubblemapsBatchTokenQuery {
   chain: string;
   address: string;
 }
+export type BubblemapsBatchTokensResponse = BubblemapsTokenMetadata[];
 
-// 9. GET /addresses/metadata/{chain}/{address}
+// 9. GET /addresses/metadata/{address}
 export interface BubblemapsAddressMetadata {
-  chain: string;
   address: string;
-  details: BubblemapsAddressDetails;
+  address_details: BubblemapsAddressDetails;
+  chain?: string;
+  details?: BubblemapsAddressDetails;
 }
 
-// 10. POST /addresses/metadata-batch
+// 10. POST /addresses/metadata (Batch)
+export interface BubblemapsBatchAddressesRequest {
+  addresses: string[];
+}
+export type BubblemapsBatchAddressesResponse = BubblemapsAddressMetadata[];
+// Compatibility query type
 export interface BubblemapsBatchAddressQuery {
-  chain: string;
+  chain?: string;
   address: string;
 }
 
@@ -196,4 +252,3 @@ export interface BubblemapsValidationErrorItem {
 export interface BubblemapsValidationError {
   detail: BubblemapsValidationErrorItem[];
 }
-
