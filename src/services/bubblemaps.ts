@@ -2,7 +2,9 @@ import type {
   BubblemapsAddressMetadata,
   BubblemapsBatchAddressQuery,
   BubblemapsBatchTokenQuery,
+  BubblemapsChainInfo,
   BubblemapsContextTokenKey,
+  BubblemapsHoldersResponse,
   BubblemapsMapResponse,
   BubblemapsScreenshotResponse,
   BubblemapsSubgraphRequest,
@@ -82,6 +84,23 @@ function getHeaders(): Record<string, string> {
 }
 
 /**
+ * Parses and logs Bubblemaps 422 validation errors with exact field location.
+ */
+async function handleBubblemapsResponse<T>(res: Response, endpoint: string): Promise<T | null> {
+  if (res.ok) {
+    return (await res.json()) as T;
+  }
+
+  if (res.status === 422) {
+    const errorJson = (await res.json().catch(() => null)) as BubblemapsValidationError | null;
+    console.warn(`[Bubblemaps 422 Error] ${endpoint}:`, errorJson?.detail || errorJson);
+  } else {
+    console.warn(`[Bubblemaps API Error] ${endpoint} returned status ${res.status}`);
+  }
+  return null;
+}
+
+/**
  * Build the iframe embed URL for Bubblemaps.
  * Always guarantees partnerId is present (default 'demo') to prevent 400 Bad Request.
  */
@@ -102,27 +121,41 @@ export function buildBubblemapsIframeUrl(
   return `https://iframe.bubblemaps.io/map?${params.toString()}`;
 }
 
-// ─── 1. GET Get Supported Chains ─────────────────────────────────────────────
-export async function getSupportedChains(): Promise<BubblemapsSupportedChain[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/chains/supported`;
+// ─── 1. GET /chains ──────────────────────────────────────────────────────────
+export async function getChains(): Promise<BubblemapsChainInfo[]> {
+  const url = `${BUBBLEMAPS_API_BASE}/chains`;
   try {
     const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const data = await handleBubblemapsResponse<BubblemapsChainInfo[]>(res, 'GET /chains');
+    if (data && Array.isArray(data)) return data;
   } catch (e) {
-    console.warn('[Bubblemaps API] getSupportedChains error:', e);
+    console.warn('[Bubblemaps API] getChains error:', e);
   }
   return [
-    { chain: 'eth', name: 'Ethereum', is_active: true, native_symbol: 'ETH' },
-    { chain: 'solana', name: 'Solana', is_active: true, native_symbol: 'SOL' },
-    { chain: 'bsc', name: 'BNB Chain', is_active: true, native_symbol: 'BNB' },
-    { chain: 'base', name: 'Base', is_active: true, native_symbol: 'ETH' },
-    { chain: 'arbi', name: 'Arbitrum', is_active: true, native_symbol: 'ETH' },
-    { chain: 'polygon', name: 'Polygon', is_active: true, native_symbol: 'POL' },
-    { chain: 'avax', name: 'Avalanche', is_active: true, native_symbol: 'AVAX' },
+    { id: 'eth', name: 'Ethereum', dexscreener_id: 'ethereum', coingecko_id: 'ethereum' },
+    { id: 'solana', name: 'Solana', dexscreener_id: 'solana', coingecko_id: 'solana' },
+    { id: 'bsc', name: 'BNB Chain', dexscreener_id: 'bsc', coingecko_id: 'binance-smart-chain' },
+    { id: 'base', name: 'Base', dexscreener_id: 'base', coingecko_id: 'base' },
+    { id: 'arbi', name: 'Arbitrum', dexscreener_id: 'arbitrum', coingecko_id: 'arbitrum-one' },
+    { id: 'polygon', name: 'Polygon', dexscreener_id: 'polygon', coingecko_id: 'polygon-pos' },
+    { id: 'avax', name: 'Avalanche', dexscreener_id: 'avalanche', coingecko_id: 'avalanche' },
   ];
 }
 
-// ─── 2. GET Get Token Bubble Map ─────────────────────────────────────────────
+export async function getSupportedChains(): Promise<BubblemapsSupportedChain[]> {
+  const chains = await getChains();
+  return chains.map((c) => ({
+    chain: c.id,
+    id: c.id,
+    name: c.name,
+    is_active: true,
+    dexscreener_id: c.dexscreener_id,
+    coingecko_id: c.coingecko_id,
+    native_symbol: c.id.toUpperCase(),
+  }));
+}
+
+// ─── 2. GET /tokens/map/{chain}/{token_address} ──────────────────────────────
 export interface FetchBubbleMapOptions {
   limit?: number;
   use_magic_nodes?: boolean;
@@ -155,15 +188,8 @@ export async function getTokenBubbleMap(
       url.searchParams.set('return_clusters', return_clusters.toString());
 
       const res = await fetch(url.toString(), { headers: getHeaders() });
-
-      if (res.ok) {
-        return (await res.json()) as BubblemapsMapResponse;
-      }
-
-      if (res.status === 422) {
-        const errorJson = await res.json().catch(() => null);
-        console.warn('[Bubblemaps 422 Validation Error]', errorJson);
-      }
+      const data = await handleBubblemapsResponse<BubblemapsMapResponse>(res, 'GET /tokens/map');
+      if (data) return data;
     } catch (e) {
       console.warn('[Bubblemaps API] getTokenBubbleMap error:', e);
     }
@@ -172,59 +198,99 @@ export async function getTokenBubbleMap(
   return generateFallbackBubbleMap(cleanChain, cleanAddress);
 }
 
-// Alias for backwards compatibility
 export const fetchTokenBubbleMap = getTokenBubbleMap;
 
-// ─── 3. GET Get Token Screenshot ─────────────────────────────────────────────
+// ─── 3. GET /tokens/screenshot/{chain}/{token_address} ───────────────────────
 export async function getTokenScreenshot(
   chain: string,
   address: string
 ): Promise<BubblemapsScreenshotResponse | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/screenshot/${cleanChain}/${address.trim()}`;
+  const cleanAddress = address.trim();
+  const url = `${BUBBLEMAPS_API_BASE}/tokens/screenshot/${cleanChain}/${cleanAddress}`;
+
   try {
     const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const data = await handleBubblemapsResponse<BubblemapsScreenshotResponse>(res, 'GET /tokens/screenshot');
+    if (data) {
+      return {
+        ...data,
+        screenshot_url: data.image_url || data.screenshot_url,
+        dt_update: data.updated_at || data.dt_update,
+      };
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getTokenScreenshot error:', e);
   }
   return null;
 }
 
-// ─── 4. GET Get Token Metrics ────────────────────────────────────────────────
+// ─── 4. GET /tokens/metrics/{chain}/{token_address} ──────────────────────────
 export async function getTokenMetrics(
   chain: string,
   address: string
 ): Promise<BubblemapsTokenMetricsResponse | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metrics/${cleanChain}/${address.trim()}`;
+  const cleanAddress = address.trim();
+  const url = `${BUBBLEMAPS_API_BASE}/tokens/metrics/${cleanChain}/${cleanAddress}`;
+
   try {
     const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const data = await handleBubblemapsResponse<BubblemapsTokenMetricsResponse>(res, 'GET /tokens/metrics');
+    if (data) {
+      // Unify both direct { supply_stats, scores } and wrapped { metrics: { supply_stats, scores } }
+      const supplyStats = data.supply_stats || data.metrics?.supply_stats;
+      const scores = data.scores || data.metrics?.scores;
+      if (supplyStats && scores) {
+        return {
+          supply_stats: supplyStats,
+          scores: scores,
+          metrics: { supply_stats: supplyStats, scores },
+        };
+      }
+      return data;
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getTokenMetrics error:', e);
   }
   return null;
 }
 
-// ─── 5. GET Get Token Top Holders ────────────────────────────────────────────
+// ─── 5. GET /tokens/holders/{chain}/{token_address} ──────────────────────────
+export async function getTokenHolders(
+  chain: string,
+  address: string,
+  limit: number = 80
+): Promise<BubblemapsHoldersResponse> {
+  const cleanChain = normalizeBubblemapsChain(chain);
+  const cleanAddress = address.trim();
+  const url = `${BUBBLEMAPS_API_BASE}/tokens/holders/${cleanChain}/${cleanAddress}?limit=${limit}`;
+
+  try {
+    const res = await fetch(url, { headers: getHeaders() });
+    const data = await handleBubblemapsResponse<BubblemapsHoldersResponse>(res, 'GET /tokens/holders');
+    if (data && Array.isArray(data)) return data;
+  } catch (e) {
+    console.warn('[Bubblemaps API] getTokenHolders error:', e);
+  }
+  return [];
+}
+
+// Compatibility wrapper
 export async function getTokenTopHolders(
   chain: string,
   address: string,
-  limit: number = 50
+  limit: number = 80
 ): Promise<BubblemapsTopHoldersResponse | null> {
-  const cleanChain = normalizeBubblemapsChain(chain);
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/top-holders/${cleanChain}/${address.trim()}?limit=${limit}`;
-  try {
-    const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
-  } catch (e) {
-    console.warn('[Bubblemaps API] getTokenTopHolders error:', e);
-  }
-  return null;
+  const holders = await getTokenHolders(chain, address, limit);
+  return {
+    chain,
+    token_address: address,
+    top_holders: holders,
+  };
 }
 
-// ─── 6. GET Search Token ─────────────────────────────────────────────────────
+// ─── 6. GET /tokens/search ───────────────────────────────────────────────────
 export async function searchTokens(
   query: string,
   chain?: string
@@ -234,87 +300,170 @@ export async function searchTokens(
   if (chain) {
     url.searchParams.set('chain', normalizeBubblemapsChain(chain));
   }
+
   try {
     const res = await fetch(url.toString(), { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const raw = await handleBubblemapsResponse<any[]>(res, 'GET /tokens/search');
+    if (raw && Array.isArray(raw)) {
+      return raw.map((item) => {
+        const tokenKey = item.token_key || { chain: item.chain || '', address: item.address || '' };
+        const metadata = item.metadata || {
+          name: item.name || '',
+          symbol: item.symbol || '',
+          is_indexed: item.has_map ?? true,
+          img_url: item.logo_url,
+        };
+        return {
+          token_key: tokenKey,
+          metadata,
+          chain: tokenKey.chain,
+          address: tokenKey.address,
+          name: metadata.name,
+          symbol: metadata.symbol,
+          logo_url: metadata.img_url,
+          has_map: metadata.is_indexed,
+        };
+      });
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] searchTokens error:', e);
   }
   return [];
 }
 
-// ─── 7. GET Get Token Metadata ───────────────────────────────────────────────
+// ─── 7. GET /tokens/metadata/{chain}/{token_address} ─────────────────────────
 export async function getTokenMetadata(
   chain: string,
   address: string
 ): Promise<BubblemapsTokenMetadata | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata/${cleanChain}/${address.trim()}`;
+  const cleanAddress = address.trim();
+  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata/${cleanChain}/${cleanAddress}`;
+
   try {
     const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const raw = await handleBubblemapsResponse<any>(res, 'GET /tokens/metadata');
+    if (raw) {
+      const tokenKey = raw.token_key || { chain: cleanChain, address: cleanAddress };
+      const metadata = raw.metadata || {
+        name: raw.name || '',
+        symbol: raw.symbol || '',
+        is_indexed: raw.verified ?? true,
+        img_url: raw.logo_url,
+      };
+      const stats = raw.stats || {
+        transfers_count: raw.holder_count || 0,
+        min_date: new Date().toISOString(),
+        max_date: new Date().toISOString(),
+      };
+      return {
+        token_key: tokenKey,
+        metadata,
+        stats,
+        chain: tokenKey.chain,
+        address: tokenKey.address,
+        name: metadata.name,
+        symbol: metadata.symbol,
+      };
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getTokenMetadata error:', e);
   }
   return null;
 }
 
-// Backwards compatibility alias
 export const fetchBubblemapsMetadata = getTokenMetadata;
 
-// ─── 8. POST Get Batch Tokens Metadata ───────────────────────────────────────
+// ─── 8. POST /tokens/metadata (Batch) ────────────────────────────────────────
 export async function getBatchTokensMetadata(
   tokens: BubblemapsBatchTokenQuery[]
 ): Promise<BubblemapsTokenMetadata[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata-batch`;
+  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata`;
+  const payload = tokens.map((t) => ({
+    chain: normalizeBubblemapsChain(t.chain),
+    address: t.address.trim(),
+  }));
+
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(tokens.map((t) => ({ ...t, chain: normalizeBubblemapsChain(t.chain) }))),
+      body: JSON.stringify(payload),
     });
-    if (res.ok) return await res.json();
+    const list = await handleBubblemapsResponse<any[]>(res, 'POST /tokens/metadata');
+    if (list && Array.isArray(list)) {
+      return list.map((raw) => ({
+        token_key: raw.token_key,
+        metadata: raw.metadata,
+        stats: raw.stats,
+        chain: raw.token_key?.chain,
+        address: raw.token_key?.address,
+        name: raw.metadata?.name,
+        symbol: raw.metadata?.symbol,
+      }));
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getBatchTokensMetadata error:', e);
   }
   return [];
 }
 
-// ─── 9. GET Get Address Metadata ─────────────────────────────────────────────
+// ─── 9. GET /addresses/metadata/{address} ────────────────────────────────────
 export async function getAddressMetadata(
-  chain: string,
-  address: string
+  address: string,
+  chain?: string
 ): Promise<BubblemapsAddressMetadata | null> {
-  const cleanChain = normalizeBubblemapsChain(chain);
-  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata/${cleanChain}/${address.trim()}`;
+  const cleanAddress = address.trim();
+  // Primary official path is /addresses/metadata/{address}
+  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata/${cleanAddress}`;
+
   try {
     const res = await fetch(url, { headers: getHeaders() });
-    if (res.ok) return await res.json();
+    const raw = await handleBubblemapsResponse<any>(res, 'GET /addresses/metadata');
+    if (raw) {
+      return {
+        address: raw.address || cleanAddress,
+        address_details: raw.address_details || raw.details,
+        chain: chain ? normalizeBubblemapsChain(chain) : undefined,
+        details: raw.address_details || raw.details,
+      };
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getAddressMetadata error:', e);
   }
   return null;
 }
 
-// ─── 10. POST Get Batch Addresses Metadata ───────────────────────────────────
+// ─── 10. POST /addresses/metadata (Batch) ────────────────────────────────────
 export async function getBatchAddressesMetadata(
-  addresses: BubblemapsBatchAddressQuery[]
+  addressesOrQueries: string[] | BubblemapsBatchAddressQuery[]
 ): Promise<BubblemapsAddressMetadata[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata-batch`;
+  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata`;
+  const addressStrings: string[] = addressesOrQueries.map((item) =>
+    typeof item === 'string' ? item.trim() : item.address.trim()
+  );
+
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(addresses.map((a) => ({ ...a, chain: normalizeBubblemapsChain(a.chain) }))),
+      body: JSON.stringify({ addresses: addressStrings }),
     });
-    if (res.ok) return await res.json();
+    const list = await handleBubblemapsResponse<any[]>(res, 'POST /addresses/metadata');
+    if (list && Array.isArray(list)) {
+      return list.map((raw) => ({
+        address: raw.address,
+        address_details: raw.address_details || raw.details,
+        details: raw.address_details || raw.details,
+      }));
+    }
   } catch (e) {
     console.warn('[Bubblemaps API] getBatchAddressesMetadata error:', e);
   }
   return [];
 }
 
-// ─── 11. POST Get Addresses Subgraph ─────────────────────────────────────────
+// ─── 11. POST /relationships/subgraph ────────────────────────────────────────
 export async function getAddressesSubgraph(
   request: BubblemapsSubgraphRequest
 ): Promise<BubblemapsSubgraphResponse | null>;
@@ -361,15 +510,7 @@ export async function getAddressesSubgraph(
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-
-    if (res.ok) {
-      return (await res.json()) as BubblemapsSubgraphResponse;
-    }
-
-    if (res.status === 422) {
-      const errorJson = (await res.json().catch(() => null)) as BubblemapsValidationError | null;
-      console.warn('[Bubblemaps 422 Validation Error - Subgraph]', errorJson?.detail);
-    }
+    return await handleBubblemapsResponse<BubblemapsSubgraphResponse>(res, 'POST /relationships/subgraph');
   } catch (e) {
     console.warn('[Bubblemaps API] getAddressesSubgraph error:', e);
   }
@@ -447,6 +588,7 @@ function generateFallbackBubbleMap(_chain: string, address: string): BubblemapsM
           is_shown_on_map: true,
         },
       ],
+      time_nodes: [],
     },
     relationships: [],
     clusters: [
