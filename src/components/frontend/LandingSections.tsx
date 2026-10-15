@@ -40,7 +40,7 @@ export const ProblemSection: React.FC = () => (
   <section id="problem" aria-labelledby="problem-title" className="bg-[#0B0E11] py-20 px-6 border-t border-[#2B313A]">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-14">
-        <span className="inline-block text-[11px] font-mono font-semibold tracking-[0.2em] uppercase text-[#F0B90B] bg-[#F0B90B]/10 border border-[#F0B90B]/20 rounded px-3 py-1 mb-3">
+        <span className="inline-block text-[15px] font-mono font-bold tracking-[0.2em] uppercase text-[#F0B90B] mb-3">
           PROBLEM
         </span>
         <h2 id="problem-title" className="text-3xl md:text-5xl font-bold tracking-tight text-[#EAECEF]">
@@ -254,7 +254,7 @@ export const SolutionSection: React.FC = () => (
   <section id="solution" aria-labelledby="solution-title" className="bg-[#0B0E11] py-20 px-6 border-t border-[#2B313A]">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-14">
-        <span className="inline-block text-[11px] font-mono font-semibold tracking-[0.2em] uppercase text-[#0ECB81] bg-[#0ECB81]/10 border border-[#0ECB81]/20 rounded px-3 py-1 mb-3">
+        <span className="inline-block text-[15px] font-mono font-bold tracking-[0.2em] uppercase text-[#0ECB81] mb-3">
           SOLUTION
         </span>
         <h2 id="solution-title" className="text-3xl md:text-5xl font-bold tracking-tight text-[#EAECEF]">
@@ -361,7 +361,7 @@ export const OnboardingPipeline: React.FC = () => (
   <section id="how-it-works" aria-labelledby="pipeline-title" className="bg-[#0B0E11] py-20 px-6 border-t border-[#2B313A]">
     <div className="max-w-7xl mx-auto">
       <div className="text-center mb-14">
-        <span className="inline-block text-[11px] font-mono font-semibold tracking-[0.2em] uppercase text-[#F0B90B] bg-[#F0B90B]/10 border border-[#F0B90B]/20 rounded px-3 py-1 mb-3">
+        <span className="inline-block text-[15px] font-mono font-bold tracking-[0.2em] uppercase text-[#F0B90B] mb-3">
           HOW IT WORKS
         </span>
         <h2 id="pipeline-title" className="text-3xl md:text-5xl font-bold tracking-tight text-[#EAECEF]">
