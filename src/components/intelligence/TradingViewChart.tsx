@@ -1,4 +1,4 @@
-import { BarChart3, ExternalLink, Maximize2, Minimize2, Search } from 'lucide-react';
+import { BarChart3, Expand, ExternalLink, Search, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 
 declare global {
@@ -66,7 +66,7 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
   const rawId = useId();
   const widgetId = `tv_${rawId.replace(/:/g, '')}`;
   const [interval, setInterval] = useState(defaultInterval);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isInAppExpanded, setIsInAppExpanded] = useState(false);
   const [activeSymbol, setActiveSymbol] = useState(symbol || 'BINANCE:BTCUSDT');
   const [searchInput, setSearchInput] = useState('');
 
@@ -76,6 +76,27 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
       setActiveSymbol(symbol);
     }
   }, [symbol]);
+
+  const toggleInAppView = () => {
+    setIsInAppExpanded((prev) => {
+      const next = !prev;
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 120);
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isInAppExpanded) {
+        setIsInAppExpanded(false);
+        setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isInAppExpanded]);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,9 +152,15 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
   const externalUrl = `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(activeSymbol)}`;
 
   return (
-    <div className={`w-full overflow-hidden rounded-[6px] border border-[#2B313A] bg-[#181A20] ${isFullscreen ? 'fixed inset-3 z-50 rounded-[6px]' : 'relative'}`}>
+    <div className={`w-full overflow-hidden transition-all ${
+      isInAppExpanded
+        ? 'fixed inset-0 z-[100] bg-[#0B0E11] p-3 sm:p-4 flex flex-col w-screen h-screen'
+        : 'relative rounded-[6px] border border-[#2B313A] bg-[#181A20]'
+    }`}>
       {/* Chart Control Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3.5 py-2.5 bg-[#14171D] border-b border-[#2B313A]">
+      <div className={`flex flex-wrap items-center justify-between gap-2.5 px-3.5 py-2.5 bg-[#14171D] border-b border-[#2B313A] ${
+        isInAppExpanded ? 'rounded-t-lg border border-[#2B313A]' : ''
+      }`}>
         {/* Left: Active Symbol Badge & Search Input */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="w-7 h-7 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
@@ -141,9 +168,14 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-alphabag-text tracking-wide bg-[#202630] px-2 py-0.5 rounded border border-[#2B313A] num">
+            <span className="text-xs font-bold text-alphabag-text tracking-wide bg-[#202630] px-2.5 py-0.5 rounded border border-[#2B313A] num">
               {activeSymbol}
             </span>
+            {isInAppExpanded && (
+              <span className="text-[11px] font-bold text-alphabag-yellow bg-alphabag-yellow/10 border border-alphabag-yellow/20 px-2 py-0.5 rounded uppercase">
+                IN-APP TERMINAL
+              </span>
+            )}
           </div>
 
           {/* Direct Search Bar for ANY token */}
@@ -153,7 +185,7 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="View any token (e.g. PEPE, DOGE, SOL, SUI)..."
-              className="bg-transparent text-xs text-alphabag-text placeholder:text-alphabag-subtext/50 outline-none w-44 sm:w-64"
+              className="bg-transparent text-xs text-alphabag-text placeholder:text-alphabag-subtext/50 outline-none w-40 sm:w-60"
             />
             <button
               type="submit"
@@ -182,7 +214,7 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
           </div>
         </div>
 
-        {/* Right: Timeframe, External TradingView, Fullscreen */}
+        {/* Right: Timeframe, Open in App Button, External, Close */}
         <div className="flex items-center gap-2">
           {/* Timeframe selector */}
           <div className="flex bg-[#0B0E11] border border-[#2B313A] rounded p-0.5 gap-0.5">
@@ -201,32 +233,55 @@ export function TradingViewChart({ symbol, height = 640, defaultInterval = '60' 
             ))}
           </div>
 
-          {/* Direct link to TradingView.com with all native tools */}
+          {/* OPEN IN APP BUTTON BY TIMEFRAME */}
+          <button
+            type="button"
+            onClick={toggleInAppView}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+              isInAppExpanded
+                ? 'bg-alphabag-yellow text-black border border-alphabag-yellow shadow-md'
+                : 'bg-[#202630] hover:bg-alphabag-yellow hover:text-black text-alphabag-text border border-[#2B313A] shadow-sm'
+            }`}
+            title={`Open ${activeSymbol} in App Terminal`}
+          >
+            <Expand size={13} />
+            <span>{isInAppExpanded ? 'In-App Active' : 'Open in App'}</span>
+          </button>
+
+          {/* External Link (optional fallback) */}
           <a
             href={externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-subtext hover:text-alphabag-text border border-[#2B313A] text-xs font-medium transition-colors"
-            title="Open in full TradingView.com"
+            className="p-1.5 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-subtext hover:text-alphabag-text border border-[#2B313A] transition-colors"
+            title="Open on external TradingView.com"
           >
-            <span className="hidden sm:inline text-xs">TradingView</span>
-            <ExternalLink size={12} />
+            <ExternalLink size={13} />
           </a>
 
-          <button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-1.5 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-subtext hover:text-alphabag-text border border-[#2B313A] transition-colors"
-            title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-          >
-            {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
-          </button>
+          {/* Close button when in-app full terminal is open */}
+          {isInAppExpanded && (
+            <button
+              type="button"
+              onClick={() => {
+                setIsInAppExpanded(false);
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 100);
+              }}
+              className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors ml-1"
+              title="Close In-App Terminal (Esc)"
+            >
+              <X size={15} />
+            </button>
+          )}
         </div>
       </div>
 
       <div
         ref={containerRef}
-        className="w-full bg-[#181A20]"
-        style={{ height: isFullscreen ? 'calc(100% - 46px)' : height }}
+        className={`w-full bg-[#181A20] ${
+          isInAppExpanded ? 'flex-1 rounded-b-lg border-x border-b border-[#2B313A]' : ''
+        }`}
+        style={{ height: isInAppExpanded ? 'calc(100vh - 80px)' : height }}
       />
     </div>
   );
