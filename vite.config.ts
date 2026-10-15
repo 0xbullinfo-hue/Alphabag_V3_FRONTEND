@@ -14,21 +14,30 @@ export default defineConfig(({ mode }) => {
   const devHost = env.VITE_DEV_HOST || '0.0.0.0';
   const devPort = Number(env.VITE_DEV_PORT || '3005');
   const proxyTarget = env.VITE_API_BASE_URL || 'http://localhost:3003';
-  const isProductionDeployment = mode === 'production' && env.VITE_ENVIRONMENT === 'production';
+  const isProductionBuild = mode === 'production';
   const isDevelopment = mode === 'development';
+
+  if (isProductionBuild) {
+    if (!env.VITE_API_BASE_URL) {
+      throw new Error('VITE_API_BASE_URL must be set for a production build.');
+    }
+    let apiUrl: URL;
+    try {
+      apiUrl = new URL(env.VITE_API_BASE_URL);
+    } catch {
+      throw new Error(`VITE_API_BASE_URL is not a valid URL: ${env.VITE_API_BASE_URL}`);
+    }
+    if (apiUrl.protocol !== 'https:') {
+      throw new Error(`VITE_API_BASE_URL must use HTTPS for production builds, got: ${env.VITE_API_BASE_URL}`);
+    }
+    if (env.VITE_DATA_MODE === 'MOCK' || env.VITE_LAUNCH_MODE === 'dev') {
+      throw new Error('Production builds cannot have VITE_DATA_MODE=MOCK or dev VITE_LAUNCH_MODE.');
+    }
+  }
+
   const contentSecurityPolicy = isDevelopment
     ? "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' http://localhost:3003 http://127.0.0.1:3003 https: wss:; font-src 'self' data: https:;"
     : "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https: wss:; font-src 'self' data: https:;";
-
-  if (isProductionDeployment) {
-    if (!env.VITE_API_BASE_URL) {
-      throw new Error('VITE_API_BASE_URL must be set for a production deployment.');
-    }
-    const apiUrl = new URL(env.VITE_API_BASE_URL);
-    if (apiUrl.protocol !== 'https:') {
-      throw new Error('VITE_API_BASE_URL must use HTTPS for a production deployment.');
-    }
-  }
 
   const proxyAgent = proxyTarget.startsWith('https://')
     ? new https.Agent({ family: 4 })
@@ -46,7 +55,7 @@ export default defineConfig(({ mode }) => {
           // In prod: set VITE_API_BASE_URL to your deployed backend domain.
           target: proxyTarget,
           changeOrigin: true,
-          secure: false,
+          secure: proxyTarget.startsWith('https://'),
           agent: proxyAgent
         }
       }
@@ -88,7 +97,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     esbuild: {
-      drop: ['console', 'debugger'],
+      drop: ['debugger'],
+      pure: ['console.log', 'console.debug', 'console.info'],
     },
     build: {
       sourcemap: false,
