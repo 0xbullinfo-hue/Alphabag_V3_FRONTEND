@@ -28,7 +28,7 @@ import {
   Zap
 } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
 import { Calculator } from './Calculator';
@@ -611,6 +611,7 @@ export type LandingTab = 'home' | 'features' | 'roadmap' | 'faq' | 'calculator' 
 export const Landing: React.FC = () => {
   useWeb3Modal();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -641,11 +642,12 @@ export const Landing: React.FC = () => {
 
 
   useEffect(() => {
-    // Only redirect to app if NOT in teaser mode, user is authenticated, and not explicitly viewing /landing
-    if (!IS_TEASER_MODE && isAuthenticated && window.location.pathname !== '/landing') {
+    // Only redirect to dashboard if NOT in teaser mode, user is authenticated, and not explicitly requesting landing
+    const isExplicitLanding = location.pathname === '/landing' || (typeof window !== 'undefined' && window.location.hash.includes('/landing'));
+    if (!IS_TEASER_MODE && isAuthenticated && !isExplicitLanding) {
       navigate('/dashboard');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, location.pathname]);
 
   useEffect(() => {
     const tick = () => setTeaserCountdown(getTeaserCountdown(TEASER_LAUNCH_AT));

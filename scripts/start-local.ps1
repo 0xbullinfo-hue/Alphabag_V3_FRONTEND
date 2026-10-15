@@ -1,7 +1,10 @@
 $ErrorActionPreference = 'Stop'
 
 $frontendDir = Split-Path -Parent $PSScriptRoot
-$backendDir = Join-Path (Split-Path -Parent $frontendDir) 'alphabag_v3_backend'
+$backendDir = Join-Path (Split-Path -Parent $frontendDir) 'backend'
+if (-not (Test-Path $backendDir)) {
+  $backendDir = Join-Path (Split-Path -Parent $frontendDir) 'alphabag_v3_backend'
+}
 
 if (-not (Test-Path $backendDir)) {
   throw "Backend directory not found: $backendDir"
@@ -51,10 +54,15 @@ Start-Process cmd.exe -ArgumentList @(
 
 Start-Sleep -Seconds 2
 
-Start-Process $networkFrontendUrl | Out-Null
+Start-Process "http://localhost:3005/" | Out-Null
 
-Write-Host "`nSERVERS RUNNING" -ForegroundColor Green
-Write-Host "Frontend: $networkFrontendUrl" -ForegroundColor Cyan
-Write-Host "Local    : http://localhost:3005" -ForegroundColor Cyan
-Write-Host "Backend : http://localhost:3003" -ForegroundColor Cyan
-Write-Host "Admin   : $($networkFrontendUrl)/#/admin`n" -ForegroundColor Cyan
+Write-Host "`n============================================" -ForegroundColor Green
+Write-Host " SERVERS RUNNING SUCCESSFULLY" -ForegroundColor Green
+Write-Host "============================================" -ForegroundColor Green
+Write-Host " Landing Page : http://localhost:3005/ (or http://localhost:3005/#/landing)" -ForegroundColor Cyan
+Write-Host " Dashboard    : http://localhost:3005/#/dashboard (or http://localhost:3005/#/my-alphabag)" -ForegroundColor Cyan
+Write-Host " Alpha Desk   : http://localhost:3005/#/alpha-desk" -ForegroundColor Cyan
+Write-Host " Alpha Feed   : http://localhost:3005/#/alphas-feed" -ForegroundColor Cyan
+Write-Host " Backend API  : http://localhost:3003" -ForegroundColor Cyan
+Write-Host " Admin Portal : http://localhost:3005/#/admin" -ForegroundColor Cyan
+Write-Host " Network URL  : $networkFrontendUrl`n" -ForegroundColor Green
