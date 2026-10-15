@@ -875,10 +875,9 @@ export const Landing: React.FC = () => {
             ) : !isAuthenticated ? (
               <Button
                 size="sm"
-                onClick={handleLaunchApp}
-                className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer transition-all"
+                className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-default opacity-90 select-none"
               >
-                Connect Wallet
+                Connect Soon
               </Button>
             ) : (
               <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
@@ -904,10 +903,9 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              onClick={handleLaunchApp}
-              className="w-full font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer transition-all"
+              className="w-full font-semibold bg-alphabag-yellow text-black cursor-default opacity-90 select-none"
             >
-              {isAuthenticated ? 'Open App' : 'Connect Wallet'}
+              Connect Soon
             </Button>
           </div>
         )}
@@ -943,10 +941,9 @@ export const Landing: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-stretch gap-3">
                       <Button
                         size="lg"
-                        onClick={handleLaunchApp}
-                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black hover:bg-yellow-400 border-none rounded-lg transition-all cursor-pointer shadow-sm active:scale-[0.98]"
+                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black border-none rounded-lg transition-all cursor-default select-none shadow-sm"
                       >
-                        {isAuthenticated ? 'Open Portfolio' : 'Track Smart (Connect)'}
+                        Track Smart
                       </Button>
                       <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
                         <Button variant="outline" size="lg" className="w-full px-8 py-3.5 text-sm font-bold uppercase tracking-wider border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 text-alphabag-text rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
@@ -1037,30 +1034,6 @@ export const Landing: React.FC = () => {
             <ProblemSection />
             <SolutionSection />
             <OnboardingPipeline />
-
-            {/* Institutional Conversion CTA */}
-            <section className="bg-gradient-to-b from-[#0B0E11] to-[#14171D] py-20 px-6 border-t border-[#2B313A]">
-              <div className="max-w-4xl mx-auto text-center space-y-6">
-                <span className="inline-block text-[11px] font-mono font-semibold tracking-[0.2em] uppercase text-alphabag-yellow bg-alphabag-yellow/10 border border-alphabag-yellow/20 rounded px-3 py-1">
-                  INSTITUTIONAL ACCESS
-                </span>
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-alphabag-text">
-                  Take Full Control of Your Web3 Portfolio
-                </h2>
-                <p className="text-base md:text-lg text-alphabag-subtext max-w-2xl mx-auto leading-relaxed">
-                  Join institutional traders and smart-money investors tracking multi-chain balances, whale flow telemetry, and AI-grounded market intelligence.
-                </p>
-                <div className="flex items-center justify-center pt-2">
-                  <Button
-                    size="lg"
-                    onClick={handleLaunchApp}
-                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black hover:bg-yellow-400 border-none rounded-lg transition-all cursor-pointer shadow-lg active:scale-[0.98]"
-                  >
-                    {isAuthenticated ? 'Launch Portfolio' : 'Connect Wallet Now'}
-                  </Button>
-                </div>
-              </div>
-            </section>
           </>
         )}
 
