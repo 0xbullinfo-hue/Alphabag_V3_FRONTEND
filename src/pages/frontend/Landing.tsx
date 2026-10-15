@@ -1050,21 +1050,13 @@ export const Landing: React.FC = () => {
                 <p className="text-base md:text-lg text-alphabag-subtext max-w-2xl mx-auto leading-relaxed">
                   Join institutional traders and smart-money investors tracking multi-chain balances, whale flow telemetry, and AI-grounded market intelligence.
                 </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <div className="flex items-center justify-center pt-2">
                   <Button
                     size="lg"
                     onClick={handleLaunchApp}
-                    className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black hover:bg-yellow-400 border-none rounded-lg transition-all cursor-pointer shadow-lg active:scale-[0.98]"
+                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-bold uppercase tracking-wider bg-alphabag-yellow text-black hover:bg-yellow-400 border-none rounded-lg transition-all cursor-pointer shadow-lg active:scale-[0.98]"
                   >
                     {isAuthenticated ? 'Launch Portfolio' : 'Connect Wallet Now'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    onClick={() => navigate('/alpha-desk')}
-                    className="w-full sm:w-auto px-8 py-3.5 text-sm font-bold uppercase tracking-wider border-[#2B313A] hover:border-alphabag-yellow/40 hover:bg-[#202630] text-alphabag-text rounded-lg transition-all cursor-pointer"
-                  >
-                    Explore Alpha Desk
                   </Button>
                 </div>
               </div>
