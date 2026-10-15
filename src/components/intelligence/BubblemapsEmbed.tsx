@@ -123,14 +123,9 @@ export function BubblemapsEmbed({
                 <Share2 size={16} />
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white tracking-wide uppercase">
-                    Holder Distribution Topology
-                  </span>
-                  <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20">
-                    Live Cluster Map
-                  </span>
-                </div>
+                <span className="text-sm font-bold text-white tracking-wide uppercase">
+                  Holder Distribution
+                </span>
                 <p className="text-xs text-gray-400">
                   Inspect wallet clusters, insider concentrations, and cross-wallet funding links.
                 </p>
@@ -301,11 +296,8 @@ export function BubblemapsEmbed({
                   <Share2 size={16} />
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                    <span>Bubblemaps Pro Station</span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 uppercase">
-                      {selectedChain}
-                    </span>
+                  <h2 className="text-base font-bold text-white tracking-wide uppercase">
+                    Bubblemaps Pro Station
                   </h2>
                   <p className="text-xs text-gray-400 font-mono truncate max-w-xl">
                     {activeAddress}
