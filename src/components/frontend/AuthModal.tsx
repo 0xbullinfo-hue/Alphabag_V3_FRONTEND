@@ -105,7 +105,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setLoading(true);
     setError('');
     try {
-      const nonceResponse = await api.get('/api/auth/nonce');
+      const nonceResponse = await api.get(`/api/auth/nonce?wallet=${encodeURIComponent(address)}`);
       const nonce = nonceResponse.data?.nonce;
       if (!nonce) throw new Error('Could not initialize secure sign-in. Please try again.');
 
