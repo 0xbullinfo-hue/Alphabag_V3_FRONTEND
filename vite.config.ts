@@ -13,9 +13,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   const devHost = env.VITE_DEV_HOST || '0.0.0.0';
   const devPort = Number(env.VITE_DEV_PORT || '3005');
-  const proxyTarget = env.VITE_API_BASE_URL || 'http://localhost:3003';
   const isProductionBuild = mode === 'production';
   const isDevelopment = mode === 'development';
+  const proxyTarget = env.VITE_DEV_API_TARGET || (isDevelopment ? 'http://localhost:3003' : (env.VITE_API_BASE_URL || 'http://localhost:3003'));
 
   if (isProductionBuild) {
     if (!env.VITE_API_BASE_URL) {
