@@ -50,6 +50,7 @@ export interface ClaimMissionRequest {
   proofLink?: string;
   taskLink?: string;
   feedback?: string;
+  captchaToken?: string;
 }
 
 export interface ClaimMissionResponse {

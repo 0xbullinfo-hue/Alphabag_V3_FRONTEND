@@ -18,6 +18,7 @@ Zap
 import React,{ useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
+import { TurnstileWidget } from '../../components/common/TurnstileWidget';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
@@ -57,6 +58,7 @@ export const Airdrop: React.FC = () => {
     const [itemsToBagRate, setItemsToBagRate] = useState<number | null>(null);
     const [campaignEnded, setCampaignEnded] = useState(false);
     const [payoutRequest, setPayoutRequest] = useState<PayoutRequest | null>(null);
+    const [captchaToken, setCaptchaToken] = useState<string>('');
     const parseMissionResponse = (data: Mission[] | MissionListResponse): Mission[] => {
         return Array.isArray(data) ? data : (data.missions || []);
     };
@@ -214,7 +216,8 @@ export const Airdrop: React.FC = () => {
                 missionId: taskId,
                 taskId, 
                 taskLink: link,
-                feedback: taskFeedback[taskId]
+                feedback: taskFeedback[taskId],
+                captchaToken: captchaToken || undefined
             };
 
             const res = await api.post<ClaimMissionResponse>('/api/airdrop/tasks/complete', claimPayload);
@@ -285,7 +288,9 @@ export const Airdrop: React.FC = () => {
         }
 
         try {
-            const res = await api.post<PayoutRequestResponse>('/api/airdrop/payout');
+            const res = await api.post<PayoutRequestResponse>('/api/airdrop/payout', {
+                captchaToken: captchaToken || undefined
+            });
             if (res.data.success) {
                 Swal.fire({
                     title: 'AIRDROP REQUESTED',
@@ -503,6 +508,7 @@ export const Airdrop: React.FC = () => {
 
                     {/* FIX: Changed mt-auto pt-6 to mt-auto for bottom alignment, added flex-1 above */}
                     <div className="mt-auto">
+                        <TurnstileWidget onVerify={setCaptchaToken} action="airdrop" />
                         <div className="flex gap-2 h-10">
                             {campaignEnded ? (
                                 <>
