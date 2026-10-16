@@ -10,9 +10,13 @@ import {
   Share2,
   ShieldCheck,
   Target,
+  Wallet,
   Zap
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { BubblemapsEmbed } from '../../components/intelligence/BubblemapsEmbed';
 import { SantimentMetrics } from '../../components/intelligence/SantimentMetrics';
 import { TradingViewChart } from '../../components/intelligence/TradingViewChart';
@@ -67,43 +71,88 @@ const GATE_TOOLS = [
 ];
 
 function AlphaDeskGate() {
-  const handleUpgrade = () => window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
+  const { user } = useAuth();
+  const { isConnected } = useAccount();
+  const { open } = useWeb3Modal();
+  const navigate = useNavigate();
+
+  const handleAction = () => {
+    if (!isConnected) {
+      open();
+    } else if (!user) {
+      window.dispatchEvent(new CustomEvent('open-login-modal'));
+    } else {
+      window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-8">
       <div className="flex flex-col items-center gap-3.5 mb-8 text-center max-w-lg">
-        <div className="w-12 h-12 rounded-[6px] bg-[#181A20] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
-          <Lock size={22} />
+        <div className="w-14 h-14 rounded-xl bg-[#181A20] border border-[#2B313A] shadow-[0_0_30px_rgba(240,185,11,0.15)] flex items-center justify-center text-alphabag-yellow">
+          <Lock size={24} />
         </div>
 
         <div className="space-y-1.5">
           <div className="inline-flex items-center gap-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-[2px]">
             Institutional Terminal Suite
           </div>
-          <h1 className="text-2xl font-bold text-alphabag-text tracking-tight uppercase">Alpha Desk Pro</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-alphabag-text tracking-tight uppercase">Alpha Desk Pro</h1>
           <p className="text-alphabag-subtext text-xs leading-relaxed max-w-md">
             Integrated quantitative workstation aggregating charting, holder topology, smart wallet flows, and on-chain security.
           </p>
         </div>
 
-        <Button onClick={handleUpgrade} size="md" className="w-full max-w-xs font-semibold">
-          <Zap size={14} className="mr-1.5" /> Access Alpha Desk Pro
-        </Button>
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full max-w-md justify-center mt-1">
+          <Button
+            onClick={handleAction}
+            size="md"
+            className="w-full sm:w-auto font-semibold flex-1 shadow-[0_0_20px_rgba(240,185,11,0.25)] hover:shadow-[0_0_25px_rgba(240,185,11,0.35)] transition-all"
+          >
+            {!isConnected ? (
+              <>
+                <Wallet size={15} className="mr-1.5" /> Connect Wallet to Unlock
+              </>
+            ) : !user ? (
+              <>
+                <Lock size={15} className="mr-1.5" /> Sign In with Wallet
+              </>
+            ) : (
+              <>
+                <Zap size={15} className="mr-1.5" /> Mint Alpha Pass
+              </>
+            )}
+          </Button>
+          <Button
+            onClick={() => navigate('/alpha-passes')}
+            variant="secondary"
+            size="md"
+            className="w-full sm:w-auto font-medium"
+          >
+            Alpha Passes
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 w-full max-w-5xl">
-        {GATE_TOOLS.map(({ Icon, label, desc }) => (
+        {GATE_TOOLS.map(({ Icon, label, badge, desc }) => (
           <div
             key={label}
-            className="bg-[#181A20] border border-[#2B313A] rounded-[6px] p-3.5 flex flex-col gap-2 transition-colors hover:border-[#3E4552]"
+            className="group bg-[#181A20] border border-[#2B313A] rounded-[6px] p-3.5 flex flex-col gap-2 transition-all duration-200 hover:border-alphabag-yellow/40 hover:bg-[#1C2027] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">
+                <div className="w-8 h-8 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow group-hover:border-alphabag-yellow/30 transition-colors">
                   <Icon size={15} />
                 </div>
-                <span className="text-sm font-semibold text-alphabag-text block">{label}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-alphabag-text block">{label}</span>
+                  <span className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#202630] text-alphabag-subtext border border-[#2B313A]">
+                    {badge}
+                  </span>
+                </div>
               </div>
-              <Lock size={12} className="text-alphabag-subtext/60" />
+              <Lock size={12} className="text-alphabag-subtext/60 group-hover:text-alphabag-yellow/70 transition-colors" />
             </div>
             <p className="text-xs text-alphabag-subtext leading-relaxed">{desc}</p>
           </div>

@@ -1,6 +1,8 @@
-import { Bell, Briefcase, ChevronDown, LogOut, Menu, Search, Settings, X } from 'lucide-react';
+import { Bell, Briefcase, ChevronDown, LogOut, Menu, Search, Settings, Wallet, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAuth } from '../../context/AuthContext';
 import { IS_TEASER_MODE } from '../../services/config';
 import { Button } from '../ui/Button';
@@ -13,6 +15,8 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { open } = useWeb3Modal();
+  const { isConnected, address } = useAccount();
   const [searchValue, setSearchValue] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -162,14 +166,25 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                 </div>
               )}
             </div>
+          ) : isConnected && address ? (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => window.dispatchEvent(new CustomEvent('open-login-modal'))}
+              leftIcon={<Wallet size={14} />}
+              className="font-semibold shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_rgba(240,185,11,0.35)] transition-all"
+            >
+              Sign In ({address.slice(0, 6)}...{address.slice(-4)})
+            </Button>
           ) : (
             <Button
               variant="primary"
               size="sm"
-              onClick={() => navigate('/settings')}
-              leftIcon={<Briefcase size={14} />}
+              onClick={() => open()}
+              leftIcon={<Wallet size={14} />}
+              className="font-semibold shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_rgba(240,185,11,0.35)] transition-all"
             >
-              Connect Terminal
+              Connect Wallet
             </Button>
           )}
         </div>
