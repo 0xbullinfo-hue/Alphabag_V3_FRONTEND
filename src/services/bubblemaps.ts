@@ -16,8 +16,24 @@ import type {
   BubblemapsTopHoldersResponse,
   BubblemapsValidationError,
 } from '../types/bubblemaps';
+import { resolveApiUrl } from './api';
 
-const BUBBLEMAPS_API_BASE = 'https://api.bubblemaps.io/v0';
+export function getBubblemapsApiBase(): string {
+  return resolveApiUrl('/api/proxy/bubblemaps');
+}
+
+function buildApiUrl(endpoint: string): URL {
+  const base = getBubblemapsApiBase();
+  const origin =
+    typeof window !== 'undefined' && window.location?.origin
+      ? window.location.origin
+      : 'http://localhost';
+
+  if (base.startsWith('http://') || base.startsWith('https://')) {
+    return new URL(`${base}${endpoint}`);
+  }
+  return new URL(`${base}${endpoint}`, origin);
+}
 
 /**
  * Normalizes input chain names to exact Bubblemaps API chain slugs.
@@ -61,26 +77,13 @@ export function normalizeBubblemapsChain(chain: string): string {
 }
 
 export function getPartnerId(): string {
-  const envId = import.meta.env.VITE_BUBBLEMAPS_PARTNER_ID;
-  if (typeof envId === 'string' && envId.trim().length > 0) {
-    return envId.trim();
-  }
-  return 'demo';
-}
-
-function getApiKey(): string | undefined {
-  return import.meta.env.VITE_BUBBLEMAPS_API_KEY;
+  return 'alphabag';
 }
 
 function getHeaders(): Record<string, string> {
-  const headers: Record<string, string> = {
+  return {
     Accept: 'application/json',
   };
-  const apiKey = getApiKey();
-  if (apiKey) {
-    headers['X-ApiKey'] = apiKey;
-  }
-  return headers;
 }
 
 /**
@@ -102,7 +105,7 @@ async function handleBubblemapsResponse<T>(res: Response, endpoint: string): Pro
 
 /**
  * Build the iframe embed URL for Bubblemaps.
- * Always guarantees partnerId is present (default 'demo') to prevent 400 Bad Request.
+ * Always guarantees partnerId is present (default 'alphabag') to prevent 400 Bad Request.
  */
 export function buildBubblemapsIframeUrl(
   chain: string = 'eth',
@@ -123,9 +126,9 @@ export function buildBubblemapsIframeUrl(
 
 // ─── 1. GET /chains ──────────────────────────────────────────────────────────
 export async function getChains(): Promise<BubblemapsChainInfo[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/chains`;
+  const url = buildApiUrl('/chains');
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const data = await handleBubblemapsResponse<BubblemapsChainInfo[]>(res, 'GET /chains');
     if (data && Array.isArray(data)) return data;
   } catch (e) {
@@ -177,22 +180,19 @@ export async function getTokenBubbleMap(
 
   const cleanChain = normalizeBubblemapsChain(chain);
   const cleanAddress = address.trim();
-  const apiKey = getApiKey();
 
-  if (apiKey) {
-    try {
-      const url = new URL(`${BUBBLEMAPS_API_BASE}/tokens/map/${cleanChain}/${cleanAddress}`);
-      url.searchParams.set('limit', limit.toString());
-      url.searchParams.set('use_magic_nodes', use_magic_nodes.toString());
-      url.searchParams.set('use_time_nodes', use_time_nodes.toString());
-      url.searchParams.set('return_clusters', return_clusters.toString());
+  try {
+    const url = buildApiUrl(`/tokens/map/${cleanChain}/${cleanAddress}`);
+    url.searchParams.set('limit', limit.toString());
+    url.searchParams.set('use_magic_nodes', use_magic_nodes.toString());
+    url.searchParams.set('use_time_nodes', use_time_nodes.toString());
+    url.searchParams.set('return_clusters', return_clusters.toString());
 
-      const res = await fetch(url.toString(), { headers: getHeaders() });
-      const data = await handleBubblemapsResponse<BubblemapsMapResponse>(res, 'GET /tokens/map');
-      if (data) return data;
-    } catch (e) {
-      console.warn('[Bubblemaps API] getTokenBubbleMap error:', e);
-    }
+    const res = await fetch(url.toString(), { headers: getHeaders() });
+    const data = await handleBubblemapsResponse<BubblemapsMapResponse>(res, 'GET /tokens/map');
+    if (data) return data;
+  } catch (e) {
+    console.warn('[Bubblemaps API] getTokenBubbleMap error:', e);
   }
 
   return generateFallbackBubbleMap(cleanChain, cleanAddress);
@@ -207,10 +207,10 @@ export async function getTokenScreenshot(
 ): Promise<BubblemapsScreenshotResponse | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
   const cleanAddress = address.trim();
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/screenshot/${cleanChain}/${cleanAddress}`;
+  const url = buildApiUrl(`/tokens/screenshot/${cleanChain}/${cleanAddress}`);
 
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const data = await handleBubblemapsResponse<BubblemapsScreenshotResponse>(res, 'GET /tokens/screenshot');
     if (data) {
       return {
@@ -232,13 +232,12 @@ export async function getTokenMetrics(
 ): Promise<BubblemapsTokenMetricsResponse | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
   const cleanAddress = address.trim();
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metrics/${cleanChain}/${cleanAddress}`;
+  const url = buildApiUrl(`/tokens/metrics/${cleanChain}/${cleanAddress}`);
 
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const data = await handleBubblemapsResponse<BubblemapsTokenMetricsResponse>(res, 'GET /tokens/metrics');
     if (data) {
-      // Unify both direct { supply_stats, scores } and wrapped { metrics: { supply_stats, scores } }
       const supplyStats = data.supply_stats || data.metrics?.supply_stats;
       const scores = data.scores || data.metrics?.scores;
       if (supplyStats && scores) {
@@ -264,10 +263,11 @@ export async function getTokenHolders(
 ): Promise<BubblemapsHoldersResponse> {
   const cleanChain = normalizeBubblemapsChain(chain);
   const cleanAddress = address.trim();
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/holders/${cleanChain}/${cleanAddress}?limit=${limit}`;
+  const url = buildApiUrl(`/tokens/holders/${cleanChain}/${cleanAddress}`);
+  url.searchParams.set('limit', limit.toString());
 
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const data = await handleBubblemapsResponse<BubblemapsHoldersResponse>(res, 'GET /tokens/holders');
     if (data && Array.isArray(data)) return data;
   } catch (e) {
@@ -295,7 +295,7 @@ export async function searchTokens(
   query: string,
   chain?: string
 ): Promise<BubblemapsTokenSearchResult[]> {
-  const url = new URL(`${BUBBLEMAPS_API_BASE}/tokens/search`);
+  const url = buildApiUrl('/tokens/search');
   url.searchParams.set('q', query.trim());
   if (chain) {
     url.searchParams.set('chain', normalizeBubblemapsChain(chain));
@@ -338,10 +338,10 @@ export async function getTokenMetadata(
 ): Promise<BubblemapsTokenMetadata | null> {
   const cleanChain = normalizeBubblemapsChain(chain);
   const cleanAddress = address.trim();
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata/${cleanChain}/${cleanAddress}`;
+  const url = buildApiUrl(`/tokens/metadata/${cleanChain}/${cleanAddress}`);
 
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const raw = await handleBubblemapsResponse<any>(res, 'GET /tokens/metadata');
     if (raw) {
       const tokenKey = raw.token_key || { chain: cleanChain, address: cleanAddress };
@@ -378,14 +378,14 @@ export const fetchBubblemapsMetadata = getTokenMetadata;
 export async function getBatchTokensMetadata(
   tokens: BubblemapsBatchTokenQuery[]
 ): Promise<BubblemapsTokenMetadata[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/tokens/metadata`;
+  const url = buildApiUrl('/tokens/metadata');
   const payload = tokens.map((t) => ({
     chain: normalizeBubblemapsChain(t.chain),
     address: t.address.trim(),
   }));
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -414,11 +414,10 @@ export async function getAddressMetadata(
   chain?: string
 ): Promise<BubblemapsAddressMetadata | null> {
   const cleanAddress = address.trim();
-  // Primary official path is /addresses/metadata/{address}
-  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata/${cleanAddress}`;
+  const url = buildApiUrl(`/addresses/metadata/${cleanAddress}`);
 
   try {
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await fetch(url.toString(), { headers: getHeaders() });
     const raw = await handleBubblemapsResponse<any>(res, 'GET /addresses/metadata');
     if (raw) {
       return {
@@ -438,13 +437,13 @@ export async function getAddressMetadata(
 export async function getBatchAddressesMetadata(
   addressesOrQueries: string[] | BubblemapsBatchAddressQuery[]
 ): Promise<BubblemapsAddressMetadata[]> {
-  const url = `${BUBBLEMAPS_API_BASE}/addresses/metadata`;
+  const url = buildApiUrl('/addresses/metadata');
   const addressStrings: string[] = addressesOrQueries.map((item) =>
     typeof item === 'string' ? item.trim() : item.address.trim()
   );
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
       body: JSON.stringify({ addresses: addressStrings }),
@@ -475,7 +474,7 @@ export async function getAddressesSubgraph(
   arg1: string[] | BubblemapsSubgraphRequest,
   arg2?: BubblemapsContextTokenKey
 ): Promise<BubblemapsSubgraphResponse | null> {
-  const url = `${BUBBLEMAPS_API_BASE}/relationships/subgraph`;
+  const url = buildApiUrl('/relationships/subgraph');
 
   let payload: BubblemapsSubgraphRequest;
   if (Array.isArray(arg1)) {
@@ -505,7 +504,7 @@ export async function getAddressesSubgraph(
   }
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(url.toString(), {
       method: 'POST',
       headers: { ...getHeaders(), 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
