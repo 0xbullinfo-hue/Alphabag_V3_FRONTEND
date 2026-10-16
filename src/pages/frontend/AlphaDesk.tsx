@@ -60,13 +60,13 @@ const TABS: TabConfig[] = [
 
 // ─── Premium gate screen ──────────────────────────────────────────────────────
 const GATE_TOOLS = [
-  { Icon: BarChart2,   label: 'TradingView Suite', badge: 'CHART',     desc: 'Institutional technical analysis with custom timeframes and drawing tools' },
-  { Icon: Share2,      label: 'Bubblemaps',        badge: 'HOLDERS',   desc: 'Interactive token holder clustering and concentration risk analysis' },
-  { Icon: Eye,         label: 'Wallet Flow',       badge: 'FLOW',      desc: 'Real-time multi-chain large transaction telemetry and smart wallet flows' },
-  { Icon: Target,      label: 'Trade Signals',     badge: 'SIGNALS',   desc: 'Structured market entries, multi-tier profit targets, and invalidation stops' },
-  { Icon: Bot,         label: 'Market AI',         badge: 'ASSISTANT', desc: 'Quantitative market assistant with token context and historical memory' },
-  { Icon: Activity,    label: 'Social Intel',      badge: 'METRICS',   desc: 'Santiment on-chain social volume, net sentiment balance, and keyword velocity' },
-  { Icon: ShieldCheck, label: 'Security Approvals',badge: 'SECURITY',  desc: 'Wallet token allowance audit and contract approval revocation terminal' },
+  { Icon: BarChart2,   label: 'TradingView Suite', desc: 'Institutional technical analysis with custom timeframes and drawing tools' },
+  { Icon: Share2,      label: 'Bubblemaps',        desc: 'Interactive token holder clustering and concentration risk analysis' },
+  { Icon: Eye,         label: 'Wallet Flow',       desc: 'Real-time multi-chain large transaction telemetry and smart wallet flows' },
+  { Icon: Target,      label: 'Trade Signals',     desc: 'Structured market entries, multi-tier profit targets, and invalidation stops' },
+  { Icon: Bot,         label: 'Market AI',         desc: 'Quantitative market assistant with token context and historical memory' },
+  { Icon: Activity,    label: 'Social Intel',      desc: 'Santiment on-chain social volume, net sentiment balance, and keyword velocity' },
+  { Icon: ShieldCheck, label: 'Security Approvals',desc: 'Wallet token allowance audit and contract approval revocation terminal' },
 ];
 
 function AlphaDeskGate() {
@@ -87,7 +87,7 @@ function AlphaDeskGate() {
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-8">
       <div className="flex flex-col items-center gap-3.5 mb-8 text-center max-w-lg">
-        <div className="w-16 h-16 rounded-2xl bg-[#181A20] border border-[#2B313A] shadow-[0_0_30px_rgba(240,185,11,0.2)] flex items-center justify-center p-2.5">
+        <div className="w-16 h-16 rounded-2xl bg-[#181A20] border border-[#2B313A] flex items-center justify-center p-2.5">
           <img src="/logo.png" alt="AlphaBAG Logo" className="w-full h-full object-contain rounded-full" />
         </div>
 
@@ -122,24 +122,16 @@ function AlphaDeskGate() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 w-full max-w-5xl">
-        {GATE_TOOLS.map(({ Icon, label, badge, desc }) => (
+        {GATE_TOOLS.map(({ Icon, label, desc }) => (
           <div
             key={label}
             className="group bg-[#181A20] border border-[#2B313A] rounded-[6px] p-3.5 flex flex-col gap-2 transition-all duration-200 hover:border-alphabag-yellow/40 hover:bg-[#1C2027] hover:shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow group-hover:border-alphabag-yellow/30 transition-colors">
-                  <Icon size={15} />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-alphabag-text block">{label}</span>
-                  <span className="text-[9px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#202630] text-alphabag-subtext border border-[#2B313A]">
-                    {badge}
-                  </span>
-                </div>
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded bg-[#202630] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow group-hover:border-alphabag-yellow/30 transition-colors shrink-0">
+                <Icon size={15} />
               </div>
-              <Lock size={12} className="text-alphabag-subtext/60 group-hover:text-alphabag-yellow/70 transition-colors" />
+              <span className="text-sm font-semibold text-alphabag-text block">{label}</span>
             </div>
             <p className="text-xs text-alphabag-subtext leading-relaxed">{desc}</p>
           </div>
