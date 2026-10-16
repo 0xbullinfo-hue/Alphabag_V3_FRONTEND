@@ -1,4 +1,7 @@
+// @vitest-environment node
 import { describe, it, expect } from 'vitest';
+import { SiweMessage } from 'siwe';
+import { getAddress } from 'viem';
 import { createSiweMessage, parseSiweMessage } from '../../src/utils/siwe';
 
 describe('SIWE message formatting and roundtrip', () => {
@@ -26,7 +29,7 @@ describe('SIWE message formatting and roundtrip', () => {
 
     // Check strict structure
     expect(lines[0]).toBe('alphabag.xyz wants you to sign in with your Ethereum account:');
-    expect(lines[1]).toBe('0x1111111111111111111111111111111111111111');
+    expect(lines[1]).toBe(getAddress('0x1111111111111111111111111111111111111111'));
     expect(lines[2]).toBe('');
     expect(lines[3]).toBe('Sign in to AlphaBAG Protocol Hub.');
     expect(lines[4]).toBe('');
@@ -37,28 +40,51 @@ describe('SIWE message formatting and roundtrip', () => {
     expect(lines[9]).toBe('Issued At: 2026-10-15T12:00:00.000Z');
   });
 
-  it('correctly parses an EIP-4361 formatted message back to its parameters', () => {
+  it('checksums lowercase addresses correctly using viem getAddress', () => {
+    const rawLowerAddress = '0x53464971a475e63833180f439c9f488274add5c9';
+    const checksummed = getAddress(rawLowerAddress);
+
+    const message = createSiweMessage({
+      domain: 'alphabag.xyz',
+      address: rawLowerAddress,
+      uri: 'https://alphabag.xyz',
+      chainId: 1,
+      nonce: 'nonce12345678',
+      issuedAt: '2026-10-15T12:00:00.000Z'
+    });
+
+    expect(message).toContain(checksummed);
+  });
+
+  it('round-trips through backend SiweMessage parser without error', () => {
     const originalParams = {
       domain: 'alphabag.xyz',
       address: '0x2222222222222222222222222222222222222222',
       statement: 'Sign in to AlphaBAG Protocol Hub.',
       uri: 'https://alphabag.xyz',
       version: '1',
-      chainId: 1,
+      chainId: 56,
       nonce: '9876543210ab',
       issuedAt: '2026-10-15T14:30:00.000Z'
     };
 
     const message = createSiweMessage(originalParams);
-    const parsed = parseSiweMessage(message);
+    
+    // Test direct parsing with the official backend SiweMessage parser
+    const backendParsed = new SiweMessage(message);
+    expect(backendParsed.domain).toBe(originalParams.domain);
+    expect(backendParsed.address).toBe(getAddress(originalParams.address));
+    expect(backendParsed.statement).toBe(originalParams.statement);
+    expect(backendParsed.uri).toBe(originalParams.uri);
+    expect(backendParsed.version).toBe(originalParams.version);
+    expect(backendParsed.chainId).toBe(originalParams.chainId);
+    expect(backendParsed.nonce).toBe(originalParams.nonce);
+    expect(backendParsed.issuedAt).toBe(originalParams.issuedAt);
 
+    // Test helper parseSiweMessage
+    const parsed = parseSiweMessage(message);
     expect(parsed).not.toBeNull();
     expect(parsed?.domain).toBe(originalParams.domain);
-    expect(parsed?.address).toBe(originalParams.address);
-    expect(parsed?.uri).toBe(originalParams.uri);
-    expect(parsed?.version).toBe(originalParams.version);
-    expect(parsed?.chainId).toBe(originalParams.chainId);
-    expect(parsed?.nonce).toBe(originalParams.nonce);
-    expect(parsed?.issuedAt).toBe(originalParams.issuedAt);
+    expect(parsed?.address).toBe(getAddress(originalParams.address));
   });
 });

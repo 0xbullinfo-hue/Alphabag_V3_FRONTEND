@@ -11,7 +11,7 @@ export interface ParsedWalletError {
   code: WalletErrorCode;
   title: string;
   message: string;
-  action?: 'RETRY' | 'SWITCH_CHAIN' | 'CONNECT_WALLET' | 'GET_FUNDS';
+  action?: 'retry' | 'switch-chain' | 'connect' | 'get-funds' | 'RETRY' | 'SWITCH_CHAIN' | 'CONNECT_WALLET' | 'GET_FUNDS';
 }
 
 export function parseWalletError(error: unknown): ParsedWalletError {
@@ -20,7 +20,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'UNKNOWN',
       title: 'Unexpected Error',
       message: 'An unknown wallet error occurred. Please try again.',
-      action: 'RETRY'
+      action: 'retry'
     };
   }
 
@@ -30,7 +30,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
   const code = err.code ?? err.cause?.code;
   const name = err.name || '';
 
-  // 1. User rejection
+  // 1. User rejection: 4001, ACTION_REJECTED, UserRejectedRequestError
   if (
     code === 4001 ||
     code === 'ACTION_REJECTED' ||
@@ -38,18 +38,20 @@ export function parseWalletError(error: unknown): ParsedWalletError {
     msg.includes('user rejected') ||
     msg.includes('user denied') ||
     msg.includes('rejected transaction') ||
-    msg.includes('user cancelled')
+    msg.includes('user cancelled') ||
+    msg.includes('action_rejected')
   ) {
     return {
       code: 'USER_REJECTED',
       title: 'Signature Rejected',
       message: 'You declined the transaction or signature request in your wallet.',
-      action: 'RETRY'
+      action: 'retry'
     };
   }
 
   // 2. Chain mismatch / Wrong network
   if (
+    code === 4902 ||
     name === 'ChainMismatchError' ||
     msg.includes('chain mismatch') ||
     msg.includes('wrong network') ||
@@ -60,7 +62,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'WRONG_CHAIN',
       title: 'Wrong Network',
       message: 'Your wallet is connected to an unsupported network. Please switch to the required chain.',
-      action: 'SWITCH_CHAIN'
+      action: 'switch-chain'
     };
   }
 
@@ -76,7 +78,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'INSUFFICIENT_FUNDS',
       title: 'Insufficient Balance',
       message: 'Your wallet does not have enough balance to cover the amount and required gas fees.',
-      action: 'GET_FUNDS'
+      action: 'get-funds'
     };
   }
 
@@ -91,7 +93,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'RPC_TIMEOUT',
       title: 'Network Timeout',
       message: 'The RPC node took too long to respond. Please check your connection and retry.',
-      action: 'RETRY'
+      action: 'retry'
     };
   }
 
@@ -106,7 +108,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'DISCONNECTED',
       title: 'Wallet Disconnected',
       message: 'Your wallet is not currently connected. Please reconnect and try again.',
-      action: 'CONNECT_WALLET'
+      action: 'connect'
     };
   }
 
@@ -122,7 +124,7 @@ export function parseWalletError(error: unknown): ParsedWalletError {
       code: 'REVERTED',
       title: 'Transaction Failed',
       message: reason,
-      action: 'RETRY'
+      action: 'retry'
     };
   }
 
@@ -131,6 +133,6 @@ export function parseWalletError(error: unknown): ParsedWalletError {
     code: 'UNKNOWN',
     title: 'Wallet Error',
     message: err.shortMessage || err.message || 'An unexpected transaction error occurred.',
-    action: 'RETRY'
+    action: 'retry'
   };
 }
