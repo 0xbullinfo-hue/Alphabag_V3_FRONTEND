@@ -14,7 +14,6 @@ import {
   Zap
 } from 'lucide-react';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { BubblemapsEmbed } from '../../components/intelligence/BubblemapsEmbed';
@@ -74,7 +73,6 @@ function AlphaDeskGate() {
   const { user } = useAuth();
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
-  const navigate = useNavigate();
 
   const handleAction = () => {
     if (!isConnected) {
@@ -89,25 +87,22 @@ function AlphaDeskGate() {
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-8">
       <div className="flex flex-col items-center gap-3.5 mb-8 text-center max-w-lg">
-        <div className="w-14 h-14 rounded-xl bg-[#181A20] border border-[#2B313A] shadow-[0_0_30px_rgba(240,185,11,0.15)] flex items-center justify-center text-alphabag-yellow">
-          <Lock size={24} />
+        <div className="w-16 h-16 rounded-2xl bg-[#181A20] border border-[#2B313A] shadow-[0_0_30px_rgba(240,185,11,0.2)] flex items-center justify-center p-2.5">
+          <img src="/logo.png" alt="AlphaBAG Logo" className="w-full h-full object-contain rounded-full" />
         </div>
 
         <div className="space-y-1.5">
-          <div className="inline-flex items-center gap-1.5 bg-alphabag-yellow/10 border border-alphabag-yellow/20 text-alphabag-yellow text-[11px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-[2px]">
-            Institutional Terminal Suite
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-alphabag-text tracking-tight uppercase">Alpha Desk Pro</h1>
           <p className="text-alphabag-subtext text-xs leading-relaxed max-w-md">
             Integrated quantitative workstation aggregating charting, holder topology, smart wallet flows, and on-chain security.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full max-w-md justify-center mt-1">
+        <div className="w-full max-w-xs mt-1">
           <Button
             onClick={handleAction}
             size="md"
-            className="w-full sm:w-auto font-semibold flex-1 shadow-[0_0_20px_rgba(240,185,11,0.25)] hover:shadow-[0_0_25px_rgba(240,185,11,0.35)] transition-all"
+            className="w-full font-semibold shadow-[0_0_20px_rgba(240,185,11,0.25)] hover:shadow-[0_0_25px_rgba(240,185,11,0.35)] transition-all"
           >
             {!isConnected ? (
               <>
@@ -122,14 +117,6 @@ function AlphaDeskGate() {
                 <Zap size={15} className="mr-1.5" /> Mint Alpha Pass
               </>
             )}
-          </Button>
-          <Button
-            onClick={() => navigate('/alpha-passes')}
-            variant="secondary"
-            size="md"
-            className="w-full sm:w-auto font-medium"
-          >
-            Alpha Passes
           </Button>
         </div>
       </div>
