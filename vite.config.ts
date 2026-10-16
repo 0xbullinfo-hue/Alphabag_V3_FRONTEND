@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => {
   }
 
   const contentSecurityPolicy = isDevelopment
-    ? "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' http://localhost:3003 http://127.0.0.1:3003 https: wss:; font-src 'self' data: https:;"
-    : "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; connect-src 'self' https: wss:; font-src 'self' data: https:;";
+    ? "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https: blob:; frame-src 'self' https://s.tradingview.com https://www.tradingview.com https://iframe.bubblemaps.io https://challenges.cloudflare.com https://hcaptcha.com; connect-src 'self' http://localhost:3003 http://127.0.0.1:3003 https: wss:; object-src 'none'; base-uri 'self'; form-action 'self';"
+    : "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https: blob:; frame-src 'self' https://s.tradingview.com https://www.tradingview.com https://iframe.bubblemaps.io https://challenges.cloudflare.com https://hcaptcha.com; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self';";
 
   const proxyAgent = proxyTarget.startsWith('https://')
     ? new https.Agent({ family: 4 })

@@ -41,8 +41,10 @@ export const useNeuralCore = (portfolioItems: any[], tier: string) => {
             const token = sessionStorage.getItem('alphabag_token');
             const response = await fetch(resolveApiUrl('/api/ai/neural-core'), {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-Requested-With': 'AlphaBAG-Client',
                     ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
                 },
                 body: JSON.stringify({

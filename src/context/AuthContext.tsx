@@ -66,33 +66,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   // ── SECURE SESSION RESTORATION ───────────────────────────────────────────
-  // Validates stored token with backend before restoring session.
+  // Validates session with backend (via HttpOnly cookie or saved token) before restoring session.
   // In local dev, falls back to DEV_USER so developers can test dashboards & tools immediately.
   useEffect(() => {
     const validateStoredSession = async () => {
       const savedToken = sessionStorage.getItem('alphabag_token');
-
-      if (!savedToken) {
-        if (isLocalhostDev) {
-          const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
-          if (!isExplicitLoggedOut) {
-            setUser(DEV_USER);
-            sessionStorage.setItem('alphabag_user', JSON.stringify(DEV_USER));
-          }
-        }
-        setIsLoading(false);
-        return;
+      if (savedToken) {
+        api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
       }
 
       try {
-        api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
         const res = await api.get('/api/auth/me');
 
         if (res.data) {
-          let userData = res.data;
-          
+          const userData = res.data;
           setUser(userData);
-          setToken(savedToken);
+          if (savedToken) setToken(savedToken);
           sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
         } else {
           sessionStorage.removeItem('alphabag_token');
@@ -100,7 +89,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           delete api.defaults.headers.common['Authorization'];
         }
       } catch (err: any) {
-        console.error('[AUTH] Session validation failed:', err?.response?.data?.error || err.message);
         if (isLocalhostDev) {
           const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
           if (!isExplicitLoggedOut) {
@@ -199,6 +187,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    api.post('/api/auth/logout').catch(() => {});
     setToken(null);
     setUser(null);
     sessionStorage.removeItem('alphabag_token');
