@@ -69,6 +69,7 @@ export interface User {
 
 export interface ReferralEntry {
   id: string;
+  handle?: string;
   email?: string;
   pointsEarned?: number;
   joinedAt?: string;
