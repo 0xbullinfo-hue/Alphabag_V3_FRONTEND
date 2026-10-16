@@ -7,8 +7,6 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
   interval = '60',
   containerId = 'tv_chart_container',
   libraryPath = '/charting_library/',
-  chartsStorageUrl = 'https://saveload.tradingview.com',
-  chartsStorageApiVersion = '1.1',
   clientId = 'alphabag.trade',
   userId = 'public_user',
   fullscreen = false,
@@ -70,15 +68,13 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
       disabled_features: [
         'use_localstorage_for_settings',
         'header_saveload',
+        'study_templates',
         'timeframes_toolbar',
       ],
       enabled_features: [
-        'study_templates',
         'hide_left_toolbar_by_default',
         'side_toolbar_in_fullscreen_mode',
       ],
-      charts_storage_url: chartsStorageUrl,
-      charts_storage_api_version: chartsStorageApiVersion,
       client_id: clientId,
       user_id: userId,
       fullscreen,
@@ -124,7 +120,7 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
         widgetRef.current = null;
       }
     };
-  }, [libraryAvailable, symbol, interval, containerId, libraryPath, chartsStorageUrl, chartsStorageApiVersion, clientId, userId, fullscreen, autosize, studiesOverrides, onChartReady]);
+  }, [libraryAvailable, symbol, interval, containerId, libraryPath, clientId, userId, fullscreen, autosize, studiesOverrides, onChartReady]);
 
   // If library is not yet deployed to /public/charting_library/, render clear guidance & seamless fallback
   if (libraryAvailable === false) {

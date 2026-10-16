@@ -3,6 +3,8 @@ import {
   cleanSymbolName,
   getPriceScale,
   resolutionToBinanceInterval,
+  isValidSymbol,
+  MAX_CONCURRENT_SUBSCRIPTIONS,
   AlphaBAGDatafeed,
 } from '../../src/components/TradingView/datafeed';
 
@@ -22,6 +24,64 @@ describe('TradingView Advanced Charts Datafeed', () => {
     it('preserves pairs with quote currency', () => {
       expect(cleanSymbolName('ETHBTC')).toBe('ETHBTC');
       expect(cleanSymbolName('BTCUSD')).toBe('BTCUSD');
+    });
+  });
+
+  describe('Symbol Validation (R10)', () => {
+    it('accepts valid alphanumeric symbols of length 2 to 20', () => {
+      expect(isValidSymbol('BTCUSDT')).toBe(true);
+      expect(isValidSymbol('ETH')).toBe(true);
+      expect(isValidSymbol('PEPEUSDT123')).toBe(true);
+    });
+
+    it('rejects symbols with special characters, spaces, or script injections', () => {
+      expect(isValidSymbol('BTC/USDT')).toBe(false);
+      expect(isValidSymbol('BTC USDT')).toBe(false);
+      expect(isValidSymbol('<script>')).toBe(false);
+      expect(isValidSymbol('BTC@USDT')).toBe(false);
+      expect(isValidSymbol('A')).toBe(false); // too short
+      expect(isValidSymbol('A'.repeat(21))).toBe(false); // too long
+    });
+  });
+
+  describe('WebSocket Subscriptions & Concurrency Capping (R10)', () => {
+    it('enforces maximum concurrent subscriptions limit of 5 and evicts oldest', () => {
+      const datafeed = new AlphaBAGDatafeed();
+      const mockCallback = () => {};
+      const mockReset = () => {};
+
+      // Subscribe 6 symbols
+      for (let i = 1; i <= 6; i++) {
+        datafeed.subscribeBars(
+          { name: `TOKEN${i}USDT` } as any,
+          '60',
+          mockCallback,
+          `sub-uid-${i}`,
+          mockReset
+        );
+      }
+
+      // Max active subscriptions must never exceed MAX_CONCURRENT_SUBSCRIPTIONS (5)
+      expect(datafeed.getActiveSubscriptionsCount()).toBeLessThanOrEqual(MAX_CONCURRENT_SUBSCRIPTIONS);
+      expect(datafeed.getActiveSubscriptionsCount()).toBe(5);
+
+      // Clean up all
+      for (let i = 1; i <= 6; i++) {
+        datafeed.unsubscribeBars(`sub-uid-${i}`);
+      }
+      expect(datafeed.getActiveSubscriptionsCount()).toBe(0);
+    });
+
+    it('rejects invalid symbol from opening a WebSocket subscription', () => {
+      const datafeed = new AlphaBAGDatafeed();
+      datafeed.subscribeBars(
+        { name: 'INVALID#SYMBOL!@' } as any,
+        '60',
+        () => {},
+        'sub-invalid',
+        () => {}
+      );
+      expect(datafeed.getActiveSubscriptionsCount()).toBe(0);
     });
   });
 

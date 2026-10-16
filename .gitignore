@@ -44,3 +44,6 @@ scripts/seed-demo-data.js
 recordings/
 recordings-test/
 
+# Proprietary TradingView Charting Library (licensed asset, do not commit)
+public/charting_library/
+

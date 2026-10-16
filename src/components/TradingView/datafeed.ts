@@ -65,6 +65,11 @@ export const cleanSymbolName = (symbol: string): string => {
   return clean;
 };
 
+// Validate that symbol contains only alphanumeric characters between 2 and 20 chars
+export const isValidSymbol = (symbol: string): boolean => {
+  return /^[A-Z0-9]{2,20}$/.test(symbol);
+};
+
 // Dynamic price scale based on symbol (e.g. PEPE, SHIB need more decimal places)
 export const getPriceScale = (symbol: string): number => {
   const s = symbol.toUpperCase();
@@ -109,8 +114,24 @@ const POPULAR_SEARCH_SYMBOLS: SearchSymbolResultItem[] = [
   { symbol: 'SHIBUSDT', full_name: 'BINANCE:SHIBUSDT', description: 'Shiba Inu / Tether USD', exchange: 'BINANCE', ticker: 'SHIBUSDT', type: 'crypto' },
 ];
 
+export const MAX_CONCURRENT_SUBSCRIPTIONS = 5;
+
+export interface ActiveSubscription {
+  ws: WebSocket | null;
+  cleanSymbol: string;
+  streamName: string;
+  retryCount: number;
+  retryTimer?: ReturnType<typeof setTimeout>;
+  closedIntentionally: boolean;
+  callback: SubscribeBarsCallback;
+}
+
 export class AlphaBAGDatafeed implements IBasicDataFeed {
-  private activeSubscriptions = new Map<string, WebSocket>();
+  private activeSubscriptions = new Map<string, ActiveSubscription>();
+
+  getActiveSubscriptionsCount(): number {
+    return this.activeSubscriptions.size;
+  }
 
   onReady(callback: (config: DatafeedConfiguration) => void): void {
     setTimeout(() => callback(DEFAULT_CONFIGURATION), 0);
@@ -239,18 +260,49 @@ export class AlphaBAGDatafeed implements IBasicDataFeed {
     subscriberUID: string,
     _onResetCacheNeededCallback: () => void
   ): void {
-    const cleanSymbol = cleanSymbolName(symbolInfo.name).toLowerCase();
-    const interval = resolutionToBinanceInterval(resolution);
-    const streamName = `${cleanSymbol}@kline_${interval}`;
-    const wsUrl = `wss://stream.binance.com:9443/ws/${streamName}`;
+    const rawClean = cleanSymbolName(symbolInfo.name);
+    if (!isValidSymbol(rawClean)) {
+      console.warn(`[AlphaBAG Datafeed] Rejected invalid symbol format: ${rawClean}`);
+      return;
+    }
 
     // Clean up existing subscription if duplicate
     if (this.activeSubscriptions.has(subscriberUID)) {
       this.unsubscribeBars(subscriberUID);
     }
 
+    // Enforce maximum concurrent active subscriptions limit (max 5)
+    if (this.activeSubscriptions.size >= MAX_CONCURRENT_SUBSCRIPTIONS) {
+      const oldestKey = this.activeSubscriptions.keys().next().value;
+      if (oldestKey) {
+        this.unsubscribeBars(oldestKey);
+      }
+    }
+
+    const cleanSymbol = rawClean.toLowerCase();
+    const interval = resolutionToBinanceInterval(resolution);
+    const streamName = `${cleanSymbol}@kline_${interval}`;
+
+    const sub: ActiveSubscription = {
+      ws: null,
+      cleanSymbol,
+      streamName,
+      retryCount: 0,
+      closedIntentionally: false,
+      callback: onRealtimeCallback,
+    };
+
+    this.activeSubscriptions.set(subscriberUID, sub);
+    this.connectStream(subscriberUID, sub);
+  }
+
+  private connectStream(subscriberUID: string, sub: ActiveSubscription): void {
+    if (sub.closedIntentionally) return;
+
     try {
+      const wsUrl = `wss://stream.binance.com:9443/ws/${sub.streamName}`;
       const ws = new WebSocket(wsUrl);
+      sub.ws = ws;
 
       ws.onmessage = (event) => {
         try {
@@ -265,7 +317,9 @@ export class AlphaBAGDatafeed implements IBasicDataFeed {
               close: parseFloat(k.c),
               volume: parseFloat(k.v),
             };
-            onRealtimeCallback(bar);
+            sub.callback(bar);
+            // Reset retry count on successful message
+            sub.retryCount = 0;
           }
         } catch (e) {
           console.warn('[AlphaBAG WebSocket] Parse error:', e);
@@ -273,20 +327,46 @@ export class AlphaBAGDatafeed implements IBasicDataFeed {
       };
 
       ws.onerror = (err) => {
-        console.warn(`[AlphaBAG WebSocket] Stream error for ${streamName}:`, err);
+        console.warn(`[AlphaBAG WebSocket] Stream error for ${sub.streamName}:`, err);
       };
 
-      this.activeSubscriptions.set(subscriberUID, ws);
+      ws.onclose = () => {
+        if (sub.closedIntentionally) return;
+        if (sub.retryCount < 5) {
+          const baseDelay = 1000 * Math.pow(2, sub.retryCount);
+          const jitter = Math.random() * 500;
+          const delay = Math.min(baseDelay + jitter, 10000);
+          sub.retryCount++;
+          sub.retryTimer = setTimeout(() => {
+            if (this.activeSubscriptions.has(subscriberUID)) {
+              this.connectStream(subscriberUID, sub);
+            }
+          }, delay);
+        } else {
+          console.warn(`[AlphaBAG WebSocket] Max retries (5) reached for ${sub.streamName}`);
+          this.activeSubscriptions.delete(subscriberUID);
+        }
+      };
     } catch (err) {
       console.warn('[AlphaBAG Datafeed] Failed to initialize live WebSocket:', err);
     }
   }
 
   unsubscribeBars(subscriberUID: string): void {
-    const ws = this.activeSubscriptions.get(subscriberUID);
-    if (ws) {
-      if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
-        ws.close();
+    const sub = this.activeSubscriptions.get(subscriberUID);
+    if (sub) {
+      sub.closedIntentionally = true;
+      if (sub.retryTimer) {
+        clearTimeout(sub.retryTimer);
+        sub.retryTimer = undefined;
+      }
+      if (sub.ws) {
+        try {
+          if (sub.ws.readyState === WebSocket.OPEN || sub.ws.readyState === WebSocket.CONNECTING) {
+            sub.ws.close();
+          }
+        } catch (_) {}
+        sub.ws = null;
       }
       this.activeSubscriptions.delete(subscriberUID);
     }
