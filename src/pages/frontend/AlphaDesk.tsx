@@ -44,18 +44,17 @@ type TabId = 'tradingview' | 'bubblemaps' | 'whales' | 'calls' | 'ai' | 'santime
 interface TabConfig {
   id: TabId;
   label: string;
-  badge: string;
   Icon: LucideIcon;
 }
 
 const TABS: TabConfig[] = [
-  { id: 'tradingview', label: 'TradingView',   badge: 'CHART',     Icon: BarChart2   },
-  { id: 'bubblemaps',  label: 'Bubblemaps',    badge: 'HOLDERS',   Icon: Share2      },
-  { id: 'whales',      label: 'Wallet Flow',   badge: 'FLOW',      Icon: Eye         },
-  { id: 'calls',       label: 'Trade Signals', badge: 'SIGNALS',   Icon: Target      },
-  { id: 'ai',          label: 'Market AI',     badge: 'ASSISTANT', Icon: Bot         },
-  { id: 'santiment',   label: 'Social Intel',  badge: 'METRICS',   Icon: Activity    },
-  { id: 'security',    label: 'Approvals Scan',badge: 'SECURITY',  Icon: ShieldCheck },
+  { id: 'tradingview', label: 'TradingView',   Icon: BarChart2   },
+  { id: 'bubblemaps',  label: 'Bubblemaps',    Icon: Share2      },
+  { id: 'whales',      label: 'Wallet Flow',   Icon: Eye         },
+  { id: 'calls',       label: 'Trade Signals', Icon: Target      },
+  { id: 'ai',          label: 'Market AI',     Icon: Bot         },
+  { id: 'santiment',   label: 'Social Intel',  Icon: Activity    },
+  { id: 'security',    label: 'Approvals Scan',Icon: ShieldCheck },
 ];
 
 // ─── Premium gate screen ──────────────────────────────────────────────────────
@@ -239,13 +238,13 @@ export const AlphaDesk: React.FC = () => {
 
       {/* ── Sleek Segmented Terminal Tabs (7 Compact Institutional Tabs) ──────── */}
       <div className="flex items-center px-3 py-2 bg-[#14171D] border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-1.5">
-        {TABS.map(({ id, label, badge, Icon }) => {
+        {TABS.map(({ id, label, Icon }) => {
           const active = activeTab === id;
           return (
             <button
               key={id}
               onClick={() => handleTabChange(id)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all shrink-0 border ${
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all shrink-0 border ${
                 active
                   ? 'bg-[#202630] text-alphabag-yellow border-alphabag-yellow/40 shadow-sm'
                   : 'bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50 border-transparent'
@@ -253,9 +252,6 @@ export const AlphaDesk: React.FC = () => {
             >
               <Icon size={14} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
               <span>{label}</span>
-              <span className={`text-[11px] px-1 py-0.2 rounded font-mono font-medium ${active ? 'bg-alphabag-yellow/20 text-alphabag-yellow' : 'bg-[#0B0E11] text-alphabag-subtext'}`}>
-                {badge}
-              </span>
             </button>
           );
         })}
