@@ -7,6 +7,7 @@ CheckCircle2,
 Copy,
 Gift,
 Lock,
+Loader2,
 Send,
 Shield,ShieldAlert,
 Timer,
@@ -927,15 +928,20 @@ export const Airdrop: React.FC = () => {
                             <Button 
                                 type="submit" 
                                 disabled={isSubmitting || !review}
-                                className="w-full py-3 bg-alphabag-yellow text-alphabag-dark font-semibold uppercase rounded-md hover:bg-[#e0bd2e] transition-all flex flex-col items-center justify-center gap-1"
+                                className="w-full !h-auto min-h-[48px] py-3 px-6 bg-alphabag-yellow text-[#0B0E11] hover:bg-[#FCD535] active:bg-[#D9A30A] font-bold text-sm tracking-wider uppercase rounded-lg transition-all flex items-center justify-center gap-2.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isSubmitting ? 'SYNCING DATA...' : (
-                                    <>
-                                        <span className="text-sm">INITIALIZE FINAL SYNC</span>
-                                        <span className="text-[11px] font-medium opacity-80 uppercase">
-                                            Earn 5,000 ITEMS for Feedback
+                                {isSubmitting ? (
+                                    <span className="flex items-center gap-2 font-bold text-sm text-[#0B0E11]">
+                                        <Loader2 size={16} className="animate-spin text-[#0B0E11]" />
+                                        <span>SUBMITTING...</span>
+                                    </span>
+                                ) : (
+                                    <div className="flex items-center justify-center gap-2.5 text-[#0B0E11]">
+                                        <span className="text-sm font-bold tracking-wider">SUBMIT</span>
+                                        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-black/10 border border-black/15 font-mono">
+                                            +5,000 ITEMS
                                         </span>
-                                    </>
+                                    </div>
                                 )}
                             </Button>
                         </form>
