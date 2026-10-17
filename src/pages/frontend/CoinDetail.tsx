@@ -1,4 +1,4 @@
-import { ArrowLeft, Share2, ShieldCheck, Star, Wallet, Zap } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Share2, ShieldCheck, Star, Wallet, Zap } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
 import { Area,AreaChart,CartesianGrid,ResponsiveContainer,Tooltip,XAxis,YAxis } from 'recharts';
@@ -8,6 +8,7 @@ import { Coin,PortfolioItem } from '../../types';
 
 import { MarketService } from '../../services/MarketService';
 import { api } from '../../services/api';
+import { dexscreenerService, DexPair } from '../../services/dexscreener';
 
 export const CoinDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -17,6 +18,10 @@ export const CoinDetail: React.FC = () => {
     const [notFound, setNotFound] = useState(false);
     const [holding, setHolding] = useState<PortfolioItem | undefined>(undefined);
     const [timeframe, setTimeframe] = useState('1D');
+    const [chartMode, setChartMode] = useState<'SPARKLINE' | 'DEXSCREENER'>('SPARKLINE');
+    const [dexPairs, setDexPairs] = useState<DexPair[]>([]);
+    const [selectedDexPair, setSelectedDexPair] = useState<DexPair | null>(null);
+    const [isFetchingDex, setIsFetchingDex] = useState(false);
     const [aiInsight, setAiInsight] = useState<string | null>(null);
     const [isFetchingAi, setIsFetchingAi] = useState(false);
     const [groundingLinks, setGroundingLinks] = useState<any[]>([]);
@@ -36,6 +41,7 @@ export const CoinDetail: React.FC = () => {
                         sparkline_in_7d: { price: realCoin.sparkline_in_7d?.price || [] }
                     });
                     fetchAiInsight(realCoin.name, realCoin.symbol);
+                    fetchDexPairs(realCoin.symbol);
                     return;
                 }
             } catch (e) {
@@ -72,6 +78,22 @@ export const CoinDetail: React.FC = () => {
             setHolding(portfolioItems.find(p => p.coinId === coin.id));
         }
     }, [coin, portfolioItems]);
+
+    const fetchDexPairs = async (symbol: string) => {
+        setIsFetchingDex(true);
+        try {
+            const pairs = await dexscreenerService.search(symbol);
+            if (pairs && pairs.length > 0) {
+                const sorted = [...pairs].sort((a, b) => (b.volume?.h24 || 0) - (a.volume?.h24 || 0));
+                setDexPairs(sorted);
+                setSelectedDexPair(sorted[0]);
+            }
+        } catch (err) {
+            console.warn("[CoinDetail] DexScreener lookup error:", err);
+        } finally {
+            setIsFetchingDex(false);
+        }
+    };
 
     const fetchAiInsight = async (coinName: string, symbol: string) => {
         setIsFetchingAi(true);
@@ -215,64 +237,146 @@ export const CoinDetail: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 h-[500px] flex flex-col">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2 pb-4 border-b border-alphabag-gray/30">
-                            <div className="flex space-x-1.5 bg-alphabag-black p-1 rounded-md border border-alphabag-gray">
-                                {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 h-[540px] flex flex-col">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3 pb-3 border-b border-alphabag-gray/30">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <div className="flex space-x-1 bg-alphabag-black p-1 rounded-md border border-alphabag-gray">
                                     <button
-                                        key={tf}
-                                        onClick={() => setTimeframe(tf)}
-                                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all uppercase tracking-wider ${timeframe === tf
+                                        type="button"
+                                        onClick={() => setChartMode('SPARKLINE')}
+                                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all uppercase tracking-wider ${chartMode === 'SPARKLINE'
                                             ? 'bg-alphabag-yellow text-alphabag-black'
                                             : 'text-alphabag-subtext hover:text-white hover:bg-alphabag-gray'
                                             }`}
                                     >
-                                        {tf}
+                                        Sparkline (7D)
                                     </button>
-                                ))}
+                                    <button
+                                        type="button"
+                                        onClick={() => setChartMode('DEXSCREENER')}
+                                        className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-all uppercase tracking-wider flex items-center gap-1.5 ${chartMode === 'DEXSCREENER'
+                                            ? 'bg-alphabag-yellow text-alphabag-black'
+                                            : 'text-alphabag-subtext hover:text-white hover:bg-alphabag-gray'
+                                            }`}
+                                    >
+                                        <Zap size={12} className={chartMode === 'DEXSCREENER' ? 'fill-current' : 'text-alphabag-yellow'} />
+                                        <span>DexScreener Live</span>
+                                    </button>
+                                </div>
+
+                                {chartMode === 'SPARKLINE' && (
+                                    <div className="flex space-x-1 bg-alphabag-black p-1 rounded-md border border-alphabag-gray">
+                                        {['15m', '1H', '4H', '1D', '1W', '1M'].map(tf => (
+                                            <button
+                                                key={tf}
+                                                type="button"
+                                                onClick={() => setTimeframe(tf)}
+                                                className={`px-2 py-1 rounded text-[11px] font-semibold transition-all uppercase tracking-wider ${timeframe === tf
+                                                    ? 'bg-alphabag-yellow text-alphabag-black'
+                                                    : 'text-alphabag-subtext hover:text-white hover:bg-alphabag-gray'
+                                                    }`}
+                                            >
+                                                {tf}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {chartMode === 'DEXSCREENER' && dexPairs.length > 1 && (
+                                    <select
+                                        value={selectedDexPair?.pairAddress || ''}
+                                        onChange={(e) => {
+                                            const p = dexPairs.find(item => item.pairAddress === e.target.value);
+                                            if (p) setSelectedDexPair(p);
+                                        }}
+                                        className="bg-alphabag-black border border-alphabag-gray rounded text-[11px] text-white px-2 py-1 outline-none uppercase font-mono"
+                                    >
+                                        {dexPairs.slice(0, 6).map(p => (
+                                            <option key={p.pairAddress} value={p.pairAddress}>
+                                                {p.chainId?.toUpperCase()} • {p.dexId?.toUpperCase()} ({p.baseToken?.symbol}/{p.quoteToken?.symbol})
+                                            </option>
+                                        ))}
+                                    </select>
+                                )}
                             </div>
+
                             <div className="flex items-center space-x-2 text-[11px] font-medium text-alphabag-subtext uppercase tracking-wider">
-                                <span>{hasRealChart ? '7-Day Price History' : 'Live sparkline unavailable — showing current price only'}</span>
+                                {chartMode === 'SPARKLINE' ? (
+                                    <span>{hasRealChart ? '7-Day Price History' : 'Live sparkline unavailable'}</span>
+                                ) : (
+                                    <span className="flex items-center gap-1 text-alphabag-yellow">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-alphabag-green animate-pulse"></span>
+                                        Real-Time Candlestick Feed
+                                    </span>
+                                )}
                             </div>
                         </div>
 
-                        <div className="flex-1 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={chartData}>
-                                    <defs>
-                                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor={isPositive ? '#0ECB81' : '#F6465D'} stopOpacity={0.4} />
-                                            <stop offset="95%" stopColor={isPositive ? '#0ECB81' : '#F6465D'} stopOpacity={0} />
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#2B3139" vertical={false} strokeOpacity={0.2} />
-                                    <XAxis dataKey="time" hide />
-                                    <YAxis
-                                        domain={['auto', 'auto']}
-                                        orientation="right"
-                                        tick={{ fill: '#848E9C', fontSize: 11, fontWeight: '500' }}
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tickFormatter={(val) => `$${val.toLocaleString()}`}
+                        {chartMode === 'SPARKLINE' ? (
+                            <div className="flex-1 w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={chartData}>
+                                        <defs>
+                                            <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor={isPositive ? '#0ECB81' : '#F6465D'} stopOpacity={0.4} />
+                                                <stop offset="95%" stopColor={isPositive ? '#0ECB81' : '#F6465D'} stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="#2B3139" vertical={false} strokeOpacity={0.2} />
+                                        <XAxis dataKey="time" hide />
+                                        <YAxis
+                                            domain={['auto', 'auto']}
+                                            orientation="right"
+                                            tick={{ fill: '#848E9C', fontSize: 11, fontWeight: '500' }}
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tickFormatter={(val) => `$${val.toLocaleString()}`}
+                                        />
+                                        <Tooltip
+                                            contentStyle={{ backgroundColor: '#0B0E11', border: '1px solid #2B3139', color: '#EAECEF', borderRadius: '4px' }}
+                                            itemStyle={{ color: '#EAECEF', fontWeight: '500' }}
+                                            cursor={{ stroke: '#848E9C', strokeWidth: 1, strokeDasharray: '4 4' }}
+                                            formatter={(value: number) => [`$${value.toFixed(2)}`, 'Market Price']}
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="price"
+                                            stroke={isPositive ? '#0ECB81' : '#F6465D'}
+                                            fillOpacity={1}
+                                            fill="url(#colorPrice)"
+                                            strokeWidth={2}
+                                            animationDuration={1000}
+                                        />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            </div>
+                        ) : (
+                            <div className="flex-1 w-full rounded-md overflow-hidden bg-alphabag-black border border-alphabag-gray/50 relative">
+                                {selectedDexPair ? (
+                                    <iframe
+                                        src={`https://dexscreener.com/${selectedDexPair.chainId}/${selectedDexPair.pairAddress}?embed=1&theme=dark&trades=0&info=0`}
+                                        title={`DexScreener Chart for ${selectedDexPair.baseToken.symbol}`}
+                                        className="w-full h-full border-0"
                                     />
-                                    <Tooltip
-                                        contentStyle={{ backgroundColor: '#0B0E11', border: '1px solid #2B3139', color: '#EAECEF', borderRadius: '4px' }}
-                                        itemStyle={{ color: '#EAECEF', fontWeight: '500' }}
-                                        cursor={{ stroke: '#848E9C', strokeWidth: 1, strokeDasharray: '4 4' }}
-                                        formatter={(value: number) => [`$${value.toFixed(2)}`, 'Market Price']}
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="price"
-                                        stroke={isPositive ? '#0ECB81' : '#F6465D'}
-                                        fillOpacity={1}
-                                        fill="url(#colorPrice)"
-                                        strokeWidth={2}
-                                        animationDuration={1000}
-                                    />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center h-full text-alphabag-subtext p-6 text-center">
+                                        <Zap size={32} className="text-alphabag-yellow mb-2 opacity-80" />
+                                        <p className="text-sm font-semibold text-white mb-1">DEX Pool Search</p>
+                                        <p className="text-xs text-alphabag-subtext max-w-sm mb-4">
+                                            {isFetchingDex ? 'Scanning on-chain DEX liquidity...' : `No direct single pool auto-matched for ${coin.symbol.toUpperCase()}. Launch DEX screener to inspect all pools.`}
+                                        </p>
+                                        <a
+                                            href={`https://dexscreener.com/search?q=${encodeURIComponent(coin.symbol)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-alphabag-yellow text-alphabag-dark text-xs font-semibold uppercase tracking-wider hover:bg-yellow-400 transition-colors"
+                                        >
+                                            Search on DexScreener <ExternalLink size={12} />
+                                        </a>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -361,6 +465,61 @@ export const CoinDetail: React.FC = () => {
                             <div className="py-2">
                                 <p className="text-xs font-semibold text-white mb-1">Audit data unavailable</p>
                                 <p className="text-[11px] text-alphabag-subtext leading-relaxed">Contract audit and security verification scores are not currently available for this asset.</p>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="bg-alphabag-dark border border-alphabag-gray rounded-lg p-4 relative">
+                        <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-xs font-semibold text-alphabag-text uppercase tracking-wider flex items-center">
+                                <Zap size={15} className="mr-2 text-alphabag-yellow" /> On-Chain Liquidity
+                            </h3>
+                            {selectedDexPair && (
+                                <a
+                                    href={selectedDexPair.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[11px] text-alphabag-yellow hover:underline flex items-center gap-1"
+                                    title="View Pair on DexScreener"
+                                >
+                                    DexScreener <ExternalLink size={11} />
+                                </a>
+                            )}
+                        </div>
+
+                        {selectedDexPair ? (
+                            <div className="space-y-2 pt-1 text-xs">
+                                <div className="flex justify-between py-1.5 border-b border-alphabag-gray/30">
+                                    <span className="text-alphabag-subtext font-medium uppercase text-[11px]">DEX Protocol</span>
+                                    <span className="font-semibold text-white uppercase text-[11px]">
+                                        {selectedDexPair.dexId} ({selectedDexPair.chainId})
+                                    </span>
+                                </div>
+                                <div className="flex justify-between py-1.5 border-b border-alphabag-gray/30">
+                                    <span className="text-alphabag-subtext font-medium uppercase text-[11px]">Liquidity Depth</span>
+                                    <span className="font-semibold text-alphabag-green tabular-nums num text-[11px]">
+                                        {selectedDexPair.liquidity?.usd ? `$${selectedDexPair.liquidity.usd.toLocaleString()}` : '—'}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between py-1.5 border-b border-alphabag-gray/30">
+                                    <span className="text-alphabag-subtext font-medium uppercase text-[11px]">24h Volume</span>
+                                    <span className="font-semibold text-white tabular-nums num text-[11px]">
+                                        {selectedDexPair.volume?.h24 ? `$${selectedDexPair.volume.h24.toLocaleString()}` : '—'}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between py-1.5">
+                                    <span className="text-alphabag-subtext font-medium uppercase text-[11px]">24h Transactions</span>
+                                    <span className="font-semibold text-white tabular-nums num text-[11px]">
+                                        {selectedDexPair.txns?.h24 ? `${selectedDexPair.txns.h24.buys}B / ${selectedDexPair.txns.h24.sells}S` : '—'}
+                                    </span>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="py-2">
+                                <p className="text-xs font-semibold text-white mb-1">DEX pair data loading or unlisted</p>
+                                <p className="text-[11px] text-alphabag-subtext leading-relaxed">
+                                    Live on-chain liquidity depth is sourced directly from decentralized exchange routers via DexScreener API.
+                                </p>
                             </div>
                         )}
                     </div>

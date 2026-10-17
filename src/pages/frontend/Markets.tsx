@@ -1,13 +1,94 @@
 import {
   ArrowDown,
   ArrowUp,
+  ExternalLink,
   RefreshCw,
   Search,
   Star,
+  Zap,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MarketService } from '../../services/MarketService';
+import { dexscreenerService, DexPair } from '../../services/dexscreener';
+
+const FALLBACK_DEX_PAIRS: DexPair[] = [
+  {
+    chainId: 'solana',
+    dexId: 'raydium',
+    url: 'https://dexscreener.com/solana/83vseozb3aawu9kwpkybft39z3jfdj4m1b5z3w18k8y4',
+    pairAddress: '83vsEozB3aAWu9kWpKybFt39z3JfdJ4M1B5z3w18k8Y4',
+    baseToken: { address: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', name: 'Bonk', symbol: 'BONK' },
+    quoteToken: { address: 'So11111111111111111111111111111111111111112', name: 'Solana', symbol: 'SOL' },
+    priceNative: '0.000138',
+    priceUsd: '0.00002148',
+    volume: { h24: 38240000, h1: 1840000 },
+    priceChange: { h1: 2.14, h24: 14.85 },
+    liquidity: { usd: 12480000 },
+    fdv: 1890000000,
+    txns: { h24: { buys: 14200, sells: 11950 } }
+  },
+  {
+    chainId: 'ethereum',
+    dexId: 'uniswap_v3',
+    url: 'https://dexscreener.com/ethereum/0x11b815efb8f581194ae79006d24e0d814b7697f6',
+    pairAddress: '0x11b815efb8f581194ae79006d24e0d814b7697f6',
+    baseToken: { address: '0x6982508145454ce325ddbe47a25d4ec3d2311933', name: 'Pepe', symbol: 'PEPE' },
+    quoteToken: { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', name: 'Wrapped Ether', symbol: 'WETH' },
+    priceNative: '0.00000000412',
+    priceUsd: '0.00001015',
+    volume: { h24: 51200000, h1: 3410000 },
+    priceChange: { h1: 0.95, h24: 6.42 },
+    liquidity: { usd: 28900000 },
+    fdv: 4280000000,
+    txns: { h24: { buys: 22100, sells: 19800 } }
+  },
+  {
+    chainId: 'solana',
+    dexId: 'raydium',
+    url: 'https://dexscreener.com/solana/ep2wng94ueeqsrj1h1g4ffwukj118x954mupk4z',
+    pairAddress: 'EP2Wng94UeeQsRj1h1g4fFWUkJ118X954MUpK4Z',
+    baseToken: { address: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', name: 'dogwifhat', symbol: 'WIF' },
+    quoteToken: { address: 'So11111111111111111111111111111111111111112', name: 'Solana', symbol: 'SOL' },
+    priceNative: '0.0162',
+    priceUsd: '2.52',
+    volume: { h24: 44100000, h1: 2950000 },
+    priceChange: { h1: -1.25, h24: 8.35 },
+    liquidity: { usd: 19400000 },
+    fdv: 2520000000,
+    txns: { h24: { buys: 18400, sells: 16200 } }
+  },
+  {
+    chainId: 'bsc',
+    dexId: 'pancakeswap_v3',
+    url: 'https://dexscreener.com/bsc/0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
+    pairAddress: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
+    baseToken: { address: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', name: 'Wrapped BNB', symbol: 'WBNB' },
+    quoteToken: { address: '0x55d398326f99059ff775485246999027b3197955', name: 'Tether USD', symbol: 'USDT' },
+    priceNative: '730.08',
+    priceUsd: '730.08',
+    volume: { h24: 88500000, h1: 4200000 },
+    priceChange: { h1: 0.15, h24: 0.26 },
+    liquidity: { usd: 64200000 },
+    fdv: 97200000000,
+    txns: { h24: { buys: 31200, sells: 29800 } }
+  },
+  {
+    chainId: 'base',
+    dexId: 'aerodrome',
+    url: 'https://dexscreener.com/base/0x2f90ef59a22f77977eb71b12b59623e8f8fe0774',
+    pairAddress: '0x2f90ef59a22f77977eb71b12b59623e8f8fe0774',
+    baseToken: { address: '0x532f27101965dd16442e59d40670faf5ebb142e4', name: 'Brett', symbol: 'BRETT' },
+    quoteToken: { address: '0x4200000000000000000000000000000000000006', name: 'Wrapped Ether', symbol: 'WETH' },
+    priceNative: '0.0000418',
+    priceUsd: '0.1025',
+    volume: { h24: 18400000, h1: 1210000 },
+    priceChange: { h1: 3.12, h24: 11.45 },
+    liquidity: { usd: 9240000 },
+    fdv: 1024000000,
+    txns: { h24: { buys: 9200, sells: 7800 } }
+  }
+];
 
 export interface CoinMarketData {
   id: string;
@@ -319,6 +400,37 @@ export const Markets: React.FC = () => {
     fetchMarketData();
   }, [fetchMarketData]);
 
+  const [dexPairs, setDexPairs] = useState<DexPair[]>(FALLBACK_DEX_PAIRS);
+  const [isFetchingDex, setIsFetchingDex] = useState(false);
+
+  const fetchDexMarketPairs = useCallback(async () => {
+    setIsFetchingDex(true);
+    try {
+      const topSymbols = ['SOL', 'PEPE', 'BONK', 'WIF', 'ETH', 'BRETT', 'SUI', 'RENDER'];
+      const results = await Promise.allSettled(topSymbols.map((s) => dexscreenerService.search(s)));
+      const pairs: DexPair[] = [];
+      results.forEach((res) => {
+        if (res.status === 'fulfilled' && Array.isArray(res.value) && res.value[0]) {
+          pairs.push(res.value[0]);
+        }
+      });
+      if (pairs.length > 0) {
+        pairs.sort((a, b) => (b.volume?.h24 || 0) - (a.volume?.h24 || 0));
+        setDexPairs(pairs);
+      }
+    } catch (err) {
+      console.warn('[Markets] DexScreener fetch error:', err);
+    } finally {
+      setIsFetchingDex(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedCategory === '⚡ DexScreener Live') {
+      fetchDexMarketPairs();
+    }
+  }, [selectedCategory, fetchDexMarketPairs]);
+
   const toggleWatchlist = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setWatchlist((prev) => {
@@ -333,7 +445,7 @@ export const Markets: React.FC = () => {
     let list = coins;
     if (selectedCategory === '⭐ Watchlist') {
       list = list.filter((c) => watchlist.has(c.id));
-    } else if (selectedCategory !== 'All Cryptos') {
+    } else if (selectedCategory !== 'All Cryptos' && selectedCategory !== '⚡ DexScreener Live') {
       list = list.filter((c) => c.category === selectedCategory);
     }
 
@@ -345,6 +457,18 @@ export const Markets: React.FC = () => {
     }
     return list;
   }, [coins, selectedCategory, searchQuery, watchlist]);
+
+  const filteredDexPairs = useMemo(() => {
+    if (!searchQuery.trim()) return dexPairs;
+    const q = searchQuery.toLowerCase().trim();
+    return dexPairs.filter(
+      (p) =>
+        p.baseToken?.name?.toLowerCase().includes(q) ||
+        p.baseToken?.symbol?.toLowerCase().includes(q) ||
+        p.chainId?.toLowerCase().includes(q) ||
+        p.dexId?.toLowerCase().includes(q)
+    );
+  }, [dexPairs, searchQuery]);
 
   const fmt = (val: number | undefined) => {
     if (!val || isNaN(val)) return '$–';
@@ -448,6 +572,18 @@ export const Markets: React.FC = () => {
           <span>Watchlist ({watchlist.size})</span>
         </button>
 
+        <button
+          onClick={() => setSelectedCategory('⚡ DexScreener Live')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
+            selectedCategory === '⚡ DexScreener Live'
+              ? 'bg-alphabag-yellow text-[#0B0E11] shadow'
+              : 'bg-[#181A20] text-alphabag-yellow/90 hover:text-alphabag-yellow hover:bg-[#202630] border border-alphabag-yellow/30'
+          }`}
+        >
+          <Zap size={12} className={selectedCategory === '⚡ DexScreener Live' ? 'fill-[#0B0E11]' : ''} />
+          <span>DexScreener Live</span>
+        </button>
+
         {CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat;
           return (
@@ -466,8 +602,127 @@ export const Markets: React.FC = () => {
         })}
       </div>
 
-      {/* ── CoinMarketCap Institutional Data Table ── */}
-      <div className="rounded-lg border border-[#2B313A] bg-[#181A20] overflow-hidden shadow-xl">
+      {selectedCategory === '⚡ DexScreener Live' ? (
+        <div className="rounded-lg border border-[#2B313A] bg-[#181A20] overflow-hidden shadow-xl">
+          <div className="p-3 bg-[#14171D] border-b border-[#2B313A] flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Zap size={16} className="text-alphabag-yellow" />
+              <span className="text-xs font-bold uppercase tracking-wider text-white">Live On-Chain Liquidity & DEX Screener</span>
+              {isFetchingDex && <span className="text-[11px] text-alphabag-yellow font-mono animate-pulse">Syncing...</span>}
+            </div>
+            <button
+              type="button"
+              onClick={fetchDexMarketPairs}
+              disabled={isFetchingDex}
+              className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#181A20] hover:bg-[#202630] text-gray-300 text-[11px] font-semibold border border-[#2B313A]"
+            >
+              <RefreshCw size={11} className={isFetchingDex ? 'animate-spin' : ''} />
+              <span>Refresh Pools</span>
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead className="bg-[#14171D] border-b border-[#2B313A] text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
+                <tr>
+                  <th className="py-3 px-3 pl-4 w-10 text-center">⭐</th>
+                  <th className="py-3 px-3 text-left">Pair / Token</th>
+                  <th className="py-3 px-3 text-left">DEX & Chain</th>
+                  <th className="py-3 px-3 text-right">Price</th>
+                  <th className="py-3 px-3 text-right">1h %</th>
+                  <th className="py-3 px-3 text-right">24h %</th>
+                  <th className="py-3 px-3 text-right">24h Volume</th>
+                  <th className="py-3 px-3 text-right">Liquidity Depth</th>
+                  <th className="py-3 px-3 text-right hidden lg:table-cell">24h Txns</th>
+                  <th className="py-3 px-4 text-center">Live DEX</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#2B313A] text-xs font-mono">
+                {filteredDexPairs.map((pair, idx) => {
+                  const isStarred = watchlist.has(pair.pairAddress);
+                  const pch1 = pair.priceChange?.h1 ?? 0;
+                  const pch24 = pair.priceChange?.h24 ?? 0;
+                  const isUp24 = pch24 >= 0;
+
+                  return (
+                    <tr
+                      key={pair.pairAddress || idx}
+                      className="hover:bg-[#202630]/70 transition-colors cursor-pointer group"
+                    >
+                      <td className="py-3 px-3 pl-4 text-center">
+                        <button
+                          type="button"
+                          aria-label={`${isStarred ? 'Remove' : 'Add'} ${pair.baseToken?.symbol} from watchlist`}
+                          aria-pressed={isStarred}
+                          onClick={(e) => toggleWatchlist(pair.pairAddress, e)}
+                          className="inline-flex rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow"
+                        >
+                          <Star
+                            size={13}
+                            aria-hidden="true"
+                            className={`transition-colors inline-block ${
+                              isStarred ? 'text-alphabag-yellow fill-alphabag-yellow' : 'text-gray-600 hover:text-gray-300'
+                            }`}
+                          />
+                        </button>
+                      </td>
+                      <td className="py-3 px-3">
+                        <div className="flex items-center gap-2">
+                          <div>
+                            <div className="font-semibold text-white text-xs group-hover:text-alphabag-yellow transition-colors flex items-center gap-1.5">
+                              <span>{pair.baseToken?.name || pair.baseToken?.symbol}</span>
+                              <span className="text-[11px] text-gray-400">/{pair.quoteToken?.symbol}</span>
+                            </div>
+                            <div className="text-[11px] text-gray-500 font-mono">
+                              {pair.pairAddress ? `${pair.pairAddress.slice(0, 6)}...${pair.pairAddress.slice(-4)}` : ''}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-3">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold uppercase bg-[#202630] text-alphabag-yellow border border-[#2B313A]">
+                          {pair.chainId} • {pair.dexId}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 text-right font-semibold text-white num">
+                        ${pair.priceUsd ? Number(pair.priceUsd) < 0.01 ? Number(pair.priceUsd).toFixed(6) : Number(pair.priceUsd).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}
+                      </td>
+                      <td className={`py-3 px-3 text-right font-semibold num ${pch1 >= 0 ? 'text-[#0ECB81]' : 'text-[#F6465D]'}`}>
+                        {pch1 >= 0 ? '+' : ''}{pch1.toFixed(2)}%
+                      </td>
+                      <td className={`py-3 px-3 text-right font-semibold num ${isUp24 ? 'text-[#0ECB81]' : 'text-[#F6465D]'}`}>
+                        {isUp24 ? '+' : ''}{pch24.toFixed(2)}%
+                      </td>
+                      <td className="py-3 px-3 text-right text-gray-300 font-semibold num">
+                        {fmt(pair.volume?.h24)}
+                      </td>
+                      <td className="py-3 px-3 text-right text-alphabag-green font-semibold num">
+                        {fmt(pair.liquidity?.usd)}
+                      </td>
+                      <td className="py-3 px-3 text-right text-gray-400 hidden lg:table-cell num">
+                        {pair.txns?.h24 ? `${pair.txns.h24.buys}B / ${pair.txns.h24.sells}S` : '—'}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <a
+                          href={pair.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow hover:bg-alphabag-yellow hover:text-[#0B0E11] transition-all"
+                          title="Open Chart on DexScreener"
+                        >
+                          Chart <ExternalLink size={11} />
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ) : (
+        /* ── CoinMarketCap Institutional Data Table ── */
+        <div className="rounded-lg border border-[#2B313A] bg-[#181A20] overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead className="bg-[#14171D] border-b border-[#2B313A] text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
@@ -611,6 +866,7 @@ export const Markets: React.FC = () => {
           </table>
         </div>
       </div>
+      )}
     </div>
   );
 };

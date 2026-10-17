@@ -101,7 +101,17 @@ export const Settings: React.FC = () => {
                         <div className="text-2xl font-bold text-alphabag-text leading-none tracking-tight tabular-nums num">
                             {(premiumTokenBalance ?? 0).toLocaleString()} <span className="text-alphabag-yellow text-sm">BAG</span>
                         </div>
-                        <button onClick={() => {}} disabled={true} className="h-7 bg-alphabag-yellow text-alphabag-dark text-[11px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
+                        <div className="flex flex-col items-end">
+                            <button
+                                onClick={() => {}}
+                                disabled={true}
+                                title="Token Generation Event (TGE) pending - Contract deployment in progress"
+                                className="h-7 bg-alphabag-yellow/50 text-alphabag-dark text-[11px] font-semibold px-3 rounded-md transition-all cursor-not-allowed"
+                            >
+                                Buy
+                            </button>
+                            <span className="text-[11px] text-alphabag-subtext mt-0.5">Available at TGE</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -383,13 +393,17 @@ export const Settings: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="pt-4">
+                        <div className="pt-4 space-y-1.5">
                             <button
                                 disabled={true}
-                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed"
+                                title="Tier eligibility automatically verified post-TGE token snapshot"
+                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 opacity-60 cursor-not-allowed border border-alphabag-border"
                             >
                                 Hold 10k $BAG
                             </button>
+                            <p className="text-[11px] text-center text-alphabag-subtext">
+                                Verified via on-chain snapshot post-TGE
+                            </p>
                         </div>
                     </div>
 
@@ -434,14 +448,18 @@ export const Settings: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="pt-4">
+                        <div className="pt-4 space-y-1.5">
                             <button
                                 disabled={true}
-                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 opacity-50 cursor-not-allowed"
+                                title="Genesis Pass Mint Phase 2 will be announced in Alpha Passes Hub"
+                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 opacity-60 cursor-not-allowed border border-alphabag-yellow/20"
                             >
-                                <Lock size={14} />
+                                <Lock size={14} className="text-alphabag-yellow/70" />
                                 <span>Get Alpha Pass</span>
                             </button>
+                            <p className="text-[11px] text-center text-alphabag-subtext">
+                                Genesis Pass Phase 2 Mint Coming Soon
+                            </p>
                         </div>
                     </div>
                 </div>
