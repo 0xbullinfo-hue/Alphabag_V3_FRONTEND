@@ -400,7 +400,7 @@ export function BubblemapsEmbed({
                           className="w-6 h-6 rounded-full border border-[#2B313A]"
                         />
                       ) : (
-                        <div className="w-6 h-6 rounded-full bg-[#0B0E11] flex items-center justify-center text-[10px] text-alphabag-yellow font-bold border border-[#2B313A]">
+                        <div className="w-6 h-6 rounded-full bg-[#0B0E11] flex items-center justify-center text-[11px] text-alphabag-yellow font-bold border border-[#2B313A]">
                           {item.metadata?.symbol?.slice(0, 2) || 'TK'}
                         </div>
                       )}
@@ -413,13 +413,13 @@ export function BubblemapsEmbed({
                             ${item.metadata?.symbol || item.symbol}
                           </span>
                         </div>
-                        <span className="text-[10px] font-mono text-gray-500">
+                        <span className="text-[11px] font-mono text-gray-500">
                           {item.token_key?.address || item.address}
                         </span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-[#0B0E11] text-gray-400 uppercase font-mono border border-[#2B313A]">
+                      <span className="px-1.5 py-0.5 rounded text-[11px] bg-[#0B0E11] text-gray-400 uppercase font-mono border border-[#2B313A]">
                         {item.token_key?.chain || item.chain || selectedChain}
                       </span>
                     </div>
@@ -449,7 +449,7 @@ export function BubblemapsEmbed({
                     }`}
                   >
                     <span>{token.symbol}</span>
-                    <span className="opacity-60 text-[10px] uppercase">({token.chain})</span>
+                    <span className="opacity-60 text-[11px] uppercase">({token.chain})</span>
                   </button>
                 );
               })}
@@ -468,7 +468,7 @@ export function BubblemapsEmbed({
         {/* ── Frame Container ── */}
         <div className="relative w-full bg-[#0B0E11]" style={{ height }}>
           {loading && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[#0B0E11]/95 text-xs text-gray-300 backdrop-blur-sm">
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[#0B0E11]/95 text-xs text-gray-300 ">
               <div className="w-9 h-9 border-2 border-alphabag-yellow/20 border-t-alphabag-yellow rounded-full animate-spin" />
               <div className="text-center">
                 <p className="text-sm font-semibold text-white">Analyzing On-Chain Clusters...</p>
@@ -492,7 +492,7 @@ export function BubblemapsEmbed({
 
       {/* ── Screenshot Snapshot Modal ── */}
       {showSnapshotModal && (
-        <div className="fixed inset-0 z-50 bg-[#0B0E11]/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#0B0E11]/85 flex items-center justify-center p-4">
           <div className="w-full max-w-3xl bg-[#14171D] border border-[#2B313A] rounded-xl overflow-hidden shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 bg-[#181A20] border-b border-[#2B313A]">
               <div className="flex items-center gap-2">
@@ -551,7 +551,7 @@ export function BubblemapsEmbed({
 
       {/* ── Full-Screen In-App Workstation Modal ── */}
       {isExpanded && (
-        <div className="fixed inset-0 z-50 bg-[#0B0E11]/90 backdrop-blur-md flex flex-col p-4 md:p-6 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 bg-[#0B0E11]/90 flex flex-col p-4 md:p-6 animate-in fade-in duration-200">
           <div className="w-full h-full flex flex-col bg-[#14171D] border border-[#2B313A] rounded-xl overflow-hidden shadow-2xl">
             {/* Modal Command Bar */}
             <div className="flex items-center justify-between px-5 py-3.5 bg-[#181A20] border-b border-[#2B313A]">

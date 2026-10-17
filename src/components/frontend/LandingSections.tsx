@@ -106,7 +106,7 @@ const PerformanceAnalyticsWidget: React.FC = () => {
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-medium text-[#848E9C]">Growth</span>
-        <span className="text-[10px] font-mono font-bold text-[#0ECB81] bg-[#0ECB81]/15 px-1.5 py-0.5 rounded">
+        <span className="text-[11px] font-mono font-bold text-[#0ECB81] bg-[#0ECB81]/15 px-1.5 py-0.5 rounded">
           +2.4%
         </span>
       </div>
@@ -122,7 +122,7 @@ const PerformanceAnalyticsWidget: React.FC = () => {
               style={{ height: bar.h }}
               className={`w-full max-w-[10px] rounded-t transition-all duration-300 ${
                 bar.active
-                  ? 'bg-[#F0B90B] shadow-[0_0_8px_rgba(240,185,11,0.35)]'
+                  ? 'bg-[#F0B90B] '
                   : 'bg-[#F0B90B]/60 hover:bg-[#F0B90B]'
               }`}
             />
@@ -139,7 +139,7 @@ const PortfolioAllocationWidget: React.FC = () => {
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between">
         <span className="text-[11px] font-medium text-[#848E9C]">Allocation</span>
-        <span className="text-[10px] font-mono font-bold text-[#0ECB81] bg-[#0ECB81]/15 px-1.5 py-0.5 rounded">
+        <span className="text-[11px] font-mono font-bold text-[#0ECB81] bg-[#0ECB81]/15 px-1.5 py-0.5 rounded">
           3 Chains
         </span>
       </div>
@@ -150,19 +150,19 @@ const PortfolioAllocationWidget: React.FC = () => {
 
       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#2B313A]/50">
         <div>
-          <div className="text-[10px] text-[#848E9C] mb-0.5">Bitcoin</div>
+          <div className="text-[11px] text-[#848E9C] mb-0.5">Bitcoin</div>
           <div className="text-xs font-bold font-mono text-[#EAECEF] mb-1">27%</div>
-          <div className="h-1 w-full bg-[#F0B90B] rounded-full shadow-[0_0_6px_rgba(240,185,11,0.3)]" />
+          <div className="h-1 w-full bg-[#F0B90B] rounded-full " />
         </div>
         <div>
-          <div className="text-[10px] text-[#848E9C] mb-0.5">Ethereum</div>
+          <div className="text-[11px] text-[#848E9C] mb-0.5">Ethereum</div>
           <div className="text-xs font-bold font-mono text-[#EAECEF] mb-1">12%</div>
-          <div className="h-1 w-full bg-[#38BDF8] rounded-full shadow-[0_0_6px_rgba(56,189,248,0.3)]" />
+          <div className="h-1 w-full bg-[#38BDF8] rounded-full " />
         </div>
         <div>
-          <div className="text-[10px] text-[#848E9C] mb-0.5">Solana</div>
+          <div className="text-[11px] text-[#848E9C] mb-0.5">Solana</div>
           <div className="text-xs font-bold font-mono text-[#EAECEF] mb-1">61%</div>
-          <div className="h-1 w-full bg-[#A855F7] rounded-full shadow-[0_0_6px_rgba(168,85,247,0.3)]" />
+          <div className="h-1 w-full bg-[#A855F7] rounded-full " />
         </div>
       </div>
     </div>
@@ -181,7 +181,7 @@ const MultiCoinTrackingWidget: React.FC = () => {
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between mb-1">
         <span className="text-[11px] font-medium text-[#848E9C]">Live Tracking</span>
-        <span className="text-[10px] font-mono text-[#0ECB81] flex items-center gap-1">
+        <span className="text-[11px] font-mono text-[#0ECB81] flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-[#0ECB81] inline-block animate-pulse" /> Live
         </span>
       </div>
@@ -193,7 +193,7 @@ const MultiCoinTrackingWidget: React.FC = () => {
             className="flex items-center justify-between p-1.5 rounded bg-[#181A20] border border-[#2B313A]/70"
           >
             <div className="flex items-center gap-2">
-              <div className={`w-5 h-5 rounded-full bg-[#202630] border border-[#2B313A] flex items-center justify-center text-[10px] font-bold font-mono ${c.color}`}>
+              <div className={`w-5 h-5 rounded-full bg-[#202630] border border-[#2B313A] flex items-center justify-center text-[11px] font-bold font-mono ${c.color}`}>
                 {c.sym.substring(0, 1)}
               </div>
               <span className="text-xs font-semibold text-[#EAECEF]">{c.sym}</span>
@@ -201,7 +201,7 @@ const MultiCoinTrackingWidget: React.FC = () => {
 
             <div className="flex items-center gap-2 font-mono text-[11px]">
               <span className="font-semibold text-[#EAECEF]">{c.price}</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded text-[#0ECB81] bg-[#0ECB81]/15">
+              <span className="text-[11px] font-bold px-1.5 py-0.2 rounded text-[#0ECB81] bg-[#0ECB81]/15">
                 {c.change}
               </span>
             </div>
@@ -224,7 +224,7 @@ const SeamlessIntegrationWidget: React.FC = () => {
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between mb-1">
         <span className="text-[11px] font-medium text-[#848E9C]">Integration</span>
-        <span className="text-[10px] font-mono text-[#848E9C]">Auto-Sync</span>
+        <span className="text-[11px] font-mono text-[#848E9C]">Auto-Sync</span>
       </div>
 
       <div className="space-y-1.5">
@@ -234,13 +234,13 @@ const SeamlessIntegrationWidget: React.FC = () => {
             className="flex items-center justify-between p-1.5 rounded bg-[#181A20] border border-[#2B313A]/70"
           >
             <div className="flex items-center gap-2">
-              <div className={`w-5 h-5 rounded-full bg-[#202630] border border-[#2B313A] flex items-center justify-center text-[10px] font-bold font-mono ${v.color}`}>
+              <div className={`w-5 h-5 rounded-full bg-[#202630] border border-[#2B313A] flex items-center justify-center text-[11px] font-bold font-mono ${v.color}`}>
                 {v.name.substring(0, 1)}
               </div>
               <span className="text-xs font-semibold text-[#EAECEF]">{v.name}</span>
             </div>
 
-            <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-[#202630] border border-[#2B313A] text-[#848E9C]">
+            <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-[#202630] border border-[#2B313A] text-[#848E9C]">
               SYNCED
             </span>
           </div>

@@ -780,7 +780,7 @@ export function TradingViewChart({
 
       {/* ── Full-Screen In-App Workstation Modal ── */}
       {isInAppExpanded && (
-        <div className="fixed inset-0 z-50 bg-[#0B0E11]/90 backdrop-blur-md flex flex-col p-4 md:p-6 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 bg-[#0B0E11]/90 flex flex-col p-4 md:p-6 animate-in fade-in duration-200">
           <div className="w-full h-full flex flex-col bg-[#14171D] border border-[#2B313A] rounded-xl overflow-hidden shadow-2xl">
             {/* Modal Command Bar */}
             <div className="flex items-center justify-between px-5 py-3.5 bg-[#181A20] border-b border-[#2B313A]">

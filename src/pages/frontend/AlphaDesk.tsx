@@ -102,7 +102,7 @@ function AlphaDeskGate() {
           <Button
             onClick={handleAction}
             size="md"
-            className="w-full font-semibold shadow-[0_0_20px_rgba(240,185,11,0.25)] hover:shadow-[0_0_25px_rgba(240,185,11,0.35)] transition-all"
+            className="w-full font-semibold transition-all"
           >
             {!isConnected ? (
               <>

@@ -262,26 +262,26 @@ export const BubblemapsForensics: React.FC<BubblemapsForensicsProps> = ({
                             key={hIdx}
                             type="button"
                             onClick={() => handleInspectAddress(h)}
-                            className="px-1.5 py-0.5 rounded bg-[#1C2028] hover:bg-[#2B313A] text-gray-300 hover:text-white border border-[#2B313A] text-[10px] font-mono transition-colors"
+                            className="px-1.5 py-0.5 rounded bg-[#1C2028] hover:bg-[#2B313A] text-gray-300 hover:text-white border border-[#2B313A] text-[11px] font-mono transition-colors"
                             title="Click to inspect address metadata"
                           >
                             {h.length > 10 ? `${h.slice(0, 6)}...${h.slice(-4)}` : h}
                           </button>
                         ))}
                         {c.holders.length > 4 && (
-                          <span className="text-[10px] text-gray-500">+{c.holders.length - 4} more</span>
+                          <span className="text-[11px] text-gray-500">+{c.holders.length - 4} more</span>
                         )}
                       </div>
 
                       {/* Trace Money Trails CTA */}
                       <div className="pt-1 flex items-center justify-between border-t border-[#1C2028]">
-                        <span className="text-[10px] text-gray-500 truncate max-w-[150px]">
+                        <span className="text-[11px] text-gray-500 truncate max-w-[150px]">
                           {c.magic_nodes?.[0] ? `Source: ${c.magic_nodes[0].slice(0, 10)}...` : 'Direct links'}
                         </span>
                         <button
                           type="button"
                           onClick={() => handleTraceCluster(idx, c.holders)}
-                          className="flex items-center gap-1 px-2 py-1 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-yellow text-[10px] font-semibold transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-yellow text-[11px] font-semibold transition-colors"
                         >
                           <Network size={11} />
                           <span>{isTracing ? 'Hide Trail' : 'Trace Subgraph'}</span>
@@ -363,7 +363,7 @@ export const BubblemapsForensics: React.FC<BubblemapsForensicsProps> = ({
 
       {/* ── Single Address Metadata Modal ── */}
       {inspectAddress && (
-        <div className="fixed inset-0 z-50 bg-[#0B0E11]/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#0B0E11]/80 flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-[#14171D] border border-[#2B313A] rounded-xl p-4 shadow-2xl space-y-3">
             <div className="flex items-center justify-between border-b border-[#2B313A] pb-2.5">
               <div className="flex items-center gap-2">
@@ -391,13 +391,13 @@ export const BubblemapsForensics: React.FC<BubblemapsForensicsProps> = ({
               <div className="space-y-2 text-xs">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="bg-[#0B0E11] p-2.5 rounded border border-[#2B313A]">
-                    <span className="text-gray-500 block text-[10px] uppercase">Connection Degree</span>
+                    <span className="text-gray-500 block text-[11px] uppercase">Connection Degree</span>
                     <span className="text-white font-mono font-bold text-base">
                       {addressDetails.address_details?.degree ?? 'N/A'}
                     </span>
                   </div>
                   <div className="bg-[#0B0E11] p-2.5 rounded border border-[#2B313A]">
-                    <span className="text-gray-500 block text-[10px] uppercase">Entity Type</span>
+                    <span className="text-gray-500 block text-[11px] uppercase">Entity Type</span>
                     <span className="text-white font-semibold">
                       {addressDetails.address_details?.label ||
                         (addressDetails.address_details?.is_contract

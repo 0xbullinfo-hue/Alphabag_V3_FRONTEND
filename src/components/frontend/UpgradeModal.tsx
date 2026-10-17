@@ -3,6 +3,7 @@ import { AlertTriangle,ArrowRight,Crown,ShieldCheck,Smartphone,X,Zap } from 'luc
 import React,{ useEffect,useState } from 'react';
 import { useAccount,useBalance,useNetwork,useSwitchNetwork } from 'wagmi';
 import { bsc } from 'wagmi/chains';
+import { formatUnits, parseUnits } from 'viem';
 import { useAuth } from '../../context/AuthContext';
 import { TOKEN_GATING_CONFIG } from '../../services/config';
 import { Button } from '../ui/Button';
@@ -69,11 +70,16 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
         }
       }
 
-      const currentBalance = Number(tokenBalance?.formatted || 0);
-      if (MIN_HOLDINGS > 0 && currentBalance < MIN_HOLDINGS) {
-        throw new Error(
-          `Insufficient BAG balance. You have ${currentBalance.toFixed(2)}, need ${MIN_HOLDINGS}.`
-        );
+      const currentBalance = tokenBalance
+        ? formatUnits(tokenBalance.value, tokenBalance.decimals)
+        : '0';
+      if (MIN_HOLDINGS > 0) {
+        const requiredBalance = parseUnits(String(MIN_HOLDINGS), tokenBalance?.decimals ?? 18);
+        if (!tokenBalance || tokenBalance.value < requiredBalance) {
+          throw new Error(
+            `Insufficient BAG balance. You have ${currentBalance}, need ${MIN_HOLDINGS}.`
+          );
+        }
       }
 
       const upgraded = await upgradeToUltimate(address);

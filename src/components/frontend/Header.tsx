@@ -172,7 +172,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
               size="sm"
               onClick={() => window.dispatchEvent(new CustomEvent('open-login-modal'))}
               leftIcon={<Wallet size={14} />}
-              className="font-semibold shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_rgba(240,185,11,0.35)] transition-all"
+              className="font-semibold transition-all"
             >
               Sign In ({address.slice(0, 6)}...{address.slice(-4)})
             </Button>
@@ -182,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
               size="sm"
               onClick={() => open()}
               leftIcon={<Wallet size={14} />}
-              className="font-semibold shadow-[0_0_15px_rgba(240,185,11,0.2)] hover:shadow-[0_0_20px_rgba(240,185,11,0.35)] transition-all"
+              className="font-semibold transition-all"
             >
               Connect Wallet
             </Button>
