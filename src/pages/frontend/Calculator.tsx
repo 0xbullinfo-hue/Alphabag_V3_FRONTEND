@@ -46,7 +46,8 @@ const InputField = ({
     borderClass = 'border-alphabag-gray',
     labelSub = '',
     minimal = false,
-    disabled = false
+    disabled = false,
+    allowNegative = false
 }: {
     label: string;
     value: string;
@@ -56,6 +57,7 @@ const InputField = ({
     labelSub?: string;
     minimal?: boolean;
     disabled?: boolean;
+    allowNegative?: boolean;
 }) => (
     <div className="flex flex-col gap-1 w-full">
         <label className="text-alphabag-subtext text-xs font-semibold">{label}</label>
@@ -66,7 +68,8 @@ const InputField = ({
             disabled={disabled}
             onChange={e => {
                 const v = e.target.value;
-                if (v === '' || /^\d*\.?\d*$/.test(v)) {
+                const regex = allowNegative ? /^-?\d*\.?\d*$/ : /^\d*\.?\d*$/;
+                if (v === '' || (allowNegative && v === '-') || regex.test(v)) {
                     onChange(v);
                 }
             }}
@@ -91,27 +94,27 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
     // Leverage State
     const [direction, setDirection] = useState<Direction>('LONG');
-    const [levEntry, setLevEntry] = useState(minimal ? '65000' : '');
-    const [levMargin, setLevMargin] = useState(minimal ? '1000' : '');
+    const [levEntry, setLevEntry] = useState('65000');
+    const [levMargin, setLevMargin] = useState('1000');
     const [levSlider, setLevSlider] = useState(10);
-    const [levTP, setLevTP] = useState(minimal ? '70000' : '');
-    const [levSL, setLevSL] = useState(minimal ? '62500' : '');
+    const [levTP, setLevTP] = useState('70000');
+    const [levSL, setLevSL] = useState('62500');
 
     // Spot State
-    const [spotBuy, setSpotBuy] = useState(minimal ? '3200' : '');
-    const [spotSell, setSpotSell] = useState(minimal ? '3600' : '');
-    const [spotAmount, setSpotAmount] = useState(minimal ? '2.5' : '');
+    const [spotBuy, setSpotBuy] = useState('3200');
+    const [spotSell, setSpotSell] = useState('3600');
+    const [spotAmount, setSpotAmount] = useState('2.5');
     const [spotFee, setSpotFee] = useState('0.1');
 
     // Degen State
-    const [degenInv, setDegenInv] = useState(minimal ? '1000' : '');
-    const [degenEntryMC, setDegenEntryMC] = useState(minimal ? '250000' : '');
-    const [degenTargetMC, setDegenTargetMC] = useState(minimal ? '1000000' : '');
+    const [degenInv, setDegenInv] = useState('1000');
+    const [degenEntryMC, setDegenEntryMC] = useState('250000');
+    const [degenTargetMC, setDegenTargetMC] = useState('1000000');
     const [degenRugProb, setDegenRugProb] = useState(30);
 
     // IL State
-    const [ilPriceA, setIlPriceA] = useState(minimal ? '50' : '');
-    const [ilPriceB, setIlPriceB] = useState(minimal ? '10' : '');
+    const [ilPriceA, setIlPriceA] = useState('50');
+    const [ilPriceB, setIlPriceB] = useState('10');
 
     // Converter State
     const [convAmount, setConvAmount] = useState('1');
@@ -125,8 +128,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     });
 
     React.useEffect(() => {
-        if (minimal) return;
-
+        let isMounted = true;
         const fetchLivePrices = async () => {
             try {
                 const response = await api.get('/api/market/prices', {
@@ -143,29 +145,68 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     DOGE: 'dogecoin',
                 };
 
-                setRates((currentRates) => {
-                    const nextRates = { ...currentRates };
-                    Object.entries(symbolsToIds).forEach(([symbol, id]) => {
-                        const price = Number(response.data?.[id]?.usd);
-                        if (Number.isFinite(price) && price > 0) nextRates[symbol] = price;
+                if (isMounted) {
+                    setRates((currentRates) => {
+                        const nextRates = { ...currentRates };
+                        Object.entries(symbolsToIds).forEach(([symbol, id]) => {
+                            const price = Number(response.data?.[id]?.usd);
+                            if (Number.isFinite(price) && price > 0) nextRates[symbol] = price;
+                        });
+                        return nextRates;
                     });
-                    return nextRates;
-                });
+                }
             } catch (error) {
-                console.error("Failed to fetch live prices:", error);
+                // Fallback rates remain in place
             }
         };
 
         fetchLivePrices();
         const interval = setInterval(fetchLivePrices, 30000); // Update every 30s
-        return () => clearInterval(interval);
-    }, [minimal]);
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, []);
 
-    const formatNum = (val: number, decimals: number = 2) => {
-        return val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    const handleDirectionChange = (newDir: Direction) => {
+        if (newDir === direction) return;
+        setDirection(newDir);
+
+        const entry = Number(levEntry);
+        const tp = Number(levTP);
+        const sl = Number(levSL);
+
+        // When switching direction, intelligently invert TP and SL delta relative to entry
+        if (entry > 0) {
+            if (tp > 0) {
+                const tpDelta = Math.abs(tp - entry);
+                if (tpDelta > 0) {
+                    const newTP = newDir === 'LONG' ? entry + tpDelta : Math.max(0, entry - tpDelta);
+                    setLevTP(newTP.toString());
+                }
+            }
+            if (sl > 0) {
+                const slDelta = Math.abs(sl - entry);
+                if (slDelta > 0) {
+                    const newSL = newDir === 'LONG' ? Math.max(0, entry - slDelta) : entry + slDelta;
+                    setLevSL(newSL.toString());
+                }
+            }
+        }
     };
 
-    const formatCurrency = (val: number, isDashOnZero = true, decimals = 2) => {
+    const formatNum = (val: number, decimals?: number) => {
+        if (!Number.isFinite(val)) return '0.00';
+        if (decimals !== undefined) {
+            return val.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        }
+        const abs = Math.abs(val);
+        const maxDec = abs >= 1 ? 2 : abs >= 0.01 ? 4 : 6;
+        const minDec = Math.min(2, maxDec);
+        return val.toLocaleString('en-US', { minimumFractionDigits: minDec, maximumFractionDigits: maxDec });
+    };
+
+    const formatCurrency = (val: number, isDashOnZero = true, decimals?: number) => {
         if (isDashOnZero && (!val || isNaN(val) || val === 0)) return { value: '—', status: 'neutral' };
         if (isNaN(val)) return { value: '—', status: 'neutral' };
         return {
@@ -193,7 +234,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     const formatPnL = (val: number, includePlus = true, addPercentStr = '', asKMB = false) => {
-        if (isNaN(val) || val === 0) return { value: '—', status: 'neutral' };
+        if (isNaN(val)) return { value: '—', status: 'neutral' };
+        if (val === 0) return { value: '$0.00' + addPercentStr, status: 'neutral' };
         const numStr = asKMB ? formatKMBValue(Math.abs(val)) : '$' + formatNum(Math.abs(val));
         const prefix = val > 0 ? (includePlus ? '+' : '') : '-';
         const fullStr = `${prefix}${numStr}${addPercentStr}`;
@@ -225,9 +267,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
             hasCalc = true;
             positionSize = margin * levSlider;
 
-            // Binance logic approx for liquidations
+            // Binance / Bybit USDT-Margined isolated futures liquidation formula (MMR = 0.5%)
+            const mmr = 0.005;
             if (direction === 'LONG') {
-                liqPrice = Math.max(0, entry * (1 - 1 / levSlider + 0.005));
+                liqPrice = Math.max(0, entry * ((1 - 1 / levSlider) / (1 - mmr)));
                 if (tp > entry) {
                     tpPnL = positionSize * ((tp - entry) / entry);
                     tpROE = (tpPnL / margin) * 100;
@@ -238,7 +281,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     if (sl <= liqPrice) isSlBelowLiq = true;
                 }
             } else {
-                liqPrice = entry * (1 + 1 / levSlider - 0.005);
+                liqPrice = entry * ((1 + 1 / levSlider) / (1 + mmr));
                 if (tp > 0 && tp < entry) {
                     tpPnL = positionSize * ((entry - tp) / entry);
                     tpROE = (tpPnL / margin) * 100;
@@ -260,10 +303,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         <div className="flex flex-col gap-2 mb-2">
                             <label className="text-alphabag-subtext text-xs font-semibold">Direction</label>
                             <div className="flex gap-2">
-                                <button type="button" onClick={() => setDirection('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'LONG' ? 'bg-[#102B21] text-alphabag-green border border-alphabag-green/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
+                                <button type="button" onClick={() => handleDirectionChange('LONG')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'LONG' ? 'bg-[#102B21] text-alphabag-green border border-alphabag-green/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
                                     ↑ Long
                                 </button>
-                                <button type="button" onClick={() => setDirection('SHORT')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'SHORT' ? 'bg-[#2A1519] text-alphabag-red border border-alphabag-red/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
+                                <button type="button" onClick={() => handleDirectionChange('SHORT')} className={`flex-1 py-1.5 rounded-md flex justify-center items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${direction === 'SHORT' ? 'bg-[#2A1519] text-alphabag-red border border-alphabag-red/30' : 'bg-alphabag-dark text-alphabag-subtext border border-alphabag-gray hover:bg-alphabag-gray'}`}>
                                     ↓ Short
                                 </button>
                             </div>
@@ -296,8 +339,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         </div>
 
                         <div className="grid grid-cols-2 gap-2">
-                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder="70000" borderClass={levTP ? 'border-alphabag-green/40' : 'border-alphabag-gray'} minimal={minimal} />
-                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder="62500" borderClass={levSL ? 'border-alphabag-red/40' : 'border-alphabag-gray'} minimal={minimal} />
+                            <InputField label="Take Profit ($)" value={levTP} onChange={setLevTP} placeholder={direction === 'LONG' ? "70000" : "60000"} borderClass={levTP ? 'border-alphabag-green/40' : 'border-alphabag-gray'} minimal={minimal} />
+                            <InputField label="Stop Loss ($)" value={levSL} onChange={setLevSL} placeholder={direction === 'LONG' ? "62500" : "67500"} borderClass={levSL ? 'border-alphabag-red/40' : 'border-alphabag-gray'} minimal={minimal} />
                         </div>
                     </div>
                 </div>
@@ -310,22 +353,20 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <ResultRow label="Position Size" resultObj={formatCurrency(positionSize)} minimal={minimal} />
                             <ResultRow label="Margin Used" resultObj={formatCurrency(margin)} minimal={minimal} />
                             <ResultTextRow label="Leverage" value={hasCalc ? `${levSlider}x` : '—'} valueColor={hasCalc ? "text-alphabag-text font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
-                            <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice, 2)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
+                            <ResultTextRow label="Liquidation Price" value={hasCalc ? `$${formatNum(liqPrice)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
 
-                            {!minimal && (
-                                <div className="mt-2 pt-2 border-t border-alphabag-gray/40 space-y-1">
-                                    <ResultRow
-                                        label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
-                                        resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
-                                        minimal={minimal}
-                                    />
-                                    <ResultRow
-                                        label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
-                                        resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
-                                        minimal={minimal}
-                                    />
-                                </div>
-                            )}
+                            <div className="mt-2 pt-2 border-t border-alphabag-gray/40 space-y-1">
+                                <ResultRow
+                                    label={`TP P&L @ ${tp > 0 ? '$' + formatNum(tp) : '—'}`}
+                                    resultObj={tp > 0 && hasCalc ? formatPnL(tpPnL, true, ` (+${formatNum(tpROE, 1)}%)`) : { value: '—', status: 'neutral' }}
+                                    minimal={minimal}
+                                />
+                                <ResultRow
+                                    label={`SL P&L @ ${sl > 0 ? '$' + formatNum(sl) : '—'}`}
+                                    resultObj={sl > 0 && hasCalc ? formatPnL(slPnL, false, ` (-${formatNum(Math.abs(slROE), 1)}%)`) : { value: '—', status: 'neutral' }}
+                                    minimal={minimal}
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -420,21 +461,21 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <ResultRow label="Total Cost" resultObj={formatCurrency(totalCost)} minimal={minimal} />
                             <ResultRow label="Total Revenue" resultObj={formatCurrency(totalRev)} minimal={minimal} />
                             <ResultTextRow label="Total Fees" value={hasCalc ? `$${formatNum(totalFees)}` : '—'} valueColor={hasCalc ? "text-alphabag-red font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
-                            <ResultRow label="Gross P&L" resultObj={gross !== 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                            <ResultRow label="Gross P&L" resultObj={sell > 0 && hasCalc ? formatPnL(gross) : { value: '—', status: 'neutral' }} minimal={minimal} />
                             <div className="mt-2 pt-2 border-t border-alphabag-gray/40">
-                                <ResultRow label="Net P&L (after fees)" resultObj={net !== 0 && hasCalc ? formatPnL(net, true, ` (${net > 0 ? '+' : ''}${formatNum(netROEPercent, 1)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                                <ResultRow label="Net P&L (after fees)" resultObj={hasCalc ? formatPnL(net, true, ` (${net >= 0 ? '+' : ''}${formatNum(netROEPercent, 1)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
                                 <ResultRow label="Break-even Price" resultObj={formatCurrency(breakEven)} minimal={minimal} />
                             </div>
                         </div>
                     </div>
 
-                    {net !== 0 && sell > 0 && hasCalc && (
-                        <div className={`border rounded-lg shadow-inner ${net > 0 ? 'bg-[#102B21] border-[#1E3A2F]' : 'bg-[#2A1519] border-[#4A252A]'} ${minimal ? 'p-3 mt-4' : 'p-4 mt-8'}`}>
-                            <div className={`font-bold mb-1 ${net > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} ${minimal ? 'text-xl' : 'text-[28px]'}`}>
-                                {net > 0 ? '+' : '-'}${formatNum(Math.abs(net))}
+                    {sell > 0 && hasCalc && (
+                        <div className={`border rounded-lg shadow-inner ${net >= 0 ? 'bg-[#102B21] border-[#1E3A2F]' : 'bg-[#2A1519] border-[#4A252A]'} ${minimal ? 'p-3 mt-4' : 'p-4 mt-8'}`}>
+                            <div className={`font-bold mb-1 ${net >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'} ${minimal ? 'text-xl' : 'text-[28px]'}`}>
+                                {net >= 0 ? '+' : '-'}${formatNum(Math.abs(net))}
                             </div>
-                            <div className={`${net > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} opacity-70 text-xs font-semibold`}>
-                                {net > 0 ? '+' : '-'}{formatNum(Math.abs(netROEPercent), 1)}% net return
+                            <div className={`${net >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'} opacity-70 text-xs font-semibold`}>
+                                {net >= 0 ? '+' : '-'}{formatNum(Math.abs(netROEPercent), 1)}% net return
                             </div>
                         </div>
                     )}
@@ -446,12 +487,28 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
 
     const renderILPanel = () => {
-        const ratioA = 1 + (Number(ilPriceA) / 100);
-        const ratioB = 1 + (Number(ilPriceB) / 100);
-        const priceRatio = ratioA / ratioB;
-        if (isNaN(priceRatio)) return null;
-        const il = (2 * Math.sqrt(priceRatio) / (1 + priceRatio)) - 1;
-        const ilPercent = Math.abs(il * 100);
+        const pA = Number(ilPriceA);
+        const pB = Number(ilPriceB);
+        const ratioA = 1 + (pA / 100);
+        const ratioB = 1 + (pB / 100);
+
+        let ilPercent = 0;
+        const hasCalc = ilPriceA !== '' && ilPriceB !== '' && !isNaN(pA) && !isNaN(pB);
+
+        if (hasCalc) {
+            if (ratioA <= 0 || ratioB <= 0) {
+                // If either token drops 100% or more, impermanent loss is complete (100%)
+                ilPercent = 100;
+            } else {
+                const priceRatio = ratioA / ratioB;
+                if (!Number.isFinite(priceRatio) || priceRatio <= 0) {
+                    ilPercent = 100;
+                } else {
+                    const il = (2 * Math.sqrt(priceRatio) / (1 + priceRatio)) - 1;
+                    ilPercent = Math.min(100, Math.max(0, Math.abs(il * 100)));
+                }
+            }
+        }
 
         return (
             <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
@@ -463,8 +520,8 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             <h2 className="text-alphabag-text font-bold text-sm">IL Risk Assessment</h2>
                         </div>
                         <div className="space-y-2">
-                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50" minimal={minimal} disabled={minimal} />
-                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10" minimal={minimal} disabled={minimal} />
+                            <InputField label="Asset A Price Change (%)" value={ilPriceA} onChange={setIlPriceA} placeholder="e.g. 50 or -20" minimal={minimal} allowNegative={true} />
+                            <InputField label="Asset B Price Change (%)" value={ilPriceB} onChange={setIlPriceB} placeholder="e.g. 10 or -15" minimal={minimal} allowNegative={true} />
                         </div>
                     </div>
                 </div>
@@ -472,7 +529,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     
                     <div className="relative z-10">
                         <div className={`font-bold tracking-tight ${minimal ? 'text-4xl' : 'text-5xl'} ${ilPercent > 5 ? 'text-alphabag-red' : 'text-alphabag-yellow'}`}>
-                            {ilPercent.toFixed(2)}%
+                            {hasCalc ? `${ilPercent.toFixed(2)}%` : '—'}
                         </div>
                         <p className="text-[11px] text-alphabag-subtext mt-2 max-w-[200px] font-medium uppercase tracking-wider">Estimated Loss</p>
                     </div>
@@ -483,7 +540,11 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
 
     const renderConverterPanel = () => {
         const amount = Number(convAmount);
-        const result = (amount * (rates[convFrom] || 0)) / (rates[convTo] || 1);
+        const fromRate = rates[convFrom] || 0;
+        const toRate = rates[convTo] || 1;
+        const hasValidAmount = convAmount !== '' && Number.isFinite(amount) && amount >= 0;
+        const result = (toRate > 0 && hasValidAmount) ? (amount * fromRate) / toRate : 0;
+        const unitRate = toRate > 0 ? fromRate / toRate : 0;
 
         return (
             <div className={`${mainGridClass} ${minimal ? 'flex-1 flex flex-col justify-between' : ''}`}>
@@ -496,10 +557,10 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                         </div>
                         <div className="space-y-2">
                             <div className="grid grid-cols-[1fr_80px] gap-2">
-                                <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} disabled={minimal} />
+                                <InputField label="From" value={convAmount} onChange={setConvAmount} minimal={minimal} />
                                 <div className="flex flex-col gap-1">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Token</label>
-                                    <select value={convFrom} disabled={minimal} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-70">
+                                    <select value={convFrom} onChange={e => setConvFrom(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold cursor-pointer">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>
@@ -508,12 +569,12 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <div className="flex flex-col gap-1 w-full">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Converted Value</label>
                                     <div className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text text-sm font-semibold rounded-md px-3 h-9 flex items-center">
-                                        {result.toLocaleString(undefined, { maximumFractionDigits: 6 })}
+                                        {hasValidAmount ? result.toLocaleString(undefined, { maximumFractionDigits: 6 }) : '—'}
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-alphabag-subtext text-xs font-semibold pl-1">Token</label>
-                                    <select value={convTo} disabled={minimal} onChange={e => setConvTo(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-70">
+                                    <select value={convTo} onChange={e => setConvTo(e.target.value)} className="bg-alphabag-dark border border-alphabag-gray text-alphabag-text rounded-md h-9 px-2 outline-none focus:border-alphabag-yellow text-xs font-semibold cursor-pointer">
                                         {Object.keys(rates).map(t => <option key={t} value={t}>{t}</option>)}
                                     </select>
                                 </div>
@@ -525,7 +586,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                     
                     <div className="relative z-10">
                         <div className={`font-bold text-alphabag-yellow tracking-tight ${minimal ? 'text-lg' : 'text-3xl'}`}>
-                            1 {convFrom} ≈ {(rates[convFrom] / rates[convTo]).toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
+                            1 {convFrom} ≈ {unitRate.toLocaleString(undefined, { maximumFractionDigits: 4 })} {convTo}
                         </div>
                         <p className="text-[11px] text-alphabag-subtext mt-2 font-medium uppercase tracking-wider">Quick Conversion Rate</p>
                     </div>
@@ -612,19 +673,21 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                 <ResultRow label="Investment" resultObj={formatCurrency(inv)} minimal={minimal} />
                                 <ResultTextRow label="Target Multiple" value={hasCalc ? `${multiplier.toFixed(2)}x` : '—'} valueColor={hasCalc ? "text-[#D8B4FE] font-bold text-sm" : "text-alphabag-subtext text-sm"} minimal={minimal} />
                                 <ResultRow label="Target Value" resultObj={formatCurrency(targetVal)} minimal={minimal} />
-                                <ResultRow label="Net Profit" resultObj={profit !== 0 && hasCalc ? formatPnL(profit, true, ` (+${formatNum(roi, 0)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
+                                <ResultRow label="Net Profit" resultObj={hasCalc ? formatPnL(profit, true, ` (${roi >= 0 ? '+' : ''}${formatNum(roi, 0)}%)`) : { value: '—', status: 'neutral' }} minimal={minimal} />
 
                                 <div className="mt-4 pt-3 border-t border-alphabag-gray/40">
                                     <div className="flex justify-between items-center mb-1">
                                         <span className="text-alphabag-subtext text-xs font-semibold">Expected Value (EV)</span>
-                                        <div className="flex items-center gap-2">
-                                            <div className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${ev > 0 ? 'bg-alphabag-green/15 text-alphabag-green' : 'bg-alphabag-red/15 text-alphabag-red'}`}>
-                                                {ev > 0 ? 'Positive EV' : 'Negative EV'}
+                                        {hasCalc && (
+                                            <div className="flex items-center gap-2">
+                                                <div className={`px-1.5 py-0.5 rounded text-[11px] font-semibold ${ev >= 0 ? 'bg-alphabag-green/15 text-alphabag-green' : 'bg-alphabag-red/15 text-alphabag-red'}`}>
+                                                    {ev >= 0 ? 'Positive EV' : 'Negative EV'}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
-                                    <div className={`font-semibold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev > 0 ? 'text-alphabag-green' : 'text-alphabag-red'} num`}>
-                                        {ev !== 0 && hasCalc ? `${ev > 0 ? '+' : '-'}$${formatNum(Math.abs(ev))}` : '—'}
+                                    <div className={`font-semibold tracking-tight ${minimal ? 'text-2xl' : 'text-4xl'} ${ev >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'} num`}>
+                                        {hasCalc ? `${ev >= 0 ? '+' : '-'}$${formatNum(Math.abs(ev))}` : '—'}
                                     </div>
                                     <p className="text-[11px] text-alphabag-subtext/70 mt-1 font-medium">Average outcome including risk.</p>
                                 </div>
