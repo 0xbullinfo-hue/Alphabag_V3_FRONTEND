@@ -65,7 +65,12 @@ const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').th
 const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => ({ default: m.AlphaPasses })));
 const AlphaDesk = lazy(() => import('./pages/frontend/AlphaDesk').then(m => ({ default: m.AlphaDesk })));
 
-const GlobalLoader = () => null;
+const GlobalLoader = () => (
+  <div role="status" aria-live="polite" className="min-h-screen bg-alphabag-black text-alphabag-subtext flex items-center justify-center">
+    <span aria-hidden="true" className="h-7 w-7 rounded-full border-2 border-alphabag-yellow border-t-transparent animate-spin" />
+    <span className="ml-3 text-sm">Loading AlphaBAG…</span>
+  </div>
+);
 const INDEXABLE_PATHS = new Set(['/', '/alpha-passes', '/genesis', '/genesis-manifesto', '/airdrop', '/markets', '/news']);
 
 const HashRedirect = () => {
@@ -178,7 +183,7 @@ const AppContent = () => {
   if (IS_TEASER_MODE) {
     return (
       <>
-        <Suspense fallback={null}>
+        <Suspense fallback={<GlobalLoader />}>
           <Routes>
             <Route path="*" element={<Landing />} />
           </Routes>
@@ -192,7 +197,7 @@ const AppContent = () => {
       <HashRedirect />
       <SeoRoutePolicy />
       <AirdropTracker />
-      <Suspense fallback={null}>
+      <Suspense fallback={<GlobalLoader />}>
         <Routes>
           <Route path="/" element={
             isLoading ? <GlobalLoader /> :

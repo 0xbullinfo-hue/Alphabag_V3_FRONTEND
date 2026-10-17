@@ -1,5 +1,5 @@
 
-import { ArrowRight,Bookmark,Clock,Facebook,Instagram,Newspaper,Search,Send,Twitter,X,Zap } from 'lucide-react';
+import { ArrowRight,Bookmark,Copy,Clock,Facebook,Newspaper,Search,Send,Twitter,X,Zap } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { api } from '../../services/api';
 import { NewsItem } from '../../types';
@@ -8,8 +8,46 @@ import { PageIcon } from '../../components/ui/PageIcon';
 export const News: React.FC = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [newsError, setNewsError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
   const [selectedArticle, setSelectedArticle] = useState<NewsItem | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [savedArticleIds, setSavedArticleIds] = useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set();
+    try {
+      const stored = JSON.parse(window.localStorage.getItem('alphabag.savedNews.v1') || '[]');
+      return new Set(Array.isArray(stored) ? stored.filter((id): id is string => typeof id === 'string') : []);
+    } catch {
+      return new Set();
+    }
+  });
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
+
+  const toggleSavedArticle = (articleId: string) => {
+    const next = new Set(savedArticleIds);
+    if (next.has(articleId)) next.delete(articleId);
+    else next.add(articleId);
+    setSavedArticleIds(next);
+    try {
+      window.localStorage.setItem('alphabag.savedNews.v1', JSON.stringify([...next]));
+    } catch (error) {
+      console.warn('Could not persist saved articles in this browser', error);
+    }
+  };
+
+  const copyNewsLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShareNotice('News page link copied');
+    } catch {
+      setShareNotice('Clipboard access is unavailable');
+    }
+  };
+  useEffect(() => {
+    if (!shareNotice) return;
+    const timer = window.setTimeout(() => setShareNotice(null), 2500);
+    return () => window.clearTimeout(timer);
+  }, [shareNotice]);
 
   const safeNews = Array.isArray(news) ? news : [];
   const filteredNews = safeNews.filter(item => 
@@ -20,22 +58,30 @@ export const News: React.FC = () => {
   );
 
   useEffect(() => {
+    let cancelled = false;
     const fetchNewsData = async () => {
       try {
         const res = await api.get('/api/news');
         const list = Array.isArray(res.data) 
           ? res.data 
           : (Array.isArray(res.data?.news) ? res.data.news : (Array.isArray(res.data?.data) ? res.data.data : []));
-        setNews(list);
+        if (!cancelled) {
+          setNews(list);
+          setNewsError(false);
+        }
       } catch (error) {
         console.error("Failed to fetch news", error);
-        setNews([]);
+        if (!cancelled) {
+          setNews([]);
+          setNewsError(true);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-    fetchNewsData();
-  }, []);
+    void fetchNewsData();
+    return () => { cancelled = true; };
+  }, [retryKey]);
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-96 space-y-2">
@@ -64,6 +110,7 @@ export const News: React.FC = () => {
                  </div>
                  <input 
                     type="text" 
+                    aria-label="Search news articles"
                     placeholder="Search historical posts..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -81,8 +128,9 @@ export const News: React.FC = () => {
         {filteredNews.length === 0 ? (
             <div className="col-span-full py-20 text-center flex flex-col items-center">
                 <Search size={48} className="text-alphabag-gray mb-2" />
-                <h3 className="text-xl font-semibold text-white mb-2">No transmissions found</h3>
-                <p className="text-sm text-alphabag-subtext">Adjust your search parameters to comb through the archive.</p>
+                <h3 className="text-xl font-semibold text-white mb-2">{newsError ? 'News feed unavailable' : searchTerm ? 'No matching reports' : 'No transmissions found'}</h3>
+                <p className="text-sm text-alphabag-subtext">{newsError ? 'The news service could not be reached. Try again in a moment.' : searchTerm ? 'Try a different title or keyword.' : 'There are no reports to display right now.'}</p>
+                {newsError && <button type="button" onClick={() => { setLoading(true); setRetryKey((value) => value + 1); }} className="mt-3 rounded border border-alphabag-gray px-3 py-1.5 text-xs font-semibold text-alphabag-yellow hover:border-alphabag-yellow">Try again</button>}
             </div>
         ) : filteredNews.map((item) => (
           <article
@@ -157,10 +205,13 @@ export const News: React.FC = () => {
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-4 animate-fade-in">
           <div
             className="absolute inset-0 bg-alphabag-black/80"
+            aria-hidden="true"
             onClick={() => setSelectedArticle(null)}
           ></div>
-          <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-4xl h-[85vh] rounded-lg shadow-2xl relative overflow-hidden flex flex-col animate-slide-up">
+          <div role="dialog" aria-modal="true" aria-label={selectedArticle.title} className="bg-alphabag-dark border border-alphabag-gray w-full max-w-4xl h-[85vh] rounded-lg shadow-2xl relative overflow-hidden flex flex-col animate-slide-up">
             <button
+              type="button"
+              aria-label="Close article"
               onClick={() => setSelectedArticle(null)}
               className="absolute top-4 right-4 z-20 w-8 h-8 bg-alphabag-black/60 text-white rounded-md flex items-center justify-center hover:bg-alphabag-red transition-colors"
             >
@@ -169,7 +220,7 @@ export const News: React.FC = () => {
 
             <div className="flex-1 overflow-y-auto custom-scrollbar">
               <div className="h-72 md:h-[380px] relative">
-                <img src={selectedArticle.imageUrl} className="w-full h-full object-cover" alt="" />
+                {selectedArticle.imageUrl ? <img src={selectedArticle.imageUrl} className="w-full h-full object-cover" alt="" /> : <div className="h-full w-full bg-alphabag-darkgray" aria-hidden="true" />}
                 <div className="absolute inset-0 bg-gradient-to-t from-alphabag-dark via-alphabag-dark/40 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 right-6">
                   <div className="flex items-center space-x-2 mb-2">
@@ -189,6 +240,7 @@ export const News: React.FC = () => {
                   <div className="flex items-center space-x-2 text-alphabag-subtext">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-white/50 mr-2">Share Intel:</span>
                     <a 
+                      aria-label="Share on X"
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}&url=${encodeURIComponent(window.location.href)}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
@@ -197,6 +249,7 @@ export const News: React.FC = () => {
                       <Twitter size={16} />
                     </a>
                     <a 
+                      aria-label="Share on Telegram"
                       href={`https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(selectedArticle.title + ' shared from @myalphabag')}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
@@ -205,6 +258,7 @@ export const News: React.FC = () => {
                       <Send size={16} />
                     </a>
                     <a 
+                      aria-label="Share on Facebook"
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} 
                       target="_blank" 
                       rel="noopener noreferrer" 
@@ -212,22 +266,17 @@ export const News: React.FC = () => {
                     >
                       <Facebook size={16} />
                     </a>
-                    <a 
-                      href="https://instagram.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="hover:text-[#E4405F] transition-colors"
-                      onClick={() => alert("Link copied for Instagram! \n" + window.location.href + "\nshared from @myalphabag")}
-                    >
-                      <Instagram size={16} />
-                    </a>
+                    <button type="button" aria-label="Copy news page link" title="Copy news page link" onClick={() => void copyNewsLink()} className="hover:text-alphabag-yellow transition-colors">
+                      <Copy size={16} />
+                    </button>
 
                     <span className="w-px h-5 bg-alphabag-gray mx-2"></span>
                     
-                    <button className="flex items-center hover:text-alphabag-yellow transition-colors font-semibold uppercase text-[11px] tracking-wider ml-2 border border-alphabag-gray/50 px-2.5 py-1 rounded bg-alphabag-black/30">
-                      <Bookmark size={13} className="mr-1.5" /> Save
+                    <button type="button" aria-pressed={savedArticleIds.has(selectedArticle.id)} onClick={() => toggleSavedArticle(selectedArticle.id)} className="flex items-center hover:text-alphabag-yellow transition-colors font-semibold uppercase text-[11px] tracking-wider ml-2 border border-alphabag-gray/50 px-2.5 py-1 rounded bg-alphabag-black/30">
+                      <Bookmark size={13} className="mr-1.5" /> {savedArticleIds.has(selectedArticle.id) ? 'Saved' : 'Save'}
                     </button>
                   </div>
+                  {shareNotice && <span role="status" className="text-[11px] text-alphabag-subtext">{shareNotice}</span>}
                   {selectedArticle.isPremium && (
                     <div className="flex items-center bg-alphabag-yellow/10 text-alphabag-yellow px-3 py-1 rounded border border-alphabag-yellow/20">
                       <Zap size={14} className="mr-1.5 fill-current" />

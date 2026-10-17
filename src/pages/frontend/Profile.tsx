@@ -299,8 +299,17 @@ export const Profile: React.FC = () => {
                     <div className="flex justify-between items-start">
                         <div className="relative">
                             <div
+                                role={isEditing && isOwnProfile ? 'button' : undefined}
+                                tabIndex={isEditing && isOwnProfile ? 0 : undefined}
+                                aria-label={isEditing && isOwnProfile ? 'Change profile image' : undefined}
                                 className={`w-24 h-24 rounded-lg bg-alphabag-panel border-2 border-alphabag-border p-1 ${isEditing && isOwnProfile ? 'cursor-pointer' : ''} group`}
                                 onClick={() => isEditing && isOwnProfile && avatarInputRef.current?.click()}
+                                onKeyDown={(event) => {
+                                    if (isEditing && isOwnProfile && (event.key === 'Enter' || event.key === ' ')) {
+                                        event.preventDefault();
+                                        avatarInputRef.current?.click();
+                                    }
+                                }}
                             >
                                 <div className="w-full h-full bg-alphabag-black rounded-md flex items-center justify-center overflow-hidden relative">
                                     {(editData.logoUrl || profileUser?.logoUrl) ? (

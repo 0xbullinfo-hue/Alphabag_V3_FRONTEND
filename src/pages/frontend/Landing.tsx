@@ -850,10 +850,10 @@ export const Landing: React.FC = () => {
           
           {/* Left Side: Logo + Nav Links (Binance layout) */}
           <div className="flex items-center space-x-10">
-            <div className="flex items-center space-x-2 cursor-pointer shrink-0" onClick={() => handleNavClick('home')}>
+            <button type="button" aria-label="Go to home section" className="flex items-center space-x-2 shrink-0" onClick={() => handleNavClick('home')}>
               <img src="/logo.png" alt="AlphaBAG Logo" className="w-6 h-6 object-contain rounded-full " />
               <span className="text-lg font-bold tracking-tight text-alphabag-yellow">ALPHABAG</span>
-            </div>
+            </button>
 
             {/* Desktop Nav Links */}
             <div className="hidden md:flex items-center space-x-5 text-sm font-medium text-alphabag-subtext">
@@ -884,7 +884,7 @@ export const Landing: React.FC = () => {
 
           {/* Mobile Menu Toggle */}
           <div className="md:hidden flex items-center gap-2">
-            <button className="text-alphabag-text" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button type="button" aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={isMobileMenuOpen} className="text-alphabag-text" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
               {isMobileMenuOpen ? <X /> : <LayoutGrid />}
             </button>
           </div>

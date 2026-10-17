@@ -327,13 +327,14 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                             </div>
                             <div className="flex justify-between text-alphabag-subtext text-[11px] font-medium px-1 mt-[-2px]">
                                 {[1, 25, 50, 100, 125].map(v => (
-                                    <span
+                                    <button
+                                        type="button"
                                         key={v}
-                                        className="cursor-pointer hover:text-alphabag-yellow transition-colors"
+                                        className="hover:text-alphabag-yellow transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow"
                                         onClick={() => setLevSlider(v)}
                                     >
                                         {v}x
-                                    </span>
+                                    </button>
                                 ))}
                             </div>
                         </div>
@@ -656,9 +657,9 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
                                         <input type="range" min="0" max="100" value={degenRugProb} onChange={e => setDegenRugProb(Number(e.target.value))} className="alphabag-range w-full" />
                                     </div>
                                     <div className="flex justify-between text-alphabag-subtext text-[11px] font-medium mt-1 px-1">
-                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(0)}>Safe (0%)</span>
-                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(50)}>Medium (50%)</span>
-                                        <span className="cursor-pointer hover:text-alphabag-yellow transition-colors" onClick={() => setDegenRugProb(100)}>High Risk (100%)</span>
+                                        <button type="button" className="hover:text-alphabag-yellow transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow" onClick={() => setDegenRugProb(0)}>Safe (0%)</button>
+                                        <button type="button" className="hover:text-alphabag-yellow transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow" onClick={() => setDegenRugProb(50)}>Medium (50%)</button>
+                                        <button type="button" className="hover:text-alphabag-yellow transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow" onClick={() => setDegenRugProb(100)}>High Risk (100%)</button>
                                     </div>
                                 </div>
                             </div>

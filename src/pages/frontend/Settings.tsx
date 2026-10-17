@@ -39,7 +39,7 @@ export const Settings: React.FC = () => {
     // CEX API State
     const { connections: connectedCex, connectExchange } = useCexConnections();
     const [isCexModalOpen, setIsCexModalOpen] = useState(false);
-    const [activeCexId] = useState<string | null>(null);
+    const [activeCexId, setActiveCexId] = useState<string | null>(null);
     const [isConnectingCex, setIsConnectingCex] = useState(false);
     const MAX_CEX = 20;
 
@@ -68,6 +68,7 @@ export const Settings: React.FC = () => {
             await connectExchange(info, apiKey, secret);
             Swal.fire({ title: 'Connected', text: `${info.name} Read-Only API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#FFF' });
             setIsCexModalOpen(false);
+            setActiveCexId(null);
         } catch (e: any) {
             Swal.fire({
                 title: 'Connection Failed',
@@ -98,7 +99,7 @@ export const Settings: React.FC = () => {
                     <span className="text-alphabag-subtext text-[11px] font-semibold uppercase tracking-wider mb-1">Network Verified Balance</span>
                     <div className="flex items-center gap-2">
                         <div className="text-2xl font-bold text-alphabag-text leading-none tracking-tight tabular-nums num">
-                            {premiumTokenBalance.toLocaleString()} <span className="text-alphabag-yellow text-sm">BAG</span>
+                            {(premiumTokenBalance ?? 0).toLocaleString()} <span className="text-alphabag-yellow text-sm">BAG</span>
                         </div>
                         <button onClick={() => {}} disabled={true} className="h-7 bg-alphabag-yellow text-alphabag-dark text-[11px] font-semibold px-3 rounded-md transition-all opacity-50 cursor-not-allowed">Buy</button>
                     </div>
@@ -108,11 +109,7 @@ export const Settings: React.FC = () => {
             <section className="rounded-lg border border-alphabag-border bg-alphabag-card p-4">
                 <div className="flex items-center justify-between mb-3">
                     <h2 className="text-xs font-semibold text-alphabag-text uppercase tracking-wider">Portfolio Connections</h2>
-                    <button
-                        onClick={() => {}}
-                        disabled={true}
-                        className="flex items-center gap-1.5 text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
-                    >
+                    <button type="button" onClick={() => navigate('/integrations')} className="flex items-center gap-1.5 text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors hover:text-white">
                         View All <ExternalLink size={12} />
                     </button>
                 </div>
@@ -166,9 +163,9 @@ export const Settings: React.FC = () => {
                         <Search size={14} className="mr-2 text-alphabag-yellow" /> Add New Address Tracking
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-2.5 mb-2">
-                        <input type="text" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1 opacity-50 cursor-not-allowed" />
-                        <input type="text" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed" />
-                        <select value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono opacity-50 cursor-not-allowed">
+                        <input type="text" aria-label="Wallet address" placeholder="Wallet Address (0x...)" value={newAddress} onChange={(e) => setNewAddress(e.target.value)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none md:col-span-1" />
+                        <input type="text" aria-label="Wallet label" placeholder="Label (e.g. Binance Whale)" value={newLabel} onChange={(e) => setNewLabel(e.target.value)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none" />
+                        <select aria-label="Wallet network" value={newChain} onChange={(e) => setNewChain(e.target.value as Chain)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none font-mono">
                             <option value="BSC">BSC</option>
                             <option value="ETH">ETH</option>
                             <option value="SOL">SOL</option>
@@ -176,16 +173,16 @@ export const Settings: React.FC = () => {
                             <option value="AVAX">AVAX</option>
                             <option value="ARB">ARB</option>
                         </select>
-                        <select value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none opacity-50 cursor-not-allowed">
+                        <select aria-label="Tracking type" value={addType} onChange={(e) => setAddType(e.target.value as any)} className="bg-alphabag-dark border border-alphabag-border rounded-md px-3.5 py-2 text-xs text-white focus:border-alphabag-yellow/40 outline-none">
                             <option value="PORTFOLIO">Portfolio</option>
                             <option value="WHALE">Whale Watch</option>
                         </select>
-                        <Button onClick={handleAdd} className="font-semibold h-[38px] text-xs opacity-50 cursor-not-allowed">
+                        <Button onClick={handleAdd} disabled={!newAddress.trim() || !newLabel.trim()} className="font-semibold h-[38px] text-xs">
                             <Plus size={14} className="mr-1.5" /> Add Connection
                         </Button>
                     </div>
                     {error && <div className="text-alphabag-red text-xs mt-2 bg-alphabag-red/10 p-2 rounded flex items-center"><AlertCircle size={12} className="mr-2" /> {error}</div>}
-                    <p className="text-[11px] text-alphabag-subtext mt-3">To view or remove connected wallets, go to the <button onClick={() => {}} disabled={true} className="text-alphabag-yellow underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                                    <p className="text-[11px] text-alphabag-subtext mt-3">To view or remove connected wallets, go to the <button type="button" onClick={() => navigate('/integrations')} className="text-alphabag-yellow underline hover:no-underline">Integrations page</button>.</p>
                 </div>
             </section>
 
@@ -196,11 +193,7 @@ export const Settings: React.FC = () => {
                         <h2 className="text-base font-bold text-white flex items-center gap-2"><Key size={16} className="text-alphabag-yellow" /> CEX Exchange APIs</h2>
                         <p className="text-alphabag-subtext text-xs mt-0.5">Connect read-only API keys to track centralized exchange balances. <span className="text-alphabag-yellow font-semibold">Max {MAX_CEX} exchanges.</span></p>
                     </div>
-                    <button
-                        onClick={() => {}}
-                        disabled={true}
-                        className="flex items-center gap-1.5 text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors opacity-50 cursor-not-allowed"
-                    >
+                    <button type="button" onClick={() => navigate('/integrations')} className="flex items-center gap-1.5 text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider transition-colors hover:text-white">
                         Manage <ExternalLink size={12} />
                     </button>
                 </div>
@@ -264,13 +257,13 @@ export const Settings: React.FC = () => {
                             {availableCex.map(cex => (
                                 <button
                                     key={cex.id}
-                                    onClick={() => {}}
-                                    disabled={true}
-                                    className="flex flex-col items-center justify-center p-2.5 bg-alphabag-panel border border-alphabag-border rounded-md transition-all group gap-1 opacity-50 cursor-not-allowed"
+                                    type="button"
+                                    onClick={() => { setActiveCexId(cex.id); setIsCexModalOpen(true); }}
+                                    className="flex flex-col items-center justify-center p-2.5 bg-alphabag-panel border border-alphabag-border rounded-md transition-all group gap-1 hover:border-alphabag-yellow/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow"
                                     title={`Connect ${cex.name}`}
                                 >
-                                    <img src={cex.icon} alt={cex.name} className="w-6 h-6 rounded-full bg-white p-0.5 grayscale opacity-40 transition-all" />
-                                    <span className="text-[11px] font-semibold text-alphabag-muted truncate w-full text-center">{cex.name}</span>
+                                    <img src={cex.icon} alt="" aria-hidden="true" className="w-6 h-6 rounded-full bg-white p-0.5 transition-all" />
+                                    <span className="text-[11px] font-semibold text-alphabag-muted group-hover:text-alphabag-text truncate w-full text-center">{cex.name}</span>
                                 </button>
                             ))}
                         </div>
@@ -279,7 +272,7 @@ export const Settings: React.FC = () => {
                             <p className="text-alphabag-green font-semibold text-sm">All {MAX_CEX} slots filled!</p>
                         </div>
                     )}
-                    <p className="text-[11px] text-alphabag-subtext mt-3">To remove a connected exchange, go to the <button onClick={() => {}} disabled={true} className="text-alphabag-yellow underline hover:no-underline cursor-not-allowed">Integrations page</button>.</p>
+                                    <p className="text-[11px] text-alphabag-subtext mt-3">To remove a connected exchange, go to the <button type="button" onClick={() => navigate('/integrations')} className="text-alphabag-yellow underline hover:no-underline">Integrations page</button>.</p>
                 </div>
             </section>
 
@@ -456,7 +449,7 @@ export const Settings: React.FC = () => {
 
             <CexConnectModal
                 isOpen={isCexModalOpen}
-                onClose={() => setIsCexModalOpen(false)}
+                onClose={() => { setIsCexModalOpen(false); setActiveCexId(null); }}
                 exchangeName={activeCexId ? SUPPORTED_CEX.find(c => c.id === activeCexId)?.name || 'Exchange' : 'Exchange'}
                 onConnect={handleCexConnect}
                 isConnecting={isConnectingCex}

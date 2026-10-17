@@ -1,4 +1,4 @@
-import { ArrowLeft,Bell,BellOff,Check,DollarSign,MoreHorizontal,Share2,ShieldCheck,TrendingUp } from 'lucide-react';
+import { ArrowLeft,Bell,BellOff,Check,Copy,DollarSign,Share2,ShieldCheck } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { Link,useParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
@@ -17,55 +17,63 @@ export const WhaleDetail: React.FC = () => {
     const [transactions, setTransactions] = useState<WhaleTransaction[]>([]);
     const [loading, setLoading] = useState(true);
     const [showToast, setShowToast] = useState(false);
+    const [actionNotice, setActionNotice] = useState<string | null>(null);
 
     const whaleInfo = trackedWallets.find(w => w.address === address);
     const totalValue = holdings.reduce((acc, h) => acc + h.value, 0);
     const alertsEnabled = address ? whaleAlerts.includes(address) : false;
 
     useEffect(() => {
-        if (address && whaleInfo) {
-            setLoading(true);
-            const fetchData = async () => {
-                try {
-                    // Parallel fetch across all supported chains
-                    const [balances, txs] = await Promise.all([
-                        ChainService.getMultiChainBalances(address),
-                        WhaleService.getMultiChainTransactions(address)
-                    ]);
+        if (!actionNotice) return;
+        const timer = window.setTimeout(() => setActionNotice(null), 2500);
+        return () => window.clearTimeout(timer);
+    }, [actionNotice]);
 
-                    console.log("WhaleDetail Balances Raw:", balances);
+    useEffect(() => {
+        let cancelled = false;
+        if (!address || !whaleInfo) {
+            setHoldings([]);
+            setTransactions([]);
+            setLoading(false);
+            return () => { cancelled = true; };
+        }
 
-                    // Map balances to PortfolioItem
-                    const mappedHoldings = balances.map(t => ({
-                        coinId: t.tokenAddress || t.contractAddress || t.symbol,
-                        symbol: t.symbol,
-                        name: t.name,
-                        image: t.logo || '',
-                        amount: t.guiBalance || 0,
-                        currentPrice: t.price || 0,
-                        value: t.value || 0, // Ensure value is populated
-                        priceChange24h: 0,
-                        avgBuyPrice: 0,
-                        pnl: 0,
-                        pnlPercent: 0,
-                        costBasisKnown: false,
-                        isMockData: !!t.isMockData
-                    })).sort((a, b) => b.value - a.value); // Sort by Value Descending
+        setLoading(true);
+        const fetchData = async () => {
+            try {
+                const [balances, txs] = await Promise.all([
+                    ChainService.getMultiChainBalances(address),
+                    WhaleService.getMultiChainTransactions(address)
+                ]);
 
-                    // .filter(h => h.value > 10); // Temporarily disable dust filter for debugging
+                const mappedHoldings = balances.map(t => ({
+                    coinId: t.tokenAddress || t.contractAddress || t.symbol,
+                    symbol: t.symbol,
+                    name: t.name,
+                    image: t.logo || '',
+                    amount: t.guiBalance || 0,
+                    currentPrice: t.price || 0,
+                    value: t.value || 0,
+                    priceChange24h: 0,
+                    avgBuyPrice: 0,
+                    pnl: 0,
+                    pnlPercent: 0,
+                    costBasisKnown: false,
+                    isMockData: !!t.isMockData
+                })).sort((a, b) => b.value - a.value);
 
-                    console.log("WhaleDetail Mapped Holdings:", mappedHoldings);
-
+                if (!cancelled) {
                     setHoldings(mappedHoldings);
                     setTransactions(txs);
-                } catch (e) {
-                    console.error("Whale Data Fetch Error", e);
-                } finally {
-                    setLoading(false);
                 }
-            };
-            fetchData();
-        }
+            } catch (e) {
+                if (!cancelled) console.error('Whale data fetch failed', e);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        };
+        void fetchData();
+        return () => { cancelled = true; };
     }, [address, whaleInfo]);
 
     const filteredHoldings = hideSmallBalances ? holdings.filter(h => h.value >= 1) : holdings;
@@ -78,6 +86,31 @@ export const WhaleDetail: React.FC = () => {
         }
     };
 
+    const handleShare = async () => {
+        const shareData = { title: `${whaleInfo?.label || 'Whale'} analytics`, url: window.location.href };
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareData.url);
+                setActionNotice('Page link copied');
+            }
+        } catch (error) {
+            if (error instanceof Error && error.name === 'AbortError') return;
+            setActionNotice('Unable to share this page');
+        }
+    };
+
+    const handleCopyAddress = async () => {
+        if (!address) return;
+        try {
+            await navigator.clipboard.writeText(address);
+            setActionNotice('Wallet address copied');
+        } catch {
+            setActionNotice('Clipboard access is unavailable');
+        }
+    };
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center h-96">
             <div className="w-10 h-10 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin mb-2"></div>
@@ -85,8 +118,17 @@ export const WhaleDetail: React.FC = () => {
         </div>
     );
 
+    if (!address || !whaleInfo) return (
+        <section className="flex min-h-64 flex-col items-center justify-center gap-3 text-center" role="status">
+            <h1 className="text-xl font-semibold text-alphabag-text">Whale wallet not found</h1>
+            <p className="text-sm text-alphabag-subtext">This wallet is not in your tracked whale list.</p>
+            <Link to="/whales" className="text-sm font-semibold text-alphabag-yellow hover:underline">Back to tracked whales</Link>
+        </section>
+    );
+
     return (
         <div className="space-y-2 animate-in fade-in duration-700 relative">
+            {actionNotice && <div role="status" className="fixed top-20 right-4 z-[60] rounded-md border border-alphabag-gray bg-alphabag-darkgray px-3 py-2 text-sm text-alphabag-text">{actionNotice}</div>}
             {showToast && (
                 <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-alphabag-yellow/30 px-4 py-3 rounded-md shadow-2xl flex items-center space-x-2">
                     <div className={`p-1.5 rounded-full ${alertsEnabled ? 'bg-alphabag-green/20 text-alphabag-green' : 'bg-alphabag-red/20 text-alphabag-red'}`}>
@@ -113,8 +155,8 @@ export const WhaleDetail: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex space-x-2">
-                    <button className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Share2 size={16} /></button>
-                    <button className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><MoreHorizontal size={16} /></button>
+                    <button type="button" aria-label="Share whale analytics" onClick={() => void handleShare()} className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Share2 size={16} /></button>
+                    <button type="button" aria-label="Copy wallet address" title="Copy wallet address" onClick={() => void handleCopyAddress()} className="p-2 bg-alphabag-gray text-alphabag-subtext hover:text-alphabag-text rounded-md transition-colors"><Copy size={16} /></button>
                 </div>
             </div>
 
@@ -126,17 +168,10 @@ export const WhaleDetail: React.FC = () => {
                             <h2 className="text-3xl font-semibold text-white mb-3 tracking-tight leading-none num">
                                 ${totalValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                             </h2>
-                            <div className="flex items-center space-x-5 text-xs">
-                                <div className="flex items-center text-alphabag-green font-semibold uppercase tracking-wider">
-                                    <TrendingUp size={14} className="mr-1" />
-                                    <span>+4.2%</span>
-                                </div>
-                                <div className="text-alphabag-subtext font-medium">
-                                    Cost basis: <span className="text-white num">$15.4M</span>
-                                </div>
-                                <div className="text-alphabag-subtext font-medium">
-                                    Network: <span className="text-white">Multi-Chain</span>
-                                </div>
+                                <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs">
+                                    <div className="text-alphabag-subtext font-medium">Estimated from available balances</div>
+                                    <div className="text-alphabag-subtext font-medium">Assets: <span className="text-white tabular-nums">{holdings.length}</span></div>
+                                    <div className="text-alphabag-subtext font-medium">Network: <span className="text-white">Multi-Chain</span></div>
                             </div>
                         </div>
                     </div>
@@ -171,7 +206,7 @@ export const WhaleDetail: React.FC = () => {
                                         <tr key={h.coinId} className="hover:bg-alphabag-gray/30 transition-colors">
                                             <td className="p-3 pl-6">
                                                 <div className="flex items-center space-x-2.5">
-                                                    <img src={h.image} className="w-7 h-7 rounded-full" />
+                                                    {h.image && <img src={h.image} alt="" aria-hidden="true" className="w-7 h-7 rounded-full" />}
                                                     <div>
                                                         <div className="font-semibold text-white leading-none">{h.symbol}</div>
                                                         <div className="text-[11px] text-alphabag-muted font-medium mt-1 uppercase tracking-wider">{h.name}</div>
@@ -242,7 +277,7 @@ export const WhaleDetail: React.FC = () => {
                                             width: `${totalValue > 0 ? (item.value / totalValue) * 100 : 0}%`,
                                             backgroundColor: COLORS[index % COLORS.length]
                                         }}
-                                        title={`${item.name}: ${(item.value / totalValue * 100).toFixed(1)}%`}
+                                        title={`${item.name}: ${totalValue > 0 ? ((item.value / totalValue) * 100).toFixed(1) : '0.0'}%`}
                                     >
                                         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     </div>
@@ -260,13 +295,12 @@ export const WhaleDetail: React.FC = () => {
                         <div className="space-y-2">
                             <div className="p-3 bg-alphabag-black border border-alphabag-gray rounded-md">
                                 <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Accumulation strategy</div>
-                                <div className="text-sm text-white font-medium">Buying ETH consistently below $3,500 over the last 30 days.</div>
+                                <div className="text-sm text-alphabag-subtext font-medium">Historical transaction coverage is not available to reliably infer this wallet’s strategy.</div>
                             </div>
                             <div className="p-3 bg-alphabag-black border border-alphabag-gray rounded-md">
                                 <div className="text-xs text-alphabag-subtext mb-1 uppercase tracking-wider font-semibold">Risk profile</div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white font-medium">Conservative / Large Cap</span>
-                                    <span className="text-xs bg-alphabag-green/20 text-alphabag-green px-2 py-0.5 rounded font-semibold uppercase">Low Risk</span>
+                                    <span className="text-sm text-alphabag-subtext font-medium">Risk profile unavailable</span>
                                 </div>
                             </div>
                         </div>

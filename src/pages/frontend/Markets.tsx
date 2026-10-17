@@ -6,7 +6,7 @@ import {
   Star,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MarketService } from '../../services/MarketService';
 
 export interface CoinMarketData {
@@ -501,13 +501,16 @@ export const Markets: React.FC = () => {
                     className="hover:bg-[#202630]/70 transition-colors cursor-pointer group"
                   >
                     {/* Star Watchlist */}
-                    <td className="py-3 px-3 pl-4 text-center" onClick={(e) => toggleWatchlist(coin.id, e)}>
-                      <Star
-                        size={13}
-                        className={`transition-colors inline-block ${
-                          isStarred ? 'text-alphabag-yellow fill-alphabag-yellow' : 'text-gray-600 hover:text-gray-300'
-                        }`}
-                      />
+                    <td className="py-3 px-3 pl-4 text-center">
+                      <button type="button" aria-label={`${isStarred ? 'Remove' : 'Add'} ${coin.name} from watchlist`} aria-pressed={isStarred} onClick={(e) => toggleWatchlist(coin.id, e)} className="inline-flex rounded p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow">
+                        <Star
+                          size={13}
+                          aria-hidden="true"
+                          className={`transition-colors inline-block ${
+                            isStarred ? 'text-alphabag-yellow fill-alphabag-yellow' : 'text-gray-600 hover:text-gray-300'
+                          }`}
+                        />
+                      </button>
                     </td>
 
                     {/* Rank */}
@@ -517,7 +520,7 @@ export const Markets: React.FC = () => {
 
                     {/* Coin Name & Symbol */}
                     <td className="py-3 px-3">
-                      <div className="flex items-center gap-2.5">
+                      <Link to={`/markets/${coin.id}`} aria-label={`View ${coin.name} market details`} onClick={(e) => e.stopPropagation()} className="flex items-center gap-2.5 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-alphabag-yellow">
                         <img
                           src={coin.image}
                           alt={coin.name}
@@ -534,7 +537,7 @@ export const Markets: React.FC = () => {
                             {coin.symbol}
                           </span>
                         </div>
-                      </div>
+                      </Link>
                     </td>
 
                     {/* Price */}

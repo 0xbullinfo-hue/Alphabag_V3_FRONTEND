@@ -125,12 +125,16 @@ export const Portfolio: React.FC = () => {
                 <div className="flex items-center gap-2 text-xs font-medium">
                     <div className="flex items-center gap-2 mr-2">
                         <span className="text-[11px] text-alphabag-subtext uppercase font-semibold">Charts</span>
-                        <div
+                        <button
+                            type="button"
+                            role="switch"
+                            aria-label="Charts"
+                            aria-checked={showCharts}
                             className={`w-9 h-5 rounded-full flex items-center px-0.5 cursor-pointer transition-colors ${showCharts ? 'bg-alphabag-yellow' : 'bg-[#2B313A]'}`}
                             onClick={() => setShowCharts(!showCharts)}
                         >
-                            <div className={`w-4 h-4 bg-[#0B0E11] rounded-full transition-transform ${showCharts ? 'translate-x-4' : 'translate-x-0'}`}></div>
-                        </div>
+                            <span aria-hidden="true" className={`w-4 h-4 bg-[#0B0E11] rounded-full transition-transform ${showCharts ? 'translate-x-4' : 'translate-x-0'}`}></span>
+                        </button>
                     </div>
 
                     <button

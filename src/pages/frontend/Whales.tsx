@@ -57,7 +57,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                         </div>
                     )}
                 </div>
-                <button onClick={() => removeTrackedWallet(whale.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-1.5">
+                <button type="button" aria-label={`Remove ${whale.label} from tracked whales`} onClick={() => removeTrackedWallet(whale.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-1.5">
                     <Trash2 size={15} />
                 </button>
             </div>
@@ -85,10 +85,8 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                 </div>
             </div>
 
-            <Link to={`/whales/${whale.address}`}>
-                <button className="w-full py-2 bg-alphabag-gray text-alphabag-text rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all flex items-center justify-center gap-2">
-                    View Analytics <ArrowRight size={13} />
-                </button>
+            <Link to={`/whales/${whale.address}`} className="w-full py-2 bg-alphabag-gray text-alphabag-text rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all flex items-center justify-center gap-2">
+                View Analytics <ArrowRight size={13} />
             </Link>
         </div>
     );
