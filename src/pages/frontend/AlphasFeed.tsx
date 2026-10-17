@@ -90,12 +90,6 @@ export interface DiscussionPost {
     userVoted?: 'UP' | 'DOWN';
     isInsightful?: boolean;
     insightfulCount: number;
-    tokenMetrics?: {
-        marketCap?: string;
-        fdv?: string;
-        circulatingSupply?: string;
-        unlockDate?: string;
-    };
     comments: DiscussionComment[];
     createdAt: string;
     isPinned?: boolean;
@@ -181,12 +175,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         userVoted: undefined,
         isInsightful: true,
         insightfulCount: 38,
-        tokenMetrics: {
-            marketCap: '$14.2M',
-            fdv: '$32.0M',
-            circulatingSupply: '44.3%',
-            unlockDate: 'Month 12 Cliff (Safe)'
-        },
         comments: [
             {
                 id: 'comm-bag-1',
@@ -250,12 +238,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         userVoted: undefined,
         isInsightful: true,
         insightfulCount: 24,
-        tokenMetrics: {
-            marketCap: '$92.4B',
-            fdv: '$114.8B',
-            circulatingSupply: '80.5%',
-            unlockDate: 'Staking Inflows (+6.2%)'
-        },
         comments: [
             {
                 id: 'comm-sol-1',
@@ -286,12 +268,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         userVoted: undefined,
         isInsightful: true,
         insightfulCount: 31,
-        tokenMetrics: {
-            marketCap: '$2.8B',
-            fdv: '$3.4B',
-            circulatingSupply: '71.2%',
-            unlockDate: 'Linear BME Mint'
-        },
         comments: [],
         createdAt: new Date(Date.now() - 3600000 * 18).toISOString()
     },
@@ -310,12 +286,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         userVoted: undefined,
         isInsightful: true,
         insightfulCount: 18,
-        tokenMetrics: {
-            marketCap: '$5.6B',
-            fdv: '$18.2B',
-            circulatingSupply: '28.1%',
-            unlockDate: 'Monthly Cliff (+2.1%)'
-        },
         comments: [],
         createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
     }
@@ -420,10 +390,6 @@ export const AlphasFeed: React.FC = () => {
     const [newCategory, setNewCategory] = useState<Exclude<DiscussionCategory, 'ALL'>>('TOKENOMICS');
     const [newSentiment, setNewSentiment] = useState<DiscussionSentiment>('BULLISH');
     const [newContent, setNewContent] = useState('');
-    const [newMarketCap, setNewMarketCap] = useState('');
-    const [newFdv, setNewFdv] = useState('');
-    const [newCirculating, setNewCirculating] = useState('');
-    const [newUnlock, setNewUnlock] = useState('');
 
     // Founder Form Modal
     const [isFounderFormOpen, setIsFounderFormOpen] = useState(false);
@@ -739,12 +705,6 @@ export const AlphasFeed: React.FC = () => {
             userVoted: 'UP',
             insightfulCount: 0,
             comments: [],
-            tokenMetrics: (newMarketCap || newFdv || newCirculating || newUnlock) ? {
-                marketCap: newMarketCap || undefined,
-                fdv: newFdv || undefined,
-                circulatingSupply: newCirculating || undefined,
-                unlockDate: newUnlock || undefined,
-            } : undefined,
             createdAt: new Date().toISOString()
         };
 
@@ -756,10 +716,6 @@ export const AlphasFeed: React.FC = () => {
         setIsComposerOpen(false);
         setNewTitle('');
         setNewContent('');
-        setNewMarketCap('');
-        setNewFdv('');
-        setNewCirculating('');
-        setNewUnlock('');
 
         Swal.fire({
             toast: true,
@@ -1516,36 +1472,6 @@ export const AlphasFeed: React.FC = () => {
                                         {post.content}
                                     </p>
 
-                                    {/* Token Key Metrics Card */}
-                                    {post.tokenMetrics && (
-                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-alphabag-black/70 border border-alphabag-gray rounded-xl p-3 text-center">
-                                            {post.tokenMetrics.marketCap && (
-                                                <div>
-                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Market Cap</div>
-                                                    <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.marketCap}</div>
-                                                </div>
-                                            )}
-                                            {post.tokenMetrics.fdv && (
-                                                <div>
-                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Target FDV</div>
-                                                    <div className="text-xs font-semibold text-alphabag-yellow font-mono mt-0.5">{post.tokenMetrics.fdv}</div>
-                                                </div>
-                                            )}
-                                            {post.tokenMetrics.circulatingSupply && (
-                                                <div>
-                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Circulating %</div>
-                                                    <div className="text-xs font-semibold text-alphabag-text font-mono mt-0.5">{post.tokenMetrics.circulatingSupply}</div>
-                                                </div>
-                                            )}
-                                            {post.tokenMetrics.unlockDate && (
-                                                <div>
-                                                    <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Unlock Schedule</div>
-                                                    <div className="text-xs font-semibold text-alphabag-green font-mono mt-0.5">{post.tokenMetrics.unlockDate}</div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
                                     {/* Reddit-Style Bottom Action Bar (Upvote, Comments, Insightful, Share) */}
                                     <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-alphabag-gray/50 text-xs">
                                         <div className="flex items-center gap-2">
@@ -2071,40 +1997,6 @@ export const AlphasFeed: React.FC = () => {
                                     required
                                     className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow resize-none leading-relaxed"
                                 />
-                            </div>
-
-                            <div className="space-y-2 pt-2 border-t border-alphabag-gray">
-                                <span className="text-[11px] font-semibold uppercase text-alphabag-yellow">Optional: Tokenomics Key Metrics</span>
-                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                    <input
-                                        type="text"
-                                        value={newMarketCap}
-                                        onChange={(e) => setNewMarketCap(e.target.value)}
-                                        placeholder="Market Cap ($4.2M)"
-                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={newFdv}
-                                        onChange={(e) => setNewFdv(e.target.value)}
-                                        placeholder="Target FDV ($10M)"
-                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={newCirculating}
-                                        onChange={(e) => setNewCirculating(e.target.value)}
-                                        placeholder="Circulating (42%)"
-                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
-                                    />
-                                    <input
-                                        type="text"
-                                        value={newUnlock}
-                                        onChange={(e) => setNewUnlock(e.target.value)}
-                                        placeholder="Next Unlock (Month 12)"
-                                        className="bg-alphabag-black border border-alphabag-gray rounded p-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
-                                    />
-                                </div>
                             </div>
 
                             <div className="bg-alphabag-black p-3 rounded-lg border border-alphabag-gray flex justify-between items-center text-xs">
