@@ -197,7 +197,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                         <WhaleListItem key={whale.id} whale={whale} removeTrackedWallet={removeTrackedWallet} hasAlerts={whaleAlerts.includes(whale.address)} />
                     ))}
 
-                    {activeWhales.length < limits.maxWhales && (
+                    {!embedded && activeWhales.length < limits.maxWhales && (
                         <button 
                             onClick={() => setIsAddOpen(true)}
                             className="rounded-lg border border-dashed border-alphabag-gray p-4 flex flex-col items-center justify-center text-center hover:border-alphabag-yellow/30 transition-all group"

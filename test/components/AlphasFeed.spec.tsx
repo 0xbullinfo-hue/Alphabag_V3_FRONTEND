@@ -3,6 +3,13 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import { AlphasFeed } from '../../src/pages/frontend/AlphasFeed';
 
+// Mock sweetalert2
+vi.mock('sweetalert2', () => ({
+    default: {
+        fire: vi.fn().mockResolvedValue({ isConfirmed: true })
+    }
+}));
+
 // Mock AuthContext
 vi.mock('../../src/context/AuthContext', () => ({
     useAuth: () => ({
@@ -143,14 +150,36 @@ describe('AlphasFeed Community Discussion & Live Audio Space Hub', () => {
         expect(screen.getAllByPlaceholderText(/Share your perspective/i).length).toBeGreaterThan(0);
     });
 
-    it('opens discussion composer modal and starts new discussion', async () => {
+    it('opens discussion composer modal and creates post with media support', async () => {
         render(<AlphasFeed />);
 
-        const startButton = screen.getByRole('button', { name: /Start Discussion/i });
-        fireEvent.click(startButton);
+        const createButtons = screen.getAllByRole('button', { name: /Create Post/i });
+        fireEvent.click(createButtons[0]);
 
-        expect(screen.getByText(/Start a Project Analysis Thread/i)).toBeDefined();
-        expect(screen.getByPlaceholderText(/Deep Dive into \$BAG Tokenomics/i)).toBeDefined();
+        expect(screen.getAllByText(/Create Post/i).length).toBeGreaterThan(0);
+        expect(screen.getByPlaceholderText(/What's happening in the market or protocol\?/i)).toBeDefined();
+    });
+
+    it('enforces community gating: preview mode for non-joined communities with join action', async () => {
+        render(<AlphasFeed />);
+
+        await waitFor(() => {
+            const joinButtons = screen.getAllByRole('button', { name: /\+ Join|Joined/i });
+            expect(joinButtons.length).toBeGreaterThan(0);
+        });
+
+        // Find community slugs
+        expect(screen.getAllByText(/c\/tokenomics/i).length).toBeGreaterThan(0);
+    });
+
+    it('allows community members to request stage mic with host moderation', async () => {
+        render(<AlphasFeed />);
+
+        const requestMicButton = screen.getByRole('button', { name: /Request to Speak/i });
+        expect(requestMicButton).toBeDefined();
+
+        fireEvent.click(requestMicButton);
+        expect(screen.getByRole('button', { name: /Request Pending/i })).toBeDefined();
     });
 
     it('opens Host Audio Space modal allowing community live stage creation', async () => {

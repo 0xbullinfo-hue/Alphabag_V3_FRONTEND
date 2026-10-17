@@ -1,10 +1,9 @@
 import {
   Camera,
-  Check,
-  Copy,
   ExternalLink,
   Maximize2,
   Minimize2,
+  MoreHorizontal,
   RefreshCw,
   Search,
   Share2,
@@ -78,7 +77,7 @@ export function BubblemapsEmbed({
   const [activeAddress, setActiveAddress] = useState<string>(initialAddress);
   const [inputAddress, setInputAddress] = useState<string>(initialAddress);
   const [loading, setLoading] = useState(true);
-  const [copied, setCopied] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [key, setKey] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [forensicsData, setForensicsData] = useState<BubblemapsMapResponse | null>(null);
@@ -237,12 +236,6 @@ export function BubblemapsEmbed({
     onAddressChange?.(pick.chain, pick.address);
   };
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(activeAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <>
       <div className="relative w-full overflow-hidden rounded-[8px] border border-[#2B313A] bg-[#181A20] shadow-xl">
@@ -264,17 +257,8 @@ export function BubblemapsEmbed({
               </div>
             </div>
 
-            {/* Actions: Snapshot, In-App Expand, Reload, External */}
-            <div className="flex items-center gap-2 self-end md:self-auto flex-wrap">
-              <button
-                onClick={handleOpenSnapshot}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#202630] hover:bg-[#2B313A] text-gray-300 hover:text-white border border-[#2B313A] text-xs font-semibold transition-colors"
-                title="View Official Verified Screenshot Snapshot"
-              >
-                <Camera size={13} />
-                <span>Snapshot</span>
-              </button>
-
+            {/* Actions: In-App Expand, External, and Overflow (Snapshot, Reload) */}
+            <div className="flex items-center gap-1.5 self-end md:self-auto relative">
               <button
                 onClick={() => setIsExpanded(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#202630] hover:bg-[#2B313A] text-alphabag-yellow border border-[#2B313A] text-xs font-semibold transition-all hover:scale-[1.02] shadow-sm"
@@ -282,17 +266,6 @@ export function BubblemapsEmbed({
               >
                 <Maximize2 size={13} />
                 <span>Open in App</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setLoading(true);
-                  setKey((k) => k + 1);
-                }}
-                className="p-2 rounded-lg bg-[#202630] hover:bg-[#2B313A] text-gray-300 hover:text-white border border-[#2B313A] text-xs transition-colors"
-                title="Reload Embed"
-              >
-                <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
               </button>
 
               <a
@@ -305,6 +278,46 @@ export function BubblemapsEmbed({
                 <span>External</span>
                 <ExternalLink size={12} />
               </a>
+
+              {/* Overflow Menu for Secondary Actions */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setShowMoreMenu((prev) => !prev)}
+                  className="p-1.5 rounded-lg bg-[#202630] hover:bg-[#2B313A] text-gray-300 hover:text-white border border-[#2B313A] transition-colors"
+                  title="More actions"
+                >
+                  <MoreHorizontal size={14} />
+                </button>
+
+                {showMoreMenu && (
+                  <div className="absolute right-0 top-full mt-1.5 w-44 bg-[#14171D] border border-[#2B313A] rounded-lg p-1.5 shadow-xl z-30 space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMoreMenu(false);
+                        handleOpenSnapshot();
+                      }}
+                      className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-[#202630] rounded transition-colors text-left font-medium"
+                    >
+                      <Camera size={13} className="text-alphabag-yellow" />
+                      <span>Verified Snapshot</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowMoreMenu(false);
+                        setLoading(true);
+                        setKey((k) => k + 1);
+                      }}
+                      className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-[#202630] rounded transition-colors text-left font-medium"
+                    >
+                      <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
+                      <span>Reload Embed</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -363,14 +376,6 @@ export function BubblemapsEmbed({
                     <X size={12} />
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={copyAddress}
-                  className="text-gray-400 hover:text-white transition-colors p-1"
-                  title="Copy Active Address"
-                >
-                  {copied ? <Check size={13} className="text-[#0ECB81]" /> : <Copy size={13} />}
-                </button>
               </div>
 
               {/* Analyze CTA */}

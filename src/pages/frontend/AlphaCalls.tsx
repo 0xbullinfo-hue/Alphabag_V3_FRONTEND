@@ -149,8 +149,13 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                         </div>
                                     </div>
                                     <button 
-                                        onClick={() => copyToClipboard(`${signal.pair} details`)}
+                                        onClick={() => {
+                                            const targetsStr = Array.isArray(signal.targets) ? signal.targets.join(', ') : '';
+                                            const summary = `[AlphaCall] ${signal.pair} (${signal.category})\nEntry: ${signal.entry || 'N/A'}${targetsStr ? ` | Targets: ${targetsStr}` : ''} | Stop Loss: ${signal.stopLoss || 'N/A'}${signal.contractAddress ? `\nCA: ${signal.contractAddress}` : ''}\nTime: ${signal.timestamp || 'Live'}`;
+                                            copyToClipboard(summary);
+                                        }}
                                         className="w-7 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
+                                        title="Copy Structured Trade Signal"
                                     >
                                         <Copy size={12} />
                                     </button>

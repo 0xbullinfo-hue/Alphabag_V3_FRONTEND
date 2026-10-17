@@ -1,4 +1,4 @@
-import { Bot,ChevronRight,Fingerprint,Mic,Send,Trash2,Wallet,Zap } from 'lucide-react';
+import { Bot,ChevronRight,Fingerprint,Send,Trash2,Wallet,Zap } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { useNeuralCore } from '../../components/hooks/useNeuralCore';
 import { Button } from '../../components/ui/Button';
@@ -136,14 +136,6 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
                 className="w-full h-12 bg-alphabag-dark border border-alphabag-gray rounded-md pl-4 pr-24 py-3 text-sm text-alphabag-text focus:border-alphabag-yellow focus:ring-1 focus:ring-alphabag-yellow/20 focus:outline-none transition-colors placeholder:text-alphabag-muted"
               />
               <div className="absolute right-1.5 top-1.5 bottom-1.5 flex items-center gap-1">
-                <button
-                  type="button"
-                  disabled
-                  className="h-full px-2.5 rounded-md text-zinc-600 cursor-not-allowed transition-colors"
-                  title="Voice assistant — coming in Phase 2.0"
-                >
-                  <Mic size={14} />
-                </button>
                 <Button
                   type="submit"
                   disabled={!isAuthenticated || !inputText.trim() || isStreaming || !hasLimitRemaining}

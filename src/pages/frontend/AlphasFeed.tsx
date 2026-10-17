@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: MIT
-import DOMPurify from 'dompurify';
 import {
     ArrowUpRight,
-    Award,
     Check,
     ChevronDown,
     ChevronUp,
     Coins,
     Copy,
-    Eye,
-    EyeOff,
-    Flame,
     Hand,
+    Image as ImageIcon,
     Layers,
     Loader2,
     Lock,
@@ -29,11 +25,11 @@ import {
     Target,
     ThumbsDown,
     ThumbsUp,
-    TrendingUp,
     Twitter,
     Users,
     Volume2,
     VolumeX,
+    X,
     Zap
 } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -62,11 +58,33 @@ export type DiscussionCategory =
 
 export type DiscussionSentiment = 'BULLISH' | 'BEARISH' | 'NEUTRAL';
 
+export interface CommunityMeta {
+    slug: string;
+    name: string;
+    description: string;
+    category: Exclude<DiscussionCategory, 'ALL'>;
+    memberCount: number;
+}
+
+export const COMMUNITIES: CommunityMeta[] = [
+    { slug: 'c/tokenomics', name: 'Tokenomics & Vesting', description: 'Due diligence on token supplies, lockups, and fee switches', category: 'TOKENOMICS', memberCount: 1420 },
+    { slug: 'c/utility', name: 'Utility & Yield', description: 'Real-yield staking pools, burn engines, and gas utility models', category: 'UTILITY', memberCount: 980 },
+    { slug: 'c/reviews', name: 'Project Reviews', description: 'Fundamental analysis and deep dives on emerging protocols', category: 'PROJECT_REVIEW', memberCount: 1250 },
+    { slug: 'c/alphacalls', name: 'Alpha Calls', description: 'Early setups, momentum breakouts, and smart money entries', category: 'ALPHA_CALL', memberCount: 2310 },
+    { slug: 'c/security', name: 'Security & Audits', description: 'Bytecode audits, honeypot detection, and contract risk telemetry', category: 'AUDIT_SECURITY', memberCount: 840 },
+    { slug: 'c/memecoins', name: 'Memecoin Rotation', description: 'DEX liquidity rotation, volume surges, and viral metas', category: 'MEMECOIN_ROTATION', memberCount: 3100 },
+];
+
+export const getCommunityForCategory = (cat: Exclude<DiscussionCategory, 'ALL'>): CommunityMeta => {
+    return COMMUNITIES.find(c => c.category === cat) || COMMUNITIES[0];
+};
+
 export interface DiscussionComment {
     id: string;
     authorWallet: string;
     authorTier: PassTier;
     isPro: boolean;
+    isAnonymous?: boolean;
     content: string;
     sentiment?: DiscussionSentiment;
     upvotes: number;
@@ -78,22 +96,28 @@ export interface DiscussionComment {
 export interface DiscussionPost {
     id: string;
     title: string;
-    ticker: string;
+    ticker?: string;
     category: Exclude<DiscussionCategory, 'ALL'>;
-    sentiment: DiscussionSentiment;
+    sentiment?: DiscussionSentiment;
     content: string;
+    mediaUrl?: string;
     authorWallet: string;
     authorTier: PassTier;
     isPro: boolean;
     upvotes: number;
     downvotes: number;
     userVoted?: 'UP' | 'DOWN';
-    isInsightful?: boolean;
-    insightfulCount: number;
     comments: DiscussionComment[];
     createdAt: string;
     isPinned?: boolean;
     isSponsored?: boolean;
+}
+
+export interface SpeakerRequest {
+    wallet: string;
+    name: string;
+    tier: string;
+    requestedAt: string;
 }
 
 export interface LivePodcastState {
@@ -114,6 +138,7 @@ export interface LivePodcastState {
         isSpeaking?: boolean;
         tier: string;
     }>;
+    pendingSpeakerRequests?: SpeakerRequest[];
     liveChat: Array<{
         id: string;
         authorWallet: string;
@@ -122,14 +147,6 @@ export interface LivePodcastState {
         message: string;
         timestamp: string;
     }>;
-    upvotes: number;
-    userUpvoted: boolean;
-    reactionStats?: {
-        alpha: number;
-        fire: number;
-        bullish: number;
-        insight: number;
-    };
 }
 
 export interface SponsoredAd {
@@ -150,15 +167,7 @@ export interface TrendingTopic {
     sentiment: string;
 }
 
-export interface TopAnalyst {
-    rank: string;
-    wallet: string;
-    tier: string;
-    score: string;
-    focus: string;
-}
-
-// ── DEFAULT SEED DATA (High Quality Web3 Institutional Seed) ─────────────────
+// ── DEFAULT SEED DATA ────────────────────────────────────────────────────────
 const SEED_DISCUSSIONS: DiscussionPost[] = [
     {
         id: 'disc-bag-genesis',
@@ -173,8 +182,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         upvotes: 84,
         downvotes: 3,
         userVoted: undefined,
-        isInsightful: true,
-        insightfulCount: 38,
         comments: [
             {
                 id: 'comm-bag-1',
@@ -182,7 +189,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
                 authorTier: 'PREMIUM',
                 isPro: true,
                 content: 'The buyback mechanism already burned over 2.4M $BAG in Q3. Very few DeFi tools actually distribute real revenue like this.',
-                sentiment: 'BULLISH',
                 upvotes: 19,
                 createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
                 replies: [
@@ -192,7 +198,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
                         authorTier: 'FREE',
                         isPro: false,
                         content: 'Are the buyback txs verifiable on Etherscan in real-time?',
-                        sentiment: 'NEUTRAL',
                         upvotes: 6,
                         createdAt: new Date(Date.now() - 3600000 * 3).toISOString()
                     },
@@ -202,7 +207,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
                         authorTier: 'ALPHA_VIP',
                         isPro: true,
                         content: 'Yes! All buyback hashes are emitted via the FeeDistributor contract event logs and visible on the Protocol Dashboard.',
-                        sentiment: 'BULLISH',
                         upvotes: 12,
                         createdAt: new Date(Date.now() - 3600000 * 2).toISOString()
                     }
@@ -214,7 +218,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
                 authorTier: 'PREMIUM',
                 isPro: true,
                 content: 'Single-sided staking with zero impermanent loss is the major selling point compared to standard LP pools.',
-                sentiment: 'BULLISH',
                 upvotes: 11,
                 createdAt: new Date(Date.now() - 3600000 * 1).toISOString(),
                 replies: []
@@ -236,8 +239,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         upvotes: 67,
         downvotes: 7,
         userVoted: undefined,
-        isInsightful: true,
-        insightfulCount: 24,
         comments: [
             {
                 id: 'comm-sol-1',
@@ -245,7 +246,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
                 authorTier: 'FREE',
                 isPro: false,
                 content: 'Raydium daily protocol fees crossed Uniswap on multiple days this week. Incredible liquidity flywheel.',
-                sentiment: 'BULLISH',
                 upvotes: 14,
                 createdAt: new Date(Date.now() - 3600000 * 5).toISOString(),
                 replies: []
@@ -266,8 +266,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         upvotes: 52,
         downvotes: 2,
         userVoted: undefined,
-        isInsightful: true,
-        insightfulCount: 31,
         comments: [],
         createdAt: new Date(Date.now() - 3600000 * 18).toISOString()
     },
@@ -284,8 +282,6 @@ const SEED_DISCUSSIONS: DiscussionPost[] = [
         upvotes: 41,
         downvotes: 8,
         userVoted: undefined,
-        isInsightful: true,
-        insightfulCount: 18,
         comments: [],
         createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
     }
@@ -307,19 +303,12 @@ const SEED_PODCAST: LivePodcastState = {
         { wallet: "0x34A...B901", name: "MacroDeFi_Whale", isHost: false, isSpeaking: false, tier: "PREMIUM" },
         { wallet: "0x99B...E311", name: "SolanaScreener", isHost: false, isSpeaking: true, tier: "ULTIMATE" }
     ],
+    pendingSpeakerRequests: [],
     liveChat: [
         { id: "c1", authorWallet: "0x44D...88F1", tier: "PREMIUM", isVip: true, message: "What are your thoughts on the $BAG buyback rate this week?", timestamp: "1m ago" },
         { id: "c2", authorWallet: "0x12E...77C3", tier: "FREE", isVip: false, message: "Listening in from Singapore. Great alpha on the DEX volume shift.", timestamp: "3m ago" },
         { id: "c3", authorWallet: "0x88F...4210", tier: "ALPHA_VIP", isVip: true, message: "Whale wallet 0x3a9 just swept 40 ETH into liquidity pool.", timestamp: "5m ago" }
-    ],
-    upvotes: 96,
-    userUpvoted: false,
-    reactionStats: {
-        alpha: 42,
-        fire: 89,
-        bullish: 74,
-        insight: 35
-    }
+    ]
 };
 
 const SEED_TRENDING: TrendingTopic[] = [
@@ -330,19 +319,12 @@ const SEED_TRENDING: TrendingTopic[] = [
     { ticker: '$PEPE', topic: 'Whale Accumulation Signals on BubbleMaps', posts: 64, sentiment: 'BULLISH' }
 ];
 
-const SEED_ANALYSTS: TopAnalyst[] = [
-    { rank: '1', wallet: '0x71C...89A2', tier: 'ULTIMATE', score: '98.4%', focus: 'Tokenomics & Vesting' },
-    { rank: '2', wallet: '0x99B...E311', tier: 'ULTIMATE', score: '94.1%', focus: 'DEX Liquidity & Momentum' },
-    { rank: '3', wallet: '0x52D...A1F0', tier: 'PREMIUM', score: '91.8%', focus: 'DePIN & AI Compute' },
-    { rank: '4', wallet: '0x34A...B901', tier: 'PREMIUM', score: '88.5%', focus: 'On-Chain Smart Money' }
-];
-
 const SEED_AD: SponsoredAd = {
     id: 'ad-bag-genesis',
     partnerName: 'AlphaBAG Genesis Pass',
     tagline: 'Unlock institutional on-chain trade alerts, whale cluster detection & fee share yield.',
-    description: 'Lifetime pass holders receive 100% access to all VIP screener tools, private Discord stages, and daily smart money flow reports.',
-    badge: 'VERIFIED ECOSYSTEM',
+    description: 'Lifetime pass holders receive 100% access to all VIP screener tools, private stages, and daily smart money flow reports.',
+    badge: 'VERIFIED SPONSOR',
     ctaText: 'Explore Pass Utility',
     ctaUrl: '#/airdrop',
     logoUrl: '/favicon.svg'
@@ -356,10 +338,19 @@ export const AlphasFeed: React.FC = () => {
     // Channel & Search state
     const [selectedCategory, setSelectedCategory] = useState<DiscussionCategory>('ALL');
     const [searchQuery, setSearchQuery] = useState('');
-    const [sortBy, setSortBy] = useState<'HOT' | 'TOP' | 'DEBATED' | 'LATEST'>('HOT');
-    const [privacyMode, setPrivacyMode] = useState<boolean>(true);
+    const [sortBy, setSortBy] = useState<'HOT' | 'NEW' | 'TOP'>('HOT');
 
-    // Primary Community State
+    // Community Membership State (Gating full thread & all comments behind Join)
+    const [joinedCommunities, setJoinedCommunities] = useState<Set<string>>(() => {
+        try {
+            const saved = localStorage.getItem('alphabag_joined_communities');
+            if (saved) return new Set(JSON.parse(saved));
+        } catch (_) {}
+        // Default joined with c/tokenomics so some threads are immediately unlocked
+        return new Set(['c/tokenomics']);
+    });
+
+    // Primary Feed State
     const [discussions, setDiscussions] = useState<DiscussionPost[]>(() => {
         try {
             const saved = localStorage.getItem('alphabag_community_discussions');
@@ -370,26 +361,26 @@ export const AlphasFeed: React.FC = () => {
 
     const [sponsoredAd, setSponsoredAd] = useState<SponsoredAd | null>(SEED_AD);
     const [trendingTopics, setTrendingTopics] = useState<TrendingTopic[]>(SEED_TRENDING);
-    const [topAnalysts, setTopAnalysts] = useState<TopAnalyst[]>(SEED_ANALYSTS);
     const [isLoading, setIsLoading] = useState(false);
 
     // Comment states
     const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set(['disc-bag-genesis']));
     const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
-    const [commentSentiments, setCommentSentiments] = useState<Record<string, DiscussionSentiment>>({});
+    const [commentIdentities, setCommentIdentities] = useState<Record<string, 'VISIBLE' | 'ANON'>>({});
     const [replyingTo, setReplyingTo] = useState<Record<string, string | null>>({});
 
     // Share states
     const [activeShareId, setActiveShareId] = useState<string | null>(null);
     const [copiedShareId, setCopiedShareId] = useState<string | null>(null);
 
-    // New Discussion Composer Modal
+    // Create Post Composer Modal
     const [isComposerOpen, setIsComposerOpen] = useState(false);
     const [newTitle, setNewTitle] = useState('');
-    const [newTicker, setNewTicker] = useState('$BAG');
+    const [newTicker, setNewTicker] = useState('');
     const [newCategory, setNewCategory] = useState<Exclude<DiscussionCategory, 'ALL'>>('TOKENOMICS');
     const [newSentiment, setNewSentiment] = useState<DiscussionSentiment>('BULLISH');
     const [newContent, setNewContent] = useState('');
+    const [newMediaUrl, setNewMediaUrl] = useState('');
 
     // Founder Form Modal
     const [isFounderFormOpen, setIsFounderFormOpen] = useState(false);
@@ -415,20 +406,26 @@ export const AlphasFeed: React.FC = () => {
     const isUserPro = Boolean(user?.isPro || user?.tier === 'PREMIUM' || user?.tier === 'ULTIMATE' || user?.tier === 'ALPHA_VIP');
     const userTier: PassTier = (user?.tier as PassTier) || 'FREE';
 
-    // Format address for privacy
+    // Format address for user display
     const formatAddress = (addr?: string) => {
-        if (!addr) return '0x0000...0000';
+        if (!addr) return '0x71C...89A2';
         return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
     };
 
     const currentDisplayWallet = formatAddress(user?.walletAddress || user?.id || '0x71C...89A2');
 
-    // Sync to local storage
+    // Persistence
     useEffect(() => {
         try {
             localStorage.setItem('alphabag_community_discussions', JSON.stringify(discussions));
         } catch (_) {}
     }, [discussions]);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem('alphabag_joined_communities', JSON.stringify(Array.from(joinedCommunities)));
+        } catch (_) {}
+    }, [joinedCommunities]);
 
     useEffect(() => {
         try {
@@ -443,12 +440,11 @@ export const AlphasFeed: React.FC = () => {
         const fetchCommunityData = async () => {
             setIsLoading(true);
             try {
-                const [discRes, podcastRes, adRes, trendRes, analystRes] = await Promise.allSettled([
+                const [discRes, podcastRes, adRes, trendRes] = await Promise.allSettled([
                     api.get('/api/community/discussions'),
                     api.get('/api/community/podcast'),
                     api.get('/api/community/ads'),
-                    api.get('/api/community/trending'),
-                    api.get('/api/community/analysts')
+                    api.get('/api/community/trending')
                 ]);
 
                 if (discRes.status === 'fulfilled' && Array.isArray(discRes.value.data) && discRes.value.data.length > 0) {
@@ -461,7 +457,8 @@ export const AlphasFeed: React.FC = () => {
                         isListening: prev?.isListening ?? false,
                         isMuted: prev?.isMuted ?? false,
                         userMicMuted: prev?.userMicMuted ?? true,
-                        userOnStage: prev?.userOnStage ?? false
+                        userOnStage: prev?.userOnStage ?? false,
+                        pendingSpeakerRequests: prev?.pendingSpeakerRequests ?? []
                     }));
                 }
 
@@ -472,12 +469,8 @@ export const AlphasFeed: React.FC = () => {
                 if (trendRes.status === 'fulfilled' && Array.isArray(trendRes.value.data) && trendRes.value.data.length > 0) {
                     setTrendingTopics(trendRes.value.data);
                 }
-
-                if (analystRes.status === 'fulfilled' && Array.isArray(analystRes.value.data) && analystRes.value.data.length > 0) {
-                    setTopAnalysts(analystRes.value.data);
-                }
             } catch (err) {
-                console.error("[CommunityHub] Data fetch error (using resilient seed):", err);
+                console.error("[AlphaFeed] Resilient seed data active:", err);
             } finally {
                 setIsLoading(false);
             }
@@ -485,6 +478,42 @@ export const AlphasFeed: React.FC = () => {
 
         fetchCommunityData();
     }, []);
+
+    // ── COMMUNITY MEMBERSHIP HANDLERS ────────────────────────────────────────
+    const toggleJoinCommunity = (communitySlug: string) => {
+        setJoinedCommunities(prev => {
+            const next = new Set(prev);
+            const isJoining = !next.has(communitySlug);
+            if (isJoining) {
+                next.add(communitySlug);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: `JOINED ${communitySlug.toUpperCase()}`,
+                    text: 'You now have full access to complete threads and community discussions.',
+                    showConfirmButton: false,
+                    timer: 2500,
+                    background: '#181A20',
+                    color: '#EAECEF'
+                });
+            } else {
+                next.delete(communitySlug);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'info',
+                    title: `LEFT ${communitySlug.toUpperCase()}`,
+                    text: 'Membership revoked. Thread content is now in preview mode.',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    background: '#181A20',
+                    color: '#EAECEF'
+                });
+            }
+            return next;
+        });
+    };
 
     // ── FILTERING & SORTING ──────────────────────────────────────────────────
     const filteredDiscussions = useMemo(() => {
@@ -498,7 +527,7 @@ export const AlphasFeed: React.FC = () => {
             const q = searchQuery.toLowerCase();
             list = list.filter(d => 
                 d.title.toLowerCase().includes(q) ||
-                d.ticker.toLowerCase().includes(q) ||
+                (d.ticker && d.ticker.toLowerCase().includes(q)) ||
                 d.content.toLowerCase().includes(q)
             );
         }
@@ -507,10 +536,7 @@ export const AlphasFeed: React.FC = () => {
             case 'TOP':
                 list.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
                 break;
-            case 'DEBATED':
-                list.sort((a, b) => b.comments.length - a.comments.length);
-                break;
-            case 'LATEST':
+            case 'NEW':
                 list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
                 break;
             case 'HOT':
@@ -518,8 +544,8 @@ export const AlphasFeed: React.FC = () => {
                 list.sort((a, b) => {
                     if (a.isPinned && !b.isPinned) return -1;
                     if (!a.isPinned && b.isPinned) return 1;
-                    const scoreA = (a.upvotes - a.downvotes) * 2 + a.comments.length * 5 + a.insightfulCount * 3;
-                    const scoreB = (b.upvotes - b.downvotes) * 2 + b.comments.length * 5 + b.insightfulCount * 3;
+                    const scoreA = (a.upvotes - a.downvotes) * 2 + a.comments.length * 4;
+                    const scoreB = (b.upvotes - b.downvotes) * 2 + b.comments.length * 4;
                     return scoreB - scoreA;
                 });
                 break;
@@ -528,7 +554,7 @@ export const AlphasFeed: React.FC = () => {
         return list;
     }, [discussions, selectedCategory, searchQuery, sortBy]);
 
-    // ── ACTIONS: DISCUSSIONS ─────────────────────────────────────────────────
+    // ── ACTIONS: DISCUSSIONS & COMMENTS ──────────────────────────────────────
 
     const handleVoteDiscussion = async (discId: string, type: 'UP' | 'DOWN') => {
         try {
@@ -561,22 +587,6 @@ export const AlphasFeed: React.FC = () => {
         }));
     };
 
-    const handleToggleInsightful = async (discId: string) => {
-        try {
-            await api.post(`/api/community/discussions/${discId}/insightful`);
-        } catch (_) {}
-
-        setDiscussions(prev => prev.map(d => {
-            if (d.id !== discId) return d;
-            const nextState = !d.isInsightful;
-            return {
-                ...d,
-                isInsightful: nextState,
-                insightfulCount: nextState ? d.insightfulCount + 1 : Math.max(0, d.insightfulCount - 1)
-            };
-        }));
-    };
-
     const toggleComments = (discId: string) => {
         setExpandedComments(prev => {
             const next = new Set(prev);
@@ -590,17 +600,19 @@ export const AlphasFeed: React.FC = () => {
         const text = (commentDrafts[discId] || '').trim();
         if (!text) return;
 
-        const sentiment = commentSentiments[discId] || 'NEUTRAL';
+        const isAnon = commentIdentities[discId] === 'ANON';
+        const authorWallet = isAnon ? 'Anonymous Member' : currentDisplayWallet;
         const targetReplyId = replyingTo[discId];
 
         const newComm: DiscussionComment = {
             id: `comm-${Date.now()}`,
-            authorWallet: currentDisplayWallet,
-            authorTier: userTier,
-            isPro: isUserPro,
+            authorWallet,
+            authorTier: isAnon ? 'FREE' : userTier,
+            isPro: isAnon ? false : isUserPro,
+            isAnonymous: isAnon,
             content: text,
-            sentiment,
             upvotes: 1,
+            userVoted: 'UP',
             createdAt: new Date().toISOString(),
             replies: []
         };
@@ -608,11 +620,11 @@ export const AlphasFeed: React.FC = () => {
         try {
             await api.post(`/api/community/discussions/${discId}/comments`, {
                 content: text,
-                sentiment,
                 replyToId: targetReplyId,
-                authorWallet: currentDisplayWallet,
-                authorTier: userTier,
-                isPro: isUserPro
+                authorWallet,
+                authorTier: isAnon ? 'FREE' : userTier,
+                isPro: isAnon ? false : isUserPro,
+                isAnonymous: isAnon
             });
         } catch (_) {}
 
@@ -677,7 +689,7 @@ export const AlphasFeed: React.FC = () => {
         if (!newTitle.trim() || !newContent.trim()) {
             Swal.fire({
                 title: 'Missing Details',
-                text: 'Please provide both a discussion title and analysis content.',
+                text: 'Please provide both a discussion title and post content.',
                 icon: 'warning',
                 background: '#181A20',
                 color: '#EAECEF',
@@ -686,24 +698,24 @@ export const AlphasFeed: React.FC = () => {
             return;
         }
 
-        const formattedTicker = newTicker.trim().startsWith('$') 
-            ? newTicker.trim().toUpperCase() 
-            : `$${newTicker.trim().toUpperCase()}`;
+        const formattedTicker = newTicker.trim()
+            ? (newTicker.trim().startsWith('$') ? newTicker.trim().toUpperCase() : `$${newTicker.trim().toUpperCase()}`)
+            : undefined;
 
         const newPost: DiscussionPost = {
             id: `disc-${Date.now()}`,
             title: newTitle.trim(),
-            ticker: formattedTicker || '$ALPHA',
+            ticker: formattedTicker,
             category: newCategory,
             sentiment: newSentiment,
             content: newContent.trim(),
+            mediaUrl: newMediaUrl.trim() || undefined,
             authorWallet: currentDisplayWallet,
             authorTier: userTier,
             isPro: isUserPro,
             upvotes: 1,
             downvotes: 0,
             userVoted: 'UP',
-            insightfulCount: 0,
             comments: [],
             createdAt: new Date().toISOString()
         };
@@ -715,14 +727,16 @@ export const AlphasFeed: React.FC = () => {
         setDiscussions(prev => [newPost, ...prev]);
         setIsComposerOpen(false);
         setNewTitle('');
+        setNewTicker('');
         setNewContent('');
+        setNewMediaUrl('');
 
         Swal.fire({
             toast: true,
             position: 'top-end',
             icon: 'success',
-            title: 'DISCUSSION POSTED',
-            text: 'Your research has been published to the community feed.',
+            title: 'POST PUBLISHED',
+            text: 'Your post is now live in the community feed.',
             showConfirmButton: false,
             timer: 3000,
             background: '#181A20',
@@ -730,15 +744,15 @@ export const AlphasFeed: React.FC = () => {
         });
     };
 
-    // ── SHARE ACTIONS (Copy, Twitter, Native) ────────────────────────────────
+    // ── SHARE ACTIONS ────────────────────────────────────────────────────────
     const handleSharePost = async (post: DiscussionPost) => {
         const shareUrl = `${window.location.origin}/alpha-feed?post=${post.id}`;
-        const shareText = `Check out this alpha analysis on ${post.ticker}: "${post.title}" via @AlphaBAG`;
+        const shareText = `Check out this discussion on ${post.ticker || 'AlphaBAG'}: "${post.title}" via @AlphaBAG`;
 
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: `${post.ticker} Analysis | AlphaBAG Feed`,
+                    title: `${post.title} | Alpha Feed`,
                     text: shareText,
                     url: shareUrl
                 });
@@ -746,7 +760,6 @@ export const AlphasFeed: React.FC = () => {
             } catch (_) {}
         }
 
-        // Toggle popover menu
         setActiveShareId(prev => prev === post.id ? null : post.id);
     };
 
@@ -762,7 +775,7 @@ export const AlphasFeed: React.FC = () => {
                 position: 'top-end',
                 icon: 'success',
                 title: 'Link Copied',
-                text: 'Direct alpha link copied to clipboard.',
+                text: 'Direct thread link copied to clipboard.',
                 showConfirmButton: false,
                 timer: 2000,
                 background: '#181A20',
@@ -774,12 +787,12 @@ export const AlphasFeed: React.FC = () => {
 
     const handleTwitterShare = (post: DiscussionPost) => {
         const shareUrl = `${window.location.origin}/alpha-feed?post=${post.id}`;
-        const text = encodeURIComponent(`Fresh Alpha on ${post.ticker}: "${post.title}"\n\nDeep dive via @AlphaBAG:\n${shareUrl}`);
+        const text = encodeURIComponent(`Discussion: "${post.title}" ${post.ticker ? `(${post.ticker})` : ''}\n\nJoin the debate via @AlphaBAG:\n${shareUrl}`);
         window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
         setActiveShareId(null);
     };
 
-    // ── ACTIONS: LIVE PODCAST / AUDIO SPACES ─────────────────────────────────
+    // ── LIVE AUDIO SPACES: HOST & MEMBER PERMISSIONS ─────────────────────────
 
     const handleToggleListenPodcast = () => {
         if (!podcast) return;
@@ -814,29 +827,121 @@ export const AlphasFeed: React.FC = () => {
         });
     };
 
-    const handleUpvotePodcast = () => {
+    // Community mic request flow (Open to all members, host approval required)
+    const hasRequestedMic = Boolean(podcast?.pendingSpeakerRequests?.some(r => r.wallet === currentDisplayWallet));
+
+    const handleRequestStageMic = () => {
         if (!podcast) return;
+
+        if (podcast.userOnStage) {
+            handleToggleUserMic();
+            return;
+        }
+
+        if (hasRequestedMic) {
+            // Cancel pending request
+            setPodcast(prev => {
+                if (!prev) return null;
+                return {
+                    ...prev,
+                    pendingSpeakerRequests: (prev.pendingSpeakerRequests || []).filter(r => r.wallet !== currentDisplayWallet)
+                };
+            });
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'info',
+                title: 'REQUEST WITHDRAWN',
+                text: 'Your speaking request has been cancelled.',
+                showConfirmButton: false,
+                timer: 2500,
+                background: '#181A20',
+                color: '#EAECEF'
+            });
+            return;
+        }
+
+        // Submit request to host
+        const newReq: SpeakerRequest = {
+            wallet: currentDisplayWallet,
+            name: currentDisplayWallet,
+            tier: userTier,
+            requestedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
         setPodcast(prev => {
             if (!prev) return null;
             return {
                 ...prev,
-                upvotes: prev.userUpvoted ? Math.max(0, prev.upvotes - 1) : prev.upvotes + 1,
-                userUpvoted: !prev.userUpvoted
+                isListening: true,
+                pendingSpeakerRequests: [...(prev.pendingSpeakerRequests || []), newReq]
             };
+        });
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: 'HAND RAISED',
+            text: 'Your mic request has been submitted to the stage host.',
+            showConfirmButton: false,
+            timer: 3000,
+            background: '#181A20',
+            color: '#EAECEF'
         });
     };
 
-    const handleReaction = (type: 'alpha' | 'fire' | 'bullish' | 'insight') => {
+    const handleApproveSpeaker = (req: SpeakerRequest) => {
+        if (!podcast) return;
+        const isSelf = req.wallet === currentDisplayWallet;
+
+        setPodcast(prev => {
+            if (!prev) return null;
+            const alreadySpeaker = prev.stageSpeakers.some(s => s.wallet === req.wallet);
+            const remainingRequests = (prev.pendingSpeakerRequests || []).filter(r => r.wallet !== req.wallet);
+
+            if (alreadySpeaker) {
+                return { ...prev, pendingSpeakerRequests: remainingRequests };
+            }
+
+            return {
+                ...prev,
+                pendingSpeakerRequests: remainingRequests,
+                userOnStage: isSelf ? true : prev.userOnStage,
+                userMicMuted: isSelf ? false : prev.userMicMuted,
+                stageSpeakers: [
+                    ...prev.stageSpeakers,
+                    {
+                        wallet: req.wallet,
+                        name: req.name,
+                        isHost: false,
+                        isSpeaking: false,
+                        tier: req.tier
+                    }
+                ]
+            };
+        });
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'SPEAKER APPROVED',
+            text: `${req.wallet} invited to stage as speaker.`,
+            showConfirmButton: false,
+            timer: 2500,
+            background: '#181A20',
+            color: '#EAECEF'
+        });
+    };
+
+    const handleRejectSpeaker = (wallet: string) => {
         if (!podcast) return;
         setPodcast(prev => {
             if (!prev) return null;
-            const stats = prev.reactionStats || { alpha: 42, fire: 89, bullish: 74, insight: 35 };
             return {
                 ...prev,
-                reactionStats: {
-                    ...stats,
-                    [type]: stats[type] + 1
-                }
+                pendingSpeakerRequests: (prev.pendingSpeakerRequests || []).filter(r => r.wallet !== wallet)
             };
         });
     };
@@ -878,71 +983,6 @@ export const AlphasFeed: React.FC = () => {
         setPodcastChatInput('');
     };
 
-    const handleRequestStageMic = () => {
-        if (!isUserPro) {
-            Swal.fire({
-                title: 'STAGE SPEAKING GATED',
-                html: DOMPurify.sanitize(`
-                    <div class="text-left py-2 text-xs text-alphabag-subtext leading-relaxed">
-                        <p class="mb-3 text-alphabag-text"><strong>Listeners can listen, upvote, and comment in live chat.</strong></p>
-                        <p class="mb-3">To join the stage as a live speaker or ask audio questions, hold:</p>
-                        <div class="p-3 bg-alphabag-black rounded-lg border border-alphabag-yellow/30 text-alphabag-yellow font-mono space-y-1">
-                            <div>• <strong>10,000 $BAG Tokens</strong> OR</div>
-                            <div>• <strong>1+ AlphaBAG Genesis Pass</strong></div>
-                        </div>
-                    </div>
-                `, { ADD_ATTR: ['class'] }),
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'MINT PASS / UPGRADE',
-                cancelButtonText: 'CONTINUE LISTENING',
-                confirmButtonColor: '#F0B90B',
-                background: '#181A20',
-                color: '#EAECEF'
-            }).then(r => {
-                if (r.isConfirmed) {
-                    window.location.hash = '#/airdrop';
-                }
-            });
-            return;
-        }
-
-        // Pro user: Instant stage elevation
-        setPodcast(prev => {
-            if (!prev) return null;
-            const alreadyOn = prev.stageSpeakers.some(s => s.wallet === currentDisplayWallet);
-            if (alreadyOn) return prev;
-            return {
-                ...prev,
-                isListening: true,
-                userOnStage: true,
-                userMicMuted: false,
-                stageSpeakers: [
-                    ...prev.stageSpeakers,
-                    {
-                        wallet: currentDisplayWallet,
-                        name: userTier === 'ALPHA_VIP' ? 'VIP Contributor' : 'Analyst Speaker',
-                        isHost: false,
-                        isSpeaking: true,
-                        tier: userTier
-                    }
-                ]
-            };
-        });
-
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'YOU ARE ON STAGE',
-            text: 'Your microphone is now live on the broadcast stage.',
-            showConfirmButton: false,
-            timer: 3500,
-            background: '#181A20',
-            color: '#EAECEF'
-        });
-    };
-
     const handleLaunchAudioSpace = (e: React.FormEvent) => {
         e.preventDefault();
         if (!newSpaceTitle.trim() || !newSpaceTopic.trim()) {
@@ -976,24 +1016,17 @@ export const AlphasFeed: React.FC = () => {
                     tier: userTier
                 }
             ],
+            pendingSpeakerRequests: [],
             liveChat: [
                 {
                     id: `msg-${Date.now()}`,
                     authorWallet: currentDisplayWallet,
                     tier: userTier,
                     isVip: true,
-                    message: `Live Space "${newSpaceTitle.trim()}" started! Community members are welcome to join.`,
+                    message: `Live Space "${newSpaceTitle.trim()}" started! Any community member can tune in and request to speak.`,
                     timestamp: 'Just now'
                 }
-            ],
-            upvotes: 1,
-            userUpvoted: true,
-            reactionStats: {
-                alpha: 1,
-                fire: 1,
-                bullish: 1,
-                insight: 1
-            }
+            ]
         };
 
         try {
@@ -1041,19 +1074,6 @@ export const AlphasFeed: React.FC = () => {
 
                 <div className="flex flex-wrap items-center gap-2">
                     <button
-                        onClick={() => setPrivacyMode(p => !p)}
-                        className={`px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 border transition-all ${
-                            privacyMode 
-                                ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30 hover:bg-alphabag-green/20'
-                                : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text'
-                        }`}
-                        title="Decentralized Privacy: Zero trackers, masked balances, pseudonymous wallet identity"
-                    >
-                        {privacyMode ? <EyeOff size={14} /> : <Eye size={14} />}
-                        <span>{privacyMode ? 'Privacy Shield Active' : 'Public Wallet'}</span>
-                    </button>
-
-                    <button
                         onClick={() => setIsHostSpaceModalOpen(true)}
                         className="bg-alphabag-darkgray hover:bg-alphabag-gray text-alphabag-yellow border border-alphabag-yellow/40 px-3.5 py-2 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition-all"
                         title="Start a Live Audio Stage for your community"
@@ -1067,14 +1087,14 @@ export const AlphasFeed: React.FC = () => {
                         className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm transition-all active:scale-[0.98]"
                     >
                         <Plus size={15} />
-                        <span>Start Discussion</span>
+                        <span>Create Post</span>
                     </button>
                 </div>
             </div>
 
             {/* ── LIVE AUDIO PODCAST / SPACE CARD ── */}
             {podcast && podcast.isLive ? (
-                <div className="rounded-2xl border border-alphabag-yellow/40 bg-gradient-to-r from-alphabag-darkgray via-[#16181D] to-alphabag-darkgray p-4 md:p-5 relative overflow-hidden shadow-lg">
+                <div className="rounded-2xl border border-alphabag-yellow/40 bg-gradient-to-r from-alphabag-darkgray via-[#16181D] to-alphabag-darkgray p-4 md:p-5 relative overflow-hidden shadow-lg space-y-3">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 relative z-10">
                         <div className="space-y-2 flex-1">
                             <div className="flex items-center gap-2 flex-wrap">
@@ -1086,11 +1106,11 @@ export const AlphasFeed: React.FC = () => {
                                     <strong className="text-alphabag-text tabular-nums">{podcast.listenersCount}</strong> Listening
                                 </span>
                                 <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] uppercase font-semibold">
-                                    Community Stage Open
+                                    Open Stage • Host Moderated
                                 </span>
                                 {podcast.userOnStage && (
                                     <span className="bg-alphabag-green/20 text-alphabag-green border border-alphabag-green/40 px-2 py-0.5 rounded text-[11px] font-bold uppercase">
-                                        You are a Speaker
+                                        You are on Stage
                                     </span>
                                 )}
                             </div>
@@ -1099,14 +1119,14 @@ export const AlphasFeed: React.FC = () => {
                                 {podcast.title}
                             </h3>
                             <p className="text-xs text-alphabag-subtext font-medium">
-                                Topic: {podcast.topic} • Host: <strong className="text-alphabag-yellow">{podcast.hostName}</strong> ({podcast.hostWallet})
+                                Topic: {podcast.topic} • Host: <strong className="text-alphabag-yellow">{podcast.hostName}</strong>
                             </p>
 
                             {/* Stage Speakers row */}
                             <div className="flex flex-wrap items-center gap-2 pt-1">
                                 <span className="text-[11px] uppercase font-semibold text-alphabag-subtext flex items-center gap-1">
                                     <Users size={12} />
-                                    Stage Speakers:
+                                    Speakers:
                                 </span>
                                 {podcast.stageSpeakers.map((spk, i) => (
                                     <div 
@@ -1170,7 +1190,7 @@ export const AlphasFeed: React.FC = () => {
                                 </button>
                             )}
 
-                            {/* User Mic toggle if on stage */}
+                            {/* User Mic toggle or Raise Hand (Community Open Mic with Host Approval) */}
                             {podcast.userOnStage ? (
                                 <button
                                     onClick={handleToggleUserMic}
@@ -1187,65 +1207,61 @@ export const AlphasFeed: React.FC = () => {
                             ) : (
                                 <button
                                     onClick={handleRequestStageMic}
-                                    className="px-3 py-2.5 rounded-lg text-xs font-semibold bg-alphabag-black border border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-yellow/40 flex items-center justify-center gap-1.5 transition-all"
-                                    title={isUserPro ? 'Request Mic on Stage' : 'Stage Speaking is for Premium Tier'}
+                                    className={`px-3.5 py-2.5 rounded-lg text-xs font-semibold border flex items-center justify-center gap-1.5 transition-all ${
+                                        hasRequestedMic
+                                            ? 'bg-alphabag-yellow/20 text-alphabag-yellow border-alphabag-yellow animate-pulse'
+                                            : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text hover:border-alphabag-yellow/40'
+                                    }`}
+                                    title={hasRequestedMic ? 'Click to cancel speaking request' : 'Raise hand to request speaking permission from the host'}
                                 >
-                                    <Hand size={14} className="text-alphabag-yellow" />
-                                    <span>Raise Hand</span>
-                                    {!isUserPro && <Lock size={11} className="text-alphabag-subtext" />}
+                                    <Hand size={14} className={hasRequestedMic ? 'text-alphabag-yellow animate-bounce' : 'text-alphabag-yellow'} />
+                                    <span>{hasRequestedMic ? 'Request Pending' : 'Request to Speak'}</span>
                                 </button>
                             )}
-
-                            {/* Upvote Space */}
-                            <button
-                                onClick={handleUpvotePodcast}
-                                className={`px-3 py-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all ${
-                                    podcast.userUpvoted
-                                        ? 'bg-alphabag-yellow/20 text-alphabag-yellow border-alphabag-yellow'
-                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
-                                }`}
-                                title="Upvote Live Discussion"
-                            >
-                                <ThumbsUp size={14} />
-                                <span className="tabular-nums font-mono text-xs">{podcast.upvotes}</span>
-                            </button>
                         </div>
                     </div>
 
-                    {/* Interactive chat & reactions section when listening */}
+                    {/* Host Moderation: Pending Speaker Requests Banner */}
+                    {(podcast.pendingSpeakerRequests || []).length > 0 && (
+                        <div className="bg-alphabag-black/70 border border-alphabag-yellow/30 rounded-xl p-3 space-y-2 text-xs">
+                            <div className="flex items-center justify-between">
+                                <span className="font-bold text-alphabag-yellow uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                                    <Hand size={13} />
+                                    Speaker Requests Pending Host Approval ({podcast.pendingSpeakerRequests?.length})
+                                </span>
+                                <span className="text-[11px] text-alphabag-subtext">Host Controls</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {podcast.pendingSpeakerRequests?.map((req) => (
+                                    <div key={req.wallet} className="flex items-center gap-2 bg-alphabag-darkgray px-3 py-1.5 rounded-lg border border-alphabag-gray text-xs">
+                                        <span className="font-mono text-alphabag-text font-semibold">{req.name}</span>
+                                        <button
+                                            onClick={() => handleApproveSpeaker(req)}
+                                            className="bg-alphabag-green/20 text-alphabag-green hover:bg-alphabag-green/30 border border-alphabag-green/40 px-2 py-0.5 rounded text-[11px] font-bold uppercase transition-all"
+                                        >
+                                            Approve
+                                        </button>
+                                        <button
+                                            onClick={() => handleRejectSpeaker(req.wallet)}
+                                            className="text-red-400 hover:text-red-300 px-1 py-0.5 text-[11px] font-semibold transition-all"
+                                        >
+                                            Decline
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Interactive chat section when listening */}
                     {podcast.isListening && (
-                        <div className="mt-4 pt-4 border-t border-alphabag-gray/60 space-y-3 animate-in slide-in-from-top-2 duration-300">
-                            <div className="flex flex-wrap justify-between items-center gap-2 text-xs">
+                        <div className="pt-3 border-t border-alphabag-gray/60 space-y-3 animate-in slide-in-from-top-2 duration-300">
+                            <div className="flex justify-between items-center text-xs">
                                 <span className="font-semibold text-alphabag-text uppercase text-[11px] flex items-center gap-1.5">
                                     <MessageCircle size={13} className="text-alphabag-yellow" />
-                                    Live Stage Chat & Q&A
+                                    Live Stage Chat
                                 </span>
-
-                                {/* Quick Stage Reactions */}
-                                <div className="flex items-center gap-1">
-                                    <span className="text-[11px] text-alphabag-subtext uppercase font-semibold mr-1">Reactions:</span>
-                                    <button
-                                        onClick={() => handleReaction('bullish')}
-                                        className="bg-alphabag-black hover:bg-alphabag-gray border border-alphabag-gray rounded px-2 py-0.5 text-[11px] font-mono text-alphabag-green flex items-center gap-1 transition-all"
-                                    >
-                                        <TrendingUp size={11} />
-                                        <span>{podcast.reactionStats?.bullish ?? 74}</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleReaction('fire')}
-                                        className="bg-alphabag-black hover:bg-alphabag-gray border border-alphabag-gray rounded px-2 py-0.5 text-[11px] font-mono text-alphabag-yellow flex items-center gap-1 transition-all"
-                                    >
-                                        <Flame size={11} />
-                                        <span>{podcast.reactionStats?.fire ?? 89}</span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleReaction('alpha')}
-                                        className="bg-alphabag-black hover:bg-alphabag-gray border border-alphabag-gray rounded px-2 py-0.5 text-[11px] font-mono text-alphabag-yellow flex items-center gap-1 transition-all"
-                                    >
-                                        <Zap size={11} />
-                                        <span>{podcast.reactionStats?.alpha ?? 42}</span>
-                                    </button>
-                                </div>
+                                <span className="text-[11px] text-alphabag-subtext">Stage Audio & Q&A</span>
                             </div>
 
                             <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1 text-xs">
@@ -1274,7 +1290,7 @@ export const AlphasFeed: React.FC = () => {
                                     type="text"
                                     value={podcastChatInput}
                                     onChange={(e) => setPodcastChatInput(e.target.value)}
-                                    placeholder="Ask a question or share alpha with the speakers..."
+                                    placeholder="Ask a question or share thoughts with speakers..."
                                     className="flex-1 bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
                                 />
                                 <button
@@ -1290,15 +1306,15 @@ export const AlphasFeed: React.FC = () => {
                     )}
                 </div>
             ) : (
-                /* No Active Space Banner: Quick prompt to start one */
+                /* No Active Space: Clean persistent banner */
                 <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow">
                             <Radio size={20} />
                         </div>
                         <div>
-                            <h4 className="text-sm font-bold text-alphabag-text">Live Community Audio Spaces</h4>
-                            <p className="text-xs text-alphabag-subtext">Host an AMA, debate tokenomics, or run real-time trading calls with the AlphaBAG community.</p>
+                            <h4 className="text-sm font-bold text-alphabag-text">Community Audio Spaces</h4>
+                            <p className="text-xs text-alphabag-subtext">No live discussion currently on air. Start an audio room for your community or tune in when live.</p>
                         </div>
                     </div>
                     <button
@@ -1306,7 +1322,7 @@ export const AlphasFeed: React.FC = () => {
                         className="bg-alphabag-yellow text-alphabag-dark font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider flex items-center gap-1.5 shrink-0 hover:bg-[#e0bd2e]"
                     >
                         <Radio size={14} />
-                        <span>Go Live Now</span>
+                        <span>Start Audio Discussion</span>
                     </button>
                 </div>
             )}
@@ -1321,7 +1337,7 @@ export const AlphasFeed: React.FC = () => {
                         { id: 'PROJECT_REVIEW', label: 'Project Reviews', icon: Layers },
                         { id: 'ALPHA_CALL', label: 'Alpha Calls', icon: Target },
                         { id: 'AUDIT_SECURITY', label: 'Security & Audits', icon: Shield },
-                        { id: 'MEMECOIN_ROTATION', label: 'Memecoin Rotation', icon: Flame },
+                        { id: 'MEMECOIN_ROTATION', label: 'Memecoin Rotation', icon: Sparkles },
                     ].map(ch => {
                         const Icon = ch.icon;
                         const active = selectedCategory === ch.id;
@@ -1349,7 +1365,7 @@ export const AlphasFeed: React.FC = () => {
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Filter by $TICKER or keyword..."
+                            placeholder="Filter by keyword..."
                             className="w-full bg-alphabag-darkgray border border-alphabag-gray rounded-lg pl-8 pr-3 py-1.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
                         />
                     </div>
@@ -1359,10 +1375,9 @@ export const AlphasFeed: React.FC = () => {
                         onChange={(e) => setSortBy(e.target.value as any)}
                         className="bg-alphabag-darkgray border border-alphabag-gray text-alphabag-text rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:outline-none focus:border-alphabag-yellow"
                     >
-                        <option value="HOT">Hot Debates</option>
-                        <option value="TOP">Top Voted</option>
-                        <option value="DEBATED">Most Discussed</option>
-                        <option value="LATEST">Latest</option>
+                        <option value="HOT">Hot</option>
+                        <option value="NEW">New</option>
+                        <option value="TOP">Top</option>
                     </select>
                 </div>
             </div>
@@ -1373,37 +1388,6 @@ export const AlphasFeed: React.FC = () => {
                 {/* ── LEFT COLUMN: DISCUSSIONS FEED (8 COLS) ── */}
                 <div className="lg:col-span-8 space-y-3">
                     
-                    {/* IN-FEED SPONSORED ADS */}
-                    {sponsoredAd && (
-                        <div className="rounded-xl border border-alphabag-yellow/30 bg-gradient-to-r from-alphabag-darkgray via-[#161616] to-alphabag-darkgray p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
-                            <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-alphabag-yellow/10 border border-alphabag-yellow/30 flex items-center justify-center text-alphabag-yellow shrink-0">
-                                    <Sparkles size={20} />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="bg-alphabag-yellow/15 text-alphabag-yellow px-2 py-0.2 rounded text-[11px] font-bold uppercase tracking-wider border border-alphabag-yellow/20">
-                                            SPONSORED
-                                        </span>
-                                        <h4 className="text-xs font-bold text-alphabag-text">{sponsoredAd.partnerName}</h4>
-                                    </div>
-                                    <p className="text-[11px] text-alphabag-subtext mt-0.5 leading-relaxed">
-                                        {sponsoredAd.tagline}
-                                    </p>
-                                </div>
-                            </div>
-                            <a
-                                href={sponsoredAd.ctaUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] px-3.5 py-1.5 rounded text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shrink-0 transition-all"
-                            >
-                                <span>{sponsoredAd.ctaText}</span>
-                                <ArrowUpRight size={13} />
-                            </a>
-                        </div>
-                    )}
-
                     {/* DISCUSSION CARDS */}
                     {isLoading ? (
                         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-12 text-center space-y-3">
@@ -1414,11 +1398,17 @@ export const AlphasFeed: React.FC = () => {
                         filteredDiscussions.map((post) => {
                             const isExpanded = expandedComments.has(post.id);
                             const draft = commentDrafts[post.id] || '';
-                            const sentimentDraft = commentSentiments[post.id] || 'NEUTRAL';
                             const targetReplyId = replyingTo[post.id];
                             const isShareOpen = activeShareId === post.id;
                             const isCopied = copiedShareId === post.id;
                             const netScore = post.upvotes - post.downvotes;
+
+                            // Community gating
+                            const community = getCommunityForCategory(post.category);
+                            const isMember = joinedCommunities.has(community.slug);
+
+                            // Identity choice for comment
+                            const currentIdentity = commentIdentities[post.id] || 'VISIBLE';
 
                             return (
                                 <div 
@@ -1435,21 +1425,42 @@ export const AlphasFeed: React.FC = () => {
                                                     PINNED
                                                 </span>
                                             )}
-                                            <span className="bg-alphabag-black border border-alphabag-gray text-alphabag-yellow font-bold font-mono px-2 py-0.5 rounded text-[11px]">
-                                                {post.ticker}
-                                            </span>
-                                            <span className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] font-semibold uppercase">
-                                                {post.category.replace('_', ' ')}
-                                            </span>
-                                            <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${
-                                                post.sentiment === 'BULLISH'
-                                                    ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30'
-                                                    : post.sentiment === 'BEARISH'
-                                                    ? 'bg-red-500/10 text-red-400 border-red-500/30'
-                                                    : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray'
-                                            }`}>
-                                                {post.sentiment}
-                                            </span>
+                                            
+                                            {/* Community Tag with Join Gate */}
+                                            <div className="flex items-center gap-1.5 bg-alphabag-black border border-alphabag-gray rounded-md px-2 py-0.5">
+                                                <span className="text-alphabag-yellow font-bold font-mono text-[11px]">
+                                                    {community.slug}
+                                                </span>
+                                                <button
+                                                    onClick={() => toggleJoinCommunity(community.slug)}
+                                                    className={`text-[11px] font-bold uppercase px-1.5 py-0.2 rounded transition-all ${
+                                                        isMember
+                                                            ? 'bg-alphabag-gray text-alphabag-subtext hover:text-red-400'
+                                                            : 'bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]'
+                                                    }`}
+                                                    title={isMember ? 'Click to leave community' : 'Join community to view full thread and all member comments'}
+                                                >
+                                                    {isMember ? 'Joined' : '+ Join'}
+                                                </button>
+                                            </div>
+
+                                            {post.ticker && (
+                                                <span className="bg-alphabag-gray text-alphabag-text font-bold font-mono px-2 py-0.5 rounded text-[11px]">
+                                                    {post.ticker}
+                                                </span>
+                                            )}
+
+                                            {post.sentiment && (
+                                                <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${
+                                                    post.sentiment === 'BULLISH'
+                                                        ? 'bg-alphabag-green/10 text-alphabag-green border-alphabag-green/30'
+                                                        : post.sentiment === 'BEARISH'
+                                                        ? 'bg-red-500/10 text-red-400 border-red-500/30'
+                                                        : 'bg-alphabag-gray text-alphabag-subtext border-alphabag-gray'
+                                                }`}>
+                                                    {post.sentiment}
+                                                </span>
+                                            )}
                                         </div>
 
                                         <div className="flex items-center gap-1.5 text-[11px] text-alphabag-subtext font-mono">
@@ -1467,12 +1478,39 @@ export const AlphasFeed: React.FC = () => {
                                         {post.title}
                                     </h3>
 
-                                    {/* Post Body Content */}
-                                    <p className="text-xs md:text-sm text-alphabag-subtext whitespace-pre-line leading-relaxed">
-                                        {post.content}
-                                    </p>
+                                    {/* Post Body: Full Content (if Member) or Teaser Preview (if Non-Member) */}
+                                    {isMember ? (
+                                        <div className="space-y-3">
+                                            <p className="text-xs md:text-sm text-alphabag-subtext whitespace-pre-line leading-relaxed">
+                                                {post.content}
+                                            </p>
+                                            {post.mediaUrl && (
+                                                <div className="rounded-xl overflow-hidden border border-alphabag-gray/60 max-h-80 bg-alphabag-black flex items-center justify-center">
+                                                    <img src={post.mediaUrl} alt={post.title} className="w-full h-auto object-cover max-h-80" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            <p className="text-xs md:text-sm text-alphabag-subtext leading-relaxed">
+                                                {post.content.slice(0, 150)}...
+                                            </p>
+                                            <div className="p-2.5 rounded-lg bg-alphabag-black/50 border border-alphabag-yellow/20 flex items-center justify-between gap-2 text-xs">
+                                                <span className="text-alphabag-subtext text-[11px] flex items-center gap-1.5">
+                                                    <Lock size={12} className="text-alphabag-yellow" />
+                                                    <span>Thread preview mode — full analysis reserved for community members</span>
+                                                </span>
+                                                <button
+                                                    onClick={() => toggleJoinCommunity(community.slug)}
+                                                    className="bg-alphabag-yellow text-alphabag-dark px-2.5 py-1 rounded text-[11px] font-bold uppercase tracking-wider hover:bg-[#e0bd2e] shrink-0"
+                                                >
+                                                    Join {community.slug}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
 
-                                    {/* Reddit-Style Bottom Action Bar (Upvote, Comments, Insightful, Share) */}
+                                    {/* Single Action Row (Upvote/Downvote, Comments, Share) */}
                                     <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-alphabag-gray/50 text-xs">
                                         <div className="flex items-center gap-2">
                                             
@@ -1485,7 +1523,7 @@ export const AlphasFeed: React.FC = () => {
                                                             ? 'bg-alphabag-yellow text-alphabag-dark font-bold'
                                                             : 'text-alphabag-subtext hover:text-alphabag-text'
                                                     }`}
-                                                    title="Upvote Analysis"
+                                                    title="Upvote Discussion"
                                                 >
                                                     <ThumbsUp size={13} />
                                                 </button>
@@ -1525,20 +1563,6 @@ export const AlphasFeed: React.FC = () => {
                                                 <MessageSquare size={13} />
                                                 <span>{post.comments.length} Comments</span>
                                                 {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-                                            </button>
-
-                                            {/* Insightful / Like Button */}
-                                            <button
-                                                onClick={() => handleToggleInsightful(post.id)}
-                                                className={`px-2.5 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition-all ${
-                                                    post.isInsightful
-                                                        ? 'bg-alphabag-yellow/15 border-alphabag-yellow/40 text-alphabag-yellow shadow-sm'
-                                                        : 'bg-alphabag-black border-alphabag-gray text-alphabag-subtext hover:text-alphabag-text'
-                                                }`}
-                                                title="Mark as Insightful Research"
-                                            >
-                                                <Sparkles size={12} className={post.isInsightful ? 'text-alphabag-yellow' : ''} />
-                                                <span className="text-[11px]">{post.insightfulCount} Insightful</span>
                                             </button>
 
                                             {/* SHARE BUTTON & POPOVER */}
@@ -1582,19 +1606,43 @@ export const AlphasFeed: React.FC = () => {
                                         </div>
 
                                         <div className="flex items-center gap-2 text-[11px] text-alphabag-subtext">
-                                            <span>Community Due Diligence</span>
+                                            <span>{community.name}</span>
                                         </div>
                                     </div>
 
-                                    {/* ── EXPANDABLE NESTED COMMENT THREADS ── */}
+                                    {/* ── EXPANDABLE COMMENT THREADS WITH COMMUNITY GATE ── */}
                                     {isExpanded && (
                                         <div className="pt-3 border-t border-alphabag-gray/50 space-y-3 animate-in fade-in duration-300">
-                                            {/* Top-level Comment Composer */}
+                                            
+                                            {/* Comment Composer (Accessible to both Members & Non-Members with identity toggle) */}
                                             <div className="bg-alphabag-black border border-alphabag-gray rounded-xl p-3 space-y-2">
                                                 <div className="flex justify-between items-center text-[11px]">
-                                                    <span className="font-semibold text-alphabag-text">
-                                                        {targetReplyId ? 'Replying to comment thread...' : 'Join the discussion'}
-                                                    </span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-alphabag-subtext">Post as:</span>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCommentIdentities(p => ({ ...p, [post.id]: 'VISIBLE' }))}
+                                                            className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition-all ${
+                                                                currentIdentity === 'VISIBLE'
+                                                                    ? 'bg-alphabag-yellow/20 text-alphabag-yellow border-alphabag-yellow/40 font-bold'
+                                                                    : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text'
+                                                            }`}
+                                                        >
+                                                            {currentDisplayWallet}
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setCommentIdentities(p => ({ ...p, [post.id]: 'ANON' }))}
+                                                            className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition-all ${
+                                                                currentIdentity === 'ANON'
+                                                                    ? 'bg-alphabag-yellow/20 text-alphabag-yellow border-alphabag-yellow/40 font-bold'
+                                                                    : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray hover:text-alphabag-text'
+                                                            }`}
+                                                        >
+                                                            Anonymous Member
+                                                        </button>
+                                                    </div>
+
                                                     {targetReplyId && (
                                                         <button 
                                                             onClick={() => setReplyingTo(p => ({ ...p, [post.id]: null }))}
@@ -1614,22 +1662,9 @@ export const AlphasFeed: React.FC = () => {
                                                 />
 
                                                 <div className="flex justify-between items-center">
-                                                    <div className="flex items-center gap-1">
-                                                        {(['BULLISH', 'BEARISH', 'NEUTRAL'] as DiscussionSentiment[]).map(st => (
-                                                            <button
-                                                                key={st}
-                                                                type="button"
-                                                                onClick={() => setCommentSentiments(p => ({ ...p, [post.id]: st }))}
-                                                                className={`px-2 py-0.5 rounded text-[11px] font-semibold border transition-all ${
-                                                                    sentimentDraft === st
-                                                                        ? 'bg-alphabag-yellow text-alphabag-dark font-bold border-alphabag-yellow'
-                                                                        : 'bg-alphabag-darkgray text-alphabag-subtext border-alphabag-gray'
-                                                                }`}
-                                                            >
-                                                                {st}
-                                                            </button>
-                                                        ))}
-                                                    </div>
+                                                    <span className="text-[11px] text-alphabag-subtext">
+                                                        {!isMember ? 'Non-member preview: You see your comment; join to view all replies.' : 'Community thread discussion'}
+                                                    </span>
 
                                                     <button
                                                         type="button"
@@ -1643,91 +1678,119 @@ export const AlphasFeed: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Render Threaded Comments */}
-                                            {post.comments.length > 0 ? (
-                                                <div className="space-y-2.5">
-                                                    {post.comments.map((comm) => (
-                                                        <div key={comm.id} className="bg-alphabag-black/50 border border-alphabag-gray/60 rounded-xl p-3 space-y-2 text-xs">
-                                                            <div className="flex justify-between items-center">
-                                                                <div className="flex items-center gap-2">
-                                                                    <span className="font-mono text-alphabag-text font-semibold">{comm.authorWallet}</span>
-                                                                    <span className="bg-alphabag-gray text-alphabag-subtext px-1.5 py-0.2 rounded text-[11px] font-semibold uppercase">
-                                                                        {comm.authorTier}
-                                                                    </span>
-                                                                    {comm.sentiment && (
-                                                                        <span className={`text-[11px] font-bold ${
-                                                                            comm.sentiment === 'BULLISH' ? 'text-alphabag-green' : comm.sentiment === 'BEARISH' ? 'text-red-400' : 'text-alphabag-subtext'
-                                                                        }`}>
-                                                                            {comm.sentiment}
+                                            {/* Render Comments or Gated Banner */}
+                                            {isMember ? (
+                                                /* Joined Community: Render full comments thread */
+                                                post.comments.length > 0 ? (
+                                                    <div className="space-y-2.5">
+                                                        {post.comments.map((comm) => (
+                                                            <div key={comm.id} className="bg-alphabag-black/50 border border-alphabag-gray/60 rounded-xl p-3 space-y-2 text-xs">
+                                                                <div className="flex justify-between items-center">
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="font-mono text-alphabag-text font-semibold">{comm.authorWallet}</span>
+                                                                        <span className="bg-alphabag-gray text-alphabag-subtext px-1.5 py-0.2 rounded text-[11px] font-semibold uppercase">
+                                                                            {comm.authorTier}
                                                                         </span>
-                                                                    )}
+                                                                    </div>
+                                                                    <span className="text-[11px] text-alphabag-subtext">
+                                                                        {new Date(comm.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                    </span>
                                                                 </div>
-                                                                <span className="text-[11px] text-alphabag-subtext">
-                                                                    {new Date(comm.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                </span>
-                                                            </div>
 
-                                                            <p className="text-alphabag-subtext leading-relaxed pl-1">
-                                                                {comm.content}
-                                                            </p>
+                                                                <p className="text-alphabag-subtext leading-relaxed pl-1">
+                                                                    {comm.content}
+                                                                </p>
 
-                                                            {/* Comment Actions (Reply, Upvote) */}
-                                                            <div className="flex items-center gap-3 pt-1 text-[11px] text-alphabag-subtext">
-                                                                <button 
-                                                                    onClick={() => setReplyingTo(p => ({ ...p, [post.id]: comm.id }))}
-                                                                    className="text-alphabag-yellow hover:underline font-semibold flex items-center gap-1"
-                                                                >
-                                                                    <MessageCircle size={11} />
-                                                                    <span>Reply</span>
-                                                                </button>
-                                                                <span>•</span>
-                                                                <button
-                                                                    onClick={() => handleUpvoteComment(post.id, comm.id)}
-                                                                    className={`hover:text-alphabag-text flex items-center gap-1 tabular-nums ${
-                                                                        comm.userVoted === 'UP' ? 'text-alphabag-yellow font-bold' : ''
-                                                                    }`}
-                                                                >
-                                                                    <ThumbsUp size={11} />
-                                                                    <span>{comm.upvotes} upvotes</span>
-                                                                </button>
-                                                            </div>
+                                                                <div className="flex items-center gap-3 pt-1 text-[11px] text-alphabag-subtext">
+                                                                    <button 
+                                                                        onClick={() => setReplyingTo(p => ({ ...p, [post.id]: comm.id }))}
+                                                                        className="text-alphabag-yellow hover:underline font-semibold flex items-center gap-1"
+                                                                    >
+                                                                        <MessageCircle size={11} />
+                                                                        <span>Reply</span>
+                                                                    </button>
+                                                                    <span>•</span>
+                                                                    <button
+                                                                        onClick={() => handleUpvoteComment(post.id, comm.id)}
+                                                                        className={`hover:text-alphabag-text flex items-center gap-1 tabular-nums ${
+                                                                            comm.userVoted === 'UP' ? 'text-alphabag-yellow font-bold' : ''
+                                                                        }`}
+                                                                    >
+                                                                        <ThumbsUp size={11} />
+                                                                        <span>{comm.upvotes} upvotes</span>
+                                                                    </button>
+                                                                </div>
 
-                                                            {/* Nested Replies with Reddit Tree Line */}
-                                                            {comm.replies && comm.replies.length > 0 && (
-                                                                <div className="ml-2 pl-3 border-l-2 border-alphabag-gray/60 space-y-2 pt-2">
-                                                                    {comm.replies.map(rep => (
-                                                                        <div key={rep.id} className="bg-alphabag-darkgray/60 rounded-lg p-2.5 text-xs space-y-1">
-                                                                            <div className="flex items-center justify-between">
-                                                                                <div className="flex items-center gap-2">
-                                                                                    <span className="font-mono text-alphabag-text font-semibold text-[11px]">{rep.authorWallet}</span>
-                                                                                    <span className="bg-alphabag-gray text-alphabag-subtext px-1 py-0.2 rounded text-[11px] uppercase">{rep.authorTier}</span>
+                                                                {/* Nested Replies */}
+                                                                {comm.replies && comm.replies.length > 0 && (
+                                                                    <div className="ml-2 pl-3 border-l-2 border-alphabag-gray/60 space-y-2 pt-2">
+                                                                        {comm.replies.map(rep => (
+                                                                            <div key={rep.id} className="bg-alphabag-darkgray/60 rounded-lg p-2.5 text-xs space-y-1">
+                                                                                <div className="flex items-center justify-between">
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        <span className="font-mono text-alphabag-text font-semibold text-[11px]">{rep.authorWallet}</span>
+                                                                                        <span className="bg-alphabag-gray text-alphabag-subtext px-1 py-0.2 rounded text-[11px] uppercase">{rep.authorTier}</span>
+                                                                                    </div>
+                                                                                    <span className="text-[11px] text-alphabag-subtext">
+                                                                                        {new Date(rep.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                                    </span>
                                                                                 </div>
-                                                                                <span className="text-[11px] text-alphabag-subtext">
-                                                                                    {new Date(rep.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                                </span>
+                                                                                <p className="text-alphabag-subtext text-[11px] leading-relaxed">{rep.content}</p>
+                                                                                <div className="flex items-center gap-2 pt-1 text-[11px]">
+                                                                                    <button
+                                                                                        onClick={() => handleUpvoteComment(post.id, rep.id)}
+                                                                                        className={`text-alphabag-subtext hover:text-alphabag-text flex items-center gap-1 ${
+                                                                                            rep.userVoted === 'UP' ? 'text-alphabag-yellow font-bold' : ''
+                                                                                        }`}
+                                                                                    >
+                                                                                        <ThumbsUp size={10} />
+                                                                                        <span>{rep.upvotes}</span>
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
-                                                                            <p className="text-alphabag-subtext text-[11px] leading-relaxed">{rep.content}</p>
-                                                                            <div className="flex items-center gap-2 pt-1 text-[11px]">
-                                                                                <button
-                                                                                    onClick={() => handleUpvoteComment(post.id, rep.id)}
-                                                                                    className={`text-alphabag-subtext hover:text-alphabag-text flex items-center gap-1 ${
-                                                                                        rep.userVoted === 'UP' ? 'text-alphabag-yellow font-bold' : ''
-                                                                                    }`}
-                                                                                >
-                                                                                    <ThumbsUp size={10} />
-                                                                                    <span>{rep.upvotes}</span>
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-center py-4 text-xs text-alphabag-subtext">
+                                                        No comments yet. Be the first to share your perspective!
+                                                    </div>
+                                                )
                                             ) : (
-                                                <div className="text-center py-4 text-xs text-alphabag-subtext">
-                                                    No comments yet. Be the first to share your perspective!
+                                                /* Non-Member: Show user's own submitted comments + Locked Community Gate */
+                                                <div className="space-y-2.5">
+                                                    {post.comments
+                                                        .filter(c => c.authorWallet === currentDisplayWallet || c.authorWallet === 'Anonymous Member')
+                                                        .map(myComm => (
+                                                            <div key={myComm.id} className="bg-alphabag-black/50 border border-alphabag-yellow/40 rounded-xl p-3 space-y-1.5 text-xs">
+                                                                <div className="flex justify-between items-center text-[11px]">
+                                                                    <span className="font-mono text-alphabag-yellow font-semibold">Your Comment ({myComm.authorWallet})</span>
+                                                                    <span className="text-alphabag-subtext">Pending Community Visibility</span>
+                                                                </div>
+                                                                <p className="text-alphabag-text leading-relaxed">{myComm.content}</p>
+                                                            </div>
+                                                        ))
+                                                    }
+
+                                                    <div className="bg-alphabag-black/70 border border-alphabag-yellow/30 rounded-xl p-4 text-center space-y-2">
+                                                        <div className="flex items-center justify-center gap-1.5 text-alphabag-yellow font-bold text-xs uppercase tracking-wider">
+                                                            <Lock size={14} />
+                                                            <span>Community Membership Required</span>
+                                                        </div>
+                                                        <p className="text-xs text-alphabag-subtext max-w-md mx-auto leading-relaxed">
+                                                            You are viewing a thread preview in <strong className="text-alphabag-text">{community.slug}</strong>. Join the community to read all {post.comments.length} member comments and reply to discussions.
+                                                        </p>
+                                                        <button
+                                                            onClick={() => toggleJoinCommunity(community.slug)}
+                                                            className="bg-alphabag-yellow text-alphabag-dark font-bold px-4 py-2 rounded-lg text-xs uppercase tracking-wider hover:bg-[#e0bd2e] transition-all inline-flex items-center gap-1.5 shadow-sm"
+                                                        >
+                                                            <Users size={13} />
+                                                            <span>Join {community.slug} to Unlock Full Thread</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             )}
                                         </div>
@@ -1742,33 +1805,33 @@ export const AlphasFeed: React.FC = () => {
                             </div>
                             <h3 className="text-base font-bold text-alphabag-text">No Discussions Found</h3>
                             <p className="text-xs text-alphabag-subtext max-w-sm mx-auto">
-                                No community discussions match the selected filters. Start a new tokenomics or utility thread!
+                                No community discussions match the selected filters. Create a new post!
                             </p>
                             <button
                                 onClick={() => setIsComposerOpen(true)}
                                 className="bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-bold uppercase tracking-wider"
                             >
-                                Start New Discussion
+                                Create Post
                             </button>
                         </div>
                     )}
                 </div>
 
-                {/* ── RIGHT COLUMN: COMMUNITY WIDGETS & LEADERBOARDS (4 COLS) ── */}
+                {/* ── RIGHT COLUMN: COMMUNITY WIDGETS & SINGLE SPONSOR SLOT (4 COLS) ── */}
                 <div className="lg:col-span-4 space-y-3">
                     
                     {/* HOST LIVE SPACE CTA CARD */}
                     <div className="rounded-2xl border border-alphabag-yellow/30 bg-gradient-to-b from-alphabag-darkgray to-alphabag-black p-4 space-y-3 shadow-md">
                         <div className="flex items-center justify-between">
                             <span className="bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">
-                                COMMUNITY RADIO
+                                COMMUNITY STAGE
                             </span>
                             <Radio size={15} className="text-alphabag-yellow animate-pulse" />
                         </div>
                         <div>
                             <h3 className="text-sm font-bold text-alphabag-text">Host a Live Audio Stage</h3>
                             <p className="text-xs text-alphabag-subtext leading-relaxed mt-1">
-                                Launch an interactive Clubhouse-style discussion room. Community members can tune in, listen, and request the stage mic to speak.
+                                Launch an interactive live audio room. Any community member can tune in, listen, and request the mic to speak.
                             </p>
                         </div>
                         <button
@@ -1780,11 +1843,11 @@ export const AlphasFeed: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* SPONSORED PARTNER CARD */}
+                    {/* SINGLE DEDICATED SPONSOR CARD */}
                     {sponsoredAd && (
                         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3 shadow-md relative overflow-hidden">
                             <div className="flex justify-between items-center">
-                                <span className="bg-alphabag-gray text-alphabag-text px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border border-alphabag-subtext/30">
+                                <span className="bg-alphabag-yellow/15 text-alphabag-yellow px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider border border-alphabag-yellow/30">
                                     {sponsoredAd.badge}
                                 </span>
                                 <span className="text-[11px] text-alphabag-subtext font-semibold uppercase">SPONSOR</span>
@@ -1808,7 +1871,7 @@ export const AlphasFeed: React.FC = () => {
                             </a>
 
                             <div className="pt-2 border-t border-alphabag-gray/50 flex justify-between items-center text-[11px] text-alphabag-subtext">
-                                <span>Verified Web3 Ecosystem Ad</span>
+                                <span>Verified Partner Ad</span>
                                 <button
                                     onClick={() => setIsFounderFormOpen(true)}
                                     className="text-alphabag-yellow hover:underline font-semibold"
@@ -1824,10 +1887,10 @@ export const AlphasFeed: React.FC = () => {
                         <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
                             <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
                                 <span className="text-xs font-semibold uppercase text-alphabag-subtext flex items-center gap-1.5">
-                                    <Flame size={14} className="text-alphabag-yellow" />
-                                    Trending Topics
+                                    <Sparkles size={14} className="text-alphabag-yellow" />
+                                    Trending in Alpha Feed
                                 </span>
-                                <span className="text-[11px] font-semibold uppercase text-alphabag-yellow">24H Active</span>
+                                <span className="text-[11px] font-semibold uppercase text-alphabag-yellow">Active</span>
                             </div>
 
                             <div className="space-y-2">
@@ -1859,61 +1922,17 @@ export const AlphasFeed: React.FC = () => {
                         </div>
                     )}
 
-                    {/* TOP COMMUNITY ANALYSTS LEADERBOARD */}
-                    {topAnalysts.length > 0 && (
-                        <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
-                            <div className="flex items-center justify-between pb-2 border-b border-alphabag-gray">
-                                <span className="text-xs font-semibold uppercase text-alphabag-subtext flex items-center gap-1.5">
-                                    <Award size={14} className="text-alphabag-yellow" />
-                                    Top Alpha Callers
-                                </span>
-                                <span className="text-[11px] text-alphabag-subtext font-mono">By Upvotes</span>
-                            </div>
-
-                            <div className="space-y-2">
-                                {topAnalysts.map((an, i) => (
-                                    <div key={i} className="flex items-center justify-between bg-alphabag-black/50 border border-alphabag-gray rounded-xl p-2.5 text-xs">
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-5 h-5 rounded-full bg-alphabag-yellow/10 border border-alphabag-yellow/30 text-alphabag-yellow text-[11px] font-bold flex items-center justify-center">
-                                                {an.rank}
-                                            </span>
-                                            <div>
-                                                <div className="font-mono font-semibold text-alphabag-text text-[11px]">{an.wallet}</div>
-                                                <div className="text-[11px] text-alphabag-subtext">{an.focus}</div>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className="text-[11px] font-mono text-alphabag-yellow font-semibold">{an.score}</span>
-                                            <div className="text-[11px] text-alphabag-subtext uppercase">{an.tier}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* PRIVACY & DYOR COMMUNITY MANIFESTO */}
-                    <div className="rounded-2xl border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-2 text-xs">
-                        <div className="flex items-center gap-1.5 text-alphabag-yellow font-bold uppercase text-[11px]">
-                            <Shield size={14} />
-                            <span>Privacy & DYOR Manifesto</span>
-                        </div>
-                        <p className="text-[11px] text-alphabag-subtext leading-relaxed">
-                            AlphaBAG Community Feed is a decentralized market intelligence network. No tracking, zero algorithm manipulation. All analyses are user-generated due diligence. Verify contract bytecode and DYOR.
-                        </p>
-                    </div>
-
                 </div>
             </div>
 
-            {/* ── START DISCUSSION COMPOSER MODAL ── */}
+            {/* ── CREATE POST COMPOSER MODAL (SIMPLIFIED REDDIT-STYLE WITH MEDIA SUPPORT) ── */}
             {isComposerOpen && (
                 <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
                     <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-2xl max-w-2xl w-full p-5 space-y-4 max-h-[90vh] overflow-y-auto animate-in zoom-in-95 duration-200">
                         <div className="flex justify-between items-center pb-3 border-b border-alphabag-gray">
                             <div>
-                                <span className="text-xs font-semibold uppercase text-alphabag-subtext">Community Research</span>
-                                <h3 className="text-xl font-bold text-alphabag-text mt-0.5">Start a Project Analysis Thread</h3>
+                                <span className="text-xs font-semibold uppercase text-alphabag-subtext">Community Discussion</span>
+                                <h3 className="text-xl font-bold text-alphabag-text mt-0.5">Create Post</h3>
                             </div>
                             <button
                                 onClick={() => setIsComposerOpen(false)}
@@ -1926,24 +1945,23 @@ export const AlphasFeed: React.FC = () => {
                         <form onSubmit={handleCreateDiscussion} className="space-y-4">
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <div className="sm:col-span-2 space-y-1">
-                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Discussion Title</label>
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Post Title *</label>
                                     <input
                                         type="text"
                                         value={newTitle}
                                         onChange={(e) => setNewTitle(e.target.value)}
-                                        placeholder="e.g. Deep Dive into $BAG Tokenomics and Vesting..."
+                                        placeholder="What's happening in the market or protocol?"
                                         required
                                         className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Cashtag / Ticker</label>
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Ticker (Optional)</label>
                                     <input
                                         type="text"
                                         value={newTicker}
                                         onChange={(e) => setNewTicker(e.target.value)}
-                                        placeholder="$BAG"
-                                        required
+                                        placeholder="e.g. $BAG (optional)"
                                         className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs font-mono text-alphabag-yellow placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow uppercase"
                                     />
                                 </div>
@@ -1951,23 +1969,23 @@ export const AlphasFeed: React.FC = () => {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div className="space-y-1">
-                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Topic Channel</label>
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Community / Channel</label>
                                     <select
                                         value={newCategory}
                                         onChange={(e) => setNewCategory(e.target.value as any)}
                                         className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text focus:outline-none focus:border-alphabag-yellow font-semibold"
                                     >
-                                        <option value="TOKENOMICS">Tokenomics & Vesting</option>
-                                        <option value="UTILITY">Utility & Yield</option>
-                                        <option value="PROJECT_REVIEW">Project Review & Fundamentals</option>
-                                        <option value="ALPHA_CALL">Alpha Call & Due Diligence</option>
-                                        <option value="AUDIT_SECURITY">Security & Audits</option>
-                                        <option value="MEMECOIN_ROTATION">Memecoin Rotation</option>
+                                        <option value="TOKENOMICS">c/tokenomics • Tokenomics & Vesting</option>
+                                        <option value="UTILITY">c/utility • Utility & Yield</option>
+                                        <option value="PROJECT_REVIEW">c/reviews • Project Reviews</option>
+                                        <option value="ALPHA_CALL">c/alphacalls • Alpha Calls</option>
+                                        <option value="AUDIT_SECURITY">c/security • Security & Audits</option>
+                                        <option value="MEMECOIN_ROTATION">c/memecoins • Memecoin Rotation</option>
                                     </select>
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Sentiment Stance</label>
+                                    <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Sentiment Flair (Optional)</label>
                                     <div className="grid grid-cols-3 gap-1.5">
                                         {(['BULLISH', 'BEARISH', 'NEUTRAL'] as DiscussionSentiment[]).map(st => (
                                             <button
@@ -1987,41 +2005,69 @@ export const AlphasFeed: React.FC = () => {
                                 </div>
                             </div>
 
+                            {/* Media Attachment URL */}
                             <div className="space-y-1">
-                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Detailed Analysis & Key Takeaways</label>
+                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext flex items-center justify-between">
+                                    <span className="flex items-center gap-1">
+                                        <ImageIcon size={12} />
+                                        Media / Chart Attachment URL (Optional)
+                                    </span>
+                                    {newMediaUrl && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setNewMediaUrl('')}
+                                            className="text-red-400 hover:underline flex items-center gap-0.5 text-[11px]"
+                                        >
+                                            <X size={10} /> Clear Media
+                                        </button>
+                                    )}
+                                </label>
+                                <input
+                                    type="url"
+                                    value={newMediaUrl}
+                                    onChange={(e) => setNewMediaUrl(e.target.value)}
+                                    placeholder="https://... image or chart link"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow"
+                                />
+                                {newMediaUrl.trim() && (
+                                    <div className="mt-2 rounded-lg border border-alphabag-gray overflow-hidden max-h-48 bg-alphabag-black flex items-center justify-center">
+                                        <img src={newMediaUrl.trim()} alt="Media preview" className="max-h-48 object-contain" />
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Post Content *</label>
                                 <textarea
                                     value={newContent}
                                     onChange={(e) => setNewContent(e.target.value)}
-                                    placeholder="Write your in-depth thesis, token utility mechanics, smart contract breakdown, or risk notes..."
+                                    placeholder="Share your research thesis, market observation, questions, or analysis..."
                                     rows={5}
                                     required
                                     className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-subtext focus:outline-none focus:border-alphabag-yellow resize-none leading-relaxed"
                                 />
                             </div>
 
-                            <div className="bg-alphabag-black p-3 rounded-lg border border-alphabag-gray flex justify-between items-center text-xs">
-                                <span className="text-alphabag-subtext font-mono">
-                                    Posting as: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong> ({userTier})
+                            <div className="flex justify-between items-center text-xs pt-1">
+                                <span className="text-alphabag-subtext font-mono text-[11px]">
+                                    Author: <strong className="text-alphabag-yellow">{currentDisplayWallet}</strong>
                                 </span>
-                                <span className="text-[11px] text-alphabag-green font-semibold">
-                                    Privacy Shield Protected
-                                </span>
-                            </div>
 
-                            <div className="flex justify-end gap-2 pt-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsComposerOpen(false)}
-                                    className="px-4 py-2 bg-alphabag-gray text-alphabag-text rounded-lg text-xs font-bold uppercase tracking-wider"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-6 py-2 bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm"
-                                >
-                                    Publish Discussion
-                                </button>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsComposerOpen(false)}
+                                        className="px-4 py-2 bg-alphabag-gray text-alphabag-text rounded-lg text-xs font-bold uppercase tracking-wider"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-6 py-2 bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e] rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm"
+                                    >
+                                        Create Post
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -2038,7 +2084,7 @@ export const AlphasFeed: React.FC = () => {
                                     <Radio size={20} />
                                 </div>
                                 <div>
-                                    <span className="text-xs font-semibold uppercase text-alphabag-subtext">Community Radio</span>
+                                    <span className="text-xs font-semibold uppercase text-alphabag-subtext">Community Stage</span>
                                     <h3 className="text-lg font-bold text-alphabag-text">Start Live Audio Stage</h3>
                                 </div>
                             </div>
@@ -2052,7 +2098,7 @@ export const AlphasFeed: React.FC = () => {
 
                         <form onSubmit={handleLaunchAudioSpace} className="space-y-4">
                             <div className="space-y-1">
-                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Space Room Title</label>
+                                <label className="text-[11px] font-semibold uppercase text-alphabag-subtext">Room Title</label>
                                 <input
                                     type="text"
                                     value={newSpaceTitle}
@@ -2094,8 +2140,8 @@ export const AlphasFeed: React.FC = () => {
                                     <strong className="text-alphabag-yellow font-mono">{currentDisplayWallet}</strong>
                                 </div>
                                 <div className="flex justify-between items-center text-alphabag-subtext">
-                                    <span>Stage Access:</span>
-                                    <span className="text-alphabag-green font-semibold">Open Stage (Community Q&A)</span>
+                                    <span>Stage Mic Access:</span>
+                                    <span className="text-alphabag-green font-semibold">Open to All Members (Host Approved)</span>
                                 </div>
                             </div>
 

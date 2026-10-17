@@ -237,22 +237,25 @@ export const AlphaDesk: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Sleek Segmented Terminal Tabs ───────────────────────────────────── */}
-      <div className="flex items-center px-4 py-2.5 bg-[#14171D] border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-2">
-        {TABS.map(({ id, label, Icon }) => {
+      {/* ── Sleek Segmented Terminal Tabs (7 Compact Institutional Tabs) ──────── */}
+      <div className="flex items-center px-3 py-2 bg-[#14171D] border-b border-[#2B313A] overflow-x-auto no-scrollbar gap-1.5">
+        {TABS.map(({ id, label, badge, Icon }) => {
           const active = activeTab === id;
           return (
             <button
               key={id}
               onClick={() => handleTabChange(id)}
-              className={`flex items-center gap-2.5 px-5 py-3 rounded-lg text-sm md:text-base font-bold transition-all shrink-0 ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all shrink-0 border ${
                 active
-                  ? 'bg-[#202630] text-alphabag-yellow border border-[#2B313A] shadow-md ring-1 ring-alphabag-yellow/20'
-                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/60 border border-transparent'
+                  ? 'bg-[#202630] text-alphabag-yellow border-alphabag-yellow/40 shadow-sm'
+                  : 'bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50 border-transparent'
               }`}
             >
-              <Icon size={18} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
+              <Icon size={14} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
               <span>{label}</span>
+              <span className={`text-[11px] px-1 py-0.2 rounded font-mono font-medium ${active ? 'bg-alphabag-yellow/20 text-alphabag-yellow' : 'bg-[#0B0E11] text-alphabag-subtext'}`}>
+                {badge}
+              </span>
             </button>
           );
         })}
