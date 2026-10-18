@@ -2,11 +2,11 @@
 
 ## 1. Mode of Work
 - **Always Prompt Git Push:** When any requested task or update is completed and verified, immediately propose or execute the push to Git (`git push origin main`).
-- **Always Validate Before Pushing:**
+- **Always Validate & Build Before Pushing:**
   - TypeScript: `npm run typecheck`
   - Tests: `npx vitest run --pool=threads`
   - Design Standards: `npm run check:design-slop`
-- **Build Output:** `dist/` is generated from source on Netlify/CI upon push. Never commit `dist/` (ignored in `.gitignore`).
+  - Build Output: Always run `$env:VITE_API_BASE_URL="https://api.alphabag.pro"; npm run build` before pushing so local `dist/` is always updated and validated with postbuild secret scans. `dist/` is ignored in `.gitignore` for Netlify CI builds.
 
 ## 2. Zero AI Design Slop Policy
 - NO `backdrop-blur-*`

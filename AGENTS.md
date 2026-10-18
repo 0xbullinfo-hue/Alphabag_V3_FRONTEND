@@ -4,11 +4,11 @@
 
 ### 1. Git Workflow & Push Protocol
 - **Always Request/Prompt Git Push:** As soon as any update, fix, or feature is completed and validated, ALWAYS notify the user and offer/execute the Git push (`git push origin main`).
-- **Pre-Push Validation:** Never push untested or broken code. Always run:
+- **Pre-Push Validation & Build:** Never push untested or unbuilt code. Always run:
   1. `npm run typecheck` — 0 TypeScript errors.
   2. `npm run test` (or `npx vitest run --pool=threads`) — all test suites passing.
   3. `npm run check:design-slop` — verify 0 design slop violations.
-- **Build Artifacts (`dist/`):** `dist/` is deliberately in `.gitignore` (standard Vite/Netlify architecture). Netlify builds `dist` in CI from source commits. If local `dist` needs regeneration, run `$env:VITE_API_BASE_URL="https://api.alphabag.pro"; npm run build`.
+  4. **Build to `dist/` on Every Push:** Always execute `$env:VITE_API_BASE_URL="https://api.alphabag.pro"; npm run build` before pushing so local `dist/` is always updated and validated with postbuild secret scans. `dist/` remains in `.gitignore` for clean Netlify CI builds.
 
 ---
 
