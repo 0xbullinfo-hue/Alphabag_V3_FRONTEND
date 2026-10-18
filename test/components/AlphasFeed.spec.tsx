@@ -275,8 +275,8 @@ describe('AlphasFeed Community Hub', () => {
         fireEvent.click(createCommunityBtn);
 
         expect(screen.getByText('Launch a Crypto Community')).toBeDefined();
-        expect(screen.getByText('DeFi & Liquidity')).toBeDefined();
-        expect(screen.getByText('Memecoins & Culture')).toBeDefined();
-        expect(screen.getByText('AI Agents & DePIN')).toBeDefined();
+        expect(screen.getAllByText('DeFi & Liquidity').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Memecoins & Culture').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('AI Agents & DePIN').length).toBeGreaterThan(0);
     });
 });

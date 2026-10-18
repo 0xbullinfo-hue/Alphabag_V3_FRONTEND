@@ -240,7 +240,15 @@ export const AlphasFeed: React.FC = () => {
   const { user } = useAuth();
 
   // Community & Feed State
-  const [communities, setCommunities] = useState<Community[]>([]);
+  const [communities, setCommunities] = useState<Community[]>(() =>
+    CRYPTO_SECTOR_PRESETS.map((preset) => ({
+      slug: preset.slug,
+      name: preset.name,
+      description: preset.description,
+      memberCount: 142,
+      isMember: false,
+    }))
+  );
   const [selectedCommunitySlug, setSelectedCommunitySlug] = useState('');
   const [communityBusy, setCommunityBusy] = useState<string | null>(null);
   const [feedError, setFeedError] = useState('');
@@ -329,8 +337,17 @@ export const AlphasFeed: React.FC = () => {
         api.get('/api/community/podcast'),
       ]);
 
-      if (communityRes.status === 'fulfilled' && Array.isArray(communityRes.value.data)) {
-        setCommunities(communityRes.value.data);
+      if (communityRes.status === 'fulfilled' && Array.isArray(communityRes.value.data) && communityRes.value.data.length > 0) {
+        const fetched = communityRes.value.data;
+        const fetchedSlugs = new Set(fetched.map((c: Community) => c.slug));
+        const missingPresets = CRYPTO_SECTOR_PRESETS.filter((p) => !fetchedSlugs.has(p.slug)).map((p) => ({
+          slug: p.slug,
+          name: p.name,
+          description: p.description,
+          memberCount: 142,
+          isMember: false,
+        }));
+        setCommunities([...fetched, ...missingPresets]);
       }
       if (discRes.status === 'fulfilled' && Array.isArray(discRes.value.data)) {
         setDiscussions(discRes.value.data);
@@ -477,6 +494,7 @@ export const AlphasFeed: React.FC = () => {
       });
 
       setSelectedCommunitySlug(createdCommunity.slug);
+      setNewCommunitySlug(createdCommunity.slug);
       setIsCreateCommunityOpen(false);
       setCustomCommunityName('');
       setCustomCommunitySlug('');
@@ -914,6 +932,16 @@ export const AlphasFeed: React.FC = () => {
             }`}
           >
             All communities
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsCreateCommunityOpen(true)}
+            className="px-3 py-1.5 rounded-md text-xs font-bold whitespace-nowrap border border-alphabag-yellow/40 bg-alphabag-yellow/10 text-alphabag-yellow hover:bg-alphabag-yellow hover:text-alphabag-dark flex items-center gap-1 transition-colors shrink-0"
+            title="Create a new crypto community"
+            aria-label="Add New Community"
+          >
+            <Plus size={13} />
+            <span>New Community</span>
           </button>
           {communities.map((community) => (
             <button
@@ -1553,12 +1581,31 @@ export const AlphasFeed: React.FC = () => {
             </div>
 
             <form onSubmit={handleCreateDiscussion} className="space-y-3">
-              <label className="block space-y-1 text-xs font-semibold text-alphabag-subtext">
-                Community
+              <div>
+                <div className="flex items-center justify-between pb-1.5">
+                  <label htmlFor="post-community-select" className="text-xs font-semibold text-alphabag-subtext">
+                    Community / Crypto Sector
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateCommunityOpen(true)}
+                    className="text-xs font-bold text-alphabag-yellow hover:underline flex items-center gap-1"
+                  >
+                    <Plus size={13} />
+                    <span>+ Create New Community</span>
+                  </button>
+                </div>
                 <select
+                  id="post-community-select"
                   value={newCommunitySlug}
-                  onChange={(e) => setNewCommunitySlug(e.target.value)}
-                  className="w-full bg-[#0B0E11] border border-[#2B313A] rounded-md p-2.5 text-sm text-alphabag-text font-medium"
+                  onChange={(e) => {
+                    if (e.target.value === '__CREATE_NEW__') {
+                      setIsCreateCommunityOpen(true);
+                    } else {
+                      setNewCommunitySlug(e.target.value);
+                    }
+                  }}
+                  className="w-full bg-[#0B0E11] border border-[#2B313A] rounded-md p-2.5 text-sm text-alphabag-text font-medium focus:outline-none focus:border-alphabag-yellow"
                 >
                   {communities.map((community) => (
                     <option key={community.slug} value={community.slug}>
@@ -1566,8 +1613,19 @@ export const AlphasFeed: React.FC = () => {
                       {community.isMember ? '' : ' (join required)'}
                     </option>
                   ))}
+                  <option value="__CREATE_NEW__">➕ + Create or Add New Community...</option>
                 </select>
-              </label>
+                <div className="flex items-center justify-between text-[11px] text-alphabag-subtext mt-1.5">
+                  <span>Pick from 13+ crypto sectors (DeFi, Degen, Memes, AI, RWAs...)</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreateCommunityOpen(true)}
+                    className="text-alphabag-yellow hover:underline font-semibold"
+                  >
+                    Can't find your sector?
+                  </button>
+                </div>
+              </div>
 
               {communities.find((item) => item.slug === newCommunitySlug)?.isMember ? (
                 <>
@@ -1608,15 +1666,15 @@ export const AlphasFeed: React.FC = () => {
                   </label>
                 </>
               ) : (
-                <div className="rounded-md border border-[#2B313A] bg-[#0B0E11] p-3 text-sm text-alphabag-subtext">
-                  Join this community before creating a post.
+                <div className="rounded-md border border-[#2B313A] bg-[#0B0E11] p-3 text-sm text-alphabag-subtext flex items-center justify-between gap-3">
+                  <span>Join this community before creating a post.</span>
                   {communities.find((item) => item.slug === newCommunitySlug) && (
                     <button
                       type="button"
                       onClick={() =>
                         void handleJoinCommunity(communities.find((item) => item.slug === newCommunitySlug)!)
                       }
-                      className="ml-2 text-alphabag-yellow font-semibold hover:underline"
+                      className="px-3 py-1 bg-alphabag-yellow text-alphabag-dark font-bold text-xs rounded hover:bg-[#e0bd2e] shrink-0"
                     >
                       Join now
                     </button>
