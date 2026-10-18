@@ -1,4 +1,4 @@
-import { LogOut } from 'lucide-react';
+import { Lock, LogOut } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -13,12 +13,23 @@ interface NavItemProps {
   customIcon?: PageIconName;
   label: string;
   active: boolean;
+  requiresPremium?: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, active }) => {
+const NavItem: React.FC<NavItemProps> = ({
+  to,
+  icon: Icon,
+  customIcon,
+  label,
+  active,
+  requiresPremium,
+}) => {
   const { data: features } = useFeatures();
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const disabledPages = features?.disabledPages || DISABLED_PAGES;
   const isDisabled = disabledPages.includes(to);
+  const isPremium = Boolean(user && ['PREMIUM', 'ALPHA_VIP', 'ULTIMATE'].includes(user.tier));
 
   const handleClick = (e: React.MouseEvent) => {
     if (isDisabled) {
@@ -36,6 +47,63 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
           confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
         }
       });
+      return;
+    }
+
+    if (requiresPremium && !isPremium) {
+      e.preventDefault();
+      if (!isAuthenticated) {
+        Swal.fire({
+          title: 'PREMIUM VERIFICATION',
+          text: 'Alpha Desk is an exclusive workstation of AlphaBAG. Connect your wallet to verify your tier access.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'CONNECT WALLET',
+          cancelButtonText: 'CANCEL',
+          confirmButtonColor: '#F0B90B',
+          cancelButtonColor: '#2B313A',
+          background: '#181A20',
+          color: '#EAECEF',
+          customClass: {
+            popup: 'border border-[#2B313A] rounded-[6px]',
+            confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs',
+            cancelButton: 'text-gray-300 font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
+          }
+        }).then((res) => {
+          if (res.isConfirmed) {
+            window.dispatchEvent(new CustomEvent('open-login-modal'));
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'PREMIUM TIER REQUIRED',
+          html: `
+            <div class="text-xs text-gray-300 space-y-2 text-left">
+              <p><strong>Alpha Desk</strong> is a premium feature reserved for <strong>Premium</strong>, <strong>Alpha VIP</strong>, and <strong>Ultimate</strong> tier members.</p>
+              <p class="text-gray-400">Upgrade your tier or mint an Alpha Pass to unlock institutional charting, holder topology, smart wallet flows, and trade signals.</p>
+            </div>
+          `,
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'UPGRADE TIER',
+          cancelButtonText: 'VIEW PASSES',
+          confirmButtonColor: '#F0B90B',
+          cancelButtonColor: '#2B313A',
+          background: '#181A20',
+          color: '#EAECEF',
+          customClass: {
+            popup: 'border border-[#2B313A] rounded-[6px]',
+            confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs',
+            cancelButton: 'text-gray-300 font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
+          }
+        }).then((res) => {
+          if (res.isConfirmed) {
+            window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
+          } else if (res.dismiss && res.dismiss === (Swal.DismissReason?.cancel || 'cancel')) {
+            navigate('/alpha-passes');
+          }
+        });
+      }
     }
   };
 
@@ -65,6 +133,16 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, customIcon, label, ac
       </div>
       {isDisabled && (
         <span className="text-xs font-semibold bg-white/5 text-alphabag-subtext px-2 py-0.5 rounded-[2px] border border-white/10 shrink-0 ml-1">SOON</span>
+      )}
+      {!isDisabled && requiresPremium && (
+        <span className={`text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-[2px] shrink-0 ml-1 border flex items-center gap-1 ${
+          isPremium
+            ? 'bg-alphabag-yellow/15 text-alphabag-yellow border-alphabag-yellow/30'
+            : 'bg-white/5 text-alphabag-yellow/80 border-alphabag-yellow/30'
+        }`}>
+          {!isPremium && <Lock size={11} className="text-alphabag-yellow" />}
+          PRO
+        </span>
       )}
     </Link>
   );
@@ -123,7 +201,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
           </NavGroup>
 
           <NavGroup title="Market Intelligence">
-            <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
+            <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} requiresPremium />
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />

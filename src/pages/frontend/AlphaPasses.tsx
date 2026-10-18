@@ -1375,6 +1375,7 @@ export const AlphaPasses: React.FC = () => {
                     <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> All features of Free Tier</div>
                     <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Real-time BSC Whale Radar</div>
                     <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> <strong>1.5x Boost</strong> on ITEMS</div>
+                    <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> <strong>Alpha Desk</strong> Institutional Workstation</div>
                     <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> Alpha Feeds & DeFi Tracker</div>
                     <div className="flex items-center gap-2"><CheckCircle2 size={14} className="text-alphabag-green shrink-0" /> 5hr AlphaAI Queries</div>
                   </div>

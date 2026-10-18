@@ -153,4 +153,32 @@ describe('AlphaScreener DexScreener Integration', () => {
     expect(screen.getByText('BONK')).toBeInTheDocument();
     expect(screen.queryByText('BRETT')).not.toBeInTheDocument();
   });
+
+  it('does not contain any Desk button linking to Alpha Desk across tabs', async () => {
+    render(
+      <BrowserRouter>
+        <AlphaScreener />
+      </BrowserRouter>
+    );
+
+    // Verify Pairs table has no Desk button
+    expect(screen.queryByRole('button', { name: /Desk/i })).not.toBeInTheDocument();
+    expect(screen.queryByTitle(/Open Chart in Alpha Desk/i)).not.toBeInTheDocument();
+
+    // Switch to Boosts tab
+    fireEvent.click(screen.getByTestId('tab-boosts'));
+    await waitFor(() => {
+      expect(screen.getByText(/dogwifhat with a hat/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByRole('button', { name: /Desk/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /DexScreener/i })).toBeInTheDocument();
+
+    // Switch to Takeovers tab
+    fireEvent.click(screen.getByTestId('tab-takeovers'));
+    await waitFor(() => {
+      expect(screen.getByText(/Community Takeover: TRUMP Coin/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByRole('button', { name: /Desk/i })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /DexScreener/i }).length).toBeGreaterThan(0);
+  });
 });

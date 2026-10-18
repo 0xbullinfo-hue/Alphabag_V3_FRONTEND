@@ -1,6 +1,5 @@
 import {
   Activity,
-  BarChart2,
   Check,
   Copy,
   ExternalLink,
@@ -13,7 +12,6 @@ import {
   Zap,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import {
   DexCommunityTakeover,
@@ -355,7 +353,6 @@ export const AlphaScreener: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<string>(new Date().toLocaleTimeString());
-  const navigate = useNavigate();
 
   // DexScreener Live WebSocket Stream Hook
   const streamType = activeTab === 'takeovers' ? 'takeovers' : 'boosts';
@@ -863,18 +860,11 @@ export const AlphaScreener: React.FC = () => {
                       {/* Actions */}
                       <td className="py-2.5 px-3 text-center">
                         <div className="flex items-center justify-center gap-1.5">
-                          <button
-                            onClick={() => navigate('/alpha-desk')}
-                            className="p-1 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-gray-400 transition-colors"
-                            title="Open Chart in Alpha Desk"
-                          >
-                            <BarChart2 size={12} />
-                          </button>
                           <a
                             href={p.url || `https://dexscreener.com/${p.chainId}/${p.pairAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1 rounded bg-[#202630] hover:bg-[#2B313A] text-gray-400 hover:text-white transition-colors"
+                            className="p-1.5 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-gray-400 transition-colors"
                             title="View on DexScreener"
                           >
                             <ExternalLink size={12} />
@@ -999,21 +989,15 @@ export const AlphaScreener: React.FC = () => {
                     </div>
                   )}
 
-                  <button
-                    onClick={() => navigate('/alpha-desk')}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-xs font-semibold text-gray-300 transition-colors"
-                  >
-                    <BarChart2 size={13} />
-                    <span>Desk</span>
-                  </button>
                   <a
                     href={boost.url || `https://dexscreener.com/${boost.chainId}/${boost.tokenAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 rounded bg-[#202630] hover:bg-[#2B313A] text-gray-400 hover:text-white border border-[#2B313A] transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-xs font-semibold text-gray-300 border border-[#2B313A] hover:border-alphabag-yellow transition-colors"
                     title="View on DexScreener"
                   >
                     <ExternalLink size={13} />
+                    <span>DexScreener</span>
                   </a>
                 </div>
               </div>
@@ -1132,21 +1116,15 @@ export const AlphaScreener: React.FC = () => {
                     </div>
                   )}
 
-                  <button
-                    onClick={() => navigate('/alpha-desk')}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-xs font-semibold text-gray-300 transition-colors"
-                  >
-                    <BarChart2 size={13} />
-                    <span>Desk</span>
-                  </button>
                   <a
                     href={cto.url || `https://dexscreener.com/${cto.chainId}/${cto.tokenAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 rounded bg-[#202630] hover:bg-[#2B313A] text-gray-400 hover:text-white border border-[#2B313A] transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded bg-[#202630] hover:bg-alphabag-yellow hover:text-[#0B0E11] text-xs font-semibold text-gray-300 border border-[#2B313A] hover:border-alphabag-yellow transition-colors"
                     title="View on DexScreener"
                   >
                     <ExternalLink size={13} />
+                    <span>DexScreener</span>
                   </a>
                 </div>
               </div>
