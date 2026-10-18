@@ -11,6 +11,20 @@ vi.mock('sweetalert2', () => ({
     }
 }));
 
+// Mock AuthContext
+vi.mock('../../src/context/AuthContext', () => ({
+    useAuth: () => ({
+        user: {
+            id: '0x1234567890abcdef1234567890abcdef12345678',
+            walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
+            tier: 'ALPHA_VIP',
+            isPro: true
+        },
+        isAuthenticated: true,
+        isLoading: false
+    })
+}));
+
 // Mock API service
 vi.mock('../../src/services/api', () => ({
     api: {
@@ -107,7 +121,7 @@ describe('AlphasFeed Community Hub', () => {
         render(<AlphasFeed />);
 
         expect(screen.getByText('AlphaFeed')).toBeDefined();
-        expect(screen.getByText(/Community posts, discussion and project research/i)).toBeDefined();
+        expect(screen.getByText(/Collaborative Web3 Due Diligence/i)).toBeDefined();
 
         await waitFor(() => {
             expect(screen.getByText('All communities')).toBeDefined();
@@ -134,7 +148,7 @@ describe('AlphasFeed Community Hub', () => {
         render(<AlphasFeed />);
 
         await waitFor(() => {
-            expect(screen.getByText('Communities')).toBeDefined();
+            expect(screen.getByText('Ecosystem Communities')).toBeDefined();
         });
 
         const leaveButton = screen.getByRole('button', { name: 'Leave' });
@@ -210,14 +224,14 @@ describe('AlphasFeed Community Hub', () => {
     it('opens discussion composer and creates a post for joined community', async () => {
         render(<AlphasFeed />);
 
+        const newPostButton = screen.getByRole('button', { name: /New post/i });
         await waitFor(() => {
-            expect(screen.getByText(/New post/i)).toBeDefined();
+            expect(newPostButton).not.toBeDisabled();
         });
 
-        const newPostButton = screen.getByRole('button', { name: /New post/i });
         fireEvent.click(newPostButton);
 
-        expect(screen.getByText('Create a post')).toBeDefined();
+        expect(screen.getByText('Create a Post')).toBeDefined();
 
         const titleInput = screen.getByPlaceholderText(/What would you like to discuss\?/i);
         const postInput = screen.getByPlaceholderText(/Share your question, idea, research/i);
@@ -252,5 +266,17 @@ describe('AlphasFeed Community Hub', () => {
                 category: 'TOKENOMICS'
             });
         });
+    });
+
+    it('opens Create Community modal and displays researched crypto sectors', async () => {
+        render(<AlphasFeed />);
+
+        const createCommunityBtn = screen.getByRole('button', { name: /Create Community/i });
+        fireEvent.click(createCommunityBtn);
+
+        expect(screen.getByText('Launch a Crypto Community')).toBeDefined();
+        expect(screen.getByText('DeFi & Liquidity')).toBeDefined();
+        expect(screen.getByText('Memecoins & Culture')).toBeDefined();
+        expect(screen.getByText('AI Agents & DePIN')).toBeDefined();
     });
 });
