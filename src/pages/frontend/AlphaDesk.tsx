@@ -154,6 +154,7 @@ export const AlphaDesk: React.FC = () => {
   // Shared token state
   const [preset, setPreset] = useState(PRESETS[0]);
   const [customAddress, setCustomAddress] = useState(PRESETS[0].address);
+  const [contractChain, setContractChain] = useState<string>(PRESETS[0].chain);
   const [copied, setCopied] = useState(false);
 
   const handleTabChange = (id: TabId) => {
@@ -164,6 +165,12 @@ export const AlphaDesk: React.FC = () => {
   const handlePresetSelect = (p: typeof PRESETS[0]) => {
     setPreset(p);
     setCustomAddress(p.address);
+    setContractChain(p.chain);
+  };
+
+  const handleContractContextChange = (chain: string, address: string) => {
+    setContractChain(chain);
+    setCustomAddress(address);
   };
 
   const handleCopyAddress = () => {
@@ -193,33 +200,38 @@ export const AlphaDesk: React.FC = () => {
           </div>
         </div>
 
-        {/* Global Token Quick-Switch Bar (Preset chips + address bar) */}
+        {/* Market symbol and on-chain contract are separate contexts. */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Preset Chips */}
-          <div className="flex items-center bg-[#0B0E11] border border-[#2B313A] rounded p-0.5 gap-0.5">
-            {PRESETS.map((p) => {
-              const active = preset.label === p.label;
-              return (
-                <button
-                  key={p.label}
-                  onClick={() => handlePresetSelect(p)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors ${
-                    active
-                      ? 'bg-[#202630] text-alphabag-text font-semibold'
-                      : 'text-alphabag-subtext hover:text-alphabag-text'
-                  }`}
-                >
-                  <span className="text-[11px] opacity-75">{p.iconSymbol}</span>
-                  <span>{p.label}</span>
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-alphabag-subtext">Market</span>
+            <div className="flex items-center bg-[#0B0E11] border border-[#2B313A] rounded p-0.5 gap-0.5">
+              {PRESETS.map((p) => {
+                const active = preset.label === p.label;
+                return (
+                  <button
+                    key={p.label}
+                    onClick={() => handlePresetSelect(p)}
+                    aria-pressed={active}
+                    className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      active
+                        ? 'bg-[#202630] text-alphabag-text font-semibold'
+                        : 'text-alphabag-subtext hover:text-alphabag-text'
+                    }`}
+                  >
+                    <span className="text-[11px] opacity-75">{p.iconSymbol}</span>
+                    <span>{p.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Monospace Address Input */}
+          {/* On-chain contract context */}
           <div className="flex items-center bg-[#0B0E11] border border-[#2B313A] rounded px-2.5 py-1 gap-1.5 min-w-[220px] flex-1 sm:flex-initial">
+            <span className="text-[11px] font-semibold uppercase tracking-wide text-alphabag-subtext">Contract</span>
             <span className="text-[11px] font-semibold text-alphabag-yellow uppercase px-1 py-0.2 rounded-[2px] bg-alphabag-yellow/10">
-              {preset.chain}
+              {contractChain}
             </span>
             <input
               value={customAddress}
@@ -228,6 +240,7 @@ export const AlphaDesk: React.FC = () => {
               className="bg-transparent text-xs text-alphabag-text placeholder:text-alphabag-subtext/40 num outline-none w-32 sm:w-44"
             />
             <button
+              type="button"
               onClick={handleCopyAddress}
               className="text-alphabag-subtext hover:text-alphabag-text transition-colors p-0.5"
               title="Copy Address"
@@ -246,13 +259,14 @@ export const AlphaDesk: React.FC = () => {
             <button
               key={id}
               onClick={() => handleTabChange(id)}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider transition-all shrink-0 border ${
+              aria-pressed={active}
+              className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-semibold transition-colors shrink-0 ${
                 active
-                  ? 'bg-[#202630] text-alphabag-yellow border-alphabag-yellow/40 shadow-sm'
-                  : 'bg-transparent text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50 border-transparent'
+                  ? 'bg-[#202630] text-alphabag-yellow border border-[#2B313A] shadow-md ring-1 ring-alphabag-yellow/20'
+                  : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/60 border border-transparent'
               }`}
             >
-              <Icon size={14} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
+              <Icon size={15} className={active ? 'text-alphabag-yellow' : 'text-alphabag-subtext'} />
               <span>{label}</span>
             </button>
           );
@@ -276,10 +290,10 @@ export const AlphaDesk: React.FC = () => {
           {mountedTabs.has('bubblemaps') && (
             <div className="space-y-3">
               <BubblemapsEmbed
-                chain={preset.chain}
+                chain={contractChain}
                 address={customAddress}
                 height={660}
-                onAddressChange={(_chain, addr) => setCustomAddress(addr)}
+                onAddressChange={handleContractContextChange}
               />
             </div>
           )}

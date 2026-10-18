@@ -6,7 +6,6 @@ Gift,
 Layers,
 MessageSquare,
 Rocket,
-ShieldAlert,
 Target
 } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
@@ -43,18 +42,45 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
         fetchSignals();
     }, [token]);
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'Copied to clipboard',
-            showConfirmButton: false,
-            timer: 1500,
-            background: '#1E2329',
-            color: '#FFF'
-        });
+    const copyToClipboard = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: 'Copied to clipboard',
+                showConfirmButton: false,
+                timer: 1500,
+                background: '#1E2329',
+                color: '#FFF'
+            });
+        } catch {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Could not copy signal details',
+                showConfirmButton: false,
+                timer: 1800,
+                background: '#1E2329',
+                color: '#FFF'
+            });
+        }
+    };
+
+    const copySignalDetails = (signal: TradeSignal) => {
+        const targets = Array.isArray(signal.targets) ? signal.targets.join(', ') : 'Not provided';
+        const details = [
+            `Pair: ${signal.pair}`,
+            `Entry: ${signal.entry || 'Not provided'}`,
+            `Targets: ${targets}`,
+            `Stop loss: ${signal.stopLoss || 'Not provided'}`,
+            `Status: ${signal.status || 'Unknown'}`,
+            `Notes: ${signal.narrative || 'No notes provided'}`,
+            `Timestamp: ${signal.timestamp || 'Not provided'}`,
+        ].join('\n');
+        void copyToClipboard(details);
     };
 
     const safeSignals = Array.isArray(signals) ? signals : DEMO_SIGNALS;
@@ -72,10 +98,6 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Classified Alphas</h1>
                         </div>
                         <p className="text-alphabag-subtext text-sm">High-conviction setups · Early Mems · Airdrops</p>
-                    </div>
-                    <div className="bg-alphabag-gray border border-alphabag-yellow/20 px-3 py-1.5 rounded-md flex items-center gap-2">
-                        <ShieldAlert size={12} className="text-alphabag-yellow" />
-                        <span className="text-[11px] text-alphabag-yellow font-medium uppercase tracking-wider">E2E Encryption Active</span>
                     </div>
                 </div>
             )}
@@ -148,14 +170,12 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                             </div>
                                         </div>
                                     </div>
-                                    <button 
-                                        onClick={() => {
-                                            const targetsStr = Array.isArray(signal.targets) ? signal.targets.join(', ') : '';
-                                            const summary = `[AlphaCall] ${signal.pair} (${signal.category})\nEntry: ${signal.entry || 'N/A'}${targetsStr ? ` | Targets: ${targetsStr}` : ''} | Stop Loss: ${signal.stopLoss || 'N/A'}${signal.contractAddress ? `\nCA: ${signal.contractAddress}` : ''}\nTime: ${signal.timestamp || 'Live'}`;
-                                            copyToClipboard(summary);
-                                        }}
+                                    <button
+                                        type="button"
+                                        onClick={() => copySignalDetails(signal)}
                                         className="w-7 h-7 rounded bg-white/5 border border-white/10 flex items-center justify-center text-alphabag-subtext hover:text-white hover:bg-white/10 transition-colors"
-                                        title="Copy Structured Trade Signal"
+                                        aria-label={`Copy ${signal.pair} signal details`}
+                                        title="Copy signal details"
                                     >
                                         <Copy size={12} />
                                     </button>

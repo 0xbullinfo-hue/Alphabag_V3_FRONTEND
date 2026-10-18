@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import React from 'react';
 import { AlphasFeed } from '../../src/pages/frontend/AlphasFeed';
+import { api } from '../../src/services/api';
 
 // Mock sweetalert2
 vi.mock('sweetalert2', () => ({
@@ -10,186 +11,246 @@ vi.mock('sweetalert2', () => ({
     }
 }));
 
-// Mock AuthContext
-vi.mock('../../src/context/AuthContext', () => ({
-    useAuth: () => ({
-        user: {
-            id: '0x1234567890abcdef1234567890abcdef12345678',
-            walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
-            tier: 'ALPHA_VIP',
-            isPro: true
-        },
-        isAuthenticated: true,
-        isLoading: false
-    })
-}));
-
 // Mock API service
 vi.mock('../../src/services/api', () => ({
     api: {
-        get: vi.fn().mockImplementation((url: string) => {
-            if (url === '/api/community/discussions') {
-                return Promise.resolve({
-                    data: [
-                        {
-                            id: 'test-post-1',
-                            title: 'AlphaBAG Protocol Tokenomics & Fee Switch',
-                            ticker: '$BAG',
-                            category: 'TOKENOMICS',
-                            sentiment: 'BULLISH',
-                            content: 'The 60% fee switch routes revenue into buyback and burn.',
-                            authorWallet: '0x123...5678',
-                            authorTier: 'ALPHA_VIP',
-                            isPro: true,
-                            upvotes: 42,
-                            downvotes: 2,
-                            insightfulCount: 15,
-                            comments: [
-                                {
-                                    id: 'comm-1',
-                                    authorWallet: '0xabc...def0',
-                                    authorTier: 'PREMIUM',
-                                    isPro: true,
-                                    content: 'Huge catalyst for long-term spot holders.',
-                                    sentiment: 'BULLISH',
-                                    upvotes: 8,
-                                    createdAt: new Date().toISOString(),
-                                    replies: []
-                                }
-                            ],
-                            createdAt: new Date().toISOString()
-                        }
-                    ]
-                });
-            }
-            if (url === '/api/community/podcast') {
-                return Promise.resolve({
-                    data: {
-                        isLive: true,
-                        title: 'Live Stage: Whale Inflows & DEX Rotations',
-                        topic: '$SOL • Real-time Liquidity',
-                        hostName: 'AlphaDesk Lead',
-                        hostWallet: '0x123...5678',
-                        listenersCount: 88,
-                        isListening: false,
-                        stageSpeakers: [
-                            { wallet: '0x123...5678', name: 'AlphaDesk Lead', isHost: true, isSpeaking: true, tier: 'ALPHA_VIP' }
-                        ],
-                        liveChat: [],
-                        upvotes: 25,
-                        userUpvoted: false
-                    }
-                });
-            }
-            if (url === '/api/community/trending') {
-                return Promise.resolve({
-                    data: [
-                        { ticker: '$BAG', topic: 'Genesis Staking Engine', posts: 140, sentiment: 'BULLISH' }
-                    ]
-                });
-            }
-            if (url === '/api/community/analysts') {
-                return Promise.resolve({
-                    data: [
-                        { rank: '1', wallet: '0x123...5678', tier: 'ALPHA_VIP', score: '98%', focus: 'Tokenomics' }
-                    ]
-                });
-            }
-            return Promise.resolve({ data: [] });
-        }),
-        post: vi.fn().mockResolvedValue({ data: { success: true } })
+        get: vi.fn(),
+        post: vi.fn(),
+        delete: vi.fn()
     }
 }));
 
-describe('AlphasFeed Community Discussion & Live Audio Space Hub', () => {
+const mockCommunities = [
+    {
+        slug: 'tokenomics',
+        name: 'Tokenomics & Vesting',
+        description: 'Deep dives into token emissions and supply unlocks.',
+        memberCount: 142,
+        isMember: true
+    },
+    {
+        slug: 'general',
+        name: 'General Discussion',
+        description: 'Open discussion on markets and Web3.',
+        memberCount: 520,
+        isMember: false
+    }
+];
+
+const mockDiscussions = [
+    {
+        id: 'post-1',
+        title: 'Analysis of $BAG emission curve',
+        ticker: '$BAG',
+        category: 'TOKENOMICS',
+        communitySlug: 'tokenomics',
+        communityName: 'Tokenomics & Vesting',
+        communityMember: true,
+        previewOnly: false,
+        content: 'Full analysis text explaining how token emissions decrease over 24 months.',
+        authorName: 'AlphaAnalyst',
+        upvotes: 25,
+        downvotes: 1,
+        userVoted: 'UP',
+        comments: [
+            {
+                id: 'comm-1',
+                authorName: 'Trader01',
+                displayMode: 'VISIBLE',
+                content: 'Solid thesis on the unlock schedule.',
+                createdAt: new Date().toISOString()
+            }
+        ],
+        commentCount: 1,
+        createdAt: new Date().toISOString(),
+        isPinned: true
+    },
+    {
+        id: 'post-2',
+        title: 'Macro liquidity forecast Q4',
+        ticker: '$BTC',
+        category: 'GENERAL',
+        communitySlug: 'general',
+        communityName: 'General Discussion',
+        communityMember: false,
+        previewOnly: true,
+        previewText: 'Macro liquidity forecast preview text...',
+        authorName: 'MacroDesk',
+        upvotes: 10,
+        downvotes: 0,
+        comments: [],
+        commentCount: 4,
+        createdAt: new Date().toISOString()
+    }
+];
+
+describe('AlphasFeed Community Hub', () => {
     beforeEach(() => {
-        localStorage.clear();
         vi.clearAllMocks();
+        vi.mocked(api.get).mockImplementation((url: string) => {
+            if (url === '/api/community/communities') {
+                return Promise.resolve({ data: mockCommunities });
+            }
+            if (url === '/api/community/discussions') {
+                return Promise.resolve({ data: mockDiscussions });
+            }
+            if (url === '/api/community/ads') {
+                return Promise.resolve({ data: null });
+            }
+            return Promise.resolve({ data: [] });
+        });
+        vi.mocked(api.post).mockResolvedValue({ data: { success: true } });
+        vi.mocked(api.delete).mockResolvedValue({ data: { success: true } });
     });
 
-    it('renders the Alpha Feed page with title and live audio stage banner', async () => {
+    it('renders the AlphaFeed header and community filter options', async () => {
         render(<AlphasFeed />);
 
-        expect(screen.getByText('Alpha Feed')).toBeDefined();
-        expect(screen.getByText(/Web3 Trader Community/i)).toBeDefined();
+        expect(screen.getByText('AlphaFeed')).toBeDefined();
+        expect(screen.getByText(/Community posts, discussion and project research/i)).toBeDefined();
 
-        // Check for Live Audio Stage
-        expect(screen.getByText('LIVE AUDIO STAGE')).toBeDefined();
+        await waitFor(() => {
+            expect(screen.getByText('All communities')).toBeDefined();
+            expect(screen.getAllByText(/Tokenomics & Vesting/i).length).toBeGreaterThan(0);
+        });
     });
 
-    it('renders Reddit-style discussion posts with voting, comments count, and share actions', async () => {
+    it('renders discussion posts with full thread for members and previewOnly for non-members', async () => {
         render(<AlphasFeed />);
 
         await waitFor(() => {
-            const bagElements = screen.getAllByText('$BAG');
-            expect(bagElements.length).toBeGreaterThan(0);
+            expect(screen.getByText('Analysis of $BAG emission curve')).toBeDefined();
+            expect(screen.getByText('Macro liquidity forecast Q4')).toBeDefined();
         });
 
-        // Check for Share button
-        const shareButtons = screen.getAllByRole('button', { name: /share/i });
-        expect(shareButtons.length).toBeGreaterThan(0);
+        // Member post shows full content
+        expect(screen.getByText(/Full analysis text explaining/i)).toBeDefined();
 
-        // Click Share to open dropdown
-        fireEvent.click(shareButtons[0]);
-        expect(screen.getByText(/Copy Link/i)).toBeDefined();
-        expect(screen.getByText(/Share to X/i)).toBeDefined();
+        // Non-member post shows preview banner
+        expect(screen.getByText(/Join to read the full thread and community replies/i)).toBeDefined();
     });
 
-    it('supports expanding comment threads and submitting replies', async () => {
+    it('allows joining and leaving communities via directory', async () => {
         render(<AlphasFeed />);
 
         await waitFor(() => {
-            expect(screen.getAllByText(/Comments/i).length).toBeGreaterThan(0);
+            expect(screen.getByText('Communities')).toBeDefined();
         });
 
-        // Expand comments
-        const commentsToggles = screen.getAllByRole('button', { name: /Comments/i });
-        fireEvent.click(commentsToggles[0]);
+        const leaveButton = screen.getByRole('button', { name: 'Leave' });
+        expect(leaveButton).toBeDefined();
 
-        // Comment input should be visible
-        expect(screen.getAllByPlaceholderText(/Share your perspective/i).length).toBeGreaterThan(0);
+        fireEvent.click(leaveButton);
+        await waitFor(() => {
+            expect(api.delete).toHaveBeenCalledWith('/api/community/communities/tokenomics/join');
+        });
     });
 
-    it('opens discussion composer modal and creates post with media support', async () => {
-        render(<AlphasFeed />);
-
-        const createButtons = screen.getAllByRole('button', { name: /Create Post/i });
-        fireEvent.click(createButtons[0]);
-
-        expect(screen.getAllByText(/Create Post/i).length).toBeGreaterThan(0);
-        expect(screen.getByPlaceholderText(/What's happening in the market or protocol\?/i)).toBeDefined();
-    });
-
-    it('enforces community gating: preview mode for non-joined communities with join action', async () => {
+    it('supports expanding comment threads and submitting a comment', async () => {
         render(<AlphasFeed />);
 
         await waitFor(() => {
-            const joinButtons = screen.getAllByRole('button', { name: /\+ Join|Joined/i });
-            expect(joinButtons.length).toBeGreaterThan(0);
+            expect(screen.getByText(/1 Comments/i)).toBeDefined();
         });
 
-        // Find community slugs
-        expect(screen.getAllByText(/c\/tokenomics/i).length).toBeGreaterThan(0);
+        const commentToggle = screen.getByText(/1 Comments/i);
+        fireEvent.click(commentToggle);
+
+        // Input should now be available
+        const textarea = screen.getByPlaceholderText(/Write a comment…/i);
+        expect(textarea).toBeDefined();
+
+        fireEvent.change(textarea, { target: { value: 'Counter analysis on liquidity' } });
+
+        vi.mocked(api.post).mockResolvedValueOnce({
+            data: {
+                comment: {
+                    id: 'comm-2',
+                    authorName: 'Visible profile',
+                    displayMode: 'VISIBLE',
+                    content: 'Counter analysis on liquidity',
+                    createdAt: new Date().toISOString()
+                }
+            }
+        });
+
+        const submitButton = screen.getByRole('button', { name: 'Comment' });
+        fireEvent.click(submitButton);
+
+        await waitFor(() => {
+            expect(api.post).toHaveBeenCalledWith('/api/community/discussions/post-1/comments', {
+                content: 'Counter analysis on liquidity',
+                displayMode: 'VISIBLE'
+            });
+        });
     });
 
-    it('allows community members to request stage mic with host moderation', async () => {
+    it('allows upvoting a discussion post', async () => {
         render(<AlphasFeed />);
 
-        const requestMicButton = screen.getByRole('button', { name: /Request to Speak/i });
-        expect(requestMicButton).toBeDefined();
+        await waitFor(() => {
+            expect(screen.getByText('Analysis of $BAG emission curve')).toBeDefined();
+        });
 
-        fireEvent.click(requestMicButton);
-        expect(screen.getByRole('button', { name: /Request Pending/i })).toBeDefined();
+        const upvoteButton = screen.getByTitle('Rate this post');
+        vi.mocked(api.post).mockResolvedValueOnce({
+            data: {
+                upvotes: 26,
+                downvotes: 1,
+                userVoted: 'UP'
+            }
+        });
+
+        fireEvent.click(upvoteButton);
+        await waitFor(() => {
+            expect(api.post).toHaveBeenCalledWith('/api/community/discussions/post-1/vote', { type: 'UP' });
+        });
     });
 
-    it('opens Host Audio Space modal allowing community live stage creation', async () => {
+    it('opens discussion composer and creates a post for joined community', async () => {
         render(<AlphasFeed />);
 
-        const hostButtons = screen.getAllByRole('button', { name: /Host Audio Space/i });
-        expect(hostButtons.length).toBeGreaterThan(0);
-        fireEvent.click(hostButtons[0]);
+        await waitFor(() => {
+            expect(screen.getByText(/New post/i)).toBeDefined();
+        });
 
-        expect(screen.getByText(/Start Live Audio Stage/i)).toBeDefined();
-        expect(screen.getByPlaceholderText(/Whale Accumulation & DEX Liquidity Breakdown/i)).toBeDefined();
+        const newPostButton = screen.getByRole('button', { name: /New post/i });
+        fireEvent.click(newPostButton);
+
+        expect(screen.getByText('Create a post')).toBeDefined();
+
+        const titleInput = screen.getByPlaceholderText(/What would you like to discuss\?/i);
+        const postInput = screen.getByPlaceholderText(/Share your question, idea, research/i);
+
+        fireEvent.change(titleInput, { target: { value: 'Yield farming safety' } });
+        fireEvent.change(postInput, { target: { value: 'Detailed thesis on pool risk.' } });
+
+        vi.mocked(api.post).mockResolvedValueOnce({
+            data: {
+                id: 'post-new',
+                title: 'Yield farming safety',
+                content: 'Detailed thesis on pool risk.',
+                communitySlug: 'tokenomics',
+                category: 'TOKENOMICS',
+                authorName: 'AlphaAnalyst',
+                upvotes: 0,
+                downvotes: 0,
+                comments: [],
+                createdAt: new Date().toISOString()
+            }
+        });
+
+        const publishButton = screen.getByRole('button', { name: /Publish post/i });
+        fireEvent.click(publishButton);
+
+        await waitFor(() => {
+            expect(api.post).toHaveBeenCalledWith('/api/community/discussions', {
+                title: 'Yield farming safety',
+                content: 'Detailed thesis on pool risk.',
+                communitySlug: 'tokenomics',
+                ticker: undefined,
+                category: 'TOKENOMICS'
+            });
+        });
     });
 });
