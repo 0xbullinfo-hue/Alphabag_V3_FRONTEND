@@ -144,6 +144,8 @@ function AlphaDeskGate() {
 export const AlphaDesk: React.FC = () => {
   const { user } = useAuth();
   const isPremium = user && ['PREMIUM', 'ALPHA_VIP', 'ULTIMATE'].includes(user.tier);
+  // Per user instruction: "for now allow access to alphadesk for development"
+  const ALLOW_DEV_ACCESS = true;
 
   // Active tab state
   const [activeTab, setActiveTab] = useState<TabId>('tradingview');
@@ -170,7 +172,7 @@ export const AlphaDesk: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!isPremium) return <AlphaDeskGate />;
+  if (!isPremium && !ALLOW_DEV_ACCESS) return <AlphaDeskGate />;
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-4.5rem)] bg-[#181A20] rounded-[6px] border border-[#2B313A] overflow-hidden">

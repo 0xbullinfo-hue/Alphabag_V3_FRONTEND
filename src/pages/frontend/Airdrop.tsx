@@ -990,20 +990,15 @@ export const Airdrop: React.FC = () => {
                         ))}
                     </div>
 
-                    {/* FIX: Utility stats grid - consistent gap-3 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div className="flex items-start gap-3 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
-                            <div className="w-8 h-8 rounded-md bg-alphabag-gray flex items-center justify-center shrink-0"><Zap size={14} className="text-alphabag-yellow"/></div>
-                            <div>
-                                <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">Utility</div>
-                                <div className="text-xs font-semibold text-alphabag-text mt-1 leading-snug">Portfolio Manager · T2E · Degen Calculator · AI Analyst</div>
-                            </div>
+                    {/* All AlphaBAG Utility Card */}
+                    <div className="p-4 sm:p-4.5 bg-alphabag-black border border-alphabag-gray rounded-xl flex items-center gap-3.5">
+                        <div className="w-9 h-9 rounded-lg bg-alphabag-gray/50 border border-alphabag-gray flex items-center justify-center shrink-0">
+                            <Zap size={16} className="text-alphabag-yellow" />
                         </div>
-                        <div className="flex items-center gap-3 p-4 bg-alphabag-black border border-alphabag-gray rounded-md">
-                            <div className="w-8 h-8 rounded-md bg-alphabag-gray flex items-center justify-center shrink-0"><Gift size={14} className="text-alphabag-green"/></div>
-                            <div>
-                                <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">TGE Distribution</div>
-                                <div className="text-xs font-semibold text-alphabag-text mt-1">Proportional to future utility reward conversion</div>
+                        <div className="space-y-0.5">
+                            <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">Utility</div>
+                            <div className="text-xs sm:text-sm font-semibold text-alphabag-text leading-relaxed">
+                                Portfolio Tracking · T2E · Degen Calculator · AI Analyst · Whale Tracking · AlphaCalls · AlphaScreener
                             </div>
                         </div>
                     </div>

@@ -51,6 +51,12 @@ const NavItem: React.FC<NavItemProps> = ({
     }
 
     if (requiresPremium && !isPremium) {
+      // Per user instruction: "for now allow access to alphadesk for development"
+      const ALLOW_DEV_ACCESS = true;
+      if (ALLOW_DEV_ACCESS) {
+        return; // Allow direct navigation to /alpha-desk during development
+      }
+
       e.preventDefault();
       if (!isAuthenticated) {
         Swal.fire({
