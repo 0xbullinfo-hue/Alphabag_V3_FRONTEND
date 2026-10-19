@@ -26,7 +26,7 @@ const ResultRow = ({ label, resultObj, isBoldLabel = false, minimal = false }: {
     return (
         <div className={`flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 relative ${minimal ? 'py-2' : 'py-3'}`}>
             <span className={`text-alphabag-subtext text-xs ${isBoldLabel ? 'font-semibold text-alphabag-text text-sm' : 'font-medium'}`}>{label}</span>
-            <span className={colorClass}>{resultObj.value}</span>
+            <span className={`${colorClass} tabular-nums font-mono`}>{resultObj.value}</span>
         </div>
     );
 };
@@ -34,7 +34,7 @@ const ResultRow = ({ label, resultObj, isBoldLabel = false, minimal = false }: {
 const ResultTextRow = ({ label, value, valueColor = 'text-alphabag-text font-semibold text-sm', minimal = false }: { label: string, value: string, valueColor?: string, minimal?: boolean }) => (
     <div className={`flex justify-between items-center border-b border-alphabag-gray/40 last:border-0 ${minimal ? 'py-2' : 'py-3'}`}>
         <span className="text-alphabag-subtext text-xs font-medium">{label}</span>
-        <span className={valueColor}>{value}</span>
+        <span className={`${valueColor} tabular-nums font-mono`}>{value}</span>
     </div>
 );
 

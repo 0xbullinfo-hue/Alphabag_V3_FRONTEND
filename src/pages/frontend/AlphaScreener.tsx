@@ -614,7 +614,7 @@ export const AlphaScreener: React.FC = () => {
 
         {/* ── Main Tab Navigation Bar ── */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#2B313A]">
-          <div className="flex items-center gap-1.5 bg-[#0B0E11] p-1 rounded-lg border border-[#2B313A]">
+          <div className="flex items-center gap-1.5 bg-[#0B0E11] p-1 rounded-lg border border-[#2B313A] max-w-full overflow-x-auto no-scrollbar">
             <button
               data-testid="tab-pairs"
               onClick={() => setActiveTab('pairs')}

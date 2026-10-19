@@ -273,7 +273,11 @@ function App() {
             </WalletProvider>
           </AuthProvider>
           
-          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+          {import.meta.env.DEV && (
+            <div className="hidden md:block">
+              <ReactQueryDevtools initialIsOpen={false} />
+            </div>
+          )}
 </QueryClientProvider>
       </WagmiConfig>
     </ErrorBoundary>

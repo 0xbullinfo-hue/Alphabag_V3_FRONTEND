@@ -87,7 +87,7 @@ export const DeFi: React.FC = () => {
     return (
         <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 animate-in fade-in duration-700">
             {/* Header */}
-            <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+            <div className="page-header-card flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                 <div>
                     <div className="flex items-center gap-2 mb-2">
                         <PageIcon name="defi" size={40} />
@@ -135,7 +135,7 @@ export const DeFi: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <button
                         onClick={handleRefresh}
                         disabled={isRefreshing}
@@ -156,8 +156,8 @@ export const DeFi: React.FC = () => {
             </div>
 
              {/* Tabs & Actions */}
-             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                 <div className="flex overflow-x-auto custom-scrollbar pb-1.5 gap-1.5">
+             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 w-full max-w-full overflow-hidden">
+                 <div className="flex overflow-x-auto custom-scrollbar pb-1.5 gap-1.5 w-full max-w-full min-w-0">
                      {TABS.map(tab => (
                          <button
                             key={tab.id}

@@ -150,69 +150,69 @@ export const GenesisManifesto: React.FC = () => {
         />
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="mb-2">
+                <div className="mb-4">
                     <div className="flex items-center space-x-2 mb-3">
-                        <div className="w-10 h-10 bg-alphabag-yellow text-black flex items-center justify-center rounded-xl ">
+                        <div className="w-10 h-10 bg-alphabag-yellow text-black flex items-center justify-center rounded-xl">
                             <Rocket size={20} fill="currentColor" />
                         </div>
                         <div>
                             <h1 className="text-xl font-bold uppercase tracking-tight leading-none">Genesis <span className="text-transparent bg-clip-text bg-gradient-to-r from-alphabag-yellow to-yellow-600">BAG Manifesto</span></h1>
-                            <p className="text-alphabag-muted text-[11px] font-bold uppercase tracking-[0.3em] mt-1 opacity-60">Founders Phase 1.0 Onboarding</p>
+                            <p className="text-alphabag-subtext text-[11px] font-semibold uppercase tracking-[0.2em] mt-1">Founders Phase 1.0 Onboarding</p>
                         </div>
                     </div>
-                    <p className="text-alphabag-subtext text-[13px] leading-relaxed opacity-60">
+                    <p className="text-alphabag-subtext text-[13px] leading-relaxed">
                         Define your vision. The Genesis Manifesto is your project's permanent record on Alpha Radar. High-quality inputs increase community heat.
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-2">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Basic Info */}
                     <Section title="00. IDENTITY" subtitle="Project name and ticker symbol.">
-                        <div className="grid md:grid-cols-2 gap-2">
+                        <div className="grid md:grid-cols-2 gap-3">
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Project Name</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Project Name</label>
                                     <input 
                                         type="text"
                                         value={formData.name}
                                         onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
                                         placeholder="e.g. My Token Project"
-                                        className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                         required
                                     />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Ticker</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Ticker</label>
                                 <input 
                                     type="text"
                                     value={formData.symbol}
                                     onChange={(e) => setFormData(p => ({ ...p, symbol: e.target.value }))}
                                     placeholder="e.g. ALPHA"
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                     required
                                 />
                             </div>
                         </div>
  
                         {/* Media Assets */}
-                        <div className="grid md:grid-cols-2 gap-2 mt-4 pt-4 border-t border-white/5">
+                        <div className="grid md:grid-cols-2 gap-3 mt-4 pt-4 border-t border-alphabag-gray">
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Logo URL (64x64)</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Logo URL (64x64)</label>
                                 <input 
                                     type="url"
                                     value={formData.logoUrl}
                                     onChange={(e) => setFormData(p => ({ ...p, logoUrl: e.target.value }))}
                                     placeholder="https://..."
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Banner URL (1200x400)</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Banner URL (1200x400)</label>
                                 <input 
                                     type="url"
                                     value={formData.bannerUrl}
                                     onChange={(e) => setFormData(p => ({ ...p, bannerUrl: e.target.value }))}
                                     placeholder="https://..."
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                 />
                             </div>
                         </div>
@@ -220,7 +220,7 @@ export const GenesisManifesto: React.FC = () => {
                         {/* Media Preview */}
                         {(formData.logoUrl || formData.bannerUrl || formData.name) && (
                             <div className="mt-4 p-3 bg-black/40 rounded-xl border border-white/5 overflow-hidden">
-                                <p className="text-[11px] font-bold text-alphabag-yellow uppercase mb-2.5 tracking-widest px-1.5 opacity-60">Briefing Preview</p>
+                                <p className="text-[11px] font-semibold text-alphabag-yellow uppercase mb-2.5 tracking-wider px-1.5">Briefing Preview</p>
                                 <div className="relative rounded-xl overflow-hidden aspect-[3/1] bg-alphabag-darkgray/50 border border-white/10 group">
                                     {formData.bannerUrl ? (
                                         <img src={formData.bannerUrl} alt="Banner Preview" className="w-full h-full object-cover" />
@@ -250,26 +250,26 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     <Section title="01. ON-CHAIN DATA" subtitle="Contract Address and Supply details.">
-                        <div className="grid md:grid-cols-2 gap-2">
+                        <div className="grid md:grid-cols-2 gap-3">
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Contract Address (CA)</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Contract Address (CA)</label>
                                 <input 
                                     type="text"
                                     value={formData.contractAddress}
                                     onChange={(e) => setFormData(p => ({ ...p, contractAddress: e.target.value }))}
                                     placeholder="0x..."
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium font-mono"
                                     required
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Total Supply</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Total Supply</label>
                                 <input 
                                     type="text"
                                     value={formData.totalSupply}
                                     onChange={(e) => setFormData(p => ({ ...p, totalSupply: e.target.value }))}
                                     placeholder="e.g. 1,000,000,000"
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                     required
                                 />
                             </div>
@@ -277,26 +277,26 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     <Section title="02. LINKS" subtitle="Where can users find you and buy?">
-                        <div className="grid md:grid-cols-2 gap-2">
+                        <div className="grid md:grid-cols-2 gap-3">
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Website URL</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Website URL</label>
                                 <input 
                                     type="url"
                                     value={formData.websiteUrl}
                                     onChange={(e) => setFormData(p => ({ ...p, websiteUrl: e.target.value }))}
                                     placeholder="https://..."
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                     required
                                 />
                             </div>
                             <div className="space-y-1.5">
-                                <label className="text-[11px] font-bold uppercase tracking-widest text-alphabag-muted ml-1 opacity-60">Buy Link (DEX/Router)</label>
+                                <label className="text-[11px] font-semibold uppercase tracking-wider text-alphabag-subtext ml-1">Buy Link (DEX/Router)</label>
                                 <input 
                                     type="url"
                                     value={formData.buyLink}
                                     onChange={(e) => setFormData(p => ({ ...p, buyLink: e.target.value }))}
                                     placeholder="https://uniswap.org/..."
-                                    className="w-full bg-zinc-100 border border-white/5 rounded-lg px-3 py-2 text-xs text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                                    className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg px-3 py-2 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium"
                                     required
                                 />
                             </div>
@@ -307,13 +307,13 @@ export const GenesisManifesto: React.FC = () => {
                     <Section title="03. THE HOOK" subtitle="Max 150 chars. Your one-sentence pitch.">
                         <textarea 
                             maxLength={150}
-                            className="w-full bg-zinc-100 border border-white/5 rounded-xl p-4 text-xs text-black placeholder:text-zinc-400 focus:border-alphabag-yellow/50 outline-none resize-none h-24 font-bold"
+                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-muted focus:border-alphabag-yellow outline-none resize-none h-24 font-medium"
                             placeholder="e.g. The first AI-powered liquidity aggregator that optimizes yield across 12 chains in real-time."
                             value={formData.hook}
                             onChange={(e) => setFormData(prev => ({ ...prev, hook: e.target.value }))}
                             required
                         />
-                        <div className="text-[11px] text-right mt-1 font-bold text-alphabag-muted uppercase tracking-widest opacity-60">
+                        <div className="text-[11px] text-right mt-1 font-semibold text-alphabag-subtext uppercase tracking-wider">
                             {formData.hook.length} / 150
                         </div>
                     </Section>
@@ -321,7 +321,7 @@ export const GenesisManifesto: React.FC = () => {
                     {/* Description */}
                     <Section title="04. THE DEEP DIVE" subtitle="Explain why your project is the next institutional alpha.">
                         <textarea 
-                            className="w-full bg-zinc-100 border border-white/5 rounded-xl p-4 text-xs text-black placeholder:text-zinc-400 focus:border-alphabag-yellow/50 outline-none min-h-[120px] font-bold"
+                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-muted focus:border-alphabag-yellow outline-none min-h-[120px] font-medium"
                             placeholder="Provide a detailed description of your project..."
                             value={formData.description}
                             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -332,7 +332,7 @@ export const GenesisManifesto: React.FC = () => {
                     {/* Problem & Solution */}
                     <Section title="05. PROBLEM & SOLUTION" subtitle="Why does your project exist?">
                         <textarea 
-                            className="w-full bg-zinc-100 border border-white/5 rounded-xl p-4 text-xs text-black placeholder:text-zinc-400 focus:border-alphabag-yellow/50 outline-none min-h-[200px] font-bold"
+                            className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg p-3 text-xs text-alphabag-text placeholder:text-alphabag-muted focus:border-alphabag-yellow outline-none min-h-[160px] font-medium"
                             placeholder="Define the market inefficiency and how your technology or community fixes it..."
                             value={formData.problemSolution}
                             onChange={(e) => setFormData(prev => ({ ...prev, problemSolution: e.target.value }))}
@@ -340,12 +340,12 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     {/* Token Utility */}
-                    <Section title="03. TOKEN UTILITY" subtitle="Why should investors hold your token?">
+                    <Section title="06. TOKEN UTILITY" subtitle="Why should investors hold your token?">
                         <div className="space-y-2">
                             {formData.utility.map((item, index) => (
                                 <div key={index} className="flex items-center space-x-2">
                                     <input 
-                                        className="flex-1 bg-zinc-100 border border-white/5 rounded-lg p-3 text-xs text-black placeholder:text-zinc-400 focus:border-alphabag-yellow/50 outline-none transition-all font-bold"
+                                        className="flex-1 bg-alphabag-black border border-alphabag-gray rounded-lg p-2.5 text-xs text-alphabag-text placeholder:text-alphabag-muted focus:border-alphabag-yellow outline-none transition-all font-medium"
                                         placeholder={`Benefit #${index + 1}`}
                                         value={item}
                                         onChange={(e) => handleUpdateField('utility', index, e.target.value)}
@@ -361,7 +361,7 @@ export const GenesisManifesto: React.FC = () => {
                             <button 
                                 type="button" 
                                 onClick={() => handleAddField('utility')}
-                                className="flex items-center space-x-1.5 text-alphabag-yellow text-[11px] font-bold uppercase tracking-widest hover:opacity-80 transition-opacity"
+                                className="flex items-center space-x-1.5 text-alphabag-yellow text-[11px] font-semibold uppercase tracking-wider hover:opacity-80 transition-opacity pt-1"
                             >
                                 <Plus size={14} /> <span>Add Utility Point</span>
                             </button>
@@ -369,8 +369,8 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     {/* Security & Trust */}
-                    <Section title="04. SECURITY & TRUST" subtitle="Transparency is required for Genesis spots.">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <Section title="07. SECURITY & TRUST" subtitle="Transparency is required for Genesis spots.">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                             <LinkInput 
                                 label="AUDIT LINK" 
                                 placeholder="https://certik.com/..." 
@@ -393,15 +393,15 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     {/* Roadmap */}
-                    <Section title="05. THE ROADMAP" subtitle="Your next three major deliverables.">
+                    <Section title="08. THE ROADMAP" subtitle="Your next three major deliverables.">
                         <div className="space-y-2">
                             {formData.roadmap.map((item, index) => (
                                 <div key={index} className="relative">
-                                    <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 bg-alphabag-yellow text-black flex items-center justify-center rounded-full text-[11px] font-bold italic">
+                                    <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-6 h-6 bg-alphabag-yellow text-black flex items-center justify-center rounded-md text-[11px] font-bold">
                                         M{index + 1}
                                     </div>
                                     <input 
-                                        className="w-full bg-zinc-100 border border-white/5 rounded-xl p-4 pl-10 text-xs text-black placeholder:text-zinc-400 focus:border-alphabag-yellow/50 outline-none transition-all font-bold"
+                                        className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg py-2.5 pl-11 pr-3 text-xs text-alphabag-text placeholder:text-alphabag-muted focus:border-alphabag-yellow outline-none transition-all font-medium"
                                         placeholder={`Milestone ${index + 1}: e.g. Mainnet V2 Launch`}
                                         value={item}
                                         onChange={(e) => handleUpdateField('roadmap', index, e.target.value)}
@@ -413,14 +413,14 @@ export const GenesisManifesto: React.FC = () => {
                     </Section>
 
                     {/* Submit */}
-                    <div className="pt-6 border-t border-white/5 flex items-center justify-between">
-                        <div className="flex items-center space-x-2 text-alphabag-muted opacity-60">
+                    <div className="pt-4 border-t border-alphabag-gray flex items-center justify-between">
+                        <div className="flex items-center space-x-2 text-alphabag-subtext">
                             <Lock size={14} />
-                            <span className="text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Gatekeeper Fee Bypassed</span>
+                            <span className="text-[11px] font-semibold uppercase tracking-wider whitespace-nowrap">Gatekeeper Fee Bypassed</span>
                         </div>
                         <Button 
                             type="submit"
-                            className="bg-alphabag-yellow text-black font-bold uppercase tracking-widest shadow-lg shadow-alphabag-yellow/20 hover:shadow-alphabag-yellow/40 hover:-translate-y-0.5 transition-all text-[11px] h-11 px-6 rounded-xl"
+                            className="bg-alphabag-yellow text-black font-semibold uppercase tracking-wider text-[11px] h-10 px-5 rounded-md hover:bg-yellow-400 transition-colors"
                         >
                             Drop Manifesto
                         </Button>
@@ -432,10 +432,10 @@ export const GenesisManifesto: React.FC = () => {
 };
 
 const Section = ({ title, subtitle, children }: { title: string, subtitle: string, children: React.ReactNode }) => (
-    <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-5 md:p-4 ">
-        <div className="mb-2">
-            <h2 className="text-base font-bold text-white uppercase tracking-tight mb-0.5">{title}</h2>
-            <p className="text-alphabag-muted text-[11px] font-bold uppercase tracking-widest opacity-60">{subtitle}</p>
+    <div className="bg-alphabag-card border border-alphabag-gray rounded-lg p-5">
+        <div className="mb-3">
+            <h2 className="text-sm font-semibold text-white uppercase tracking-wider mb-0.5">{title}</h2>
+            <p className="text-alphabag-subtext text-[11px] font-normal">{subtitle}</p>
         </div>
         {children}
     </div>
@@ -443,11 +443,11 @@ const Section = ({ title, subtitle, children }: { title: string, subtitle: strin
 
 const LinkInput = ({ label, placeholder, value, onChange }: { label: string, placeholder: string, value: string, onChange: (val: string) => void }) => (
     <div className="space-y-1.5">
-        <label className="text-[11px] font-bold text-alphabag-muted uppercase tracking-[0.1em] opacity-60 ml-1">{label}</label>
+        <label className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider ml-1">{label}</label>
         <div className="relative">
-            <LinkIcon size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-muted opacity-40" />
+            <LinkIcon size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-alphabag-subtext" />
             <input 
-                className="w-full bg-zinc-100 border border-white/5 rounded-lg p-3 pl-9 text-[11px] text-black focus:border-alphabag-yellow/50 outline-none placeholder:text-zinc-400 transition-all font-bold"
+                className="w-full bg-alphabag-black border border-alphabag-gray rounded-lg py-2 pl-8 pr-3 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none placeholder:text-alphabag-muted transition-all font-medium font-mono"
                 placeholder={placeholder}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}

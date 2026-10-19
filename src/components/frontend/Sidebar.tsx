@@ -168,7 +168,7 @@ const NavGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ titl
 export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const { data: features } = useFeatures();
   const disabledPages = features?.disabledPages || DISABLED_PAGES;
 
@@ -218,13 +218,25 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
         <div className="px-3">
           <div className="border-t border-[#2B313A] pt-3 space-y-0.5">
             <NavItem to="/profile" customIcon="profile" label="Account Profile" active={location.pathname === '/profile'} />
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center space-x-3 px-3 py-2.5 rounded transition-colors text-alphabag-subtext hover:bg-rose-500/10 hover:text-alphabag-red mx-2"
-            >
-              <LogOut size={20} />
-              <span className="font-medium text-[17px]">Disconnect</span>
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center space-x-3 px-3 py-2.5 rounded transition-colors text-alphabag-subtext hover:bg-rose-500/10 hover:text-alphabag-red mx-2"
+              >
+                <LogOut size={20} />
+                <span className="font-medium text-[17px]">Disconnect</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-login-modal'));
+                  onClose();
+                }}
+                className="w-full flex items-center space-x-3 px-3 py-2.5 rounded transition-colors text-alphabag-yellow hover:bg-alphabag-yellow/10 mx-2"
+              >
+                <span className="font-medium text-[17px]">Connect Wallet</span>
+              </button>
+            )}
           </div>
         </div>
       </aside>

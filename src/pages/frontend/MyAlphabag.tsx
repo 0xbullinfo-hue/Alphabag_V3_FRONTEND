@@ -179,7 +179,11 @@ export const MyAlphabag: React.FC = () => {
                                         <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: a.color }}></span>
                                         {a.name}
                                     </span>
-                                    <span className="text-alphabag-subtext num text-[11px]">{((a.value / combinedTotal) * 100 || 0).toFixed(1)}%</span>
+                                    <span className="text-alphabag-subtext num text-[11px]">
+                                        {combinedTotal > 0 && Number.isFinite(a.value)
+                                            ? ((a.value / combinedTotal) * 100).toFixed(1)
+                                            : '0.0'}%
+                                    </span>
                                 </div>
                             ))}
                         </div>

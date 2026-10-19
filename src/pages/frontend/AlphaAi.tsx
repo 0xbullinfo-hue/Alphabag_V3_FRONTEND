@@ -93,10 +93,17 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
             <div className="flex items-center gap-2 mb-2">
               <PageIcon name="ai" size={40} />
               <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">Alpha Analyst</h1>
-              <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
-                <span className="text-[11px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
-              </div>
+              {isAuthenticated ? (
+                <div className="bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 bg-alphabag-green rounded-full animate-pulse"></div>
+                  <span className="text-[11px] text-alphabag-green font-semibold uppercase tracking-wider">Link Active</span>
+                </div>
+              ) : (
+                <div className="bg-zinc-800/80 border border-zinc-700/60 px-2 py-1 rounded-md flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full"></div>
+                  <span className="text-[11px] text-zinc-400 font-semibold uppercase tracking-wider">Standby · Offline</span>
+                </div>
+              )}
             </div>
             <p className="text-alphabag-subtext text-sm">Ask about market structure, portfolio risk, and on-chain activity.</p>
           </div>

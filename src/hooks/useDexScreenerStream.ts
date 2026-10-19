@@ -53,10 +53,15 @@ export function useDexScreenerStream(type: DexStreamType = 'boosts'): UseDexScre
     const url = WSS_URLS[type];
 
     const connectWebSocket = () => {
-      // Clean up any existing connection
+      // Clean up any existing connection without firing orphaned close handlers
       if (wsRef.current) {
+        const stale = wsRef.current;
+        stale.onopen = null;
+        stale.onmessage = null;
+        stale.onerror = null;
+        stale.onclose = null;
         try {
-          wsRef.current.close();
+          stale.close();
         } catch (_) {}
         wsRef.current = null;
       }
@@ -115,7 +120,6 @@ export function useDexScreenerStream(type: DexStreamType = 'boosts'): UseDexScre
           setError('WebSocket connection error, switching to fallback');
           setIsConnected(false);
           setIsStreaming(false);
-          fetchRestFallback();
         };
 
         ws.onclose = () => {
@@ -154,8 +158,13 @@ export function useDexScreenerStream(type: DexStreamType = 'boosts'): UseDexScre
         clearTimeout(reconnectTimeoutRef.current);
       }
       if (wsRef.current) {
+        const stale = wsRef.current;
+        stale.onopen = null;
+        stale.onmessage = null;
+        stale.onerror = null;
+        stale.onclose = null;
         try {
-          wsRef.current.close();
+          stale.close();
         } catch (_) {}
         wsRef.current = null;
       }

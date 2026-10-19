@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
         <div className="flex items-center flex-1">
           <button
             onClick={toggleSidebar}
-            className="mr-3 p-1.5 rounded text-alphabag-subtext hover:text-white hover:bg-[#202630] md:hidden transition-colors"
+            className="mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded text-alphabag-subtext hover:text-white hover:bg-[#202630] md:hidden transition-colors"
             aria-label="Toggle Navigation"
           >
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                     setShowNotifications(!showNotifications);
                     setShowUserMenu(false);
                   }}
-                  className={`p-1.5 rounded transition-colors relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow' : 'text-alphabag-subtext hover:text-white hover:bg-[#202630]'}`}
+                  className={`min-h-[44px] min-w-[44px] flex items-center justify-center rounded transition-colors relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow' : 'text-alphabag-subtext hover:text-white hover:bg-[#202630]'}`}
                   aria-label="Notifications"
                 >
                   <Bell size={18} />
