@@ -10,6 +10,7 @@ import {
   Crown,
   Diamond,
   Gem,
+  Gift,
   Image as ImageIcon,
   Layers,
   LayoutGrid,
@@ -34,6 +35,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 import { Calculator } from './Calculator';
 import { ProblemSection, SolutionSection, OnboardingPipeline } from '../../components/frontend/LandingSections';
+import { TGECountdown } from '../../components/frontend/TGECountdown';
 import { Markets } from './Markets';
 
 
@@ -45,40 +47,6 @@ const PRE_LAUNCH_WINDOW_DAYS = 62;
 const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || new Date(
   new Date(PRE_LAUNCH_ANCHOR).getTime() + PRE_LAUNCH_WINDOW_DAYS * 24 * 60 * 60 * 1000
 ).toISOString();
-
-type CountdownState = {
-  days: string;
-  hours: string;
-  minutes: string;
-  seconds: string;
-  isLive: boolean;
-};
-
-function getTeaserCountdown(targetIso: string): CountdownState {
-  const launchMs = new Date(targetIso).getTime();
-  if (!Number.isFinite(launchMs)) {
-    return { days: '00', hours: '00', minutes: '00', seconds: '00', isLive: false };
-  }
-
-  const diffMs = launchMs - Date.now();
-  if (diffMs <= 0) {
-    return { days: '00', hours: '00', minutes: '00', seconds: '00', isLive: true };
-  }
-
-  const totalSeconds = Math.floor(diffMs / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  return {
-    days: String(days).padStart(2, '0'),
-    hours: String(hours).padStart(2, '0'),
-    minutes: String(minutes).padStart(2, '0'),
-    seconds: String(seconds).padStart(2, '0'),
-    isLive: false
-  };
-}
 
 const FALLBACK_SITE_URL = 'https://myalphabag.com';
 
@@ -633,7 +601,7 @@ export const Landing: React.FC = () => {
       setActiveTab('home');
     }
   }, [searchParams]);
-  const [teaserCountdown, setTeaserCountdown] = useState<CountdownState>(() => getTeaserCountdown(TEASER_LAUNCH_AT));
+  
   const [openRoadmapItems, setOpenRoadmapItems] = useState<number[]>([0, 1]);
   const [activeFaqCategory, setActiveFaqCategory] = useState<string>('all');
   const [legalModal, setLegalModal] = useState<'terms' | 'privacy' | null>(null);
@@ -652,10 +620,7 @@ export const Landing: React.FC = () => {
   }, [isAuthenticated, navigate, location.pathname]);
 
   useEffect(() => {
-    const tick = () => setTeaserCountdown(getTeaserCountdown(TEASER_LAUNCH_AT));
-    tick();
-    const timer = window.setInterval(tick, 1000);
-    return () => window.clearInterval(timer);
+    // Countdown managed by TGECountdown component
   }, []);
 
   useEffect(() => {
@@ -946,28 +911,13 @@ export const Landing: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Pre-TGE Countdown Timer */}
-                  <div className="mt-2 rounded-md border border-alphabag-gray/70 bg-[#14171D] px-4 py-3 max-w-xl">
-                    <div className="text-xs font-semibold text-alphabag-subtext mb-2">
-                      {teaserCountdown.isLive ? 'Live now' : 'Beta testing countdown'}
+                  {/* TGE EVENT Countdown Timer (Identical style to TGE EVENT countdown) */}
+                  <div className="mt-3 rounded-xl border border-alphabag-gray bg-alphabag-darkgray p-4 max-w-sm sm:max-w-md">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-xs font-semibold uppercase text-alphabag-subtext">TGE EVENT</span>
+                      <Gift size={16} className="text-alphabag-subtext" />
                     </div>
-
-                    {teaserCountdown.isLive ? (
-                      <div className="text-lg font-bold text-alphabag-yellow">Live now</div>
-                    ) : (
-                      <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-                        {[
-                          { label: 'days', value: teaserCountdown.days },
-                          { label: 'hours', value: teaserCountdown.hours },
-                          { label: 'min', value: teaserCountdown.minutes }
-                        ].map((item) => (
-                          <div key={item.label} className="flex items-baseline gap-1.5">
-                            <span className="text-2xl font-bold text-alphabag-text tabular-nums leading-tight">{item.value}</span>
-                            <span className="text-xs text-alphabag-subtext">{item.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <TGECountdown targetDate={TEASER_LAUNCH_AT} />
                   </div>
 
                   {/* Stats Section */}
