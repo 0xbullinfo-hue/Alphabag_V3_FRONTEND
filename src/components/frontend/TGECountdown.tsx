@@ -45,7 +45,7 @@ export const TGECountdown: React.FC<TGECountdownProps> = ({ targetDate }) => {
   );
 
   return (
-    <div className="flex gap-2 justify-center">
+    <div className="flex gap-2.5 sm:gap-4 justify-center">
       <TimeBox value={timeLeft.days} label="Days" />
       <TimeBox value={timeLeft.hours} label="Hours" />
       <TimeBox value={timeLeft.minutes} label="Mins" />

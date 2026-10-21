@@ -898,7 +898,7 @@ export const Landing: React.FC = () => {
                     {t('hero_desc')}
                   </p>
 
-                  <div className="w-full max-w-xl pt-1">
+                  <div className="w-full max-w-xl pt-1 space-y-3">
                     <div className="flex flex-col sm:flex-row items-stretch gap-3">
                       <Button
                         size="lg"
@@ -915,15 +915,15 @@ export const Landing: React.FC = () => {
                         </Button>
                       </a>
                     </div>
-                  </div>
 
-                  {/* TGE EVENT Countdown Timer (Identical style to TGE EVENT countdown) */}
-                  <div className="mt-3 rounded-xl border border-alphabag-gray bg-alphabag-darkgray p-4 max-w-sm sm:max-w-md">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-xs font-semibold uppercase text-alphabag-subtext">TGE EVENT</span>
-                      <Gift size={16} className="text-alphabag-subtext" />
+                    {/* TGE EVENT Countdown Timer aligned flush with CTA row */}
+                    <div className="w-full rounded-xl border border-alphabag-gray bg-alphabag-darkgray p-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-xs font-semibold uppercase text-alphabag-subtext">TGE EVENT</span>
+                        <Gift size={16} className="text-alphabag-subtext" />
+                      </div>
+                      <TGECountdown targetDate={TEASER_LAUNCH_AT} />
                     </div>
-                    <TGECountdown targetDate={TEASER_LAUNCH_AT} />
                   </div>
 
                   {/* Stats Section */}
