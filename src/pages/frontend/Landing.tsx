@@ -31,6 +31,7 @@ import React,{ useEffect,useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
+import { useWallet } from '../../context/WalletContext';
 import { Calculator } from './Calculator';
 import { ProblemSection, SolutionSection, OnboardingPipeline } from '../../components/frontend/LandingSections';
 import { Markets } from './Markets';
@@ -613,6 +614,7 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
+  const { connectWallet } = useWallet();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const validTabs: LandingTab[] = ['home', 'features', 'roadmap', 'faq', 'calculator', 'markets'];
@@ -798,16 +800,8 @@ export const Landing: React.FC = () => {
   }, []);
 
   const handleLaunchApp = () => {
-    if (IS_TEASER_MODE) {
-      // In teaser mode, convert visitors to the community funnel directly.
-      window.open('https://t.me/alphabag_access', '_blank', 'noopener,noreferrer');
-      return;
-    }
-    if (isAuthenticated) {
-      navigate('/airdrop');
-    } else {
-      window.dispatchEvent(new Event('open-login-modal'));
-    }
+    // Directs to Web3 wallet connection only
+    connectWallet();
   };
 
 

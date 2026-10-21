@@ -3,19 +3,24 @@ import { api } from './api';
 
 export const ChainService = {
     /**
-     * Get multi-chain balances via Covalent (loads all ERC-20 tokens, not just native assets)
+     * Get multi-chain balances via Covalent / CoinStats (loads all ERC-20 tokens, not just native assets)
      */
-    getMultiChainBalances: async (address: string): Promise<TokenBalance[]> => {
+    getMultiChainBalances: async (address: string, chain?: string): Promise<TokenBalance[]> => {
         try {
             if (!address || !address.trim()) {
                 console.warn("ChainService: Invalid address provided");
                 return [];
             }
 
-            console.log(`[ChainService] Fetching multi-chain balances for address: ${address.substring(0, 10)}...`);
+            console.log(`[ChainService] Fetching multi-chain balances for address: ${address.substring(0, 10)}... (${chain || 'all'})`);
             
+            const params: Record<string, string> = { address };
+            if (chain && chain !== 'ALL') {
+                params.chains = chain.toLowerCase();
+            }
+
             const response = await api.get('/api/portfolio/public-balances', {
-                params: { address },
+                params,
             });
             const tokens = (response.data?.tokens || []).map((token: any): TokenBalance => ({
                 symbol: token.symbol || 'UNK',

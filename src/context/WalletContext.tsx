@@ -143,7 +143,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [addToast]);
 
   const refreshBalances = useCallback(async () => {
-    if (!user || trackedWallets.length === 0) {
+    if (trackedWallets.length === 0) {
       setPortfolioItems([]);
       return;
     }
@@ -164,7 +164,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             console.log(`[WalletContext] Fetching balances for wallet: ${node.address.substring(0, 10)}...`);
             // Use Multi-Chain Fetching
             // This will scan specific EVM chains (ETH, BSC, POLY, ARB, AVAX, BASE) + Solana if applicable
-            const tokens = await ChainService.getMultiChainBalances(node.address);
+            const tokens = await ChainService.getMultiChainBalances(node.address, node.chain);
             console.log(`[WalletContext] Fetched ${tokens.length} tokens for wallet ${node.address.substring(0, 10)}...`);
             return tokens;
           } catch (walletErr: any) {
@@ -222,11 +222,11 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         try {
           const symbol = token.symbol?.toUpperCase() || 'UNKNOWN';
           // ChainService returns guiBalance already calculated
-          const amount = Number(token.guiBalance || 0);
+          const amount = Number(token.guiBalance || token.balance || 0);
           const resolvedPrice = livePriceBySymbol[symbol];
-          const currentPrice = Number(token.price || resolvedPrice?.price || 0);
-          const priceChange24h = Number(resolvedPrice?.change24h || 0);
-          const value = Number(token.value || (amount * currentPrice));
+          const currentPrice = Number(token.price || token.priceUSD || resolvedPrice?.price || 0);
+          const priceChange24h = Number(token.change24h != null ? token.change24h : (resolvedPrice?.change24h || 0));
+          const value = Number(token.value || token.valueUSD || (amount * currentPrice));
 
           // We have no historical cost-basis data for wallet-synced tokens
           // (the balance API only reports current holdings, not purchase

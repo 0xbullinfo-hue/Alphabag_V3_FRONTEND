@@ -1,4 +1,4 @@
-import { Activity,ExternalLink,Search,Settings2,Wallet } from 'lucide-react';
+import { Activity,ExternalLink,Search,Settings2,Trash2,Wallet } from 'lucide-react';
 import React,{ useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
@@ -15,6 +15,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 interface AggregatedConnection {
     id: string;
+    rawId: string;
     name: string;
     subtext: string;
     icon: React.ReactNode | string;
@@ -23,7 +24,7 @@ interface AggregatedConnection {
 }
 
 export const Integrations: React.FC = () => {
-  const { trackedWallets } = useWallet();
+  const { trackedWallets, removeTrackedWallet, addToast } = useWallet();
   const navigate = useNavigate();
   const [cexConnections, setCexConnections] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>('ALL');
@@ -46,6 +47,7 @@ export const Integrations: React.FC = () => {
   const aggregatedData: AggregatedConnection[] = [
       ...cexConnections.map(cex => ({
           id: `cex-${cex.id}`,
+          rawId: cex.id,
           name: cex.name,
           subtext: `API Key: ${cex.apiKey}`,
           icon: cex.icon,
@@ -54,6 +56,7 @@ export const Integrations: React.FC = () => {
       })),
       ...trackedWallets.filter(w => w.type === 'PORTFOLIO').map(wallet => ({
           id: `wallet-${wallet.id}`,
+          rawId: wallet.id,
           name: wallet.label || 'Web3 Connection',
           subtext: `Chain: ${wallet.chain} | ${wallet.address.substring(0, 6)}...${wallet.address.substring(wallet.address.length - 4)}`,
           icon: <Wallet size={24} className="text-white" />,
@@ -61,6 +64,19 @@ export const Integrations: React.FC = () => {
           status: 'ACTIVE' as const
       }))
   ];
+
+  
+  const handleDeleteConnection = (item: AggregatedConnection) => {
+    if (item.category === 'WALLET') {
+      removeTrackedWallet(item.rawId);
+      addToast(`Disconnected wallet ${item.name}`, 'SUCCESS');
+    } else if (item.category === 'CEX') {
+      const updated = cexConnections.filter(c => c.id !== item.rawId);
+      setCexConnections(updated);
+      localStorage.setItem('alphabag_cex_connections', JSON.stringify(updated));
+      addToast(`Disconnected ${item.name}`, 'SUCCESS');
+    }
+  };
 
   const filtered = aggregatedData.filter(item => {
     const matchesTab = activeTab === 'ALL' || item.category === activeTab;
@@ -166,12 +182,22 @@ export const Integrations: React.FC = () => {
                             </div>
                         </div>
  
-                        {/* Status Widget */}
+                        {/* Status Widget & Actions */}
                         <div className="flex items-center gap-2 w-full md:w-auto justify-end pt-3 md:pt-0">
                             <div className="flex items-center gap-1.5 bg-alphabag-green/10 border border-alphabag-green/20 px-2 py-1 rounded-md">
                                 <Activity size={12} className="text-alphabag-green" />
                                 <span className="text-[11px] font-semibold text-alphabag-green uppercase tracking-wider">Live</span>
                             </div>
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteConnection(item)}
+                                aria-label={`Disconnect ${item.name}`}
+                                title={`Disconnect ${item.name}`}
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-colors cursor-pointer"
+                            >
+                                <Trash2 size={12} />
+                                <span>Delete</span>
+                            </button>
                         </div>
                         
                     </div>
