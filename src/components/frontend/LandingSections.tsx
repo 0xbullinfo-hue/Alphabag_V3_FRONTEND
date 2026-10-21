@@ -1,9 +1,5 @@
 import React from 'react';
 import {
-  KeyRound,
-  Link2,
-  Activity,
-  Target,
   AlertTriangle,
   Clock,
   EyeOff,
@@ -14,25 +10,19 @@ import {
    ───────────────────────────────────────────────────────────────────────────── */
 const PROBLEMS = [
   {
-    num: 'PROBLEM 01',
     title: 'Scattered Across Exchanges',
     desc: 'Manual tab-switching across Binance, Bybit, DEXs, and cold wallets leads to delayed execution, fragmented UI, and lost alpha.',
     icon: AlertTriangle,
-    badge: 'Fragmented Execution',
   },
   {
-    num: 'PROBLEM 02',
     title: 'Wasting 10+ Hours Monthly',
     desc: 'Reconciling PnL, open leverage positions, and spread discrepancies manually through error-prone, static spreadsheets.',
     icon: Clock,
-    badge: 'High Latency Sync',
   },
   {
-    num: 'PROBLEM 03',
     title: 'Zero Portfolio Visibility',
     desc: 'No unified liquidation margin, unhedged delta exposure, and blind spots to live on-chain whale balance movements.',
     icon: EyeOff,
-    badge: 'Blind Risk Exposure',
   },
 ];
 
@@ -56,17 +46,12 @@ export const ProblemSection: React.FC = () => (
           const IconComp = p.icon;
           return (
             <div
-              key={p.num}
-              className="bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl p-7 md:p-8 flex flex-col justify-between"
+              key={p.title}
+              className="bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md p-6 md:p-8 flex flex-col justify-between"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-xs font-mono font-bold tracking-wider text-white bg-white/10 border border-white/15 px-2.5 py-1 rounded">
-                    {p.num}
-                  </span>
-                  <div className="w-10 h-10 rounded-lg bg-[#F0B90B]/10 border border-[#F0B90B]/20 flex items-center justify-center text-[#F0B90B]">
-                    <IconComp size={20} />
-                  </div>
+                <div className="mb-4 text-[#F0B90B]" aria-hidden="true">
+                  <IconComp size={20} />
                 </div>
 
                 <h3 className="text-2xl font-bold text-white tracking-tight leading-snug">
@@ -120,7 +105,7 @@ const PerformanceAnalyticsWidget: React.FC = () => {
           <div key={i} className="flex-1 flex flex-col items-center h-full justify-end">
             <div
               style={{ height: bar.h }}
-              className={`w-full max-w-[10px] rounded-t transition-all duration-300 ${
+              className={`w-full max-w-[10px] rounded-t transition-colors duration-300 ${
                 bar.active
                   ? 'bg-[#F0B90B] '
                   : 'bg-[#F0B90B]/60 hover:bg-[#F0B90B]'
@@ -180,10 +165,7 @@ const MultiCoinTrackingWidget: React.FC = () => {
   return (
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[11px] font-medium text-[#848E9C]">Live Tracking</span>
-        <span className="text-[11px] font-mono text-[#0ECB81] flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#0ECB81] inline-block animate-pulse" /> Live
-        </span>
+        <span className="text-[11px] font-medium text-[#848E9C]">Market tracking preview</span>
       </div>
 
       <div className="space-y-1.5">
@@ -224,7 +206,6 @@ const SeamlessIntegrationWidget: React.FC = () => {
     <div className="p-4 bg-[#14171D] border-b border-[#2B313A] h-[168px] flex flex-col justify-between">
       <div className="flex items-center justify-between mb-1">
         <span className="text-[11px] font-medium text-[#848E9C]">Integration</span>
-        <span className="text-[11px] font-mono text-[#848E9C]">Auto-Sync</span>
       </div>
 
       <div className="space-y-1.5">
@@ -240,9 +221,6 @@ const SeamlessIntegrationWidget: React.FC = () => {
               <span className="text-xs font-semibold text-[#EAECEF]">{v.name}</span>
             </div>
 
-            <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-[#202630] border border-[#2B313A] text-[#848E9C]">
-              SYNCED
-            </span>
           </div>
         ))}
       </div>
@@ -261,14 +239,15 @@ export const SolutionSection: React.FC = () => (
           One Dashboard. All Your Crypto. Total Clarity.
         </h2>
         <p className="mt-3 text-base md:text-lg text-[#848E9C] max-w-2xl mx-auto leading-relaxed">
-          Real-time cross-chain analytics, automated balance synchronization, and institutional risk oversight.
+          Portfolio tracking, market data, and analysis tools in one dashboard.
         </p>
+        <p className="mt-2 text-xs text-[#848E9C]">Illustrative sample data — not live account balances</p>
       </div>
 
       {/* 4 cards matching How It Works grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Card 1: Performance Analytics */}
-        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl overflow-hidden flex flex-col justify-between">
+        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md overflow-hidden flex flex-col justify-between">
           <PerformanceAnalyticsWidget />
           <div className="p-6 flex-1 flex flex-col justify-between">
             <div>
@@ -281,7 +260,7 @@ export const SolutionSection: React.FC = () => (
         </div>
 
         {/* Card 2: Portfolio Allocation */}
-        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl overflow-hidden flex flex-col justify-between">
+        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md overflow-hidden flex flex-col justify-between">
           <PortfolioAllocationWidget />
           <div className="p-6 flex-1 flex flex-col justify-between">
             <div>
@@ -294,7 +273,7 @@ export const SolutionSection: React.FC = () => (
         </div>
 
         {/* Card 3: Multi-wallet Tracking */}
-        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl overflow-hidden flex flex-col justify-between">
+        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md overflow-hidden flex flex-col justify-between">
           <MultiCoinTrackingWidget />
           <div className="p-6 flex-1 flex flex-col justify-between">
             <div>
@@ -307,7 +286,7 @@ export const SolutionSection: React.FC = () => (
         </div>
 
         {/* Card 4: Seamless Integration */}
-        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl overflow-hidden flex flex-col justify-between">
+        <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md overflow-hidden flex flex-col justify-between">
           <SeamlessIntegrationWidget />
           <div className="p-6 flex-1 flex flex-col justify-between">
             <div>
@@ -315,9 +294,6 @@ export const SolutionSection: React.FC = () => (
               <p className="mt-2.5 text-sm text-[#848E9C] leading-relaxed">
                 Connect your wallets and exchanges with zero hassle to automatically sync balances.
               </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-[#2B313A] text-xs font-mono font-semibold text-[#0ECB81]">
-              and more tools
             </div>
           </div>
         </div>
@@ -333,27 +309,23 @@ export const SolutionSection: React.FC = () => (
 const STEPS = [
   {
     n: '01',
-    title: 'Create Wallet',
-    body: 'Create a fresh custodial wallet on the Binance Smart Chain in seconds.',
-    Icon: KeyRound
+    title: 'Track a wallet',
+    body: 'Add a public wallet address to view its on-chain holdings. No signature or private keys required.',
   },
   {
     n: '02',
-    title: 'Connect Wallet',
-    body: 'Connect your new wallet securely and access our dashboard instantly.',
-    Icon: Link2
+    title: 'Connect an exchange',
+    body: 'Link a read-only API key to include supported exchange balances.',
   },
   {
     n: '03',
-    title: 'Track & Analyze',
-    body: 'Add all wallets to track your portfolio and gain insights to make smarter crypto decisions.',
-    Icon: Activity
+    title: 'Review your portfolio',
+    body: 'See wallet and exchange holdings together in the dashboard.',
   },
   {
     n: '04',
-    title: 'Grow Your Crypto',
-    body: 'Grow your crypto faster with smart insights, analytics, and profit simulator tools.',
-    Icon: Target
+    title: 'Use analysis tools',
+    body: 'Explore market data, alerts, and trade calculators without placing trades through AlphaBAG.',
   },
 ];
 
@@ -368,22 +340,19 @@ export const OnboardingPipeline: React.FC = () => (
           Simple Steps to Manage Your Crypto
         </h2>
         <p className="mt-3 text-base md:text-lg text-[#848E9C] max-w-2xl mx-auto leading-relaxed">
-          From session creation to institutional analytics in under 60 seconds.
+          Connect your accounts and explore the tools in one place.
         </p>
       </div>
 
       <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 list-none p-0 m-0">
-        {STEPS.map(({ n, title, body, Icon }, i) => (
+        {STEPS.map(({ n, title, body }, i) => (
           <li key={n} className="relative">
-            <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-all duration-200 rounded-xl p-7 flex flex-col justify-between">
+            <div className="h-full bg-[#181A20] border border-[#2B313A] hover:border-[#848E9C]/50 transition-colors duration-200 rounded-md p-6 md:p-7 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-base font-bold text-[#848E9C]">
                     {n}.
                   </span>
-                  <div className="w-10 h-10 rounded-lg bg-[#F0B90B]/10 border border-[#F0B90B]/20 flex items-center justify-center text-[#F0B90B]">
-                    <Icon size={20} aria-hidden="true" />
-                  </div>
                 </div>
 
                 <h3 className="mt-6 text-xl font-bold text-[#EAECEF] tracking-tight">
