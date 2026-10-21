@@ -368,13 +368,14 @@ export const Markets: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Cryptos');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [watchlist, setWatchlist] = useState<Set<string>>(new Set(['bitcoin', 'ethereum', 'solana']));
+  const [telemetry, setTelemetry] = useState<any>(null);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const navigate = useNavigate();
 
   const fetchMarketData = useCallback(async () => {
     setIsRefreshing(true);
     try {
-      const data = await MarketService.getMarketData([], false);
+      const [data, globalOverview] = await Promise.all([MarketService.getMarketData([], false), MarketService.getGlobalOverview().catch(() => null)]); if (globalOverview) setTelemetry(globalOverview);
       const list = Array.isArray(data) ? data : (Array.isArray((data as any)?.data) ? (data as any).data : []);
       if (list && list.length > 0) {
         // Merge with our enriched category tags
@@ -498,16 +499,16 @@ export const Markets: React.FC = () => {
           </div>
           <div>
             <span className="text-gray-400">Market Cap: </span>
-            <span className="text-white font-semibold">$2.84T</span>
+            <span className="text-white font-semibold">{telemetry?.marketCap ? fmt(telemetry.marketCap) : "$3.03T"}</span>
             <span className="text-[#0ECB81] ml-1 font-semibold">+1.82% ▲</span>
           </div>
           <div>
             <span className="text-gray-400">24h Vol: </span>
-            <span className="text-white font-semibold">$94.25B</span>
+            <span className="text-white font-semibold">{telemetry?.volume ? fmt(telemetry.volume) : "$82.3B"}</span>
           </div>
           <div>
             <span className="text-gray-400">Dominance: </span>
-            <span className="text-white font-semibold">BTC: 58.2%</span>
+            <span className="text-white font-semibold">BTC: {telemetry?.btcDominance ? telemetry.btcDominance.toFixed(1) + "%" : "55.4%"}</span>
             <span className="text-gray-400 mx-1">·</span>
             <span className="text-white font-semibold">ETH: 13.9%</span>
           </div>
@@ -528,7 +529,7 @@ export const Markets: React.FC = () => {
             className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#202630] hover:bg-[#2B313A] text-alphabag-yellow font-semibold transition-colors"
           >
             <RefreshCw size={11} className={isRefreshing ? 'animate-spin' : ''} />
-            <span>{isRefreshing ? 'Syncing...' : 'Sync CMC Feed'}</span>
+            <span>{isRefreshing ? 'Syncing...' : 'Sync Live Feed'}</span>
           </button>
           <span className="text-gray-400">{lastUpdated.toLocaleTimeString()}</span>
         </div>

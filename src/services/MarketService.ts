@@ -102,4 +102,27 @@ export const MarketService = {
       return null;
     }, null);
   },
+  getGlobalOverview: async () => {
+    const key = 'market_global_overview';
+    return withCache(key, async () => {
+      const res = await api.get('/api/market/global');
+      return res.data;
+    }, null);
+  },
+
+  getLiveNews: async (limit = 10) => {
+    const key = 'market_news_' + limit;
+    return withCache(key, async () => {
+      const res = await api.get('/api/market/news', { params: { limit } });
+      return res.data;
+    }, []);
+  },
+
+  getCoinDetails: async (coinId: string) => {
+    const key = 'market_coin_' + coinId;
+    return withCache(key, async () => {
+      const res = await api.get('/api/market/coins/' + coinId);
+      return res.data;
+    }, null);
+  },
 };
