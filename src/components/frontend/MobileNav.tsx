@@ -11,7 +11,7 @@ export const MobileNav: React.FC = () => {
     { to: '/alpha-desk', icon: PanelsTopLeft, label: 'Desk' },
     { to: '/markets', icon: BarChart3, label: 'Markets' },
     { to: '/alphas-feed', icon: MessageSquare, label: 'Feed' },
-    { to: '/portfolio', icon: Wallet, label: 'Portfolio' },
+    { to: '/my-alphabag', icon: Wallet, label: 'Portfolio' },
   ];
 
   return (

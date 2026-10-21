@@ -1,4 +1,4 @@
-import { AlertTriangle, Briefcase, Radio, Search, ShieldCheck, TrendingUp } from 'lucide-react';
+import { AlertTriangle, Briefcase, ChevronDown, Radio, Search, ShieldCheck, TrendingUp } from 'lucide-react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer } from 'recharts';
@@ -170,6 +170,37 @@ export const MyAlphabag: React.FC = () => {
                         <span className="text-[11px] bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-2 py-0.5 rounded-[2px] font-semibold uppercase tracking-wider">LIVE FEED</span>
                     </div>
                     <p className="text-alphabag-subtext text-xs">Consolidated portfolio telemetry across connected centralized exchanges and Web3 on-chain wallets.</p>
+                </div>
+
+                <div className="flex items-center gap-2 self-start md:self-auto">
+                    <div className="relative group">
+                        <button className="flex items-center gap-1.5 bg-[#202630] border border-[#2B313A] hover:border-alphabag-yellow/50 text-alphabag-text px-3 py-1.5 rounded text-xs font-semibold transition-all cursor-pointer">
+                            <span>Portfolio Breakdown</span>
+                            <ChevronDown size={14} className="text-alphabag-subtext" />
+                        </button>
+                        <div className="absolute right-0 mt-1 w-52 bg-[#181A20] border border-[#2B313A] rounded-md shadow-2xl py-1 z-30 hidden group-hover:block hover:block">
+                            <button
+                                onClick={() => navigate('/dex-bag')}
+                                className="w-full text-left px-3 py-2 text-xs text-alphabag-text hover:bg-[#202630] flex items-center justify-between cursor-pointer"
+                            >
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-alphabag-yellow"></span>
+                                    DEX Portfolio
+                                </span>
+                                <span className="num text-[11px] text-alphabag-subtext">{formatUsd(dexTotal)}</span>
+                            </button>
+                            <button
+                                onClick={() => navigate('/cex-bag')}
+                                className="w-full text-left px-3 py-2 text-xs text-alphabag-text hover:bg-[#202630] flex items-center justify-between border-t border-[#2B313A]/50 cursor-pointer"
+                            >
+                                <span className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                                    CEX Portfolio
+                                </span>
+                                <span className="num text-[11px] text-alphabag-subtext">{formatUsd(cexTotal)}</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

@@ -1,4 +1,4 @@
-import { Lock, LogOut } from 'lucide-react';
+import { ChevronDown, Lock, LogOut } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -165,6 +165,112 @@ const NavGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ titl
   </div>
 );
 
+interface PortfolioNavDropdownProps {
+  onClose: () => void;
+}
+
+const PortfolioNavDropdown: React.FC<PortfolioNavDropdownProps> = ({ onClose }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isPortfolioRoute = ['/', '/my-alphabag', '/portfolio', '/dex-bag', '/cex-bag'].includes(location.pathname);
+  const [isOpen, setIsOpen] = React.useState(true);
+
+  return (
+    <div className="mb-0.5 select-none">
+      <div
+        className={`flex items-center justify-between px-3 py-2.5 rounded transition-colors duration-150 mx-2 relative cursor-pointer ${
+          isPortfolioRoute
+            ? 'bg-[#202630] text-alphabag-text font-medium border-l-2 border-alphabag-yellow'
+            : 'text-alphabag-subtext hover:bg-[#202630]/60 hover:text-alphabag-text border-l-2 border-transparent'
+        }`}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (location.pathname !== '/my-alphabag' && location.pathname !== '/') {
+            navigate('/my-alphabag');
+            onClose();
+          }
+        }}
+      >
+        <div className="flex items-center space-x-3 min-w-0">
+          <PageIcon
+            name="bag"
+            size={20}
+            framed={false}
+            className={`transition-opacity duration-150 shrink-0 ${isPortfolioRoute ? 'opacity-100' : 'opacity-70'}`}
+          />
+          <span className="text-[17px] font-medium truncate tracking-tight">Portfolio</span>
+        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+          className="p-1 text-alphabag-subtext hover:text-alphabag-text rounded"
+          aria-label="Toggle portfolio sub-menu"
+        >
+          <ChevronDown
+            size={16}
+            className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          />
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="pl-6 pr-2 py-1 space-y-0.5">
+          <Link
+            to="/my-alphabag"
+            onClick={onClose}
+            className={`flex items-center justify-between px-3 py-1.5 rounded text-xs transition-colors ${
+              location.pathname === '/my-alphabag' || location.pathname === '/' || location.pathname === '/portfolio'
+                ? 'text-alphabag-yellow font-semibold bg-alphabag-yellow/10'
+                : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+              Overview
+            </span>
+            <span className="text-[11px] uppercase font-semibold text-alphabag-muted">Consolidated</span>
+          </Link>
+
+          <Link
+            to="/dex-bag"
+            onClick={onClose}
+            className={`flex items-center justify-between px-3 py-1.5 rounded text-xs transition-colors ${
+              location.pathname === '/dex-bag'
+                ? 'text-alphabag-yellow font-semibold bg-alphabag-yellow/10'
+                : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+              DEX Portfolio
+            </span>
+            <span className="text-[11px] uppercase font-semibold bg-alphabag-yellow/10 text-alphabag-yellow px-1 py-0.2 rounded border border-alphabag-yellow/20">On-Chain</span>
+          </Link>
+
+          <Link
+            to="/cex-bag"
+            onClick={onClose}
+            className={`flex items-center justify-between px-3 py-1.5 rounded text-xs transition-colors ${
+              location.pathname === '/cex-bag'
+                ? 'text-alphabag-yellow font-semibold bg-alphabag-yellow/10'
+                : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+              CEX Portfolio
+            </span>
+            <span className="text-[11px] uppercase font-semibold bg-blue-500/10 text-blue-400 px-1 py-0.2 rounded border border-blue-500/20">Exchanges</span>
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -195,7 +301,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
       `}>
         <div className="py-1">
           <NavGroup title="Portfolio & Analytics">
-            <NavItem to="/my-alphabag" customIcon="bag" label="Portfolio" active={location.pathname === '/' || location.pathname === '/my-alphabag'} />
+            <PortfolioNavDropdown onClose={onClose} />
 
             {!disabledPages.includes('/airdrop') && (
               <NavItem to="/airdrop" customIcon="airdrop" label="Alpha Missions" active={location.pathname === '/airdrop'} />

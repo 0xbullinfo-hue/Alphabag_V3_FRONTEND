@@ -1,5 +1,6 @@
-import { Key,Plus,Trash2 } from 'lucide-react';
+import { ArrowLeft,Key,Plus,Trash2 } from 'lucide-react';
 import React,{ useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Cell,Pie,PieChart,ResponsiveContainer,Tooltip } from 'recharts';
 import Swal from 'sweetalert2';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
@@ -20,6 +21,7 @@ export { SUPPORTED_CEX };
 
 
 export const CexBag: React.FC = () => {
+    const navigate = useNavigate();
     useWallet();
     const { connections: connectedCex, removeConnection, connectExchange, totalBalance } = useCexConnections();
 
@@ -107,7 +109,21 @@ export const CexBag: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
+        <div className="w-full space-y-3 pb-4 animate-in fade-in duration-700">
+
+            {/* Back to Portfolio Navigation */}
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={() => navigate('/my-alphabag')}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-alphabag-subtext hover:text-alphabag-yellow transition-colors cursor-pointer group py-1"
+                >
+                    <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+                    <span>Back to Portfolio Overview</span>
+                </button>
+                <span className="text-[11px] uppercase font-semibold text-alphabag-subtext bg-[#181A20] border border-[#2B313A] px-2 py-0.5 rounded">
+                    CEX Exchange Balances
+                </span>
+            </div>
 
             {/* Page Header */}
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">

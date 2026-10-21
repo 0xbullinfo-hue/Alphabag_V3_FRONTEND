@@ -1,4 +1,4 @@
-import { Briefcase, ChevronDown, ChevronUp, Download, Eye, Layers, PieChart as PieChartIcon, Plus, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Briefcase, ChevronDown, ChevronUp, Download, Eye, Layers, PieChart as PieChartIcon, Plus, TrendingUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip as ReTooltip, XAxis, YAxis } from 'recharts';
@@ -91,6 +91,17 @@ export const Portfolio: React.FC = () => {
 
     return (
         <div className="space-y-3 pb-16 w-full">
+
+            {/* Back to Overview Navigation */}
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={() => navigate('/my-alphabag')}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-alphabag-subtext hover:text-alphabag-yellow transition-colors cursor-pointer group py-1"
+                >
+                    <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+                    <span>Back to Portfolio Overview</span>
+                </button>
+            </div>
 
             {/* 1. Header Area */}
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-3">

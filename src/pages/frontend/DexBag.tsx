@@ -1,17 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
-import { ChevronRight,ExternalLink,Layers,RefreshCw,TrendingDown,TrendingUp,Wallet2 } from 'lucide-react';
-import React,{ useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ArrowLeft, ChevronRight, ExternalLink, Layers, RefreshCw, TrendingDown, TrendingUp, Wallet2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { api } from '../../services/api';
 import { TokenBalance } from '../../types';
 import { getExplorerTokenUrl } from '../../lib/formatters';
 import { PageIcon } from '../../components/ui/PageIcon';
+import { useWallet } from '../../context/WalletContext';
 
 const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
   eth: { label: 'ETH', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+  ethereum: { label: 'ETH', color: 'text-blue-400', bg: 'bg-blue-500/10' },
   bsc: { label: 'BSC', color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
+  binancecoin: { label: 'BSC', color: 'text-yellow-400', bg: 'bg-yellow-500/10' },
   sol: { label: 'SOL', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  solana: { label: 'SOL', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  polygon: { label: 'POL', color: 'text-purple-300', bg: 'bg-purple-500/10' },
+  arbitrum: { label: 'ARB', color: 'text-blue-300', bg: 'bg-blue-500/10' },
+  base: { label: 'BASE', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+  avalanche: { label: 'AVAX', color: 'text-red-400', bg: 'bg-red-500/10' },
 };
 
 const fetchDexBalances = async (address: string): Promise<TokenBalance[]> => {
@@ -21,7 +29,15 @@ const fetchDexBalances = async (address: string): Promise<TokenBalance[]> => {
 };
 
 export const DexBag: React.FC = () => {
-  const { address, isConnected } = useAccount();
+  const navigate = useNavigate();
+  const { address: wagmiAddress, isConnected: wagmiIsConnected } = useAccount();
+  const { address: walletAddress, isConnected: walletConnected, trackedWallets } = useWallet();
+
+  const portfolioWallets = (trackedWallets || []).filter(w => w.type === 'PORTFOLIO');
+  const [selectedAddress, setSelectedAddress] = useState<string>('');
+  const activeAddress = selectedAddress || wagmiAddress || walletAddress || (portfolioWallets[0]?.address);
+  const isConnected = wagmiIsConnected || walletConnected || Boolean(activeAddress);
+
   const [filterChain, setFilterChain] = useState('ALL');
 
   const {
@@ -31,28 +47,66 @@ export const DexBag: React.FC = () => {
     refetch,
     dataUpdatedAt,
   } = useQuery({
-    queryKey: ['portfolio', 'dex', address],
-    queryFn: () => fetchDexBalances(address!),
-    enabled: !!address && isConnected,
+    queryKey: ['portfolio', 'dex', activeAddress],
+    queryFn: () => fetchDexBalances(activeAddress!),
+    enabled: !!activeAddress && isConnected,
     staleTime: 60_000,
   });
 
   const safeBalances = isConnected && Array.isArray(rawBalances) ? rawBalances : [];
   const totalUSD = safeBalances.reduce((sum, t) => sum + (t?.valueUSD != null ? t.valueUSD : 0), 0);
-  const filtered = filterChain === 'ALL' ? safeBalances : safeBalances.filter((t) => t?.chain === filterChain);
+  
+  const filtered = filterChain === 'ALL'
+    ? safeBalances
+    : safeBalances.filter((t) => {
+        const c = (t?.chain || '').toLowerCase();
+        if (filterChain === 'eth') return c === 'eth' || c === 'ethereum';
+        if (filterChain === 'bsc') return c === 'bsc' || c === 'binancecoin';
+        if (filterChain === 'sol') return c === 'sol' || c === 'solana';
+        return c === filterChain;
+      });
+
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt) : new Date();
 
   return (
-    <div className="space-y-2 animate-in fade-in duration-700 pb-20">
+    <div className="space-y-3 animate-in fade-in duration-700 pb-20">
+      {/* Back to Portfolio Navigation */}
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => navigate('/my-alphabag')}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-alphabag-subtext hover:text-alphabag-yellow transition-colors cursor-pointer group py-1"
+        >
+          <ArrowLeft size={14} className="transition-transform group-hover:-translate-x-0.5" />
+          <span>Back to Portfolio Overview</span>
+        </button>
+        <span className="text-[11px] uppercase font-semibold text-alphabag-subtext bg-[#181A20] border border-[#2B313A] px-2 py-0.5 rounded">
+          DEX On-Chain Balances
+        </span>
+      </div>
+
       <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <PageIcon name="dex" size={40} />
             <h1 className="text-3xl font-semibold text-alphabag-text tracking-tight">DEX Portfolio</h1>
           </div>
-          <p className="text-alphabag-subtext text-xs font-medium mt-0.5">On-chain token holdings — read only</p>
+          <p className="text-alphabag-subtext text-xs font-medium mt-0.5">Real-time on-chain token holdings & asset breakdown</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {portfolioWallets.length > 1 && (
+            <select
+              value={activeAddress || ''}
+              onChange={(e) => setSelectedAddress(e.target.value)}
+              className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-1.5 text-xs text-alphabag-text focus:border-alphabag-yellow outline-none font-semibold uppercase"
+            >
+              {portfolioWallets.map(w => (
+                <option key={w.id} value={w.address}>
+                  {w.label || 'Wallet'}: {w.address.slice(0, 6)}...{w.address.slice(-4)}
+                </option>
+              ))}
+            </select>
+          )}
+
           <select
             value={filterChain}
             onChange={(e) => setFilterChain(e.target.value)}
@@ -62,6 +116,9 @@ export const DexBag: React.FC = () => {
             <option value="eth">Ethereum</option>
             <option value="bsc">BSC</option>
             <option value="sol">Solana</option>
+            <option value="polygon">Polygon</option>
+            <option value="arbitrum">Arbitrum</option>
+            <option value="base">Base</option>
           </select>
           <button
             onClick={() => refetch()}
@@ -81,7 +138,7 @@ export const DexBag: React.FC = () => {
             ${totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
           <p className="text-alphabag-subtext text-[11px] mt-1 font-mono">
-            {isConnected && address ? `${address.slice(0, 6)}···${address.slice(-4)}` : 'No wallet connected'}
+            {isConnected && activeAddress ? `${activeAddress.slice(0, 6)}···${activeAddress.slice(-4)}` : 'No wallet connected'}
           </p>
         </div>
         <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-4">
@@ -134,7 +191,7 @@ export const DexBag: React.FC = () => {
           <div className="px-6 py-3 border-b border-alphabag-gray flex items-center gap-2">
             <Layers size={16} className="text-alphabag-yellow" />
             <span className="text-xs font-semibold uppercase tracking-wider text-alphabag-text">On-Chain Holdings</span>
-            <span className="ml-auto text-[11px] text-alphabag-subtext font-mono uppercase tracking-wider">Read-Only View</span>
+            <span className="ml-auto text-[11px] text-alphabag-subtext font-mono uppercase tracking-wider">Live Balance Telemetry</span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
@@ -167,11 +224,11 @@ export const DexBag: React.FC = () => {
                     const chain = CHAIN_LABELS[token.chain || ''] || { label: token.chain?.toUpperCase() || '—', color: 'text-alphabag-subtext', bg: 'bg-white/5' };
                     const isPositive = (token.change24h || 0) >= 0;
                     return (
-                      <tr key={`${token.contractAddress}-${i}`} className="hover:bg-alphabag-gray/40 transition-colors group">
+                      <tr key={`${token.contractAddress || token.symbol}-${i}`} className="hover:bg-alphabag-gray/40 transition-colors group">
                         <td className="p-3 pl-6">
                           <div className="flex items-center gap-2">
                             {token.logo ? (
-                              <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-alphabag-gray" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                              <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full bg-alphabag-gray object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                             ) : (
                               <div className="w-8 h-8 rounded-full bg-alphabag-yellow/10 flex items-center justify-center">
                                 <span className="text-alphabag-yellow font-semibold text-[11px]">{token.symbol?.slice(0, 2)}</span>
@@ -196,10 +253,12 @@ export const DexBag: React.FC = () => {
                         </td>
                         <td className="p-3 text-right font-semibold text-alphabag-text text-xs num">{token.valueUSD != null ? `$${token.valueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}</td>
                         <td className="p-3 text-center">
-                          {token.contractAddress && (
+                          {token.contractAddress ? (
                             <a href={getExplorerTokenUrl(token.chain || '', token.contractAddress || '')} target="_blank" rel="noopener noreferrer" className="opacity-0 group-hover:opacity-100 transition-opacity text-alphabag-subtext hover:text-alphabag-yellow">
                               <ExternalLink size={13} />
                             </a>
+                          ) : (
+                            <span className="text-alphabag-subtext text-[11px]">Native</span>
                           )}
                         </td>
                       </tr>
@@ -219,8 +278,8 @@ export const DexBag: React.FC = () => {
           </div>
           {filtered.length > 0 && (
             <div className="px-6 py-3 border-t border-alphabag-gray flex justify-between items-center">
-              <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider">{filtered.length} token{filtered.length !== 1 ? 's' : ''} · Read-only · Prices via Alchemy</span>
-              <Link to="/portfolio" className="text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider hover:underline flex items-center gap-1">Full Portfolio View <ChevronRight size={11} /></Link>
+              <span className="text-[11px] text-alphabag-subtext font-medium uppercase tracking-wider">{filtered.length} token{filtered.length !== 1 ? 's' : ''} · Multi-Chain Verified</span>
+              <Link to="/my-alphabag" className="text-[11px] text-alphabag-yellow font-semibold uppercase tracking-wider hover:underline flex items-center gap-1">Portfolio Overview <ChevronRight size={11} /></Link>
             </div>
           )}
         </div>

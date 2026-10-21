@@ -10,8 +10,7 @@ import {
   Crown,
   Diamond,
   Gem,
-  Gift,
-  Image as ImageIcon,
+    Image as ImageIcon,
   Layers,
   LayoutGrid,
   Lock,
@@ -918,10 +917,6 @@ export const Landing: React.FC = () => {
 
                     {/* TGE EVENT Countdown Timer aligned flush with CTA row */}
                     <div className="w-full rounded-xl border border-alphabag-gray bg-alphabag-darkgray p-4">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-xs font-semibold uppercase text-alphabag-subtext">BETA TESTING COUNT-DOWN</span>
-                        <Gift size={16} className="text-alphabag-subtext" />
-                      </div>
                       <TGECountdown targetDate={TEASER_LAUNCH_AT} />
                     </div>
                   </div>
