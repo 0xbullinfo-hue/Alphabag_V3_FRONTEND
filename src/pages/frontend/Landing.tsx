@@ -834,8 +834,10 @@ export const Landing: React.FC = () => {
             ) : (
               <Button
                 size="sm"
-                onClick={handleLaunchApp}
-                className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer"
+                disabled
+                aria-disabled="true"
+                title="Wallet connection coming soon"
+                className="font-semibold px-6 bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
               >
                 Build your portfolio
               </Button>
@@ -859,8 +861,10 @@ export const Landing: React.FC = () => {
             <button onClick={() => handleNavClick('faq')} className={`text-left py-2 text-sm font-medium ${activeTab === 'faq' ? 'text-alphabag-text' : 'text-alphabag-subtext'}`}>{t('nav_faq')}</button>
             <Button
               size="lg"
-              onClick={handleLaunchApp}
-              className="w-full font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 cursor-pointer"
+              disabled
+              aria-disabled="true"
+              title="Wallet connection coming soon"
+              className="w-full font-semibold bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
             >
               Build your portfolio
             </Button>
@@ -898,8 +902,10 @@ export const Landing: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-stretch gap-3">
                       <Button
                         size="lg"
-                        onClick={handleLaunchApp}
-                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none rounded-md transition-colors cursor-pointer"
+                        disabled
+                        aria-disabled="true"
+                        title="Wallet connection coming soon"
+                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-semibold bg-alphabag-yellow/50 text-black/60 border-none rounded-md transition-colors cursor-not-allowed opacity-60"
                       >
                         Build your portfolio
                       </Button>
@@ -980,8 +986,10 @@ export const Landing: React.FC = () => {
                 <div className="flex items-center justify-center pt-2">
                   <Button
                     size="lg"
-                    onClick={handleLaunchApp}
-                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-semibold bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer"
+                    disabled
+                    aria-disabled="true"
+                    title="Wallet connection coming soon"
+                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-semibold bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
                   >
                     Build your portfolio
                   </Button>
