@@ -8,7 +8,6 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  errorMessage?: string;
 }
 
 /**
@@ -19,7 +18,6 @@ export class ErrorBoundary extends React.Component<Props, State> {
   // Use property initializer for state to resolve "Property 'state' does not exist" errors
   public state: State = {
     hasError: false,
-    errorMessage: undefined,
   };
 
   // Explicitly declaring props to ensure it's recognized by the compiler in strict environments
@@ -30,9 +28,9 @@ export class ErrorBoundary extends React.Component<Props, State> {
     this.props = props;
   }
 
-  public static getDerivedStateFromError(error: Error): State {
+  public static getDerivedStateFromError(): State {
     // Update state so the next render will show the fallback UI.
-    return { hasError: true, errorMessage: error.message };
+    return { hasError: true };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -49,18 +47,16 @@ export class ErrorBoundary extends React.Component<Props, State> {
             <div className="w-16 h-16 bg-alphabag-red/10 rounded-full flex items-center justify-center mx-auto mb-2 text-alphabag-red">
               <ShieldAlert size={32} />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2 uppercase tracking-tighter">System Node Failure</h1>
+            <h1 className="text-xl font-semibold text-white mb-2">Something went wrong</h1>
             <p className="text-alphabag-subtext text-sm mb-3">
-              An unexpected exception occurred in the application layer. The intelligence stream has been interrupted.
+              This page encountered an unexpected error. Reload it to try again.
             </p>
-            {this.state.errorMessage && (
-              <p className="text-xs text-alphabag-muted mb-2 break-words">Error: {this.state.errorMessage}</p>
-            )}
             <Button 
+                type="button"
                 onClick={() => window.location.reload()} 
-                className="w-full font-bold uppercase tracking-widest bg-alphabag-red hover:bg-alphabag-red/80 text-white rounded-xl"
+                className="w-full font-semibold bg-alphabag-red hover:bg-alphabag-red/80 text-white rounded-md"
             >
-              <RefreshCw size={16} className="mr-2" /> Reboot Interface
+              <RefreshCw size={16} className="mr-2" /> Reload page
             </Button>
           </div>
         </div>

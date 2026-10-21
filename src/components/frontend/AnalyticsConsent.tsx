@@ -84,7 +84,7 @@ export const AnalyticsConsent: React.FC = () => {
       title="Cookie settings"
       aria-label="Cookie settings"
       onClick={() => setConsent('unknown')}
-      className="fixed bottom-4 right-4 z-[110] flex h-9 w-9 items-center justify-center border border-alphabag-gray bg-alphabag-darkgray text-alphabag-subtext shadow-lg hover:text-alphabag-yellow"
+      className="fixed bottom-20 md:bottom-4 right-4 z-[110] flex h-9 w-9 items-center justify-center border border-alphabag-gray bg-alphabag-darkgray text-alphabag-subtext hover:text-alphabag-yellow"
     >
       <Settings size={16} />
     </button>

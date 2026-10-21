@@ -14,19 +14,20 @@ interface NotificationCenterProps {
   isOpen: boolean;
   onClose: () => void;
   notifications: Notification[];
+  onMarkAllRead?: () => void;
 }
 
-export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, onClose, notifications }) => {
+export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, onClose, notifications, onMarkAllRead }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="absolute right-0 mt-2 w-80 bg-alphabag-dark rounded-md border border-alphabag-gray shadow-2xl z-[100] animate-in slide-in-from-top-2 duration-200">
+    <div id="notification-center" role="region" aria-label="Notifications" className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-alphabag-dark rounded-md border border-alphabag-gray shadow-2xl z-[100] animate-in slide-in-from-top-2 duration-200">
       <div className="p-3 border-b border-white/5 flex justify-between items-center bg-white/5">
         <div className="flex items-center gap-2">
           <Bell size={14} className="text-alphabag-yellow" />
-          <h3 className="text-[11px] font-bold text-white uppercase tracking-wider">Intelligence Center</h3>
+          <h3 className="text-sm font-semibold text-white">Notifications</h3>
         </div>
-        <button onClick={onClose} className="text-alphabag-muted hover:text-white transition-colors">
+        <button type="button" onClick={onClose} aria-label="Close notifications" className="text-alphabag-muted hover:text-white transition-colors">
           <X size={16} />
         </button>
       </div>
@@ -57,16 +58,18 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
         ) : (
           <div className="py-12 text-center space-y-2">
             <Bell size={24} className="mx-auto text-alphabag-muted opacity-20" />
-            <p className="text-[11px] text-alphabag-muted font-semibold uppercase tracking-wider">No New Intel</p>
+            <p className="text-sm text-alphabag-muted">No notifications yet</p>
           </div>
         )}
       </div>
 
-      <div className="p-3 border-t border-white/5 bg-black/40 text-center">
-        <button className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider hover:text-white transition-colors">
-          Mark all as read
-        </button>
-      </div>
+      {onMarkAllRead && notifications.some(notification => !notification.read) && (
+        <div className="p-3 border-t border-white/5 bg-black/40 text-center">
+          <button type="button" onClick={onMarkAllRead} className="text-xs font-medium text-alphabag-yellow hover:text-white transition-colors">
+            Mark all as read
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -44,7 +44,7 @@ export const BubblemapsForensics: React.FC<BubblemapsForensicsProps> = ({
   const [addressDetails, setAddressDetails] = useState<BubblemapsAddressMetadata | null>(null);
   const [addressLoading, setAddressLoading] = useState(false);
 
-  if (loading || !data) {
+  if (loading) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 p-3.5 bg-[#14171D] border-b border-[#2B313A] animate-pulse">
         {[1, 2, 3, 4].map((i) => (
@@ -53,6 +53,15 @@ export const BubblemapsForensics: React.FC<BubblemapsForensicsProps> = ({
       </div>
     );
   }
+
+  if (!data) {
+    return (
+      <div role="status" className="p-4 bg-[#14171D] border-b border-[#2B313A] text-sm text-gray-400">
+        On-chain analysis is unavailable right now. Use the refresh control above to try again.
+      </div>
+    );
+  }
+
 
   const { metrics, clusters } = data;
   const score = metrics.scores.bubblemaps_score;

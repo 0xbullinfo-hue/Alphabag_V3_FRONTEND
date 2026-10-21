@@ -9,6 +9,19 @@ interface TransactionFeedProps {
     chainId?: number; // Default 1 (ETH)
 }
 
+const getTransactionExplorerUrl = (chainId: number, hash: string) => {
+    const explorerByChainId: Record<number, string> = {
+        1: 'https://etherscan.io',
+        56: 'https://bscscan.com',
+        137: 'https://polygonscan.com',
+        8453: 'https://basescan.org',
+        42161: 'https://arbiscan.io',
+        43114: 'https://snowtrace.io',
+    };
+    if (chainId === 101 || chainId === 1399811149) return `https://solscan.io/tx/${hash}`;
+    return `${explorerByChainId[chainId] || explorerByChainId[1]}/tx/${hash}`;
+};
+
 export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chainId = 1 }) => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(false);
@@ -51,7 +64,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                         </>
                     )}
                 </h3>
-                <button onClick={fetchHistory} disabled={loading} className="text-alphabag-subtext hover:text-white transition-colors">
+                <button type="button" onClick={fetchHistory} disabled={loading} aria-label="Refresh transaction feed" className="text-alphabag-subtext hover:text-white transition-colors disabled:opacity-50">
                     <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
                 </button>
             </div>
@@ -81,7 +94,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-alphabag-gray/10">
-                            {transactions.map((tx) => {
+                            {transactions.map((tx, index) => {
                                 if (!tx || !tx.from) return null;
 
                                 const fromAddr = tx.from || '';
@@ -92,7 +105,7 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                                 const label = WalletLabels.getLabel(otherAddr || '');
 
                                 return (
-                                    <tr key={tx.hash || Math.random()} className="hover:bg-white/5 transition-colors font-mono">
+                                    <tr key={tx.hash || `${tx.from}-${tx.to}-${tx.date}-${index}`} className="hover:bg-white/5 transition-colors font-mono">
                                         <td className="p-3">
                                             <div className={`flex items-center gap-1.5 ${isOut ? 'text-alphabag-red' : 'text-alphabag-green'}`}>
                                                 {isOut ? <ArrowUpRight size={12} /> : <ArrowDownLeft size={12} />}
@@ -101,9 +114,10 @@ export const TransactionFeed: React.FC<TransactionFeedProps> = ({ address, chain
                                         </td>
                                         <td className="p-3 text-alphabag-subtext text-[11px]">
                                             <a
-                                                href={`https://etherscan.io/tx/${tx.hash}`}
+                                                href={getTransactionExplorerUrl(chainId, tx.hash)}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                aria-label={`Open transaction ${tx.hash.slice(0, 8)} in block explorer`}
                                                 className="hover:text-white flex items-center gap-1"
                                             >
                                                 {(tx.hash || '').substring(0, 6)}...

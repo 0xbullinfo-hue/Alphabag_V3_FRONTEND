@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { Skeleton } from '../ui/Skeleton';
 import { ServerIpNote } from './ServerIpNote';
@@ -16,6 +16,8 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
   const [ex, setEx] = useState<Exchange | null>(null);
   const [creds, setCreds] = useState<Record<Field, string>>({ apiKey: '', secret: '', passphrase: '' });
   const [serverIp, setServerIp] = useState<string | null>(null);
+  const [loadingExchanges, setLoadingExchanges] = useState(true);
+  const [exError, setExError] = useState<string | null>(null);
 
   // Clear sensitive credentials from memory on unmount
   useEffect(() => {
@@ -34,19 +36,27 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
       .catch(() => {});
     return () => { alive = false; };
   }, []);
-  const [exError, setExError] = useState<string | null>(null);
   const [testing, setTesting] = useState(false);
   const [result, setResult] = useState<TestResult | null>(null);
   const [error, setError] = useState<{ message: string; hint?: string } | null>(null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    let alive = true;
-    api.get<Exchange[]>('/api/cex/exchanges')
-      .then(r => { if (alive) setExchanges(r.data); })
-      .catch(() => { if (alive) setExError('Could not load exchanges. Check your connection.'); });
-    return () => { alive = false; };
+  const loadExchanges = useCallback(async () => {
+    setLoadingExchanges(true);
+    setExError(null);
+    try {
+      const response = await api.get<Exchange[]>('/api/cex/exchanges');
+      const availableExchanges = Array.isArray(response.data) ? response.data : [];
+      setExchanges(availableExchanges);
+      if (availableExchanges.length === 0) setExError('No exchanges are available right now. Try again later.');
+    } catch {
+      setExError('Could not load exchanges. Check your connection and try again.');
+    } finally {
+      setLoadingExchanges(false);
+    }
   }, []);
+
+  useEffect(() => { void loadExchanges(); }, [loadExchanges]);
 
   const canAdvance = () => {
     if (step === 0) return !!ex;
@@ -101,15 +111,16 @@ export function ConnectWizard({ onClose, onConnected }: { onClose: () => void; o
               <span className="text-sm text-red-200">{exError}</span>
               <button
                 type="button"
-                onClick={() => window.location.reload()}
-                className="ml-auto text-xs text-red-300 underline"
+                onClick={() => void loadExchanges()}
+                disabled={loadingExchanges}
+                className="ml-auto text-xs text-red-300 underline disabled:opacity-50"
               >
                 Retry
               </button>
             </div>
           )}
 
-          {exchanges.length === 0 && !exError && (
+          {loadingExchanges && exchanges.length === 0 && (
             <Skeleton className="h-48 w-full" />
           )}
 

@@ -79,6 +79,7 @@ export function BubblemapsEmbed({
   const [loading, setLoading] = useState(true);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [key, setKey] = useState(0);
+  const [forensicsRefreshKey, setForensicsRefreshKey] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [forensicsData, setForensicsData] = useState<BubblemapsMapResponse | null>(null);
   const [forensicsLoading, setForensicsLoading] = useState(false);
@@ -130,6 +131,7 @@ export function BubblemapsEmbed({
   // Load raw B2B API Forensics Data
   useEffect(() => {
     let isMounted = true;
+    setForensicsData(null);
     setForensicsLoading(true);
     fetchTokenBubbleMap(selectedChain, activeAddress)
       .then((data) => {
@@ -144,7 +146,7 @@ export function BubblemapsEmbed({
     return () => {
       isMounted = false;
     };
-  }, [selectedChain, activeAddress]);
+  }, [selectedChain, activeAddress, forensicsRefreshKey]);
 
   // Sync if parent updates initial props
   useEffect(() => {
@@ -309,6 +311,7 @@ export function BubblemapsEmbed({
                         setShowMoreMenu(false);
                         setLoading(true);
                         setKey((k) => k + 1);
+                        setForensicsRefreshKey((k) => k + 1);
                       }}
                       className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-[#202630] rounded transition-colors text-left font-medium"
                     >

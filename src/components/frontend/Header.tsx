@@ -21,16 +21,8 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const [notifications] = useState<any[]>([
-    {
-      id: '1',
-      type: 'SYSTEM',
-      title: 'Phase 1 Active',
-      message: 'AlphaBAG Protocol Hub is live. Complete missions to secure your TGE allocation.',
-      timestamp: new Date().toISOString(),
-      read: false
-    }
-  ]);
+  // Do not show a fabricated unread alert when no notification feed is connected.
+  const notifications: any[] = [];
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,6 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
             onClick={toggleSidebar}
             className="mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded text-alphabag-subtext hover:text-white hover:bg-[#202630] md:hidden transition-colors"
             aria-label="Toggle Navigation"
+            aria-expanded={isSidebarOpen}
           >
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -74,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
           </Link>
         </div>
 
-        <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-sm mx-6 relative">
+        <form role="search" onSubmit={handleSearch} aria-label="Search markets" className="hidden md:flex flex-1 max-w-sm mx-6 relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search size={14} className="text-alphabag-subtext" />
           </div>
@@ -98,6 +91,9 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                   }}
                   className={`min-h-[44px] min-w-[44px] flex items-center justify-center rounded transition-colors relative ${showNotifications ? 'bg-alphabag-yellow/10 text-alphabag-yellow' : 'text-alphabag-subtext hover:text-white hover:bg-[#202630]'}`}
                   aria-label="Notifications"
+                  aria-haspopup="true"
+                  aria-expanded={showNotifications}
+                  aria-controls="notification-center"
                 >
                   <Bell size={18} />
                   {notifications.some(n => !n.read) && (
@@ -111,6 +107,10 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                     setShowNotifications(false);
                   }}
                   className="flex items-center space-x-2 px-2.5 py-1 rounded hover:bg-[#202630] transition-colors"
+                  aria-label="Account menu"
+                  aria-haspopup="true"
+                  aria-expanded={showUserMenu}
+                  aria-controls="account-menu"
                 >
                   <div className="hidden sm:block text-right">
                     <div className="text-xs font-medium text-alphabag-text leading-none mb-0.5">{user?.email?.split('@')[0]}</div>
