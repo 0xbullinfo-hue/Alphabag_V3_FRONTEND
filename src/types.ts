@@ -129,6 +129,8 @@ export interface PortfolioItem {
   costBasisKnown: boolean;
   /** True when price/value for this row came from a mock/fallback source rather than a live feed. */
   isMockData?: boolean;
+  address?: string; // Connected/tracked wallet address
+  chain?: string; // Chain on which asset resides
 }
 
 export interface PortfolioHistoryPoint {
@@ -360,4 +362,5 @@ export interface TokenBalance {
   valueUSD?: number;
   change24h?: number;
   isMockData?: boolean; // True when this row came from a mock/fallback source, not a live API
+  address?: string; // Wallet address owning this balance
 }

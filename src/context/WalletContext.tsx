@@ -123,6 +123,36 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, [wagmiAddress, wagmiIsConnected, checkTokenBalance]);
 
+  const [manualAddress, setManualAddress] = useState<string | null>(null);
+
+  const connectManually = (addr: string) => {
+    setManualAddress(addr);
+  };
+
+  // Priority: an actually-connected wallet or a manually-entered watch
+  // address always wins over the account's verifiedWallet, and user?.id
+  // must NEVER be used as a fallback here — it's a database identifier,
+  // not a wallet address, and passing it into chain-balance lookups would
+  // silently produce garbage results.
+  const activeAddress = wagmiAddress || manualAddress || user?.verifiedWallet || undefined;
+
+  // Auto-sync connected Web3 wallet into trackedWallets so portfolio is reflected immediately
+  useEffect(() => {
+    if (wagmiAddress && wagmiIsConnected) {
+      setTrackedWallets(prev => {
+        const exists = prev.some(w => w.address.toLowerCase() === wagmiAddress.toLowerCase());
+        if (exists) return prev;
+        return [{
+          id: 'connected-' + wagmiAddress.toLowerCase(),
+          address: wagmiAddress,
+          label: 'Connected Web3 Wallet',
+          chain: 'ETH',
+          type: 'PORTFOLIO'
+        }, ...prev];
+      });
+    }
+  }, [wagmiAddress, wagmiIsConnected]);
+
   const addToast = useCallback((message: string, type: 'SUCCESS' | 'ERROR' | 'INFO' = 'SUCCESS') => {
     const id = crypto.randomUUID();
     setToasts(prev => [...prev, { id, message, type }]);
@@ -143,19 +173,25 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [addToast]);
 
   const refreshBalances = useCallback(async () => {
-    if (trackedWallets.length === 0) {
+    const portfolioWallets = [...trackedWallets.filter(w => w.type === 'PORTFOLIO')];
+    if (activeAddress && !portfolioWallets.some(w => w.address.toLowerCase() === activeAddress.toLowerCase())) {
+      portfolioWallets.unshift({
+        id: 'active-connected',
+        address: activeAddress,
+        label: 'Connected Wallet',
+        chain: 'ETH',
+        type: 'PORTFOLIO'
+      });
+    }
+
+    if (portfolioWallets.length === 0) {
       setPortfolioItems([]);
+      setIsSyncing(false);
       return;
     }
 
     setIsSyncing(true);
     try {
-      const portfolioWallets = trackedWallets.filter(w => w.type === 'PORTFOLIO');
-      if (portfolioWallets.length === 0) {
-        setPortfolioItems([]);
-        setIsSyncing(false);
-        return;
-      }
 
       // Fetch balances for all wallets with error boundary per wallet
       const allResults = await Promise.allSettled(
@@ -242,6 +278,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               ...existing,
               amount: existing.amount + amount,
               value: existing.value + value,
+              address: existing.address || token.address,
+              chain: existing.chain || token.chain,
             });
           } else {
             aggregated.set(symbol, {
@@ -258,6 +296,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               pnlPercent: pnlPercent,
               costBasisKnown: false,
               isMockData: !!token.isMockData,
+              address: token.address,
+              chain: token.chain,
             });
           }
         } catch (tokenErr: any) {
@@ -344,15 +384,15 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } finally {
       setIsSyncing(false);
     }
-  }, [user, trackedWallets, manualTransactions, addToast]);
+  }, [user, activeAddress, trackedWallets, manualTransactions, addToast]);
 
   useEffect(() => {
-    if (user) {
+    if (user || activeAddress || trackedWallets.length > 0) {
       refreshBalances();
       const interval = setInterval(refreshBalances, 120000); // 120s Auto-Refresh for DEX
       return () => clearInterval(interval);
     }
-  }, [user, trackedWallets.length, refreshBalances]);
+  }, [user, activeAddress, trackedWallets.length, refreshBalances]);
 
   const addTrackedWallet = async (address: string, label: string, chain: Chain, type: 'PORTFOLIO' | 'WHALE'): Promise<{ success: boolean; error?: string }> => {
     const limits = TIER_LIMITS[tier as keyof typeof TIER_LIMITS] || TIER_LIMITS.FREE;
@@ -375,20 +415,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return { success: true };
   };
 
-  const [manualAddress, setManualAddress] = useState<string | null>(null);
 
-  const connectManually = (addr: string) => {
-    setManualAddress(addr);
-    // Trigger auth update if needed, or just let local state handle it for now
-    // For MVP, we might need to mock the user for manual connection if AuthContext doesn't handle it
-  };
-
-  // Priority: an actually-connected wallet or a manually-entered watch
-  // address always wins over the account's verifiedWallet, and user?.id
-  // must NEVER be used as a fallback here — it's a database identifier,
-  // not a wallet address, and passing it into chain-balance lookups would
-  // silently produce garbage results.
-  const activeAddress = wagmiAddress || manualAddress || user?.verifiedWallet || undefined;
 
   return (
     <WalletContext.Provider value={{
@@ -418,6 +445,9 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (manualAddress) {
           setManualAddress(null);
         } else {
+          if (wagmiAddress) {
+            setTrackedWallets(prev => prev.filter(w => w.id !== 'connected-' + wagmiAddress.toLowerCase()));
+          }
           disconnect();
         }
       },

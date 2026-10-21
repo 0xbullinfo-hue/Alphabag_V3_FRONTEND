@@ -9,7 +9,7 @@ import { formatUsd } from '../../lib/formatters';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
-    const { portfolioItems } = useWallet();
+    const { portfolioItems, trackedWallets, address: activeAddress, isSyncing } = useWallet();
     const [cexTotal, setCexTotal] = useState(0);
     const [cexConnections, setCexConnections] = useState<any[]>([]);
 
@@ -36,8 +36,16 @@ export const MyAlphabag: React.FC = () => {
     const dexTotal = portfolioItems?.reduce((acc, item) => acc + (item.value || 0), 0) || 0;
     const combinedTotal = dexTotal + cexTotal;
 
-    const dexChains = Array.from(new Set(portfolioItems.map(item => (item as any).chain || 'BSC')));
-    const dexWallets = Array.from(new Set(portfolioItems.map(item => (item as any).address)));
+    const dexWallets = useMemo(() => Array.from(new Set([
+        ...trackedWallets.filter(w => w.type === 'PORTFOLIO').map(w => w.address),
+        ...(activeAddress ? [activeAddress] : []),
+        ...portfolioItems.map(item => (item as any).address)
+    ].filter(Boolean) as string[])), [trackedWallets, activeAddress, portfolioItems]);
+
+    const dexChains = useMemo(() => Array.from(new Set([
+        ...trackedWallets.filter(w => w.type === 'PORTFOLIO').map(w => w.chain),
+        ...portfolioItems.map(item => (item as any).chain || 'ETH')
+    ].filter(Boolean) as string[])), [trackedWallets, portfolioItems]);
 
     const feeAuditData = useMemo(() => {
         let gasSpent = 642.50;
@@ -106,15 +114,50 @@ export const MyAlphabag: React.FC = () => {
     }, [selectedWallet, auditingWallet, dexWallets]);
 
     const allocationData = useMemo(() => {
-        const dataMap: Record<string, { name: string, value: number, color: string }> = {
-            'BTC': { name: 'BTC', value: 29032.18, color: '#F0B90B' },
-            'ETH': { name: 'ETH', value: 14490.84 + 6347.16, color: '#3B82F6' },
-            'SOL': { name: 'SOL', value: 7492.80, color: '#8B5CF6' },
-            'USDT': { name: 'USDT', value: 3500.00, color: '#0ECB81' },
-            'PEPE': { name: 'PEPE', value: 1638.00, color: '#F6465D' }
-        };
-        return Object.values(dataMap).sort((a, b) => b.value - a.value);
-    }, []);
+        const PALETTE = ['#F0B90B', '#3B82F6', '#8B5CF6', '#0ECB81', '#F6465D', '#06B6D4', '#EC4899', '#EAB308', '#6366F1', '#14B8A6'];
+        const dataMap: Record<string, { name: string; value: number; color: string }> = {};
+
+        // DEX holdings
+        if (portfolioItems && portfolioItems.length > 0) {
+            portfolioItems.forEach(item => {
+                const sym = item.symbol?.toUpperCase() || 'OTHER';
+                const val = Number(item.value || 0);
+                if (val > 0) {
+                    if (dataMap[sym]) {
+                        dataMap[sym].value += val;
+                    } else {
+                        const colorIdx = Object.keys(dataMap).length % PALETTE.length;
+                        dataMap[sym] = { name: sym, value: val, color: PALETTE[colorIdx] };
+                    }
+                }
+            });
+        }
+
+        // CEX holdings
+        if (cexConnections && cexConnections.length > 0) {
+            cexConnections.forEach(cex => {
+                const name = cex.name || 'CEX';
+                const val = Number(cex.balance || 0);
+                if (val > 0) {
+                    if (dataMap[name]) {
+                        dataMap[name].value += val;
+                    } else {
+                        const colorIdx = Object.keys(dataMap).length % PALETTE.length;
+                        dataMap[name] = { name, value: val, color: PALETTE[colorIdx] };
+                    }
+                }
+            });
+        }
+
+        const list = Object.values(dataMap).sort((a, b) => b.value - a.value);
+        if (list.length > 0) return list;
+
+        return [
+            { name: 'ETH', value: 0, color: '#3B82F6' },
+            { name: 'USDT', value: 0, color: '#0ECB81' },
+            { name: 'SOL', value: 0, color: '#8B5CF6' }
+        ];
+    }, [portfolioItems, cexConnections]);
 
     return (
         <div className="w-full space-y-3 pb-3">
@@ -348,58 +391,57 @@ export const MyAlphabag: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[#2B313A]/50 text-xs">
-                                    <tr className="hover:bg-[#202630] transition-colors">
-                                        <td className="py-2.5 px-2">
-                                            <div className="flex items-center gap-2">
-                                                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" className="w-4 h-4 rounded-full" alt="BTC" />
-                                                <span className="font-semibold text-alphabag-text">BTC</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2.5 px-2">
-                                            <span className="text-[11px] font-semibold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.2 rounded-[2px]">CEX</span>
-                                        </td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+2.5%</td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$29,032.18</td>
-                                    </tr>
-                                    <tr className="hover:bg-[#202630] transition-colors">
-                                        <td className="py-2.5 px-2">
-                                            <div className="flex items-center gap-2">
-                                                <img src="https://cryptologos.cc/logos/solana-sol-logo.png" className="w-4 h-4 rounded-full" alt="SOL" />
-                                                <span className="font-semibold text-alphabag-text">SOL</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2.5 px-2">
-                                            <span className="text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-1.5 py-0.2 rounded-[2px]">DEX</span>
-                                        </td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+5.6%</td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$7,492.80</td>
-                                    </tr>
-                                    <tr className="hover:bg-[#202630] transition-colors">
-                                        <td className="py-2.5 px-2">
-                                            <div className="flex items-center gap-2">
-                                                <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" className="w-4 h-4 rounded-full" alt="ETH" />
-                                                <span className="font-semibold text-alphabag-text">ETH</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2.5 px-2">
-                                            <span className="text-[11px] font-semibold uppercase bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.2 rounded-[2px]">CEX</span>
-                                        </td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-green font-semibold num">+2.1%</td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$14,490.84</td>
-                                    </tr>
-                                    <tr className="hover:bg-[#202630] transition-colors">
-                                        <td className="py-2.5 px-2">
-                                            <div className="flex items-center gap-2">
-                                                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/24478.png" className="w-4 h-4 rounded-full" alt="PEPE" />
-                                                <span className="font-semibold text-alphabag-text">PEPE</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-2.5 px-2">
-                                            <span className="text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-1.5 py-0.2 rounded-[2px]">DEX</span>
-                                        </td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-red font-semibold num">-4.2%</td>
-                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">$1,638.00</td>
-                                    </tr>
+                                    {portfolioItems && portfolioItems.length > 0 ? (
+                                        portfolioItems
+                                            .slice()
+                                            .sort((a, b) => (b.value || 0) - (a.value || 0))
+                                            .map((item, idx) => {
+                                                const change = item.priceChange24h || 0;
+                                                const isPositive = change >= 0;
+                                                return (
+                                                    <tr key={item.coinId || item.symbol + idx} className="hover:bg-[#202630] transition-colors">
+                                                        <td className="py-2.5 px-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <img
+                                                                    src={item.image || `https://ui-avatars.com/api/?name=${item.symbol}&background=random`}
+                                                                    className="w-4 h-4 rounded-full object-cover"
+                                                                    alt={item.symbol}
+                                                                    onError={(e: any) => { e.target.src = `https://ui-avatars.com/api/?name=${item.symbol}&background=random`; }}
+                                                                />
+                                                                <span className="font-semibold text-alphabag-text">{item.symbol}</span>
+                                                                <span className="text-[11px] text-alphabag-subtext hidden sm:inline">{item.name}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-2.5 px-2">
+                                                            <span className="text-[11px] font-semibold uppercase bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 px-1.5 py-0.2 rounded-[2px]">
+                                                                DEX
+                                                            </span>
+                                                        </td>
+                                                        <td className={`py-2.5 px-2 text-right font-semibold num ${isPositive ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
+                                                            {isPositive ? '+' : ''}{change.toFixed(2)}%
+                                                        </td>
+                                                        <td className="py-2.5 px-2 text-right text-alphabag-text font-semibold num">
+                                                            {formatUsd(item.value || 0)}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })
+                                    ) : isSyncing ? (
+                                        <tr>
+                                            <td colSpan={4} className="py-8 text-center text-alphabag-subtext text-xs">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <div className="w-4 h-4 border-2 border-alphabag-yellow border-t-transparent rounded-full animate-spin"></div>
+                                                    <span>Syncing multi-chain wallet balances...</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        <tr>
+                                            <td colSpan={4} className="py-8 text-center text-alphabag-subtext text-xs">
+                                                No on-chain assets detected yet. Connect a Web3 wallet or add a tracked wallet to load live balances.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
