@@ -1,3 +1,4 @@
+import { formatPrice, formatAmount } from '../../lib/formatters';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, ChevronRight, ExternalLink, Layers, RefreshCw, TrendingDown, TrendingUp, Wallet2 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -243,8 +244,8 @@ export const DexBag: React.FC = () => {
                         <td className="p-3">
                           <span className={`text-[11px] font-semibold px-2 py-0.5 rounded ${chain.bg} ${chain.color} uppercase`}>{chain.label}</span>
                         </td>
-                        <td className="p-3 text-right font-mono text-alphabag-text text-xs font-semibold num">{parseFloat(token.balance || '0').toLocaleString()}</td>
-                        <td className="p-3 text-right text-alphabag-subtext text-xs font-mono num">{token.priceUSD != null ? `$${token.priceUSD.toFixed(4)}` : '—'}</td>
+                        <td className="p-3 text-right font-mono text-alphabag-text text-xs font-semibold num">{formatAmount(token.balance)}</td>
+                        <td className="p-3 text-right text-alphabag-subtext text-xs font-mono num">{token.priceUSD != null ? formatPrice(token.priceUSD) : '\u2014'}</td>
                         <td className="p-3 text-right">
                           <span className={`text-xs font-semibold flex items-center justify-end gap-0.5 num ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
                             {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
