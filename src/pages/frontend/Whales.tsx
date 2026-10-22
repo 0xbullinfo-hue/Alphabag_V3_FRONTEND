@@ -1,5 +1,6 @@
 
-import { ArrowRight,Bell,Eye,Plus,ShieldAlert,Trash2 } from 'lucide-react';
+import { ArrowRight, Bell, Eye, Plus, ShieldAlert, Trash2, X } from 'lucide-react';
+import { ChainService } from '../../services/ChainService';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { UpgradeCmd } from '../../components/frontend/UpgradeCmd';
@@ -9,7 +10,7 @@ import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
 
 
-import { X } from 'lucide-react';
+
 import { Chain } from '../../types';
 
 // Sub-component to handle individual whale data fetching
@@ -22,7 +23,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
         const fetchValue = async () => {
             try {
                 // Use the same multi-chain fetch as the detail view
-                const balances = await import('../../services/ChainService').then(m => m.ChainService.getMultiChainBalances(whale.address));
+                const balances = await ChainService.getMultiChainBalances(whale.address);
 
                 // Calculate total value
                 const total = balances.reduce((acc, token) => acc + (token.value || 0), 0);
