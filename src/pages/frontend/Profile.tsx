@@ -401,7 +401,7 @@ export const Profile: React.FC = () => {
                         </div>
 
                         {isEditing ? (
-                            <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className="space-y-2 transition-opacity">
                                 <div className="space-y-1">
                                     <label className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider ml-1">Bio</label>
                                     <textarea 

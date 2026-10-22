@@ -87,7 +87,7 @@ export const DeFi: React.FC = () => {
     };
 
     return (
-        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 animate-in fade-in duration-700">
+        <div className="relative min-h-[calc(100vh-12rem)] flex flex-col pb-20 w-full space-y-2 transition-opacity">
             {/* Header */}
             <div className="page-header-card flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4">
                 <div>

@@ -2,7 +2,7 @@ import { ArrowLeft,Key,Plus,Trash2 } from 'lucide-react';
 import React,{ useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cell,Pie,PieChart,ResponsiveContainer,Tooltip } from 'recharts';
-import Swal from 'sweetalert2';
+import { alert } from '../../lib/alert';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
@@ -33,11 +33,11 @@ export const CexBag: React.FC = () => {
 
     const openConnectModal = (cexId: string) => {
         if (connectedCex.find(c => c.id === cexId)) {
-            Swal.fire({ title: 'Already Connected', text: 'This exchange is already linked. Remove it first to reconnect.', icon: 'info', background: '#1E2329', color: '#EAECEF' });
+            alert.fire({ title: 'Already Connected', text: 'This exchange is already linked. Remove it first to reconnect.', icon: 'info' });
             return;
         }
         if (connectedCex.length >= MAX_CEX) {
-            Swal.fire({ title: 'Limit Reached', text: `You can connect up to ${MAX_CEX} exchanges.`, icon: 'warning', background: '#1E2329', color: '#EAECEF' });
+            alert.fire({ title: 'Limit Reached', text: `You can connect up to ${MAX_CEX} exchanges.`, icon: 'warning' });
             return;
         }
         setActiveExchange(cexId);
@@ -51,19 +51,17 @@ export const CexBag: React.FC = () => {
             const info = SUPPORTED_CEX.find(c => c.id === activeExchange);
             if (!info) return;
             await connectExchange(info, apiKey, secret);
-            Swal.fire({ title: 'Connected', text: `Read-Only ${info.name} API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#EAECEF' });
+            alert.fire({ title: 'Connected', text: `Read-Only ${info.name} API verified!`, icon: 'success', timer: 1500, showConfirmButton: false });
             setIsModalOpen(false);
         } catch (e: any) {
             // Previously this branch didn't exist — any API key/secret
             // "verified" instantly with a random fake balance. Now a
             // failed or not-yet-implemented backend check surfaces here
             // instead of silently pretending to succeed.
-            Swal.fire({
+            alert.fire({
                 title: 'Connection Failed',
                 text: e?.response?.data?.message || e?.message || 'Could not verify this exchange API key. Please check your key and try again.',
                 icon: 'error',
-                background: '#1E2329',
-                color: '#EAECEF',
             });
         } finally {
             setIsConnecting(false);
@@ -109,7 +107,7 @@ export const CexBag: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-3 pb-4 animate-in fade-in duration-700">
+        <div className="w-full space-y-3 pb-4 transition-opacity">
 
             {/* Back to Portfolio Navigation */}
             <div className="flex items-center justify-between">

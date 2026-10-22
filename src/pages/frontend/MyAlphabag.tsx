@@ -1,8 +1,9 @@
 import { AlertTriangle, Briefcase, ChevronDown, Radio, Search, ShieldCheck, TrendingUp } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer } from 'recharts';
-import Swal from 'sweetalert2';
+import { alert } from '../../lib/alert';
+import { useCexConnections } from '../../hooks/useCexConnections';
 import { useWallet } from '../../context/WalletContext';
 import { PageIcon } from '../../components/ui/PageIcon';
 import { formatUsd } from '../../lib/formatters';
@@ -10,28 +11,13 @@ import { formatUsd } from '../../lib/formatters';
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
     const { portfolioItems, trackedWallets, address: activeAddress, isSyncing } = useWallet();
-    const [cexTotal, setCexTotal] = useState(0);
-    const [cexConnections, setCexConnections] = useState<any[]>([]);
+    const { connections: cexConnections, totalBalance: cexTotal } = useCexConnections();
 
     const [activeSection, setActiveSection] = useState<'overview' | 'fee-auditor'>('overview');
     const [selectedWallet, setSelectedWallet] = useState<string>('all');
     const [customWalletInput, setCustomWalletInput] = useState<string>('');
     const [auditingWallet, setAuditingWallet] = useState<string | null>(null);
     const [isAuditingCustom, setIsAuditingCustom] = useState<boolean>(false);
-
-    useEffect(() => {
-        const savedCex = localStorage.getItem('alphabag_cex_connections');
-        if (savedCex) {
-            try {
-                const parsed = JSON.parse(savedCex);
-                setCexConnections(parsed);
-                const total = parsed.reduce((acc: number, item: any) => acc + (item.balance || 0), 0);
-                setCexTotal(total);
-            } catch (e) {
-                console.error("Error loading CEX portfolio data on MYALPHABAG", e);
-            }
-        }
-    }, []);
 
     const dexTotal = portfolioItems?.reduce((acc, item) => acc + (item.value || 0), 0) || 0;
     const combinedTotal = dexTotal + cexTotal;
@@ -575,14 +561,12 @@ export const MyAlphabag: React.FC = () => {
                                             if (!customWalletInput) return;
                                             setAuditingWallet(customWalletInput);
                                             setIsAuditingCustom(true);
-                                            Swal.fire({
+                                            alert.fire({
                                                 title: 'AUDITING WALLET',
                                                 text: 'Parsing transaction logs on BSC, Ethereum and Solana nodes...',
                                                 icon: 'success',
                                                 timer: 1500,
                                                 showConfirmButton: false,
-                                                background: '#181A20',
-                                                color: '#EAECEF'
                                             });
                                         }}
                                         className="bg-alphabag-yellow hover:bg-[#FCD535] text-[#0B0E11] text-xs font-semibold px-3.5 py-1.5 rounded transition-colors shrink-0"

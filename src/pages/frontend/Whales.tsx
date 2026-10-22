@@ -131,7 +131,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
     };
 
     return (
-        <div className={`space-y-4 animate-in fade-in duration-500 ${embedded ? '' : 'pb-20'}`}>
+        <div className={`space-y-4 transition-opacity ${embedded ? '' : 'pb-20'}`}>
 
             {/* Page Header */}
             {!embedded ? (
@@ -215,7 +215,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
 
             {/* Inline Add Modal */}
             {isAddOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 animate-in fade-in">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 transition-opacity">
                     <div className="bg-alphabag-dark border border-alphabag-gray w-full max-w-md rounded-lg p-5 relative">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-base font-semibold text-white uppercase tracking-wider flex items-center gap-2">

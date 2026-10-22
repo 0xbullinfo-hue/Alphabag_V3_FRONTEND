@@ -70,7 +70,7 @@ export const DexBag: React.FC = () => {
   const lastUpdated = dataUpdatedAt ? new Date(dataUpdatedAt) : new Date();
 
   return (
-    <div className="space-y-3 animate-in fade-in duration-700 pb-20">
+    <div className="space-y-3 transition-opacity pb-20">
       {/* Back to Portfolio Navigation */}
       <div className="flex items-center justify-between">
         <button

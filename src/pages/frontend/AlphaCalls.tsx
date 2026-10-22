@@ -87,7 +87,7 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
     const filteredSignals = safeSignals.filter(s => activeCategory === 'ALL' || s?.category === activeCategory);
 
     return (
-        <div className={`relative flex flex-col w-full animate-in fade-in duration-500 ${embedded ? '' : 'min-h-[calc(100vh-12rem)] pb-20'}`}>
+        <div className={`relative flex flex-col w-full transition-opacity ${embedded ? '' : 'min-h-[calc(100vh-12rem)] pb-20'}`}>
             
             {/* Header (hidden in embedded Alpha Desk mode) */}
             {!embedded && (

@@ -617,7 +617,7 @@ export const AlphaPasses: React.FC = () => {
   }, [userNFTs, collectionFilter, searchTokenId]);
 
   return (
-    <div className="w-full space-y-2 pb-2 animate-in fade-in duration-700">
+    <div className="w-full space-y-2 pb-2 transition-opacity">
       <SEO
         title="Alpha Passes | AlphaBAG Genesis Collection"
         description="Mint your AlphaBAG Genesis Pass. 4,000 limited utility NFTs at 0.07 BNB offering tier discounts, VIP multipliers, and AI crypto intelligence tools."
@@ -1418,7 +1418,7 @@ export const AlphaPasses: React.FC = () => {
 
       {/* ── PASS INSPECTION MODAL ─────────────────────────────────────────── */}
       {selectedInspectPass && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 transition-opacity">
           <div className="relative w-full max-w-2xl rounded-lg bg-alphabag-darkgray border border-alphabag-gray p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden">
             {/* Close button */}
             <button

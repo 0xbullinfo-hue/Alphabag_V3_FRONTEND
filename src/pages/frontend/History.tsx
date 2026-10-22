@@ -48,7 +48,7 @@ export const HistoryPage: React.FC = () => {
     const hasMockData = safeTxs.some(tx => tx?.isMockData);
 
     return (
-        <div className="space-y-2 animate-in fade-in duration-700 pb-20">
+        <div className="space-y-2 transition-opacity pb-20">
             {hasMockData && (
                 <div className="rounded-lg border border-alphabag-yellow/30 bg-alphabag-yellow/10 px-4 py-2.5 text-xs text-alphabag-yellow font-bold uppercase tracking-wide">
                     Demo data shown — live transaction sync is unavailable right now. These entries are not your real transaction history.

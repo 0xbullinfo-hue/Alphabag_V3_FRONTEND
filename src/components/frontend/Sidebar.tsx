@@ -1,7 +1,7 @@
 import { ChevronDown, Lock, LogOut } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { alert, Swal } from '../../lib/alert';
 import { useAuth } from '../../context/AuthContext';
 import { useFeatures } from '../../hooks/useFeatures';
 import { DISABLED_PAGES } from '../../services/config';
@@ -34,18 +34,11 @@ const NavItem: React.FC<NavItemProps> = ({
   const handleClick = (e: React.MouseEvent) => {
     if (isDisabled) {
       e.preventDefault();
-      Swal.fire({
+      alert.fire({
         title: 'COMING SOON',
         text: `${label} feature is in final testing.`,
         icon: 'info',
         confirmButtonText: 'ACKNOWLEDGE',
-        confirmButtonColor: '#F0B90B',
-        background: '#181A20',
-        color: '#EAECEF',
-        customClass: {
-          popup: 'border border-[#2B313A] rounded-[6px]',
-          confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
-        }
       });
       return;
     }
@@ -59,29 +52,20 @@ const NavItem: React.FC<NavItemProps> = ({
 
       e.preventDefault();
       if (!isAuthenticated) {
-        Swal.fire({
+        alert.fire({
           title: 'PREMIUM VERIFICATION',
           text: 'Alpha Desk is an exclusive workstation of AlphaBAG. Connect your wallet to verify your tier access.',
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'CONNECT WALLET',
           cancelButtonText: 'CANCEL',
-          confirmButtonColor: '#F0B90B',
-          cancelButtonColor: '#2B313A',
-          background: '#181A20',
-          color: '#EAECEF',
-          customClass: {
-            popup: 'border border-[#2B313A] rounded-[6px]',
-            confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs',
-            cancelButton: 'text-gray-300 font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
-          }
         }).then((res) => {
           if (res.isConfirmed) {
             window.dispatchEvent(new CustomEvent('open-login-modal'));
           }
         });
       } else {
-        Swal.fire({
+        alert.fire({
           title: 'PREMIUM TIER REQUIRED',
           html: `
             <div class="text-xs text-gray-300 space-y-2 text-left">
@@ -93,15 +77,6 @@ const NavItem: React.FC<NavItemProps> = ({
           showCancelButton: true,
           confirmButtonText: 'UPGRADE TIER',
           cancelButtonText: 'VIEW PASSES',
-          confirmButtonColor: '#F0B90B',
-          cancelButtonColor: '#2B313A',
-          background: '#181A20',
-          color: '#EAECEF',
-          customClass: {
-            popup: 'border border-[#2B313A] rounded-[6px]',
-            confirmButton: 'text-black font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs',
-            cancelButton: 'text-gray-300 font-semibold uppercase tracking-wider px-5 py-2 rounded text-xs'
-          }
         }).then((res) => {
           if (res.isConfirmed) {
             window.dispatchEvent(new CustomEvent('open-upgrade-modal'));

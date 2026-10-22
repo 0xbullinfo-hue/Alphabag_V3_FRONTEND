@@ -726,7 +726,7 @@ export const Calculator: React.FC<{ minimal?: boolean }> = ({ minimal = false })
     };
 
     return (
-        <div className={`w-full animate-in fade-in duration-700 calculator-container ${minimal ? 'flex-1 flex flex-col justify-between' : 'space-y-2 pb-2'}`}>
+        <div className={`w-full transition-opacity calculator-container ${minimal ? 'flex-1 flex flex-col justify-between' : 'space-y-2 pb-2'}`}>
             {/* Page Header */}
             {!minimal && (
                 <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2">

@@ -86,7 +86,7 @@ export const Integrations: React.FC = () => {
   });
 
   return (
-    <div className="space-y-2 animate-in fade-in duration-700 relative min-h-[calc(100vh-12rem)] w-full pb-10">
+    <div className="space-y-2 transition-opacity relative min-h-[calc(100vh-12rem)] w-full pb-10">
             <div className="page-header-card flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
                     <div className="flex items-center gap-2 mb-2">

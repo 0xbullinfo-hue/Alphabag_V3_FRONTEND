@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { alert } from '../../lib/alert';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
@@ -66,16 +66,14 @@ export const Settings: React.FC = () => {
             const info = SUPPORTED_CEX.find(c => c.id === activeCexId);
             if (!info) return;
             await connectExchange(info, apiKey, secret);
-            Swal.fire({ title: 'Connected', text: `${info.name} Read-Only API verified!`, icon: 'success', timer: 1500, showConfirmButton: false, background: '#1E2329', color: '#FFF' });
+            alert.fire({ title: 'Connected', text: `${info.name} Read-Only API verified!`, icon: 'success', timer: 1500, showConfirmButton: false });
             setIsCexModalOpen(false);
             setActiveCexId(null);
         } catch (e: any) {
-            Swal.fire({
+            alert.fire({
                 title: 'Connection Failed',
                 text: e?.response?.data?.message || e?.message || 'Could not verify this exchange API key. Please check your key and try again.',
                 icon: 'error',
-                background: '#1E2329',
-                color: '#FFF',
             });
         } finally {
             setIsConnectingCex(false);
@@ -85,7 +83,7 @@ export const Settings: React.FC = () => {
     const availableCex = SUPPORTED_CEX.filter(c => !connectedCex.find(cc => cc.id === c.id));
 
     return (
-        <div className="w-full space-y-4 animate-in fade-in duration-700 pb-6">
+        <div className="w-full space-y-4 transition-opacity pb-6">
             {/* Page Header */}
             <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>

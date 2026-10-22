@@ -21,7 +21,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ isOpen, 
   if (!isOpen) return null;
 
   return (
-    <div id="notification-center" role="region" aria-label="Notifications" className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-alphabag-dark rounded-md border border-alphabag-gray shadow-2xl z-[100] animate-in slide-in-from-top-2 duration-200">
+    <div id="notification-center" role="region" aria-label="Notifications" className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-alphabag-dark rounded-md border border-alphabag-gray shadow-2xl z-[100] animate-slide-in">
       <div className="p-3 border-b border-white/5 flex justify-between items-center bg-white/5">
         <div className="flex items-center gap-2">
           <Bell size={14} className="text-alphabag-yellow" />

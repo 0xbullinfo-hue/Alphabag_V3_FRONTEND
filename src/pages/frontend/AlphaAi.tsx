@@ -85,7 +85,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
   const numAssets = portfolioItems.length + cexAssetCount;
 
   return (
-    <div className={`flex flex-col animate-in fade-in duration-500 w-full text-alphabag-text ${embedded ? 'min-h-[640px]' : 'min-h-[calc(100vh-100px)]'}`}>
+    <div className={`flex flex-col transition-opacity w-full text-alphabag-text ${embedded ? 'min-h-[640px]' : 'min-h-[calc(100vh-100px)]'}`}>
       {/* Header (hidden in embedded Alpha Desk mode) */}
       {!embedded && (
         <div className="page-header-card flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-2 shrink-0">

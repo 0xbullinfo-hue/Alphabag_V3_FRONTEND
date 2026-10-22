@@ -726,7 +726,7 @@ export const AlphasFeed: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-3 pb-8 animate-in fade-in duration-500">
+    <div className="w-full space-y-3 pb-8 transition-opacity">
       {/* ── COMMUNITY HEADER ── */}
       <div className="page-header-card flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
@@ -867,7 +867,7 @@ export const AlphasFeed: React.FC = () => {
 
           {/* Expandable Live Space Chat */}
           {podcast.isListening && (
-            <div className="mt-4 pt-4 border-t border-[#2B313A] space-y-3 animate-in slide-in-from-top-2 duration-300">
+            <div className="mt-4 pt-4 border-t border-[#2B313A] space-y-3 transition-opacity">
               <div className="flex justify-between items-center text-xs">
                 <span className="font-semibold text-alphabag-text uppercase text-[11px] flex items-center gap-1.5">
                   <MessageCircle size={13} className="text-alphabag-yellow" />
@@ -1174,7 +1174,7 @@ export const AlphasFeed: React.FC = () => {
 
                   {/* ── EXPANDABLE COMMENT THREAD ── */}
                   {isExpanded && (
-                    <div className="pt-3 border-t border-[#2B313A] space-y-3 animate-in fade-in duration-300">
+                    <div className="pt-3 border-t border-[#2B313A] space-y-3 transition-opacity">
                       <div className="bg-[#0B0E11] border border-[#2B313A] rounded-md p-3 space-y-2">
                         <label htmlFor={`comment-${post.id}`} className="text-xs font-semibold text-alphabag-text">
                           Add a comment
@@ -1408,7 +1408,7 @@ export const AlphasFeed: React.FC = () => {
       {/* ── CREATE COMMUNITY MODAL (RESEARCHED SECTORS + CUSTOM OPTION) ── */}
       {isCreateCommunityOpen && (
         <div
-          className="fixed inset-0 bg-[#0B0E11]/85 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#0B0E11]/85 z-50 flex items-center justify-center p-4 transition-opacity"
           role="dialog"
           aria-modal="true"
           aria-labelledby="create-community-title"
@@ -1557,7 +1557,7 @@ export const AlphasFeed: React.FC = () => {
       {/* ── NEW POST COMPOSER MODAL ── */}
       {isComposerOpen && (
         <div
-          className="fixed inset-0 bg-[#0B0E11]/85 z-50 flex items-center justify-center p-4 animate-in fade-in duration-200"
+          className="fixed inset-0 bg-[#0B0E11]/85 z-50 flex items-center justify-center p-4 transition-opacity"
           role="dialog"
           aria-modal="true"
           aria-labelledby="new-post-title"

@@ -550,7 +550,7 @@ export const AlphaScreener: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-3 pb-8 animate-in fade-in duration-300">
+    <div className="w-full space-y-3 pb-8 transition-opacity">
       {/* ── DexScreener Command Bar Header ── */}
       <div className="bg-[#14171D] border border-[#2B313A] rounded-lg p-3.5 space-y-3 shadow-md">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">

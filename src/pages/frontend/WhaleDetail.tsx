@@ -127,7 +127,7 @@ export const WhaleDetail: React.FC = () => {
     );
 
     return (
-        <div className="space-y-2 animate-in fade-in duration-700 relative">
+        <div className="space-y-2 transition-opacity relative">
             {actionNotice && <div role="status" className="fixed top-20 right-4 z-[60] rounded-md border border-alphabag-gray bg-alphabag-darkgray px-3 py-2 text-sm text-alphabag-text">{actionNotice}</div>}
             {showToast && (
                 <div className="fixed top-20 right-8 z-[60] bg-alphabag-darkgray border border-alphabag-yellow/30 px-4 py-3 rounded-md shadow-2xl flex items-center space-x-2">

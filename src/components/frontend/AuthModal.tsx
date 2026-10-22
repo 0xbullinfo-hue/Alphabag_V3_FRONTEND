@@ -98,7 +98,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-alphabag-black/90 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-alphabag-black/90 transition-opacity">
       <div className="bg-alphabag-dark border border-white/10 w-full max-w-sm rounded-lg overflow-hidden relative group">
         <div className="p-5 relative z-10">
           <div className="flex justify-between items-center mb-4">
@@ -134,7 +134,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
           <div className="space-y-3">
             {error && (
-              <div className="text-red-400 text-[11px] text-center font-semibold uppercase tracking-wider bg-red-500/10 border border-red-500/20 p-2.5 rounded-md animate-in shake duration-300">
+              <div className="text-red-400 text-[11px] text-center font-semibold uppercase tracking-wider bg-red-500/10 border border-red-500/20 p-2.5 rounded-md transition-opacity">
                 Error: {error}
               </div>
             )}
@@ -191,7 +191,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             )}
 
             {step === 'SUCCESS' && (
-              <div className="flex flex-col items-center justify-center py-3 space-y-2 animate-in zoom-in duration-300">
+              <div className="flex flex-col items-center justify-center py-3 space-y-2 transition-opacity">
                 <div className="w-16 h-16 bg-alphabag-green/20 rounded-full flex items-center justify-center text-alphabag-green">
                   <CheckCircle2 size={36} strokeWidth={2.5} />
                 </div>

@@ -402,7 +402,7 @@ export const Airdrop: React.FC = () => {
     };
 
     return (
-        <div className="w-full space-y-3 pb-2 animate-in fade-in duration-700">
+        <div className="w-full space-y-3 pb-2 transition-opacity">
         <SEO
           title="Airdrop Rewards & Ecosystem Points | AlphaBAG"
           description="Participate in AlphaBAG ecosystem quests, earn airdrop points, and verify your wallet eligibility for early community rewards."
@@ -430,7 +430,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Mission Paused Banner */}
             {missionPaused && (
-                <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl animate-in slide-in-from-top-4 duration-500">
+                <div className="flex items-center gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl transition-opacity">
                     <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
                         <Lock size={20} className="text-yellow-400" />
                     </div>
@@ -552,7 +552,7 @@ export const Airdrop: React.FC = () => {
                         <div className="flex flex-col flex-1">
                             <div className="mb-3 flex-1">
                                 {campaignEnded ? (
-                                    <div className="animate-in fade-in zoom-in duration-500">
+                                    <div className="transition-opacity">
                                         <div className="text-[11px] text-alphabag-yellow font-semibold uppercase text-center mb-3">Wallet Distribution Protocol</div>
                                         <TGECountdown targetDate={new Date(new Date(stats.tgeDate).getTime() + 72 * 60 * 60 * 1000).toISOString()} />
                                     </div>
@@ -881,7 +881,7 @@ export const Airdrop: React.FC = () => {
 
             {/* Submission Section (Founder & Social) */}
             {!submitted ? (
-                <div className="space-y-3 animate-in slide-in-from-bottom-8 duration-700">
+                <div className="space-y-3 transition-opacity">
                     <div className="rounded-2xl p-5 bg-alphabag-darkgray border border-alphabag-gray">
                         <div className="mb-4">
                             <h2 className="text-xl font-semibold text-alphabag-text flex items-center gap-2">
@@ -1031,7 +1031,7 @@ export const Airdrop: React.FC = () => {
                     </div>
 
                     {isFounderApplication && (
-                        <div className="space-y-3 pt-2 animate-in slide-in-from-top-4 duration-500">
+                        <div className="space-y-3 pt-2 transition-opacity">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 <div className="space-y-1">
                                 <label className="text-xs text-alphabag-subtext font-semibold">Project Name</label>
