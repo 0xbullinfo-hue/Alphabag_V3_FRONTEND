@@ -49,7 +49,7 @@ export const Integrations: React.FC = () => {
           id: `cex-${cex.id}`,
           rawId: cex.id,
           name: cex.name,
-          subtext: `API Key: ${cex.apiKey}`,
+          subtext: `API Key: \u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022${cex.apiKey ? cex.apiKey.slice(-4) : "...."}`,
           icon: cex.icon,
           category: 'CEX' as const,
           status: 'ACTIVE' as const

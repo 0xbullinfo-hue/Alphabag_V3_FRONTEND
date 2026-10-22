@@ -253,7 +253,7 @@ export const CexBag: React.FC = () => {
                                     ) : (
                                         connectedCex.flatMap((cex) =>
                                             (cex.balances || []).map((asset: any, idx: number) => (
-                                            <tr key={idx} className="hover:bg-alphabag-gray/40 transition-colors">
+                                            <tr key={`${cex.id}-${asset.symbol || idx}`} className="hover:bg-alphabag-gray/40 transition-colors">
                                                 <td className="p-4 px-6">
                                                     <div className="flex items-center gap-2">
                                                         <img src={asset.img || `https://cryptologos.cc/logos/${asset.symbol?.toLowerCase()}-${asset.symbol?.toLowerCase()}-logo.png`} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
@@ -299,7 +299,7 @@ export const CexBag: React.FC = () => {
                                                     <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green mr-1.5"></div>
                                                     API Connected {cex.lastSynced ? `· Synced ${timeSince(cex.lastSynced)}` : ''}
                                                 </div>
-                                                <div className="text-alphabag-subtext text-[11px] font-mono mt-0.5">{cex.apiKey}</div>
+                                                <div className="text-alphabag-subtext text-[11px] font-mono mt-0.5">{cex.apiKey ? `\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022${cex.apiKey.slice(-4)}` : "Key encrypted at rest"}</div>
                                             </div>
                                         </div>
                                         <button onClick={() => removeConnection(cex.id)} className="text-alphabag-subtext hover:text-alphabag-red transition-colors p-2">

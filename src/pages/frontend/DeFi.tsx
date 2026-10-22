@@ -1,5 +1,6 @@
 import { Activity, AlertTriangle, Download, RefreshCw, ShieldCheck } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
@@ -17,6 +18,7 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 export const DeFi: React.FC = () => {
+    const navigate = useNavigate();
     const { address } = useWallet();
     const [positions, setPositions] = useState<DefiPosition[]>([]);
     const [source, setSource] = useState<'moralis' | 'defillama-opportunities' | 'none'>('none');
@@ -149,7 +151,7 @@ export const DeFi: React.FC = () => {
                         <div className="w-1.5 h-1.5 rounded-full bg-alphabag-green"></div>
                         <span className="text-[11px] font-medium uppercase tracking-wider text-alphabag-subtext">Nodes Live</span>
                     </div>
-                    <button className="flex items-center gap-1.5 bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all">
+                    <button onClick={() => navigate("/security")} className="flex items-center gap-1.5 bg-alphabag-gray text-alphabag-text px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-muted transition-all">
                         <Activity size={13} /> Protocol Audit
                     </button>
                 </div>
@@ -199,7 +201,7 @@ export const DeFi: React.FC = () => {
                           <tbody className="divide-y divide-alphabag-gray text-[13px]">
                               {filtered.length === 0 ? (
                                   <tr>
-                                      <td colSpan={6} className="p-12 text-center text-alphabag-subtext bg-alphabag-black/10">No positions found.</td>
+                                      <td colSpan={5} className="p-12 text-center text-alphabag-subtext bg-alphabag-black/10">No positions found.</td>
                                   </tr>
                               ) : (
                                   filtered.map(pos => (

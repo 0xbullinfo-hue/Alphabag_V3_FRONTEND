@@ -886,8 +886,8 @@ export const Landing: React.FC = () => {
                 {/* Left Column: Copy & Stats */}
                 <div className="lg:col-span-6 text-left space-y-4 flex flex-col justify-center">
                   <h1 className="text-4xl sm:text-5xl lg:text-[54px] xl:text-[58px] font-bold text-alphabag-text leading-[1.08] tracking-[-0.03em]">
-                    <span className="block whitespace-nowrap">{t('hero_title_1')}</span>
-                    <span className="flex items-baseline gap-2.5 mt-1.5 whitespace-nowrap">
+                    <span className="block">{t('hero_title_1')}</span>
+                    <span className="flex flex-wrap items-baseline gap-2.5 mt-1.5">
                       <span className="text-xl sm:text-2xl lg:text-[26px] font-semibold text-alphabag-subtext tracking-normal">with</span>
                       <span className="text-alphabag-yellow">{t('hero_title_2')}</span>
                     </span>
