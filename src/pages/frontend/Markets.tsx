@@ -489,7 +489,7 @@ export const Markets: React.FC = () => {
   };
 
   return (
-    <div className="w-full space-y-3 pb-8 animate-in fade-in duration-300">
+    <div className="w-full space-y-3 pb-8 transition-opacity">
       {/* ── CoinMarketCap Global Crypto Metrics Ticker Bar ── */}
       <div className="bg-[#14171D] border border-[#2B313A] rounded-lg px-4 py-2.5 flex flex-wrap items-center justify-between text-xs text-gray-300 gap-y-2 shadow-sm">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px]">
@@ -499,18 +499,18 @@ export const Markets: React.FC = () => {
           </div>
           <div>
             <span className="text-gray-400">Market Cap: </span>
-            <span className="text-white font-semibold">{telemetry?.marketCap ? fmt(telemetry.marketCap) : "$3.03T"}</span>
+            <span className="text-white font-semibold">{telemetry?.marketCap ? fmt(telemetry.marketCap) : "—"}</span>
             <span className="text-[#0ECB81] ml-1 font-semibold">+1.82% ▲</span>
           </div>
           <div>
             <span className="text-gray-400">24h Vol: </span>
-            <span className="text-white font-semibold">{telemetry?.volume ? fmt(telemetry.volume) : "$82.3B"}</span>
+            <span className="text-white font-semibold">{telemetry?.volume ? fmt(telemetry.volume) : "—"}</span>
           </div>
           <div>
             <span className="text-gray-400">Dominance: </span>
-            <span className="text-white font-semibold">BTC: {telemetry?.btcDominance ? telemetry.btcDominance.toFixed(1) + "%" : "55.4%"}</span>
+            <span className="text-white font-semibold">BTC: {telemetry?.btcDominance ? telemetry.btcDominance.toFixed(1) + "%" : "—"}</span>
             <span className="text-gray-400 mx-1">·</span>
-            <span className="text-white font-semibold">ETH: 13.9%</span>
+            <span className="text-white font-semibold">ETH: {telemetry?.ethDominance ? telemetry.ethDominance.toFixed(1) + "%" : "—"}</span>
           </div>
           <div>
             <span className="text-gray-400">ETH Gas: </span>
