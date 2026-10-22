@@ -15,8 +15,9 @@ const DEV_USER: User = {
   id: 'dev-user-001',
   email: 'trader@alphabag.app',
   tier: 'ULTIMATE',
-  verifiedWallet: '0x1111111111111111111111111111111111111111',
-  walletAddress: '0x1111111111111111111111111111111111111111',
+  // verifiedWallet removed so unauthenticated/dev state does not inject phantom wallet
+  verifiedWallet: undefined,
+  walletAddress: undefined,
   alphaAiUsageSeconds: 0,
   lastAlphaAiReset: new Date().toISOString(),
   isAdmin: false,

@@ -10,7 +10,7 @@ import { formatUsd } from '../../lib/formatters';
 
 export const MyAlphabag: React.FC = () => {
     const navigate = useNavigate();
-    const { portfolioItems, trackedWallets, address: activeAddress, isSyncing } = useWallet();
+    const { portfolioItems, trackedWallets, address: activeAddress, isSyncing, whaleAlerts } = useWallet();
     const { connections: cexConnections, totalBalance: cexTotal } = useCexConnections();
 
     const [activeSection, setActiveSection] = useState<'overview' | 'fee-auditor'>('overview');
@@ -34,6 +34,19 @@ export const MyAlphabag: React.FC = () => {
     ].filter(Boolean) as string[])), [trackedWallets, portfolioItems]);
 
     const feeAuditData = useMemo(() => {
+        if (dexWallets.length === 0 && (!auditingWallet || selectedWallet !== 'custom')) {
+            return {
+                gasSpent: 0,
+                slippageLoss: 0,
+                bridgeFriction: 0,
+                totalFees: 0,
+                ethLeakage: 0,
+                solLeakage: 0,
+                bscLeakage: 0,
+                baseLeakage: 0,
+                txs: []
+            };
+        }
         let gasSpent = 642.50;
         let slippageLoss = 124.20;
         let bridgeFriction = 89.00;
@@ -135,14 +148,7 @@ export const MyAlphabag: React.FC = () => {
             });
         }
 
-        const list = Object.values(dataMap).sort((a, b) => b.value - a.value);
-        if (list.length > 0) return list;
-
-        return [
-            { name: 'ETH', value: 0, color: '#3B82F6' },
-            { name: 'USDT', value: 0, color: '#0ECB81' },
-            { name: 'SOL', value: 0, color: '#8B5CF6' }
-        ];
+        return Object.values(dataMap).sort((a, b) => b.value - a.value);
     }, [portfolioItems, cexConnections]);
 
     return (
@@ -204,50 +210,65 @@ export const MyAlphabag: React.FC = () => {
                             <span className="font-semibold text-alphabag-text num">{formatUsd(cexTotal)}</span> CEX Holdings &nbsp;·&nbsp; <span className="font-semibold text-alphabag-text num">{formatUsd(dexTotal)}</span> DEX Holdings
                         </p>
                     </div>
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-emerald-500/10 text-alphabag-green font-semibold text-xs shrink-0 self-start mt-4 border border-emerald-500/20 num">
-                        <TrendingUp size={13} /> +3.9% 24h
-                    </div>
+                    {combinedTotal > 0 ? (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-emerald-500/10 text-alphabag-green font-semibold text-xs shrink-0 self-start mt-4 border border-emerald-500/20 num">
+                            <TrendingUp size={13} /> Live Balance Active
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-sm bg-neutral-800 text-alphabag-subtext font-semibold text-xs shrink-0 self-start mt-4 border border-neutral-700 num">
+                            No Active Balance
+                        </div>
+                    )}
                 </div>
 
                 {/* Total Allocation Donut Chart */}
                 <div className="lg:col-span-2 bg-[#181A20] border border-[#2B313A] rounded-md p-4 flex flex-row items-center gap-4">
-                    <div className="w-1/2 h-[120px] relative shrink-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <RePieChart>
-                                <Pie 
-                                    data={allocationData} 
-                                    cx="50%" 
-                                    cy="50%" 
-                                    innerRadius={36} 
-                                    outerRadius={52} 
-                                    paddingAngle={3} 
-                                    dataKey="value"
-                                >
-                                    {allocationData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} stroke="#181A20" strokeWidth={2} />
+                    {allocationData.length > 0 ? (
+                        <>
+                            <div className="w-1/2 h-[120px] relative shrink-0">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <RePieChart>
+                                        <Pie 
+                                            data={allocationData} 
+                                            cx="50%" 
+                                            cy="50%" 
+                                            innerRadius={36} 
+                                            outerRadius={52} 
+                                            paddingAngle={3} 
+                                            dataKey="value"
+                                        >
+                                            {allocationData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={entry.color} stroke="#181A20" strokeWidth={2} />
+                                            ))}
+                                        </Pie>
+                                    </RePieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="w-1/2 space-y-1.5 overflow-hidden">
+                                <p className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Asset Weight</p>
+                                <div className="space-y-1 text-xs">
+                                    {allocationData.slice(0, 4).map((a) => (
+                                        <div key={a.name} className="flex items-center justify-between gap-2">
+                                            <span className="flex items-center gap-1.5 truncate text-alphabag-text">
+                                                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: a.color }}></span>
+                                                {a.name}
+                                            </span>
+                                            <span className="text-alphabag-subtext num text-[11px]">
+                                                {combinedTotal > 0 && Number.isFinite(a.value)
+                                                    ? ((a.value / combinedTotal) * 100).toFixed(1)
+                                                    : '0.0'}%
+                                            </span>
+                                        </div>
                                     ))}
-                                </Pie>
-                            </RePieChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className="w-1/2 space-y-1.5 overflow-hidden">
-                        <p className="text-[11px] font-semibold text-alphabag-subtext uppercase tracking-wider">Asset Weight</p>
-                        <div className="space-y-1 text-xs">
-                            {allocationData.slice(0, 4).map((a) => (
-                                <div key={a.name} className="flex items-center justify-between gap-2">
-                                    <span className="flex items-center gap-1.5 truncate text-alphabag-text">
-                                        <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: a.color }}></span>
-                                        {a.name}
-                                    </span>
-                                    <span className="text-alphabag-subtext num text-[11px]">
-                                        {combinedTotal > 0 && Number.isFinite(a.value)
-                                            ? ((a.value / combinedTotal) * 100).toFixed(1)
-                                            : '0.0'}%
-                                    </span>
                                 </div>
-                            ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className="w-full flex flex-col items-center justify-center text-center py-6 text-alphabag-subtext text-xs space-y-1">
+                            <span className="font-semibold text-alphabag-text uppercase text-[11px]">Asset Weight</span>
+                            <p>No tracked assets to allocate</p>
                         </div>
-                    </div>
+                    )}
                 </div>
 
             </div>
@@ -472,36 +493,22 @@ export const MyAlphabag: React.FC = () => {
                             </h3>
                         </div>
 
-                        <div className="space-y-3 flex-1">
-                            <div className="flex gap-2.5 items-start border-b border-[#2B313A]/50 pb-2.5">
-                                <div className="w-6 h-6 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0 text-xs font-semibold">W</div>
-                                <div className="space-y-0.5 min-w-0">
-                                    <p className="text-xs text-alphabag-text leading-relaxed">
-                                        <span className="font-semibold">0x7a2...f31</span> transferred <span className="font-semibold num">1,200 ETH</span> to exchange custody.
-                                    </p>
-                                    <span className="text-[11px] text-alphabag-subtext block num">2m ago</span>
+                        <div className="space-y-3 flex-1 flex flex-col justify-center">
+                            {whaleAlerts && whaleAlerts.length > 0 ? (
+                                whaleAlerts.slice(0, 3).map((alert, idx) => (
+                                    <div key={idx} className="flex gap-2.5 items-start border-b border-[#2B313A]/50 pb-2.5">
+                                        <div className="w-6 h-6 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 flex items-center justify-center shrink-0 text-xs font-semibold">W</div>
+                                        <div className="space-y-0.5 min-w-0">
+                                            <p className="text-xs text-alphabag-text leading-relaxed">{alert}</p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center py-6 text-alphabag-subtext text-xs space-y-1">
+                                    <Radio size={20} className="mx-auto text-alphabag-muted opacity-40 mb-1" />
+                                    <p>Awaiting live protocol alerts...</p>
                                 </div>
-                            </div>
-
-                            <div className="flex gap-2.5 items-start border-b border-[#2B313A]/50 pb-2.5">
-                                <div className="w-6 h-6 rounded bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20 flex items-center justify-center shrink-0 text-xs font-semibold">S</div>
-                                <div className="space-y-0.5 min-w-0">
-                                    <p className="text-xs text-alphabag-text leading-relaxed">
-                                        <span className="font-semibold">Trade signal</span> registered for <span className="font-semibold text-alphabag-yellow">$JUP</span>.
-                                    </p>
-                                    <span className="text-[11px] text-alphabag-subtext block num">18m ago</span>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-2.5 items-start">
-                                <div className="w-6 h-6 rounded bg-emerald-500/10 text-alphabag-green border border-emerald-500/20 flex items-center justify-center shrink-0 text-xs font-semibold">M</div>
-                                <div className="space-y-0.5 min-w-0">
-                                    <p className="text-xs text-alphabag-text leading-relaxed">
-                                        Ecosystem reward cycle is live for verified members.
-                                    </p>
-                                    <span className="text-[11px] text-alphabag-subtext block num">1h ago</span>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
 

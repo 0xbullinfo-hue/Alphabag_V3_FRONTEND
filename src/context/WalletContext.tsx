@@ -61,7 +61,20 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [isPremium, setIsPremium] = useState(false);
   const [trackedWallets, setTrackedWallets] = useState<WalletEntry[]>(() => {
     const saved = localStorage.getItem('alphabag_tracked_wallets');
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    try {
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed)
+        ? parsed.filter(w =>
+            w?.address &&
+            w.address.toLowerCase() !== '0x1111111111111111111111111111111111111111' &&
+            w.address.toLowerCase() !== '0x0000000000000000000000000000000000000000' &&
+            !w.id?.startsWith('connected-')
+          )
+        : [];
+    } catch {
+      return [];
+    }
   });
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [whaleAlerts, setWhaleAlerts] = useState<string[]>([]);
@@ -134,7 +147,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // must NEVER be used as a fallback here — it's a database identifier,
   // not a wallet address, and passing it into chain-balance lookups would
   // silently produce garbage results.
-  const activeAddress = wagmiAddress || manualAddress || user?.verifiedWallet || undefined;
+  const activeAddress = (wagmiIsConnected && wagmiAddress) ? wagmiAddress : (manualAddress || undefined);
 
   // Auto-sync connected Web3 wallet into trackedWallets so portfolio is reflected immediately
   useEffect(() => {
@@ -150,6 +163,9 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           type: 'PORTFOLIO'
         }, ...prev];
       });
+    } else if (!wagmiIsConnected) {
+      // Clean up ephemeral auto-connected wallet so disconnecting returns to a clean slate
+      setTrackedWallets(prev => prev.filter(w => !w.id?.startsWith('connected-')));
     }
   }, [wagmiAddress, wagmiIsConnected]);
 

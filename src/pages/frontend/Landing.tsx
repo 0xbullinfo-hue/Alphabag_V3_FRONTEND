@@ -31,7 +31,6 @@ import React,{ useEffect,useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
-import { useWallet } from '../../context/WalletContext';
 import { Calculator } from './Calculator';
 import { ProblemSection, SolutionSection, OnboardingPipeline } from '../../components/frontend/LandingSections';
 import { TGECountdown } from '../../components/frontend/TGECountdown';
@@ -40,12 +39,8 @@ import { Markets } from './Markets';
 
 // When VITE_LAUNCH_MODE=teaser, the app shows landing only — no auth, no backend required.
 const IS_TEASER_MODE = import.meta.env.VITE_LAUNCH_MODE === 'teaser';
-// Pre-TGE countdown: anchored to 2026-08-31 with a 62-day runway
-const PRE_LAUNCH_ANCHOR = '2026-08-31T00:00:00Z';
-const PRE_LAUNCH_WINDOW_DAYS = 62;
-const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || new Date(
-  new Date(PRE_LAUNCH_ANCHOR).getTime() + PRE_LAUNCH_WINDOW_DAYS * 24 * 60 * 60 * 1000
-).toISOString();
+// Pre-TGE countdown: targeted to November 25, 2026 for beta release
+const TEASER_LAUNCH_AT = import.meta.env.VITE_TEASER_LAUNCH_AT || '2026-11-25T00:00:00Z';
 
 const FALLBACK_SITE_URL = 'https://myalphabag.com';
 
@@ -581,7 +576,6 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-  const { connectWallet } = useWallet();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const validTabs: LandingTab[] = ['home', 'features', 'roadmap', 'faq', 'calculator', 'markets'];
@@ -763,11 +757,6 @@ export const Landing: React.FC = () => {
     };
   }, []);
 
-  const handleLaunchApp = () => {
-    // Directs to Web3 wallet connection only
-    connectWallet();
-  };
-
 
 
 
@@ -826,21 +815,15 @@ export const Landing: React.FC = () => {
           <div className="hidden md:flex items-center space-x-2">
 
             {/* Main Auth/Demo CTAs */}
-            {IS_TEASER_MODE ? (
-              <Button size="sm" onClick={handleLaunchApp} className="font-semibold px-6 bg-alphabag-yellow text-black hover:bg-yellow-400 border-none cursor-pointer">
-                JOIN US
-              </Button>
-            ) : (
-              <Button
-                size="sm"
-                disabled
-                aria-disabled="true"
-                title="Wallet connection coming soon"
-                className="font-semibold px-6 bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
-              >
-                Build your portfolio
-              </Button>
-            )}
+            <Button
+              size="sm"
+              disabled
+              aria-disabled="true"
+              title="Coming soon for beta testing"
+              className="font-semibold px-6 bg-alphabag-yellow text-black border-none cursor-not-allowed pointer-events-none opacity-85"
+            >
+              Build your portfolio
+            </Button>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -862,8 +845,8 @@ export const Landing: React.FC = () => {
               size="lg"
               disabled
               aria-disabled="true"
-              title="Wallet connection coming soon"
-              className="w-full font-semibold bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
+              title="Coming soon for beta testing"
+              className="w-full font-semibold bg-alphabag-yellow text-black border-none cursor-not-allowed pointer-events-none opacity-85"
             >
               Build your portfolio
             </Button>
@@ -903,16 +886,23 @@ export const Landing: React.FC = () => {
                         size="lg"
                         disabled
                         aria-disabled="true"
-                        title="Wallet connection coming soon"
-                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-semibold bg-alphabag-yellow/50 text-black/60 border-none rounded-md transition-colors cursor-not-allowed opacity-60"
+                        title="Coming soon for beta testing"
+                        className="w-full sm:flex-1 px-8 py-3.5 text-sm font-semibold bg-alphabag-yellow text-black border-none rounded-md cursor-not-allowed pointer-events-none opacity-85"
                       >
                         Build your portfolio
                       </Button>
-                      <a href="https://t.me/alphabag_access" target="_blank" rel="noopener noreferrer" className="w-full sm:flex-1">
-                        <Button variant="outline" size="lg" className="w-full px-8 py-3.5 text-sm font-semibold border-alphabag-gray hover:border-alphabag-muted hover:bg-alphabag-gray/40 text-alphabag-text rounded-md transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                      <div className="w-full sm:flex-1">
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          disabled
+                          aria-disabled="true"
+                          title="Coming soon for beta testing"
+                          className="w-full px-8 py-3.5 text-sm font-semibold border-alphabag-gray text-alphabag-text rounded-md flex items-center justify-center gap-2 cursor-not-allowed pointer-events-none opacity-85"
+                        >
                           <Send size={15} /> {t('btn_join_community')}
                         </Button>
-                      </a>
+                      </div>
                     </div>
 
                     {/* TGE EVENT Countdown Timer aligned flush with CTA row */}
@@ -983,8 +973,8 @@ export const Landing: React.FC = () => {
                     size="lg"
                     disabled
                     aria-disabled="true"
-                    title="Wallet connection coming soon"
-                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-semibold bg-alphabag-yellow/50 text-black/60 border-none cursor-not-allowed opacity-60"
+                    title="Coming soon for beta testing"
+                    className="w-full sm:w-auto px-10 py-3.5 text-sm font-semibold bg-alphabag-yellow text-black border-none rounded-md cursor-not-allowed pointer-events-none opacity-85"
                   >
                     Build your portfolio
                   </Button>
