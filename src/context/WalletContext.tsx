@@ -44,6 +44,28 @@ interface WalletContextType {
   addManualTransaction: (data: any) => void;
 }
 
+const KNOWN_MOCK_ADDRESSES = new Set([
+  '0x1111111111111111111111111111111111111111',
+  '0x0000000000000000000000000000000000000000',
+  '0x0137ecd59dae00d0b35ff440641dc60f7dc7ff13',
+  '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+  '0xf977814e90da44bfa03b6295a0616a897441acec',
+  '0xdbf5e9c5206d0db70a90108bf936da60221dc080',
+  '0xd4b6a66a2a69a5a43d2c2bce3b246a4805a128b7'
+]);
+
+const isMockWalletEntry = (w: any): boolean => {
+  if (!w || typeof w !== 'object') return true;
+  if (!w.address || typeof w.address !== 'string') return true;
+  const addr = w.address.trim().toLowerCase();
+  if (KNOWN_MOCK_ADDRESSES.has(addr)) return true;
+  if (w.isMockData) return true;
+  const label = (w.label || '').trim().toLowerCase();
+  if (/^whale\s*\d+$/i.test(label)) return true;
+  if (['known whale', 'unnamed whale', 'mock whale', 'test whale', 'demo wallet', 'mock wallet', 'test wallet'].includes(label)) return true;
+  return false;
+};
+
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -64,14 +86,17 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!saved) return [];
     try {
       const parsed = JSON.parse(saved);
-      return Array.isArray(parsed)
-        ? parsed.filter(w =>
-            w?.address &&
-            w.address.toLowerCase() !== '0x1111111111111111111111111111111111111111' &&
-            w.address.toLowerCase() !== '0x0000000000000000000000000000000000000000' &&
-            !w.id?.startsWith('connected-')
-          )
-        : [];
+      if (!Array.isArray(parsed)) return [];
+      const sanitized = parsed.filter(w =>
+        w?.address &&
+        !w.id?.startsWith('connected-') &&
+        !isMockWalletEntry(w)
+      );
+      // Immediately write back sanitized list so legacy mock data is permanently wiped from browser storage
+      if (sanitized.length !== parsed.length) {
+        localStorage.setItem('alphabag_tracked_wallets', JSON.stringify(sanitized));
+      }
+      return sanitized;
     } catch {
       return [];
     }
@@ -81,7 +106,18 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [manualTransactions, setManualTransactions] = useState<any[]>(() => {
     const saved = localStorage.getItem('alphabag_manual_holdings');
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) return [];
+    try {
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) return [];
+      const sanitized = parsed.filter(tx => tx && !tx.isMockData);
+      if (sanitized.length !== parsed.length) {
+        localStorage.setItem('alphabag_manual_holdings', JSON.stringify(sanitized));
+      }
+      return sanitized;
+    } catch {
+      return [];
+    }
   });
 
   // Single source of truth: AuthContext.user.tier, set only by the backend

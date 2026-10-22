@@ -24,9 +24,9 @@ const DEV_USER: User = {
   isPro: true,
   onboardingComplete: true,
   accountType: 'TRADER',
-  bagTokens: 1000000,
+  bagTokens: 0,
   referralCode: 'ALPHADEV',
-  referralCount: 12,
+  referralCount: 0,
   completedTasks: [],
 };
 

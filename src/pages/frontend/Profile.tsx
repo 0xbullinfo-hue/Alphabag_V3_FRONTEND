@@ -167,38 +167,8 @@ export const Profile: React.FC = () => {
                     setProject(projectData);
                 }
 
-                // Mock posts for timeline (Filtered by targetId)
-                const mockAllPosts = [
-                    {
-                        id: 'p1',
-                        authorId: 'user1',
-                        content: "Scaling the neural core to handle 50k requests/sec. The AlphaBAG engine is built for institutional load. #AlphaRadar",
-                        likeCount: 420,
-                        commentCount: 12,
-                        shareCount: 55,
-                        createdAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'p2',
-                        authorId: 'user2',
-                        content: "Just spotted a massive whale move on the Alpha Hub. The liquidity depth is incredible. Strong buy signals across the board.",
-                        likeCount: 89,
-                        commentCount: 4,
-                        shareCount: 12,
-                        createdAt: new Date(Date.now() - 3600000).toISOString()
-                    },
-                    {
-                        id: 'p3',
-                        authorId: user?.id || 'me',
-                        content: "Finally set up my AlphaBAG dashboard. The CEX + DEX unified portfolio view is a game changer for my workflow.",
-                        likeCount: 15,
-                        commentCount: 2,
-                        shareCount: 3,
-                        createdAt: new Date(Date.now() - 7200000).toISOString()
-                    }
-                ];
-
-                setPosts(mockAllPosts.filter(p => p.authorId === targetId || (targetId === user?.id && p.authorId === 'me')));
+                // Timeline posts (Empty default until user activity is logged)
+                setPosts([]);
             } catch (err) {
                 console.error("Failed to fetch profile", err);
             } finally {
@@ -503,7 +473,7 @@ export const Profile: React.FC = () => {
                             <div className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider mb-0.5">Tokens</div>
                             <div className="flex items-center justify-center gap-1">
                                 <Zap size={12} className="text-alphabag-yellow" fill="currentColor" />
-                                <span className="text-base font-bold text-white leading-tight num">{profileUser?.bagTokens || 100}</span>
+                                <span className="text-base font-bold text-white leading-tight num">{profileUser?.bagTokens ?? 0}</span>
                             </div>
                             <div className="text-[11px] font-semibold text-alphabag-muted uppercase">Top 1%</div>
                         </div>
