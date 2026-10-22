@@ -427,7 +427,7 @@ export const Markets: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === '⚡ DexScreener Live') {
+    if (selectedCategory === 'DexScreener Live') {
       fetchDexMarketPairs();
     }
   }, [selectedCategory, fetchDexMarketPairs]);
@@ -444,9 +444,9 @@ export const Markets: React.FC = () => {
 
   const filteredCoins = useMemo(() => {
     let list = coins;
-    if (selectedCategory === '⭐ Watchlist') {
+    if (selectedCategory === 'Watchlist') {
       list = list.filter((c) => watchlist.has(c.id));
-    } else if (selectedCategory !== 'All Cryptos' && selectedCategory !== '⚡ DexScreener Live') {
+    } else if (selectedCategory !== 'All Cryptos' && selectedCategory !== 'DexScreener Live') {
       list = list.filter((c) => c.category === selectedCategory);
     }
 
@@ -495,12 +495,16 @@ export const Markets: React.FC = () => {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px]">
           <div>
             <span className="text-gray-400">Cryptos: </span>
-            <span className="text-alphabag-yellow font-bold">2,400+</span>
+            <span className="text-alphabag-yellow font-bold">{telemetry?.activeCryptos ? Number(telemetry.activeCryptos).toLocaleString() : "2,400+"}</span>
           </div>
           <div>
             <span className="text-gray-400">Market Cap: </span>
             <span className="text-white font-semibold">{telemetry?.marketCap ? fmt(telemetry.marketCap) : "—"}</span>
-            <span className="text-[#0ECB81] ml-1 font-semibold">+1.82% ▲</span>
+            {telemetry?.marketCapChange24h != null ? (
+              <span className={"ml-1 font-semibold " + (telemetry.marketCapChange24h >= 0 ? "text-[#0ECB81]" : "text-rose-400")}>
+                {telemetry.marketCapChange24h >= 0 ? "+" + telemetry.marketCapChange24h.toFixed(2) + "%" : telemetry.marketCapChange24h.toFixed(2) + "%"}
+              </span>
+            ) : null}
           </div>
           <div>
             <span className="text-gray-400">24h Vol: </span>
@@ -514,11 +518,11 @@ export const Markets: React.FC = () => {
           </div>
           <div>
             <span className="text-gray-400">ETH Gas: </span>
-            <span className="text-[#0ECB81] font-semibold">12 Gwei</span>
+            <span className="text-[#0ECB81] font-semibold">{telemetry?.gasPriceGwei ? telemetry.gasPriceGwei + " Gwei" : "—"}</span>
           </div>
           <div>
             <span className="text-gray-400">Fear & Greed: </span>
-            <span className="text-[#0ECB81] font-bold">74 (Greed)</span>
+            <span className="text-[#0ECB81] font-bold">{telemetry?.fearAndGreed != null ? telemetry.fearAndGreed : "—"}</span>
           </div>
         </div>
 
@@ -562,26 +566,26 @@ export const Markets: React.FC = () => {
       {/* ── CoinMarketCap Category Pills ── */}
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
         <button
-          onClick={() => setSelectedCategory('⭐ Watchlist')}
+          onClick={() => setSelectedCategory('Watchlist')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-            selectedCategory === '⭐ Watchlist'
+            selectedCategory === 'Watchlist'
               ? 'bg-alphabag-yellow text-[#0B0E11] shadow'
               : 'bg-[#181A20] text-gray-300 hover:text-white hover:bg-[#202630] border border-[#2B313A]'
           }`}
         >
-          <Star size={12} className={selectedCategory === '⭐ Watchlist' ? 'fill-[#0B0E11]' : ''} />
+          <Star size={12} className={selectedCategory === 'Watchlist' ? 'fill-[#0B0E11]' : ''} />
           <span>Watchlist ({watchlist.size})</span>
         </button>
 
         <button
-          onClick={() => setSelectedCategory('⚡ DexScreener Live')}
+          onClick={() => setSelectedCategory('DexScreener Live')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-            selectedCategory === '⚡ DexScreener Live'
+            selectedCategory === 'DexScreener Live'
               ? 'bg-alphabag-yellow text-[#0B0E11] shadow'
               : 'bg-[#181A20] text-alphabag-yellow/90 hover:text-alphabag-yellow hover:bg-[#202630] border border-alphabag-yellow/30'
           }`}
         >
-          <Zap size={12} className={selectedCategory === '⚡ DexScreener Live' ? 'fill-[#0B0E11]' : ''} />
+          <Zap size={12} className={selectedCategory === 'DexScreener Live' ? 'fill-[#0B0E11]' : ''} />
           <span>DexScreener Live</span>
         </button>
 
@@ -603,7 +607,7 @@ export const Markets: React.FC = () => {
         })}
       </div>
 
-      {selectedCategory === '⚡ DexScreener Live' ? (
+      {selectedCategory === 'DexScreener Live' ? (
         <div className="rounded-lg border border-[#2B313A] bg-[#181A20] overflow-hidden shadow-xl">
           <div className="p-3 bg-[#14171D] border-b border-[#2B313A] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -638,7 +642,11 @@ export const Markets: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#2B313A] text-xs font-mono">
-                {filteredDexPairs.map((pair, idx) => {
+                {filteredDexPairs.length === 0 ? (
+                  <tr>
+                    <td colSpan={10} className="py-12 text-center text-alphabag-subtext font-sans">No DEX pairs match your filter.</td>
+                  </tr>
+                ) : filteredDexPairs.map((pair, idx) => {
                   const isStarred = watchlist.has(pair.pairAddress);
                   const pch1 = pair.priceChange?.h1 ?? 0;
                   const pch24 = pair.priceChange?.h24 ?? 0;
@@ -742,7 +750,11 @@ export const Markets: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2B313A] text-xs font-mono">
-              {filteredCoins.map((coin) => {
+              {filteredCoins.length === 0 ? (
+                <tr>
+                  <td colSpan={11} className="py-12 text-center text-alphabag-subtext font-sans">No coins match your filter.</td>
+                </tr>
+              ) : filteredCoins.map((coin) => {
                 const isStarred = watchlist.has(coin.id);
                 const pch1h = coin.price_change_percentage_1h_in_currency ?? 0;
                 const pch24h = coin.price_change_percentage_24h_in_currency ?? coin.price_change_percentage_24h ?? 0;

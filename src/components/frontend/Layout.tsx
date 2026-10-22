@@ -41,7 +41,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             key={toast.id}
             role={toast.type === 'ERROR' ? 'alert' : 'status'}
             aria-live={toast.type === 'ERROR' ? 'assertive' : 'polite'}
-            className="pointer-events-auto glass-panel px-4 py-3 rounded-xl flex items-center space-x-2 min-w-[280px] animate-slide-in overflow-hidden"
+            className="pointer-events-auto glass-panel relative px-4 py-3 rounded-lg flex items-center space-x-2 min-w-[280px] animate-slide-in overflow-hidden"
           >
             <div className={`
                     w-1 h-full absolute left-0 top-0 

@@ -80,7 +80,7 @@ const WhaleListItem: React.FC<{ whale: any, removeTrackedWallet: (id: string) =>
                 </div>
                 <div className="bg-alphabag-black border border-alphabag-gray rounded-md p-2.5">
                     <div className="text-[11px] text-alphabag-subtext uppercase font-medium tracking-wider mb-1">Value</div>
-                    <div className="text-alphabag-text text-xs font-semibold tabular-nums num">
+                    <div className="text-alphabag-text text-xs font-semibold num">
                         {loading ? <span className="text-alphabag-subtext animate-pulse">Scanning...</span> : `$${(netWorth || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                     </div>
                 </div>
@@ -148,7 +148,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                         <UpgradeCmd />
                         <button 
                             onClick={() => setIsAddOpen(true)}
-                            className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                            className="flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-yellowHover transition-all"
                         >
                             <Plus size={15} /> Add Whale
                         </button>
@@ -162,7 +162,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                     </div>
                     <button 
                         onClick={() => setIsAddOpen(true)}
-                        className="flex items-center gap-1.5 bg-alphabag-yellow text-alphabag-dark px-3.5 py-1.5 rounded text-xs font-semibold hover:bg-[#e0bd2e] transition-all shrink-0"
+                        className="flex items-center gap-1.5 bg-alphabag-yellow text-alphabag-dark px-3.5 py-1.5 rounded text-xs font-semibold hover:bg-alphabag-yellowHover transition-all shrink-0"
                     >
                         <Plus size={14} /> Add Whale Wallet
                     </button>
@@ -187,7 +187,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                     </p>
                     <button
                         onClick={() => setIsAddOpen(true)}
-                        className="inline-flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-[#e0bd2e] transition-all"
+                        className="inline-flex items-center gap-2 bg-alphabag-yellow text-alphabag-dark px-4 py-2 rounded-md text-xs font-semibold hover:bg-alphabag-yellowHover transition-all"
                     >
                         <Plus size={15} /> Add Whale Wallet
                     </button>
@@ -279,7 +279,7 @@ export const Whales: React.FC<{ embedded?: boolean }> = ({ embedded = false }) =
                             <Button 
                                 type="submit" 
                                 isLoading={isSubmitting} 
-                                className="w-full py-2.5 mt-4 text-xs font-semibold tracking-wider uppercase bg-alphabag-yellow text-alphabag-dark hover:bg-[#e0bd2e]"
+                                className="w-full py-2.5 mt-4 text-xs font-semibold tracking-wider uppercase bg-alphabag-yellow text-alphabag-dark hover:bg-alphabag-yellowHover"
                             >
                                 Track Wallet
                             </Button>

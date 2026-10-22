@@ -199,7 +199,14 @@ export const DeFi: React.FC = () => {
                               </tr>
                           </thead>
                           <tbody className="divide-y divide-alphabag-gray text-[13px]">
-                              {filtered.length === 0 ? (
+                              {isRefreshing ? (
+                                  <tr>
+                                      <td colSpan={5} className="p-12 text-center text-alphabag-subtext bg-alphabag-black/10">
+                                          <RefreshCw size={15} className="animate-spin inline mr-2 text-alphabag-yellow" />
+                                          Loading positions...
+                                      </td>
+                                  </tr>
+                              ) : filtered.length === 0 ? (
                                   <tr>
                                       <td colSpan={5} className="p-12 text-center text-alphabag-subtext bg-alphabag-black/10">No positions found.</td>
                                   </tr>
@@ -208,8 +215,8 @@ export const DeFi: React.FC = () => {
                                       <tr key={pos.id} className="hover:bg-alphabag-black/20 transition-colors group">
                                           <td className="p-3 px-6">
                                               <div className="flex items-center gap-2">
-                                                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-0.5 shadow-sm border border-alphabag-gray shrink-0">
-                                                     <img src={pos.icon} alt={pos.protocol} className="w-full h-full object-contain rounded-full" />
+                                                  <div className="w-8 h-8 rounded-lg bg-alphabag-black flex items-center justify-center p-1 border border-alphabag-gray shrink-0">
+                                                     <img src={pos.icon} alt={pos.protocol} className="w-full h-full object-contain rounded" onError={(e) => { (e.currentTarget as HTMLElement).style.display = "none"; }} />
                                                   </div>
                                                   <div>
                                                       <div className="text-white font-semibold text-sm flex items-center gap-1.5">
