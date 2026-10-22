@@ -1,13 +1,16 @@
 import { ArrowLeft,Key,Plus,Trash2 } from 'lucide-react';
 import React,{ useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 import { Cell,Pie,PieChart,ResponsiveContainer,Tooltip } from 'recharts';
 import { alert } from '../../lib/alert';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
-import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { timeSince } from '../../lib/formatters';
 import { SUPPORTED_CEX } from '../../services/exchanges';
+
+export { SUPPORTED_CEX } from '../../services/exchanges';
 import { PageIcon } from '../../components/ui/PageIcon';
 
 const CHART_COLORS = [
@@ -17,13 +20,24 @@ const CHART_COLORS = [
     '#FDE68A','#6EE7B7','#93C5FD','#DDD6FE','#FDA4AF',
 ];
 
-export { SUPPORTED_CEX };
-
 
 export const CexBag: React.FC = () => {
     const navigate = useNavigate();
-    useWallet();
     const { connections: connectedCex, removeConnection, connectExchange, totalBalance } = useCexConnections();
+
+    const { data: tradesData } = useQuery({
+        queryKey: ['cex-trades', connectedCex.map(c => c.id).join(',')],
+        queryFn: async () => {
+            try {
+                const res = await api.get('/api/cex/trades');
+                return res.data;
+            } catch {
+                return { count: 0, trades: [] };
+            }
+        },
+        enabled: connectedCex.length > 0,
+    });
+    const tradeCount = tradesData?.count ?? tradesData?.trades?.length ?? 0;
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeExchange, setActiveExchange] = useState<string | null>(null);
@@ -75,9 +89,6 @@ export const CexBag: React.FC = () => {
     // exchanges expose this) or a manually logged buy price, same as the
     // wallet-tracking side. Until one of those is wired up, show this
     // honestly as unavailable instead of a fake number.
-    const hasCexPnLData = false;
-    const mockPnL    = 0;
-    const mockPnLPct = 0;
 
     const chartData = connectedCex.map((cex, i) => ({
         name:  cex.name,
@@ -93,7 +104,7 @@ export const CexBag: React.FC = () => {
         if (active && payload?.length) {
             const d = payload[0].payload;
             return (
-                <div className="bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-3 shadow-xl text-sm">
+                <div className="bg-alphabag-black border border-alphabag-gray rounded-md px-4 py-3 text-sm">
                     <div className="flex items-center gap-2 mb-1">
                         <img src={d.icon} className="w-5 h-5 rounded-full" alt={d.name} />
                         <span className="font-semibold text-alphabag-text">{d.name}</span>
@@ -158,17 +169,13 @@ export const CexBag: React.FC = () => {
                 </div>
                 <div className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4">
                     <span className="text-xs font-semibold uppercase text-alphabag-subtext block mb-2">Consolidated PnL</span>
-                    {hasCexPnLData ? (
-                        <div className={`flex items-center gap-2 mb-2`}>
-                            <div className={`text-3xl font-semibold tracking-tight tabular-nums num ${mockPnL >= 0 ? 'text-alphabag-green' : 'text-alphabag-red'}`}>
-                                {mockPnL >= 0 ? '+' : '-'}${Math.abs(mockPnL).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </div>
-                            <div className={`px-2 py-0.5 rounded text-[11px] font-semibold num ${mockPnL >= 0 ? 'bg-alphabag-green/10 text-alphabag-green' : 'bg-alphabag-red/10 text-alphabag-red'}`}>
-                                {mockPnL >= 0 ? '+' : ''}{mockPnLPct.toFixed(2)}%
-                            </div>
+                    {tradeCount > 0 ? (
+                        <div className="mb-2">
+                            <div className="text-xl font-bold text-alphabag-text">{tradeCount} Trades Synced</div>
+                            <div className="text-xs text-alphabag-subtext">Real-time cost-basis imported</div>
                         </div>
                     ) : (
-                        <div className="text-lg font-semibold text-alphabag-subtext mb-2">Not available yet</div>
+                        <div className="text-lg font-semibold text-alphabag-subtext mb-2">Cost-basis pending sync</div>
                     )}
                     <div className="bg-alphabag-gray text-alphabag-subtext px-2 py-0.5 rounded text-[11px] font-medium uppercase w-fit">24H Metrics</div>
                 </div>
@@ -254,7 +261,13 @@ export const CexBag: React.FC = () => {
                                             <tr key={`${cex.id}-${asset.symbol || idx}`} className="hover:bg-alphabag-gray/40 transition-colors">
                                                 <td className="p-4 px-6">
                                                     <div className="flex items-center gap-2">
-                                                        <img src={asset.img || `https://cryptologos.cc/logos/${asset.symbol?.toLowerCase()}-${asset.symbol?.toLowerCase()}-logo.png`} alt={asset.symbol} className="w-7 h-7 rounded-full shadow-sm" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                        {asset.img ? (
+                                                        <img src={asset.img} alt={asset.symbol} className="w-7 h-7 rounded-full" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                    ) : (
+                                                        <div className="w-7 h-7 rounded-full bg-alphabag-black border border-alphabag-gray flex items-center justify-center shrink-0">
+                                                            <span className="text-alphabag-yellow text-[11px] font-semibold uppercase">{asset.symbol?.slice(0, 2) || '??'}</span>
+                                                        </div>
+                                                    )}
                                                         <div>
                                                             <div className="text-alphabag-text font-semibold">{asset.symbol}</div>
                                                             <div className="text-alphabag-subtext text-[11px] mt-0.5">{asset.coin || asset.name}</div>

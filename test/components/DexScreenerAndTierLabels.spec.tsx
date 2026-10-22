@@ -91,7 +91,7 @@ describe('DexScreener Feeds, Charts, and Membership Availability Labels', () => 
         </MemoryRouter>
       );
 
-      const dexPill = screen.getByRole('button', { name: /DexScreener Live/i });
+      const dexPill = screen.getByRole('button', { name: /(?:DexScreener|DEX) Live/i });
       expect(dexPill).toBeInTheDocument();
 
       fireEvent.click(dexPill);

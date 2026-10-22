@@ -23,7 +23,7 @@ import { PageIcon } from '../../components/ui/PageIcon';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { Chain } from '../../types';
-import { SUPPORTED_CEX } from './CexBag';
+import { SUPPORTED_CEX } from '../../services/exchanges';
 import { DISABLED_PAGES } from '../../services/config';
 
 export const Settings: React.FC = () => {

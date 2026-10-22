@@ -89,7 +89,7 @@ export function useCexConnections() {
             id: serverConnectionId,
             name: exchangeInfo.name,
             icon: exchangeInfo.icon,
-            apiKey: apiKey.substring(0, 4) + '\u2022\u2022\u2022\u2022',
+            apiKey: '••••••••' + apiKey.slice(-4),
             balance: totalUsd,
             balances,
             isConnected: true,

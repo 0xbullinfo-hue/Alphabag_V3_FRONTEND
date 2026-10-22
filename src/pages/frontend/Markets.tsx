@@ -364,6 +364,7 @@ const CATEGORIES = [
 
 export const Markets: React.FC = () => {
   const [coins, setCoins] = useState<CoinMarketData[]>(FALLBACK_TOP_COINS);
+  const [isFallback, setIsFallback] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Cryptos');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -388,10 +389,14 @@ export const Markets: React.FC = () => {
           };
         });
         setCoins(enriched);
+        setIsFallback(false);
         setLastUpdated(new Date());
+      } else {
+        setIsFallback(true);
       }
     } catch {
       // Keep rich fallback dataset active
+      setIsFallback(true);
     } finally {
       setIsRefreshing(false);
     }
@@ -427,7 +432,7 @@ export const Markets: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === 'DexScreener Live') {
+    if (selectedCategory === 'DEX Live') {
       fetchDexMarketPairs();
     }
   }, [selectedCategory, fetchDexMarketPairs]);
@@ -446,7 +451,7 @@ export const Markets: React.FC = () => {
     let list = coins;
     if (selectedCategory === 'Watchlist') {
       list = list.filter((c) => watchlist.has(c.id));
-    } else if (selectedCategory !== 'All Cryptos' && selectedCategory !== 'DexScreener Live') {
+    } else if (selectedCategory !== 'All Cryptos' && selectedCategory !== 'DEX Live') {
       list = list.filter((c) => c.category === selectedCategory);
     }
 
@@ -472,7 +477,7 @@ export const Markets: React.FC = () => {
   }, [dexPairs, searchQuery]);
 
   const fmt = (val: number | undefined) => {
-    if (!val || isNaN(val)) return '$–';
+    if (!val || isNaN(val)) return '—';
     if (val >= 1e12) return '$' + (val / 1e12).toFixed(2) + 'T';
     if (val >= 1e9) return '$' + (val / 1e9).toFixed(2) + 'B';
     if (val >= 1e6) return '$' + (val / 1e6).toFixed(2) + 'M';
@@ -495,7 +500,7 @@ export const Markets: React.FC = () => {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-[11px]">
           <div>
             <span className="text-gray-400">Cryptos: </span>
-            <span className="text-alphabag-yellow font-bold">{telemetry?.activeCryptos ? Number(telemetry.activeCryptos).toLocaleString() : "2,400+"}</span>
+            <span className="text-alphabag-yellow font-bold">{telemetry?.activeCryptos ? Number(telemetry.activeCryptos).toLocaleString() : '—'}</span>
           </div>
           <div>
             <span className="text-gray-400">Market Cap: </span>
@@ -527,6 +532,11 @@ export const Markets: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2 text-[11px]">
+          {isFallback && (
+            <span className="text-[11px] uppercase font-mono px-2 py-0.5 rounded bg-[#202630] text-gray-300 border border-[#2B313A]">
+              Cached • offline feed
+            </span>
+          )}
           <button
             onClick={() => fetchMarketData()}
             disabled={isRefreshing}
@@ -546,8 +556,21 @@ export const Markets: React.FC = () => {
             <span>Today's Cryptocurrency Prices by Market Cap</span>
           </h1>
           <p className="text-xs text-gray-400 mt-1">
-            Global market capitalization is <span className="text-white font-semibold">$2.84 Trillion</span>, an increase of{' '}
-            <span className="text-[#0ECB81] font-semibold">1.82%</span> over the last day.
+            {telemetry?.marketCap ? (
+              <>
+                Global market capitalization is <span className="text-white font-semibold">{fmt(telemetry.marketCap)}</span>
+                {telemetry.marketCapChange24h != null ? (
+                  <>
+                    , {telemetry.marketCapChange24h >= 0 ? 'an increase of ' : 'a decrease of '}
+                    <span className={telemetry.marketCapChange24h >= 0 ? 'text-[#0ECB81] font-semibold' : 'text-[#F6465D] font-semibold'}>
+                      {Math.abs(telemetry.marketCapChange24h).toFixed(2)}%
+                    </span> over the last day.
+                  </>
+                ) : '.'}
+              </>
+            ) : (
+              'Real-time cryptocurrency prices, market capitalization, volume, and supply telemetry.'
+            )}
           </p>
         </div>
 
@@ -578,15 +601,15 @@ export const Markets: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setSelectedCategory('DexScreener Live')}
+          onClick={() => setSelectedCategory('DEX Live')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-            selectedCategory === 'DexScreener Live'
+            selectedCategory === 'DEX Live'
               ? 'bg-alphabag-yellow text-[#0B0E11] shadow'
               : 'bg-[#181A20] text-alphabag-yellow/90 hover:text-alphabag-yellow hover:bg-[#202630] border border-alphabag-yellow/30'
           }`}
         >
-          <Zap size={12} className={selectedCategory === 'DexScreener Live' ? 'fill-[#0B0E11]' : ''} />
-          <span>DexScreener Live</span>
+          <Zap size={12} className={selectedCategory === 'DEX Live' ? 'fill-[#0B0E11]' : ''} />
+          <span>DEX Live</span>
         </button>
 
         {CATEGORIES.map((cat) => {
@@ -607,7 +630,7 @@ export const Markets: React.FC = () => {
         })}
       </div>
 
-      {selectedCategory === 'DexScreener Live' ? (
+      {selectedCategory === 'DEX Live' ? (
         <div className="rounded-lg border border-[#2B313A] bg-[#181A20] overflow-hidden shadow-xl">
           <div className="p-3 bg-[#14171D] border-b border-[#2B313A] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">

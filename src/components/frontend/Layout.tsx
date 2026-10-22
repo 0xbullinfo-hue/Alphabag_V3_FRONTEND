@@ -18,7 +18,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-      {/* FIX: md:pl-[248px] matches sidebar width (w-60=240px + left-2=8px) eliminating dead gap */}
+      {/* FIX: md:pl-64 provides consistent balanced offset aligned with fixed sidebar */}
       {/* FIX: px-4 py-3 replaces asymmetric pt-2 pl-2 md:pl-0 pr-2 pb-2 for balanced breathing room */}
             <main className="md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 pt-14">
         <LiveMarketTickerBar />

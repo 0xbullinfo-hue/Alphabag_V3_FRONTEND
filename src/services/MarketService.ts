@@ -68,8 +68,9 @@ export const MarketService = {
 
   searchCoins: async (query: string) => {
     try {
-      const data = (await api.get('/api/market/search', { params: { query } })).data;
-      return data.coins || [];
+      const res = await api.get('/api/market/search', { params: { query } });
+      const data = res.data;
+      return Array.isArray(data) ? data : (data?.coins ?? []);
     } catch (error) {
       return [];
     }

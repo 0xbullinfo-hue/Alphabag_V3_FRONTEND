@@ -569,7 +569,7 @@ const ALPHA_PASS_RARITY_TIERS = [
   { name: 'Mythic', pct: '2%', count: '80', color: '#EC4899', image: '/nft-collection/tiers/mythic.png' },
 ];
 
-export type LandingTab = 'home' | 'features' | 'roadmap' | 'faq' | 'calculator' | 'markets';
+export type LandingTab = 'home' | 'features' | 'roadmap' | 'faq' | 'markets';
 
 export const Landing: React.FC = () => {
   useWeb3Modal();
@@ -578,7 +578,7 @@ export const Landing: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const validTabs: LandingTab[] = ['home', 'features', 'roadmap', 'faq', 'calculator', 'markets'];
+  const validTabs: LandingTab[] = ['home', 'features', 'roadmap', 'faq', 'markets'];
   const rawTab = searchParams.get('tab');
   const initialTab: LandingTab = (rawTab && validTabs.includes(rawTab as LandingTab))
     ? (rawTab as LandingTab)
@@ -590,7 +590,7 @@ export const Landing: React.FC = () => {
     const tabParam = searchParams.get('tab');
     if (tabParam && validTabs.includes(tabParam as LandingTab)) {
       setActiveTab(tabParam as LandingTab);
-    } else if (tabParam === 'tokenomics' || tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
+    } else if (tabParam === 'calculator' || tabParam === 'tokenomics' || tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
       setActiveTab('home');
     }
   }, [searchParams]);
