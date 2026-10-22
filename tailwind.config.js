@@ -14,6 +14,7 @@ export default {
                     dark:        "var(--panel-color)",
                     darkgray:    "var(--card-color)",
                     'dark-card': "var(--card-color)",
+                    hover:        "var(--hover-color)",
                     gray:        "var(--border-color)",
                     border:      "var(--border-color)",
                     'border-light': "var(--border-light)",
