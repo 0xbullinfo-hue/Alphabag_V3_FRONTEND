@@ -1,6 +1,6 @@
 import { ArrowLeft, Briefcase, ChevronDown, ChevronUp, Download, Eye, Layers, PieChart as PieChartIcon, Plus, TrendingUp } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip as ReTooltip, XAxis, YAxis } from 'recharts';
 import { Button } from '../../components/ui/Button';
 import { DataSourceBadge } from '../../components/ui/DataSourceBadge';
@@ -21,6 +21,11 @@ export const Portfolio: React.FC = () => {
     const [showCharts, setShowCharts] = useState(true);
     const [activeTab, setActiveTab] = useState<'overview' | 'transactions'>('overview');
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        setActiveTab(searchParams.get('tab') === 'transactions' ? 'transactions' : 'overview');
+    }, [searchParams]);
 
     const safeTrackedWallets = Array.isArray(trackedWallets) ? trackedWallets : [];
     const safePortfolioItems = Array.isArray(portfolioItems) ? portfolioItems : [];
@@ -64,10 +69,10 @@ export const Portfolio: React.FC = () => {
     }, [activeWallets.length, timeframe]);
 
     const handleManageConnections = () => {
-        navigate('/settings');
+        navigate('/integrations');
     };
 
-    if (activeWallets.length === 0) {
+    if (activeWallets.length === 0 && activeTab === 'overview') {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 space-y-3 max-w-xl mx-auto">
                 <div className="w-12 h-12 bg-[#202630] rounded-[6px] border border-[#2B313A] flex items-center justify-center text-alphabag-yellow">

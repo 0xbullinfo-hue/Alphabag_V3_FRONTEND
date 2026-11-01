@@ -11,7 +11,7 @@ export const MobileNav: React.FC = () => {
     { to: '/alpha-desk', icon: PanelsTopLeft, label: 'Desk' },
     { to: '/markets', icon: BarChart3, label: 'Markets' },
     { to: '/alphas-feed', icon: MessageSquare, label: 'Feed' },
-    { to: '/my-alphabag', icon: Wallet, label: 'Portfolio' },
+    { to: '/portfolio', icon: Wallet, label: 'Portfolio' },
   ];
 
   return (
@@ -20,6 +20,7 @@ export const MobileNav: React.FC = () => {
         {navItems.map((item) => {
           const isActive = location.pathname === item.to
             || (item.to === '/my-alphabag' && location.pathname === '/dashboard')
+            || (item.to === '/portfolio' && location.pathname === '/history')
             || (item.to === '/alphas-feed' && location.pathname === '/alpha-feed');
           return (
             <Link

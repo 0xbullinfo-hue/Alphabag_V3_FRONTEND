@@ -13,6 +13,7 @@ import {
   Wallet
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
@@ -180,6 +181,9 @@ function AlphaDeskGate({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const AlphaDesk: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const initialTab = TABS.find(({ id }) => id === requestedTab)?.id ?? 'tradingview';
   const { user, isLoading: isAuthLoading } = useAuth();
   const {
     data: access,
@@ -197,8 +201,8 @@ export const AlphaDesk: React.FC = () => {
   });
 
   // Active tab state
-  const [activeTab, setActiveTab] = useState<TabId>('tradingview');
-  const [mountedTabs, setMountedTabs] = useState<Set<TabId>>(new Set(['tradingview']));
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
+  const [mountedTabs, setMountedTabs] = useState<Set<TabId>>(() => new Set([initialTab]));
 
   // Shared token state
   const [preset, setPreset] = useState(PRESETS[0]);

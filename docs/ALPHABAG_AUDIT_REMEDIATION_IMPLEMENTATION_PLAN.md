@@ -25,6 +25,14 @@ This plan is based on the remediation scope and repository structures available 
 - **Release blocker:** The production backend is not part of this workspace. Do not treat Alpha Desk capacity or the BAG threshold as enforced in production until backend wallet verification, atomic seat allocation/reconciliation, and seat release are implemented and covered by integration tests. The existing upgrade endpoint must also issue the canonical Alpha entitlement using this threshold.
 - AlphaBAG's own NFT collection distribution, minting UI, contract source, generators, and collection assets have been removed. Wallet NFT visibility is a separate DEX feature; it calls `GET /api/portfolio/nfts` for the selected tracked wallet and expects EVM and Solana results. This production endpoint is not available in this frontend workspace and must be implemented by the backend before NFT holdings can be verified live. Uniswap V3 liquidity-position NFTs remain supported.
 
+## Frontend Feature Ownership
+
+- The home dashboard is the concise portfolio overview; detailed performance and transaction history live under the Portfolio analytics route. `/history` redirects to the transaction-history tab there.
+- Global Markets owns broad asset and market telemetry. Alpha Screener owns DEX pair discovery, boosts, takeovers, and trending metas; Global Markets links to that canonical DEX discovery view rather than offering a second DEX pair table.
+- Integrations is the canonical place to add, find, and remove tracked wallets. Exchange API-key setup remains in the CEX Portfolio flow, while the Integrations hub lists and disconnects those connections. Membership settings are separate from connection management.
+- Alpha Desk is the canonical entry point for its embedded Wallet Flow, Trade Signals, Market AI, and Approvals Scan tools. Legacy standalone routes redirect to the corresponding Desk tab, so the existing Desk access check applies.
+- The placeholder on-chain fee auditor is not exposed until verified fee data and a real audit operation are available.
+
 ## 1. Phase Breakdown
 
 | Phase | Target Repo(s) | Key Deliverable | Dependency | Priority (P0/P1/P2) |

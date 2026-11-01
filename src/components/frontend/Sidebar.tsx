@@ -138,7 +138,7 @@ const PortfolioNavDropdown: React.FC<PortfolioNavDropdownProps> = ({ onClose }) 
             to="/my-alphabag"
             onClick={onClose}
             className={`flex items-center justify-between px-3 py-1.5 rounded text-xs transition-colors ${
-              location.pathname === '/my-alphabag' || location.pathname === '/' || location.pathname === '/portfolio'
+              location.pathname === '/my-alphabag' || location.pathname === '/'
                 ? 'text-alphabag-yellow font-semibold bg-alphabag-yellow/10'
                 : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50'
             }`}
@@ -147,7 +147,22 @@ const PortfolioNavDropdown: React.FC<PortfolioNavDropdownProps> = ({ onClose }) 
               <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
               Overview
             </span>
-            <span className="text-[11px] uppercase font-semibold text-alphabag-muted">Consolidated</span>
+            <span className="text-[11px] uppercase font-semibold text-alphabag-muted">Overview</span>
+          </Link>
+
+          <Link
+            to="/portfolio"
+            onClick={onClose}
+            className={`flex items-center justify-between px-3 py-1.5 rounded text-xs transition-colors ${
+              location.pathname === '/portfolio' || location.pathname === '/history'
+                ? 'text-alphabag-yellow font-semibold bg-alphabag-yellow/10'
+                : 'text-alphabag-subtext hover:text-alphabag-text hover:bg-[#202630]/50'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-current"></span>
+              Performance & History
+            </span>
           </Link>
 
           <Link
@@ -224,7 +239,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             )}
             <NavItem to="/alphas-feed" customIcon="feed" label="Alpha Feed" active={location.pathname === '/alphas-feed' || location.pathname === '/alpha-feed'} />
             <NavItem to="/calculator" customIcon="calculator" label="Position Calculator" active={location.pathname === '/calculator'} />
-            <NavItem to="/settings" customIcon="settings" label="Setup Connections" active={location.pathname === '/settings'} />
+            <NavItem to="/settings" customIcon="settings" label="Membership" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
           </NavGroup>
 

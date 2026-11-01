@@ -39,7 +39,7 @@ export const PAGE_ICONS: Record<PageIconName, { src: string; alt: string }> = {
   defi: { src: '/icons/icon-defi.svg', alt: 'DeFi Tracker' },
   news: { src: '/icons/icon-news.svg', alt: 'Crypto News' },
   history: { src: '/icons/icon-history.svg', alt: 'Transaction History' },
-  settings: { src: '/icons/icon-settings.svg', alt: 'Setup Connections' },
+  settings: { src: '/icons/icon-settings.svg', alt: 'Membership' },
   integrations: { src: '/icons/icon-integrations.svg', alt: 'Integrations' },
   profile: { src: '/icons/icon-profile.svg', alt: 'My Profile' },
   desk: { src: '/icons/icon-screener.svg', alt: 'Alpha Desk' },

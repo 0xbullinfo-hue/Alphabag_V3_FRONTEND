@@ -83,24 +83,17 @@ describe('DexScreener Feeds, Charts, and Membership Availability Labels', () => 
     });
   });
 
-  describe('Markets Page - DexScreener Live Tab', () => {
-    it('switches to DexScreener Live table when clicking DexScreener Live category pill', async () => {
+  describe('Markets Page - DEX discovery destination', () => {
+    it('routes DEX pair discovery to the Alpha Screener instead of duplicating its table', async () => {
       render(
         <MemoryRouter>
           <Markets />
         </MemoryRouter>
       );
 
-      const dexPill = screen.getByRole('button', { name: /(?:DexScreener|DEX) Live/i });
-      expect(dexPill).toBeInTheDocument();
-
-      fireEvent.click(dexPill);
-
-      await waitFor(() => {
-        expect(screen.getByText(/Live On-Chain Liquidity & DEX Screener/i)).toBeInTheDocument();
-        expect(screen.getByRole('columnheader', { name: /DEX & Chain/i })).toBeInTheDocument();
-        expect(screen.getByRole('columnheader', { name: /Liquidity Depth/i })).toBeInTheDocument();
-      });
+      const screenerLink = screen.getByRole('link', { name: /Explore DEX pairs in Alpha Screener/i });
+      expect(screenerLink).toHaveAttribute('href', '/alpha-screener');
+      expect(screen.queryByText(/Live On-Chain Liquidity & DEX Screener/i)).not.toBeInTheDocument();
     });
   });
 

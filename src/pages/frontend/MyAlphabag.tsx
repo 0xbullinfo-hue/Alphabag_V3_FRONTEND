@@ -13,7 +13,7 @@ export const MyAlphabag: React.FC = () => {
     const { portfolioItems, trackedWallets, address: activeAddress, isSyncing, whaleAlerts } = useWallet();
     const { connections: cexConnections, totalBalance: cexTotal } = useCexConnections();
 
-    const [activeSection, setActiveSection] = useState<'overview' | 'fee-auditor'>('overview');
+    const activeSection = 'overview';
     const [selectedWallet, setSelectedWallet] = useState<string>('all');
     const [customWalletInput, setCustomWalletInput] = useState<string>('');
     const [auditingWallet, setAuditingWallet] = useState<string | null>(null);
@@ -272,7 +272,7 @@ export const MyAlphabag: React.FC = () => {
 
                         <div className="flex justify-between items-center border-t border-[#2B313A] pt-3">
                             <span className="text-[11px] text-alphabag-subtext font-medium">{cexConnections.length} Connected</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
+                            <button onClick={() => navigate('/integrations')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
                                 Configure API Keys &rarr;
                             </button>
                         </div>
@@ -328,29 +328,13 @@ export const MyAlphabag: React.FC = () => {
 
                         <div className="flex justify-between items-center border-t border-[#2B313A] pt-3">
                             <span className="text-[11px] text-alphabag-subtext font-medium">{dexWallets.length} Tracked</span>
-                            <button onClick={() => navigate('/settings')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
+                            <button onClick={() => navigate('/integrations')} className="text-xs font-semibold text-alphabag-yellow hover:underline">
                                 Configure Wallets &rarr;
                             </button>
                         </div>
                     </div>
                 </div>
 
-            </div>
-
-            {/* Tabs Navigation Card */}
-            <div className="bg-[#181A20] border border-[#2B313A] rounded-md p-1.5 flex gap-1">
-                <button
-                    onClick={() => setActiveSection('overview')}
-                    className={`px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors ${activeSection === 'overview' ? 'bg-[#202630] text-alphabag-text border border-[#2B313A]' : 'text-alphabag-subtext hover:text-white'}`}
-                >
-                    Holdings Breakdown
-                </button>
-                <button
-                    onClick={() => setActiveSection('fee-auditor')}
-                    className={`px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider rounded transition-colors ${activeSection === 'fee-auditor' ? 'bg-[#202630] text-alphabag-text border border-[#2B313A]' : 'text-alphabag-subtext hover:text-white'}`}
-                >
-                    On-Chain Fee Auditor
-                </button>
             </div>
 
             {activeSection === 'overview' ? (

@@ -405,13 +405,13 @@ export const CoinDetail: React.FC = () => {
                                     </div>
                                 </div>
                                 <div className="flex gap-2 mt-2">
-                                    <Button variant="danger" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/settings')} title="Remove Connection Tracking">Remove Tracking</Button>
+                                    <Button variant="danger" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/integrations')} title="Remove Connection Tracking">Remove Tracking</Button>
                                 </div>
                             </div>
                         ) : (
                             <div className="text-center py-8 relative z-10">
                                 <p className="text-alphabag-subtext text-xs mb-3 leading-relaxed">Connect your wallet to track your <b>{coin.name}</b> holdings and analyze entry performance.</p>
-                                <Button variant="primary" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/settings')}>Connect & Track</Button>
+                                <Button variant="primary" size="sm" className="w-full font-semibold uppercase tracking-wider" onClick={() => navigate('/integrations')}>Connect & Track</Button>
                             </div>
                         )}
                     </div>

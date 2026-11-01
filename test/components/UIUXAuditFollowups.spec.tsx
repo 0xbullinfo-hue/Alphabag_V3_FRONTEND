@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { News } from '../../src/pages/frontend/News';
 import { WhaleDetail } from '../../src/pages/frontend/WhaleDetail';
 import { Settings } from '../../src/pages/frontend/Settings';
+import { Integrations } from '../../src/pages/frontend/Integrations';
 import { api } from '../../src/services/api';
 
 vi.mock('../../src/services/api', () => ({
@@ -154,8 +155,8 @@ describe('UI/UX Audit Follow-Up Verifications', () => {
     });
   });
 
-  describe('Settings Component - CEX Modal and Form Validation', () => {
-    it('disables Add Connection button while required address or label are blank', async () => {
+  describe('Membership and Connections Pages', () => {
+    it('provides a single route from membership settings to connection management', () => {
       vi.mocked(api.get).mockResolvedValue({ data: { connections: [] } });
 
       render(
@@ -164,7 +165,18 @@ describe('UI/UX Audit Follow-Up Verifications', () => {
         </MemoryRouter>
       );
 
-      const addBtn = screen.getByRole('button', { name: /Add Connection/i });
+      const manageButton = screen.getByRole('button', { name: /Manage Connections/i });
+      expect(manageButton).toBeInTheDocument();
+    });
+
+    it('disables Add while required wallet fields are blank', () => {
+      render(
+        <MemoryRouter>
+          <Integrations />
+        </MemoryRouter>
+      );
+
+      const addBtn = screen.getByRole('button', { name: /^Add$/i });
       expect(addBtn).toBeDisabled();
 
       const addrInput = screen.getByLabelText(/Wallet address/i);
@@ -175,24 +187,6 @@ describe('UI/UX Audit Follow-Up Verifications', () => {
 
       fireEvent.change(labelInput, { target: { value: 'My Wallet' } });
       expect(addBtn).not.toBeDisabled();
-    });
-
-    it('opens CEX connect modal when clicking an available exchange tile', async () => {
-      vi.mocked(api.get).mockResolvedValue({ data: { connections: [] } });
-
-      render(
-        <MemoryRouter>
-          <Settings />
-        </MemoryRouter>
-      );
-
-      const binanceTile = screen.getByTitle(/Connect Binance/i);
-      fireEvent.click(binanceTile);
-
-      await waitFor(() => {
-        expect(screen.getByRole('heading', { name: /Connect Binance/i })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Authorize Connection/i })).toBeInTheDocument();
-      });
     });
   });
 });

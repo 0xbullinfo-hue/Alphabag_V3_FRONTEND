@@ -600,17 +600,12 @@ export const Markets: React.FC = () => {
           <span>Watchlist ({watchlist.size})</span>
         </button>
 
-        <button
-          onClick={() => setSelectedCategory('DEX Live')}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
-            selectedCategory === 'DEX Live'
-              ? 'bg-alphabag-yellow text-[#0B0E11] shadow'
-              : 'bg-[#181A20] text-alphabag-yellow/90 hover:text-alphabag-yellow hover:bg-[#202630] border border-alphabag-yellow/30'
-          }`}
+        <Link
+          to="/alpha-screener"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all bg-[#181A20] text-alphabag-yellow/90 hover:text-alphabag-yellow hover:bg-[#202630] border border-alphabag-yellow/30"
         >
-          <Zap size={12} className={selectedCategory === 'DEX Live' ? 'fill-[#0B0E11]' : ''} />
-          <span>DEX Live</span>
-        </button>
+          <span>Explore DEX pairs in Alpha Screener</span>
+        </Link>
 
         {CATEGORIES.map((cat) => {
           const isActive = selectedCategory === cat;

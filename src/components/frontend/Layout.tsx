@@ -1,4 +1,3 @@
-import { LiveMarketTickerBar } from './LiveMarketTickerBar';
 import { AnimatePresence } from 'framer-motion';
 import { AlertCircle,CheckCircle,Info,X } from 'lucide-react';
 import React,{ useState } from 'react';
@@ -21,7 +20,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {/* FIX: md:pl-64 provides consistent balanced offset aligned with fixed sidebar */}
       {/* FIX: px-4 py-3 replaces asymmetric pt-2 pl-2 md:pl-0 pr-2 pb-2 for balanced breathing room */}
             <main className="md:pl-64 min-h-screen transition-all duration-300 pb-20 md:pb-0 relative z-10 pt-14">
-        <LiveMarketTickerBar />
         <AnimatePresence mode="wait">
           <PageTransition>
             <div className="px-4 py-3 w-full">

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { useWallet } from '../../context/WalletContext';
 import { PageIcon } from '../../components/ui/PageIcon';
+import { Chain } from '../../types';
 
 type Tab = 'ALL' | 'CEX' | 'WALLET';
 
@@ -24,11 +25,29 @@ interface AggregatedConnection {
 }
 
 export const Integrations: React.FC = () => {
-  const { trackedWallets, removeTrackedWallet, addToast } = useWallet();
+  const { trackedWallets, removeTrackedWallet, addTrackedWallet, addToast } = useWallet();
   const navigate = useNavigate();
   const [cexConnections, setCexConnections] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<Tab>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+  const [newLabel, setNewLabel] = useState('');
+  const [newChain, setNewChain] = useState<Chain>('BSC');
+  const [trackingType, setTrackingType] = useState<'PORTFOLIO' | 'WHALE'>('PORTFOLIO');
+  const [addError, setAddError] = useState<string | null>(null);
+
+  const handleAddWallet = async () => {
+    setAddError(null);
+    const result = await addTrackedWallet(newAddress, newLabel, newChain, trackingType);
+    if (!result.success) {
+      setAddError(result.error || 'Could not add this wallet.');
+      return;
+    }
+
+    setNewAddress('');
+    setNewLabel('');
+    addToast('Wallet tracking added.', 'SUCCESS');
+  };
 
   useEffect(() => {
     // Read CEX connections directly from local storage as established in CexBag.tsx
@@ -54,11 +73,11 @@ export const Integrations: React.FC = () => {
           category: 'CEX' as const,
           status: 'ACTIVE' as const
       })),
-      ...trackedWallets.filter(w => w.type === 'PORTFOLIO').map(wallet => ({
+      ...trackedWallets.map(wallet => ({
           id: `wallet-${wallet.id}`,
           rawId: wallet.id,
           name: wallet.label || 'Web3 Connection',
-          subtext: `Chain: ${wallet.chain} | ${wallet.address.substring(0, 6)}...${wallet.address.substring(wallet.address.length - 4)}`,
+          subtext: `${wallet.type === 'WHALE' ? 'Whale watch' : 'Portfolio'} · ${wallet.chain} · ${wallet.address.substring(0, 6)}...${wallet.address.substring(wallet.address.length - 4)}`,
           icon: <Wallet size={24} className="text-white" />,
           category: 'WALLET' as const,
           status: 'ACTIVE' as const
@@ -114,24 +133,42 @@ export const Integrations: React.FC = () => {
                 </div>
             </div>
 
-      {/* Connection Prompts - Since Hub is Read-Only, direct users to the Bags to connect */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <section className="rounded-lg border border-alphabag-gray bg-alphabag-darkgray p-4 space-y-3">
+          <div>
+              <h2 className="text-sm font-semibold text-alphabag-text">Add wallet tracking</h2>
+              <p className="text-xs text-alphabag-subtext mt-1">Add a portfolio wallet or a wallet to monitor for activity.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+              <input aria-label="Wallet address" value={newAddress} onChange={(event) => setNewAddress(event.target.value)} placeholder="Wallet address" className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-xs text-alphabag-text md:col-span-2" />
+              <input aria-label="Wallet label" value={newLabel} onChange={(event) => setNewLabel(event.target.value)} placeholder="Label" className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-xs text-alphabag-text" />
+              <select aria-label="Wallet network" value={newChain} onChange={(event) => setNewChain(event.target.value as Chain)} className="bg-alphabag-black border border-alphabag-gray rounded-md px-3 py-2 text-xs text-alphabag-text">
+                  <option value="BSC">BSC</option>
+                  <option value="ETH">Ethereum</option>
+                  <option value="SOL">Solana</option>
+                  <option value="BASE">Base</option>
+                  <option value="AVAX">Avalanche</option>
+                  <option value="ARB">Arbitrum</option>
+              </select>
+              <div className="flex gap-2">
+                  <select aria-label="Tracking type" value={trackingType} onChange={(event) => setTrackingType(event.target.value as 'PORTFOLIO' | 'WHALE')} className="min-w-0 flex-1 bg-alphabag-black border border-alphabag-gray rounded-md px-2 py-2 text-xs text-alphabag-text">
+                      <option value="PORTFOLIO">Portfolio</option>
+                      <option value="WHALE">Whale watch</option>
+                  </select>
+                  <Button size="sm" onClick={() => void handleAddWallet()} disabled={!newAddress.trim() || !newLabel.trim()}>Add</Button>
+              </div>
+          </div>
+          {addError && <p role="alert" className="text-xs text-alphabag-red">{addError}</p>}
+      </section>
+
+      {/* Exchange setup remains in the exchange portfolio; this hub owns the unified connection list. */}
+      <div className="grid grid-cols-1 gap-2">
           <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3 flex items-center justify-between hover:bg-alphabag-gray/30 transition-colors">
               <div>
                   <h3 className="text-xs font-semibold text-white mb-0.5">Need to add an Exchange?</h3>
-                  <p className="text-[11px] text-alphabag-subtext">Manage active API Keys in the CEX Portfolio.</p>
+                  <p className="text-[11px] text-alphabag-subtext">Add or manage read-only exchange API keys.</p>
               </div>
               <Button size="sm" variant="secondary" onClick={() => navigate('/cex-bag')} className="text-xs h-8 font-semibold uppercase tracking-wider px-3">
                  Add CEX <ExternalLink size={10} className="ml-1" />
-              </Button>
-          </div>
-          <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-lg p-3 flex items-center justify-between hover:bg-alphabag-gray/30 transition-colors">
-              <div>
-                  <h3 className="text-xs font-semibold text-white mb-0.5">Need to add a Web3 Wallet?</h3>
-                  <p className="text-[11px] text-alphabag-subtext">Connect on-chain wallets in the DEX Portfolio.</p>
-              </div>
-              <Button size="sm" variant="secondary" onClick={() => navigate('/dex-bag')} className="text-xs h-8 font-semibold uppercase tracking-wider px-3">
-                 Set BAG <ExternalLink size={10} className="ml-1" />
               </Button>
           </div>
       </div>

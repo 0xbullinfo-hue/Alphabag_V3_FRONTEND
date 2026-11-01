@@ -49,19 +49,14 @@ const News = lazy(() => import('./pages/frontend/News').then(m => ({ default: m.
 const Settings = lazy(() => import('./pages/frontend/Settings').then(m => ({ default: m.Settings })));
 const DeFi = lazy(() => import('./pages/frontend/DeFi').then(m => ({ default: m.DeFi })));
 const Integrations = lazy(() => import('./pages/frontend/Integrations').then(m => ({ default: m.Integrations })));
-const AlphaAi = lazy(() => import('./pages/frontend/AlphaAi').then(m => ({ default: m.AlphaAi })));
-const AlphaCalls = lazy(() => import('./pages/frontend/AlphaCalls').then(m => ({ default: m.AlphaCalls })));
 const Landing = lazy(() => import('./pages/frontend/Landing').then(m => ({ default: m.Landing })));
-const Whales = lazy(() => import('./pages/frontend/Whales').then(m => ({ default: m.Whales })));
 const WhaleDetail = lazy(() => import('./pages/frontend/WhaleDetail').then(m => ({ default: m.WhaleDetail })));
-const History = lazy(() => import('./pages/frontend/History').then(m => ({ default: m.HistoryPage })));
 const GenesisLanding = lazy(() => import('./pages/frontend/GenesisLanding').then(m => ({ default: m.GenesisLanding })));
 const GenesisManifesto = lazy(() => import('./pages/frontend/GenesisManifesto').then(m => ({ default: m.GenesisManifesto })));
 const Profile = lazy(() => import('./pages/frontend/Profile').then(m => ({ default: m.Profile })));
 const Airdrop = lazy(() => import('./pages/frontend/Airdrop').then(m => ({ default: m.Airdrop })));
 const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ default: m.Portfolio })));
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
-const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
 const AlphaDesk = lazy(() => import('./pages/frontend/AlphaDesk').then(m => ({ default: m.AlphaDesk })));
 
 const GlobalLoader = () => (
@@ -210,21 +205,21 @@ const AppContent = () => {
           <Route path="/dex-bag" element={<Layout><DexBag /></Layout>} />
           <Route path="/calculator" element={<Layout><Calculator /></Layout>} />
           <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
-          <Route path="/history" element={<Layout><History /></Layout>} />
+          <Route path="/history" element={<Navigate to="/portfolio?tab=transactions" replace />} />
           <Route path="/alpha-screener" element={<Layout><AlphaScreener /></Layout>} />
           <Route path="/alpha-desk" element={<Layout><AlphaDesk /></Layout>} />
           <Route path="/my-alphabag" element={<Layout><MyAlphabag /></Layout>} />
 
           <Route path="/markets" element={<Layout><Markets /></Layout>} />
           <Route path="/markets/:id" element={<Layout><CoinDetail /></Layout>} />
-          <Route path="/whales" element={<Layout><Whales /></Layout>} />
+          <Route path="/whales" element={<Navigate to="/alpha-desk?tab=whales" replace />} />
           <Route path="/whales/:address" element={<Layout><WhaleDetail /></Layout>} />
           <Route path="/defi" element={<Layout><DeFi /></Layout>} />
-          <Route path="/security" element={<Layout><SecurityScanner /></Layout>} />
+          <Route path="/security" element={<Navigate to="/alpha-desk?tab=security" replace />} />
           <Route path="/integrations" element={<Layout><Integrations /></Layout>} />
           <Route path="/news" element={<Layout><News /></Layout>} />
-          <Route path="/alpha-ai" element={<Layout><AlphaAi /></Layout>} />
-          <Route path="/alpha-calls" element={<Layout><AlphaCalls /></Layout>} />
+          <Route path="/alpha-ai" element={<Navigate to="/alpha-desk?tab=ai" replace />} />
+          <Route path="/alpha-calls" element={<Navigate to="/alpha-desk?tab=calls" replace />} />
           <Route path="/alphas-feed" element={<Layout><AlphasFeed /></Layout>} />
           <Route path="/alpha-feed" element={<Layout><AlphasFeed /></Layout>} />
           <Route path="/trade-signals" element={<Navigate to="/alphas-feed" replace />} />
