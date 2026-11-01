@@ -2,6 +2,44 @@ import React, { useEffect, useRef, useState } from 'react';
 import { alphaBAGDatafeed } from './datafeed';
 import type { ChartContainerProps, IChartingLibraryWidget } from './types';
 
+const chartLibraryLoads = new Map<string, Promise<void>>();
+
+function loadChartLibrary(libraryPath: string): Promise<void> {
+  if ((window as any).TradingView?.widget) return Promise.resolve();
+
+  const scriptUrl = `${libraryPath}charting_library.standalone.js`;
+  const pendingLoad = chartLibraryLoads.get(scriptUrl);
+  if (pendingLoad) return pendingLoad;
+
+  const load = (async () => {
+    const response = await fetch(scriptUrl, { method: 'HEAD' });
+    if (!response.ok) throw new Error('Charting Library is unavailable');
+
+    await new Promise<void>((resolve, reject) => {
+      const existing = document.querySelector<HTMLScriptElement>(`script[data-tv-chart-library="${scriptUrl}"]`);
+      const script = existing || document.createElement('script');
+      const handleLoad = () => resolve();
+      const handleError = () => reject(new Error('Failed to load TradingView script'));
+
+      if (!existing) {
+        script.src = scriptUrl;
+        script.type = 'text/javascript';
+        script.async = true;
+        script.dataset.tvChartLibrary = scriptUrl;
+      }
+      script.addEventListener('load', handleLoad, { once: true });
+      script.addEventListener('error', handleError, { once: true });
+      if (!existing) document.head.appendChild(script);
+    });
+
+    if (!(window as any).TradingView?.widget) throw new Error('TradingView widget constructor is unavailable');
+  })();
+
+  chartLibraryLoads.set(scriptUrl, load);
+  void load.catch(() => chartLibraryLoads.delete(scriptUrl));
+  return load;
+}
+
 export const TVChartContainer: React.FC<ChartContainerProps> = ({
   symbol = 'BINANCE:BTCUSDT',
   interval = '60',
@@ -19,34 +57,13 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
   const [libraryAvailable, setLibraryAvailable] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check if the proprietary charting_library bundle is present
-    const checkLibrary = async () => {
-      try {
-        const scriptUrl = `${libraryPath}charting_library.standalone.js`;
-        const res = await fetch(scriptUrl, { method: 'HEAD' });
-        if (res.ok) {
-          // Script exists in public folder, dynamically inject script if not already loaded
-          const win = window as any;
-          if (!win.TradingView) {
-            const script = document.createElement('script');
-            script.src = scriptUrl;
-            script.type = 'text/javascript';
-            script.async = true;
-            script.onload = () => setLibraryAvailable(true);
-            script.onerror = () => setLibraryAvailable(false);
-            document.head.appendChild(script);
-          } else {
-            setLibraryAvailable(true);
-          }
-        } else {
-          setLibraryAvailable(false);
-        }
-      } catch {
-        setLibraryAvailable(false);
-      }
-    };
+    let active = true;
+    setLibraryAvailable(null);
+    loadChartLibrary(libraryPath)
+      .then(() => { if (active) setLibraryAvailable(true); })
+      .catch(() => { if (active) setLibraryAvailable(false); });
 
-    checkLibrary();
+    return () => { active = false; };
   }, [libraryPath]);
 
   useEffect(() => {
@@ -102,15 +119,18 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
       },
     };
 
+    let active = true;
     const tvWidget = new win.TradingView.widget(widgetOptions) as IChartingLibraryWidget;
     widgetRef.current = tvWidget;
 
     tvWidget.onChartReady(() => {
+      if (!active || widgetRef.current !== tvWidget) return;
       console.log('[AlphaBAG TV] Advanced Charts initialized with custom Binance datafeed');
       onChartReady?.();
     });
 
     return () => {
+      active = false;
       if (widgetRef.current) {
         try {
           widgetRef.current.remove();
@@ -169,6 +189,17 @@ export const TVChartContainer: React.FC<ChartContainerProps> = ({
             className="w-full h-full border-0"
           />
         </div>
+      </div>
+    );
+  }
+
+  if (libraryAvailable === null) {
+    return (
+      <div className="w-full h-full min-h-[500px] flex items-center justify-center bg-[#0B0E11] text-[#848E9C]" role="status" aria-live="polite">
+        <span className="flex items-center gap-2 text-xs font-medium">
+          <span className="w-3 h-3 border-2 border-[#F0B90B] border-t-transparent rounded-full animate-spin" />
+          Loading chart...
+        </span>
       </div>
     );
   }

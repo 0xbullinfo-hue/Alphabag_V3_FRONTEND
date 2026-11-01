@@ -172,5 +172,8 @@ export function formatCompact(val: number | null | undefined, prefix = '$'): str
 export function formatAmount(v?: number | string | null): string {
   const n = typeof v === 'string' ? parseFloat(v) : v;
   if (n == null || isNaN(n)) return '0';
-  return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : String(parseFloat(n.toFixed(4)));
+  if (Math.abs(n) < 1) {
+    return new Intl.NumberFormat('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 8 }).format(n);
+  }
+  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(n);
 }

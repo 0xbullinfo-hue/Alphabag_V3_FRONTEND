@@ -12,7 +12,7 @@ Establish a sequenced, testable path to production readiness across the frontend
 | :--- | :--- | :--- |
 | 1. Security, Secrets & Core Stability | Code changes implemented; automated checks pass | Removed browser-side admin/provider credentials; added backend proxy routes for EVM and Solana transactions; added explicit production CORS origin allowlisting and environment examples; added admin source/bundle secret gates. Production release remains blocked until provider credentials previously embedded in browser builds are rotated and production `CORS_ALLOWED_ORIGINS` is configured with exact frontend/admin origins. Repository history cleanup remains a separately approved operations task. Backend-UI has no existing automated test files. |
 | 2. Cross-Repo Contract & Backend Architecture | Complete; all available automated gates pass | OpenAPI covers signal REST/SSE/admin routes, provider proxy routes, and existing airdrop/admin response fields; both clients generate from the lowercase backend checkout. CoinStats/DEX retries and AlphaCalls SSE delivery are implemented. AlphaCalls source is admin-managed signals, with ULTIMATE as the Pro entitlement per product decision. |
-| 3. Frontend & Admin UI Refinement | Not started | Depends on Phase 2 contract and endpoint behavior. |
+| 3. Frontend & Admin UI Refinement | Complete; all available automated gates pass | Added adaptive crypto amount precision, admin mutation pending/duplicate-submit states, and idempotent TradingView loading/cleanup guards with an explicit loading state. |
 | 4. Integration Testing & Production Verification | Not started | Release gate after Phases 1-3. |
 
 This plan is based on the remediation scope and repository structures available during planning. The detailed audit report and all three source trees were not available for verification. Backend and admin paths below are repository-level targets to confirm before implementation, not confirmed defect locations.
@@ -191,3 +191,10 @@ The available Frontend workspace defines `npm run typecheck`, `npm run test`, `n
 - Frontend typecheck, 98 tests, design check, production build/prerender, and secret scan pass. Backend-UI typecheck, production build, and source/bundle secret scans pass; its configured test command finds no test files. Contract additions also corrected existing admin airdrop UI type mismatches.
 - AlphaCalls uses SSE snapshots with REST fallback/reconnect. Admin CRUD remains the signal source; automated trigger rules were not added because the product decision was admin-managed publication.
 - The Backend-UI test script currently finds no test files; maintain that as a coverage gap until focused client tests are added.
+
+### Phase 3 Execution Verification
+
+- Frontend tests pass (102 tests across 22 files), including new fiat/crypto precision cases; typecheck, design check, production build/prerender, and secret scan pass.
+- Backend-UI TypeScript and production build/secret scans pass; signal status/delete controls now expose pending state and block duplicate mutations. The configured test runner still reports no test files.
+- TradingView script loading is shared/idempotent; async initialization and chart-ready callbacks are guarded after unmount; loading has a visible state.
+- Admin financial panels now compile against the expanded backend response contract; CSV formula-sanitization code also compiles and applies to the exported email field.
