@@ -12,7 +12,7 @@ import React,{ useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../context/AuthContext';
 import { PageIcon } from '../../components/ui/PageIcon';
-import { api } from '../../services/api';
+import { api, resolveApiUrl } from '../../services/api';
 import { TradeSignal } from '../../types';
 
 const DEMO_SIGNALS: TradeSignal[] = [];
@@ -25,21 +25,63 @@ export const AlphaCalls: React.FC<{ embedded?: boolean }> = ({ embedded = false 
     const [activeCategory, setActiveCategory] = useState<string>('ALL');
 
     useEffect(() => {
-        const fetchSignals = async () => {
+        let isActive = true;
+        const controller = new AbortController();
+        const refreshSignals = async () => {
             try {
                 const res = await api.get('/api/signals');
                 const incoming = Array.isArray(res.data)
                     ? res.data
                     : (Array.isArray(res.data?.signals) ? res.data.signals : (Array.isArray(res.data?.data) ? res.data.data : []));
-                setSignals(incoming);
+                if (isActive) setSignals(incoming);
             } catch (error) {
                 console.error("Failed to fetch signals:", error);
-                setSignals([]);
+                if (isActive) setSignals([]);
             } finally {
-                setLoading(false);
+                if (isActive) setLoading(false);
             }
         };
-        fetchSignals();
+
+        const consumeSignalStream = async () => {
+            while (isActive) {
+                try {
+                    const response = await fetch(resolveApiUrl('/api/signals/stream'), {
+                        headers: token ? { Authorization: `Bearer ${token}` } : {},
+                        signal: controller.signal,
+                    });
+                    if (!response.ok || !response.body) throw new Error(`Signal stream returned ${response.status}`);
+
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+                    while (isActive) {
+                        const { value, done } = await reader.read();
+                        if (done) break;
+                        buffer += decoder.decode(value, { stream: true });
+                        const messages = buffer.split('\n\n');
+                        buffer = messages.pop() || '';
+                        for (const message of messages) {
+                            const data = message.split('\n').find(line => line.startsWith('data:'))?.slice(5).trim();
+                            if (!data) continue;
+                            const payload = JSON.parse(data);
+                            if (Array.isArray(payload.signals)) setSignals(payload.signals);
+                        }
+                    }
+                } catch (error) {
+                    if (!isActive) return;
+                    console.warn('AlphaCalls live stream disconnected; refreshing the REST feed.', error);
+                    await refreshSignals();
+                }
+                if (isActive) await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        };
+
+        void refreshSignals();
+        void consumeSignalStream();
+        return () => {
+            isActive = false;
+            controller.abort();
+        };
     }, [token]);
 
     const copyToClipboard = async (text: string) => {

@@ -11,7 +11,7 @@ Establish a sequenced, testable path to production readiness across the frontend
 | Phase | Implementation Status | Release Notes |
 | :--- | :--- | :--- |
 | 1. Security, Secrets & Core Stability | Code changes implemented; automated checks pass | Removed browser-side admin/provider credentials; added backend proxy routes for EVM and Solana transactions; added explicit production CORS origin allowlisting and environment examples; added admin source/bundle secret gates. Production release remains blocked until provider credentials previously embedded in browser builds are rotated and production `CORS_ALLOWED_ORIGINS` is configured with exact frontend/admin origins. Repository history cleanup remains a separately approved operations task. Backend-UI has no existing automated test files. |
-| 2. Cross-Repo Contract & Backend Architecture | Not started | Begins after Phase 1 release prerequisites are verified. |
+| 2. Cross-Repo Contract & Backend Architecture | Complete; all available automated gates pass | OpenAPI covers signal REST/SSE/admin routes, provider proxy routes, and existing airdrop/admin response fields; both clients generate from the lowercase backend checkout. CoinStats/DEX retries and AlphaCalls SSE delivery are implemented. AlphaCalls source is admin-managed signals, with ULTIMATE as the Pro entitlement per product decision. |
 | 3. Frontend & Admin UI Refinement | Not started | Depends on Phase 2 contract and endpoint behavior. |
 | 4. Integration Testing & Production Verification | Not started | Release gate after Phases 1-3. |
 
@@ -182,3 +182,12 @@ The available Frontend workspace defines `npm run typecheck`, `npm run test`, `n
 - Backend: `npm test` (50 tests) and `npm run validate` (49 endpoints, 42 schemas, no breaking changes) passed.
 - Backend-UI: configured test command exited successfully but found no test files; source secret scan, TypeScript check, production build, and bundle scan passed.
 - Remaining production operations: rotate previously exposed provider keys, set `CORS_ALLOWED_ORIGINS` to the exact production UI origins, and follow the approved history-purge procedure if sensitive historical data requires rewriting.
+
+### Phase 2 Execution Verification
+
+- Backend contract validation passes for 53 endpoints and 48 schemas with no breaking changes; all operation responses are documented.
+- Backend tests pass (61 tests), including provider retry, rate-limit, signal entitlement, mutation broadcast, and cross-instance polling checks.
+- Frontend and Backend-UI contract types are regenerated from `alphabag_v3_backend/openapi.yaml`; both local generators now prefer that checkout over the stale alternate directory name.
+- Frontend typecheck, 98 tests, design check, production build/prerender, and secret scan pass. Backend-UI typecheck, production build, and source/bundle secret scans pass; its configured test command finds no test files. Contract additions also corrected existing admin airdrop UI type mismatches.
+- AlphaCalls uses SSE snapshots with REST fallback/reconnect. Admin CRUD remains the signal source; automated trigger rules were not added because the product decision was admin-managed publication.
+- The Backend-UI test script currently finds no test files; maintain that as a coverage gap until focused client tests are added.

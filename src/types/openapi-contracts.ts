@@ -66,6 +66,84 @@ export interface ErrorResponse {
   details?: string;
 }
 
+export interface WhaleTransaction {
+  hash: string;
+  from: string;
+  to: string;
+  value: string;
+  timeStamp: string;
+  tokenSymbol?: string;
+  tokenDecimal?: string;
+}
+
+export interface Signal {
+  id: string;
+  pair: string;
+  type: string;
+  entry?: string | null;
+  stopLoss?: string | null;
+  targets?: string[];
+  narrative?: string | null;
+  category?: string | null;
+  risk?: string | null;
+  status: 'ACTIVE' | 'HIT' | 'LOSS' | 'CLOSED' | 'PENDING';
+  timestamp?: string | null;
+  contractAddress?: string | null;
+  socialLinks?: Record<string, any>;
+  isBlurred?: boolean;
+  message?: string;
+}
+
+export interface SignalListResponse {
+  signals: Signal[];
+  updatedAt: string;
+}
+
+export interface AdminSignalRequest {
+  pair: string;
+  type: string;
+  entry?: string;
+  stopLoss?: string;
+  targets?: string[];
+  narrative?: string;
+  category?: string;
+  risk?: string;
+  description?: string;
+  socialLinks?: Record<string, any>;
+  relevantInfo?: string;
+  tokenInfo?: Record<string, any>;
+  leverage?: string;
+  contractAddress?: string;
+  status?: 'ACTIVE' | 'HIT' | 'LOSS' | 'CLOSED' | 'PENDING';
+}
+
+export interface AdminSignalUpdateRequest {
+  pair?: string;
+  type?: string;
+  entry?: string;
+  stopLoss?: string;
+  targets?: string[];
+  narrative?: string;
+  category?: string;
+  risk?: string;
+  description?: string;
+  socialLinks?: Record<string, any>;
+  relevantInfo?: string;
+  tokenInfo?: Record<string, any>;
+  leverage?: string;
+  contractAddress?: string;
+  status?: 'ACTIVE' | 'HIT' | 'LOSS' | 'CLOSED' | 'PENDING';
+}
+
+export interface AdminSignalMutationResponse {
+  success: boolean;
+  item: Signal;
+}
+
+export interface SignalDeleteResponse {
+  success: boolean;
+}
+
 export interface FeatureFlags {
   disabledPages: string[];
   enableTokenGating: boolean;
@@ -163,6 +241,7 @@ export interface TreasuryStatus {
   id: string;
   minimumClaimBalance: number;
   itemsToBagRate?: number | null;
+  campaignEnded?: boolean;
   isDeactivated?: boolean;
   intelligence: Record<string, any>;
 }
@@ -240,7 +319,11 @@ export interface AdminWalletEntry {
   history?: any[];
   isFounderRequest?: boolean;
   isFounderAirdrop?: boolean;
+  isBanned?: boolean;
+  strikes?: number;
   projectName?: string | null;
+  projectLogo?: string | null;
+  projectBanner?: string | null;
   projectTicker?: string | null;
   projectManifesto?: string | null;
   projectSocial?: string | null;
@@ -256,7 +339,7 @@ export interface AdminStrikeLogEntry {
   userId?: string;
   adminId?: string;
   reason?: string;
-  timestamp?: string;
+  timestamp: string;
 }
 
 export interface AdminActivityEntry {
@@ -265,6 +348,8 @@ export interface AdminActivityEntry {
   missionId?: string;
   rewardTokens?: number;
   pointsEarned?: number;
+  proofLink?: string | null;
+  feedback?: string | null;
   createdAt: string;
   user?: Record<string, any>;
   mission?: Record<string, any>;
@@ -345,6 +430,13 @@ export namespace OpenAPI {
   export type ClaimMissionRequest = import('./openapi-contracts').ClaimMissionRequest;
   export type ClaimMissionResponse = import('./openapi-contracts').ClaimMissionResponse;
   export type ErrorResponse = import('./openapi-contracts').ErrorResponse;
+  export type WhaleTransaction = import('./openapi-contracts').WhaleTransaction;
+  export type Signal = import('./openapi-contracts').Signal;
+  export type SignalListResponse = import('./openapi-contracts').SignalListResponse;
+  export type AdminSignalRequest = import('./openapi-contracts').AdminSignalRequest;
+  export type AdminSignalUpdateRequest = import('./openapi-contracts').AdminSignalUpdateRequest;
+  export type AdminSignalMutationResponse = import('./openapi-contracts').AdminSignalMutationResponse;
+  export type SignalDeleteResponse = import('./openapi-contracts').SignalDeleteResponse;
   export type FeatureFlags = import('./openapi-contracts').FeatureFlags;
   export type TokenBalance = import('./openapi-contracts').TokenBalance;
   export type PortfolioBalancesResponse = import('./openapi-contracts').PortfolioBalancesResponse;

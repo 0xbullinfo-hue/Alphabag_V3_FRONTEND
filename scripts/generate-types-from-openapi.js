@@ -23,8 +23,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.dirname(__dirname);
 const SPEC_PATH_CANDIDATES = [
-    path.join(ROOT, '..', 'Alphabag_V3_Backend', 'openapi.yaml'),
     path.join(ROOT, '..', 'alphabag_v3_backend', 'openapi.yaml'),
+    path.join(ROOT, '..', 'Alphabag_V3_Backend', 'openapi.yaml'),
     path.join(ROOT, 'openapi.yaml')
 ];
 const OUTPUT_PATH = path.join(ROOT, 'src', 'types', 'openapi-contracts.ts');
