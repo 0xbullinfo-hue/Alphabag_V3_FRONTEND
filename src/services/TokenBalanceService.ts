@@ -60,26 +60,26 @@ export class TokenBalanceService {
       return balance;
     } catch (error) {
       console.error('[TokenBalanceService] Error checking balance:', error);
-      // Return 0 on error - user loses premium access (safe fallback)
+      // Return 0 on error so the backend remains the sole source of entitlement.
       return 0;
     }
   }
 
   /**
-   * Determine if user qualifies for premium tier
+   * Determine if a balance meets the Alpha token requirement.
    * 
    * @param balance - Current BAG token balance
-   * @returns true if qualified for premium
+   * @returns true if qualified for Alpha
    */
-  static isQualifiedForPremium(balance: number): boolean {
-    const minimumRequired = TOKEN_GATING_CONFIG.MIN_BAG_REQUIRED;
+  static isQualifiedForAlpha(balance: number): boolean {
+    const minimumRequired = TOKEN_GATING_CONFIG.ALPHA_MINIMUM_BAG_BALANCE;
     
     // Both balance >= minimum AND minimum must be > 0
-    // This ensures we don't grant premium when minimum not configured
+    // This ensures an unset or invalid minimum cannot grant Alpha.
     const qualified = balance >= minimumRequired && minimumRequired > 0;
     
     if (qualified) {
-      console.log(`[TokenBalanceService] ✅ Premium qualified: ${balance} >= ${minimumRequired}`);
+      console.log(`[TokenBalanceService] Alpha qualified: ${balance} >= ${minimumRequired}`);
     } else {
       console.log(
         `[TokenBalanceService] ❌ Not qualified: ${balance} < ${minimumRequired}`
@@ -97,10 +97,10 @@ export class TokenBalanceService {
    * Get tier based on token balance
    * 
    * @param balance - Current BAG token balance
-   * @returns 'PREMIUM' or 'FREE'
+   * @returns 'ALPHA' or 'FREE'
    */
-  static getTier(balance: number): 'PREMIUM' | 'FREE' {
-    return this.isQualifiedForPremium(balance) ? 'PREMIUM' : 'FREE';
+  static getTier(balance: number): 'ALPHA' | 'FREE' {
+    return this.isQualifiedForAlpha(balance) ? 'ALPHA' : 'FREE';
   }
 
   /**
@@ -114,9 +114,9 @@ export class TokenBalanceService {
     const needed = Math.max(0, minimumRequired - balance);
     
     if (needed === 0) {
-      return `Premium tier active. Balance: ${balance.toFixed(2)} BAG`;
+      return `Alpha tier active. Balance: ${balance.toFixed(2)} BAG`;
     }
 
-    return `Hold ${minimumRequired} BAG for premium. You need ${needed.toFixed(2)} more.`;
+    return `Hold ${minimumRequired} BAG for Alpha. You need ${needed.toFixed(2)} more.`;
   }
 }

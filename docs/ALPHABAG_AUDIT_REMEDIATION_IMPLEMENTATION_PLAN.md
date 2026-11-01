@@ -11,11 +11,19 @@ Establish a sequenced, testable path to production readiness across the frontend
 | Phase | Implementation Status | Release Notes |
 | :--- | :--- | :--- |
 | 1. Security, Secrets & Core Stability | Code changes implemented; automated checks pass | Removed browser-side admin/provider credentials; added backend proxy routes for EVM and Solana transactions; added explicit production CORS origin allowlisting and environment examples; added admin source/bundle secret gates. Production release remains blocked until provider credentials previously embedded in browser builds are rotated and production `CORS_ALLOWED_ORIGINS` is configured with exact frontend/admin origins. Repository history cleanup remains a separately approved operations task. Backend-UI has no existing automated test files. |
-| 2. Cross-Repo Contract & Backend Architecture | Complete; all available automated gates pass | OpenAPI covers signal REST/SSE/admin routes, provider proxy routes, and existing airdrop/admin response fields; both clients generate from the lowercase backend checkout. CoinStats/DEX retries and AlphaCalls SSE delivery are implemented. AlphaCalls source is admin-managed signals, with ULTIMATE as the Pro entitlement per product decision. |
+| 2. Cross-Repo Contract & Backend Architecture | Complete; all available automated gates pass | OpenAPI covers signal REST/SSE/admin routes, provider proxy routes, and existing airdrop/admin response fields; both clients generate from the lowercase backend checkout. CoinStats/DEX retries and AlphaCalls SSE delivery are implemented. AlphaCalls source is admin-managed signals; the production backend must enforce the canonical Alpha entitlement before release. |
 | 3. Frontend & Admin UI Refinement | Complete; all available automated gates pass | Added adaptive crypto amount precision, admin mutation pending/duplicate-submit states, and idempotent TradingView loading/cleanup guards with an explicit loading state. |
 | 4. Integration Testing & Production Verification | Automated verification complete; production smoke checks remain | HTTP-level AlphaCalls integration and browser component fallback/pending-state tests are in place. Live wallet/provider behavior, deployed CORS origins, rotated keys, licensed TradingView assets, and rollback rehearsal remain deployment-owner checks. |
 
 This plan is based on the remediation scope and repository structures available during planning. The detailed audit report and all three source trees were not available for verification. Backend and admin paths below are repository-level targets to confirm before implementation, not confirmed defect locations.
+
+## Alpha Membership and Desk Release Blocker
+
+- The only membership tiers are **Free** and **Alpha**. Alpha eligibility requires at least **3,000 BAG** in the authenticated login wallet; portfolio totals and client-supplied tier values are not proof of eligibility.
+- Alpha Desk admits at most **1,000 active eligible users**. Admission must be allocated atomically by the production backend, eligibility must be revalidated, and a seat must be released when a user no longer qualifies.
+- The frontend calls `POST /api/alpha-desk/access` and fails closed unless the backend returns a valid grant, token-required, or capacity-reached response. The repository's mock response is demo-only and is not production enforcement.
+- **Release blocker:** The production backend is not part of this workspace. Do not treat Alpha Desk capacity or the BAG threshold as enforced in production until backend wallet verification, atomic seat allocation/reconciliation, and seat release are implemented and covered by integration tests. The existing upgrade endpoint must also issue the canonical Alpha entitlement using this threshold.
+- AlphaBAG's own NFT collection distribution, minting UI, contract source, generators, and collection assets have been removed. Wallet NFT visibility is a separate DEX feature; it calls `GET /api/portfolio/nfts` for the selected tracked wallet and expects EVM and Solana results. This production endpoint is not available in this frontend workspace and must be implemented by the backend before NFT holdings can be verified live. Uniswap V3 liquidity-position NFTs remain supported.
 
 ## 1. Phase Breakdown
 
@@ -154,6 +162,7 @@ This plan is based on the remediation scope and repository structures available 
 - [ ] Provider tests inject 429, 5xx, timeout, malformed response, and recovery; retries are bounded and respect `Retry-After`.
 - [ ] Cache tests verify TTL, stale-while-revalidate, and invalidation behavior.
 - [ ] AlphaCalls tests verify trigger validation, deduplication, Pro entitlement, broadcast, reconnect, and admin pause/override behavior.
+- [ ] Alpha Desk backend tests verify authenticated login-wallet balance checks at 3,000 BAG, atomic enforcement of the 1,000-active-user cap, denial at capacity, and seat release/reopening when eligibility is lost.
 
 ### Phase 3 gates
 
@@ -166,6 +175,7 @@ This plan is based on the remediation scope and repository structures available 
 ### Phase 4 release gates
 
 - [ ] E2E wallet/auth → token navigation → chart interaction → eligible AlphaCalls signal receipt passes.
+- [ ] Alpha Desk access tests prove malformed/unavailable decisions fail closed and production backend integration enforces the active-user cap and eligibility lifecycle.
 - [ ] Ineligible and unauthenticated users cannot receive gated signals or invoke protected mutations.
 - [ ] Mocked 429/500/timeout/socket-drop cases display actionable UI state and recover without duplicate actions.
 - [ ] CI gates pass in all three repos: typecheck/build, tests, contract drift, secret scan, and the frontend design check.
@@ -202,7 +212,7 @@ The available Frontend workspace defines `npm run typecheck`, `npm run test`, `n
 ### Phase 4 Execution Verification
 
 - Backend OpenAPI validation passes with 53 endpoints, 48 schemas, and no breaking changes; backend tests pass (62 tests).
-- HTTP integration test covers anonymous blurred signals, full details for an eligible ULTIMATE account, rejection of unauthenticated admin mutations, and delivery of an admin-published signal to an active SSE dashboard client.
+- HTTP integration test covers anonymous blurred signals, full details for an eligible Alpha account, rejection of unauthenticated admin mutations, and delivery of an admin-published signal to an active SSE dashboard client.
 - Frontend browser component test verifies REST fallback after an SSE failure; Backend-UI component test verifies status/delete controls disable during a pending mutation.
 - Frontend gates pass: typecheck, 103 tests across 23 files, design check, production build/prerender, and postbuild secret scan. Backend-UI gates pass: one UI test, strict TypeScript check, production build, source scan, and bundle scan.
 - Remaining deployment smoke checks: verify production wallet sign-in and token navigation, inspect the licensed TradingView chart at desktop/mobile sizes, confirm each production UI origin in `CORS_ALLOWED_ORIGINS`, confirm exposed provider credentials have been rotated, inject real staging 429/500/provider outage responses, and rehearse rollback. These require deployed staging credentials/origins and are not represented as completed by local tests.

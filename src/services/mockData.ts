@@ -111,7 +111,7 @@ export const getAuditLogs = async (): Promise<AuditLog[]> => {
 
 export interface GlobalBackendStats {
   visitors: number;
-  tierUsers: { FREE: number; ULTIMATE: number };
+  tierUsers: { FREE: number; ALPHA: number };
   geoData: { country: string; count: number }[];
   totalWallets: number;
   totalWhaleWatches: number;
@@ -123,7 +123,7 @@ export const getGlobalStats = async (): Promise<GlobalBackendStats> => {
     const res = await api.get('/api/stats');
     return res.data || {
       visitors: 0,
-      tierUsers: { FREE: 0, ULTIMATE: 0 },
+      tierUsers: { FREE: 0, ALPHA: 0 },
       geoData: [],
       totalWallets: 0,
       totalWhaleWatches: 0,
@@ -132,7 +132,7 @@ export const getGlobalStats = async (): Promise<GlobalBackendStats> => {
   } catch (e) {
     return {
       visitors: 0,
-      tierUsers: { FREE: 0, ULTIMATE: 0 },
+      tierUsers: { FREE: 0, ALPHA: 0 },
       geoData: [],
       totalWallets: 0,
       totalWhaleWatches: 0,
@@ -181,5 +181,4 @@ export const fetchEarnOpportunities = async () => [];
 export const fetchBlogPosts = async () => [];
 export const fetchChainInfo = async (_i: string) => undefined;
 export const fetchChains = async () => [];
-export const fetchNFTs = async () => [];
 export const MOCK_COINS: Coin[] = [];

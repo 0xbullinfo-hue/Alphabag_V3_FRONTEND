@@ -6,21 +6,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { Sidebar } from '../../src/components/frontend/Sidebar';
 import { Airdrop } from '../../src/pages/frontend/Airdrop';
-import Swal from 'sweetalert2';
-
-// Mock Swal
-vi.mock('sweetalert2', () => ({
-  default: {
-    fire: vi.fn().mockResolvedValue({ isConfirmed: false, dismiss: 'cancel' }),
-    DismissReason: {
-      cancel: 'cancel',
-      backdrop: 'backdrop',
-      close: 'close',
-      esc: 'esc',
-      timer: 'timer',
-    },
-  },
-}));
 
 // Mock useFeatures
 vi.mock('../../src/hooks/useFeatures', () => ({
@@ -59,7 +44,7 @@ vi.mock('../../src/context/AuthContext', () => ({
   useAuth: () => mockAuthState,
 }));
 
-describe('Alpha Desk Premium Tier Verification on Navigation & Links', () => {
+describe('Alpha Desk navigation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockAuthState = {
@@ -69,7 +54,7 @@ describe('Alpha Desk Premium Tier Verification on Navigation & Links', () => {
     };
   });
 
-  it('renders Alpha Desk in Sidebar with PRO badge', () => {
+  it('renders Alpha Desk without a legacy tier badge', () => {
     render(
       <BrowserRouter>
         <Sidebar isOpen={true} onClose={vi.fn()} />
@@ -78,10 +63,10 @@ describe('Alpha Desk Premium Tier Verification on Navigation & Links', () => {
 
     const deskLink = screen.getByRole('link', { name: /Alpha Desk/i });
     expect(deskLink).toBeInTheDocument();
-    expect(deskLink).toHaveTextContent(/PRO/i);
+    expect(deskLink).not.toHaveTextContent(/PRO|VIP|Premium/i);
   });
 
-  it('allows access to Alpha Desk for development without blocking alerts', () => {
+  it('leaves entitlement decisions to the Alpha Desk access service', () => {
     render(
       <BrowserRouter>
         <Sidebar isOpen={true} onClose={vi.fn()} />
@@ -91,68 +76,6 @@ describe('Alpha Desk Premium Tier Verification on Navigation & Links', () => {
     const deskLink = screen.getByRole('link', { name: /Alpha Desk/i });
     fireEvent.click(deskLink);
 
-    // Development access allows seamless navigation
-    expect(deskLink.getAttribute('href')).toBe('/alpha-desk');
-    expect(Swal.fire).not.toHaveBeenCalled();
-  });
-
-  it('allows navigation when user is authenticated with FREE tier during development', () => {
-    mockAuthState = {
-      user: { id: '1', email: 'trader@alphabag.com', tier: 'FREE' },
-      isAuthenticated: true,
-      logout: vi.fn(),
-    };
-
-    render(
-      <BrowserRouter>
-        <Sidebar isOpen={true} onClose={vi.fn()} />
-      </BrowserRouter>
-    );
-
-    const deskLink = screen.getByRole('link', { name: /Alpha Desk/i });
-    fireEvent.click(deskLink);
-
-    expect(deskLink.getAttribute('href')).toBe('/alpha-desk');
-    expect(Swal.fire).not.toHaveBeenCalled();
-  });
-
-  it('allows navigation without warning when user has PREMIUM tier', () => {
-    mockAuthState = {
-      user: { id: '2', email: 'pro@alphabag.com', tier: 'PREMIUM' },
-      isAuthenticated: true,
-      logout: vi.fn(),
-    };
-
-    render(
-      <BrowserRouter>
-        <Sidebar isOpen={true} onClose={vi.fn()} />
-      </BrowserRouter>
-    );
-
-    const deskLink = screen.getByRole('link', { name: /Alpha Desk/i });
-    fireEvent.click(deskLink);
-
-    expect(Swal.fire).not.toHaveBeenCalled();
-    expect(deskLink.getAttribute('href')).toBe('/alpha-desk');
-  });
-
-  it('allows navigation without warning when user has ALPHA_VIP or ULTIMATE tier', () => {
-    mockAuthState = {
-      user: { id: '3', email: 'vip@alphabag.com', tier: 'ALPHA_VIP' },
-      isAuthenticated: true,
-      logout: vi.fn(),
-    };
-
-    render(
-      <BrowserRouter>
-        <Sidebar isOpen={true} onClose={vi.fn()} />
-      </BrowserRouter>
-    );
-
-    const deskLink = screen.getByRole('link', { name: /Alpha Desk/i });
-    fireEvent.click(deskLink);
-
-    expect(Swal.fire).not.toHaveBeenCalled();
     expect(deskLink.getAttribute('href')).toBe('/alpha-desk');
   });
 

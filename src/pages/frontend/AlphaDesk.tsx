@@ -10,10 +10,10 @@ import {
   Share2,
   ShieldCheck,
   Target,
-  Wallet,
-  Zap
+  Wallet
 } from 'lucide-react';
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { BubblemapsEmbed } from '../../components/intelligence/BubblemapsEmbed';
@@ -21,6 +21,7 @@ import { SantimentMetrics } from '../../components/intelligence/SantimentMetrics
 import { TradingViewChart } from '../../components/intelligence/TradingViewChart';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
+import { requestAlphaDeskAccess } from '../../services/alphaDeskAccess';
 import { AlphaCalls } from './AlphaCalls';
 import { AlphaAi } from './AlphaAi';
 import { SecurityScanner } from './SecurityScanner';
@@ -68,20 +69,62 @@ const GATE_TOOLS = [
   { Icon: ShieldCheck, label: 'Security Approvals',desc: 'Wallet token allowance audit and contract approval revocation terminal' },
 ];
 
-function AlphaDeskGate() {
+type AlphaDeskGateState = 'checking' | 'sign-in' | 'alpha-required' | 'capacity-reached' | 'unavailable';
+
+function AlphaDeskGate({
+  state,
+  activeUsers,
+  maxUsers,
+  onRetry,
+}: {
+  state: AlphaDeskGateState;
+  activeUsers?: number;
+  maxUsers?: number;
+  onRetry?: () => void;
+}) {
   const { user } = useAuth();
   const { isConnected } = useAccount();
   const { open } = useWeb3Modal();
 
   const handleAction = () => {
-    if (!isConnected) {
+    if (state === 'unavailable' || state === 'capacity-reached') {
+      onRetry?.();
+    } else if (state === 'alpha-required') {
+      window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
+    } else if (!isConnected) {
       open();
     } else if (!user) {
       window.dispatchEvent(new CustomEvent('open-login-modal'));
-    } else {
-      window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
     }
   };
+
+  const gateCopy = {
+    checking: {
+      title: 'Checking Alpha Desk access',
+      description: 'Verifying your authenticated wallet and current membership.',
+      action: 'Checking access',
+    },
+    'sign-in': {
+      title: 'Sign in to verify access',
+      description: 'Alpha Desk is available to Alpha members holding at least 3,000 BAG in their login wallet, while an active place is available.',
+      action: isConnected ? 'Sign in with wallet' : 'Connect wallet',
+    },
+    'alpha-required': {
+      title: 'Alpha membership required',
+      description: 'Hold at least 3,000 BAG in the wallet used to sign in. Alpha Desk access is limited to 1,000 currently eligible users.',
+      action: 'Verify Alpha membership',
+    },
+    'capacity-reached': {
+      title: 'Alpha Desk is at capacity',
+      description: `All ${maxUsers ?? 1000} active places are currently in use. Access reopens when a current member no longer meets the Alpha token requirement.`,
+      action: 'Check again',
+    },
+    unavailable: {
+      title: 'Access could not be verified',
+      description: 'The Alpha Desk access service is unavailable. The workstation stays locked until access can be verified.',
+      action: 'Try again',
+    },
+  }[state];
 
   return (
     <div className="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-4 py-8">
@@ -91,31 +134,26 @@ function AlphaDeskGate() {
         </div>
 
         <div className="space-y-1.5">
-          <h1 className="text-2xl sm:text-3xl font-bold text-alphabag-text tracking-tight uppercase">Alpha Desk Pro</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-alphabag-text tracking-tight uppercase">{gateCopy.title}</h1>
           <p className="text-alphabag-subtext text-xs leading-relaxed max-w-md">
-            Integrated quantitative workstation aggregating charting, holder topology, smart wallet flows, and on-chain security.
+            {gateCopy.description}
           </p>
+          {state === 'capacity-reached' && activeUsers !== undefined && maxUsers !== undefined && (
+            <p className="text-alphabag-text text-xs font-mono tabular-nums mt-2">
+              {activeUsers.toLocaleString()} / {maxUsers.toLocaleString()} active users
+            </p>
+          )}
         </div>
 
         <div className="w-full max-w-xs mt-1">
           <Button
             onClick={handleAction}
+            disabled={state === 'checking'}
             size="md"
             className="w-full font-semibold transition-all"
           >
-            {!isConnected ? (
-              <>
-                <Wallet size={15} className="mr-1.5" /> Connect Wallet to Unlock
-              </>
-            ) : !user ? (
-              <>
-                <Lock size={15} className="mr-1.5" /> Sign In with Wallet
-              </>
-            ) : (
-              <>
-                <Zap size={15} className="mr-1.5" /> Mint Alpha Pass
-              </>
-            )}
+            {state === 'checking' ? <Lock size={15} className="mr-1.5" /> : <Wallet size={15} className="mr-1.5" />}
+            {gateCopy.action}
           </Button>
         </div>
       </div>
@@ -142,10 +180,21 @@ function AlphaDeskGate() {
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const AlphaDesk: React.FC = () => {
-  const { user } = useAuth();
-  const isPremium = user && ['PREMIUM', 'ALPHA_VIP', 'ULTIMATE'].includes(user.tier);
-  // Per user instruction: "for now allow access to alphadesk for development"
-  const ALLOW_DEV_ACCESS = true;
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const {
+    data: access,
+    isLoading: isCheckingAccess,
+    isError: accessError,
+    refetch: retryAccess,
+  } = useQuery({
+    queryKey: ['alpha-desk-access', user?.id],
+    queryFn: requestAlphaDeskAccess,
+    enabled: Boolean(user) && !isAuthLoading,
+    retry: false,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+  });
 
   // Active tab state
   const [activeTab, setActiveTab] = useState<TabId>('tradingview');
@@ -179,7 +228,28 @@ export const AlphaDesk: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (!isPremium && !ALLOW_DEV_ACCESS) return <AlphaDeskGate />;
+  if (isAuthLoading || isCheckingAccess) {
+    return <AlphaDeskGate state="checking" />;
+  }
+  if (!user) {
+    return <AlphaDeskGate state="sign-in" />;
+  }
+  if (accessError || !access) {
+    return <AlphaDeskGate state="unavailable" onRetry={() => void retryAccess()} />;
+  }
+  if (access.status === 'TOKEN_REQUIRED') {
+    return <AlphaDeskGate state="alpha-required" />;
+  }
+  if (access.status === 'CAPACITY_REACHED') {
+    return (
+      <AlphaDeskGate
+        state="capacity-reached"
+        activeUsers={access.activeUsers}
+        maxUsers={access.maxUsers}
+        onRetry={() => void retryAccess()}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-4.5rem)] bg-[#181A20] rounded-[6px] border border-[#2B313A] overflow-hidden">

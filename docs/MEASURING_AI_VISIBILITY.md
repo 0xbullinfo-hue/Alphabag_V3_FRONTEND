@@ -26,7 +26,7 @@ In [`src/lib/analytics.ts`](../src/lib/analytics.ts), AlphaBAG automatically ins
      referrer_url: document.referrer
    });
    ```
-2. It persists the acquisition source into `localStorage` (`alphabag_ai_attribution`) so downstream conversions (e.g. wallet connects, Genesis Pass mints) maintain attribution back to the originating AI referral.
+2. It persists the acquisition source into `localStorage` (`alphabag_ai_attribution`) so downstream conversions (e.g. wallet connections and sign-ins) maintain attribution back to the originating AI referral.
 
 ---
 

@@ -6,7 +6,7 @@ import { Button } from '../ui/Button';
 export const UpgradeCmd: React.FC<{ className?: string }> = ({ className = '' }) => {
     const { user } = useAuth();
 
-    if (user?.tier === 'ULTIMATE') return null;
+    if (user?.tier === 'ALPHA') return null;
 
     return (
         <Button
@@ -15,7 +15,7 @@ export const UpgradeCmd: React.FC<{ className?: string }> = ({ className = '' })
             onClick={() => window.dispatchEvent(new CustomEvent('open-upgrade-modal'))}
             className={`border-alphabag-yellow/50 text-alphabag-yellow hover:bg-alphabag-yellow/10 font-bold uppercase tracking-wider ${className}`}
         >
-            <Crown size={14} className="mr-2" /> Upgrade
+            <Crown size={14} className="mr-2" /> Alpha access
         </Button>
     );
 };

@@ -6,7 +6,7 @@
  * 
  * Supports:
  * - Testnet (all features enabled, token gating disabled)
- * - Mainnet (real token gating, premium features)
+ * - Mainnet (real token gating, Alpha features)
  * - Feature flags for gradual rollout
  */
 
@@ -18,46 +18,20 @@ export const TOKEN_GATING_CONFIG = {
   BAG_TOKEN_ADDRESS_MAINNET: import.meta.env.VITE_BAG_TOKEN_ADDRESS_MAINNET || '',
   BAG_TOKEN_ADDRESS_TESTNET: import.meta.env.VITE_BAG_TOKEN_ADDRESS_TESTNET || '',
   
-  // ===== PREMIUM ACCESS REQUIREMENTS =====
-  // Minimum BAG tokens required to unlock premium features
-  // Set to 0 (or not set) to disable token gating
-  MIN_BAG_REQUIRED: Number(import.meta.env.VITE_MIN_BAG_REQUIRED) || 0,
+  // Alpha membership requires this balance in the authenticated wallet.
+  ALPHA_MINIMUM_BAG_BALANCE: 3000,
   
   // ===== ADMIN WALLET CONFIGURATION =====
   // Handled entirely server-side via JWT claims.
   // No client-side evaluation of admin wallets.
   // ===== FEATURE FLAGS =====
   // Toggle token gating on/off
-  // TESTNET: false (all users get premium for testing)
+  // TESTNET: false (token gating can be disabled for testing)
   // MAINNET: true (real token verification required)
   ENABLE_TOKEN_GATING: import.meta.env.VITE_ENABLE_TOKEN_GATING === 'true',
   
   // Production vs Testnet detection
   IS_PRODUCTION: import.meta.env.VITE_ENVIRONMENT === 'production',
-};
-
-export const NFT_CONFIG = {
-  NFT_CONTRACT_ADDRESS_MAINNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_MAINNET || '',
-  NFT_CONTRACT_ADDRESS_TESTNET: import.meta.env.VITE_NFT_CONTRACT_ADDRESS_TESTNET || '',
-  IPFS_BASE_URI: import.meta.env.VITE_NFT_IPFS_BASE_URI || '',
-  IPFS_GATEWAY: import.meta.env.VITE_IPFS_GATEWAY || 'https://ipfs.io/ipfs/',
-  MINT_PRICE_BNB: 0.07,
-  MINT_PRICE_BAG: 100,
-  TOTAL_SUPPLY: 4000,
-  MAX_MINT_PER_TX: 10,
-  MAX_MINT_PER_WALLET: 10,
-  ELEMENT_MARKET_COLLECTION_URL: import.meta.env.VITE_ELEMENT_MARKET_COLLECTION_URL || 'https://element.market/bsc',
-  PANCAKESWAP_BUY_URL: import.meta.env.VITE_PANCAKESWAP_BUY_URL || 'https://pancakeswap.finance/swap',
-  REQUIRED_BAG_FOR_PREMIUM: 10000,
-  REQUIRED_NFT_FOR_VIP: 10,
-};
-
-export const resolveIpfsUrl = (url: string): string => {
-  if (!url) return '';
-  if (url.startsWith('ipfs://')) {
-    return url.replace('ipfs://', NFT_CONFIG.IPFS_GATEWAY);
-  }
-  return url;
 };
 
 // Global Demo Mode Toggle
@@ -67,7 +41,7 @@ const IS_LOCALHOST_DEV = import.meta.env.DEV && typeof window !== 'undefined' &&
 export const IS_DEMO_MODE = IS_LOCALHOST_DEV && import.meta.env.VITE_DEMO_MODE !== 'false';
 
 // Comma-separated list of disabled route paths in production
-export const getDisabledPages = (): string[] => ['/alpha-passes', '/passes', '/pricing'];
+export const getDisabledPages = (): string[] => [];
 export const DISABLED_PAGES: string[] = getDisabledPages();
 
 // Launch mode is configured via environment so the same codebase can support
@@ -175,20 +149,20 @@ export const TIER_LIMITS = {
     maxWhales: 5,
     refreshInterval: 5 * ONE_MINUTE, // 5 min refresh for free
   },
-  PREMIUM: {
+  ALPHA: {
     maxPortfolios: 100,
     maxWhales: 50,
-    refreshInterval: 2 * ONE_MINUTE, // 2 min refresh for premium
+    refreshInterval: 2 * ONE_MINUTE, // 2 min refresh for Alpha
   },
 } as const;
 
 // ===== ERROR MESSAGES =====
 export const ERROR_MESSAGES = {
-  TOKEN_CHECK_FAILED: 'Failed to verify premium status. Please refresh or contact support.',
+  TOKEN_CHECK_FAILED: 'Failed to verify Alpha membership. Please refresh or contact support.',
   NETWORK_ERROR: 'Network connection failed. Please check your internet connection.',
   WALLET_NOT_CONNECTED: 'Please connect your wallet to continue.',
-  PREMIUM_REQUIRED: 'This feature requires a premium subscription.',
-  INSUFFICIENT_BALANCE: 'You do not have enough BAG tokens for premium access.',
+  ALPHA_REQUIRED: 'This feature requires Alpha membership.',
+  INSUFFICIENT_BALANCE: 'Hold at least 3,000 BAG in your login wallet for Alpha membership.',
 };
 
 // ===== VALIDATION =====
@@ -199,9 +173,6 @@ export function validateConfig() {
   if (TOKEN_GATING_CONFIG.ENABLE_TOKEN_GATING) {
     if (!TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_MAINNET) {
       errors.push('⚠️ Token gating enabled but BAG_TOKEN_ADDRESS_MAINNET not set');
-    }
-    if (!TOKEN_GATING_CONFIG.MIN_BAG_REQUIRED || TOKEN_GATING_CONFIG.MIN_BAG_REQUIRED <= 0) {
-      errors.push('⚠️ Token gating enabled but MIN_BAG_REQUIRED not configured');
     }
   }
 
@@ -229,11 +200,10 @@ For Testnet (All features available, no token check):
   VITE_BAG_TOKEN_ADDRESS_TESTNET= (empty - not deployed yet)
   ADMIN_WALLETS=0x_YOUR_ADMIN_WALLET_ADDRESS_HERE (Server-side)
 
-For Mainnet (Real token gating, premium features):
+For Mainnet (Real token gating, Alpha features):
   VITE_ENVIRONMENT=production
   VITE_ENABLE_TOKEN_GATING=true
   VITE_BAG_TOKEN_ADDRESS_MAINNET=0x... (deployed token address)
-  VITE_MIN_BAG_REQUIRED=1000
   NANSEN_API_KEY=your_key (Server-side)
   ETHERSCAN_API_KEY=your_key (Server-side)
   BSCSCAN_API_KEY=your_key (Server-side)

@@ -1,18 +1,15 @@
 import {
     AlertCircle,
-    CheckCircle2,
     Check,
     Crown,
     Database,
     ExternalLink,
     Eye,
     Key,
-    Lock,
     Plus,
     Search,
     TrendingUp,
-    Wallet,
-    Zap
+    Wallet
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -20,14 +17,15 @@ import { alert } from '../../lib/alert';
 import { CexConnectModal } from '../../components/frontend/CexConnectModal';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
+import { useAuth } from '../../context/AuthContext';
 import { useWallet } from '../../context/WalletContext';
 import { useCexConnections } from '../../hooks/useCexConnections';
 import { Chain } from '../../types';
 import { SUPPORTED_CEX } from '../../services/exchanges';
-import { DISABLED_PAGES } from '../../services/config';
 
 export const Settings: React.FC = () => {
-    const { trackedWallets, addTrackedWallet, premiumTokenBalance, getLimits } = useWallet();
+    const { trackedWallets, addTrackedWallet, bagTokenBalance, getLimits } = useWallet();
+    const { user } = useAuth();
     const navigate = useNavigate();
 
     const [newAddress, setNewAddress] = useState('');
@@ -94,10 +92,10 @@ export const Settings: React.FC = () => {
                     <p className="text-alphabag-subtext text-xs">Configure professional data feeds and membership status.</p>
                 </div>
                 <div className="flex flex-col items-end">
-                    <span className="text-alphabag-subtext text-[11px] font-semibold uppercase tracking-wider mb-1">Network Verified Balance</span>
+                    <span className="text-alphabag-subtext text-[11px] font-semibold uppercase tracking-wider mb-1">Tracked Wallet BAG Total</span>
                     <div className="flex items-center gap-2">
                         <div className="text-2xl font-bold text-alphabag-text leading-none tracking-tight tabular-nums num">
-                            {(premiumTokenBalance ?? 0).toLocaleString()} <span className="text-alphabag-yellow text-sm">BAG</span>
+                            {(bagTokenBalance ?? 0).toLocaleString()} <span className="text-alphabag-yellow text-sm">BAG</span>
                         </div>
                         <div className="flex flex-col items-end">
                             <button
@@ -284,181 +282,55 @@ export const Settings: React.FC = () => {
                 </div>
             </section>
 
-            {/* ─── Membership Status (3-Tier Comparison Matrix) ─── */}
             <section className="rounded-lg border border-alphabag-border bg-alphabag-card p-5 space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-alphabag-border">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <Crown className="text-alphabag-yellow" size={18} />
-                            <h2 className="text-lg font-bold text-white tracking-tight">Membership Status & Tier Access</h2>
-                        </div>
-                        <p className="text-alphabag-subtext text-xs">
-                            Hold $BAG tokens and Genesis Utility Passes to unlock multi-network intelligence and VIP multipliers.
-                        </p>
+                <div className="pb-3 border-b border-alphabag-border">
+                    <div className="flex items-center gap-2 mb-1">
+                        <Crown className="text-alphabag-yellow" size={18} />
+                        <h2 className="text-lg font-bold text-white tracking-tight">Membership</h2>
                     </div>
-                    {!DISABLED_PAGES.includes('/alpha-passes') && (
-                        <button
-                            onClick={() => navigate('/alpha-passes')}
-                            className="bg-alphabag-panel hover:bg-alphabag-hover text-alphabag-text border border-alphabag-border px-3.5 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all w-fit"
-                        >
-                            <Zap size={14} className="text-alphabag-yellow" />
-                            <span>Alpha Passes Hub</span>
-                        </button>
-                    )}
+                    <p className="text-alphabag-subtext text-xs">
+                        Alpha eligibility is verified by the server against the wallet used to sign in.
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-stretch pt-1">
-                    {/* Free Tier */}
-                    <div className={`bg-alphabag-panel border rounded-md p-4 flex flex-col justify-between relative transition-all ${
-                        premiumTokenBalance < 2000 ? 'border-alphabag-yellow/50' : 'border-alphabag-border opacity-80'
-                    }`}>
-                        {premiumTokenBalance < 2000 && (
-                            <div className="absolute top-3.5 right-3.5">
-                                <span className="bg-alphabag-dark text-alphabag-yellow border border-alphabag-yellow/30 px-2 py-0.5 rounded text-[11px] font-semibold uppercase">
-                                    Current Tier
-                                </span>
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-stretch">
+                    <div className="bg-alphabag-panel border border-alphabag-border rounded-md p-4">
+                        <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Free</div>
+                        <h3 className="text-base font-bold text-alphabag-text mt-0.5">Free membership</h3>
+                        <div className="text-lg font-bold text-alphabag-subtext mt-1.5 num">0 BAG required</div>
+                        <div className="h-px bg-alphabag-border my-3" />
+                        <div className="space-y-2 text-xs text-alphabag-text">
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-subtext shrink-0" /><span>Standard dashboard and portfolio tools</span></div>
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-subtext shrink-0" /><span>Markets, Alpha Screener, and calculator</span></div>
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-subtext shrink-0" /><span>News, missions, and community feed</span></div>
+                        </div>
+                        {!user || user.tier !== 'ALPHA' ? (
+                            <p className="text-[11px] text-alphabag-yellow font-semibold mt-4">Current membership</p>
+                        ) : null}
+                    </div>
+
+                    <div className="bg-alphabag-panel border border-alphabag-yellow/50 rounded-md p-4">
+                        <div className="text-[11px] uppercase font-semibold text-alphabag-yellow">Alpha</div>
+                        <h3 className="text-base font-bold text-alphabag-text mt-0.5">Alpha membership</h3>
+                        <div className="text-lg font-bold text-alphabag-yellow mt-1.5 num">3,000 BAG</div>
+                        <p className="text-[11px] text-alphabag-subtext mt-1">Held in the wallet used to sign in</p>
+                        <div className="h-px bg-alphabag-border my-3" />
+                        <div className="space-y-2 text-xs text-alphabag-text">
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-yellow shrink-0" /><span>All Free membership features</span></div>
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-yellow shrink-0" /><span>Expanded Alpha analytics and tools</span></div>
+                            <div className="flex items-center gap-2"><Check size={14} className="text-alphabag-yellow shrink-0" /><span>Alpha Desk, subject to its 1,000-user active limit</span></div>
+                        </div>
+                        {user?.tier === 'ALPHA' ? (
+                            <p className="text-[11px] text-alphabag-green font-semibold mt-4">Alpha membership verified</p>
+                        ) : (
+                            <Button
+                                size="sm"
+                                onClick={() => window.dispatchEvent(new CustomEvent('open-upgrade-modal'))}
+                                className="mt-4 w-full"
+                            >
+                                Verify Alpha membership
+                            </Button>
                         )}
-                        <div>
-                            <div className="text-[11px] uppercase font-semibold text-alphabag-subtext">Base Public</div>
-                            <h3 className="text-base font-bold text-alphabag-text mt-0.5">FREE TIER</h3>
-                            <div className="text-lg font-bold text-alphabag-subtext mt-1.5 num">0 $BAG</div>
-                            <div className="h-px bg-alphabag-border my-3" />
-                            <div className="space-y-2 text-xs text-alphabag-subtext">
-                                <div className="flex items-center gap-2 text-alphabag-text">
-                                    <Check size={14} className="text-alphabag-subtext shrink-0" />
-                                    <span><strong>Standard Dashboard Access</strong></span>
-                                </div>
-                                <div className="flex items-center gap-2 text-alphabag-text">
-                                    <Check size={14} className="text-alphabag-subtext shrink-0" />
-                                    <span><strong>1.0x Base</strong> ITEMS Earning</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-alphabag-text">
-                                    <Check size={14} className="text-alphabag-subtext shrink-0" />
-                                    <span>Alpha Screener & Global Markets</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-alphabag-text">
-                                    <Check size={14} className="text-alphabag-subtext shrink-0" />
-                                    <span>Alpha Calculator & Mission Control</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-alphabag-text">
-                                    <Check size={14} className="text-alphabag-subtext shrink-0" />
-                                    <span>Alpha Passes, News & Connections</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="pt-4">
-                            <span className="block text-center text-[11px] font-semibold text-alphabag-subtext uppercase">
-                                Default Access
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Premium Tier */}
-                    <div className={`bg-alphabag-panel border rounded-md p-4 flex flex-col justify-between relative transition-all ${
-                        premiumTokenBalance >= 2000 ? 'border-alphabag-yellow' : 'border-alphabag-border'
-                    }`}>
-                        <div className="absolute top-3.5 right-3.5">
-                            <span className="bg-alphabag-yellow/10 text-alphabag-yellow px-2 py-0.5 rounded text-[11px] font-semibold uppercase border border-alphabag-yellow/20">
-                                {premiumTokenBalance >= 2000 ? 'Active Holder' : 'Token Holder'}
-                            </span>
-                        </div>
-                        <div>
-                            <div className="text-[11px] uppercase font-semibold text-alphabag-yellow">Pro Analytics</div>
-                            <h3 className="text-base font-bold text-alphabag-text mt-0.5">PREMIUM TIER</h3>
-                            <div className="text-lg font-bold text-alphabag-yellow mt-1.5 num">2,000 $BAG + 1 NFT</div>
-                            <div className="h-px bg-alphabag-border my-3" />
-                            <div className="space-y-2 text-xs text-alphabag-text">
-                                <div className="flex items-center gap-2">
-                                    <Check size={14} className="text-alphabag-yellow shrink-0" />
-                                    <span><strong>All features of Free Tier</strong></span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Check size={14} className="text-alphabag-yellow shrink-0" />
-                                    <span>Real-time BSC Whale Radar</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Check size={14} className="text-alphabag-yellow shrink-0" />
-                                    <span><strong>1.25x Multiplier</strong> on ITEMS</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Check size={14} className="text-alphabag-yellow shrink-0" />
-                                    <span>Alpha Feeds & DeFi Tracker</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Check size={14} className="text-alphabag-yellow shrink-0" />
-                                    <span>5hr AlphaAI Queries</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="pt-4 space-y-1.5">
-                            <button
-                                disabled={true}
-                                title="Tier eligibility automatically verified post-TGE token snapshot"
-                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 opacity-60 cursor-not-allowed border border-alphabag-border"
-                            >
-                                Hold 10k $BAG
-                            </button>
-                            <p className="text-[11px] text-center text-alphabag-subtext">
-                                Verified via on-chain snapshot post-TGE
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Alpha VIP Tier */}
-                    <div className="bg-alphabag-panel border-2 border-alphabag-yellow rounded-md p-4 flex flex-col justify-between relative shadow-sm">
-                        <div className="absolute top-3.5 right-3.5">
-                            <span className="bg-alphabag-yellow text-alphabag-dark px-2 py-0.5 rounded text-[11px] font-bold uppercase">
-                                All Unlocked
-                            </span>
-                        </div>
-                        <div>
-                            <div className="text-[11px] uppercase font-semibold text-alphabag-yellow flex items-center gap-1">
-                                <Crown size={12} fill="currentColor" /> Apex Level
-                            </div>
-                            <h3 className="text-base font-bold text-alphabag-text mt-0.5">ALPHA VIP</h3>
-                            <div className="text-lg font-bold text-alphabag-yellow mt-1.5 num">2,000 $BAG + 10 NFT</div>
-                            <div className="h-px bg-alphabag-border my-3" />
-                            <div className="space-y-2 text-xs text-alphabag-text font-medium">
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span><strong>All features of Free Tier</strong></span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span><strong>100% Platform Unlocks</strong></span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span><strong>Alpha Mission & 1.5x MAXIMUM Multiplier</strong></span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span>VIP Telegram Bot Real-time Alerts</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span>Private Founder, AlphaCall, Alpha Analysts & Alpha Feeds</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <CheckCircle2 size={14} className="text-alphabag-green shrink-0" />
-                                    <span>DeFi Tracker, Security Radar & All Dashboard Features</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="pt-4 space-y-1.5">
-                            <button
-                                disabled={true}
-                                title="Genesis Pass Mint Phase 2 will be announced in Alpha Passes Hub"
-                                className="w-full bg-alphabag-dark text-alphabag-subtext py-2 rounded text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 opacity-60 cursor-not-allowed border border-alphabag-yellow/20"
-                            >
-                                <Lock size={14} className="text-alphabag-yellow/70" />
-                                <span>Get Alpha Pass</span>
-                            </button>
-                            <p className="text-[11px] text-center text-alphabag-subtext">
-                                Genesis Pass Phase 2 Mint Coming Soon
-                            </p>
-                        </div>
                     </div>
                 </div>
             </section>

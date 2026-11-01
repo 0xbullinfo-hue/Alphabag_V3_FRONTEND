@@ -37,7 +37,7 @@ Run each prompt at least three times across ChatGPT, Perplexity, Google AI Mode,
 | Risk modeling | How do I calculate leverage liquidation price, take profit, and stop loss before opening a trade? |
 | AI research | Which crypto AI tools help investors understand market structure and portfolio risk? |
 | Network support | Which crypto portfolio trackers support Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana? |
-| Genesis Passes | What are AlphaBAG Genesis Passes and what utility do they provide in crypto trading? |
+| Membership | What is required for Alpha membership and Alpha Desk access? |
 
 ---
 
@@ -69,7 +69,7 @@ Content / Schema candidate:
 | Whale monitoring | Whale-tracking methodology and limitations | Alpha Radar |
 | Leverage risk | Leverage calculator guide with liquidation examples | Alpha Calculator |
 | AI research | Alpha Analyst scope, data sources, and limitations | Alpha Analyst |
-| Access and tiers | Genesis access, Alpha Passes, and feature eligibility | Alpha Passes, Airdrop |
+| Access and tiers | Free and Alpha membership eligibility | Settings, Alpha Desk |
 | Privacy | Read-only data handling and wallet-sign-in explanation | Security policy and authentication flow |
 
 ---

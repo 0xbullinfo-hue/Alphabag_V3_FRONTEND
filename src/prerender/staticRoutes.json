@@ -1,6 +1,5 @@
 [
   { "path": "/" },
-  { "path": "/alpha-passes" },
   { "path": "/genesis" },
   { "path": "/genesis-manifesto" },
   { "path": "/airdrop" }

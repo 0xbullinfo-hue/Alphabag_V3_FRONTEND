@@ -5,23 +5,19 @@ import { api } from '../services/api';
 import { TOKEN_GATING_CONFIG } from '../services/config';
 import { User } from '../types';
 
-// SECURITY: Dev override is now OPT-IN via env var, never automatic.
-// To enable in local development, set VITE_ENABLE_DEV_ULTIMATE=true in .env
-// NEVER commit .env files with this enabled.
-// Tier is 100% verified server-side via JWT and database lookup.
+// Tier is verified server-side via the authenticated session.
 
-// Local development fallback user (Ultimate tier with complete permissions)
+// Local development fallback user; demo sessions do not imply Alpha eligibility.
 const DEV_USER: User = {
   id: 'dev-user-001',
   email: 'trader@alphabag.app',
-  tier: 'ULTIMATE',
+  tier: 'FREE',
   // verifiedWallet removed so unauthenticated/dev state does not inject phantom wallet
   verifiedWallet: undefined,
   walletAddress: undefined,
   alphaAiUsageSeconds: 0,
   lastAlphaAiReset: new Date().toISOString(),
   isAdmin: false,
-  isPro: true,
   onboardingComplete: true,
   accountType: 'TRADER',
   bagTokens: 0,
@@ -38,7 +34,7 @@ interface AuthContextType {
   isLoading: boolean;
   token: string | null;
   logout: () => void;
-  upgradeToUltimate: (walletAddress: string) => Promise<boolean>;
+  upgradeToAlpha: (walletAddress: string) => Promise<boolean>;
   updateAiUsage: (seconds: number) => void;
   completeOnboarding: (accountType: 'FOUNDER' | 'TRADER', profileData: any) => Promise<void>;
   siweLogin: (address: string, signature: string, message: string) => Promise<boolean>;
@@ -47,6 +43,11 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+const normalizeUser = (user: Omit<User, 'tier'> & { tier?: string }): User => {
+  const { tier, ...userData } = user;
+  return { ...userData, tier: tier?.toUpperCase() === 'ALPHA' ? 'ALPHA' : 'FREE' };
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -80,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const res = await api.get('/api/auth/me');
 
         if (res.data) {
-          const userData = res.data;
+          const userData = normalizeUser(res.data);
           setUser(userData);
           if (savedToken) setToken(savedToken);
           sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
@@ -117,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await api.get('/api/auth/me');
       if (res.data) {
-        let userData = res.data;
+        const userData = normalizeUser(res.data);
         
         setUser(userData);
         sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
@@ -140,7 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
 
       if (res.data.user && res.data.token) {
-        let userData = res.data.user;
+        const userData = normalizeUser(res.data.user);
         
         setUser(userData);
         setToken(res.data.token);
@@ -169,7 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await api.post('/api/auth/login', { email, password, portal });
 
       if (res.data.user && res.data.token) {
-        let userData = res.data.user;
+        const userData = normalizeUser(res.data.user);
         
         setUser(userData);
         setToken(res.data.token);
@@ -204,17 +205,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => window.removeEventListener('auth:expired', handleAuthExpired);
   }, [disconnect]);
 
-  const upgradeToUltimate = async (walletAddress: string): Promise<boolean> => {
+  const upgradeToAlpha = async (walletAddress: string): Promise<boolean> => {
     if (!user) return false;
     try {
       const res = await api.post('/api/auth/verify-upgrade', { walletAddress });
       if (res.data?.user && res.data?.token) {
-        setUser(res.data.user);
+        const userData = normalizeUser(res.data.user);
+        setUser(userData);
         setToken(res.data.token);
-        sessionStorage.setItem('alphabag_user', JSON.stringify(res.data.user));
+        sessionStorage.setItem('alphabag_user', JSON.stringify(userData));
         sessionStorage.setItem('alphabag_token', res.data.token);
         api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-        return res.data.user.tier === 'ULTIMATE';
+        return userData.tier === 'ALPHA';
       }
       return false;
     } catch (e: any) {
@@ -224,7 +226,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateAiUsage = (seconds: number) => {
-    if (!user || user.tier === 'ULTIMATE' || user.isPro) return;
+    if (!user || user.tier === 'ALPHA') return;
     const updated = { ...user, alphaAiUsageSeconds: (user.alphaAiUsageSeconds || 0) + seconds };
     setUser(updated);
     sessionStorage.setItem('alphabag_user', JSON.stringify(updated));
@@ -248,7 +250,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       isLoading, 
       token, 
       logout, 
-      upgradeToUltimate, 
+      upgradeToAlpha,
       updateAiUsage, 
       siweLogin, 
       emailLogin, 

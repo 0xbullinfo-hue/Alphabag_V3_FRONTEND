@@ -63,7 +63,7 @@ Cloudflare, AWS WAF, and similar edge proxies frequently categorize live AI craw
 
 ### Recommended Edge Rules:
 1. **Allowlist Verified AI User-Agents:** Ensure WAF Bot Management bypass rules exist for known verified bots (e.g. Cloudflare's "Verified Bot" category includes `GPTBot`, `PerplexityBot`, and `ClaudeBot`).
-2. **Do Not Challenge Standard HTTP GETs on Prerendered Static Routes:** Public routes (`/`, `/alpha-passes`, `/genesis`, `/genesis-manifesto`, `/airdrop`) serve pre-rendered HTML and should bypass aggressive rate-limiting.
+2. **Do Not Challenge Standard HTTP GETs on Prerendered Static Routes:** Public routes (`/`, `/genesis`, `/genesis-manifesto`, `/airdrop`) serve pre-rendered HTML and should bypass aggressive rate-limiting.
 3. **Verify Reverse DNS:** Legitimate bots from OpenAI and Google resolve back to `.openai.com` and `.googlebot.com`.
 
 ---
@@ -85,12 +85,10 @@ LLMs generate answers probabilistically and frequently synthesize plausible URLs
 
 ### Mitigation Strategies:
 1. **Predictive Route Aliases:** Map frequent hallucinations to canonical routes in `App.tsx`:
-   - `/passes` → `/alpha-passes`
-   - `/pricing` → `/alpha-passes`
    - `/whitepaper` → `/genesis-manifesto`
    - `/tokenomics` → `/genesis-manifesto`
    - `/quests` → `/airdrop`
-2. **Context-Rich 404 Fallback:** If an unmapped URL is requested, render an informative page providing direct links to key public hubs (`Alpha Passes`, `Genesis Terminal`, `Airdrop`, `Calculator`).
+2. **Context-Rich 404 Fallback:** If an unmapped URL is requested, render an informative page providing direct links to key public hubs (`Genesis Terminal`, `Airdrop`, `Calculator`).
 
 ---
 

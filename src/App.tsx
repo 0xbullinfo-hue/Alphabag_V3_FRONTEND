@@ -14,7 +14,7 @@ import { WalletProvider } from './context/WalletContext';
 import { usePortfolioStream } from './hooks/usePortfolioStream';
 import { queryClient } from './lib/queryClient';
 import { config } from './lib/wagmi';
-import { IS_TEASER_MODE, DISABLED_PAGES } from './services/config';
+import { IS_TEASER_MODE } from './services/config';
 import Swal from 'sweetalert2';
 
 // When VITE_LAUNCH_MODE=teaser, only the landing page is reachable — no
@@ -62,7 +62,6 @@ const Airdrop = lazy(() => import('./pages/frontend/Airdrop').then(m => ({ defau
 const Portfolio = lazy(() => import('./pages/frontend/Portfolio').then(m => ({ default: m.Portfolio })));
 const AlphaScreener = lazy(() => import('./pages/frontend/AlphaScreener').then(m => ({ default: m.AlphaScreener })));
 const SecurityScanner = lazy(() => import('./pages/frontend/SecurityScanner').then(m => ({ default: m.SecurityScanner })));
-const AlphaPasses = lazy(() => import('./pages/frontend/AlphaPasses').then(m => ({ default: m.AlphaPasses })));
 const AlphaDesk = lazy(() => import('./pages/frontend/AlphaDesk').then(m => ({ default: m.AlphaDesk })));
 
 const GlobalLoader = () => (
@@ -71,7 +70,7 @@ const GlobalLoader = () => (
     <span className="ml-3 text-sm">Loading AlphaBAG…</span>
   </div>
 );
-const INDEXABLE_PATHS = new Set(['/', '/alpha-passes', '/genesis', '/genesis-manifesto', '/airdrop', '/markets', '/news']);
+const INDEXABLE_PATHS = new Set(['/', '/genesis', '/genesis-manifesto', '/airdrop', '/markets', '/news']);
 
 const HashRedirect = () => {
   const navigate = useNavigate();
@@ -235,11 +234,6 @@ const AppContent = () => {
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/profile/:id" element={<Layout><Profile /></Layout>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />
-          <Route path="/alpha-passes" element={DISABLED_PAGES.includes('/alpha-passes') ? <Navigate to="/" replace /> : <Layout><AlphaPasses /></Layout>} />
-          <Route path="/alpha-pass" element={<Navigate to="/" replace />} />
-          <Route path="/alpha-access" element={<Navigate to="/" replace />} />
-          <Route path="/passes" element={<Navigate to="/" replace />} />
-          <Route path="/pricing" element={<Navigate to="/" replace />} />
           <Route path="/tokenomics" element={<Navigate to="/genesis-manifesto" replace />} />
           <Route path="/whitepaper" element={<Navigate to="/genesis-manifesto" replace />} />
           <Route path="/docs" element={<Navigate to="/genesis-manifesto" replace />} />
@@ -247,7 +241,6 @@ const AppContent = () => {
           <Route path="/rewards" element={<Navigate to="/airdrop" replace />} />
           <Route path="/terminal" element={<Navigate to="/" replace />} />
           <Route path="/app" element={<Navigate to="/" replace />} />
-          <Route path="/nft" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

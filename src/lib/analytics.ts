@@ -211,19 +211,6 @@ export const analytics = {
     });
   },
 
-  trackMintAction: (tier: string, quantity: number, totalCost: number) => {
-    trackEvent({
-      action: 'mint_pass',
-      category: 'nft',
-      label: tier,
-      value: totalCost,
-      custom_parameters: {
-        pass_tier: tier,
-        quantity,
-        total_cost: totalCost,
-      },
-    });
-  },
 };
 
 declare global {

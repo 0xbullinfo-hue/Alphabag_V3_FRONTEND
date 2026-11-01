@@ -22,20 +22,7 @@ export interface Coin {
   current_price_24h_low?: number;
 }
 
-// Strict 2-tier system as per requirements
-export type UserTier = 'FREE' | 'PREMIUM' | 'ALPHA_VIP' | 'ULTIMATE';
-export type PassTier = 'FREE' | 'PREMIUM' | 'ALPHA_VIP';
-
-export interface AlphaPassNFT {
-  tokenId: number;
-  name: string;
-  tier: 'Genesis Pass' | 'VIP Founder' | 'Alpha Elite';
-  rarity: string;
-  image: string;
-  mintedAt?: string;
-  multiplier: string;
-  perks: string[];
-}
+export type UserTier = 'FREE' | 'ALPHA';
 
 export interface User {
   id: string;
@@ -46,7 +33,6 @@ export interface User {
   alphaAiUsageSeconds: number;
   lastAlphaAiReset: string;
   isAdmin: boolean;
-  isPro?: boolean;
   visits?: number;
   lastLoginIp?: string;
   location?: string;
@@ -224,15 +210,6 @@ export interface AuditLog {
 export interface UserGrowthData {
   date: string;
   count: number;
-}
-
-// Added missing NFTItem interface
-export interface NFTItem {
-  id: string;
-  name: string;
-  imageUrl: string;
-  collection: string;
-  floorPrice: number;
 }
 
 // Added missing DefiPosition interface

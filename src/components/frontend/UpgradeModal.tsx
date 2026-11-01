@@ -17,14 +17,14 @@ const BAG_TOKEN_ADDRESS =
   TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_MAINNET ||
   TOKEN_GATING_CONFIG.BAG_TOKEN_ADDRESS_TESTNET ||
   '0x0000000000000000000000000000000000000000';
-const MIN_HOLDINGS = TOKEN_GATING_CONFIG.MIN_BAG_REQUIRED;
+const MIN_HOLDINGS = TOKEN_GATING_CONFIG.ALPHA_MINIMUM_BAG_BALANCE;
 
 export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) => {
   const { open } = useWeb3Modal();
   const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  const { upgradeToUltimate } = useAuth();
+  const { user, upgradeToAlpha } = useAuth();
 
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
@@ -55,6 +55,14 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
     setVerificationError(null);
 
     try {
+      const loginWallet = user?.verifiedWallet || user?.walletAddress;
+      if (!loginWallet) {
+        throw new Error('Sign in with the wallet you want to verify for Alpha membership.');
+      }
+      if (loginWallet.toLowerCase() !== address.toLowerCase()) {
+        throw new Error('Connect the same wallet you used to sign in before verifying Alpha membership.');
+      }
+
       if (chain?.id !== bsc.id) {
         if (switchNetwork) {
           try {
@@ -82,9 +90,9 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
         }
       }
 
-      const upgraded = await upgradeToUltimate(address);
+      const upgraded = await upgradeToAlpha(address);
       if (!upgraded) {
-        throw new Error('Verification failed. The server could not confirm your BAG balance.');
+        throw new Error('Verification failed. The server could not confirm the 3,000 BAG requirement.');
       }
       onClose();
     } catch (e: any) {
@@ -111,7 +119,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
                 <Crown size={22} fill="currentColor" />
               </div>
               <h2 className="text-2xl font-bold text-white tracking-tight uppercase leading-none text-left">
-                Alpha<span className="text-alphabag-yellow">BAG</span> <span className="block text-[11px] text-alphabag-subtext tracking-wider mt-1 font-semibold">Genesis Node Upgrade</span>
+                Alpha<span className="text-alphabag-yellow">BAG</span> <span className="block text-[11px] text-alphabag-subtext tracking-wider mt-1 font-semibold">Alpha Membership</span>
               </h2>
             </div>
             <button onClick={onClose} className="p-2 text-alphabag-subtext hover:text-white transition-colors bg-alphabag-black/50 rounded-md">
@@ -124,7 +132,7 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({ isOpen, onClose }) =
               <ShieldCheck size={44} className="mx-auto text-alphabag-yellow" />
             </div>
             <p className="text-sm text-alphabag-text font-bold leading-relaxed mb-1 uppercase tracking-wider">
-              Unlock Premium Intelligence
+              Unlock Alpha Membership
             </p>
             <p className="text-[11px] text-alphabag-subtext font-medium leading-relaxed px-4">
               Verify eligibility to unlock deeper analytics, priority alerts, and unlimited AlphaAI access.

@@ -5,15 +5,15 @@ import { useWallet } from '../../context/WalletContext';
 import { Button } from '../ui/Button';
 
 export const WalletConnectButton: React.FC = () => {
-  const { address, isConnecting, connectWallet, disconnectWallet, isPremium, connectionType } = useWallet();
+  const { address, isConnecting, connectWallet, disconnectWallet, isAlpha, connectionType } = useWallet();
   const { chain } = useNetwork();
 
   if (address) {
     return (
       <div className="flex items-center space-x-2">
-        {isPremium && (
+        {isAlpha && (
           <div className="hidden lg:flex items-center bg-alphabag-yellow text-alphabag-dark text-[11px] font-bold px-2.5 py-1 rounded-md">
-            <Crown size={12} className="mr-1.5" fill="currentColor" /> NODE ELITE
+            <Crown size={12} className="mr-1.5" fill="currentColor" /> ALPHA
           </div>
         )}
 

@@ -20,7 +20,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
   const { portfolioItems } = useWallet();
   const { user, isAuthenticated, updateAiUsage } = useAuth();
   const tier = user?.tier || 'FREE';
-  const isUltimate = tier === 'ULTIMATE';
+  const isAlpha = tier === 'ALPHA';
 
   const [cexTotal, setCexTotal] = useState(0);
   const [cexAssetCount, setCexAssetCount] = useState(0);
@@ -61,7 +61,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
 
   const freeUsageSeconds = user?.alphaAiUsageSeconds || 0;
   const FREE_LIMIT_SECONDS = 24 * 60 * 60; // 24 hours (Unlimited for Beta)
-  const hasLimitRemaining = isUltimate || freeUsageSeconds < FREE_LIMIT_SECONDS;
+  const hasLimitRemaining = isAlpha || freeUsageSeconds < FREE_LIMIT_SECONDS;
 
   const handleSendMessage = (userMsg: string) => {
     if (!isAuthenticated) {
@@ -69,7 +69,7 @@ export const AlphaAi: React.FC<{ embedded?: boolean }> = ({ embedded = false }) 
       return;
     }
     if (!hasLimitRemaining) return;
-    if (!isUltimate) updateAiUsage(10);
+    if (!isAlpha) updateAiUsage(10);
     sendMessage(userMsg);
   };
 

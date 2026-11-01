@@ -16,7 +16,7 @@ AlphaBAG is an institutional-grade Web3 portfolio tracking, on-chain intelligenc
 - **DeFi Operations**: Real on-chain balance and position surveillance across major lending markets (Aave V3), concentrated liquidity pools (Uniswap V3), and ERC-4626 vaults.
 - **CEX Portfolio Hardening**: High-security server-side AES-256-GCM encryption with per-connection IV and authentication tags for Binance, Coinbase, Kraken, OKX, and Bybit connections. Strict read-only API key enforcement with local credential redaction.
 - **AlphaAI Grounded Assistant**: Streaming neural market intelligence equipped with anti-hallucination guardrails (`findUnsupportedNumbers`), prompt injection defense, and on-chain fact verification.
-- **Alpha Passes (Genesis Collection)**: 4,000 limited-supply utility memberships on BNB Smart Chain unlocking fee rebates, VIP volume multipliers, and tiered access.
+- **Free and Alpha memberships**: Alpha eligibility requires 3,000 BAG in the authenticated wallet; Alpha Desk is limited to 1,000 active eligible users.
 - **Security & Privacy First**: Read-only architecture. Private keys are never requested, stored, or exposed. EIP-4361 Sign-In with Ethereum (SIWE) authentication.
 
 ---
@@ -87,7 +87,7 @@ npm run build
 
 - **Phase 01 (Executing)**: Foundation and core dashboard systems, AlphaAI research engine, read-only security framework.
 - **Phase 02 (Pending)**: Public Beta with free access to portfolio tracking, Genesis cohort onboarding, and continuous UX refinement.
-- **Phase 03 (Pending)**: Utility, Alpha Pass multiplier activations, and staged pro terminal tools.
+- **Phase 03 (Pending)**: Alpha membership access (3,000 BAG minimum) and staged Alpha Desk rollout.
 - **Phase 04 (Queued)**: Global scale, automated multi-chain execution triggers, and decentralized intelligence feeds.
 
 ---

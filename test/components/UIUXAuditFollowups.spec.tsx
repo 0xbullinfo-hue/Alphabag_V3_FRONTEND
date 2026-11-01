@@ -32,7 +32,7 @@ vi.mock('../../src/context/WalletContext', () => ({
     whaleAlerts: [],
     toggleWhaleAlert: vi.fn(),
     addTrackedWallet: vi.fn().mockResolvedValue({ success: true }),
-    premiumTokenBalance: 1000,
+    bagTokenBalance: 1000,
     portfolioCount: 1,
     whaleCount: 1,
     isFounder: true,

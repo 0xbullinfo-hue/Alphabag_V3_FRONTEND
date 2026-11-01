@@ -30,7 +30,6 @@ This runbook provides deployment, configuration, secret rotation, database migra
 | `VITE_ENVIRONMENT` | No | `development` | Deployment environment label (`development` or `production`). |
 | `VITE_DATA_MODE` | No | `REAL` | Must be `REAL` in production. Production builds refuse `MOCK`. |
 | `VITE_BAG_TOKEN_ADDRESS_MAINNET` | No | `""` | Contract address for $BAG token gating on BSC mainnet. |
-| `VITE_NFT_CONTRACT_ADDRESS_MAINNET` | No | `""` | Genesis Pass NFT contract address. If empty/zero, mint button disables in production. |
 
 ---
 

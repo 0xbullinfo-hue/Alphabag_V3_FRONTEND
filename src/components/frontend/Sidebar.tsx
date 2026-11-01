@@ -1,9 +1,9 @@
-import { ChevronDown, Lock, LogOut } from 'lucide-react';
+import { ChevronDown, LogOut } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { alert, Swal } from '../../lib/alert';
 import { useAuth } from '../../context/AuthContext';
 import { useFeatures } from '../../hooks/useFeatures';
+import { alert } from '../../lib/alert';
 import { DISABLED_PAGES } from '../../services/config';
 import { PageIcon, PageIconName } from '../ui/PageIcon';
 
@@ -13,7 +13,6 @@ interface NavItemProps {
   customIcon?: PageIconName;
   label: string;
   active: boolean;
-  requiresPremium?: boolean;
 }
 
 const NavItem: React.FC<NavItemProps> = ({
@@ -22,14 +21,10 @@ const NavItem: React.FC<NavItemProps> = ({
   customIcon,
   label,
   active,
-  requiresPremium,
 }) => {
   const { data: features } = useFeatures();
-  const { user, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
   const disabledPages = features?.disabledPages || DISABLED_PAGES;
   const isDisabled = disabledPages.includes(to);
-  const isPremium = Boolean(user && ['PREMIUM', 'ALPHA_VIP', 'ULTIMATE'].includes(user.tier));
 
   const handleClick = (e: React.MouseEvent) => {
     if (isDisabled) {
@@ -41,50 +36,6 @@ const NavItem: React.FC<NavItemProps> = ({
         confirmButtonText: 'ACKNOWLEDGE',
       });
       return;
-    }
-
-    if (requiresPremium && !isPremium) {
-      // Per user instruction: "for now allow access to alphadesk for development"
-      const ALLOW_DEV_ACCESS = true;
-      if (ALLOW_DEV_ACCESS) {
-        return; // Allow direct navigation to /alpha-desk during development
-      }
-
-      e.preventDefault();
-      if (!isAuthenticated) {
-        alert.fire({
-          title: 'PREMIUM VERIFICATION',
-          text: 'Alpha Desk is an exclusive workstation of AlphaBAG. Connect your wallet to verify your tier access.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'CONNECT WALLET',
-          cancelButtonText: 'CANCEL',
-        }).then((res) => {
-          if (res.isConfirmed) {
-            window.dispatchEvent(new CustomEvent('open-login-modal'));
-          }
-        });
-      } else {
-        alert.fire({
-          title: 'PREMIUM TIER REQUIRED',
-          html: `
-            <div class="text-xs text-gray-300 space-y-2 text-left">
-              <p><strong>Alpha Desk</strong> is a premium feature reserved for <strong>Premium</strong>, <strong>Alpha VIP</strong>, and <strong>Ultimate</strong> tier members.</p>
-              <p class="text-gray-400">Upgrade your tier or mint an Alpha Pass to unlock institutional charting, holder topology, smart wallet flows, and trade signals.</p>
-            </div>
-          `,
-          icon: 'info',
-          showCancelButton: true,
-          confirmButtonText: 'UPGRADE TIER',
-          cancelButtonText: 'VIEW PASSES',
-        }).then((res) => {
-          if (res.isConfirmed) {
-            window.dispatchEvent(new CustomEvent('open-upgrade-modal'));
-          } else if (res.dismiss && res.dismiss === (Swal.DismissReason?.cancel || 'cancel')) {
-            navigate('/alpha-passes');
-          }
-        });
-      }
     }
   };
 
@@ -114,16 +65,6 @@ const NavItem: React.FC<NavItemProps> = ({
       </div>
       {isDisabled && (
         <span className="text-xs font-semibold bg-white/5 text-alphabag-subtext px-2 py-0.5 rounded-[2px] border border-white/10 shrink-0 ml-1">SOON</span>
-      )}
-      {!isDisabled && requiresPremium && (
-        <span className={`text-[11px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-[2px] shrink-0 ml-1 border flex items-center gap-1 ${
-          isPremium
-            ? 'bg-alphabag-yellow/15 text-alphabag-yellow border-alphabag-yellow/30'
-            : 'bg-white/5 text-alphabag-yellow/80 border-alphabag-yellow/30'
-        }`}>
-          {!isPremium && <Lock size={11} className="text-alphabag-yellow" />}
-          PRO
-        </span>
       )}
     </Link>
   );
@@ -288,7 +229,7 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
           </NavGroup>
 
           <NavGroup title="Market Intelligence">
-            <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} requiresPremium />
+            <NavItem to="/alpha-desk" customIcon="desk" label="Alpha Desk" active={location.pathname === '/alpha-desk'} />
             <NavItem to="/alpha-screener" customIcon="screener" label="Alpha Screener" active={location.pathname === '/alpha-screener'} />
             <NavItem to="/markets" customIcon="markets" label="Global Markets" active={location.pathname === '/markets'} />
             <NavItem to="/defi" customIcon="defi" label="DeFi Tracker" active={location.pathname === '/defi'} />

@@ -7,22 +7,14 @@ import {
   Briefcase,
   Calculator as CalculatorIcon,
   ChevronRight,
-  Crown,
-  Diamond,
-  Gem,
-    Image as ImageIcon,
   Layers,
   LayoutGrid,
   Lock,
-  Palette,
   PieChart,
   Send,
   ShieldCheck,
-  Sparkles,
-  Star,
   TrendingUp,
   Trophy,
-  Users,
   Wallet,
   X,
   Zap
@@ -100,7 +92,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     nav_home: "Home",
     nav_features: "Features",
     nav_tokenomics: "Alphanomics",
-    nav_alpha_pass: "Alpha Pass",
     nav_buy: "Buy",
     nav_roadmap: "Roadmap",
     nav_faq: "FAQ",
@@ -133,20 +124,11 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
     pricing_title: "Membership Tiers",
     pricing_subtitle: "Scale your operation. Cancel anytime.",
-    tier_free: "Beta Tester",
-    tier_free_price: "Free Access",
-    tier_free_tokens: "Current Option (Current Alpha)",
-    tier_free_badge: "ACTIVE: CURRENT ALPHA",
-    tier_premium: "Alphabag (coming soon)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "All Features Locked",
-    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
   },
   ar: {
     nav_home: "الرئيسية",
     nav_features: "الميزات",
     nav_tokenomics: "اقتصاديات الرمز",
-    nav_alpha_pass: "ألفا باس",
     nav_buy: "شراء",
     nav_roadmap: "خارطة الطريق",
     nav_faq: "الأسئلة الشائعة",
@@ -179,14 +161,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "يقوم الذكاء الاصطناعي الخاص بنا بتحليل الهياكل الفنية وتقديم إعدادات تداول مباشرة.",
     pricing_title: "فئات العضوية",
     pricing_subtitle: "توسيع نطاق العملية الخاصة بك. إلغاء في أي وقت.",
-    tier_free: "مختبر بيتا",
-    tier_free_price: "وصول مجاني",
-    tier_free_tokens: "الخيار الحالي (ألفا الحالية)",
-    tier_free_badge: "نشط: ألفا الحالية",
-    tier_premium: "ألفاباج (قريباً)",
-    tier_premium_price: "مميز",
-    tier_premium_tokens: "جميع الميزات مغلقة",
-    tier_premium_badge: "الأهلية: حامل جينيسيس"
   },
   "ar-bh": {
     nav_home: "الرئيسية",
@@ -224,20 +198,11 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "يقوم الذكاء الاصطناعي الخاص بنا بتحليل الهياكل الفنية وتقديم إعدادات تداول مباشرة.",
     pricing_title: "فئات العضوية",
     pricing_subtitle: "توسيع نطاق العملية الخاصة بك. إلغاء في أي وقت.",
-    tier_free: "مختبر بيتا",
-    tier_free_price: "وصول مجاني",
-    tier_free_tokens: "الخيار الحالي (ألفا الحالية)",
-    tier_free_badge: "نشط: ألفا الحالية",
-    tier_premium: "ألفاباج (قريباً)",
-    tier_premium_price: "مميز",
-    tier_premium_tokens: "جميع الميزات مغلقة",
-    tier_premium_badge: "الأهلية: حامل جينيسيس"
   },
   az: {
     nav_home: "Ana Səhifə",
     nav_features: "Özəlliklər",
     nav_tokenomics: "Tokenomika",
-    nav_alpha_pass: "Alpha Keçidi",
     nav_buy: "Satın Al",
     nav_roadmap: "Yol Xəritəsi",
     nav_faq: "FAQ",
@@ -270,20 +235,11 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Qrafikləri əllə təhlil etməyi dayandırın. Bizim xüsusi süni intellektimiz birbaşa sizə siqnallar göndərir.",
     pricing_title: "Üzvlük Səviyyələri",
     pricing_subtitle: "Əməliyyatınızı genişləndirin. İstənilən vaxt ləğv edin.",
-    tier_free: "Beta Test Cihazı",
-    tier_free_price: "Pulsuz Giriş",
-    tier_free_tokens: "Cari Seçim (Cari Alpha)",
-    tier_free_badge: "AKTİV: CARİ ALPHA",
-    tier_premium: "Alphabag (tezliklə)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "Bütün Özəlliklər Kilidlidir",
-    tier_premium_badge: "UYĞUNLUQ: GENESIS SAHİBİ"
   },
   de: {
     nav_home: "Startseite",
     nav_features: "Funktionen",
     nav_tokenomics: "Alphanomics",
-    nav_alpha_pass: "Alpha-Pass",
     nav_buy: "Kaufen",
     nav_roadmap: "Roadmap",
     nav_faq: "FAQ",
@@ -316,14 +272,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Schluss mit der manuellen Chartanalyse. Unsere KI analysiert technische Strukturen und liefert profitable Setups.",
     pricing_title: "Mitgliedschaftsstufen",
     pricing_subtitle: "Erweitern Sie Ihre Möglichkeiten. Jederzeit kündbar.",
-    tier_free: "Beta-Tester",
-    tier_free_price: "Kostenloser Zugang",
-    tier_free_tokens: "Aktuelle Option (Aktuelle Alpha)",
-    tier_free_badge: "AKTIV: AKTUELLE ALPHA",
-    tier_premium: "Alphabag (demnächst)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "Alle Funktionen gesperrt",
-    tier_premium_badge: "BERECHTIGUNG: GENESIS HOLDER"
   },
   "en-ae": {
     nav_home: "Home",
@@ -361,14 +309,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
     pricing_title: "Membership Tiers",
     pricing_subtitle: "Scale your operation. Cancel anytime.",
-    tier_free: "Beta Tester",
-    tier_free_price: "Free Access",
-    tier_free_tokens: "Current Option (Current Alpha)",
-    tier_free_badge: "ACTIVE: CURRENT ALPHA",
-    tier_premium: "Alphabag (coming soon)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "All Features Locked",
-    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
   },
   "en-au": {
     nav_home: "Home",
@@ -404,14 +344,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
     pricing_title: "Membership Tiers",
     pricing_subtitle: "Scale your operation. Cancel anytime.",
-    tier_free: "Beta Tester",
-    tier_free_price: "Free Access",
-    tier_free_tokens: "Current Option (Current Alpha)",
-    tier_free_badge: "ACTIVE: CURRENT ALPHA",
-    tier_premium: "Alphabag (coming soon)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "All Features Locked",
-    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
   },
   "en-bh": {
     nav_home: "Home",
@@ -449,14 +381,6 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
     why_ai_desc: "Stop manually parsing charts. Our proprietary LLM analyzes technical structures and order book flow to deliver institutional-grade trade setups directly to your inbox.",
     pricing_title: "Membership Tiers",
     pricing_subtitle: "Scale your operation. Cancel anytime.",
-    tier_free: "Beta Tester",
-    tier_free_price: "Free Access",
-    tier_free_tokens: "Current Option (Current Alpha)",
-    tier_free_badge: "ACTIVE: CURRENT ALPHA",
-    tier_premium: "Alphabag (coming soon)",
-    tier_premium_price: "Premium",
-    tier_premium_tokens: "All Features Locked",
-    tier_premium_badge: "ELIGIBILITY: GENESIS HOLDER"
   }
 };
 
@@ -500,12 +424,12 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
     phase: 'PHASE 03',
     title: 'UTILITY_AND_PREMIUM_EXPERIENCE',
     status: 'PENDING',
-    note: 'Premium features roll out in stages. Early users get first access.',
+    note: 'Alpha features require 3,000 BAG in the authenticated wallet.',
     points: [
-      'Ecosystem Activation: Introduce the ALPHABAG Passes to reward early supporters',
+      'Alpha Membership: Expanded analytics for eligible holders',
       'Pro Terminal: Advanced analytics, custom intelligence feeds, and priority data access',
       'Partner Integrations: Expanded data providers and execution tools for power users',
-      'Tiered Access: Unlock higher frequency alerts and deeper insights through participation and loyalty'
+      'Two membership tiers: Free and Alpha, with eligibility checked against the login wallet'
     ]
   },
   {
@@ -519,54 +443,6 @@ const ROADMAP_PHASES: RoadmapPhase[] = [
       'Autonomous AI: Progressive upgrades toward self-learning research and strategy guidance'
     ]
   }
-];
-
-const ALPHA_PASS_STATS = [
-  { label: 'Total Supply', value: '4,000', icon: <Layers size={20} /> },
-  { label: 'Unique Traits', value: '200+', icon: <Palette size={20} /> },
-  { label: 'Blockchain', value: 'BNB Chain', icon: <ShieldCheck size={20} /> },
-  { label: 'Mint Price', value: '0.07 BNB', icon: <Diamond size={20} /> },
-];
-
-const ALPHA_PASS_UTILITIES = [
-  {
-    icon: <Zap size={24} />,
-    title: 'Platform Access',
-    desc: 'Unlock premium features, advanced analytics, and exclusive trading tools within the AlphaBAG ecosystem.',
-  },
-  {
-    icon: <Crown size={24} />,
-    title: 'Tier-Based Perks',
-    desc: 'Rarity determines your tier — higher rarity grants elevated platform privileges and priority access.',
-  },
-  {
-    icon: <Trophy size={24} />,
-    title: 'T2E Boosters',
-    desc: 'NFT holders receive multiplied Trade-to-Earn rewards, stacking with platform engagement.',
-  },
-  {
-    icon: <Users size={24} />,
-    title: 'DEX & CEX Wallet Tracking',
-    desc: 'Track and manage your decentralized and centralized exchange wallets with real-time balance monitoring and analytics.',
-  },
-  {
-    icon: <Star size={24} />,
-    title: 'Airdrop Priority',
-    desc: 'Holders are first in line for future token airdrops, partner project drops, and exclusive events.',
-  },
-  {
-    icon: <Sparkles size={24} />,
-    title: 'Alpha Signals',
-    desc: 'Access private alpha channels with institutional-grade trade signals and whale movement alerts.',
-  },
-];
-
-const ALPHA_PASS_RARITY_TIERS = [
-  { name: 'Common', pct: '50%', count: '2,000', color: '#F97316', image: '/nft-collection/tiers/common.png' },
-  { name: 'Rare', pct: '25%', count: '1,000', color: '#06B6D4', image: '/nft-collection/tiers/rare.png' },
-  { name: 'Epic', pct: '15%', count: '600', color: '#A855F7', image: '/nft-collection/tiers/epic.png' },
-  { name: 'Legendary', pct: '8%', count: '320', color: '#FCD535', image: '/nft-collection/tiers/legendary.png' },
-  { name: 'Mythic', pct: '2%', count: '80', color: '#EC4899', image: '/nft-collection/tiers/mythic.png' },
 ];
 
 export type LandingTab = 'home' | 'features' | 'roadmap' | 'faq' | 'markets';
@@ -590,7 +466,7 @@ export const Landing: React.FC = () => {
     const tabParam = searchParams.get('tab');
     if (tabParam && validTabs.includes(tabParam as LandingTab)) {
       setActiveTab(tabParam as LandingTab);
-    } else if (tabParam === 'calculator' || tabParam === 'tokenomics' || tabParam === 'alpha-pass' || tabParam === 'alpha-access' || tabParam === 'nft') {
+    } else if (tabParam === 'calculator' || tabParam === 'tokenomics') {
       setActiveTab('home');
     }
   }, [searchParams]);
@@ -1081,7 +957,7 @@ export const Landing: React.FC = () => {
                   icon={<Trophy className="text-alphabag-yellow" />}
                   title="EARN WHILE YOU TRADE"
                   tagline="Complete missions. Share insights. Climb the leaderboard."
-                  desc="Every action during Beta earns Points. When rewards go live, Points convert — and early users get the biggest multipliers. Pass holders stack on top. The earlier you're in, the more it compounds."
+                  desc="Every action during Beta earns Points. Reward terms will be published when the rewards program launches."
                 />
                 <FeatureHighlight
                   icon={<Zap className="text-blue-400" />}
@@ -1219,180 +1095,6 @@ export const Landing: React.FC = () => {
         )}
 
         
-        {/* Alpha Pass Section (Hidden until public launch) */}
-        {(activeTab as any) === 'alpha-pass' && (
-          <section className="relative py-28 px-6 min-h-[85vh] flex flex-col justify-center">
-
-
-            <div className="max-w-7xl mx-auto relative z-10 w-full space-y-16">
-              {/* Collection Hero & Mint Card */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
-                <div className="flex flex-col justify-between space-y-6">
-                  <div>
-
-                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-alphabag-text leading-[1.1] mb-4">
-                      Alpha<span className="text-alphabag-yellow">BAG</span> Pass
-                    </h2>
-                    <p className="text-alphabag-subtext text-base md:text-lg leading-relaxed max-w-xl">
-                      A curated collection of <span className="text-alphabag-yellow font-semibold">exclusive NFT art pieces</span> designed 
-                      to serve as your key to the AlphaBAG ecosystem. Each piece unlocks platform utility,
-                      governance rights, and enhanced earning potential.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    {ALPHA_PASS_STATS.map((stat) => (
-                      <div key={stat.label} className="bg-alphabag-darkgray border border-alphabag-gray rounded-md p-4 flex items-center gap-3">
-                        <div className="w-10 h-10 shrink-0 rounded-md bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-alphabag-yellow">
-                          {stat.icon}
-                        </div>
-                        <div>
-                          <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">{stat.label}</div>
-                          <div className="text-lg font-bold text-alphabag-text">{stat.value}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button disabled className="flex-1 px-8 py-4 rounded-md bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
-                      <Wallet size={18} /> Mint Coming Soon
-                    </button>
-                    <button disabled className="px-6 py-4 rounded-md bg-alphabag-darkgray text-alphabag-subtext font-semibold text-base border border-alphabag-gray cursor-not-allowed flex items-center justify-center gap-2">
-                      <ImageIcon size={18} /> View Gallery
-                    </button>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <div className="bg-alphabag-darkgray border border-alphabag-gray rounded-md p-6 md:p-8">
-                    <div className="mb-6">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="text-sm font-semibold text-alphabag-text uppercase tracking-wider">Mint Progress</span>
-                        <span className="text-sm font-mono font-bold text-alphabag-yellow">0 / 4,000</span>
-                      </div>
-                      <div className="w-full h-3 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
-                        <div className="h-full rounded-full bg-gradient-to-r from-alphabag-yellow to-yellow-600" style={{ width: '0%' }} />
-                      </div>
-                      <div className="mt-2 flex justify-between text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider">
-                        <span>0% Minted</span>
-                        <span>Phase 1</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                      <div className="bg-alphabag-black rounded-md p-4 border border-alphabag-gray text-center">
-                        <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Price</div>
-                        <div className="text-xl font-bold text-alphabag-yellow">0.07 BNB</div>
-                      </div>
-                      <div className="bg-alphabag-black rounded-md p-4 border border-alphabag-gray text-center">
-                        <div className="text-[11px] text-alphabag-subtext font-semibold uppercase tracking-wider mb-1">Max Per Wallet</div>
-                        <div className="text-xl font-bold text-alphabag-text">5</div>
-                      </div>
-                    </div>
-
-                    <div className="mb-6">
-                      <div className="text-xs text-alphabag-subtext font-semibold uppercase tracking-wider mb-2">Quantity</div>
-                      <div className="flex items-center gap-3">
-                        <button disabled className="w-10 h-10 rounded-md bg-alphabag-black border border-alphabag-gray text-alphabag-subtext font-bold text-lg cursor-not-allowed">-</button>
-                        <div className="flex-1 h-10 rounded-md bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-lg font-bold text-alphabag-text">1</div>
-                        <button disabled className="w-10 h-10 rounded-md bg-alphabag-black border border-alphabag-gray text-alphabag-subtext font-bold text-lg cursor-not-allowed">+</button>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-alphabag-gray">
-                      <span className="text-sm font-semibold text-alphabag-subtext">Total</span>
-                      <span className="text-lg font-bold text-alphabag-yellow">0.07 BNB</span>
-                    </div>
-
-                    <button disabled className="w-full py-4 rounded-md bg-alphabag-yellow/20 text-alphabag-yellow font-bold text-base border border-alphabag-yellow/30 cursor-not-allowed flex items-center justify-center gap-2">
-                      <Lock size={18} /> Connect Wallet to Mint
-                    </button>
-
-                    <div className="mt-4 text-center">
-                      <span className="inline-flex items-center gap-1.5 text-xs text-alphabag-subtext font-semibold uppercase tracking-wider">
-                        <span className="w-2 h-2 rounded-full bg-yellow-500/60 animate-pulse" />
-                        Minting Not Active
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Utility Grid */}
-              <div>
-                <div className="text-center mb-10">
-                  <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-alphabag-text mb-2">
-                    Pass <span className="text-alphabag-yellow">Utility</span>
-                  </h3>
-                  <p className="text-alphabag-subtext text-sm md:text-base max-w-xl mx-auto">
-                    Every Alpha Pass NFT is more than art — it's your key to the AlphaBAG ecosystem.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {ALPHA_PASS_UTILITIES.map((feat) => (
-                    <div key={feat.title} className="bg-alphabag-darkgray border border-alphabag-gray rounded-md p-6 hover:border-alphabag-muted transition-colors">
-                      <div className="w-12 h-12 rounded-md bg-alphabag-black border border-alphabag-gray flex items-center justify-center text-alphabag-yellow mb-4">
-                        {feat.icon}
-                      </div>
-                      <h4 className="text-base font-bold text-alphabag-text mb-2">{feat.title}</h4>
-                      <p className="text-sm text-alphabag-subtext leading-relaxed">{feat.desc}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Rarity Tiers */}
-              <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-10">
-                  <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-alphabag-text mb-2">
-                    Rarity <span className="text-alphabag-yellow">Tiers</span>
-                  </h3>
-                  <p className="text-alphabag-subtext text-sm md:text-base max-w-lg mx-auto">
-                    5 rarity levels determine your tier and unlock escalating platform benefits.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  {ALPHA_PASS_RARITY_TIERS.map((tier) => (
-                    <div key={tier.name} className="bg-alphabag-darkgray border border-alphabag-gray rounded-md p-5 flex items-center justify-between hover:border-alphabag-muted transition-colors">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-md overflow-hidden border flex items-center justify-center bg-alphabag-black shrink-0" style={{ borderColor: tier.color + '60' }}>
-                          <img
-                            src={tier.image}
-                            alt={tier.name}
-                            className="w-full h-full object-cover"
-                            onError={(e: any) => {
-                              e.currentTarget.style.display = 'none';
-                            }}
-                          />
-                          <Gem size={20} className="hidden only:block" style={{ color: tier.color }} />
-                        </div>
-                        <div>
-                          <div className="text-base font-bold text-alphabag-text flex items-center gap-2">
-                            <span>{tier.name}</span>
-                            <span className="text-[11px] font-mono px-1.5 py-0.2 rounded border" style={{ borderColor: tier.color + '40', color: tier.color, background: tier.color + '15' }}>
-                              {tier.count} Bags
-                            </span>
-                          </div>
-                          <div className="text-xs text-alphabag-subtext font-medium">{tier.pct} Allocation</div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-6">
-                        <div className="hidden sm:block w-32 h-2 rounded-full bg-alphabag-black border border-alphabag-gray overflow-hidden">
-                          <div className="h-full rounded-full transition-colors" style={{ width: tier.pct, background: tier.color }} />
-                        </div>
-                        <div className="text-lg font-bold min-w-[50px] text-right" style={{ color: tier.color }}>{tier.pct}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* Terminal Roadmap Section */}
         {activeTab === 'roadmap' && (
           <section id="roadmap" className="py-24 px-6 relative overflow-hidden bg-alphabag-black/40 min-h-[85vh] flex flex-col justify-center">
@@ -1511,7 +1213,7 @@ export const Landing: React.FC = () => {
                     { id: 'security', label: 'Security & Privacy' },
                     { id: 'ai', label: 'AlphaAI' },
                     { id: 'networks', label: 'Networks & Integrations' },
-                    { id: 'rewards', label: 'Rewards & Passes' },
+                    { id: 'rewards', label: 'Rewards & Membership' },
                     { id: 'support', label: 'Troubleshooting' }
                   ].map(cat => (
                     <button
@@ -1541,11 +1243,11 @@ export const Landing: React.FC = () => {
                     <div className="space-y-2.5">
                       <FaqItem
                         question="What is AlphaBAG?"
-                        answer="AlphaBAG is a trading command center. It combines multi-chain portfolio tracking, CEX + DeFi position monitoring, whale alerts, and AlphaAI market intelligence in one dashboard. Hold an AlphaBAG Pass to unlock boosted rewards and Pro tools as the platform grows."
+                        answer="AlphaBAG is a trading command center. It combines multi-chain portfolio tracking, CEX + DeFi position monitoring, whale alerts, and AlphaAI market intelligence in one dashboard."
                       />
                       <FaqItem
-                        question="Do I need to buy a Pass to start?"
-                        answer="No. The dashboard, wallet tracking, basic alerts, and the Points system are free. Passes are for users who want faster rewards and earlier access to Pro features."
+                        question="What are the Free and Alpha tiers?"
+                        answer="Free provides access to standard dashboard tools. Alpha requires at least 3,000 BAG in the wallet used to sign in. Alpha Desk is additionally limited to 1,000 active eligible users."
                       />
                       <FaqItem
                         question="What do I need to get started?"
@@ -1683,29 +1385,25 @@ export const Landing: React.FC = () => {
                   </div>
                 )}
 
-                {/* Category 6: Rewards & the Pass */}
+                {/* Category 6: Rewards & Membership */}
                 {(activeFaqCategory === 'all' || activeFaqCategory === 'rewards') && (
                   <div>
                     <h3 className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-400 mb-3.5 flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block"></span>
-                      Rewards & the Pass
+                      Rewards & Membership
                     </h3>
                     <div className="space-y-2.5">
                       <FaqItem
                         question="How does the rewards system work?"
-                        answer="During Beta, everyone earns Points for using the dashboard and completing missions. When rewards go live, Points convert and AlphaBAG Pass holders receive multipliers. The more you participate, the more you unlock."
+                        answer="During Beta, everyone earns Points for using the dashboard and completing missions. Reward terms will be published when the rewards program launches."
                       />
                       <FaqItem
-                        question="What is an AlphaBAG Pass?"
-                        answer="An AlphaBAG Pass is your membership to the ecosystem. There are 4,000 Genesis Passes that unlock boosted T2E rewards, early access to Pro tools, and community privileges. Free users keep full access to the dashboard — Passes accelerate progress rather than gate the basics."
+                        question="How is Alpha eligibility verified?"
+                        answer="The server verifies that the wallet used to sign in holds at least 3,000 BAG. The client cannot grant Alpha membership by reporting a wallet balance."
                       />
                       <FaqItem
-                        question="When do premium features unlock?"
-                        answer={"Premium features roll out in phases:\n\n• Phase 2 — Beta tools for everyone\n• Phase 3 — Pro Terminal and boosted rewards for Pass holders\n• Phase 4 — Full AI automation and Founders-tier access\n\nSee the AlphaMap for exact timelines and current status."}
-                      />
-                      <FaqItem
-                        question="Can I lose my Pass?"
-                        answer="No. Passes are permanent to the wallet that holds them. If you transfer a Pass, the benefits move with it."
+                        question="What happens when Alpha Desk reaches its 1,000-user limit?"
+                        answer="New access is denied while all 1,000 active places are occupied. A place becomes available when an existing user no longer meets the 3,000 BAG requirement."
                       />
                     </div>
                   </div>

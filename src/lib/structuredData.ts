@@ -51,7 +51,7 @@ export const buildProductSchema = (product: {
     price: product.price.toString(),
     priceCurrency: product.currency || 'BAG',
     availability: 'https://schema.org/InStock',
-    url: product.url ? `${BASE_URL}${product.url}` : `${BASE_URL}/alpha-passes`,
+    url: product.url ? `${BASE_URL}${product.url}` : BASE_URL,
   },
 });
 
@@ -101,6 +101,5 @@ export const buildSoftwareAppSchema = () => ({
     'Whale wallet movement alerts',
     'AI market intelligence and analysis',
     'Leverage and PnL simulation calculator',
-    'AlphaBAG Genesis Pass NFT ecosystem',
   ],
 });

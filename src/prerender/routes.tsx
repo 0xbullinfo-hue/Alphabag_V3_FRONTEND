@@ -1,6 +1,5 @@
-﻿import React from 'react';
+import React from 'react';
 import { Landing } from '../pages/frontend/Landing';
-import { AlphaPasses } from '../pages/frontend/AlphaPasses';
 import { GenesisLanding } from '../pages/frontend/GenesisLanding';
 import { GenesisManifesto } from '../pages/frontend/GenesisManifesto';
 import { Airdrop } from '../pages/frontend/Airdrop';
@@ -15,7 +14,6 @@ export interface PrerenderRoute {
 
 const COMPONENT_BY_PATH: Record<string, React.ComponentType<any>> = {
   '/': Landing,
-  '/alpha-passes': AlphaPasses,
   '/genesis': GenesisLanding,
   '/genesis-manifesto': GenesisManifesto,
   '/airdrop': Airdrop,

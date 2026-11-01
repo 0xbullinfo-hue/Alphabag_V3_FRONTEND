@@ -10,7 +10,8 @@ To track token balances, current pricing, and historical portfolio performance a
 | Data Needed | Recommended API Provider | API Endpoint / Method | Purpose |
 | :--- | :--- | :--- | :--- |
 | **EVM Multi-chain Balances** | **DeBank Cloud API** or **Moralis API** | `/v1/user/token_list`, `/getWalletTokenBalances` | Fetches balances of all ERC-20 tokens, DeFi yields, and staked assets. |
-| **Solana Balances** | **Helius API** or **SimpleHash API** | RPC method: `getAssetsByOwner` (DAS API) | Fetches SPL tokens, Solana native balance, and compressed NFTs. |
+| **Solana Balances** | **Helius API** or **SimpleHash API** | RPC method: `getAssetsByOwner` (DAS API) | Fetches SPL token and native balance data. |
+| **Wallet NFT holdings** | Server-side EVM indexer and Solana DAS provider | Frontend contract: `GET /api/portfolio/nfts?address={wallet}` | Returns normalized NFT ownership for the selected DEX wallet across EVM networks and Solana. Provider credentials stay on the backend. |
 | **Historical PnL & Charts** | **Covalent API** or **Ankr Multi-chain API** | `/v1/{chain_id}/address/{address}/portfolio/` | Pulls historical balance history over time to plot line charts. |
 | **Token Prices (On-Chain)** | **Birdeye API** or **GeckoTerminal API** | `/v1/token/price`, `/networks/{network}/pools` | Real-time prices of long-tail meme coins and L2 tokens not listed on major CEXs. |
 
@@ -101,7 +102,6 @@ Replaces direct exchange API configurations.
 ### D. Infrastructure-First Framework (Alchemy Enhanced APIs)
 Replaces node providers (QuickNode/Alchemy standard RPCs) and basic indexers.
 *   **Alchemy Token API**: `alchemy_getTokenBalances` reads all token balances in one call.
-*   **Alchemy NFT API**: `alchemy_getNFTs` reads profile pictures and digital collectibles.
 *   **Alchemy Notify**: Configures webhooks on address activity to feed the whale radar feed live.
 *   *Note*: Alchemy does not provide global USD pricing or historical candlestick arrays. Pair Alchemy with **Birdeye API** (for DEX prices) and **CCXT** (for CEX balances) for a complete 3-layer architecture.
 

@@ -1,5 +1,5 @@
 import { formatPrice, formatAmount } from '../../lib/formatters';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ChevronRight, ExternalLink, Layers, RefreshCw, TrendingDown, TrendingUp, Wallet2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { api } from '../../services/api';
 import { TokenBalance } from '../../types';
 import { getExplorerTokenUrl } from '../../lib/formatters';
 import { PageIcon } from '../../components/ui/PageIcon';
+import { WalletNftsPanel } from '../../components/portfolio/WalletNftsPanel';
 import { useWallet } from '../../context/WalletContext';
 
 const CHAIN_LABELS: Record<string, { label: string; color: string; bg: string }> = {
@@ -31,6 +32,7 @@ const fetchDexBalances = async (address: string): Promise<TokenBalance[]> => {
 
 export const DexBag: React.FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { address: wagmiAddress, isConnected: wagmiIsConnected } = useAccount();
   const { address: walletAddress, isConnected: walletConnected, trackedWallets } = useWallet();
 
@@ -122,7 +124,12 @@ export const DexBag: React.FC = () => {
             <option value="base">Base</option>
           </select>
           <button
-            onClick={() => refetch()}
+            onClick={() => {
+              void refetch();
+              if (activeAddress) {
+                void queryClient.invalidateQueries({ queryKey: ['portfolio', 'nfts', activeAddress] });
+              }
+            }}
             disabled={isLoading || !isConnected}
             className="bg-alphabag-gray text-alphabag-text border border-alphabag-muted rounded-md px-3 py-1.5 hover:bg-alphabag-muted transition-all disabled:opacity-40 flex items-center gap-1.5 text-xs font-semibold uppercase cursor-pointer"
           >
@@ -285,6 +292,8 @@ export const DexBag: React.FC = () => {
           )}
         </div>
       )}
+
+      {isConnected && activeAddress && <WalletNftsPanel address={activeAddress} />}
     </div>
   );
 };

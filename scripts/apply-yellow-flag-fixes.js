@@ -31,7 +31,7 @@ console.log('✅ 1. backend/authController.js — Self-referral exploit blocked 
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 2. SWAL2 HTML INJECTION IN FRONTEND — Sanitize all html: params
-//    Files: AlphasFeed.tsx, AlphaPasses.tsx
+//    File: AlphasFeed.tsx
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // AlphasFeed.tsx — The html: in the Swal uses template literals with static content only
@@ -60,32 +60,6 @@ if (!alphasFeed.includes('DOMPurify')) {
 }
 fs.writeFileSync(alphasFeedPath, alphasFeed, 'utf8');
 console.log('✅ 2a. frontend/AlphasFeed.tsx — DOMPurify sanitization added to Swal html: params');
-
-// AlphaPasses.tsx — html: contains txHash interpolation which comes from blockchain (safe),
-// but add DOMPurify wrapper as defense-in-depth
-const alphaPassesPath = path.join(frontendRoot, 'src/pages/frontend/AlphaPasses.tsx');
-let alphaPasses = fs.readFileSync(alphaPassesPath, 'utf8');
-if (!alphaPasses.includes('DOMPurify')) {
-    alphaPasses = alphaPasses.replace(
-        "import Swal from 'sweetalert2';",
-        "import Swal from 'sweetalert2';\nimport DOMPurify from 'dompurify';"
-    );
-    // Wrap the html: param
-    alphaPasses = alphaPasses.replace(
-        /html:\s*`/g,
-        'html: DOMPurify.sanitize(`'
-    );
-    // Close sanitize for backtick strings ending with `,
-    alphaPasses = alphaPasses.replace(
-        /DOMPurify\.sanitize\(`([\s\S]*?)`\s*,\s*\n/g,
-        (match, content) => {
-            return `DOMPurify.sanitize(\`${content}\`, { ADD_ATTR: ['class'] }),\n`;
-        }
-    );
-}
-fs.writeFileSync(alphaPassesPath, alphaPasses, 'utf8');
-console.log('✅ 2b. frontend/AlphaPasses.tsx — DOMPurify sanitization added to Swal html: params');
-
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 3. T2E RACE CONDITION — Add claimWindow dedup key to withClaimLock

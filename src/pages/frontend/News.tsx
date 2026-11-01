@@ -160,7 +160,7 @@ export const News: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-alphabag-black/80 to-transparent"></div>
               {item.isPremium && (
                 <div className="absolute top-4 right-4 bg-alphabag-yellow text-alphabag-black text-[11px] font-semibold px-2 py-0.5 rounded flex items-center">
-                  <Zap size={13} className="mr-1 fill-current" /> ULTIMATE
+                  <Zap size={13} className="mr-1 fill-current" /> ALPHA
                 </div>
               )}
               <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">

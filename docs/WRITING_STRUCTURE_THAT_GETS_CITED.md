@@ -11,12 +11,12 @@ LLMs chunk text during retrieval. If an answer is buried 5 paragraphs deep in in
 ### The Rule:
 State the primary answer or definition in the **first 1–2 sentences** immediately following an `<h1>` or `<h2>` heading.
 
-### Example (Alpha Passes):
+### Example (Membership):
 > **Bad:**
-> "In the fast-paced world of decentralized finance and digital assets, community access has evolved beyond simple memberships. AlphaBAG represents a revolution in how traders think about utility. Through careful design and smart contracts, we introduce our pass system..."
+> "In the fast-paced world of decentralized finance and digital assets, community access has evolved beyond simple memberships. AlphaBAG represents a revolution in how traders think about utility. Through careful design, we provide two membership tiers..."
 >
 > **Good (BLUF):**
-> "AlphaBAG Genesis Passes are 10,000 limited-supply utility NFTs on BNB Chain that grant lifetime VIP trading fee discounts, on-chain whale surveillance radar access, and up to 3x airdrop point multipliers across three membership tiers (Silver, Gold, Platinum)."
+> "AlphaBAG has two membership tiers: Free and Alpha. Alpha eligibility requires at least 3,000 BAG in the authenticated login wallet. Alpha Desk access is limited to 1,000 active eligible users."
 
 ---
 
@@ -39,7 +39,7 @@ AI models favor high-entropy, concrete factual statements over generic promotion
 |---|---|
 | "We support all the popular blockchains." | "AlphaBAG supports 7 major blockchain networks: Ethereum, BNB Chain, Polygon, Arbitrum, Avalanche, Base, and Solana." |
 | "Our security is bank-grade and totally safe." | "AlphaBAG operates on a non-custodial, read-only model. It never requests or stores private keys, relying solely on cryptographic message signing for session authentication." |
-| "Low pass mint price with great discounts." | "AlphaBAG Genesis Passes have a capped supply of 10,000 units and mint for 100 $BAG tokens, offering 15% to 50% lifetime platform discounts." |
+| "Get premium access." | "AlphaBAG has two membership tiers: Free and Alpha. Alpha requires at least 3,000 BAG in the authenticated login wallet." |
 
 ---
 

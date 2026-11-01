@@ -189,7 +189,6 @@ export const fetchEarnOpportunities = async () => [];
 export const fetchBlogPosts = async () => [];
 export const fetchChainInfo = async (_i: string) => undefined;
 export const fetchChains = async () => [];
-export const fetchNFTs = async () => [];
 export const MOCK_COINS: Coin[] = [];
 `;
 fs.writeFileSync(path.join(frontendRoot, 'src/services/mockData.ts'), mockDataContent, 'utf8');

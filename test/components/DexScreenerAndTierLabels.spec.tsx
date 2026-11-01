@@ -4,6 +4,7 @@ import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Settings } from '../../src/pages/frontend/Settings';
+import { TierBadge } from '../../src/components/ui/TierBadge';
 import { Markets } from '../../src/pages/frontend/Markets';
 import { CoinDetail } from '../../src/pages/frontend/CoinDetail';
 import { MarketService } from '../../src/services/MarketService';
@@ -31,7 +32,7 @@ vi.mock('../../src/context/WalletContext', () => ({
     whaleAlerts: [],
     toggleWhaleAlert: vi.fn(),
     addTrackedWallet: vi.fn().mockResolvedValue({ success: true }),
-    premiumTokenBalance: 1000,
+    bagTokenBalance: 1000,
     portfolioCount: 0,
     whaleCount: 0,
     isFounder: true,
@@ -57,29 +58,28 @@ describe('DexScreener Feeds, Charts, and Membership Availability Labels', () => 
     };
   });
 
-  describe('Settings Membership Actions - Recommendation 3 Verification', () => {
-    it('renders informative availability labels and tooltips for disabled token and pass actions', () => {
+  it('only treats the canonical Alpha tier as Alpha', () => {
+    const { rerender } = render(<TierBadge tier="ULTIMATE" />);
+    expect(screen.getByText('Free')).toBeInTheDocument();
+
+    rerender(<TierBadge tier="ALPHA" />);
+    expect(screen.getByText('Alpha')).toBeInTheDocument();
+  });
+
+  describe('Settings Membership Actions', () => {
+    it('shows only Free and Alpha membership with the 3,000 BAG requirement', () => {
       render(
         <MemoryRouter>
           <Settings />
         </MemoryRouter>
       );
 
-      // Buy button
-      const buyBtn = screen.getByRole('button', { name: /^Buy$/i });
-      expect(buyBtn).toBeDisabled();
-      expect(buyBtn).toHaveAttribute('title', expect.stringContaining('TGE'));
-      expect(screen.getByText(/Available at TGE/i)).toBeInTheDocument();
-
-      // Tier 2 Hold 10k BAG
-      const tier2Btn = screen.getByRole('button', { name: /Hold 10k \$BAG/i });
-      expect(tier2Btn).toBeDisabled();
-      expect(screen.getByText(/Verified via on-chain snapshot post-TGE/i)).toBeInTheDocument();
-
-      // Tier 3 Alpha Pass
-      const tier3Btn = screen.getByRole('button', { name: /Get Alpha Pass/i });
-      expect(tier3Btn).toBeDisabled();
-      expect(screen.getByText(/Genesis Pass Phase 2 Mint Coming Soon/i)).toBeInTheDocument();
+      expect(screen.getByText('Free membership')).toBeInTheDocument();
+      expect(screen.getByText('Alpha membership')).toBeInTheDocument();
+      expect(screen.getByText('3,000 BAG')).toBeInTheDocument();
+      expect(screen.getByText(/Alpha eligibility is verified by the server against the wallet used to sign in/i)).toBeInTheDocument();
+      expect(screen.getByText(/1,000-user active limit/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Premium Tier|Alpha VIP/i)).not.toBeInTheDocument();
     });
   });
 

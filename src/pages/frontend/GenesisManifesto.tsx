@@ -6,13 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
-import { useWallet } from '../../context/WalletContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 
 export const GenesisManifesto: React.FC = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { premiumTokenBalance } = useWallet();
     const isFounder = user?.accountType === 'FOUNDER';
     const [formData, setFormData] = useState({
         name: '',
@@ -55,11 +53,11 @@ export const GenesisManifesto: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // 1. Holding Check
-        if (premiumTokenBalance < 100000) {
+        // 1. Alpha membership check
+        if (user?.tier !== 'ALPHA') {
             Swal.fire({
-                title: 'Insufficient Locked Stake',
-                text: 'Only verified holders can submit project details.',
+                title: 'Alpha membership required',
+                text: 'Hold at least 3,000 BAG in the wallet used to sign in.',
                 icon: 'warning',
                 background: '#1E2329',
                 color: '#FFF'
@@ -67,7 +65,7 @@ export const GenesisManifesto: React.FC = () => {
             return;
         }
 
-        // 2. Founder Check for Manifesto
+        // 2. Founder role check for Manifesto
         if (!isFounder) {
             Swal.fire({
                 title: 'Manifesto Restricted',

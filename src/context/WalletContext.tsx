@@ -18,16 +18,15 @@ interface WalletContextType {
   isSyncing: boolean;
   address?: string;
   isConnecting: boolean;
-  isPremium: boolean;
+  isAlpha: boolean;
   isCheckingBalance: boolean;
-  tokenCheckError: string | null;
   connectionType: 'MANUAL' | 'WALLET';
-  premiumTokenBalance: number;
+  bagTokenBalance: number;
   trackedWallets: WalletEntry[];
   portfolioItems: PortfolioItem[];
   whaleAlerts: string[];
   toasts: Toast[];
-  tier: 'FREE' | 'PREMIUM';
+  tier: 'FREE' | 'ALPHA';
 
   connectWallet: () => void;
   connectManually: (address: string) => void;
@@ -78,9 +77,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [isSyncing, setIsSyncing] = useState(false);
   const [isCheckingBalance] = useState(false);
-  const [tokenCheckError, setTokenCheckError] = useState<string | null>(null);
-  const [premiumTokenBalance, setPremiumTokenBalance] = useState(0);
-  const [isPremium, setIsPremium] = useState(false);
+  const [bagTokenBalance, setBagTokenBalance] = useState(0);
   const [trackedWallets, setTrackedWallets] = useState<WalletEntry[]>(() => {
     const saved = localStorage.getItem('alphabag_tracked_wallets');
     if (!saved) return [];
@@ -120,14 +117,8 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   });
 
-  // Single source of truth: AuthContext.user.tier, set only by the backend
-  // after real verification. Previously this derived from a second,
-  // independent `isPremium` flag that only got set by an on-chain balance
-  // check tied to wagmi wallet connection — so a user could be ULTIMATE in
-  // AuthContext (features unlocked) while still being capped at FREE wallet
-  // limits here, or vice versa. Fall back to the local on-chain check only
-  // while `user` hasn't loaded yet (e.g. brief moment during initial auth).
-  const tier = (user?.tier === 'ULTIMATE' || isPremium) ? 'PREMIUM' : 'FREE';
+  const isAlpha = user?.tier === 'ALPHA';
+  const tier = isAlpha ? 'ALPHA' : 'FREE';
 
   useEffect(() => {
     localStorage.setItem('alphabag_tracked_wallets', JSON.stringify(trackedWallets));
@@ -147,30 +138,6 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [hideSmallBalances]);
 
   const toggleHideSmallBalances = () => setHideSmallBalances((prev: boolean) => !prev);
-
-  // ===== TOKEN BALANCE CHECKING =====
-  const checkTokenBalance = useCallback(() => {
-    if (!TOKEN_GATING_CONFIG.ENABLE_TOKEN_GATING) {
-      // Do not auto-grant premium if token gating is off; reflect authentic tier status
-      setIsPremium(user?.tier === 'ULTIMATE' || user?.isPro || false);
-      setPremiumTokenBalance(0);
-      return;
-    }
-
-    // Tier entitlement is issued only by the backend after it verifies the
-    // wallet bound to the signed session. Do not grant or revoke access from
-    // an independently computed browser balance.
-    setIsPremium(user?.tier === 'ULTIMATE' || user?.isPro || false);
-    setPremiumTokenBalance(0);
-    setTokenCheckError(null);
-  }, [user?.tier, user?.isPro]);
-
-  // Auto-Upgrade Logic - Check token balance on wallet connect
-  useEffect(() => {
-    if (wagmiAddress && wagmiIsConnected) {
-      checkTokenBalance();
-    }
-  }, [wagmiAddress, wagmiIsConnected, checkTokenBalance]);
 
   const [manualAddress, setManualAddress] = useState<string | null>(null);
 
@@ -425,7 +392,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         : Array.from(aggregated.values()).find(i => i.symbol === 'BAG');
 
       const bagBalance = bagToken ? bagToken.amount : 0;
-      setPremiumTokenBalance(bagBalance);
+      setBagTokenBalance(bagBalance);
 
       // Auto-Upgrade Trigger (Disabled for Beta)
       console.log('[WalletContext] Portfolio refresh completed successfully');
@@ -454,7 +421,7 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (currentCount >= max) {
       return {
         success: false,
-        error: `${tier} Tier limit reached (Max ${max}). Upgrade to ULTIMATE for unlimited tracking.`
+        error: `${tier} tier limit reached (max ${max}). Alpha membership unlocks expanded tracking.`
       };
     }
 
@@ -475,11 +442,10 @@ export const WalletProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       isSyncing,
       address: activeAddress,
       isConnecting: false,
-      isPremium,
+      isAlpha,
       isCheckingBalance,
-      tokenCheckError,
       connectionType: wagmiIsConnected ? 'WALLET' : 'MANUAL',
-      premiumTokenBalance,
+      bagTokenBalance,
       trackedWallets,
       portfolioItems,
       whaleAlerts,

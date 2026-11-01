@@ -216,7 +216,6 @@ export interface LivePodcastState {
     id: string;
     authorWallet: string;
     tier: string;
-    isVip?: boolean;
     message: string;
     timestamp: string;
   }>;
@@ -226,13 +225,13 @@ export interface LivePodcastState {
 
 // ── DEFAULT FALLBACK SPONSOR ────────────────────────────────────────────────
 const DEFAULT_SPONSORED_AD: SponsoredAd = {
-  partnerName: 'AlphaBAG Genesis Pass',
+  partnerName: 'AlphaBAG Alpha Membership',
   badge: 'ECOSYSTEM',
-  tagline: 'Stake $BAG to earn 60% protocol fee share & unlock Alpha Desk VIP.',
+  tagline: 'Hold 3,000 BAG in your login wallet for Alpha membership.',
   description:
-    'AlphaBAG Genesis Pass holders receive perpetual fee rebates, exclusive institutional tools in Alpha Desk, and VIP early access to verified community partner pools.',
-  ctaText: 'MINT PASS / UPGRADE',
-  ctaUrl: '#/airdrop',
+    'Alpha membership unlocks expanded platform tools. Alpha Desk access is separately limited to 1,000 active eligible users.',
+  ctaText: 'VERIFY ALPHA',
+  ctaUrl: '/settings',
 };
 
 // ── COMPONENT ────────────────────────────────────────────────────────────────
@@ -272,24 +271,22 @@ export const AlphasFeed: React.FC = () => {
     listenersCount: 148,
     isListening: false,
     stageSpeakers: [
-      { wallet: '0x884...219A', name: 'AlphaDesk Core', isHost: true, isSpeaking: true, tier: 'ALPHA_VIP' },
-      { wallet: '0x71C...894B', name: 'DeFi Researcher', isSpeaking: false, tier: 'ULTIMATE' },
-      { wallet: '0x3F2...1A90', name: 'On-Chain Forensics', isSpeaking: false, tier: 'ALPHA_VIP' },
+      { wallet: '0x884...219A', name: 'AlphaDesk Core', isHost: true, isSpeaking: true, tier: 'ALPHA' },
+      { wallet: '0x71C...894B', name: 'DeFi Researcher', isSpeaking: false, tier: 'FREE' },
+      { wallet: '0x3F2...1A90', name: 'On-Chain Forensics', isSpeaking: false, tier: 'ALPHA' },
     ],
     liveChat: [
       {
         id: 'msg-1',
         authorWallet: '0x123...4567',
-        tier: 'ALPHA_VIP',
-        isVip: true,
+        tier: 'ALPHA',
         message: 'Massive accumulation seen on DEX aggregator volume.',
         timestamp: '1m ago',
       },
       {
         id: 'msg-2',
         authorWallet: '0x999...1111',
-        tier: 'PREMIUM',
-        isVip: false,
+        tier: 'FREE',
         message: 'Are the token unlocks on schedule for Q4?',
         timestamp: 'Just now',
       },
@@ -694,7 +691,7 @@ export const AlphasFeed: React.FC = () => {
   const handleRequestStageMic = () => {
     Swal.fire({
       title: 'MIC ACCESS REQUESTED',
-      text: 'You have been added to the VIP Speaker Queue. The host will invite you to the mic shortly.',
+      text: 'You have been added to the speaker queue. The host will invite you to the mic shortly.',
       icon: 'success',
       background: '#181A20',
       color: '#EAECEF',
@@ -710,7 +707,6 @@ export const AlphasFeed: React.FC = () => {
       id: `msg-${Date.now()}`,
       authorWallet: visibleDisplayName,
       tier: (user?.tier as string) || 'FREE',
-      isVip: Boolean(user?.isPro),
       message: podcastChatInput.trim(),
       timestamp: 'Just now',
     };

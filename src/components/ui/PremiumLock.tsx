@@ -8,23 +8,21 @@ interface PremiumLockProps {
   children: React.ReactNode;
   title?: string;
   description?: string;
-  requiredTier?: 'PREMIUM' | 'ULTIMATE';
+  requiredTier?: 'ALPHA';
 }
 
 export const PremiumLock: React.FC<PremiumLockProps> = ({ 
   children, 
-  title = "Premium Access", 
-  description = "Requires 1,000,000 BAG held in a verified wallet.",
-  requiredTier = 'ULTIMATE',
+  title = "Alpha Access",
+  description = "Requires 3,000 BAG held in the wallet used to sign in.",
+  requiredTier = 'ALPHA',
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const hasAccess = React.useMemo(() => {
     if (!user) return false;
-    if (user.tier === 'ULTIMATE') return true;
-    if (requiredTier === 'PREMIUM' && user.tier === 'PREMIUM') return true;
-    return false;
+    return user.tier === requiredTier;
   }, [user, requiredTier]);
 
   if (hasAccess) return <>{children}</>;
@@ -47,7 +45,7 @@ export const PremiumLock: React.FC<PremiumLockProps> = ({
           <p className="text-alphabag-subtext text-xs mb-4 leading-relaxed">{description}</p>
           <div className="space-y-2">
             <Button size="sm" onClick={handleUpgrade} className="w-full">
-              {requiredTier === 'ULTIMATE' ? 'Verify Ultimate Access' : 'Upgrade Account'}
+              Verify Alpha Access
             </Button>
             <Button 
               variant="ghost" 

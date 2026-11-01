@@ -17,8 +17,7 @@ vi.mock('../../src/context/AuthContext', () => ({
         user: {
             id: '0x1234567890abcdef1234567890abcdef12345678',
             walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
-            tier: 'ALPHA_VIP',
-            isPro: true
+            tier: 'ALPHA'
         },
         isAuthenticated: true,
         isLoading: false
