@@ -1,9 +1,10 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AxiosResponse } from 'axios';
 import { api } from '../../src/services/api';
 import {
   ALPHA_DESK_ACTIVE_USER_LIMIT,
   ALPHA_DESK_REQUIRED_BAG_BALANCE,
+  isAlphaDeskLocalPreviewEnabled,
   requestAlphaDeskAccess,
 } from '../../src/services/alphaDeskAccess';
 
@@ -16,6 +17,23 @@ vi.mock('../../src/services/api', () => ({
 describe('Alpha Desk access service', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('allows the preview flag only in development mode', () => {
+    vi.stubEnv('DEV', true);
+    vi.stubEnv('VITE_ALPHA_DESK_LOCAL_PREVIEW', 'true');
+    expect(isAlphaDeskLocalPreviewEnabled()).toBe(true);
+
+    vi.stubEnv('VITE_ALPHA_DESK_LOCAL_PREVIEW', '');
+    expect(isAlphaDeskLocalPreviewEnabled()).toBe(false);
+
+    vi.stubEnv('VITE_ALPHA_DESK_LOCAL_PREVIEW', 'true');
+    vi.stubEnv('DEV', false);
+    expect(isAlphaDeskLocalPreviewEnabled()).toBe(false);
   });
 
   it('requests a server-side decision and accepts an eligible grant', async () => {

@@ -31,6 +31,7 @@ This plan is based on the remediation scope and repository structures available 
 - Global Markets owns broad asset and market telemetry. Alpha Screener owns DEX pair discovery, boosts, takeovers, and trending metas; Global Markets links to that canonical DEX discovery view rather than offering a second DEX pair table.
 - Integrations is the canonical place to add, find, and remove tracked wallets. Exchange API-key setup remains in the CEX Portfolio flow, while the Integrations hub lists and disconnects those connections. Membership settings are separate from connection management.
 - Alpha Desk is the canonical entry point for its embedded Wallet Flow, Trade Signals, Market AI, and Approvals Scan tools. Legacy standalone routes redirect to the corresponding Desk tab, so the existing Desk access check applies.
+- A local-only Alpha Desk preview is available with `VITE_ALPHA_DESK_LOCAL_PREVIEW=true` when running Vite development mode. Production builds reject this flag; it is not an entitlement and must never be used to grant production access.
 - The placeholder on-chain fee auditor is not exposed until verified fee data and a real audit operation are available.
 
 ## 1. Phase Breakdown

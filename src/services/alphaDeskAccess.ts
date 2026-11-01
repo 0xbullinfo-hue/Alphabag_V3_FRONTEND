@@ -4,6 +4,9 @@ import { TOKEN_GATING_CONFIG } from './config';
 export const ALPHA_DESK_ACTIVE_USER_LIMIT = 1000;
 export const ALPHA_DESK_REQUIRED_BAG_BALANCE = TOKEN_GATING_CONFIG.ALPHA_MINIMUM_BAG_BALANCE;
 
+export const isAlphaDeskLocalPreviewEnabled = (): boolean =>
+  import.meta.env.DEV && import.meta.env.VITE_ALPHA_DESK_LOCAL_PREVIEW === 'true';
+
 export type AlphaDeskAccessStatus = 'GRANTED' | 'TOKEN_REQUIRED' | 'CAPACITY_REACHED';
 
 export interface AlphaDeskAccess {

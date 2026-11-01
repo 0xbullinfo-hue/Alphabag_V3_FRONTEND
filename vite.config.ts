@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
   const proxyTarget = env.VITE_DEV_API_TARGET || (isDevelopment ? 'http://localhost:3003' : (env.VITE_API_BASE_URL || 'http://localhost:3003'));
 
   if (isProductionBuild) {
+    if (env.VITE_ALPHA_DESK_LOCAL_PREVIEW === 'true') {
+      throw new Error('Production builds cannot enable VITE_ALPHA_DESK_LOCAL_PREVIEW.');
+    }
     if (!env.VITE_API_BASE_URL) {
       throw new Error('VITE_API_BASE_URL must be set for a production build.');
     }

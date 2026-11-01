@@ -22,7 +22,7 @@ import { SantimentMetrics } from '../../components/intelligence/SantimentMetrics
 import { TradingViewChart } from '../../components/intelligence/TradingViewChart';
 import { Button } from '../../components/ui/Button';
 import { useAuth } from '../../context/AuthContext';
-import { requestAlphaDeskAccess } from '../../services/alphaDeskAccess';
+import { isAlphaDeskLocalPreviewEnabled, requestAlphaDeskAccess } from '../../services/alphaDeskAccess';
 import { AlphaCalls } from './AlphaCalls';
 import { AlphaAi } from './AlphaAi';
 import { SecurityScanner } from './SecurityScanner';
@@ -181,6 +181,7 @@ function AlphaDeskGate({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export const AlphaDesk: React.FC = () => {
+  const isLocalPreview = isAlphaDeskLocalPreviewEnabled();
   const [searchParams] = useSearchParams();
   const requestedTab = searchParams.get('tab');
   const initialTab = TABS.find(({ id }) => id === requestedTab)?.id ?? 'tradingview';
@@ -193,7 +194,7 @@ export const AlphaDesk: React.FC = () => {
   } = useQuery({
     queryKey: ['alpha-desk-access', user?.id],
     queryFn: requestAlphaDeskAccess,
-    enabled: Boolean(user) && !isAuthLoading,
+    enabled: Boolean(user) && !isAuthLoading && !isLocalPreview,
     retry: false,
     staleTime: 30_000,
     refetchInterval: 60_000,
@@ -232,31 +233,38 @@ export const AlphaDesk: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (isAuthLoading || isCheckingAccess) {
-    return <AlphaDeskGate state="checking" />;
-  }
-  if (!user) {
-    return <AlphaDeskGate state="sign-in" />;
-  }
-  if (accessError || !access) {
-    return <AlphaDeskGate state="unavailable" onRetry={() => void retryAccess()} />;
-  }
-  if (access.status === 'TOKEN_REQUIRED') {
-    return <AlphaDeskGate state="alpha-required" />;
-  }
-  if (access.status === 'CAPACITY_REACHED') {
-    return (
-      <AlphaDeskGate
-        state="capacity-reached"
-        activeUsers={access.activeUsers}
-        maxUsers={access.maxUsers}
-        onRetry={() => void retryAccess()}
-      />
-    );
+  if (!isLocalPreview) {
+    if (isAuthLoading || isCheckingAccess) {
+      return <AlphaDeskGate state="checking" />;
+    }
+    if (!user) {
+      return <AlphaDeskGate state="sign-in" />;
+    }
+    if (accessError || !access) {
+      return <AlphaDeskGate state="unavailable" onRetry={() => void retryAccess()} />;
+    }
+    if (access.status === 'TOKEN_REQUIRED') {
+      return <AlphaDeskGate state="alpha-required" />;
+    }
+    if (access.status === 'CAPACITY_REACHED') {
+      return (
+        <AlphaDeskGate
+          state="capacity-reached"
+          activeUsers={access.activeUsers}
+          maxUsers={access.maxUsers}
+          onRetry={() => void retryAccess()}
+        />
+      );
+    }
   }
 
   return (
     <div className="flex flex-col w-full min-h-[calc(100vh-4.5rem)] bg-[#181A20] rounded-[6px] border border-[#2B313A] overflow-hidden">
+      {isLocalPreview && (
+        <div role="status" className="border-b border-alphabag-yellow/40 bg-alphabag-yellow/10 px-3.5 py-2 text-xs text-alphabag-yellow">
+          Local preview only — Alpha Desk access checks are bypassed in this development session. Production still requires verified Alpha membership and an available seat.
+        </div>
+      )}
       
       {/* ── Top Command Bar ──────────────────────────────────────────────────── */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 px-3.5 py-2.5 bg-[#14171D] border-b border-[#2B313A]">
