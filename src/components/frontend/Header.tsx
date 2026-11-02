@@ -1,4 +1,4 @@
-import { Bell, Briefcase, ChevronDown, LogOut, Menu, Search, Settings, Wallet, X } from 'lucide-react';
+import { Bell, Briefcase, ChevronDown, LogOut, Menu, Search, Wallet, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
@@ -39,11 +39,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
       navigate(`/markets?search=${encodeURIComponent(searchValue.trim())}`);
       setSearchValue('');
     }
-  };
-
-  const handleNavigateToSettings = () => {
-    setShowUserMenu(false);
-    navigate('/settings');
   };
 
   return (
@@ -147,14 +142,6 @@ export const Header: React.FC<HeaderProps> = ({ toggleSidebar, isSidebarOpen }) 
                   >
                     <Briefcase size={14} className="mr-2 text-alphabag-subtext" />
                     Account Profile
-                  </button>
-
-                  <button
-                    onClick={handleNavigateToSettings}
-                    className="w-full text-left px-3 py-2 text-xs font-medium text-alphabag-text hover:bg-[#202630] rounded flex items-center mb-0.5 transition-colors"
-                  >
-                    <Settings size={14} className="mr-2 text-alphabag-subtext" />
-                    Terminal Settings
                   </button>
 
                   <button

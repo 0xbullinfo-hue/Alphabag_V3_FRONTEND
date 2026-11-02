@@ -156,17 +156,17 @@ describe('UI/UX Audit Follow-Up Verifications', () => {
   });
 
   describe('Membership and Connections Pages', () => {
-    it('provides a single route from membership settings to connection management', () => {
-      vi.mocked(api.get).mockResolvedValue({ data: { connections: [] } });
-
+    it('redirects legacy membership settings to the account profile', () => {
       render(
-        <MemoryRouter>
-          <Settings />
+        <MemoryRouter initialEntries={['/settings']}>
+          <Routes>
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<div>Account Profile</div>} />
+          </Routes>
         </MemoryRouter>
       );
 
-      const manageButton = screen.getByRole('button', { name: /Manage Connections/i });
-      expect(manageButton).toBeInTheDocument();
+      expect(screen.getByText('Account Profile')).toBeInTheDocument();
     });
 
     it('disables Add while required wallet fields are blank', () => {

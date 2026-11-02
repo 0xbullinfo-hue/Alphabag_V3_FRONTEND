@@ -66,20 +66,18 @@ describe('DexScreener Feeds, Charts, and Membership Availability Labels', () => 
     expect(screen.getByText('Alpha')).toBeInTheDocument();
   });
 
-  describe('Settings Membership Actions', () => {
-    it('shows only Free and Alpha membership with the 3,000 BAG requirement', () => {
+  describe('Legacy Settings Route', () => {
+    it('redirects membership settings to the account profile', () => {
       render(
-        <MemoryRouter>
-          <Settings />
+        <MemoryRouter initialEntries={['/settings']}>
+          <Routes>
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<div>Account Profile</div>} />
+          </Routes>
         </MemoryRouter>
       );
 
-      expect(screen.getByText('Free membership')).toBeInTheDocument();
-      expect(screen.getByText('Alpha membership')).toBeInTheDocument();
-      expect(screen.getByText('3,000 BAG')).toBeInTheDocument();
-      expect(screen.getByText(/Alpha eligibility is verified by the server against the wallet used to sign in/i)).toBeInTheDocument();
-      expect(screen.getByText(/1,000-user active limit/i)).toBeInTheDocument();
-      expect(screen.queryByText(/Premium Tier|Alpha VIP/i)).not.toBeInTheDocument();
+      expect(screen.getByText('Account Profile')).toBeInTheDocument();
     });
   });
 

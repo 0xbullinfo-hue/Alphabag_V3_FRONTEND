@@ -73,6 +73,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const validateStoredSession = async () => {
       const savedToken = sessionStorage.getItem('alphabag_token');
+      if (isLocalhostDev && !savedToken) {
+        const isExplicitLoggedOut = sessionStorage.getItem('alphabag_dev_logged_out') === 'true';
+        if (!isExplicitLoggedOut) {
+          setUser(DEV_USER);
+          sessionStorage.setItem('alphabag_user', JSON.stringify(DEV_USER));
+        } else {
+          sessionStorage.removeItem('alphabag_user');
+          delete api.defaults.headers.common['Authorization'];
+        }
+        setIsLoading(false);
+        return;
+      }
       if (savedToken) {
         api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
       }
@@ -133,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true);
       const refCode = sessionStorage.getItem('alphabag_ref_code');
       
-      const res = await api.post('/api/auth/siwe', { 
+      const res = await api.post('/api/auth/verify', {
         address, 
         signature, 
         message, 

@@ -46,7 +46,6 @@ const MyAlphabag = lazy(() => import('./pages/frontend/MyAlphabag').then(m => ({
 const Markets = lazy(() => import('./pages/frontend/Markets').then(m => ({ default: m.Markets })));
 const CoinDetail = lazy(() => import('./pages/frontend/CoinDetail').then(m => ({ default: m.CoinDetail })));
 const News = lazy(() => import('./pages/frontend/News').then(m => ({ default: m.News })));
-const Settings = lazy(() => import('./pages/frontend/Settings').then(m => ({ default: m.Settings })));
 const DeFi = lazy(() => import('./pages/frontend/DeFi').then(m => ({ default: m.DeFi })));
 const Integrations = lazy(() => import('./pages/frontend/Integrations').then(m => ({ default: m.Integrations })));
 const Landing = lazy(() => import('./pages/frontend/Landing').then(m => ({ default: m.Landing })));
@@ -225,7 +224,7 @@ const AppContent = () => {
           <Route path="/trade-signals" element={<Navigate to="/alphas-feed" replace />} />
           <Route path="/signals" element={<Navigate to="/alphas-feed" replace />} />
 
-          <Route path="/settings" element={<Layout><Settings /></Layout>} />
+          <Route path="/settings" element={<Navigate to="/profile" replace />} />
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/profile/:id" element={<Layout><Profile /></Layout>} />
           <Route path="/airdrop" element={<Layout><Airdrop /></Layout>} />

@@ -239,7 +239,6 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
             )}
             <NavItem to="/alphas-feed" customIcon="feed" label="Alpha Feed" active={location.pathname === '/alphas-feed' || location.pathname === '/alpha-feed'} />
             <NavItem to="/calculator" customIcon="calculator" label="Position Calculator" active={location.pathname === '/calculator'} />
-            <NavItem to="/settings" customIcon="settings" label="Membership" active={location.pathname === '/settings'} />
             <NavItem to="/integrations" customIcon="integrations" label="Integrations" active={location.pathname === '/integrations'} />
           </NavGroup>
 

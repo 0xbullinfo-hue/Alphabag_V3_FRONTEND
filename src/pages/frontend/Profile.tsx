@@ -1,8 +1,9 @@
 import {
     ArrowLeft,
-    Calendar,
     Camera,
     CheckCircle2,
+    Crown,
+    ExternalLink,
     Globe,
     MapPin,
     MessageSquare,
@@ -10,7 +11,8 @@ import {
     Share2,
     ShieldCheck,
     Users,
-    Zap
+    Zap,
+    Wallet
 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -18,17 +20,20 @@ import Swal from 'sweetalert2';
 import { Button } from '../../components/ui/Button';
 import { PageIcon } from '../../components/ui/PageIcon';
 import { useAuth } from '../../context/AuthContext';
+import { useWallet } from '../../context/WalletContext';
 import { AlphaRadarService } from '../../services/alphaRadarService';
 import { api } from '../../services/api';
+import { TIER_LIMITS, TOKEN_GATING_CONFIG } from '../../services/config';
 import { extractSyncData, injectSyncData } from '../../services/syncService';
-import { Post, Project } from '../../types';
+import { Project } from '../../types';
 
 const getProfileName = (userObj: any) => {
     if (userObj?.email) {
         return userObj.email.split('@')[0];
     }
-    if (userObj?.walletAddress) {
-        return userObj.walletAddress.substring(0, 6) + '...' + userObj.walletAddress.substring(userObj.walletAddress.length - 4);
+    const walletAddress = userObj?.verifiedWallet || userObj?.walletAddress;
+    if (walletAddress) {
+        return walletAddress.substring(0, 6) + '...' + walletAddress.substring(walletAddress.length - 4);
     }
     if (userObj?.id) {
         return userObj.id.substring(0, 8);
@@ -40,8 +45,9 @@ const getProfileHandle = (userObj: any) => {
     if (userObj?.email) {
         return userObj.email.split('@')[0].toLowerCase();
     }
-    if (userObj?.walletAddress) {
-        return userObj.walletAddress.substring(0, 6).toLowerCase();
+    const walletAddress = userObj?.verifiedWallet || userObj?.walletAddress;
+    if (walletAddress) {
+        return walletAddress.substring(0, 6).toLowerCase();
     }
     if (userObj?.id) {
         return userObj.id.substring(0, 8).toLowerCase();
@@ -53,8 +59,9 @@ const getProfileInitial = (userObj: any) => {
     if (userObj?.email && userObj.email[0]) {
         return userObj.email[0].toUpperCase();
     }
-    if (userObj?.walletAddress && userObj.walletAddress[2]) {
-        return userObj.walletAddress[2].toUpperCase();
+    const walletAddress = userObj?.verifiedWallet || userObj?.walletAddress;
+    if (walletAddress?.[2]) {
+        return walletAddress[2].toUpperCase();
     }
     return 'E';
 };
@@ -62,12 +69,13 @@ const getProfileInitial = (userObj: any) => {
 export const Profile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { user, refreshUser } = useAuth();
+    const { address: connectedWalletAddress, isConnected, trackedWallets } = useWallet();
     const navigate = useNavigate();
     
     const [profileUser, setProfileUser] = useState<any>(null);
     const [project, setProject] = useState<Project | null>(null);
-    const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [profileError, setProfileError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
 
     const handleCopyRef = (refUrl: string) => {
@@ -99,8 +107,12 @@ export const Profile: React.FC = () => {
         reader.readAsDataURL(file);
     };
 
-    const isOwnProfile = user?.id === id || (!id && user) || id === 'me';
+    const isOwnProfile = Boolean(user && (user.id === id || !id || id === 'me'));
     const targetId = id === 'me' ? user?.id : (id || user?.id);
+    const isLocalPreview = import.meta.env.DEV
+        && typeof window !== 'undefined'
+        && ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname)
+        && user?.id === 'dev-user-001';
 
     useEffect(() => {
         const fetchProfileData = async () => {
@@ -110,44 +122,15 @@ export const Profile: React.FC = () => {
                 return;
             }
             setIsLoading(true);
+            setProfileError(null);
+            setProject(null);
             try {
-                // Fetch latest user data if it's "me"
                 let data;
                 if (isOwnProfile && targetId === user?.id) {
                     data = user;
-                } else if (targetId === 'user1') {
-                    data = {
-                        id: 'user1',
-                        email: 'founder@neuralbag.com',
-                        accountType: 'FOUNDER',
-                        bio: "Architecting the future of decentralized alpha discovery. Neural engine specialist and BAG holder.",
-                        website: 'neuralbag.com',
-                        location: 'Silicon Valley, CA'
-                    };
-                } else if (targetId === 'user2') {
-                    data = {
-                        id: 'user2',
-                        email: 'whale_trader@alphabag.com',
-                        accountType: 'TRADER',
-                        bio: "Professional yield farmer and alpha seeker. 80% Win Rate on DEX gems. #AlphaRadar Expert.",
-                        website: 'alpharadar.io',
-                        location: 'Dubai, UAE'
-                    };
                 } else {
-                    // Try to fetch from API if not mock
-                    try {
-                        const res = await api.get(`/api/auth/profile/${targetId}`);
-                        data = res.data;
-                    } catch {
-                        data = {
-                            id: targetId,
-                            email: 'explorer@alphabag.com',
-                            accountType: 'TRADER',
-                            bio: "Decentralized explorer seeking out the next big play.",
-                            website: 'alphabag.com',
-                            location: 'Global'
-                        };
-                    }
+                    const res = await api.get(`/api/auth/profile/${targetId}`);
+                    data = res.data;
                 }
 
                 const { bioText } = extractSyncData(data?.bio || '');
@@ -166,11 +149,10 @@ export const Profile: React.FC = () => {
                 if (projectData) {
                     setProject(projectData);
                 }
-
-                // Timeline posts (Empty default until user activity is logged)
-                setPosts([]);
             } catch (err) {
-                console.error("Failed to fetch profile", err);
+                console.error('[Profile] Failed to fetch profile:', err);
+                setProfileUser(null);
+                setProfileError('Could not load this profile. Please try again later.');
             } finally {
                 setIsLoading(false);
             }
@@ -188,11 +170,17 @@ export const Profile: React.FC = () => {
                 ? injectSyncData(editData.bio, originalSyncData)
                 : editData.bio;
 
+            if (isLocalPreview) {
+                setProfileUser((current: any) => current ? { ...current, ...editData, bio: finalBio } : current);
+                setIsEditing(false);
+                return;
+            }
+
             const res = await api.post('/api/auth/update-profile', {
                 ...editData,
                 bio: finalBio
             });
-            if (res.data.success) {
+            if (res.data?.success && res.data?.user) {
                 Swal.fire({
                     title: 'PROFILE UPDATED',
                     text: 'Your identity has been synchronized with the core.',
@@ -204,6 +192,8 @@ export const Profile: React.FC = () => {
                 setProfileUser(res.data.user);
                 await refreshUser();
                 setIsEditing(false);
+            } else {
+                throw new Error(res.data?.error || 'The profile update was not confirmed by the server.');
             }
         } catch (err: any) {
             Swal.fire({
@@ -216,6 +206,17 @@ export const Profile: React.FC = () => {
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleCancelEdit = () => {
+        setEditData({
+            bio: profileUser?.bio || '',
+            website: profileUser?.website || '',
+            location: profileUser?.location || '',
+            bannerUrl: profileUser?.bannerUrl || '',
+            logoUrl: profileUser?.logoUrl || ''
+        });
+        setIsEditing(false);
     };
 
     if (isLoading) {
@@ -235,23 +236,50 @@ export const Profile: React.FC = () => {
                     </div>
                     <h1 className="text-lg font-bold text-alphabag-text uppercase">Profile unavailable</h1>
                     <p className="mt-2 text-sm text-alphabag-subtext leading-relaxed">
-                        Connect and sign in with your wallet to view and manage your AlphaBAG profile.
+                        {profileError || 'Connect and sign in with your wallet to view and manage your AlphaBAG profile.'}
                     </p>
-                    <Button
-                        className="mt-5 w-full font-semibold"
-                        onClick={() => window.dispatchEvent(new Event('open-login-modal'))}
-                    >
-                        Connect wallet
-                    </Button>
+                    {!user && (
+                        <Button
+                            className="mt-5 w-full font-semibold"
+                            onClick={() => window.dispatchEvent(new Event('open-login-modal'))}
+                        >
+                            Connect wallet
+                        </Button>
+                    )}
                 </div>
             </div>
         );
     }
 
     const isFounder = profileUser?.accountType === 'FOUNDER' || profileUser?.isAdmin;
+    const isAlphaMember = String(profileUser?.tier || '').toUpperCase() === 'ALPHA';
+    const loginWallet = profileUser?.verifiedWallet || profileUser?.walletAddress;
+    const membershipFeatures = {
+        FREE: [
+            `Portfolio tracking: up to ${TIER_LIMITS.FREE.maxPortfolios} wallets`,
+            `Whale monitoring: up to ${TIER_LIMITS.FREE.maxWhales} wallets`,
+            'Core market and portfolio tools',
+            'AlphaAI access with a usage limit',
+        ],
+        ALPHA: [
+            `Portfolio tracking: up to ${TIER_LIMITS.ALPHA.maxPortfolios} wallets`,
+            `Whale monitoring: up to ${TIER_LIMITS.ALPHA.maxWhales} wallets`,
+            'Unlimited AlphaAI access',
+            'Priority alerts and deeper analytics',
+            'Alpha Desk access while an eligible place is available',
+        ],
+    };
 
     return (
         <div className="bg-alphabag-black min-h-screen text-white pb-20">
+            {isLocalPreview && (
+                <div className="mx-auto max-w-6xl px-4 pt-4">
+                    <div role="status" className="rounded-md border border-alphabag-yellow/30 bg-alphabag-dark px-4 py-3 text-xs text-alphabag-subtext">
+                        <span className="font-semibold text-alphabag-yellow">Local preview.</span>{' '}
+                        Demo account only; wallet sign-in is unavailable. Profile edits stay in this page preview and are not sent to the server.
+                    </div>
+                </div>
+            )}
             {/* Header / Banner */}
             <div className="h-32 border-b border-alphabag-border relative bg-cover bg-center bg-no-repeat bg-alphabag-card" style={{ backgroundImage: profileUser?.bannerUrl ? `url(${profileUser.bannerUrl})` : undefined }}>
                 {!profileUser?.bannerUrl && <div className="absolute inset-0 bg-alphabag-card"></div>}
@@ -316,7 +344,7 @@ export const Profile: React.FC = () => {
                                         <Button 
                                             variant="outline"
                                             size="sm"
-                                            onClick={() => setIsEditing(false)}
+                                            onClick={handleCancelEdit}
                                             className="rounded-md border-alphabag-border text-white hover:bg-alphabag-hover font-semibold uppercase tracking-wider text-[11px] px-3.5 py-1.5"
                                         >
                                             Cancel
@@ -363,8 +391,8 @@ export const Profile: React.FC = () => {
                                     {getProfileName(profileUser)}
                                 </h2>
                                 {isFounder && <CheckCircle2 size={16} className="text-alphabag-yellow" fill="currentColor" />}
-                                <div className={`px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider ml-1 ${isFounder ? 'bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'}`}>
-                                    {isFounder ? 'FOUNDER' : 'ELITE'}
+                                <div className={`px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider ml-1 ${isFounder ? 'bg-alphabag-yellow/10 text-alphabag-yellow border border-alphabag-yellow/20' : 'bg-alphabag-panel text-alphabag-subtext border border-alphabag-border'}`}>
+                                    {isFounder ? 'FOUNDER' : profileUser?.accountType || 'MEMBER'}
                                 </div>
                             </div>
                             <p className="text-alphabag-muted text-[13px] font-medium">@{getProfileHandle(profileUser)}_member</p>
@@ -443,45 +471,20 @@ export const Profile: React.FC = () => {
                                 </p>
 
                                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-alphabag-muted font-semibold uppercase tracking-wider">
-                                    <div className="flex items-center gap-1.5"><MapPin size={14} className="text-alphabag-yellow" /> {profileUser?.location || "Web3 Native"}</div>
-                                    <div className="flex items-center gap-1.5"><Globe size={14} className="text-alphabag-yellow" /> {profileUser?.website || "alphabag.com"}</div>
-                                    <div className="flex items-center gap-1.5"><Calendar size={14} className="text-alphabag-yellow" /> Joined March 2026</div>
+                                    {profileUser?.location && <div className="flex items-center gap-1.5"><MapPin size={14} className="text-alphabag-yellow" /> {profileUser.location}</div>}
+                                    {profileUser?.website && (
+                                        <a
+                                            href={/^https?:\/\//i.test(profileUser.website) ? profileUser.website : `https://${profileUser.website}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 hover:text-alphabag-text"
+                                        >
+                                            <Globe size={14} className="text-alphabag-yellow" /> {profileUser.website}
+                                        </a>
+                                    )}
                                 </div>
                             </>
                         )}
-
-                        <div className="flex gap-4 pt-2 border-t border-alphabag-border">
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-white font-bold text-sm num">4.2K</span>
-                                <span className="text-alphabag-muted text-[11px] font-semibold uppercase tracking-wider">Following</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-white font-bold text-sm num">12.8K</span>
-                                <span className="text-alphabag-muted text-[11px] font-semibold uppercase tracking-wider">Followers</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Stats Dashboard */}
-                    <div className="mt-4 grid grid-cols-3 gap-2.5 pt-4 border-t border-alphabag-border">
-                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
-                            <div className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider mb-0.5">Rep</div>
-                            <div className="text-base font-bold text-white leading-tight num">98%</div>
-                            <div className="text-[11px] font-semibold text-alphabag-yellow/70 uppercase">Diamond</div>
-                        </div>
-                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
-                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider mb-0.5">Tokens</div>
-                            <div className="flex items-center justify-center gap-1">
-                                <Zap size={12} className="text-alphabag-yellow" fill="currentColor" />
-                                <span className="text-base font-bold text-white leading-tight num">{profileUser?.bagTokens ?? 0}</span>
-                            </div>
-                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase">Top 1%</div>
-                        </div>
-                        <div className="text-center p-2.5 bg-alphabag-panel rounded-md border border-alphabag-border">
-                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase tracking-wider mb-0.5">Vetting</div>
-                            <div className="text-base font-bold text-alphabag-green leading-tight">LVL 1</div>
-                            <div className="text-[11px] font-semibold text-alphabag-muted uppercase">Verified</div>
-                        </div>
                     </div>
 
                     {/* Referral Link — only on own profile */}
@@ -495,7 +498,7 @@ export const Profile: React.FC = () => {
                                     <span className="text-[11px] font-semibold text-alphabag-yellow uppercase tracking-wider">Referral Link</span>
                                     {profileUser?.referralCount > 0 && (
                                         <span className="ml-auto text-[11px] font-semibold text-alphabag-muted uppercase num">
-                                            {profileUser.referralCount} referral{profileUser.referralCount !== 1 ? 's' : ''} · Bonus ITEMS earned
+                                            {profileUser.referralCount} referral{profileUser.referralCount !== 1 ? 's' : ''}
                                         </span>
                                     )}
                                 </div>
@@ -517,25 +520,161 @@ export const Profile: React.FC = () => {
                                     </button>
                                 </div>
                                 <p className="text-[11px] text-alphabag-muted mt-1.5 font-medium">
-                                    Share this link — each signup earns you bonus ITEMS in the active campaign.
+                                    Share your referral link with the community.
                                 </p>
                             </div>
                         );
                     })()}
                 </div>
 
-                {/* Timeline Tabs */}
-                <div className="flex border-b border-alphabag-border mb-3">
-                    {['Alphas', isFounder ? 'Manifesto' : 'Replies', 'Media'].map((tab) => (
-                        <button 
-                            key={tab}
-                            className={`px-6 py-3 text-[11px] font-semibold uppercase tracking-wider relative transition-colors ${tab === 'Alphas' ? 'text-alphabag-yellow' : 'text-alphabag-muted hover:text-white'}`}
-                        >
-                            {tab}
-                            {tab === 'Alphas' && <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-alphabag-yellow rounded-full" />}
-                        </button>
-                    ))}
-                </div>
+                {isOwnProfile && (
+                    <section id="membership" className="mb-4 space-y-4">
+                        <div className="border border-alphabag-border bg-alphabag-card rounded-lg p-4 sm:p-5">
+                        <div className="flex flex-wrap items-start justify-between gap-4">
+                            <div className="flex gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-alphabag-border bg-alphabag-panel">
+                                    {isAlphaMember ? <Crown size={18} className="text-alphabag-yellow" /> : <Wallet size={18} className="text-alphabag-subtext" />}
+                                </div>
+                                <div>
+                                    <h2 className="text-sm font-bold uppercase tracking-wide text-alphabag-text">Membership</h2>
+                                    <p className="mt-1 text-xs text-alphabag-subtext">
+                                        {isAlphaMember
+                                            ? 'Your account has Alpha membership.'
+                                            : 'Compare both membership tiers and their features below.'}
+                                    </p>
+                                </div>
+                            </div>
+                            <span className={`rounded border px-2.5 py-1 text-xs font-semibold uppercase tracking-wide ${isAlphaMember ? 'border-alphabag-yellow/30 bg-alphabag-yellow/10 text-alphabag-yellow' : 'border-alphabag-border bg-alphabag-panel text-alphabag-subtext'}`}>
+                                {isAlphaMember ? 'Alpha' : 'Free'}
+                            </span>
+                        </div>
+
+                        <div className="mt-4 grid gap-3 border-t border-alphabag-border pt-4 md:grid-cols-2">
+                            {(['FREE', 'ALPHA'] as const).map((tier) => {
+                                const isCurrentTier = (isAlphaMember ? 'ALPHA' : 'FREE') === tier;
+                                return (
+                                    <article
+                                        key={tier}
+                                        aria-label={`${tier === 'FREE' ? 'Free' : 'Alpha'} tier features`}
+                                        className={`rounded-lg border p-4 ${tier === 'ALPHA' ? 'border-alphabag-yellow/40 bg-alphabag-yellow/[0.04]' : 'border-alphabag-border bg-alphabag-panel'}`}
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            {tier === 'ALPHA' && <Crown size={16} className="text-alphabag-yellow" />}
+                                            <h3 className="text-sm font-bold uppercase tracking-wide text-alphabag-text">
+                                                {tier === 'FREE' ? 'Free' : 'Alpha'}
+                                            </h3>
+                                        </div>
+                                        {isCurrentTier && (
+                                            <p className="mt-1 text-[11px] font-semibold text-alphabag-green">Your current tier</p>
+                                        )}
+                                        <ul className="mt-3 space-y-2">
+                                            {membershipFeatures[tier].map((feature) => (
+                                                <li key={feature} className="flex items-start gap-2 text-xs text-alphabag-subtext">
+                                                    <CheckCircle2 size={14} className={`mt-0.5 shrink-0 ${tier === 'ALPHA' ? 'text-alphabag-yellow' : 'text-alphabag-green'}`} />
+                                                    <span>{feature}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </article>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-4 rounded-md border border-alphabag-border bg-alphabag-panel p-3">
+                            <p className="text-xs font-semibold text-alphabag-text">How Alpha eligibility works</p>
+                            <p className="mt-1 text-xs leading-relaxed text-alphabag-subtext">
+                                Alpha is unlocked by verifying at least {TOKEN_GATING_CONFIG.ALPHA_MINIMUM_BAG_BALANCE.toLocaleString()} BAG in the same wallet used to sign in; it is not a paid subscription. Alpha Desk has a separate limit of 1,000 eligible users.
+                            </p>
+                        </div>
+
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            {isAlphaMember ? (
+                                <Button
+                                    size="sm"
+                                    onClick={() => navigate('/alpha-desk')}
+                                    className="bg-alphabag-yellow text-black font-semibold"
+                                >
+                                    <ExternalLink size={14} className="mr-1.5" /> Open Alpha Desk
+                                </Button>
+                            ) : !isLocalPreview ? (
+                                <Button
+                                    size="sm"
+                                    onClick={() => window.dispatchEvent(new CustomEvent('open-upgrade-modal'))}
+                                    className="bg-alphabag-yellow text-black font-semibold"
+                                >
+                                    Verify Alpha eligibility
+                                </Button>
+                            ) : (
+                                <p className="text-xs text-alphabag-muted">
+                                    Wallet verification is unavailable in this local preview.
+                                </p>
+                            )}
+                        </div>
+                        </div>
+
+                        <div className="border border-alphabag-border bg-alphabag-card rounded-lg p-4 sm:p-5">
+                            <div className="flex flex-wrap items-start justify-between gap-3">
+                                <div>
+                                    <h2 className="text-sm font-bold uppercase tracking-wide text-alphabag-text">Connected details</h2>
+                                    <p className="mt-1 text-xs text-alphabag-subtext">Review the login wallet and wallet connections linked to this account.</p>
+                                </div>
+                                <Button size="sm" variant="secondary" onClick={() => navigate('/integrations')}>
+                                    <ExternalLink size={14} className="mr-1.5" /> Manage connections
+                                </Button>
+                            </div>
+
+                            <div className="mt-4 grid gap-3 border-t border-alphabag-border pt-4 sm:grid-cols-2">
+                                <div className="rounded-md border border-alphabag-border bg-alphabag-panel p-3">
+                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-alphabag-muted">Login wallet</p>
+                                    <p className="mt-1 break-all font-mono text-xs text-alphabag-text">{loginWallet || 'No wallet linked to this account'}</p>
+                                    <p className="mt-1 text-[11px] text-alphabag-subtext">Used to sign in and verify Alpha eligibility.</p>
+                                </div>
+                                <div className="rounded-md border border-alphabag-border bg-alphabag-panel p-3">
+                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-alphabag-muted">Currently connected wallet</p>
+                                    <p className="mt-1 break-all font-mono text-xs text-alphabag-text">
+                                        {isConnected && connectedWalletAddress ? connectedWalletAddress : 'No wallet currently connected'}
+                                    </p>
+                                    {isConnected && connectedWalletAddress && loginWallet && connectedWalletAddress.toLowerCase() !== loginWallet.toLowerCase() && (
+                                        <p className="mt-1 text-[11px] text-alphabag-yellow">This differs from the login wallet used for Alpha verification.</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="mt-4">
+                                <div className="flex items-center justify-between gap-2">
+                                    <h3 className="text-xs font-semibold uppercase tracking-wide text-alphabag-text">Tracked wallets</h3>
+                                    <span className="font-mono text-xs text-alphabag-subtext">{trackedWallets.length}</span>
+                                </div>
+                                {trackedWallets.length > 0 ? (
+                                    <ul className="mt-2 divide-y divide-alphabag-border rounded-md border border-alphabag-border">
+                                        {trackedWallets.map((wallet) => (
+                                            <li key={wallet.id} className="flex flex-wrap items-center justify-between gap-2 bg-alphabag-panel px-3 py-2">
+                                                <div>
+                                                    <p className="text-xs font-semibold text-alphabag-text">{wallet.label || 'Tracked wallet'}</p>
+                                                    <p className="mt-0.5 font-mono text-[11px] text-alphabag-subtext">
+                                                        {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)} · {wallet.chain}
+                                                    </p>
+                                                </div>
+                                                <span className="text-[11px] text-alphabag-muted">
+                                                    {wallet.type === 'WHALE' ? 'Whale monitor' : 'Portfolio'}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="mt-2 rounded-md border border-alphabag-border bg-alphabag-panel px-3 py-2 text-xs text-alphabag-subtext">
+                                        No tracked wallets added. Add and manage wallet connections in Integrations.
+                                    </p>
+                                )}
+                            </div>
+                            <p className="mt-3 text-[11px] text-alphabag-muted">
+                                Exchange connections and API-key management are available in Integrations; secret keys are never shown on your profile.
+                            </p>
+                        </div>
+                    </section>
+                )}
+
+                <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-alphabag-subtext">Recent activity</h2>
 
                 {/* Timeline Content */}
                 <div className="space-y-3">
@@ -601,31 +740,11 @@ export const Profile: React.FC = () => {
                         </div>
                     )}
 
-                    {posts.length > 0 ? (
-                        posts.map(post => (
-                            <div key={post.id} className="p-4 border border-alphabag-border bg-alphabag-card hover:bg-alphabag-hover transition-colors rounded-lg">
-                                <div className="flex gap-3">
-                                    <div className="w-9 h-9 flex-shrink-0 bg-alphabag-panel border border-alphabag-border rounded-full flex items-center justify-center font-bold text-alphabag-yellow uppercase text-xs">
-                                        {getProfileInitial(profileUser)}
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="font-semibold text-white text-sm">{getProfileName(profileUser)}</span>
-                                            {isFounder && <CheckCircle2 size={14} className="text-alphabag-yellow" fill="currentColor" />}
-                                            <span className="text-alphabag-muted text-xs">@{getProfileHandle(profileUser)}_member</span>
-                                        </div>
-                                        <p className="text-zinc-200 text-sm leading-relaxed">
-                                            {post.content}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
+                    {!(isFounder && project) && (
                         <div className="p-16 text-center border border-dashed border-alphabag-border rounded-lg">
                             <MessageSquare size={36} className="text-alphabag-muted mx-auto mb-2 opacity-30" />
-                            <h3 className="text-sm font-bold text-white uppercase tracking-tight mb-1">No Alphas Yet</h3>
-                            <p className="text-xs text-alphabag-muted">This node hasn't broadcasted any intelligence yet.</p>
+                            <h3 className="text-sm font-bold text-white uppercase tracking-tight mb-1">No activity yet</h3>
+                            <p className="text-xs text-alphabag-muted">No profile activity has been published yet.</p>
                         </div>
                     )}
                 </div>
